@@ -9,7 +9,7 @@ process.on("unhandledRejection", err => {
 
 const fs = require("fs");
 const { exec, spawnSync } = require("child_process");
-const readline = require('readline');
+const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -23,8 +23,11 @@ let gitDiff = spawnSync("git", [
 let output = gitDiff.stdout.toString().trim();
 let fileList = null;
 let results = [];
-if (output) {
+if (output && output !== "") {
   fileList = output.split(/\r?\n/);
+} else {
+  console.log("no files!");
+  process.exit(0);
 }
 
 results.push(yarnCheck(fileList));
@@ -61,15 +64,17 @@ function prettyFormat(fileList) {
       else if (line.startsWith("+")) console.log("\x1b[32m", line, "\x1b[0m");
       else console.log(line);
     });
-    rl.question('Stage this patch and continue? [Y/n] ', (answer) => {
-      if (answer.trim().toLowerCase() !== 'y'){
-        console.error('[krypton.lint] Aborted! Changes have been applied but not staged.');
+    rl.question("Stage this patch and continue? [Y/n] ", answer => {
+      if (answer.trim().toLowerCase() !== "y") {
+        console.error(
+          "[krypton.lint] Aborted! Changes have been applied but not staged."
+        );
         process.exit(1);
       }
     });
-    status = spawnSync('git', ['update-index', '--add', ...file_list])
+    status = spawnSync("git", ["update-index", "--add", ...fileList]);
     hasErrors = status.error ? true : false;
-    return hasErrors
+    return hasErrors;
   }
 }
 
