@@ -1,16 +1,25 @@
 import React, { Component } from "react";
-import "../";
+import Auxbar from "./auxbar";
+import Lifecycles from "./lifecycle-list";
 //import { BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 
-class Login extends Component {
+class List extends Component {
   render() {
     return (
-      <div className="login login-container container" id="login">
-        this is login page
+      <div className="lifecycle-list-page lifecycle-list-page-container container" id="lifecycle-list-page">
+        <div  className="row">
+          <div  className="col-lg-3">
+            <Auxbar />
+          </div>
+          <div  className="col-lg-9">
+            <Lifecycles />
+          </div>
+        </div>
       </div>
     );
   }
-}
+};
+
 
 // const Topics = ({ match }) => (
 //   <div>
@@ -40,4 +49,4 @@ class Login extends Component {
 //   </div>
 // )
 
-export default () => <Login />;
+export default () => <List />;
