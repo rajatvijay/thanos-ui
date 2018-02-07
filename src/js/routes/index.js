@@ -1,8 +1,9 @@
 import React from "react";
-import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "../login";
+import Navbar from "../navbar";
 import LifecycleList from "../lifecycle";
-
+import "antd/dist/antd.css";
 
 // const Topic = ({ match }) => (
 //   <div>
@@ -34,13 +35,14 @@ import LifecycleList from "../lifecycle";
 //   </div>
 // );
 
-
-
 export default () => (
-  <BrowserRouter>
-    <Switch>
-      <Route path="/" exact={true} component={Login} />
-      <Route path="/lifecycles" component={LifecycleList} />
-    </Switch>
-  </BrowserRouter>
+  <div className="main-container">
+    <Navbar />
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact={true} component={Login} />
+        <Route path="/lifecycles" component={LifecycleList} />
+      </Switch>
+    </BrowserRouter>
+  </div>
 );

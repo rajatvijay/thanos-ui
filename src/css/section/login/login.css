@@ -1,0 +1,59 @@
+.login-container {
+  display: block;
+}
+
+.login-overlay {
+  background-color: #305ebe;
+  position: absolute;
+  height: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+50,305ebe+50,305ebe+100 */
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(
+    top,
+    #ffffff 0%,
+    #ffffff 35%,
+    #305ebe 35%,
+    #305ebe 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    #ffffff 0%,
+    #ffffff 35%,
+    #305ebe 35%,
+    #305ebe 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #ffffff 35%,
+    #305ebe 35%,
+    #305ebe 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient(
+      startColorstr="#ffffff",
+      endColorstr="#305ebe",
+      GradientType=0
+    ); /* IE6-9 */
+}
+
+.login-box {
+  position: relative;
+  top: 200px;
+  width: 400px;
+  height: auto;
+  min-height: 400px;
+  border-radius: 3px;
+  margin: 0 auto;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.19);
+  background: #fff;
+  text-align: center;
+  padding: 24px;
+}
+
+.login-box .btn-login {
+  margin-top: 100px;
+}
