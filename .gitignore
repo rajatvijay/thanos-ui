@@ -19,3 +19,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+krypton-ui.sublime-project
+krypton-ui.sublime-workspace
