@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "../login";
 import Navbar from "../navbar";
-import LifecycleList from "../lifecycle";
+import WorkflowList from "../workflow";
 import "antd/dist/antd.css";
 
 // const Topic = ({ match }) => (
@@ -41,7 +41,7 @@ export default () => (
     <BrowserRouter>
       <Switch>
         <Route path="/" exact={true} component={Login} />
-        <Route path="/lifecycles" component={LifecycleList} />
+        <Route path="/workflows" component={WorkflowList} />
       </Switch>
     </BrowserRouter>
   </div>

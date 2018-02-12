@@ -6,8 +6,8 @@ class NavTop extends Component {
   render() {
     return (
       <div
-        className="lifecycle-list-page lifecycle-list-page-container container"
-        id="lifecycle-list-page"
+        className="workflow-list-page workflow-list-page-container container"
+        id="workflow-list-page"
       >
         nav Top
       </div>

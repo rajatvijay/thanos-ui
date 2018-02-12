@@ -48,7 +48,7 @@ class NormalLoginForm extends React.Component {
             Forgot password
           </a>
           <br />
-          <Link to="lifecycle">
+          <Link to="workflow">
             <Button
               type="primary"
               htmlType="submit"
