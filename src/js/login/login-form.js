@@ -1,70 +1,95 @@
-import React, { Component } from "react";
-import { Form, Icon, Input, Button, Checkbox } from "antd";
-import { Link } from "react-router-dom";
-//import '../../css/section/login/login.css';
+import React from "react";
+import { Form, Button, Input, Icon } from "antd";
+import validator from "validator";
 
 const FormItem = Form.Item;
 
-class NormalLoginForm extends React.Component {
-  handleSubmit = e => {
+class LoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {},
+      loading: false,
+      errors: {}
+    };
+  }
+
+  onSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
+
+    let id = Math.floor(Math.random() * 10) + 1; //generate random id for test
+    let data = this.state.data;
+    data.user_id = id; //send id in payload
+    const errors = this.validate(data); //error valitation in form
+    this.setState({ errors: errors });
+    if (Object.keys(errors).length === 0) {
+      //if no error is found then submit
+      this.props.userLogin(data);
+    }
+  };
+
+  //client side data validation
+  validate = data => {
+    const errors = {};
+    if (!validator.isEmail(data.email)) errors.email = "Invalid email";
+    if (!data.password) errors.password = "Password can't be empty";
+    return errors;
+  };
+
+  //capture form data in state
+  onInputChange = e => {
+    this.setState({
+      data: { ...this.state.data, [e.target.name]: e.target.value }
     });
   };
+
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { data, errors } = this.state;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
-          {getFieldDecorator("userName", {
-            rules: [{ required: true, message: "Please input your username!" }]
-          })(
+      <div className="login-form-box">
+        <Form layout="vertical" onSubmit={this.onSubmit} className="login-form">
+          <FormItem
+            validateStatus={errors.email && "error"}
+            hasFeedback
+            help={errors.email}
+          >
             <Input
+              id="email"
+              name="email"
+              type="text"
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="Username"
+              placeholder="Username or email"
+              value={data.email}
+              onChange={this.onInputChange}
             />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator("password", {
-            rules: [{ required: true, message: "Please input your Password!" }]
-          })(
+          </FormItem>
+          <FormItem
+            validateStatus={errors.password && "error"}
+            help={errors.password}
+          >
             <Input
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              id="password"
+              name="password"
               type="password"
-              placeholder="Password"
+              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder="password"
+              value={data.password}
+              onChange={this.onInputChange}
             />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator("remember", {
-            valuePropName: "checked",
-            initialValue: true
-          })(<Checkbox>Remember me</Checkbox>)}
-          <a className="login-form-forgot" href="">
-            Forgot password
-          </a>
-          <br />
-          <Link to="workflow">
+          </FormItem>
+          <FormItem>
             <Button
               type="primary"
               htmlType="submit"
               className="login-form-button"
             >
-              Log in
+              Login
             </Button>
-          </Link>
-          <br />
-          Or <a href="">register now!</a>
-        </FormItem>
-      </Form>
+          </FormItem>
+        </Form>
+      </div>
     );
   }
 }
 
-const LoginForm = Form.create()(NormalLoginForm);
-
-export default () => <LoginForm />;
+export default LoginForm;

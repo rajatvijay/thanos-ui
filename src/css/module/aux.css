@@ -1,0 +1,16 @@
+.aux-nav {
+  background-color: rgb(235, 240, 250);
+}
+
+.aux-item {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.aux-lead {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  color: rgba(48, 94, 190, 0.5);
+  font-size: 14px;
+  text-transform: uppercase;
+}

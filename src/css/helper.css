@@ -1,0 +1,77 @@
+.text-primary {
+  color: #305ebe;
+}
+
+.text-primary {
+  color: #305ebe;
+  opacity: 0.5;
+}
+
+.text-light {
+  color: #999;
+}
+.text-red {
+  color: red;
+}
+.text-green {
+  color: green;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-bold {
+  font-weight: bold;
+}
+.text-medium {
+  font-weight: medium;
+}
+.text-normal {
+  font-weight: normal;
+}
+.text-thin {
+  font-weight: 400;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.bg-primary {
+  background-color: #305ebe;
+}
+.bg-primary-light {
+  background: #ebf0fa;
+}
+
+.side-padder-16 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.vertical-padder-16 {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}

@@ -1,2 +1,8 @@
 @import url("framework/bootstrap-reboot.min.css");
 @import url("framework/bootstrap-grid.min.css");
+@import url("helper.css");
+@import url("module/sidebar-right.css");
+@import url("module/aux.css");
+@import url("section/users/users.css");
+@import url("section/users/profile.css");
+@import url("section/navbar/navbar-top.css");
