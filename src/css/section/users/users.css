@@ -1,0 +1,44 @@
+@import "card.css";
+
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 300px;
+  max-width: 350px;
+  flex-basis: auto;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  /*//display: inline-flex;*/
+  /*border: 1px solid #888;*/
+  background-color: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.card .head,
+.card .body,
+.card .foot {
+  padding: 16px;
+}
+
+.card > div {
+  border-bottom: 1px solid #ddd;
+}
+
+.card .head-link {
+  display: block;
+  position: relative;
+  padding-left: 48px;
+}
+
+.card .head-link .avatar {
+  position: absolute;
+  left: 0;
+}
+
+.card .head .username {
+  margin: 0;
+}

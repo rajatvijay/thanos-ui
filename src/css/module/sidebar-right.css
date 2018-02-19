@@ -1,0 +1,18 @@
+.sidebar-right {
+  background-color: #fff;
+  box-shadow: -30px 0 38px 0 rgba(0, 0, 0, 0.07);
+}
+
+.sidebar-head {
+  background: #305ebe;
+  padding: 14px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.close-trigger {
+  float: right;
+  color: #fff;
+  font-size: 14px;
+}
