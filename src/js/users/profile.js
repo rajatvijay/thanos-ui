@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
 
-class Profile extends React.Component {
+class Profile extends Component {
   constructor(props) {
     super();
     console.log(this.props);
@@ -107,10 +107,10 @@ class Profile extends React.Component {
                 <p>
                   <ul>
                     <li>
-                      <a href="#">JORGE UBALDO COLIN PESCINA </a>
+                      <a href="">JORGE UBALDO COLIN PESCINA </a>
                     </li>
                     <li>
-                      <a href="#">JORGE UBALDO COLIN PESCINA (MAIN)</a>
+                      <a href="">JORGE UBALDO COLIN PESCINA (MAIN)</a>
                     </li>
                   </ul>
                 </p>

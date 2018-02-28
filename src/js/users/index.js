@@ -5,7 +5,7 @@ import Profile from "./profile";
 import UserFilter from "./filter";
 import _ from "lodash";
 
-const { Sider } = Layout;
+const { Sider, Content } = Layout;
 
 const usersList = [
   {
@@ -87,7 +87,7 @@ class UserList extends Component {
 
   getUser(props) {
     if (props.profile.params.id !== undefined) {
-      const uid = parseInt(props.profile.params.id);
+      const uid = parseInt(props.profile.params.id, 10);
       var user = _.find(usersList, { id: uid });
       this.setState({ sidebar: false, userId: uid, user: user }, function() {
         console.log(this.state);
@@ -97,10 +97,10 @@ class UserList extends Component {
 
   render() {
     return (
-      <Layout className="users-container " id="users">
+      <Layout className="users-container inner-container">
         <Sider
           width={250}
-          style={{ background: "#ebf0fa", height: "100vh" }}
+          style={{ overflow: "auto", height: "100vh", position: "fixed" }}
           className="aux-nav aux-nav-filter bg-primary-light"
         >
           <h5 className="aux-item aux-lead">Filters</h5>
@@ -120,15 +120,19 @@ class UserList extends Component {
             <UserFilter placeholder="Group" />
           </div>
         </Sider>
-        <CardList userList={usersList} />
+        <Layout style={{ marginLeft: 250 }}>
+          <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+            <CardList userList={usersList} />
+          </Content>
 
-        {this.state.userId ? (
-          <Profile
-            user={this.state.user}
-            sidebar={this.state.sidebar}
-            toggleSidebar={this.callBackCollapser}
-          />
-        ) : null}
+          {this.state.userId ? (
+            <Profile
+              user={this.state.user}
+              sidebar={this.state.sidebar}
+              toggleSidebar={this.callBackCollapser}
+            />
+          ) : null}
+        </Layout>
       </Layout>
     );
   }

@@ -6,7 +6,7 @@ import debounce from "lodash.debounce";
 
 const Option = Select.Option;
 
-class UserFilter extends Component {
+class WorkflowFilter extends Component {
   constructor(props) {
     super(props);
     this.lastFetchId = 0;
@@ -65,4 +65,4 @@ class UserFilter extends Component {
   }
 }
 
-export default UserFilter;
+export default WorkflowFilter;

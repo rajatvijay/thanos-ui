@@ -6,6 +6,7 @@
   "dependencies": {
     "antd": "^3.1.6",
     "autoprefixer": "7.1.6",
+    "axios": "^0.18.0",
     "babel-core": "6.26.0",
     "babel-eslint": "7.2.3",
     "babel-loader": "7.1.2",
@@ -20,6 +21,7 @@
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
     "lodash": "^4.17.5",
+    "moment-timezone": "^0.5.14",
     "node-less": "^1.0.0",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
@@ -29,6 +31,7 @@
     "react": "^16.2.0",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.2.0",
+    "react-moment": "^0.7.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^2.2.1",

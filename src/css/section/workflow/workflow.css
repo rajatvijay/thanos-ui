@@ -1,0 +1,53 @@
+.lc-card-head {
+  padding-left: 8px 16px;
+}
+
+.lc-card-head .group-overview {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lc-card .sub-step-list {
+  display: block;
+  overflow-x: auto;
+}
+
+.lc-card .lc-card-body .sub-step-list .groupaz {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 250px;
+  margin-right: 20px;
+}
+
+.lc-card .lc-card-body .groupaz .grp-class {
+  padding-bottom: 12px;
+  font-weight: 500;
+  border-bottom: 1px solid #f3f5fa;
+  display: block;
+}
+
+.lc-card .lc-card-body .groupaz .lc-step i,
+.lc-card .lc-card-body .groupaz ul li i {
+  font-size: 14px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.lc-card .lc-card-body .groupaz ul {
+  list-style: none;
+  padding-left: 25px;
+  margin-top: 24px;
+}
+
+.lc-card .lc-card-body .groupaz ul li {
+  height: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lc-card .lc-card-body .groupaz ul li a:hover {
+  text-decoration: none;
+}

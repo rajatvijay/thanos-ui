@@ -3,7 +3,7 @@ import LoginForm from "./login-form";
 import { withRouter } from "react-router-dom";
 //import bindActionCreators from "redux";
 import { connect } from "react-redux";
-import { userLogin } from "./actions-login";
+//import { userLogin, login } from "./actions-login";
 import "../../css/section/login/login.css";
 
 const mapStateToProps = state => {
@@ -26,6 +26,10 @@ class Login extends Component {
     super(props);
   }
 
+  // submit = data =>{
+  //   this.props.login(data).then( ()=>this.props.history.push("/") );
+  // }
+
   render() {
     return (
       <div className="login login-container container-fluid" id="login">
@@ -42,3 +46,4 @@ class Login extends Component {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
+//export default withRouter(connect({login})(Login));

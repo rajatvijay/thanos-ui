@@ -25,6 +25,7 @@ class LoginForm extends React.Component {
     if (Object.keys(errors).length === 0) {
       //if no error is found then submit
       this.props.userLogin(data);
+      //this.props.onSubmit(data);
     }
   };
 

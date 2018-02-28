@@ -1,3 +1,13 @@
+//import api from "./api";
+
+// export const userLoggegIn = (user) => ({
+//   type : "USER_LOGGED_IN",
+//   user
+// })
+
+// export const login = credentials => (dispatch)=>
+//   api.user.login(credentials).then(user => dispatch(userLoggegIn(user)));
+
 export const userLogin = user => {
   console.log(user);
   return {

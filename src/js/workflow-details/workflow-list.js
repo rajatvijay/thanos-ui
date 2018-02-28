@@ -281,7 +281,7 @@ class WorkflowCardBody extends Component {
             <li key={"key-" + index}>
               <Link
                 to={
-                  "/workflows/instances/" +
+                  "/workflow/instances/" +
                   that.props.workflowData.id +
                   "?step=" +
                   s.id
@@ -477,8 +477,8 @@ class WorkflowCardBody extends Component {
                   return (
                     <li key={"key" + index}>
                       <Link
-                        to={
-                          "/workflows/instances/" +
+                        href={
+                          "/lifecycles/instances/" +
                           this.props.workflowData.id +
                           "?step=" +
                           s.id

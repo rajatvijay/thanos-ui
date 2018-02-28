@@ -2,21 +2,22 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "../login";
 import Navbar from "../navbar";
-import WorkflowList from "../workflow";
+import Workflow from "../workflow";
+import WorkflowDetails from "../workflow-details";
 import Users from "../users";
 import "antd/dist/antd.css";
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
   return {
-    loginUser: state.loginUser
+    loginUser: state.loginUser,
+    user: state.user
   };
 };
 
 class MainRoutes extends React.Component {
   constructor(props) {
-    super();
-    console.log(this.props);
+    super(props);
   }
 
   render() {
@@ -27,10 +28,9 @@ class MainRoutes extends React.Component {
             <Navbar />
             <Switch>
               {/*<Route path="/" render={ ( props ) => ( props.location.pathname !== "/login") && <Navbar /> }/>*/}
-
               <Route path="/login" excat component={Login} />
+              <Route path="/workflows" component={Workflow} />
 
-              <Route path="/workflows" component={WorkflowList} />
               <Route path="/users/:id?" component={Users} />
             </Switch>
           </div>

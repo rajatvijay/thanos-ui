@@ -1,10 +1,10 @@
-const initialState = {
-  user_id: null,
-  username: "",
-  userAuthenticated: false
-};
+// const initialState = {
+//   user_id: null,
+//   username: "",
+//   userAuthenticated: false
+// };
 
-export default (state = initialState, action) => {
+export default (state = {}, action = {}) => {
   switch (action.type) {
     case "LOGIN":
       return Object.assign({}, state, {
@@ -18,12 +18,8 @@ export default (state = initialState, action) => {
         username: "",
         userAuthenticated: false
       });
-    case "LOGOUT_SUCCESSFUL":
-      return Object.assign({}, state, {
-        user_id: null,
-        username: "",
-        userAuthenticated: false
-      });
+    case "USER_LOGGED_IN":
+      return action.user;
     default:
       return state;
   }
