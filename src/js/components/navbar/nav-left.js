@@ -20,7 +20,7 @@ class NavLeft extends Component {
         >
           <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
             <Menu.Item key="1">
-              <Link to="/workflows" className="nav-text">
+              <Link to="/workflows/instances" className="nav-text">
                 <Icon type="switcher" />
                 <span className="nav-text">WorkFlows</span>
               </Link>

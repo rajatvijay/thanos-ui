@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Menu, Icon, Button, Dropdown } from "antd";
-import logo from "../../images/client-logo/mck.png";
+import logo from "../../../images/client-logo/mck.png";
 
 const { Header } = Layout;
 
@@ -31,7 +31,7 @@ class NavTop extends Component {
             position: "fixed",
             width: "100%",
             left: 0,
-            zIndex: 1,
+            zIndex: 2,
             boxShadow: "0 1px 4px 0 rgba(0,0,0,0.09)"
           }}
         >

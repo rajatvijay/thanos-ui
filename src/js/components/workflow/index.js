@@ -4,7 +4,7 @@ import WorkflowList from "./workflow-list";
 //import Profile from "./profile";
 import WorkflowFilter from "./filter";
 import _ from "lodash";
-import data from "./data.js";
+import data from "../../data/data.js";
 
 const { Sider, Content } = Layout;
 

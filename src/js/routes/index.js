@@ -1,23 +1,23 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Login from "../login";
-import Navbar from "../navbar";
-import Workflow from "../workflow";
-import WorkflowDetails from "../workflow-details";
-import Users from "../users";
+import Login from "../components/login";
+import Navbar from "../components/navbar";
+import Workflow from "../components/workflow";
+import WorkflowDetails from "../components/workflow-details";
+import Users from "../components/users";
 import "antd/dist/antd.css";
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
   return {
-    loginUser: state.loginUser,
-    user: state.user
+    loginUser: state.loginUser
   };
 };
 
 class MainRoutes extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props);
   }
 
   render() {
@@ -28,9 +28,13 @@ class MainRoutes extends React.Component {
             <Navbar />
             <Switch>
               {/*<Route path="/" render={ ( props ) => ( props.location.pathname !== "/login") && <Navbar /> }/>*/}
-              <Route path="/login" excat component={Login} />
-              <Route path="/workflows" component={Workflow} />
 
+              <Route path="/login" excat component={Login} />
+              <Route path="/workflows/instances/" exact component={Workflow} />
+              <Route
+                path="/workflows/instances/:id?"
+                component={WorkflowDetails}
+              />
               <Route path="/users/:id?" component={Users} />
             </Switch>
           </div>

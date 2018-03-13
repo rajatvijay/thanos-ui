@@ -8,6 +8,7 @@ import {
   Avatar,
   Progress,
   Tag,
+  Button,
   Popover,
   Divider
 } from "antd";
@@ -281,7 +282,7 @@ class WorkflowCardBody extends Component {
             <li key={"key-" + index}>
               <Link
                 to={
-                  "/workflow/instances/" +
+                  "/workflows/instances/" +
                   that.props.workflowData.id +
                   "?step=" +
                   s.id
@@ -477,8 +478,8 @@ class WorkflowCardBody extends Component {
                   return (
                     <li key={"key" + index}>
                       <Link
-                        href={
-                          "/lifecycles/instances/" +
+                        to={
+                          "/workflows/instances/" +
                           this.props.workflowData.id +
                           "?step=" +
                           s.id
@@ -518,7 +519,9 @@ class WorkflowCardBody extends Component {
       <div className="lc-card-body">
         <Row>
           <Col span={12} className="">
-            <button>View details</button>
+            <Link to={"instances/" + this.props.workflowData.id + "/"}>
+              <Button type="primary">View details</Button>
+            </Link>
           </Col>
           <Col span={12} className="text-right text-light ">
             <span>
