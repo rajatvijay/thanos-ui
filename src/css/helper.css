@@ -26,6 +26,9 @@
 .text-light {
   color: #999;
 }
+.text-white {
+  color: #fff;
+}
 
 /*Text aligmnet*/
 .text-center {

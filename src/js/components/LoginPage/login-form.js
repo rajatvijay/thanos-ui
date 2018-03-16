@@ -1,21 +1,61 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import { Form, Button, Input, Icon } from "antd";
 import validator from "validator";
+import { userActions } from '../../actions';
 
 const FormItem = Form.Item;
 
 class LoginForm extends React.Component {
+
   constructor(props) {
     super(props);
+
+    // reset login status
+
     this.state = {
-      data: {},
-      loading: false,
-      errors: {}
+        username: '',
+        password: '',
+        submitted: false,
+        data: {},
+        loading: false,
+        errors: {}
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onSubmit = e => {
+  handleChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit(e) {
     e.preventDefault();
+
+    this.setState({ submitted: true });
+    const { username, password } = this.state;
+    const { dispatch } = this.props;
+    if (username && password) {
+        dispatch(userActions.login(username, password));
+    }
+  }
+
+
+
+
+
+
+
+  /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+
+
+
+  onSubmit = e => {
+    // e.preventDefault();
 
     let id = Math.floor(Math.random() * 10) + 1; //generate random id for test
     let data = this.state.data;
@@ -25,14 +65,17 @@ class LoginForm extends React.Component {
     if (Object.keys(errors).length === 0) {
       //if no error is found then submit
       //this.props.userLogin(data);
-      this.props.onSubmit(data);
+      //this.props.onSubmit(data);
     }
+
+    this.handleSubmit(e);
   };
 
   //client side data validation
   validate = data => {
     const errors = {};
     //if (!validator.isEmail(data.email)) errors.email = "Invalid email";
+    if (!data.username) errors.username = "username can't be empty";
     if (!data.password) errors.password = "Password can't be empty";
     return errors;
   };
@@ -42,25 +85,28 @@ class LoginForm extends React.Component {
     this.setState({
       data: { ...this.state.data, [e.target.name]: e.target.value }
     });
+
+    this.handleChange(e);
   };
 
   render() {
-    const { data, errors } = this.state;
+    const { data, errors, username, password, submitted } = this.state;
+
     return (
       <div className="login-form-box">
         <Form layout="vertical" onSubmit={this.onSubmit} className="login-form">
           <FormItem
-            validateStatus={errors.email && "error"}
+            validateStatus={errors.username && "error"}
             hasFeedback
-            help={errors.email}
+            help={errors.username}
           >
             <Input
-              id="email"
-              name="email"
+              id="username"
+              name="username"
               type="text"
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="Username or email"
-              value={data.email}
+              value={data.username}
               onChange={this.onInputChange}
             />
           </FormItem>
@@ -86,6 +132,10 @@ class LoginForm extends React.Component {
             >
               Login
             </Button>
+            <br/>
+            <br/>
+            <br/>
+            <Link to="/register" > Sign up</Link>
           </FormItem>
         </Form>
       </div>

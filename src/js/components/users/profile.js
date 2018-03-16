@@ -7,7 +7,6 @@ const { Sider } = Layout;
 class Profile extends Component {
   constructor(props) {
     super();
-    console.log(this.props);
   }
 
   callback = key => {

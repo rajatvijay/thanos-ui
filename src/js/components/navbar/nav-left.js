@@ -33,9 +33,20 @@ class NavLeft extends Component {
               </Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Icon type="line-chart" />
-              <span className="nav-text">Insight</span>
+              <Link to="/insight">
+                <Icon type="line-chart" />
+                <span className="nav-text">Insight</span>
+              </Link>
             </Menu.Item>
+
+            <Menu.Item key="4">
+              <Link to="/login" className="nav-text">
+                <Icon type="logout" />
+                <span className="nav-text">Logout</span>
+              </Link>
+            </Menu.Item>
+
+
           </Menu>
         </Sider>
       </div>

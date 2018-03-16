@@ -9,7 +9,6 @@
 //   api.user.login(credentials).then(user => dispatch(userLoggegIn(user)));
 
 export const userLogin = user => {
-  console.log(user);
   return {
     type: "LOGIN",
     payload: user
