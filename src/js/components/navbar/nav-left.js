@@ -45,8 +45,6 @@ class NavLeft extends Component {
                 <span className="nav-text">Logout</span>
               </Link>
             </Menu.Item>
-
-
           </Menu>
         </Sider>
       </div>

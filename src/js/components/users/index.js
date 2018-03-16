@@ -89,8 +89,7 @@ class UserList extends Component {
     if (props.profile.params.id !== undefined) {
       const uid = parseInt(props.profile.params.id, 10);
       var user = _.find(usersList, { id: uid });
-      this.setState({ sidebar: false, userId: uid, user: user }, function() {
-      });
+      this.setState({ sidebar: false, userId: uid, user: user }, function() {});
     }
   }
 

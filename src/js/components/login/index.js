@@ -26,10 +26,10 @@ class Login extends Component {
     super(props);
   }
 
-  submit = data =>{
+  submit = data => {
     console.log(data);
     //this.props.userLogin(data);
-  }
+  };
 
   render() {
     return (
@@ -48,4 +48,4 @@ class Login extends Component {
 }
 
 //export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
-export default withRouter(connect(null,{userLogin})(Login));
+export default withRouter(connect(null, { userLogin })(Login));

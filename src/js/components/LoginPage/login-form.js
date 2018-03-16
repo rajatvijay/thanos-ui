@@ -1,25 +1,24 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon } from "antd";
 import validator from "validator";
-import { userActions } from '../../actions';
+import { userActions } from "../../actions";
 
 const FormItem = Form.Item;
 
 class LoginForm extends React.Component {
-
   constructor(props) {
     super(props);
 
     // reset login status
 
     this.state = {
-        username: '',
-        password: '',
-        submitted: false,
-        data: {},
-        loading: false,
-        errors: {}
+      username: "",
+      password: "",
+      submitted: false,
+      data: {},
+      loading: false,
+      errors: {}
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -38,21 +37,13 @@ class LoginForm extends React.Component {
     const { username, password } = this.state;
     const { dispatch } = this.props;
     if (username && password) {
-        dispatch(userActions.login(username, password));
+      dispatch(userActions.login(username, password));
     }
   }
 
-
-
-
-
-
-
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
-
-
 
   onSubmit = e => {
     // e.preventDefault();
@@ -132,10 +123,10 @@ class LoginForm extends React.Component {
             >
               Login
             </Button>
-            <br/>
-            <br/>
-            <br/>
-            <Link to="/register" > Sign up</Link>
+            <br />
+            <br />
+            <br />
+            <Link to="/register"> Sign up</Link>
           </FormItem>
         </Form>
       </div>
