@@ -26,6 +26,8 @@ class HomePage extends React.Component {
         <p>You're logged in with React!!</p>
         <h3>All registered users:</h3>
         {users.loading && <em>Loading users...</em>}
+        {users.erros && <p>users.erros</p>}
+        {users.item && console.log(users)}
 
         <p>
           <Link to="/login">Logout</Link>
