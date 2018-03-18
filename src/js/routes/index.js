@@ -37,8 +37,6 @@ class MainRoutes extends React.Component {
       // clear alert on location change
       dispatch(alertActions.clear());
     });
-
-    console.log(props);
   }
 
   render() {

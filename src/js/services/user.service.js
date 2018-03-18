@@ -10,30 +10,43 @@ export const userService = {
   delete: _delete
 };
 
+let domain = window.location.hostname;
+domain = domain.split(".");
+let client = domain[0];
+
 function login(username, password) {
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
+    },
     body: JSON.stringify({ username, password })
   };
 
-  return fetch("/users/authenticate", requestOptions)
-    .then(response => {
-      if (!response.ok) {
-        return Promise.reject(response.statusText);
-      }
+  console.log("requestOptions- header");
+  console.log(requestOptions);
 
-      return response.json();
-    })
-    .then(user => {
-      // login successful if there's a jwt token in the response
-      if (user && user.token) {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(user));
-      }
+  return (
+    fetch("/users/authenticate", requestOptions)
+      //return fetch("http://thevetted.co/api/v1/users/login/", requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          return Promise.reject(response.statusText);
+        }
 
-      return user;
-    });
+        return response.json();
+      })
+      .then(user => {
+        // login successful if there's a jwt token in the response
+        if (user && user.token) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem("user", JSON.stringify(user));
+        }
+
+        return user;
+      })
+  );
 }
 
 function logout() {
@@ -44,10 +57,17 @@ function logout() {
 function getAll() {
   const requestOptions = {
     method: "GET",
-    headers: authHeader()
+    //headers: authHeader()
+    headers: {
+      "Content-Type": "application/json",
+      "X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
+    }
   };
 
-  return fetch("/users", requestOptions).then(handleResponse);
+  return fetch("http://thevetted.co/api/v1/users/", requestOptions).then(
+    handleResponse
+  );
+  //return fetch("/users", requestOptions).then(handleResponse);
 }
 
 function getById(id) {
