@@ -32,8 +32,6 @@ class MainRoutes extends React.Component {
     super(props);
 
     const { dispatch } = this.props;
-    console.log(this.props);
-
     history.listen((location, action) => {
       // clear alert on location change
       dispatch(alertActions.clear());
@@ -50,8 +48,6 @@ class MainRoutes extends React.Component {
 
         <Router history={history}>
           <div>
-            {console.log("history.location.pathname")}
-            {console.log(history.location.pathname)}
             {localStorage.getItem("user") ||
             !history.location.pathname === "/login" ? (
               <Navbar />
