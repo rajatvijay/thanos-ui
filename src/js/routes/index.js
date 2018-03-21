@@ -9,16 +9,15 @@ import {
 import { connect } from "react-redux";
 import { history } from "../_helpers";
 import { alertActions } from "../actions";
+
 import { PrivateRoute } from "../components/PrivateRoute";
 import { HomePage } from "../components/HomePage";
 import { LoginPage } from "../components/LoginPage";
 import { RegisterPage } from "../components/RegisterPage";
-
-import Login from "../components/login";
-import Navbar from "../components/navbar";
-import Workflow from "../components/workflow";
-import WorkflowDetails from "../components/workflow-details";
-import Users from "../components/users";
+import Navbar from "../components/Navbar";
+import Workflow from "../components/Workflow";
+import WorkflowDetails from "../components/WorkflowDetails";
+import Users from "../components/Users";
 import "antd/dist/antd.css";
 
 function mapStateToProps(state) {
@@ -33,11 +32,14 @@ class MainRoutes extends React.Component {
     super(props);
 
     const { dispatch } = this.props;
+    console.log(this.props)
+
     history.listen((location, action) => {
       // clear alert on location change
       dispatch(alertActions.clear());
     });
   }
+  
 
   render() {
     const { alert } = this.props;
@@ -49,7 +51,9 @@ class MainRoutes extends React.Component {
 
         <Router history={history}>
           <div>
-            {localStorage.getItem("user") ? <Navbar /> : null}
+            {console.log('history.location.pathname')}
+            {console.log(history.location.pathname)}
+            {localStorage.getItem("user") || (!history.location.pathname === "/login") ? <Navbar /> : null}
 
             <Switch>
               <Route path="/login" component={LoginPage} />

@@ -39,18 +39,18 @@ export function configureFakeBackend() {
           return;
         }
 
-        // get users
-        // if (url.endsWith('/users') && opts.method === 'GET') {
-        //     // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
-        //     if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
-        //         resolve({ ok: true, json: () => users });
-        //     } else {
-        //         // return 401 not authorised if token is null or invalid
-        //         reject('Unauthorised');
-        //     }
+        //get users
+        if (url.endsWith('/users') && opts.method === 'GET') {
+            // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
+            if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+                resolve({ ok: true, json: () => users });
+            } else {
+                // return 401 not authorised if token is null or invalid
+                reject('Unauthorised');
+            }
 
-        //     return;
-        // }
+            return;
+        }
 
         // get user by id
         if (url.match(/\/users\/\d+$/) && opts.method === "GET") {

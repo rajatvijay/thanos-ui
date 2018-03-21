@@ -10,9 +10,12 @@ export const userService = {
   delete: _delete
 };
 
+//Get client name for form headers.
 let domain = window.location.hostname;
 domain = domain.split(".");
 let client = domain[0];
+
+
 
 function login(username, password) {
   const requestOptions = {
@@ -27,9 +30,8 @@ function login(username, password) {
   console.log("requestOptions- header");
   console.log(requestOptions);
 
-  return (
-    fetch("/users/authenticate", requestOptions)
-      //return fetch("http://thevetted.co/api/v1/users/login/", requestOptions)
+  return (fetch("/users/authenticate", requestOptions)
+  //return (fetch("http://thevetted.co/api/v1/users/login/", requestOptions)
       .then(response => {
         if (!response.ok) {
           return Promise.reject(response.statusText);
@@ -64,10 +66,10 @@ function getAll() {
     }
   };
 
-  return fetch("http://thevetted.co/api/v1/users/", requestOptions).then(
-    handleResponse
-  );
-  //return fetch("/users", requestOptions).then(handleResponse);
+  // return fetch("http://thevetted.co/api/v1/users/", requestOptions).then(
+  //   handleResponse
+  // );
+  return fetch("/users", requestOptions).then(handleResponse);
 }
 
 function getById(id) {
