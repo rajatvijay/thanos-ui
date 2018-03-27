@@ -1,7 +1,6 @@
 import { authHeader } from "../_helpers";
 
 export const workflowDetailsService = {
-  getAll,
   getById,
   update,
   delete: _delete

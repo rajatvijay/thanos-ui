@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon } from "antd";
 import validator from "validator";
-import { userActions } from "../../actions";
+import { userActions, login } from "../../actions";
 
 const FormItem = Form.Item;
 
@@ -37,7 +37,7 @@ class LoginForm extends React.Component {
     const { username, password } = this.state;
     const { dispatch } = this.props;
     if (username && password) {
-      dispatch(userActions.login(username, password));
+      dispatch(login(username, password));
     }
   }
 

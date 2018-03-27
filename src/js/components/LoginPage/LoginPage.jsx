@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import LoginForm from "./login-form";
-import { userActions } from "../../actions";
+import { userActions, logout } from "../../actions";
 import "../../../css/section/login/login.css";
 
 class LoginPage extends React.Component {
@@ -10,7 +10,7 @@ class LoginPage extends React.Component {
     super(props);
 
     // reset login status
-    this.props.dispatch(userActions.logout());
+    //this.props.dispatch(logout());
   }
 
   render() {

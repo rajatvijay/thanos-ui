@@ -1,19 +1,19 @@
 import { workflowDetailsConstants } from "../constants";
-import { userService } from "../services";
+import { workflowDetailsService } from "../services";
 import { alertActions } from "./";
 import { history } from "../_helpers";
 
 export const workflowDetailsActions = {
-  getAll,
+  getById,
   delete: _delete
 };
 
-function getAll() {
+function getById() {
   return dispatch => {
     dispatch(request());
 
     workflowDetailsService
-      .getAll()
+      .getById()
       .then(
         workflowDetails => dispatch(success(workflowDetails)),
         error => dispatch(failure(error))
@@ -21,13 +21,13 @@ function getAll() {
   };
 
   function request() {
-    return { type: workflowDetailsConstants.GETALL_REQUEST };
+    return { type: workflowDetailsConstants.GET_REQUEST };
   }
   function success(workflowDetails) {
-    return { type: workflowDetailsConstants.GETALL_SUCCESS, workflowDetails };
+    return { type: workflowDetailsConstants.GET_SUCCESS, workflowDetails };
   }
   function failure(error) {
-    return { type: workflowDetailsConstants.GETALL_FAILURE, error };
+    return { type: workflowDetailsConstants.GET_FAILURE, error };
   }
 }
 

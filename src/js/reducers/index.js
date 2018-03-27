@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
 
-import { authentication } from "./authentication.reducer";
-import { registration } from "./registration.reducer";
-import { users } from "./users.reducer";
-import { alert } from "./alert.reducer";
+import { authentication } from "./authentication";
+import { registration } from "./registration";
+import { users } from "./users";
+import { alert } from "./alert";
+import { workflow } from "./workflow_list";
+import { workflowDetails } from "./workflow_details";
 
 const rootReducer = combineReducers({
   authentication,
