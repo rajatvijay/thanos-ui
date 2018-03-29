@@ -1,6 +1,6 @@
 import { userConstants } from "../constants";
 import { userService } from "../services";
-//import { logout as UserLogout } from "../services/user";
+import { logout as UserLogout } from "../services/user";
 import { alertActions } from "./";
 import { history } from "../_helpers";
 
@@ -25,16 +25,16 @@ export const login = (username, password) => async dispatch => {
   }
 };
 
-// export const logout = () => async dispatch => {
-//   try {
-//     const response = await UserLogout();
-//     dispatch({
-//       type: userConstants.LOGOUT
-//     });
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+export const logout = () => async dispatch => {
+  try {
+    const response = await UserLogout();
+    dispatch({
+      type: userConstants.LOGOUT
+    });
+  } catch (error) {
+    throw error;
+  }
+};
 
 function register(user) {
   return dispatch => {

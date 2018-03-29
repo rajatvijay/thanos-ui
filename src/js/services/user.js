@@ -1,6 +1,7 @@
 import { authHeader } from "../_helpers";
 import axios from "axios";
 
+import { getValueFromCookie } from "../utils/request";
 export const userService = {
   login,
   register,
@@ -22,19 +23,15 @@ function login(username, password) {
       "Content-Type": "application/json",
       "X-DTS-SCHEMA": "vetted"
     },
-    credentials: "same-origin",
+    credentials: "include",
     body: JSON.stringify({ email: username, password: password })
   };
 
-  console.log("requestOptions- header");
-  console.log(requestOptions);
-  console.log(requestOptions.body, "++++++++++++++_-----------------------");
   return fetch("http://slackcart.com/api/v1/users/login/", requestOptions)
     .then(response => {
       if (!response.ok) {
         return Promise.reject(response.statusText);
       }
-
       return response.json();
     })
     .then(user => {
@@ -54,7 +51,8 @@ export const logout = async () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-DTS-SCHEMA": "vetted"
+      "X-DTS-SCHEMA": "vetted",
+      "X-CSRFToken": getValueFromCookie("csrftoken")
     },
     credentials: "include",
     body: JSON.stringify({})
@@ -64,10 +62,8 @@ export const logout = async () => {
       "http://slackcart.com/api/v1/users/logout/",
       requestOptions
     );
-    console.log(response, "++++++++++++++++++++++++++++");
     return response;
   } catch (error) {
-    console.log(error, "+_---------------------------");
     throw error;
   }
 };
