@@ -31,6 +31,7 @@ export const logout = () => async dispatch => {
     dispatch({
       type: userConstants.LOGOUT
     });
+    history.push("/login");
   } catch (error) {
     throw error;
   }

@@ -8,9 +8,6 @@ import "../../../css/section/login/login.css";
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
-
-    // reset login status
-    this.props.dispatch(logout());
   }
 
   render() {

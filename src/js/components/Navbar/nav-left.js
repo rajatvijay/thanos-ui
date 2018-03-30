@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Layout, Menu, Icon } from "antd";
+import { connect } from "react-redux";
+import { logout } from "../../actions";
 import { history } from "../../_helpers";
 import _ from "lodash";
 
@@ -9,8 +11,8 @@ const { Sider } = Layout;
 const menuList = [
   { name: "Workflows", path: "/workflows/instances", icon: "switcher" },
   { name: "Users", path: "/users", icon: "user" },
-  { name: "Insight", path: "/insight", icon: "line-chart" },
-  { name: "Logout", path: "/login", icon: "logout" }
+  { name: "Insight", path: "/insight", icon: "line-chart" }
+  //{ name: "Logout", path: "/login", icon: "logout" }
 ];
 
 class NavLeft extends Component {
@@ -44,6 +46,10 @@ class NavLeft extends Component {
     this.setState({ activePath: code });
   }
 
+  onLogout(key) {
+    this.props.dispatch(logout());
+  }
+
   render() {
     return (
       <div className="" id="">
@@ -73,10 +79,24 @@ class NavLeft extends Component {
               );
             })}
           </Menu>
+
+          <br />
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={["5"]}
+            style={{ position: "absolute", bottom: "61px" }}
+            onClick={this.onLogout.bind(this, "key")}
+          >
+            <Menu.Item key="5">
+              <Icon type="logout" />
+              <span className="nav-text">Logout</span>
+            </Menu.Item>
+          </Menu>
         </Sider>
       </div>
     );
   }
 }
 
-export default () => <NavLeft />;
+export default connect(null)(NavLeft);
