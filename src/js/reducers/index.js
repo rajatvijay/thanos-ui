@@ -11,7 +11,9 @@ const rootReducer = combineReducers({
   authentication,
   registration,
   users,
-  alert
+  alert,
+  workflow,
+  workflowDetails
 });
 
 export default rootReducer;

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Layout } from "antd";
+import { connect } from "react-redux";
+import { Layout, Icon } from "antd";
 import WorkflowList from "./workflow-list";
 //import Profile from "./profile";
+import { workflowActions } from "../../actions";
 import WorkflowFilter from "./filter";
 import _ from "lodash";
 import data from "../../data/data.js";
@@ -10,13 +12,13 @@ const { Sider, Content } = Layout;
 
 const workflowListData = data;
 
-const Workflows = ({ match }) => (
-  <WorkflowList profile={match} listData={workflowListData} />
+const Workflows = ({ props }) => (
+  <WorkflowList profile={props.match} listData={workflowListData} {...props} />
 );
 
 class Workflow extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = { sidebar: false, workflowId: null };
   }
 
@@ -26,6 +28,7 @@ class Workflow extends Component {
 
   componentDidMount = () => {
     //this.getUser(this.props);
+    this.props.dispatch(workflowActions.getAll());
   };
 
   callBackCollapser = () => {
@@ -67,12 +70,27 @@ class Workflow extends Component {
             <WorkflowFilter placeholder="Group" />
           </div>
         </Sider>
-        <Layout style={{ marginLeft: 250, background: "#FBFBFF" }}>
-          <Workflows />
+        <Layout
+          style={{ marginLeft: 250, background: "#FBFBFF", height: "100vh" }}
+        >
+          {this.props.workflow.loading ? (
+            <div className="text-center text-bold mr-top-lg">
+              <Icon type="loading" style={{ fontSize: 24 }} />
+            </div>
+          ) : (
+            <Workflows props={this.props} />
+          )}
         </Layout>
       </Layout>
     );
   }
 }
 
-export default Workflow;
+function mapStateToProps(state) {
+  const { workflow } = state;
+  return {
+    workflow
+  };
+}
+
+export default connect(mapStateToProps)(Workflow);

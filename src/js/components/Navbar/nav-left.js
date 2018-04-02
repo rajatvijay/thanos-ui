@@ -84,7 +84,7 @@ class NavLeft extends Component {
           <Menu
             theme="dark"
             mode="inline"
-            selectedKeys={["5"]}
+            selectedKeys={["0"]}
             style={{ position: "absolute", bottom: "61px" }}
             onClick={this.onLogout.bind(this, "key")}
           >

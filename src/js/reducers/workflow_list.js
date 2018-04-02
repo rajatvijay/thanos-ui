@@ -1,17 +1,22 @@
 import { workflowConstants } from "../constants";
 
-export function workflow (state = {}, action) {
+//const initialState = user ? { loggedIn: true, user } : {};
+
+export function workflow(state = {}, action) {
   switch (action.type) {
     case workflowConstants.GETALL_REQUEST:
       return {
         loading: true
+        //workflowList: action.workflows,
       };
     case workflowConstants.GETALL_SUCCESS:
       return {
-        items: action.workflows
+        loading: false,
+        workflow: action.workflow
       };
     case workflowConstants.GETALL_FAILURE:
       return {
+        loading: false,
         error: action.error
       };
     default:

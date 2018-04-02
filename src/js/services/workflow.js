@@ -16,14 +16,18 @@ function getAll() {
     //headers: authHeader()
     headers: {
       "Content-Type": "application/json",
-      "X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
-    }
+      //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
+      "X-DTS-SCHEMA": "vetted"
+    },
+    credentials: "include"
   };
 
   // return fetch("http://thevetted.co/api/v1/users/", requestOptions).then(
   //   handleResponse
   // );
-  return fetch("/api/workflows", requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/workflows/", requestOptions).then(
+    handleResponse
+  );
 }
 
 function getById(id) {

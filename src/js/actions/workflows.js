@@ -15,7 +15,7 @@ function getAll() {
     workflowService
       .getAll()
       .then(
-        workflow => dispatch(success(workflow)),
+        workflow => dispatch(success(workflow.results)),
         error => dispatch(failure(error))
       );
   };
