@@ -9,9 +9,9 @@ import "../css/App.css";
 import "antd/dist/antd.css";
 
 // setup fake backend
-import { configureFakeBackend } from "./_helpers";
+//import { configureFakeBackend } from "./_helpers";
 
-configureFakeBackend();
+//configureFakeBackend();
 
 ReactDOM.render(
   <Provider store={store}>

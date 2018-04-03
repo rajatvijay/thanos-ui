@@ -57,3 +57,15 @@
 .login-box .btn-login {
   margin-top: 100px;
 }
+
+/*magiclink*/
+
+.magic--submitted {
+  padding-top: 40px;
+}
+
+.magic--submitted .icon .material-icons {
+  font-size: 60px;
+  color: #8bcd36;
+  margin-bottom: 20px;
+}

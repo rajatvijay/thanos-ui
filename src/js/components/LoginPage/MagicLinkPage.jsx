@@ -1,26 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import LoginForm from "./login-form";
+import LoginForm from "./magic-form";
 import { Icon } from "antd";
-import { userActions, logout } from "../../actions";
 import "../../../css/section/login/login.css";
 
-class LoginPage extends React.Component {
+class MagicLoginPage extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const { loggingIn } = this.props;
+    const { loading } = this.props;
     return (
       <div className="login login-container container-fluid" id="login">
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
             <div className="login-box ">
-              {this.props.loggingIn ? (
-                <div className="text-center mr-top-lg">
-                  <Icon type="loading" style={{ fontSize: 24 }} />
+              {this.props.emailAuth.loading ? (
+                <div>
+                  <Icon type="loading" />
                 </div>
               ) : (
                 <LoginForm {...this.props} />
@@ -34,13 +33,16 @@ class LoginPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { loggingIn } = state.authentication;
-  const { alert } = state;
+  const { emailAuth } = state.users;
+  const { loading, error, submitted } = emailAuth;
   return {
-    loggingIn,
-    alert
+    emailAuth: {
+      loading,
+      error,
+      submitted
+    }
   };
 }
 
-const connectedLoginPage = connect(mapStateToProps)(LoginPage);
-export { connectedLoginPage as LoginPage };
+const connectedLoginPage = connect(mapStateToProps)(MagicLoginPage);
+export { connectedLoginPage as MagicLoginPage };

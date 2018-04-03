@@ -13,6 +13,7 @@ import { alertActions } from "../actions";
 import { PrivateRoute } from "../components/PrivateRoute";
 import { HomePage } from "../components/HomePage";
 import { LoginPage } from "../components/LoginPage";
+import { MagicLoginPage } from "../components/LoginPage/MagicLinkPage";
 import { RegisterPage } from "../components/RegisterPage";
 import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
@@ -40,6 +41,8 @@ class MainRoutes extends React.Component {
 
   render() {
     const { alert } = this.props;
+    console.log("alert---------->>");
+    console.log(alert);
     return (
       <div className="main-container">
         {alert && alert.message ? (
@@ -54,8 +57,9 @@ class MainRoutes extends React.Component {
             ) : null}
 
             <Switch>
-              <Route path="/login" component={LoginPage} />
-              <Route path="/register" component={RegisterPage} />
+              <Route path="/login" exact component={LoginPage} />
+              <Route path="/login/magic" exact component={MagicLoginPage} />
+              <Route path="/register" exact component={RegisterPage} />
 
               <Redirect from="/" exact to="/workflows/instances/" />
               <PrivateRoute path="/insight" exact component={HomePage} />

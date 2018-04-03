@@ -1,8 +1,12 @@
 import { userConstants } from "../constants";
 import { userService } from "../services";
-import { logout as UserLogout } from "../services/user";
+import {
+  logout as UserLogout,
+  sendEmailAuthToken as userSendEmailAuthToken
+} from "../services/user";
 import { alertActions } from "./";
 import { history } from "../_helpers";
+import { notification } from "antd";
 
 export const userActions = {
   register,
@@ -34,6 +38,30 @@ export const logout = () => async dispatch => {
     history.push("/login");
   } catch (error) {
     throw error;
+  }
+};
+
+export const sendEmailAuthToken = email => async dispatch => {
+  dispatch({ type: userConstants.LOGIN_LINK_REQUEST, email });
+  try {
+    const response = await userSendEmailAuthToken(email);
+
+    dispatch({
+      type: userConstants.LOGIN_LINK_SUCCESS,
+      user: response
+    });
+    if (response.ok) {
+      history.push("/");
+    } else {
+      notification["error"]({
+        message: "Something went wrong.",
+        description:
+          "There was an error while submitting the form, please try again. If the proplem still persist pleas contact our team "
+      });
+    }
+  } catch (error) {
+    dispatch({ type: userConstants.LOGIN_LINK_FAILURE, error });
+    // dispatch(alertActions.error(error));
   }
 };
 

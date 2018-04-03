@@ -1,7 +1,54 @@
 import { userConstants } from "../constants";
 
-export function users(state = {}, action) {
+const initialState = {
+  formState: {
+    username: "",
+    password: ""
+  },
+  emailAuth: {
+    email: "",
+    submitted: false,
+    data: {},
+    loading: false,
+    errors: {}
+  },
+  loading: false,
+  items: {},
+  error: ""
+};
+
+export function users(state = initialState, action) {
   switch (action.type) {
+    case userConstants.LOGIN_LINK_REQUEST:
+      return {
+        ...state,
+        emailAuth: { ...state.emailAuth, loading: true }
+      };
+
+    case userConstants.LOGIN_LINK_SUCCESS:
+      if (action.user.ok) {
+        return {
+          ...state,
+          emailAuth: { ...state.emailAuth, loading: false, submitted: true }
+        };
+      } else {
+        return {
+          ...state,
+          emailAuth: {
+            ...state.emailAuth,
+            loading: false,
+            submitted: false,
+            error: true
+          }
+        };
+      }
+
+    case userConstants.LOGIN_LINK_FAILURE:
+      return {
+        ...state,
+        emailAuth: { ...state.emailAuth, loading: false, errors: action.errors }
+      };
+
     case userConstants.GETALL_REQUEST:
       return {
         loading: true

@@ -68,6 +68,28 @@ export const logout = async () => {
   }
 };
 
+export const sendEmailAuthToken = async email => {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-DTS-SCHEMA": "vetted",
+      "X-CSRFToken": getValueFromCookie("csrftoken")
+    },
+    credentials: "include",
+    body: JSON.stringify({ email })
+  };
+  try {
+    const response = await fetch(
+      //"http://slackcart.com/api/v1/users/generate_magic_link/",
+      "http://slackcart.com/api/v1/users/magic_link/",
+      requestOptions
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 // function logout() {
 //   // remove user from local storage to log user out
 

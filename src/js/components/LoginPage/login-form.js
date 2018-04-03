@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Input, Icon } from "antd";
+import { Form, Button, Input, Icon, Divider } from "antd";
 import validator from "validator";
 import { userActions, login } from "../../actions";
 
@@ -115,19 +115,22 @@ class LoginForm extends React.Component {
               onChange={this.onInputChange}
             />
           </FormItem>
+
           <FormItem>
             <Button
               type="primary"
               htmlType="submit"
               className="login-form-button"
             >
+              {" "}
               Login
             </Button>
-            <br />
-            <br />
-            <br />
-            <Link to="/register"> Sign up</Link>
+            {/*<Link to="/register"> Sign up</Link>*/}
           </FormItem>
+          <Divider />
+          <div>
+            <Link to="/login/magic">Forgot password?</Link>
+          </div>
         </Form>
       </div>
     );

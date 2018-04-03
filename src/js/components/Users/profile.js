@@ -9,9 +9,7 @@ class Profile extends Component {
     super();
   }
 
-  callback = key => {
-    console.log(key);
-  };
+  callback = key => {};
 
   toggle = () => {
     this.props.toggleSidebar();
