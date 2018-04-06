@@ -1,5 +1,5 @@
 import { authHeader } from "../_helpers";
-import axios from "axios";
+//import axios from "axios";
 
 import { getValueFromCookie } from "../utils/request";
 export const userService = {

@@ -22,14 +22,10 @@ const SubMenu = Menu.SubMenu;
 // )
 
 class StepSidebar extends Component {
-  constructor(props) {
-    super(props);
-    //const state = {}
-  }
-
-  getInitialState() {
-    return {};
-  }
+  // constructor(props) {
+  //   super(props);
+  //   //const state = {}
+  // }
 
   componentDidMount() {}
 

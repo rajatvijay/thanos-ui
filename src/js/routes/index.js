@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  BrowserRouter,
+  //BrowserRouter,
   Router,
   Route,
   Switch,
@@ -11,6 +11,7 @@ import { history } from "../_helpers";
 import { alertActions } from "../actions";
 
 import { PrivateRoute } from "../components/PrivateRoute";
+import { GenericNotFound } from "../components/notfound";
 import { HomePage } from "../components/HomePage";
 import { LoginPage } from "../components/LoginPage";
 import { MagicLoginPage } from "../components/LoginPage/MagicLinkPage";
@@ -45,9 +46,11 @@ class MainRoutes extends React.Component {
     console.log(alert);
     return (
       <div className="main-container">
-        {alert && alert.message ? (
-          <div className={`alert ${alert.type}`}>{alert.message}</div>
-        ) : null}
+        <div className="error" style={{ position: "relative", zIndex: 111 }}>
+          {alert && alert.message ? (
+            <div className={`alert ${alert.type}`}>{alert.message}</div>
+          ) : null}
+        </div>
 
         <Router history={history}>
           <div>
@@ -73,6 +76,8 @@ class MainRoutes extends React.Component {
                 component={WorkflowDetails}
               />
               <PrivateRoute path="/users/:id?" component={Users} />
+
+              <Route path="/" component={GenericNotFound} />
             </Switch>
           </div>
         </Router>

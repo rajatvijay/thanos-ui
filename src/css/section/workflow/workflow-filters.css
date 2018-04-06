@@ -1,0 +1,92 @@
+.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
+}
+
+.workflow-details-container
+  .ant-layout-sider
+  .ant-menu-submenu
+  > .ant-menu:not(.ant-menu-horizontal)
+  .ant-menu-item-selected {
+}
+
+.aux-nav-menu {
+}
+
+.aux-nav .filter-section {
+  margin-bottom: 40px;
+}
+
+.aux-nav .aux-lead-secondary {
+  color: #505050;
+}
+.aux-nav .clear-filter {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  padding: 0 10px;
+  color: #305ebe;
+  font-weight: normal;
+  font-size: 12px;
+  text-transform: lowercase;
+}
+
+.aux-filter-list {
+  padding: 0;
+  list-style: none;
+  /*//transition: all 0.3s ease-in-out;*/
+}
+
+.aux-filter-list li {
+  padding: 10px 16px;
+  color: #929292;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.aux-filter-list li:hover,
+.aux-filter-list li:active,
+.aux-filter-list li.active {
+  background: #8c9ab8;
+  color: #fff;
+}
+
+.filter-top {
+  position: relative;
+  width: 98%;
+  overflow-x: hidden;
+}
+
+.filter-top-list {
+  width: 100%;
+  padding: 0;
+  list-style: none;
+  margin: 20px 16px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.filter-top-list .filter-top-list-item {
+  cursor: pointer;
+  padding: 16px;
+  display: inline-block;
+  height: 80px;
+  text-align: center;
+  vertical-align: middle;
+  min-width: 150px;
+  max-width: 200px;
+  background: #fff;
+  border: 1px solid #efefef;
+  color: #929292;
+  transition: all 0.3s ease-in-out;
+  /*line-height: 60px;*/
+}
+
+.filter-top-list .filter-top-list-item:hover {
+  background: #f6f6f6;
+}
+
+.filter-top-list .filter-top-list-item:active,
+.filter-top-list .filter-top-list-item.active {
+  background: #8c9ab8;
+  color: #fff;
+}

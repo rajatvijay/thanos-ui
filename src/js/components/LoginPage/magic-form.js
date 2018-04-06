@@ -6,7 +6,7 @@ import { sendEmailAuthToken } from "../../actions/user";
 
 const FormItem = Form.Item;
 
-class LoginForm extends React.Component {
+class LoginLinkForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -78,7 +78,7 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    const { data, errors, email, submitted } = this.state;
+    const { data, errors } = this.state;
 
     return (
       <div className="login-form-box">
@@ -153,4 +153,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm;
+export default LoginLinkForm;

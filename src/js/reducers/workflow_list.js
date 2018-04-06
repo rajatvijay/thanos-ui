@@ -17,6 +17,7 @@ export function workflow(state = {}, action) {
     case workflowConstants.GETALL_FAILURE:
       return {
         loading: false,
+        loadingStatus: "failed",
         error: action.error
       };
     default:

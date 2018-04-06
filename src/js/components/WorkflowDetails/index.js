@@ -13,10 +13,10 @@ const WorkflowDetails = ({ match }) => (
 );
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    //const state = {}
-  }
+  // constructor(props) {
+  //   super(props);
+  //   //const state = {}
+  // }
 
   componentDidMount() {}
 

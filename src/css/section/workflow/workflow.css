@@ -1,5 +1,5 @@
 .lc-card-head {
-  padding-left: 8px 16px;
+  padding: 8px 0px;
 }
 
 .lc-card-head .group-overview {
@@ -9,9 +9,18 @@
   white-space: nowrap;
 }
 
+.lc-card-head .group-overview .grp-status .material-icons {
+  width: 20px;
+}
+
 .lc-card .sub-step-list {
   display: block;
   overflow-x: auto;
+}
+
+.lc-card .lc-card-body .sub-step-list .groupaz-list {
+  padding: 0;
+  list-style: none;
 }
 
 .lc-card .lc-card-body .sub-step-list .groupaz {
@@ -33,6 +42,7 @@
   font-size: 14px;
   vertical-align: middle;
   margin-right: 10px;
+  width: 20px;
 }
 
 .lc-card .lc-card-body .groupaz ul {

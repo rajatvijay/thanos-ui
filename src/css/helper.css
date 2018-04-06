@@ -92,6 +92,19 @@
   text-overflow: ellipsis;
 }
 
+.text-anchor {
+  cursor: pointer;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+
+.text-nounderline,
+.text-nounderline:hover {
+  text-decoration: none;
+}
+
 /*Background Colors*/
 .bg-primary {
   background-color: #305ebe;

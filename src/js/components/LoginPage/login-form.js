@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider } from "antd";
-import validator from "validator";
-import { userActions, login } from "../../actions";
+//import validator from "validator";
+import { login } from "../../actions";
 
 const FormItem = Form.Item;
 
@@ -81,7 +81,7 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    const { data, errors, username, password, submitted } = this.state;
+    const { data, errors } = this.state;
 
     return (
       <div className="login-form-box">
