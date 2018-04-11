@@ -52,7 +52,7 @@ const HeaderWorkflowGroup = props => {
   return (
     <Col span={10}>
       <div className="group-overview">
-        <div ca>
+        <div>
           {_.map(props.workflow.step_groups, function(groupitem, index) {
             return (
               <span
@@ -169,9 +169,9 @@ const StepGroupList = props => {
   return (
     <div className="sub-step-list">
       <ul className="groupaz-list">
-        {_.map(props.workflow.step_groups, function(group) {
+        {_.map(props.workflow.step_groups, function(group, index) {
           return (
-            <li className="groupaz">
+            <li className="groupaz" key={"group-" + index}>
               <div
                 className={
                   "lc-step grp-class step-group-status text-metal " +
@@ -182,8 +182,14 @@ const StepGroupList = props => {
                 {group.step_group_def.label}
               </div>
               <ul>
-                {_.map(group.steps, function(steps) {
-                  return <StepItem {...props} stepData={steps} />;
+                {_.map(group.steps, function(steps, index) {
+                  return (
+                    <StepItem
+                      {...props}
+                      stepData={steps}
+                      key={"step-" + index}
+                    />
+                  );
                 })}
               </ul>
             </li>

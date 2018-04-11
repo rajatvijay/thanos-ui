@@ -5,6 +5,8 @@ import { registration } from "./registration";
 import { users } from "./users";
 import { alert } from "./alert";
 import { workflow } from "./workflow_list";
+import { workflowCreate } from "./workflow_create";
+import { workflowKind } from "./workflow_kind";
 import { workflowDetails } from "./workflow_details";
 
 const rootReducer = combineReducers({
@@ -13,7 +15,9 @@ const rootReducer = combineReducers({
   users,
   alert,
   workflow,
-  workflowDetails
+  workflowKind,
+  workflowDetails,
+  workflowCreate
 });
 
 export default rootReducer;

@@ -42,8 +42,6 @@ class MainRoutes extends React.Component {
 
   render() {
     const { alert } = this.props;
-    console.log("alert---------->>");
-    console.log(alert);
     return (
       <div className="main-container">
         <div className="error" style={{ position: "relative", zIndex: 111 }}>
