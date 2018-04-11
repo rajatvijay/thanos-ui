@@ -1,16 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Layout, Icon, Row, Col, Avatar, Progress, Tag, Popover } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import data from "../../data/data.js";
 import dataSteps from "../../data/data-details.js";
 import StepBody from "./step-body.js";
-
-const WorkflowDetails = ({ match }) => (
-  <div>
-    <Workflow inst={match} />
-  </div>
-);
+import { workflowDetailsActions, workflowActions } from "../../actions";
+import { WorkflowHeader2 } from "../Workflow/workflow-item";
 
 class Header extends Component {
   // constructor(props) {
@@ -116,9 +113,15 @@ class Header extends Component {
   }
 }
 
-class Workflow extends Component {
+// const WorkflowHead=()=>{
+//   return <div>
+
+//   </div>
+// }
+
+class WorkflowDetails extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = { sidebar: false, workflowId: null, selectedStep: null };
   }
 
@@ -128,13 +131,16 @@ class Workflow extends Component {
 
   componentDidMount = () => {
     var that = this;
-    var id = parseInt(that.props.inst.params.id, 10);
+    var id = parseInt(that.props.match.params.id, 10);
     var wfData = _.find(data, function(o) {
       return o.id === id;
     });
 
     this.setState({ workflowData: wfData });
     //this.getUser(this.props);
+
+    this.props.dispatch(workflowDetailsActions.getStepGroup(id));
+    console.log(this.getHeaderData(id));
   };
 
   callBackCollapser = () => {
@@ -151,18 +157,20 @@ class Workflow extends Component {
   //   }
   // }
 
-  onStepSelected(cb) {
+  onStepSelected = cb => {
     var steps = dataSteps.steps;
-
-    console.log("check--------");
-    console.log(steps);
     var selected = _.find(steps, { id: parseInt(cb.key, 10) });
     this.setState({ selectedStep: selected });
-    console.log(selected);
-  }
+  };
+
+  getHeaderData = id => {
+    return this.props.dispatch(workflowActions.getById(id));
+  };
 
   render() {
     let workflowData = this.state.workflowData;
+    let workflowDetails = this.props.workflowDetails.workflowDetails;
+    let stepLoading = this.props.workflowDetails.loading;
     return (
       <Layout className="workflow-details-container inner-container">
         <div
@@ -173,12 +181,20 @@ class Workflow extends Component {
             boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
           }}
         >
+          {/*<WorkflowHeader2 workflow={this.getHeaderData} />*/}
+
           {workflowData ? <Header workflowData={workflowData} /> : null}
         </div>
 
         <StepSidebar
+          step2={
+            this.props.workflowDetails.workflowDetails
+              ? this.props.workflowDetails.workflowDetails.stepGroups.results
+              : null
+          }
           step={dataSteps}
           onStepSelected={this.onStepSelected.bind(this)}
+          loading={stepLoading}
         />
 
         <Layout
@@ -199,4 +215,11 @@ class Workflow extends Component {
   }
 }
 
-export default WorkflowDetails;
+function mapStateToProps(state) {
+  const { workflowDetails } = state;
+  return {
+    workflowDetails
+  };
+}
+
+export default connect(mapStateToProps)(WorkflowDetails);

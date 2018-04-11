@@ -3,6 +3,7 @@ import { workflowService } from "../services";
 
 export const workflowActions = {
   getAll,
+  getById,
   delete: _delete
 };
 
@@ -26,6 +27,29 @@ function getAll() {
   }
   function failure(error) {
     return { type: workflowConstants.GETALL_FAILURE, error };
+  }
+}
+
+function getById(id) {
+  return dispatch => {
+    dispatch(request(id));
+
+    workflowService
+      .getById(id)
+      .then(
+        workflow => dispatch(success(workflow.results)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request() {
+    return { type: workflowConstants.GET_REQUEST };
+  }
+  function success(workflow) {
+    return { type: workflowConstants.GET_SUCCESS, workflow };
+  }
+  function failure(error) {
+    return { type: workflowConstants.GET_FAILURE, error };
   }
 }
 

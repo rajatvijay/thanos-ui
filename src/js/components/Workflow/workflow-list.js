@@ -3,7 +3,7 @@ import { Layout, Collapse } from "antd";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 import Config from "../../utils/config";
-import WorkflowItem, { WorkflowHeader2, WorkflowBody2 } from "./workflow-item";
+import WorkflowItem, { WorkflowHeader, WorkflowBody } from "./workflow-item";
 import _ from "lodash";
 
 const { Content } = Layout;
@@ -28,12 +28,12 @@ class WorkflowList extends Component {
               return (
                 <Panel
                   showArrow={false}
-                  header={<WorkflowHeader2 workflow={item} />}
+                  header={<WorkflowHeader workflow={item} />}
                   key={index}
                   style={{ background: "#fff" }}
                   className="lc-card"
                 >
-                  <WorkflowBody2 workflow={item} />
+                  <WorkflowBody workflow={item} />
                 </Panel>
               );
             })}

@@ -21,7 +21,25 @@ const SubMenu = Menu.SubMenu;
 //   //var list = data;
 // )
 
-class StepSidebar extends Component {
+const StepSidebar = props => {
+  return (
+    <Sider
+      width={250}
+      style={{ overflow: "auto", height: "100vh", position: "absolute" }}
+      className="aux-nav aux-nav-menu bg-primary-light"
+    >
+      {props.loading || props.step === null ? (
+        <div className="text-center" style={{ fontSize: 24 }}>
+          <Icon type="loading" />
+        </div>
+      ) : (
+        <StepSidebarMenu {...props} />
+      )}
+    </Sider>
+  );
+};
+
+class StepSidebarMenu extends Component {
   // constructor(props) {
   //   super(props);
   //   //const state = {}
@@ -34,7 +52,7 @@ class StepSidebar extends Component {
   }
 
   getGroups(data) {
-    var that = this;
+    let that = this;
     return _.map(data, function(g, key) {
       return (
         <SubMenu
@@ -43,38 +61,42 @@ class StepSidebar extends Component {
           className="kkllk"
           title={
             <span>
-              <Icon type="mail" />
-              <span>{key}</span>
+              <i className="material-icons t-14 pd-right-sm">
+                panorama_fish_eye
+              </i>
+              <span>{g.step_group_def.label}</span>
             </span>
           }
         >
-          {that.getSteps(g)}
+          {that.getSteps(g.steps)}
         </SubMenu>
       );
     });
   }
 
   getSteps(data) {
-    var steps = _.map(data, function(s, key) {
-      return <Menu.Item key={s.id}>{s.label}</Menu.Item>;
+    let steps = _.map(data, function(s, key) {
+      return (
+        <Menu.Item key={s.id}>
+          <i className="material-icons t-14 pd-right-sm">
+            {s.completed_at === null ? "panorama_fish_eye" : "check_circle"}
+          </i>
+          {s.name}
+        </Menu.Item>
+      );
     });
     return steps;
   }
 
   render() {
-    var grouping = _.groupBy(this.props.step.steps, "group.label");
-    //var groups = _.map(this.props.step.steps, "group");
+    let grouping = this.props.step2;
 
     if (this.props.step.deadline) {
       var isOverdue = moment(this.props.step.deadline).isBefore(new Date());
     }
 
     return (
-      <Sider
-        width={250}
-        style={{ overflow: "auto", height: "100vh", position: "absolute" }}
-        className="aux-nav aux-nav-menu bg-primary-light"
-      >
+      <div>
         <Menu
           onClick={this.onStepSelected.bind(this)}
           style={{
@@ -89,7 +111,7 @@ class StepSidebar extends Component {
         >
           {this.getGroups(grouping)}
         </Menu>
-      </Sider>
+      </div>
     );
   }
 }

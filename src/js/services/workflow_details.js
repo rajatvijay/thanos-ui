@@ -1,7 +1,9 @@
 import { authHeader } from "../_helpers";
+import { getValueFromCookie } from "../utils/request";
 
 export const workflowDetailsService = {
   getById,
+  getStepGroup,
   update,
   delete: _delete
 };
@@ -18,6 +20,23 @@ function getById(id) {
   };
 
   return fetch("/api/workflow/" + id, requestOptions).then(handleResponse);
+}
+
+function getStepGroup(id) {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-DTS-SCHEMA": "vetted"
+    },
+    credentials: "include"
+  };
+
+  return fetch(
+    //"http://slackcart.com/api/v1/workflows/" + id + "/stepgroups/",
+    "http://slackcart.com/api/v1/workflows/7/stepgroups/",
+    requestOptions
+  ).then(handleResponse);
 }
 
 function update(workflow) {
@@ -43,6 +62,7 @@ function _delete(id) {
 }
 
 function handleResponse(response) {
+  console.log("\n");
   if (!response.ok) {
     return Promise.reject(response.statusText);
   }

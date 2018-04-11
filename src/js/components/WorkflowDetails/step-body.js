@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 class StepBody extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.stepBody.fields);
+    //    console.log(this.props.stepBody.fields);
   }
 
   renderField() {
@@ -23,7 +23,7 @@ class StepBody extends Component {
       <div className="pd-ard-lg">
         <Form layout="vertical" onSubmit={this.handleSubmit}>
           {_.map(this.props.stepBody.fields, function(f) {
-            console.log(f);
+            //            console.log(f);
             return (
               <FormItem label={f.body} key={f.id}>
                 <Input defaultValue={f.answer} />

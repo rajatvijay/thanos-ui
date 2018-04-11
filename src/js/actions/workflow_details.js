@@ -5,6 +5,7 @@ import { workflowDetailsService } from "../services";
 
 export const workflowDetailsActions = {
   getById,
+  getStepGroup,
   delete: _delete
 };
 
@@ -28,6 +29,32 @@ function getById() {
   }
   function failure(error) {
     return { type: workflowDetailsConstants.GET_FAILURE, error };
+  }
+}
+
+function getStepGroup(id) {
+  return dispatch => {
+    dispatch(request(id));
+
+    workflowDetailsService
+      .getStepGroup(id)
+      .then(
+        stepGroups => dispatch(success(stepGroups)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request() {
+    return { type: workflowDetailsConstants.GET_STEPGROUPS_REQUEST, id };
+  }
+  function success(stepGroups) {
+    return {
+      type: workflowDetailsConstants.GET_STEPGROUPS_SUCCESS,
+      stepGroups
+    };
+  }
+  function failure(error) {
+    return { type: workflowDetailsConstants.GET_STEPGROUPS_FAILURE, error };
   }
 }
 

@@ -84,20 +84,12 @@ const HeaderWorkflowGroup = props => {
 const menu = (
   <Menu>
     <Menu.Item>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="http://www.alipay.com/"
-      >
+      <a target="_blank" rel="noopener noreferrer" href="">
         1st menu item
       </a>
     </Menu.Item>
     <Menu.Item>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="http://www.taobao.com/"
-      >
+      <a target="_blank" rel="noopener noreferrer" href="">
         2nd menu item
       </a>
     </Menu.Item>
@@ -131,7 +123,7 @@ const HeaderOptions = props => {
   );
 };
 
-const WorkflowHeader = props => {
+export const WorkflowHeader = props => {
   return (
     <Row type="flex" align="middle" className="lc-card-head">
       <Col span={1} className="text-center text-metal ">
@@ -145,7 +137,7 @@ const WorkflowHeader = props => {
 };
 
 /*workflow body*/
-const Workflowbody = props => {
+export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
       <Row>
@@ -201,7 +193,6 @@ const StepGroupList = props => {
 };
 
 const StepItem = props => {
-  console.log(props);
   return (
     <li className={"text-metal"}>
       <Link
@@ -219,8 +210,5 @@ const StepItem = props => {
     </li>
   );
 };
-
-export const WorkflowHeader2 = WorkflowHeader;
-export const WorkflowBody2 = Workflowbody;
 
 //export default WorkflowItem;
