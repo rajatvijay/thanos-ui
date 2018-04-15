@@ -1,4 +1,4 @@
-import { authHeader2 } from "../_helpers";
+import { authHeader,handleResponse } from "../_helpers";
 import { getValueFromCookie } from "../utils/request";
 
 export const workflowCreateService = {
@@ -8,12 +8,7 @@ export const workflowCreateService = {
 function crerateWorkflow(payload) {
   const requestOptions = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
-      "X-DTS-SCHEMA": "vetted",
-      "X-CSRFToken": getValueFromCookie("csrftoken")
-    },
+    headers: authHeader.post(),
     credentials: "include",
     body: JSON.stringify(payload)
   };
@@ -23,9 +18,9 @@ function crerateWorkflow(payload) {
   );
 }
 
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-  return response.json();
-}
+// function handleResponse(response) {
+//   if (!response.ok) {
+//     return Promise.reject(response.statusText);
+//   }
+//   return response.json();
+// }

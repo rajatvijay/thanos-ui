@@ -25,10 +25,10 @@ class CardUser extends Component {
         </div>
         <div className="body">
           <Row>
-            <Col span={14}>
+            <Col span={24} className="mr-bottom-sm">
               <Icon className="text-primary" type="mail" /> {user.email}
             </Col>
-            <Col span={10}>
+            <Col span={24} >
               <Icon className="text-primary" type="phone" /> {user.phone}
             </Col>
           </Row>

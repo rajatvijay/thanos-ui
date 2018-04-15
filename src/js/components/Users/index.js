@@ -4,21 +4,14 @@ import CardList from "./card-list";
 import Profile from "./profile";
 import UserFilter from "./filter";
 import _ from "lodash";
+import {connect} from "react-redux"
+import {userActions} from "../../actions"
+
 
 const { Sider, Content } = Layout;
 
 const usersList = [
-  {
-    username: "junaid lone",
-    initials: "JL",
-    id: 1,
-    email: "junaid@thevetted.com",
-    phone: "+91 9123456789",
-    rating: 4,
-    relatedWorkflow: 2,
-    company: "TheVetted",
-    extra: {}
-  },
+  
   {
     username: "Gagandeep Singh",
     initials: "GS",
@@ -40,6 +33,17 @@ const usersList = [
     company: "Intuit"
   },
   {
+    username: "junaid lone",
+    initials: "JL",
+    id: 1,
+    email: "junaid@thevetted.com",
+    phone: "+91 9123456789",
+    rating: 3,
+    relatedWorkflow: 2,
+    company: "TheVetted",
+    extra: {}
+  },
+  {
     username: "Tajinder Singh",
     initials: "TS",
     id: 4,
@@ -55,17 +59,18 @@ const usersList = [
     id: 5,
     email: "jlamba@thevetted.com",
     phone: "+91 9123456789",
-    rating: 3,
+    rating: 5,
     relatedWorkflow: 9,
     company: "DowJones"
   }
 ];
 
-const Users = ({ match }) => (
-  <div>
-    <UserList profile={match} />
+
+const Users = (props) => {
+  return <div>
+    <UserList profile={props.match} {...props}/>
   </div>
-);
+};
 
 class UserList extends Component {
   constructor(props) {
@@ -79,6 +84,7 @@ class UserList extends Component {
 
   componentDidMount = () => {
     this.getUser(this.props);
+    this.props.dispatch(userActions.getAll());
   };
 
   callBackCollapser = () => {
@@ -136,4 +142,12 @@ class UserList extends Component {
   }
 }
 
-export default Users;
+function mapPropsToState(state){
+  const {users} = state;
+  return {
+    users
+  }
+}
+
+
+export default connect(mapPropsToState)(Users);

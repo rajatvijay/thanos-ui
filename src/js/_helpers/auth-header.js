@@ -4,20 +4,36 @@ import { getValueFromCookie } from "../utils/request";
 // domain = domain.split(".");
 // let client = domain[0];
 
+export const authHeader = {
+  get,
+  post,
+  requestOptions,
+};
 
-export function authHeader() {
-  return {
-    "Content-Type": "application/json",
-    "X-DTS-SCHEMA": "vetted"
-    //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
-  };
-}
 
-export function authHeaderCsrf() {
+function get() {
   return {
     "Content-Type": "application/json",
     "X-DTS-SCHEMA": "vetted",
-    "X-CSRFToken": getValueFromCookie("csrftoken")
     //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
   };
-}
+};
+
+function post() {
+  return {
+    "Content-Type": "application/json",
+    "X-DTS-SCHEMA": "vetted",
+    "X-CSRFToken": getValueFromCookie("csrftoken"),
+    //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
+  };
+};
+
+function requestOptions(method) {
+  return {
+    method: "GET",
+    headers:method === 'get' ? get() : post() ,
+    credentials: "include",
+    mode:"no-cors"
+  };
+};
+

@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader,handleResponse } from "../_helpers";
 
 export const workflowService = {
   getAll,
@@ -8,7 +8,7 @@ export const workflowService = {
 function getAll() {
   const requestOptions = {
     method: "GET",
-    headers: authHeader(),
+    headers: authHeader.get(),
     credentials: "include"
   };
 
@@ -20,7 +20,7 @@ function getAll() {
 function getById(id) {
   const requestOptions = {
     method: "GET",
-    headers: authHeader(),
+    headers: authHeader.get(),
     credentials: "include"
   };
 
@@ -30,10 +30,10 @@ function getById(id) {
   ).then(handleResponse);
 }
 
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
+// function handleResponse(response) {
+//   if (!response.ok) {
+//     return Promise.reject(response.statusText);
+//   }
 
-  return response.json();
-}
+//   return response.json();
+// }

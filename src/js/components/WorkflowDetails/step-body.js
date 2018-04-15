@@ -1,45 +1,70 @@
 import React, { Component } from "react";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Icon } from "antd";
+import {connect} from "react-redux";
 import _ from "lodash";
+import {getFieldType} from "./field-types"
 
 const FormItem = Form.Item;
+
+
 
 class StepBody extends Component {
   constructor(props) {
     super(props);
-    //    console.log(this.props.stepBody.fields);
   }
 
   renderField() {
     return <div>ewfsdf</div>;
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     console.log("submit");
   }
 
+  renderForm(stepData){
+    return <Form layout="vertical" onSubmit={this.handleSubmit} className="step-form">
+      {_.map(stepData.data_fields, function(f) {
+
+        let field = getFieldType(f);
+        return field;
+        
+      })}
+
+      <FormItem>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </FormItem>
+    </Form>
+  }
+
   render() {
+    const loading = this.props.currentStepFields.loading || this.props.workflowDetails.loading;
+
+    var stepData = null;
+    if(!loading && this.props.currentStepFields){
+      stepData = this.props.currentStepFields.currentStepFields ;
+    } else {
+      stepData = 'dddlll'
+    }
     return (
       <div className="pd-ard-lg">
-        <Form layout="vertical" onSubmit={this.handleSubmit}>
-          {_.map(this.props.stepBody.fields, function(f) {
-            //            console.log(f);
-            return (
-              <FormItem label={f.body} key={f.id}>
-                <Input defaultValue={f.answer} />
-              </FormItem>
-            );
-          })}
-
-          <FormItem>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </FormItem>
-        </Form>
+        {loading ? <div className="text-center mr-top-lg"><Icon type={"loading"}/></div>:
+          (stepData ? this.renderForm(stepData): <div className="text-center mr-top-lg"><Icon type={"loading"}/></div> )
+        }
       </div>
     );
   }
 }
 
-export default StepBody;
+
+function mapStateToProps(state){
+  const {currentStepFields, workflowDetails} = state;
+  return {
+    currentStepFields,
+    workflowDetails
+  };
+}
+
+export default connect(mapStateToProps)(StepBody);

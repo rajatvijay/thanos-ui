@@ -14,6 +14,7 @@ export function workflow(state = {}, action) {
         workflow: action.workflow
       };
     case workflowConstants.GETALL_FAILURE:
+      console.log('failed to load ')
       return {
         loading: false,
         loadingStatus: "failed",

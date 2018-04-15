@@ -107,7 +107,6 @@ class NavTop extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   const { workflowKind, authentication } = state;
   return {
     workflowKind,

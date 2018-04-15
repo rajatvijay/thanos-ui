@@ -1,4 +1,4 @@
-import { workflowDetailsConstants, workflowStepConstants } from "../constants";
+import { workflowDetailsConstants } from "../constants";
 import { workflowDetailsService } from "../services";
 //import { alertActions } from "./";
 //import { history } from "../_helpers";
@@ -6,10 +6,9 @@ import { workflowDetailsService } from "../services";
 export const workflowDetailsActions = {
   getById,
   getStepGroup,
-  getStepFields,
+  delete: _delete
 };
 
-//Get workflow details
 function getById() {
   return dispatch => {
     dispatch(request());
@@ -33,7 +32,6 @@ function getById() {
   }
 }
 
-//Get workflow step groups and steps list.
 function getStepGroup(id) {
   return dispatch => {
     dispatch(request(id));
@@ -60,31 +58,28 @@ function getStepGroup(id) {
   }
 }
 
-
-//Get workflow step fileds data.
-function getStepFields(step) {
+// prefixed function name with underscore because delete is a reserved word in javascript
+function _delete(id) {
   return dispatch => {
-    dispatch(request(step));
+    dispatch(request(id));
 
-    workflowDetailsService
-      .getStepFields(step)
-      .then(
-        stepFields => dispatch(success(stepFields)),
-        error => dispatch(failure(error))
-      );
+    workflowDetailsService.delete(id).then(
+      workflowDetails => {
+        dispatch(success(id));
+      },
+      error => {
+        dispatch(failure(id, error));
+      }
+    );
   };
 
-  function request(step) {
-    return { type: workflowStepConstants.GET_STEPFIELDS_REQUEST, step };
+  function request(id) {
+    return { type: workflowDetailsConstants.DELETE_REQUEST, id };
   }
-  function success(stepFields,step) {
-    return {
-      type: workflowStepConstants.GET_STEPFIELDS_SUCCESS,
-      stepFields,
-      step
-    };
+  function success(id) {
+    return { type: workflowDetailsConstants.DELETE_SUCCESS, id };
   }
-  function failure(error) {
-    return { type: workflowStepConstants.GET_STEPFIELD_FAILURE, error };
+  function failure(id, error) {
+    return { type: workflowDetailsConstants.DELETE_FAILURE, id, error };
   }
 }

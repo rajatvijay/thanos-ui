@@ -5,6 +5,7 @@ export const workflowDetailsService = {
   getById,
   getStepGroup,
   update,
+  getStepFields,
   delete: _delete
 };
 
@@ -16,7 +17,7 @@ export const workflowDetailsService = {
 function getById(id) {
   const requestOptions = {
     method: "GET",
-    headers: authHeader()
+    headers: authHeader.get(),
   };
 
   return fetch("/api/workflow/" + id, requestOptions).then(handleResponse);
@@ -33,16 +34,39 @@ function getStepGroup(id) {
   };
 
   return fetch(
-    //"http://slackcart.com/api/v1/workflows/" + id + "/stepgroups/",
-    "http://slackcart.com/api/v1/workflows/7/stepgroups/",
+    //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
+    //"http://slackcart.com/api/v1/workflows/" + id + "/stepgroups/",  
+    "http://slackcart.com/api/v1/workflows/7/stepgroups/", 
     requestOptions
   ).then(handleResponse);
 }
 
+function getStepFields(step) {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-DTS-SCHEMA": "vetted"
+    },
+    credentials: "include"
+  };
+
+  console.log('step/////////////////////////////////////////')
+  console.log(step)
+
+  return fetch(
+    //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
+    "http://slackcart.com/api/v1/workflows/" + step.workflowId + "/stepgroups/" + step.groupId +"/steps/" + step.stepId+"/",
+    //"http://slackcart.com/api/v1/workflows/7/stepgroups/2/steps/2/",
+    requestOptions
+  ).then(handleResponse);
+}
+
+
 function update(workflow) {
   const requestOptions = {
     method: "PUT",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
+    headers: { ...authHeader.get(), "Content-Type": "application/json" },
     body: JSON.stringify(workflow)
   };
 
@@ -55,14 +79,13 @@ function update(workflow) {
 function _delete(id) {
   const requestOptions = {
     method: "DELETE",
-    headers: authHeader()
+    headers: authHeader.get()
   };
 
   return fetch("/api/workflow/" + id, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
-  console.log("\n");
   if (!response.ok) {
     return Promise.reject(response.statusText);
   }

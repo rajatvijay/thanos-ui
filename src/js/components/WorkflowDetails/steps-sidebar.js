@@ -28,7 +28,7 @@ const StepSidebar = props => {
       style={{ overflow: "auto", height: "100vh", position: "absolute" }}
       className="aux-nav aux-nav-menu bg-primary-light"
     >
-      {props.loading || props.step === null ? (
+      {props.loading || props.step2 === null ? (
         <div className="text-center" style={{ fontSize: 24 }}>
           <Icon type="loading" />
         </div>
@@ -53,10 +53,10 @@ class StepSidebarMenu extends Component {
 
   getGroups(data) {
     let that = this;
-    return _.map(data, function(g, key) {
+    return _.map(data, function(g,index) {
       return (
         <SubMenu
-          key={"sub-" + key}
+          key={"sub-" + g.id}
           style={{ backgroundColor: "transparent" }}
           className="kkllk"
           title={
@@ -68,16 +68,16 @@ class StepSidebarMenu extends Component {
             </span>
           }
         >
-          {that.getSteps(g.steps)}
+          {that.getSteps(g.steps, g.id)}
         </SubMenu>
       );
     });
   }
 
-  getSteps(data) {
+  getSteps(data, group_id) {
     let steps = _.map(data, function(s, key) {
       return (
-        <Menu.Item key={s.id}>
+        <Menu.Item key={ group_id +"_"+ s.id}>
           <i className="material-icons t-14 pd-right-sm">
             {s.completed_at === null ? "panorama_fish_eye" : "check_circle"}
           </i>
@@ -106,7 +106,7 @@ class StepSidebarMenu extends Component {
             background: "transparent"
           }}
           defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
+          defaultOpenKeys={["sub-"+this.props.defaultSelectedGroup]}
           mode="inline"
         >
           {this.getGroups(grouping)}

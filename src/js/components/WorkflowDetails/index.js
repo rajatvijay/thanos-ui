@@ -5,6 +5,7 @@ import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import data from "../../data/data.js";
 import dataSteps from "../../data/data-details.js";
+//import realDataSteps from "../../data/realdata.js";
 import StepBody from "./step-body.js";
 import { workflowDetailsActions, workflowActions } from "../../actions";
 import { WorkflowHeader2 } from "../Workflow/workflow-item";
@@ -122,14 +123,39 @@ class Header extends Component {
 class WorkflowDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = { sidebar: false, workflowId: null, selectedStep: null };
+    this.state = { sidebar: false, workflowId: null, selectedStep: null, selectedGroup: null };
   }
 
-  componentWillReceiveProps = newProps => {
+  componentWillReceiveProps = nextProps => {
     //if (newProps) this.getUser(newProps);
+
+
+    if(nextProps.workflowDetails.workflowDetails !==  this.props.workflowDetails.workflowDetails){
+      let wfd=nextProps.workflowDetails.workflowDetails;
+      let wf_id = parseInt(this.props.match.params.id, 10);
+      let stepGroup_id = wfd.stepGroups.results[0].id;
+      let step_id = wfd.stepGroups.results[0].steps[0].id;
+
+      let stepTrack = {
+        workflowId: wf_id,
+        groupId:stepGroup_id,
+        stepId: step_id,
+      }
+
+      this.setState({
+        selectedGroup:stepGroup_id,
+        selectedStep:step_id,
+      },
+
+      function(){
+        this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+      })
+    }
+      
   };
 
   componentDidMount = () => {
+
     var that = this;
     var id = parseInt(that.props.match.params.id, 10);
     var wfData = _.find(data, function(o) {
@@ -140,7 +166,6 @@ class WorkflowDetails extends Component {
     //this.getUser(this.props);
 
     this.props.dispatch(workflowDetailsActions.getStepGroup(id));
-    console.log(this.getHeaderData(id));
   };
 
   callBackCollapser = () => {
@@ -157,11 +182,26 @@ class WorkflowDetails extends Component {
   //   }
   // }
 
+
   onStepSelected = cb => {
     var steps = dataSteps.steps;
     var selected = _.find(steps, { id: parseInt(cb.key, 10) });
     this.setState({ selectedStep: selected });
+
+    this.getStepData(cb.key);
   };
+
+  getStepData=(data)=>{
+    let wf_id = parseInt(this.props.match.params.id, 10)
+    let stepMeta = data.split("_");
+    let stepTrack = {
+      workflowId: wf_id,
+      groupId:stepMeta[0],
+      stepId: stepMeta[1],
+    }
+
+    this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+  }
 
   getHeaderData = id => {
     return this.props.dispatch(workflowActions.getById(id));
@@ -193,6 +233,8 @@ class WorkflowDetails extends Component {
               : null
           }
           step={dataSteps}
+          defaultSelectedGroup={this.state.selectedStep}
+          defaultSelectedStep={['1']}
           onStepSelected={this.onStepSelected.bind(this)}
           loading={stepLoading}
         />
@@ -202,12 +244,15 @@ class WorkflowDetails extends Component {
         >
           <div className="mr-ard-md  shadow-1 bg-white">
             <StepBody
-              stepBody={
-                this.state.selectedStep
-                  ? this.state.selectedStep
-                  : dataSteps.steps[0]
-              }
+              // stepBody={
+              //   this.state.selectedStep
+              //     ? this.state.selectedStep
+              //     : dataSteps.steps[0]
+              // }
             />
+
+
+
           </div>
         </Layout>
       </Layout>
@@ -216,7 +261,7 @@ class WorkflowDetails extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowDetails } = state;
+  const { workflowDetails, } = state;
   return {
     workflowDetails
   };

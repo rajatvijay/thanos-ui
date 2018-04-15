@@ -1,4 +1,4 @@
-import { authHeader2 } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
 
 export const workflowKindService = {
   getAll
@@ -7,13 +7,8 @@ export const workflowKindService = {
 function getAll() {
   const requestOptions = {
     method: "GET",
-    //headers: authHeader()
-    headers: {
-      "Content-Type": "application/json",
-      //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
-      "X-DTS-SCHEMA": "vetted"
-    },
-    credentials: "include"
+    headers:authHeader.get(),
+    credentials: "include",
   };
 
   return fetch(
@@ -22,10 +17,10 @@ function getAll() {
   ).then(handleResponse);
 }
 
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
+// function handleResponse(response) {
+//   if (!response.ok) {
+//     return Promise.reject(response.statusText);
+//   }
 
-  return response.json();
-}
+//   return response.json();
+// }

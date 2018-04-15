@@ -49,11 +49,7 @@ export const logout = async () => {
   localStorage.removeItem("user");
   const requestOptions = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-DTS-SCHEMA": "vetted",
-      "X-CSRFToken": getValueFromCookie("csrftoken")
-    },
+    headers:authHeader.post(),
     credentials: "include",
     body: JSON.stringify({})
   };
@@ -71,11 +67,7 @@ export const logout = async () => {
 export const sendEmailAuthToken = async email => {
   const requestOptions = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-DTS-SCHEMA": "vetted",
-      "X-CSRFToken": getValueFromCookie("csrftoken")
-    },
+    headers:authHeader.post(),
     credentials: "include",
     body: JSON.stringify({ email })
   };
@@ -114,28 +106,23 @@ export const sendEmailAuthToken = async email => {
 // }
 
 function getAll() {
+  console.log(authHeader.get())
+
   const requestOptions = {
     method: "GET",
-    //headers: authHeader()
-    headers: {
-      "Content-Type": "application/json",
-      "X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
-    }
+    headers:authHeader.get(),
   };
 
-  // return fetch("http://thevetted.co/api/v1/users/", requestOptions).then(
-  //   handleResponse
-  // );
-  return fetch("/users", requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/users/", requestOptions).then(handleResponse);
 }
 
 function getById(id) {
   const requestOptions = {
     method: "GET",
-    headers: authHeader()
+    headers: authHeader.get()
   };
 
-  return fetch("/users/" + id, requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(handleResponse);
 }
 
 function register(user) {
@@ -151,27 +138,26 @@ function register(user) {
 function update(user) {
   const requestOptions = {
     method: "PUT",
-    headers: { ...authHeader(), "Content-Type": "application/json" },
+    headers: { ...authHeader.post(), "Content-Type": "application/json" },
     body: JSON.stringify(user)
   };
 
-  return fetch("/users/" + user.id, requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/users/" + user.id, requestOptions).then(handleResponse);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
   const requestOptions = {
     method: "DELETE",
-    headers: authHeader()
+    headers: authHeader.post()
   };
 
-  return fetch("/users/" + id, requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
   if (!response.ok) {
     return Promise.reject(response.statusText);
   }
-
   return response.json();
 }

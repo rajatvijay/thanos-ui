@@ -12,3 +12,7 @@
   overflow-x: visible !important;
 }
 
+
+.ant-form.step-form .ant-form-item-label label{
+  display: block;
+}

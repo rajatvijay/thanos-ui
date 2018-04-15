@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import Redux from "redux";
+//import Redux from "redux";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import _ from "lodash";
 import {
   Button,
-  Layout,
   Icon,
-  Panel,
   Avatar,
   Progress,
   Dropdown,
@@ -18,7 +16,6 @@ import {
   Tag
 } from "antd";
 
-const { item } = Menu;
 
 const getStatusColor = status => {
   status = status.toUpperCase();
