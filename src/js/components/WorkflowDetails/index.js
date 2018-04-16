@@ -8,111 +8,7 @@ import dataSteps from "../../data/data-details.js";
 //import realDataSteps from "../../data/realdata.js";
 import StepBody from "./step-body.js";
 import { workflowDetailsActions, workflowActions } from "../../actions";
-import { WorkflowHeader2 } from "../Workflow/workflow-item";
-
-class Header extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   //const state = {}
-  // }
-
-  componentDidMount() {}
-
-  getHeaderGroup() {
-    //Calculate workflow progress
-    var pendingSteps = _.size(
-      _.filter(this.props.workflowData.steps, function(s) {
-        return (s.status || {}).completed_at === null || undefined;
-      })
-    );
-    var totalSteps = _.size(this.props.workflowData.steps);
-    var completedSteps = totalSteps - pendingSteps;
-    var progressPercent = completedSteps / totalSteps * 100;
-
-    return (
-      <div>
-        <div>
-          <Progress showInfo={false} percent={progressPercent} />
-          {/*<Progress percent={(that.state.completedSteps/that.state.totalSteps) *100} successPercent={(that.state.waitingTask/that.state.totalSteps) *100} />*/}
-        </div>
-      </div>
-    );
-  }
-
-  render() {
-    const workflowData = this.props.workflowData;
-    const content = (
-      <div>
-        <p>Content</p>
-        <p>Content</p>
-      </div>
-    );
-
-    if (workflowData) {
-      return (
-        <Row type="flex" align="middle" className="lc-card-head">
-          <Col span={1} className="text-center text-metal ">
-            <Icon type="copy" />
-          </Col>
-          <Col span={7}>
-            <Avatar>J</Avatar>{" "}
-            <span className="mr-left-sm text-grey-dark text-medium">
-              {workflowData.name}
-            </span>
-          </Col>
-          <Col span={10}>{this.getHeaderGroup()}</Col>
-          <Col span={4} className="text-right">
-            <Tag color="orange">{workflowData.status.label}</Tag>{" "}
-          </Col>
-          <Col
-            span={2}
-            className="text-center "
-            style={{ position: "relative" }}
-          >
-            <Popover
-              placement="bottomRight"
-              content={content}
-              title="Title"
-              trigger="hover"
-            >
-              <Icon
-                type="solution"
-                style={{
-                  position: "absolute",
-                  fontSize: "18px",
-                  right: "48px",
-                  top: "-8px"
-                }}
-                className=" text-primary"
-              />
-            </Popover>
-
-            <Popover
-              placement="bottomRight"
-              content={content}
-              title="Title"
-              trigger="hover"
-            >
-              <i
-                style={{
-                  position: "absolute",
-                  fontSize: "18px",
-                  right: "16px",
-                  top: "-8px"
-                }}
-                className=" text-primary material-icons md-24"
-              >
-                more_vert
-              </i>
-            </Popover>
-          </Col>
-        </Row>
-      );
-    } else {
-      return <div>...</div>;
-    }
-  }
-}
+import { WorkflowHeader } from "../Workflow/workflow-item";
 
 // const WorkflowHead=()=>{
 //   return <div>
@@ -120,52 +16,104 @@ class Header extends Component {
 //   </div>
 // }
 
+const requestOptions = {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    "X-DTS-SCHEMA": "vetted"
+  },
+  credentials: "include"
+};
+
+const fethcWorkflow = id => {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-DTS-SCHEMA": "vetted"
+    },
+    credentials: "include"
+  };
+
+  return fetch(
+    "http://slackcart.com/api/v1/workflows/" + id + "/",
+    requestOptions
+  )
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Something went wrong ...");
+      }
+    })
+    .then(data => this.setState({ data, isLoading: false }))
+    .catch(error => this.setState({ error, isLoading: false }));
+};
+
 class WorkflowDetails extends Component {
   constructor(props) {
     super(props);
-    this.state = { sidebar: false, workflowId: null, selectedStep: null, selectedGroup: null };
+    this.state = {
+      sidebar: false,
+      workflowId: null,
+      selectedStep: null,
+      selectedGroup: null
+    };
   }
 
   componentWillReceiveProps = nextProps => {
     //if (newProps) this.getUser(newProps);
 
-
-    if(nextProps.workflowDetails.workflowDetails !==  this.props.workflowDetails.workflowDetails){
-      let wfd=nextProps.workflowDetails.workflowDetails;
+    if (
+      nextProps.workflowDetails.workflowDetails !==
+      this.props.workflowDetails.workflowDetails
+    ) {
+      let wfd = nextProps.workflowDetails.workflowDetails;
       let wf_id = parseInt(this.props.match.params.id, 10);
       let stepGroup_id = wfd.stepGroups.results[0].id;
       let step_id = wfd.stepGroups.results[0].steps[0].id;
 
       let stepTrack = {
         workflowId: wf_id,
-        groupId:stepGroup_id,
-        stepId: step_id,
-      }
+        groupId: stepGroup_id,
+        stepId: step_id
+      };
 
-      this.setState({
-        selectedGroup:stepGroup_id,
-        selectedStep:step_id,
-      },
+      this.setState(
+        {
+          selectedGroup: stepGroup_id,
+          selectedStep: step_id
+        },
 
-      function(){
-        this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
-      })
+        function() {
+          this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        }
+      );
     }
-      
   };
 
   componentDidMount = () => {
-
     var that = this;
     var id = parseInt(that.props.match.params.id, 10);
     var wfData = _.find(data, function(o) {
       return o.id === id;
     });
 
-    this.setState({ workflowData: wfData });
     //this.getUser(this.props);
 
     this.props.dispatch(workflowDetailsActions.getStepGroup(id));
+
+    //getworkflow data
+    fetch("http://slackcart.com/api/v1/workflows/" + id + "/", requestOptions)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong ...");
+        }
+      })
+      .then(wfdata => this.setState({ wfdata, isLoading: false }))
+      .catch(error => this.setState({ error, isLoading: false }));
   };
 
   callBackCollapser = () => {
@@ -182,7 +130,6 @@ class WorkflowDetails extends Component {
   //   }
   // }
 
-
   onStepSelected = cb => {
     var steps = dataSteps.steps;
     var selected = _.find(steps, { id: parseInt(cb.key, 10) });
@@ -191,26 +138,31 @@ class WorkflowDetails extends Component {
     this.getStepData(cb.key);
   };
 
-  getStepData=(data)=>{
-    let wf_id = parseInt(this.props.match.params.id, 10)
+  getStepData = data => {
+    let wf_id = parseInt(this.props.match.params.id, 10);
     let stepMeta = data.split("_");
     let stepTrack = {
       workflowId: wf_id,
-      groupId:stepMeta[0],
-      stepId: stepMeta[1],
-    }
+      groupId: stepMeta[0],
+      stepId: stepMeta[1]
+    };
 
     this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
-  }
+  };
 
-  getHeaderData = id => {
+  getHeaderData = () => {
+    let id = parseInt(this.props.match.params.id, 10);
+    // if(!id){
+    // }
     return this.props.dispatch(workflowActions.getById(id));
   };
 
   render() {
-    let workflowData = this.state.workflowData;
     let workflowDetails = this.props.workflowDetails.workflowDetails;
     let stepLoading = this.props.workflowDetails.loading;
+    //let workflowData2 = this.getHeaderData();
+    // console.log('workflowData2');
+    // console.log(workflowData2);
     return (
       <Layout className="workflow-details-container inner-container">
         <div
@@ -221,9 +173,16 @@ class WorkflowDetails extends Component {
             boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
           }}
         >
-          {/*<WorkflowHeader2 workflow={this.getHeaderData} />*/}
-
-          {workflowData ? <Header workflowData={workflowData} /> : null}
+          {this.state.loading || !this.state.wfdata ? (
+            <div className="text-center">
+              <Icon type="loading" />
+            </div>
+          ) : (
+            <div>
+              {console.log(this.state.wfdata)}
+              <WorkflowHeader workflow={this.state.wfdata} />
+            </div>
+          )}
         </div>
 
         <StepSidebar
@@ -234,7 +193,7 @@ class WorkflowDetails extends Component {
           }
           step={dataSteps}
           defaultSelectedGroup={this.state.selectedStep}
-          defaultSelectedStep={['1']}
+          defaultSelectedStep={["1"]}
           onStepSelected={this.onStepSelected.bind(this)}
           loading={stepLoading}
         />
@@ -244,15 +203,12 @@ class WorkflowDetails extends Component {
         >
           <div className="mr-ard-md  shadow-1 bg-white">
             <StepBody
-              // stepBody={
-              //   this.state.selectedStep
-              //     ? this.state.selectedStep
-              //     : dataSteps.steps[0]
-              // }
+            // stepBody={
+            //   this.state.selectedStep
+            //     ? this.state.selectedStep
+            //     : dataSteps.steps[0]
+            // }
             />
-
-
-
           </div>
         </Layout>
       </Layout>
@@ -261,7 +217,7 @@ class WorkflowDetails extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowDetails, } = state;
+  const { workflowDetails } = state;
   return {
     workflowDetails
   };

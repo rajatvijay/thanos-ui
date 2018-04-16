@@ -7,8 +7,8 @@ export const workflowKindService = {
 function getAll() {
   const requestOptions = {
     method: "GET",
-    headers:authHeader.get(),
-    credentials: "include",
+    headers: authHeader.get(),
+    credentials: "include"
   };
 
   return fetch(

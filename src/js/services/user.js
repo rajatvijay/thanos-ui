@@ -49,7 +49,7 @@ export const logout = async () => {
   localStorage.removeItem("user");
   const requestOptions = {
     method: "POST",
-    headers:authHeader.post(),
+    headers: authHeader.post(),
     credentials: "include",
     body: JSON.stringify({})
   };
@@ -67,7 +67,7 @@ export const logout = async () => {
 export const sendEmailAuthToken = async email => {
   const requestOptions = {
     method: "POST",
-    headers:authHeader.post(),
+    headers: authHeader.post(),
     credentials: "include",
     body: JSON.stringify({ email })
   };
@@ -106,14 +106,16 @@ export const sendEmailAuthToken = async email => {
 // }
 
 function getAll() {
-  console.log(authHeader.get())
+  console.log(authHeader.get());
 
   const requestOptions = {
     method: "GET",
-    headers:authHeader.get(),
+    headers: authHeader.get()
   };
 
-  return fetch("http://slackcart.com/api/v1/users/", requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/users/", requestOptions).then(
+    handleResponse
+  );
 }
 
 function getById(id) {
@@ -122,7 +124,9 @@ function getById(id) {
     headers: authHeader.get()
   };
 
-  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(
+    handleResponse
+  );
 }
 
 function register(user) {
@@ -142,7 +146,10 @@ function update(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch("http://slackcart.com/api/v1/users/" + user.id, requestOptions).then(handleResponse);
+  return fetch(
+    "http://slackcart.com/api/v1/users/" + user.id,
+    requestOptions
+  ).then(handleResponse);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
@@ -152,7 +159,9 @@ function _delete(id) {
     headers: authHeader.post()
   };
 
-  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(handleResponse);
+  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(
+    handleResponse
+  );
 }
 
 function handleResponse(response) {

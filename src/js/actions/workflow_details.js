@@ -6,7 +6,7 @@ import { workflowDetailsService } from "../services";
 export const workflowDetailsActions = {
   getById,
   getStepGroup,
-  getStepFields,
+  getStepFields
 };
 
 //Get workflow details
@@ -60,7 +60,6 @@ function getStepGroup(id) {
   }
 }
 
-
 //Get workflow step fileds data.
 function getStepFields(step) {
   return dispatch => {
@@ -77,7 +76,7 @@ function getStepFields(step) {
   function request(step) {
     return { type: workflowStepConstants.GET_STEPFIELDS_REQUEST, step };
   }
-  function success(stepFields,step) {
+  function success(stepFields, step) {
     return {
       type: workflowStepConstants.GET_STEPFIELDS_SUCCESS,
       stepFields,

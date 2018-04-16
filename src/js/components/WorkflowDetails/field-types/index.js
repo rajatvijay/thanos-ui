@@ -3,12 +3,11 @@ import { connect } from "react-redux";
 import { Layout, Icon, Row, Col, Avatar, Progress, Tag, Popover } from "antd";
 import _ from "lodash";
 
-import { Text, Bool,Number } from "./fields";
+import { Text, Bool, Number } from "./fields";
 // export { text } from "./fields";
 
-
-export const getFieldType=(props)=>{
-  console.log(props)
+export const getFieldType = props => {
+  console.log(props);
 
   switch (props.field_type) {
     case "text":
@@ -22,6 +21,5 @@ export const getFieldType=(props)=>{
       return "grey";
   }
 
-
-  return <div>field type</div>
-}
+  return <div>field type</div>;
+};

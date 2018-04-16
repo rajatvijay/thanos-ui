@@ -17,7 +17,7 @@ export const workflowDetailsService = {
 function getById(id) {
   const requestOptions = {
     method: "GET",
-    headers: authHeader.get(),
+    headers: authHeader.get()
   };
 
   return fetch("/api/workflow/" + id, requestOptions).then(handleResponse);
@@ -35,8 +35,8 @@ function getStepGroup(id) {
 
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    //"http://slackcart.com/api/v1/workflows/" + id + "/stepgroups/",  
-    "http://slackcart.com/api/v1/workflows/7/stepgroups/", 
+    //"http://slackcart.com/api/v1/workflows/" + id + "/stepgroups/",
+    "http://slackcart.com/api/v1/workflows/7/stepgroups/",
     requestOptions
   ).then(handleResponse);
 }
@@ -51,17 +51,22 @@ function getStepFields(step) {
     credentials: "include"
   };
 
-  console.log('step/////////////////////////////////////////')
-  console.log(step)
+  console.log("step/////////////////////////////////////////");
+  console.log(step);
 
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    "http://slackcart.com/api/v1/workflows/" + step.workflowId + "/stepgroups/" + step.groupId +"/steps/" + step.stepId+"/",
+    "http://slackcart.com/api/v1/workflows/" +
+      step.workflowId +
+      "/stepgroups/" +
+      step.groupId +
+      "/steps/" +
+      step.stepId +
+      "/",
     //"http://slackcart.com/api/v1/workflows/7/stepgroups/2/steps/2/",
     requestOptions
   ).then(handleResponse);
 }
-
 
 function update(workflow) {
   const requestOptions = {

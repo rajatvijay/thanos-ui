@@ -2,7 +2,6 @@ import { workflowConstants } from "../constants";
 
 export function workflow(state = {}, action) {
   switch (action.type) {
-
     //GET ALL THE WORKFLOWS
     case workflowConstants.GETALL_REQUEST:
       return {
@@ -14,7 +13,7 @@ export function workflow(state = {}, action) {
         workflow: action.workflow
       };
     case workflowConstants.GETALL_FAILURE:
-      console.log('failed to load ')
+      console.log("failed to load ");
       return {
         loading: false,
         loadingStatus: "failed",

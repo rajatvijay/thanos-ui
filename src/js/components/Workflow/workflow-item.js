@@ -16,23 +16,6 @@ import {
   Tag
 } from "antd";
 
-
-const getStatusColor = status => {
-  status = status.toUpperCase();
-  switch (status) {
-    case "IN PROGRESS":
-      return "orange";
-    case "EXPIRED":
-      return "red";
-    case "STALLED":
-      return "grey";
-    case "COMPLETED":
-      return "green";
-    default:
-      return "grey";
-  }
-};
-
 /*workflow Head*/
 const HeaderTitle = props => {
   return (
@@ -46,6 +29,8 @@ const HeaderTitle = props => {
 };
 
 const HeaderWorkflowGroup = props => {
+  console.log("header from inside props");
+  console.log(props);
   return (
     <Col span={10}>
       <div className="group-overview">
@@ -99,12 +84,35 @@ const menu = (
 );
 
 const HeaderOptions = props => {
+  const getStatusColor = status => {
+    status = status.toUpperCase();
+    switch (status) {
+      case "IN PROGRESS":
+        return "orange";
+      case "EXPIRED":
+        return "red";
+      case "STALLED":
+        return "grey";
+      case "COMPLETED":
+        return "green";
+      default:
+        return "grey";
+    }
+  };
   return (
     <Col span="6">
       <Row>
         <Col span={16} className="text-right">
-          <Tag color={getStatusColor(props.workflow.status.label)}>
-            {props.workflow.status.label}
+          <Tag
+            color={getStatusColor(
+              props.workflow.status
+                ? props.workflow.status.label
+                : "In Progress"
+            )}
+          >
+            {props.workflow.status
+              ? props.workflow.status.label
+              : "In Progress"}
           </Tag>{" "}
         </Col>
 

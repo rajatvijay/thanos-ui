@@ -2,9 +2,7 @@ import { workflowStepConstants } from "../constants";
 
 export function currentStepFields(state = {}, action) {
   switch (action.type) {
-    
-
-     //WORKFLOW STEP FEILDS DATA
+    //WORKFLOW STEP FEILDS DATA
     case workflowStepConstants.GET_STEPFIELDS_REQUEST:
       return {
         loading: true
@@ -13,7 +11,7 @@ export function currentStepFields(state = {}, action) {
       return {
         loading: false,
         //workflowDetails: { stepGroups: action.stepGroups }
-        currentStepFields:  action.stepFields
+        currentStepFields: action.stepFields
       };
     case workflowStepConstants.GET_STEPFIELDS_FAILURE:
       return {

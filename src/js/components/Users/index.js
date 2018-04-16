@@ -4,14 +4,12 @@ import CardList from "./card-list";
 import Profile from "./profile";
 import UserFilter from "./filter";
 import _ from "lodash";
-import {connect} from "react-redux"
-import {userActions} from "../../actions"
-
+import { connect } from "react-redux";
+import { userActions } from "../../actions";
 
 const { Sider, Content } = Layout;
 
 const usersList = [
-  
   {
     username: "Gagandeep Singh",
     initials: "GS",
@@ -65,11 +63,12 @@ const usersList = [
   }
 ];
 
-
-const Users = (props) => {
-  return <div>
-    <UserList profile={props.match} {...props}/>
-  </div>
+const Users = props => {
+  return (
+    <div>
+      <UserList profile={props.match} {...props} />
+    </div>
+  );
 };
 
 class UserList extends Component {
@@ -142,12 +141,11 @@ class UserList extends Component {
   }
 }
 
-function mapPropsToState(state){
-  const {users} = state;
+function mapPropsToState(state) {
+  const { users } = state;
   return {
     users
-  }
+  };
 }
-
 
 export default connect(mapPropsToState)(Users);

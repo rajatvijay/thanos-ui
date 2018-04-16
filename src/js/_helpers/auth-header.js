@@ -7,33 +7,31 @@ import { getValueFromCookie } from "../utils/request";
 export const authHeader = {
   get,
   post,
-  requestOptions,
+  requestOptions
 };
-
 
 function get() {
   return {
     "Content-Type": "application/json",
-    "X-DTS-SCHEMA": "vetted",
+    "X-DTS-SCHEMA": "vetted"
     //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
   };
-};
+}
 
 function post() {
   return {
     "Content-Type": "application/json",
     "X-DTS-SCHEMA": "vetted",
-    "X-CSRFToken": getValueFromCookie("csrftoken"),
+    "X-CSRFToken": getValueFromCookie("csrftoken")
     //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
   };
-};
+}
 
 function requestOptions(method) {
   return {
     method: "GET",
-    headers:method === 'get' ? get() : post() ,
+    headers: method === "get" ? get() : post(),
     credentials: "include",
-    mode:"no-cors"
+    mode: "no-cors"
   };
-};
-
+}
