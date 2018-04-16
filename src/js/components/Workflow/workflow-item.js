@@ -29,8 +29,6 @@ const HeaderTitle = props => {
 };
 
 const HeaderWorkflowGroup = props => {
-  console.log("header from inside props");
-  console.log(props);
   return (
     <Col span={10}>
       <div className="group-overview">

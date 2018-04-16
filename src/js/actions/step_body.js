@@ -9,6 +9,7 @@ export const workflowDetailsActions = {
   delete: _delete
 };
 
+//fetch step data and step fields data by id name
 function getById() {
   return dispatch => {
     dispatch(request());
@@ -32,6 +33,7 @@ function getById() {
   }
 }
 
+//fetch stepgroup  data i.e steps list
 function getStepGroup(id) {
   return dispatch => {
     dispatch(request(id));

@@ -7,9 +7,7 @@ import { Text, Bool, Number } from "./fields";
 // export { text } from "./fields";
 
 export const getFieldType = props => {
-  console.log(props);
-
-  switch (props.field_type) {
+  switch (props.field.field_type) {
     case "text":
       return Text(props);
     case "bool":
@@ -20,6 +18,4 @@ export const getFieldType = props => {
     default:
       return "grey";
   }
-
-  return <div>field type</div>;
 };

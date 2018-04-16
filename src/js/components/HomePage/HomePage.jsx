@@ -23,8 +23,7 @@ class HomePage extends React.Component {
         <br />
         <br />
         <h1>Hi {user.firstName}!</h1>
-        <p>You're logged in with React!!</p>
-        <h3>All registered users:</h3>
+        <h3>stats:</h3>
         {users.loading && <em>Loading users...</em>}
         {users.erros && <p>users.erros</p>}
         {users.item && console.log(users)}

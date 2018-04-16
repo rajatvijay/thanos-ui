@@ -51,9 +51,6 @@ function getStepFields(step) {
     credentials: "include"
   };
 
-  console.log("step/////////////////////////////////////////");
-  console.log(step);
-
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
     "http://slackcart.com/api/v1/workflows/" +

@@ -13,13 +13,13 @@ const RadioGroup = Radio.Group;
 // };
 
 export const getLabel = props => {
-  if (!props.is_required) {
-    return props.body;
+  if (!props.field.is_required) {
+    return props.field.body;
   } else {
     return (
       <div className="clearfix">
         <span className="float-right small text-light">required</span>{" "}
-        {props.body}
+        {props.field.body}
       </div>
     );
   }
@@ -32,31 +32,42 @@ export const Text = props => {
       label={getLabel(props)}
       className="from-label"
       style={{ display: "block" }}
-      key={props.id}
+      key={props.field.id}
       message="dfsdf"
-      required={props.is_required}
-      help={props.help_text}
-      validateStatus={props.completed_at ? "success" : null}
+      required={props.field.is_required}
+      help={props.field.help_text}
+      validateStatus={props.field.completed_at ? "success" : null}
     >
-      <Input defaultValue={props.answers[0].answer} />
+      <Input
+        defaultValue={props.field.answers[0].answer}
+        onChange={e => props.onFieldChange(e, props)}
+      />
     </FormItem>
   );
 };
 
 //Field Type Boolean
 export const Bool = props => {
+  let defVal =
+    props.field.answers !== null
+      ? props.field.answers[0].answer
+      : props.field.defaultValue ? 1 : 2;
+
   return (
     <FormItem
       label={getLabel(props)}
       className="from-label"
       style={{ display: "block" }}
-      key={props.id}
+      key={props.field.id}
       message="dfsdf"
-      required={props.is_required}
-      help={props.help_text}
-      validateStatus={props.completed_at ? "success" : null}
+      required={props.field.is_required}
+      help={props.field.help_text}
+      validateStatus={props.field.completed_at ? "success" : null}
     >
-      <RadioGroup>
+      <RadioGroup
+        onChange={e => props.onFieldChange(e, props)}
+        defaultValue={parseInt(defVal)}
+      >
         <Radio value={1}>Yes</Radio>
         <Radio value={2}>No</Radio>
       </RadioGroup>
@@ -71,11 +82,11 @@ export const Number = props => {
       label={getLabel(props)}
       className="from-label"
       style={{ display: "block" }}
-      key={props.id}
+      key={props.field.id}
       message="dfsdf"
-      required={props.is_required}
-      help={props.help_text}
-      validateStatus={props.completed_at ? "success" : null}
+      required={props.field.is_required}
+      help={props.field.help_text}
+      validateStatus={props.field.completed_at ? "success" : null}
     >
       <InputNumber min={1} defaultValue={3} />
     </FormItem>

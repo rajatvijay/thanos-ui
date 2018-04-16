@@ -179,7 +179,6 @@ class WorkflowDetails extends Component {
             </div>
           ) : (
             <div>
-              {console.log(this.state.wfdata)}
               <WorkflowHeader workflow={this.state.wfdata} />
             </div>
           )}

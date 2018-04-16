@@ -3,6 +3,7 @@ import { Form, Input, Button, Icon } from "antd";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { getFieldType } from "./field-types";
+import { workflowFieldActions } from "../../actions";
 
 const FormItem = Form.Item;
 
@@ -11,16 +12,29 @@ class StepBody extends Component {
     super(props);
   }
 
-  renderField() {
-    return <div>ewfsdf</div>;
-  }
-
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
     console.log("submit");
-  }
+  };
 
-  renderForm(stepData) {
+  onFieldChange = (e, payload) => {
+    let answer_id = payload.field.answers[0].id;
+    let data = {
+      answer: e.target.value,
+      answerId: answer_id,
+      fieldId: payload.field.id,
+      workflowId: payload.workflowId
+    };
+
+    if (payload.field.answers.length === 0) {
+      this.props.dispatch(workflowFieldActions.saveField(data));
+    } else {
+      this.props.dispatch(workflowFieldActions.updateField(data));
+    }
+  };
+
+  renderForm = stepData => {
+    let that = this;
     return (
       <Form
         layout="vertical"
@@ -28,7 +42,15 @@ class StepBody extends Component {
         className="step-form"
       >
         {_.map(stepData.data_fields, function(f) {
-          let field = getFieldType(f);
+          let wf_id =
+            that.props.workflowDetails.workflowDetails.stepGroups.results[0]
+              .workflow;
+          let payload = {
+            field: f,
+            onFieldChange: that.onFieldChange,
+            workflowId: wf_id
+          };
+          let field = getFieldType(payload);
           return field;
         })}
 
@@ -39,9 +61,9 @@ class StepBody extends Component {
         </FormItem>
       </Form>
     );
-  }
+  };
 
-  render() {
+  render = () => {
     const loading =
       this.props.currentStepFields.loading ||
       this.props.workflowDetails.loading;
@@ -50,7 +72,7 @@ class StepBody extends Component {
     if (!loading && this.props.currentStepFields) {
       stepData = this.props.currentStepFields.currentStepFields;
     } else {
-      stepData = "dddlll";
+      stepData = "no data";
     }
     return (
       <div className="pd-ard-lg">
@@ -67,7 +89,7 @@ class StepBody extends Component {
         )}
       </div>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {
