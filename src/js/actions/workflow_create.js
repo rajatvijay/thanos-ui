@@ -1,5 +1,6 @@
 import { workflowCreateConstants } from "../constants";
 import { workflowCreateService } from "../services";
+import { history } from "../_helpers";
 
 export const createWorkflow = payload => async dispatch => {
   dispatch({ type: workflowCreateConstants.CREATE_REQUEST, payload });
@@ -9,9 +10,7 @@ export const createWorkflow = payload => async dispatch => {
       type: workflowCreateConstants.CREATE_SUCCESS,
       workflowCreate: response
     });
-    console.log("eeeeeeee");
-    console.log(response);
-    //history.push("/");
+    history.push("/workflows/instances/" + response.id);
   } catch (error) {
     console.log(error);
     dispatch({ type: workflowCreateConstants.CREATE_FAILURE, error });

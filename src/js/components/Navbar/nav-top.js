@@ -21,13 +21,14 @@ class NavTop extends Component {
     this.props.dispatch(workflowKindActions.getAll());
   };
 
-  clicked = id => {
+  clicked = tag => {
     //dispatch
     let payload = {
       definition: null,
       created_by: this.props.authentication.user.id,
       status: 1,
-      kind: id,
+      kind: tag,
+      //tag: tag,
       name: "Draft"
     };
     this.props.dispatch(createWorkflow(payload));
@@ -42,7 +43,7 @@ class NavTop extends Component {
         {_.map(workflowKind, function(item) {
           return (
             <Menu.Item key="1" className="text-primary text-medium">
-              <span onClick={that.clicked.bind(this, item.id)}>
+              <span onClick={that.clicked.bind(this, item.tag)}>
                 <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
                 {item.name}
               </span>

@@ -84,6 +84,6 @@ function getStepFields(step) {
     };
   }
   function failure(error) {
-    return { type: workflowStepConstants.GET_STEPFIELD_FAILURE, error };
+    return { type: workflowStepConstants.GET_STEPFIELDS_FAILURE, error };
   }
 }
