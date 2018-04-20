@@ -8,9 +8,13 @@ export function workflow(state = {}, action) {
         loading: true
       };
     case workflowConstants.GETALL_SUCCESS:
+      workflow = action.workflow;
       return {
         loading: false,
-        workflow: action.workflow
+        workflow: workflow.results,
+        count: workflow.count,
+        next: workflow.next,
+        previous: workflow.previous
       };
     case workflowConstants.GETALL_FAILURE:
       console.log("failed to load ");

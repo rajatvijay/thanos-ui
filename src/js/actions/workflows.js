@@ -7,20 +7,20 @@ export const workflowActions = {
   delete: _delete
 };
 
-function getAll() {
+function getAll(filter) {
   return dispatch => {
-    dispatch(request());
+    dispatch(request(filter));
 
     workflowService
-      .getAll()
+      .getAll(filter)
       .then(
-        workflow => dispatch(success(workflow.results)),
+        workflow => dispatch(success(workflow)),
         error => dispatch(failure(error))
       );
   };
 
-  function request() {
-    return { type: workflowConstants.GETALL_REQUEST };
+  function request(filter) {
+    return { type: workflowConstants.GETALL_REQUEST, filter };
   }
   function success(workflow) {
     return { type: workflowConstants.GETALL_SUCCESS, workflow };

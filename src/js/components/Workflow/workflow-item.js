@@ -22,7 +22,7 @@ const HeaderTitle = props => {
     <Col span={7}>
       <Avatar>{props.workflow.name.charAt(0)}</Avatar>
       <span className="mr-left-sm text-grey-dark text-medium">
-        {props.workflow.name}
+        {props.workflow.name} {props.workflow.id}
       </span>
     </Col>
   );
