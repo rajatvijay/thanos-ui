@@ -4,4 +4,4 @@ export { workflowActions } from "./workflows";
 export { workflowDetailsActions } from "./workflow_details";
 export { workflowKindActions } from "./workflow_kind";
 export { createWorkflow } from "./workflow_create";
-export { workflowFieldActions } from "./workflow_field_update";
+export { workflowStepActions } from "./workflow_step_update";

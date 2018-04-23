@@ -1,20 +1,32 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Icon } from "antd";
+import { Form, Input, Button, Icon, Row, Col, Alert, Divider } from "antd";
+import Moment from "react-moment";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { getFieldType } from "./field-types";
-import { workflowFieldActions } from "../../actions";
+import { workflowStepActions } from "../../actions";
+import { userService } from "../../services";
 
 const FormItem = Form.Item;
 
 class StepBody extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      stepCompletedBy: null,
+      stepApprovedBy: null
+    };
   }
 
   handleSubmit = e => {
     e.preventDefault();
     console.log("submit");
+    console.log(this.props);
+    this.props.dispatch(
+      workflowStepActions.submitStepData(
+        this.props.currentStepFields.currentStepFields
+      )
+    );
   };
 
   onFieldChange = (e, payload) => {
@@ -27,14 +39,112 @@ class StepBody extends Component {
     };
 
     if (payload.field.answers.length === 0) {
-      this.props.dispatch(workflowFieldActions.saveField(data));
+      this.props.dispatch(workflowStepActions.saveField(data));
     } else {
-      this.props.dispatch(workflowFieldActions.updateField(data));
+      this.props.dispatch(workflowStepActions.updateField(data));
+    }
+  };
+
+  getUserById = (id, status) => {
+    let that = this;
+    userService.getById(id).then(
+      function(result, error) {
+        if (status === "completed") {
+          that.setState({ stepCompletedBy: result });
+        } else if (status === "approved") {
+          that.setState({ stepApprovedBy: result });
+        } else {
+          return "...";
+        }
+      },
+      function(error) {
+        console.log(error);
+        //notify eorro;
+      }
+    );
+  };
+
+  onApproveStep = step => {
+    //console.log(this.props, step)
+    this.props.dispatch(workflowStepActions.approveStep(step));
+  };
+
+  getStepStatus = stepData => {
+    const step = stepData;
+    // step.completed_at = "12 march 2018";
+    // step.completed_by = "Jagmeet Lamba";
+
+    if (step.completed_at || step.approved_at) {
+      //this.getUserById(step.completed_by, 'completed');
+
+      //if(step.approved_at ){this.getUserById(step.approved_by, 'approved')};
+
+      return (
+        <Alert
+          message={
+            <div className="">
+              <span className="float-right text-anchor text-underline text-primary">
+                Undo completion
+              </span>
+              <span className="float-right pd-right-sm pd-left-sm">|</span>
+              <span
+                className="float-right text-anchor text-underline text-primary"
+                onClick={this.onApproveStep.bind(this, step)}
+              >
+                {step.approved_at ? "Undo approval" : "Approve step"}
+              </span>
+
+              {step.completed_at ? (
+                <span>
+                  Completed by{" "}
+                  <span className="text-medium ">
+                    {this.state.stepCompletedBy
+                      ? this.state.stepCompletedBy.first_name
+                      : "..."}
+                  </span>{" "}
+                  on <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
+                </span>
+              ) : null}
+
+              {step.approved_at ? (
+                <span>
+                  {" "}
+                  and approved by{" "}
+                  <span className="text-medium ">
+                    {this.state.stepApprovedBy
+                      ? this.state.stepApprovedBy.first_name
+                      : "..."}
+                  </span>{" "}
+                  on <Moment format="MM/DD/YYYY">{step.approved_at}</Moment>
+                </span>
+              ) : null}
+            </div>
+          }
+          type="success"
+          showIcon
+        />
+      );
+    } else if (step.updated_at) {
+      return (
+        <Alert
+          message={
+            <div className="">
+              Last updated at{" "}
+              <Moment format="MM/DD/YYYY">{step.updated_at}</Moment>{" "}
+            </div>
+          }
+          type="info"
+          showIcon
+        />
+      );
+    } else {
+      return <span />;
     }
   };
 
   renderForm = stepData => {
     let that = this;
+
     return (
       <Form
         layout="vertical"
@@ -54,11 +164,19 @@ class StepBody extends Component {
           return field;
         })}
 
-        <FormItem>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </FormItem>
+        <Divider />
+        <Row>
+          <Col span="18">{this.getStepStatus(stepData)}</Col>
+          <Col span="6" className="text-right">
+            {stepData.completed_at ? null : (
+              <FormItem>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </FormItem>
+            )}
+          </Col>
+        </Row>
       </Form>
     );
   };

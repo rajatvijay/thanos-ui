@@ -11,6 +11,7 @@ import { notification } from "antd";
 export const userActions = {
   register,
   getAll,
+  getById,
   delete: _delete
 };
 
@@ -103,6 +104,26 @@ function getAll() {
         users => dispatch(success(users)),
         error => dispatch(failure(error))
       );
+  };
+
+  function request() {
+    return { type: userConstants.GETALL_REQUEST };
+  }
+  function success(users) {
+    return { type: userConstants.GETALL_SUCCESS, users };
+  }
+  function failure(error) {
+    return { type: userConstants.GETALL_FAILURE, error };
+  }
+}
+
+function getById(id) {
+  return dispatch => {
+    dispatch(request(id));
+
+    userService
+      .getById(id)
+      .then(user => dispatch(success(user)), error => dispatch(failure(error)));
   };
 
   function request() {

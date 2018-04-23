@@ -1,12 +1,11 @@
-import { workflowDetailsConstants } from "../constants";
+import { workflowDetailsConstants, workflowStepConstants } from "../constants";
 import { workflowDetailsService } from "../services";
 //import { alertActions } from "./";
 //import { history } from "../_helpers";
 
 export const workflowDetailsActions = {
   getById,
-  getStepGroup,
-  delete: _delete
+  getStepGroup
 };
 
 //fetch step data and step fields data by id name
@@ -60,28 +59,29 @@ function getStepGroup(id) {
   }
 }
 
-// prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
+//fetch stepgroup  data i.e steps list
+function submitStepData(payload) {
   return dispatch => {
-    dispatch(request(id));
+    dispatch(request(payload));
 
-    workflowDetailsService.delete(id).then(
-      workflowDetails => {
-        dispatch(success(id));
-      },
-      error => {
-        dispatch(failure(id, error));
-      }
-    );
+    workflowDetailsService
+      .getStepGroup(payload)
+      .then(
+        stepData => dispatch(success(stepData)),
+        error => dispatch(failure(error))
+      );
   };
 
-  function request(id) {
-    return { type: workflowDetailsConstants.DELETE_REQUEST, id };
+  function request() {
+    return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
-  function success(id) {
-    return { type: workflowDetailsConstants.DELETE_SUCCESS, id };
+  function success(stepData) {
+    return {
+      type: workflowStepConstants.SUBMIT_SUCCESS,
+      stepData
+    };
   }
-  function failure(id, error) {
-    return { type: workflowDetailsConstants.DELETE_FAILURE, id, error };
+  function failure(error) {
+    return { type: workflowStepConstants.SUBMIT_FAILURE, error };
   }
 }

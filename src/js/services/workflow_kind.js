@@ -1,4 +1,4 @@
-import { authHeader, handleResponse } from "../_helpers";
+import { authHeader, handleResponse, baseUrl } from "../_helpers";
 
 export const workflowKindService = {
   getAll
@@ -11,10 +11,9 @@ function getAll() {
     credentials: "include"
   };
 
-  return fetch(
-    "http://slackcart.com/api/v1/workflow-kinds/",
-    requestOptions
-  ).then(handleResponse);
+  return fetch(baseUrl + "workflow-kinds/", requestOptions).then(
+    handleResponse
+  );
 }
 
 // function handleResponse(response) {

@@ -7,6 +7,7 @@ import data from "../../data/data.js";
 import dataSteps from "../../data/data-details.js";
 //import realDataSteps from "../../data/realdata.js";
 import StepBody from "./step-body.js";
+import { baseUrl, authHeader } from "../../_helpers";
 import { workflowDetailsActions, workflowActions } from "../../actions";
 import { WorkflowHeader } from "../Workflow/workflow-item";
 
@@ -18,27 +19,18 @@ import { WorkflowHeader } from "../Workflow/workflow-item";
 
 const requestOptions = {
   method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-    "X-DTS-SCHEMA": "vetted"
-  },
+  headers: authHeader.get(),
   credentials: "include"
 };
 
 const fethcWorkflow = id => {
   const requestOptions = {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "X-DTS-SCHEMA": "vetted"
-    },
+    headers: authHeader.get(),
     credentials: "include"
   };
 
-  return fetch(
-    "http://slackcart.com/api/v1/workflows/" + id + "/",
-    requestOptions
-  )
+  return fetch(baseUrl + "workflows/" + id + "/", requestOptions)
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -104,7 +96,7 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowDetailsActions.getStepGroup(id));
 
     //getworkflow data
-    fetch("http://slackcart.com/api/v1/workflows/" + id + "/", requestOptions)
+    fetch(baseUrl + "workflows/" + id + "/", requestOptions)
       .then(response => {
         if (response.ok) {
           return response.json();

@@ -19,12 +19,12 @@ const initialState = {
 
 export function users(state = initialState, action) {
   switch (action.type) {
+    //MAGIC LINK
     case userConstants.LOGIN_LINK_REQUEST:
       return {
         ...state,
         emailAuth: { ...state.emailAuth, loading: true }
       };
-
     case userConstants.LOGIN_LINK_SUCCESS:
       if (action.user.ok) {
         return {
@@ -42,13 +42,13 @@ export function users(state = initialState, action) {
           }
         };
       }
-
     case userConstants.LOGIN_LINK_FAILURE:
       return {
         ...state,
         emailAuth: { ...state.emailAuth, loading: false, errors: action.errors }
       };
 
+    //GET LIST OF ALL USERS
     case userConstants.GETALL_REQUEST:
       return {
         loading: true
@@ -61,6 +61,23 @@ export function users(state = initialState, action) {
       return {
         error: action.error
       };
+
+    // GET USER BY ID
+    case userConstants.GET_REQUEST:
+      return {
+        loading: true
+      };
+    case userConstants.GET_SUCCESS:
+      return {
+        items: action.requestedUser,
+        loading: false
+      };
+    case userConstants.GET_FAILURE:
+      return {
+        error: action.error,
+        loading: false
+      };
+
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
       return {

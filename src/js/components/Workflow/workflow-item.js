@@ -50,7 +50,7 @@ const HeaderWorkflowGroup = props => {
                 >
                   panorama_fish_eye_
                 </i>
-                <span>{groupitem.step_group_def.label}</span>
+                <span>{groupitem.definition.label}</span>
               </span>
             );
           })}
@@ -170,11 +170,11 @@ const StepGroupList = props => {
               <div
                 className={
                   "lc-step grp-class step-group-status text-metal " +
-                  group.step_group_def.status
+                  group.definition.status
                 }
               >
                 <i className="material-icons">panorama_fish_eye_</i>{" "}
-                {group.step_group_def.label}
+                {group.definition.label}
               </div>
               <ul>
                 {_.map(group.steps, function(steps, index) {

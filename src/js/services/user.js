@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, baseUrl } from "../_helpers";
 //import axios from "axios";
 
 import { getValueFromCookie } from "../utils/request";
@@ -27,7 +27,7 @@ function login(username, password) {
     body: JSON.stringify({ email: username, password: password })
   };
 
-  return fetch("http://slackcart.com/api/v1/users/login/", requestOptions)
+  return fetch(baseUrl + "users/login/", requestOptions)
     .then(response => {
       if (!response.ok) {
         return Promise.reject(response.statusText);
@@ -54,10 +54,7 @@ export const logout = async () => {
     body: JSON.stringify({})
   };
   try {
-    const response = await fetch(
-      "http://slackcart.com/api/v1/users/logout/",
-      requestOptions
-    );
+    const response = await fetch(baseUrl + "users/logout/", requestOptions);
     return response;
   } catch (error) {
     throw error;
@@ -72,16 +69,13 @@ export const sendEmailAuthToken = async email => {
     body: JSON.stringify({ email })
   };
   try {
-    const response = await fetch(
-      //"http://slackcart.com/api/v1/users/generate_magic_link/",
-      "http://slackcart.com/api/v1/users/magic_link/",
-      requestOptions
-    );
+    const response = await fetch(baseUrl + "users/magic_link/", requestOptions);
     return response;
   } catch (error) {
     throw error;
   }
 };
+
 // function logout() {
 //   // remove user from local storage to log user out
 
@@ -106,25 +100,22 @@ export const sendEmailAuthToken = async email => {
 // }
 
 function getAll() {
-  console.log(authHeader.get());
-
   const requestOptions = {
     method: "GET",
     headers: authHeader.get()
   };
 
-  return fetch("http://slackcart.com/api/v1/users/", requestOptions).then(
-    handleResponse
-  );
+  return fetch(baseUrl + "users/", requestOptions).then(handleResponse);
 }
 
 function getById(id) {
   const requestOptions = {
     method: "GET",
-    headers: authHeader.get()
+    headers: authHeader.get(),
+    credentials: "include"
   };
 
-  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(
+  return fetch(baseUrl + "users/" + id + "/", requestOptions).then(
     handleResponse
   );
 }
@@ -146,10 +137,9 @@ function update(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch(
-    "http://slackcart.com/api/v1/users/" + user.id,
-    requestOptions
-  ).then(handleResponse);
+  return fetch(baseUrl + "users/" + user.id, requestOptions).then(
+    handleResponse
+  );
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
@@ -159,9 +149,7 @@ function _delete(id) {
     headers: authHeader.post()
   };
 
-  return fetch("http://slackcart.com/api/v1/users/" + id, requestOptions).then(
-    handleResponse
-  );
+  return fetch(baseUrl + "users/" + id, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

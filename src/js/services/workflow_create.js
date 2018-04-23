@@ -1,4 +1,4 @@
-import { authHeader, handleResponse } from "../_helpers";
+import { authHeader, handleResponse, baseUrl } from "../_helpers";
 import { getValueFromCookie } from "../utils/request";
 
 export const workflowCreateService = {
@@ -13,9 +13,7 @@ function crerateWorkflow(payload) {
     body: JSON.stringify(payload)
   };
 
-  return fetch("http://slackcart.com/api/v1/workflows/", requestOptions).then(
-    handleResponse
-  );
+  return fetch(baseUrl + "workflows/", requestOptions).then(handleResponse);
 }
 
 // function handleResponse(response) {

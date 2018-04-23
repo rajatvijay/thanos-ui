@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, baseUrl } from "../_helpers";
 import _ from "lodash";
 
 export const workflowService = {
@@ -13,7 +13,7 @@ function getAll(filter) {
     credentials: "include"
   };
   let params = "";
-  let url = "http://slackcart.com/api/v1/workflows/";
+  let url = baseUrl + "workflows/";
 
   if (filter) {
     const params = filterUrl(filter);
@@ -43,10 +43,9 @@ function getById(id) {
     credentials: "include"
   };
 
-  return fetch(
-    "http://slackcart.com/api/v1/workflows/" + id + "/",
-    requestOptions
-  ).then(handleResponse);
+  return fetch(baseUrl + "workflows/" + id + "/", requestOptions).then(
+    handleResponse
+  );
 }
 
 function handleResponse(response) {

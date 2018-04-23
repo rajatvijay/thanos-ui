@@ -22,3 +22,26 @@ export function currentStepFields(state = {}, action) {
       return state;
   }
 }
+
+export function currentStepData(state = {}, action) {
+  switch (action.type) {
+    //WORKFLOW STEP FIELDS DATA
+    case workflowStepConstants.SUMBIT_REQUEST:
+      return {
+        loading: true
+      };
+    case workflowStepConstants.SUBMIT_SUCCESS:
+      return {
+        loading: false,
+        //workflowDetails: { stepGroups: action.stepGroups }
+        currentStep: action.stepData
+      };
+    case workflowStepConstants.SUBMIT_FAILURE:
+      return {
+        error: action.error
+      };
+
+    default:
+      return state;
+  }
+}

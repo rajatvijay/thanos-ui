@@ -8,7 +8,7 @@ import { workflow } from "./workflow_list";
 import { workflowCreate } from "./workflow_create";
 import { workflowKind } from "./workflow_kind";
 import { workflowDetails } from "./workflow_details";
-import { currentStepFields } from "./workflow_step";
+import { currentStepFields, currentStepData } from "./workflow_step";
 
 const rootReducer = combineReducers({
   authentication,
@@ -19,7 +19,8 @@ const rootReducer = combineReducers({
   workflowKind,
   workflowDetails,
   workflowCreate,
-  currentStepFields
+  currentStepFields,
+  currentStepData
 });
 
 export default rootReducer;
