@@ -28,6 +28,9 @@ class StepBody extends Component {
   };
 
   onFieldChange = (e, payload) => {
+    console.log("payload------>");
+    console.log(payload);
+
     let method = "save";
     let data = {
       answer: e.target.value,

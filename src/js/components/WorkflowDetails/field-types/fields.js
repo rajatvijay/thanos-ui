@@ -27,6 +27,9 @@ export const getLabel = props => {
 
 //Field Type Text
 export const Text = props => {
+  console.log("on filed changeprops");
+  console.log(props);
+
   return (
     <FormItem
       label={getLabel(props)}
