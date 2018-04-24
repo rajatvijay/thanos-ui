@@ -41,7 +41,7 @@ class WorkflowList extends Component {
       page = parseInt(page[1]) + 1;
     }
 
-    console.log(page);
+    console.log(data.workflow);
 
     return (
       <div>
@@ -52,29 +52,39 @@ class WorkflowList extends Component {
             background: "#fff"
           }}
         >
-          <Collapse accordion>
-            {_.map(data.workflow, function(item, index) {
-              return (
-                <Panel
-                  showArrow={false}
-                  header={<WorkflowHeader workflow={item} />}
-                  key={index}
-                  style={{ background: "#fff" }}
-                  className="lc-card"
-                >
-                  <WorkflowBody workflow={item} />
-                </Panel>
-              );
-            })}
-          </Collapse>
+          {console.log(data.workflow)}
+          {data.workflow && data.workflow.length > 0 ? (
+            <div>
+              <Collapse accordion>
+                {_.map(data.workflow, function(item, index) {
+                  return (
+                    <Panel
+                      showArrow={false}
+                      header={<WorkflowHeader workflow={item} />}
+                      key={index}
+                      style={{ background: "#fff" }}
+                      className="lc-card"
+                    >
+                      <WorkflowBody workflow={item} />
+                    </Panel>
+                  );
+                })}
+              </Collapse>
 
-          <div className="mr-top-lg text-center pd-bottom-lg">
-            <Pagination
-              defaultCurrent={page ? page : 1}
-              total={data.count}
-              onChange={this.handlePageChange.bind(this)}
-            />
-          </div>
+              <div className="mr-top-lg text-center pd-bottom-lg">
+                <Pagination
+                  defaultCurrent={page ? page : 1}
+                  total={data.count}
+                  onChange={this.handlePageChange.bind(this)}
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="text-center text-medium text-metal">
+              {" "}
+              No workflows to show
+            </div>
+          )}
         </Content>
       </div>
     );

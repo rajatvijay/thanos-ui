@@ -29,8 +29,9 @@ export function workflowCreate(state = {}, action) {
     case workflowCreateConstants.CREATE_FAILURE:
       openNotificationWithIcon({
         type: "error",
-        message: "Workflow creation failed",
-        body: ""
+        message: "Workflow creatation failed.",
+        body:
+          "Failed to create workflow, sorry for the inconvenience. Please try again later"
       });
 
       return {
