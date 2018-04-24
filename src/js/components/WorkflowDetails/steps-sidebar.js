@@ -64,7 +64,7 @@ class StepSidebarMenu extends Component {
               <i className="material-icons t-14 pd-right-sm">
                 panorama_fish_eye
               </i>
-              <span>{g.definition.label}</span>
+              <span>{g.definition.name}</span>
             </span>
           }
         >
