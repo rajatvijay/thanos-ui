@@ -20,8 +20,6 @@ class StepBody extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log("submit");
-    console.log(this.props);
     this.props.dispatch(
       workflowStepActions.submitStepData(
         this.props.currentStepFields.currentStepFields
@@ -30,23 +28,27 @@ class StepBody extends Component {
   };
 
   onFieldChange = (e, payload) => {
-    console.log("payload-------");
-    console.log(payload);
-
-    let answer_id = payload.field.answers[0].id;
+    let method = "save";
     let data = {
       answer: e.target.value,
-      answerId: answer_id,
-      fieldId: payload.field.id,
-      workflowId: payload.workflowId
+      field: payload.field.id,
+      workflow: payload.workflowId
     };
 
-    if (payload.field.answers.length === 0) {
+    if (payload.field.answers.length !== 0) {
+      method = "update";
+      data.answerId = payload.field.answers[0].id;
+    }
+    this.callDispatch(data, method);
+  };
+
+  callDispatch = _.debounce((data, method) => {
+    if (method === "save") {
       this.props.dispatch(workflowStepActions.saveField(data));
     } else {
       this.props.dispatch(workflowStepActions.updateField(data));
     }
-  };
+  }, 500);
 
   getUserById = (id, status) => {
     let that = this;
