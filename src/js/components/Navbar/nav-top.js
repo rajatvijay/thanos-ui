@@ -37,9 +37,12 @@ class NavTop extends Component {
 
     const menu = (
       <Menu>
-        {_.map(workflowKind, function(item) {
+        {_.map(workflowKind, function(item, index) {
           return (
-            <Menu.Item key="1" className="text-primary text-medium">
+            <Menu.Item
+              key={"key-" + index}
+              className="text-primary text-medium"
+            >
               <span onClick={that.clicked.bind(this, item.tag)}>
                 <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
                 {item.name}

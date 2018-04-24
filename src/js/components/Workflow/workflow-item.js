@@ -65,17 +65,17 @@ const menu = (
   <Menu>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="">
-        1st menu item
+        Archive
       </a>
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="">
-        2nd menu item
+        In Progress
       </a>
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-        3rd menu item
+        Completed
       </a>
     </Menu.Item>
   </Menu>
@@ -199,7 +199,7 @@ const StepItem = props => {
   let step_complete = props.stepData.completed_at ? true : false;
 
   return (
-    <li className={step_complete ? "text-green" : "text-metal"}>
+    <li className={""}>
       <Link
         to={
           "/workflows/instances/" +
@@ -207,10 +207,14 @@ const StepItem = props => {
           "?step=" +
           props.stepData.id
         }
-        className="text-nounderline text-metal"
+        className={
+          step_complete
+            ? "text-green text-nounderline"
+            : "text-metal text-nounderline"
+        }
       >
         <i className="material-icons">
-          {step_complete ? "check-circle" : "panorama_fish_eye"}{" "}
+          {step_complete ? "check_circle" : "panorama_fish_eye"}{" "}
         </i>
         <span>{props.stepData.name}</span>
       </Link>

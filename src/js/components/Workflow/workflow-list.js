@@ -12,26 +12,13 @@ const { Content } = Layout;
 const Panel = Collapse.Panel;
 
 class WorkflowList extends Component {
-  componentWillReceiveProps = nextProps => {
-    console.log(nextProps);
-  };
-
-  componentDidMount = () => {
-    console.log(this.props);
-  };
-
   handlePageChange = (page, rage) => {
     let param = [{ label: "page", value: page }];
-    console.log("padingations sdfnksdnflasndfansd");
-    console.log(this.props);
-    //console.log(this.props.dispatch)
-
     this.props.dispatch(workflowActions.getAll(param));
   };
 
   render() {
     const data = this.props.workflow;
-    console.log(data);
     let page = 1;
     if (data.next) {
       page = data.next.split("?page=");
@@ -40,8 +27,6 @@ class WorkflowList extends Component {
       page = data.previous.split("?page=");
       page = parseInt(page[1]) + 1;
     }
-
-    console.log(data.workflow);
 
     return (
       <div>
@@ -52,7 +37,6 @@ class WorkflowList extends Component {
             background: "#fff"
           }}
         >
-          {console.log(data.workflow)}
           {data.workflow && data.workflow.length > 0 ? (
             <div>
               <Collapse accordion>
