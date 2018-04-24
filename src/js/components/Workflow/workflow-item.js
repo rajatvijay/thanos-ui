@@ -130,7 +130,7 @@ export const WorkflowHeader = props => {
   return (
     <Row type="flex" align="middle" className="lc-card-head">
       <Col span={1} className="text-center text-metal ">
-        <Icon type="copy" />
+        <Icon type="copy" style={{ fontSize: "18px" }} />
       </Col>
       <HeaderTitle {...props} />
       <HeaderWorkflowGroup {...props} />
@@ -196,8 +196,10 @@ const StepGroupList = props => {
 };
 
 const StepItem = props => {
+  let step_complete = props.stepData.completed_at ? true : false;
+
   return (
-    <li className={"text-metal"}>
+    <li className={step_complete ? "text-green" : "text-metal"}>
       <Link
         to={
           "/workflows/instances/" +
@@ -207,7 +209,9 @@ const StepItem = props => {
         }
         className="text-nounderline text-metal"
       >
-        <i className="material-icons">panorama_fish_eye_</i>
+        <i className="material-icons">
+          {step_complete ? "check-circle" : "panorama_fish_eye"}{" "}
+        </i>
         <span>{props.stepData.name}</span>
       </Link>
     </li>

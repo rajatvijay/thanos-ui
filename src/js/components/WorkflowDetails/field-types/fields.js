@@ -27,6 +27,9 @@ export const getLabel = props => {
 
 //Field Type Text
 export const Text = props => {
+  console.log("answer prospprops");
+  console.log(props);
+
   return (
     <FormItem
       label={getLabel(props)}
@@ -39,7 +42,11 @@ export const Text = props => {
       validateStatus={props.field.completed_at ? "success" : null}
     >
       <Input
-        defaultValue={props.field.answers[0].answer}
+        defaultValue={
+          props.field.answers[0]
+            ? props.field.answers[0].answer
+            : props.field.defaultValue
+        }
         onChange={e => props.onFieldChange(e, props)}
       />
     </FormItem>

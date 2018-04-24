@@ -20,6 +20,7 @@
 
 .lc-card .lc-card-body .sub-step-list .groupaz-list {
   padding: 0;
+  white-space: nowrap;
   list-style: none;
 }
 

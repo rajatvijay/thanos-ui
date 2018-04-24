@@ -3,15 +3,15 @@ import { workflowDetailsConstants, workflowStepConstants } from "../constants";
 export function workflowDetails(state = {}, action) {
   switch (action.type) {
     //Workflow detials
-    case workflowDetailsConstants.GETALL_REQUEST:
+    case workflowDetailsConstants.GET_REQUEST:
       return {
         loading: true
       };
-    case workflowDetailsConstants.GETALL_SUCCESS:
+    case workflowDetailsConstants.GET_SUCCESS:
       return {
         workflowDetails: action.workflowDetails
       };
-    case workflowDetailsConstants.GETALL_FAILURE:
+    case workflowDetailsConstants.GET_FAILURE:
       return {
         error: action.error
       };

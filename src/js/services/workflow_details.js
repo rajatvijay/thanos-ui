@@ -33,7 +33,7 @@ function getStepGroup(id) {
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
     //baseUrl + "workflows/" + id + "/stepgroups/",
-    baseUrl + "workflows/7/stepgroups/",
+    baseUrl + "workflows/" + parseInt(id) + "/stepgroups/",
     requestOptions
   ).then(handleResponse);
 }

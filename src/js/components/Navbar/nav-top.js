@@ -24,11 +24,8 @@ class NavTop extends Component {
   clicked = tag => {
     //dispatch
     let payload = {
-      definition: null,
-      created_by: this.props.authentication.user.id,
       status: 1,
       kind: tag,
-      //tag: tag,
       name: "Draft"
     };
     this.props.dispatch(createWorkflow(payload));
