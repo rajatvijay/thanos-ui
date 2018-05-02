@@ -19,20 +19,25 @@ import {
 /*workflow Head*/
 const HeaderTitle = props => {
   return (
-    <Col span={7}>
-      <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
-      <span className="mr-left-sm text-grey-dark text-medium">
-        {props.workflow.name} {props.workflow.id}
-      </span>
+    <Col span={5}>
+      <Link
+        to={"instances/" + props.workflow.id + "/"}
+        className="text-nounderline"
+      >
+        <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
+        <span className="mr-left-sm text-grey-dark text-medium">
+          {props.workflow.name} {props.workflow.id}
+        </span>
+      </Link>
     </Col>
   );
 };
 
 const HeaderWorkflowGroup = props => {
   return (
-    <Col span={10}>
+    <Col span={12}>
       <div className="group-overview">
-        <div>
+        <div className="overflow-wrapper">
           {_.map(props.workflow.step_groups, function(groupitem, index) {
             return (
               <span
@@ -65,17 +70,32 @@ const menu = (
   <Menu>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="">
-        Archive
+        Change status to "Archive"
       </a>
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="">
-        In Progress
+        Change status to "On hold"
       </a>
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-        Completed
+        Change status to "Completed"
+      </a>
+    </Menu.Item>
+  </Menu>
+);
+
+const menu2 = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="">
+        Refresh Preview
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="">
+        Add site
       </a>
     </Menu.Item>
   </Menu>
@@ -101,23 +121,47 @@ const HeaderOptions = props => {
     <Col span="6">
       <Row>
         <Col span={16} className="text-right">
-          <Tag
-            color={getStatusColor(
-              props.workflow.status
-                ? props.workflow.status.label
-                : "In Progress"
-            )}
-          >
-            {props.workflow.status
-              ? props.workflow.status.label
-              : "In Progress"}
-          </Tag>{" "}
+          <Dropdown overlay={menu}>
+            <Tag
+              color={getStatusColor(
+                props.workflow.status
+                  ? props.workflow.status.label
+                  : "In Progress "
+              )}
+            >
+              {props.workflow.status ? (
+                <span>
+                  {props.workflow.status.label}{" "}
+                  <Icon
+                    className="pd-left-sm"
+                    type="down"
+                    style={{ fontSize: 11 }}
+                  />
+                </span>
+              ) : (
+                <span>
+                  In Progress{" "}
+                  <Icon
+                    className="pd-left-sm"
+                    type="down"
+                    style={{ fontSize: 11 }}
+                  />
+                </span>
+              )}
+            </Tag>
+          </Dropdown>
         </Col>
 
-        <Col span="8" className="text-center " style={{ position: "relative" }}>
-          <Dropdown overlay={menu}>
-            <a className="ant-dropdown-link" href="">
-              <Icon type="down" />
+        <Col
+          span="8"
+          className="text-right pd-right "
+          style={{ position: "relative" }}
+        >
+          <Dropdown overlay={menu2}>
+            <a className="ant-dropdown-link" href="#">
+              <i className="material-icons text-primary opacity-half">
+                more_vert{" "}
+              </i>
             </a>
           </Dropdown>
         </Col>
@@ -163,7 +207,7 @@ export const WorkflowBody = props => {
 const StepGroupList = props => {
   return (
     <div className="sub-step-list">
-      <ul className="groupaz-list">
+      <ul className="groupaz-list" id="groupaz-list">
         {_.map(props.workflow.step_groups, function(group, index) {
           return (
             <li className="groupaz" key={"group-" + index}>
@@ -173,8 +217,10 @@ const StepGroupList = props => {
                   group.definition.status
                 }
               >
-                <i className="material-icons">panorama_fish_eye_</i>{" "}
-                {group.definition.name}
+                <span className="grp-name">
+                  <i className="material-icons">panorama_fish_eye_</i>{" "}
+                  {group.definition.name}
+                </span>
               </div>
               <ul>
                 {_.map(group.steps, function(steps, index) {
@@ -199,7 +245,7 @@ const StepItem = props => {
   let step_complete = props.stepData.completed_at ? true : false;
 
   return (
-    <li className={""}>
+    <li className={""} title={props.stepData.name}>
       <Link
         to={
           "/workflows/instances/" +

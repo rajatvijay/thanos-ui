@@ -10,8 +10,8 @@ const { Sider } = Layout;
 
 const menuList = [
   { name: "Workflows", path: "/workflows/instances", icon: "switcher" },
-  { name: "Users", path: "/users", icon: "user" },
-  { name: "Insight", path: "/insight", icon: "line-chart" }
+  { name: "People", path: "/users", icon: "user" }
+  //  { name: "Insight", path: "/insight", icon: "line-chart" }
   //{ name: "Logout", path: "/login", icon: "logout" }
 ];
 
@@ -52,28 +52,37 @@ class NavLeft extends Component {
 
   render() {
     return (
-      <div className="" id="">
+      <div className="navbar-left" id="">
         <Sider
           style={{
             overflow: "auto",
             height: "100vh",
             position: "fixed",
             left: 0,
-            top: "65px"
+            top: "65px",
+            width: "90px",
+            background: "#305ebe"
           }}
+          width={"90px"}
+          collapsedWidth={90}
           collapsed={true}
         >
           <Menu
             theme="dark"
             mode="inline"
             selectedKeys={[this.state.activePath]}
+            style={{ background: "#305ebe" }}
           >
             {_.map(menuList, function(m, index) {
               return (
                 <Menu.Item key={index}>
                   <Link to={m.path} className="nav-text">
-                    <Icon type={m.icon} />
-                    <span className="nav-text">{m.name}</span>
+                    <div>
+                      <Icon type={m.icon} />
+                    </div>
+                    <span className="nav-text-tooltip text-nounderline">
+                      {m.name}
+                    </span>
                   </Link>
                 </Menu.Item>
               );
@@ -89,8 +98,12 @@ class NavLeft extends Component {
             onClick={this.onLogout.bind(this, "key")}
           >
             <Menu.Item key="5">
-              <Icon type="logout" />
-              <span className="nav-text">Logout</span>
+              <span className="nav-text">
+                <div>
+                  <Icon type="logout" />
+                </div>
+                <span className="nav-text">Logout</span>
+              </span>
             </Menu.Item>
           </Menu>
         </Sider>

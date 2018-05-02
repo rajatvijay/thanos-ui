@@ -29,7 +29,7 @@ function post() {
 
 function requestOptions(method) {
   return {
-    method: "GET",
+    method: method === "get" ? "GET" : "POST",
     headers: method === "get" ? get() : post(),
     credentials: "include",
     mode: "no-cors"

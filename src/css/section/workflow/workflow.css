@@ -1,3 +1,20 @@
+/*.ant-collapse {
+  transition: all 0.5s ease-in-out;
+}*/
+
+.workflow-list.ant-collapse > .ant-collapse-item {
+  background: #fff;
+  transition: all 0.8s ease-in-out;
+}
+
+.workflow-list.ant-collapse > .ant-collapse-item:hover {
+  background: #f1f2f6;
+}
+
+.lc-card .ant-collapse-header:hover {
+  /*background: #f7f7f7;*/
+}
+
 .lc-card-head {
   padding: 8px 0px;
 }
@@ -7,6 +24,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.lc-card-head .group-overview .overflow-wrapper {
+  width: 100%;
 }
 
 .lc-card-head .group-overview .grp-status .material-icons {
@@ -32,10 +52,15 @@
 }
 
 .lc-card .lc-card-body .groupaz .grp-class {
-  padding-bottom: 12px;
   font-weight: 500;
-  border-bottom: 1px solid #f3f5fa;
   display: block;
+}
+.lc-card .lc-card-body .groupaz .grp-class .grp-name {
+  display: inline-block;
+  width: 80%;
+  /*border-bottom: 1px solid #f3f5fa;*/
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
 }
 
 .lc-card .lc-card-body .groupaz .lc-step i,
@@ -49,7 +74,9 @@
 .lc-card .lc-card-body .groupaz ul {
   list-style: none;
   padding-left: 25px;
+  padding-right: 25px;
   margin-top: 24px;
+  border-right: 1px solid #eee;
 }
 
 .lc-card .lc-card-body .groupaz ul li {

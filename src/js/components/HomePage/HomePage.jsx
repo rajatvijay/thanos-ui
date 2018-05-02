@@ -22,6 +22,9 @@ class HomePage extends React.Component {
         <br />
         <br />
         <br />
+        <h1>Feature coming soon</h1>
+        <h4>Hang tight, this feature will come soon on VETTED</h4>
+        {/*        
         <h1>Hi {user.firstName}!</h1>
         <h3>stats:</h3>
         {users.loading && <em>Loading users...</em>}
@@ -30,7 +33,7 @@ class HomePage extends React.Component {
 
         <p>
           <Link to="/login">Logout</Link>
-        </p>
+        </p>*/}
       </div>
     );
   }

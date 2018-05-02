@@ -57,8 +57,8 @@ class StepSidebarMenu extends Component {
       return (
         <SubMenu
           key={"sub-" + g.id}
-          style={{ backgroundColor: "transparent" }}
-          className="kkllk"
+          //style={{ backgroundColor: "transparent" }}
+          //className={g.completed_at === null ? "text-metal" : "text-green"}
           title={
             <span>
               <i className="material-icons t-14 pd-right-sm">
@@ -77,7 +77,10 @@ class StepSidebarMenu extends Component {
   getSteps(data, group_id) {
     let steps = _.map(data, function(s, key) {
       return (
-        <Menu.Item key={group_id + "_" + s.id}>
+        <Menu.Item
+          key={group_id + "_" + s.id}
+          className={s.completed_at === null ? "text-metal" : "text-green"}
+        >
           <i className="material-icons t-14 pd-right-sm">
             {s.completed_at === null ? "panorama_fish_eye" : "check_circle"}
           </i>

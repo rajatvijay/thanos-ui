@@ -56,10 +56,7 @@ class WorkflowDetails extends Component {
   componentWillReceiveProps = nextProps => {
     //if (newProps) this.getUser(newProps);
 
-    if (
-      nextProps.workflowDetails.workflowDetails !==
-      this.props.workflowDetails.workflowDetails
-    ) {
+    if (nextProps.workflowDetails.loading === false) {
       let wfd = nextProps.workflowDetails.workflowDetails;
       let wf_id = parseInt(this.props.match.params.id, 10);
       let stepGroup_id = wfd.stepGroups.results[0].id;

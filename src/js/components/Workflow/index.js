@@ -3,9 +3,18 @@ import { connect } from "react-redux";
 import { Layout, Icon } from "antd";
 import WorkflowList from "./workflow-list";
 import { workflowActions } from "../../actions";
-import WorkflowFilter from "./filter";
+import FilterSidebar from "./filter";
+import WorkflowFilterTop from "./filter-top";
+import _ from "lodash";
+import data from "../../data/data.js";
 
-const { Sider } = Layout;
+const { Content } = Layout;
+
+const workflowListData = data;
+
+const Workflows = ({ props }) => (
+  <WorkflowList profile={props.match} listData={workflowListData} {...props} />
+);
 
 class Workflow extends Component {
   constructor(props) {
@@ -24,31 +33,13 @@ class Workflow extends Component {
   render() {
     return (
       <Layout className="workflow-container inner-container">
-        <Sider
-          width={250}
-          style={{ overflow: "auto", height: "100vh", position: "fixed" }}
-          className="aux-nav aux-nav-filter bg-primary-light"
-        >
-          <h5 className="aux-item aux-lead">Filters</h5>
-          <div className="aux-item aux-lead">
-            <WorkflowFilter placeholder="skill" />
-          </div>
-          <div className="aux-item aux-lead">
-            <WorkflowFilter placeholder="Name" />
-          </div>
-          <div className="aux-item aux-lead">
-            <WorkflowFilter placeholder="Supplier company" />
-          </div>
-          <div className="aux-item aux-lead">
-            <WorkflowFilter placeholder="Country" />
-          </div>
-          <div className="aux-item aux-lead">
-            <WorkflowFilter placeholder="Group" />
-          </div>
-        </Sider>
+        <FilterSidebar />
+
         <Layout
           style={{ marginLeft: 250, background: "#FBFBFF", minHeight: "100vh" }}
         >
+          {this.props.workflowFilters.kind ? <WorkflowFilterTop /> : null}
+
           {this.props.workflow.loading ? (
             <div className="text-center text-bold mr-top-lg">
               <Icon type="loading" style={{ fontSize: 24 }} />
@@ -56,12 +47,10 @@ class Workflow extends Component {
           ) : this.props.workflow.loadingStatus === "failed" ? (
             <div className="mr-top-lg text-center text-bold text-metal">
               Unable to load workflow list.{" "}
-              <span
-                className="text-thin text-primary text-underline text-anchor small"
-                onClick={this.reloadWorkflowList}
-              >
+              <div className="text-anchor " onClick={this.reloadWorkflowList}>
                 Click here to reload{" "}
-              </span>
+                <i className="material-icons text-middle">refresh</i>
+              </div>
             </div>
           ) : (
             <WorkflowList profile={this.props.match} {...this.props} />
@@ -73,9 +62,10 @@ class Workflow extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflow, authentication } = state;
+  const { workflowFilters, workflow, authentication } = state;
   return {
     workflow,
+    workflowFilters,
     authentication
   };
 }

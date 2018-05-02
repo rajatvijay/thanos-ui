@@ -41,6 +41,10 @@
   text-align: right;
 }
 
+.text-middle {
+  vertical-align: middle;
+}
+
 /*Text weight*/
 .text-bold {
   font-weight: bold;
@@ -281,4 +285,8 @@
 
 .small {
   font-size: 80%;
+}
+
+.opacity-half {
+  opacity: 0.5;
 }

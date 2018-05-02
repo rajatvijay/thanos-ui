@@ -39,14 +39,13 @@ class WorkflowList extends Component {
         >
           {data.workflow && data.workflow.length > 0 ? (
             <div>
-              <Collapse accordion>
+              <Collapse accordion className="workflow-list ">
                 {_.map(data.workflow, function(item, index) {
                   return (
                     <Panel
                       showArrow={false}
                       header={<WorkflowHeader workflow={item} />}
                       key={index}
-                      style={{ background: "#fff" }}
                       className="lc-card"
                     >
                       <WorkflowBody workflow={item} />
