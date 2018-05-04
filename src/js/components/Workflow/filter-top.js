@@ -191,7 +191,10 @@ class WorkflowFilterTop extends Component {
           {_.map(filterTypeTop, function(item, index) {
             return (
               <Menu.Item key={"key-" + index} className="text-grey-dark">
-                {item.name} ({item.total})
+                <div>
+                  <div className="count">{item.total}</div>
+                  <span className="group text-metal">{item.name} </span>
+                </div>
               </Menu.Item>
             );
           })}
