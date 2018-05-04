@@ -77,6 +77,19 @@
   overflow-x: auto;
 }
 
+.filter-top .ant-menu-horizontal > .ant-menu-item {
+  text-align: center;
+  line-height: 1.45;
+  padding: 20px;
+  min-width: 100px;
+}
+
+.filter-top .ant-menu-horizontal > .ant-menu-item .group {
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item .count {
+  font-size: 30px;
+}
+
 .filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child) {
   /*border-right: 1px solid #d9d9d9;*/
 }
@@ -86,15 +99,22 @@
   display: inline-block;
   width: 1px;
   background: #d9d9d9;
-  position: relative;
+  position: absolute;
   top: 8px;
   z-index: 4;
-  right: -21px;
-  height: 24px;
+  right: -1px;
+  height: 86px;
+}
+
+.filter-top .ant-menu-horizontal > .ant-menu-item-active .count {
+  color: #505050;
 }
 
 .filter-top .ant-menu-horizontal > .ant-menu-item-selected {
   background: #f1f2f6;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item-selected .group {
+  color: #305ebe;
 }
 
 .filter-top-list .filter-top-list-item {
