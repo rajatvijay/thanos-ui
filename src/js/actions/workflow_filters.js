@@ -15,9 +15,6 @@ function setFilters(payload) {
   //determine type of filter here
   //check for existing filters
   //append to exixting filters
-
-  console.log(payload);
-
   return dispatch => {
     dispatch({
       type: workflowFiltersConstants.SET_REQUEST,

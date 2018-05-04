@@ -117,28 +117,11 @@
   color: #305ebe;
 }
 
-.filter-top-list .filter-top-list-item {
-  cursor: pointer;
-  padding: 16px;
-  display: inline-block;
-  height: 80px;
-  text-align: center;
-  vertical-align: middle;
-  min-width: 150px;
-  max-width: 200px;
-  background: #fff;
-  border: 1px solid #efefef;
-  color: #929292;
-  transition: all 0.3s ease-in-out;
-  /*line-height: 60px;*/
+.aux-nav-filter .ant-menu .ant-menu-item:hover {
+  color: #305ebe;
 }
 
-.filter-top-list .filter-top-list-item:hover {
-  background: #f6f6f6;
-}
-
-.filter-top-list .filter-top-list-item:active,
-.filter-top-list .filter-top-list-item.active {
-  background: #8c9ab8;
-  color: #fff;
+.aux-nav-filter .ant-menu .ant-menu-item-selected {
+  color: #305ebe;
+  background-color: #dae3f9;
 }

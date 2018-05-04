@@ -9,19 +9,22 @@ const openNotificationWithIcon = data => {
   });
 };
 
-export function workflowFilters(state = {}, action) {
-  console.log(action);
+const initialState = {
+  kind: { filterType: "kind", filterValue: null },
+  status: null,
+  region: null,
+  business: null,
+  multifilter: null,
+  stepgroupdef: null
+};
 
+// FUCNTION FOR FILTERING THE WORKFLOW WITH THE FILTER OPTION ON THE LEFT SIDEBAR.
+export function workflowFilters(state = initialState, action) {
   switch (action.type) {
     case workflowFiltersConstants.SET_REQUEST:
-      // let filters= appliedFilter;
-      // // if(appliedFilter.[action.workflowFilter[0].filterType]){
-
-      // // }
-      // appliedFilter.push(action.workflowFilter)
-
       return {
-        [action.workflowFilter.filterType]: [{ ...action.workflowFilter }]
+        ...state,
+        [action.workflowFilter.filterType]: { ...action.workflowFilter }
       };
 
     case workflowFiltersConstants.GET_REQUEST:
@@ -41,6 +44,7 @@ export function workflowFilters(state = {}, action) {
   }
 }
 
+//ADD THE TYPES OF FILTER AVAILABLE TO REDUX STORE
 export function workflowFilterType(state = {}, action) {
   switch (action.type) {
     case workflowFiltersConstants.GET_STATUS_REQUEST:

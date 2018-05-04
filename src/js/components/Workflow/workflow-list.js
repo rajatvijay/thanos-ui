@@ -65,7 +65,7 @@ class WorkflowList extends Component {
           ) : (
             <div className="text-center text-medium text-metal">
               {" "}
-              No workflows to show
+              No workflows to show. Try clearing the filters.
             </div>
           )}
         </Content>
