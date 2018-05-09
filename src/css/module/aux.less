@@ -1,27 +1,35 @@
+@import url("../utilities/variables.less");
+
 .aux-nav {
-  background-color: #f0eceb;
+  background-color: @color-primary-light;
+  .ant-layout-sider-children {
+    border-right: 1px solid #e8e8e8;
+  }
 }
-.aux-nav .ant-layout-sider-children {
-  border-right: 1px solid #e8e8e8;
-}
+
 .aux-item {
   padding-left: 16px;
   padding-right: 16px;
 }
+
 .aux-lead {
   margin-top: 16px;
   margin-bottom: 16px;
-  color: rgba(121, 85, 72, 0.5);
+  //color: rgba(48, 94, 190, 0.5);
+  color: @color-primary-midtone;
   font-size: 14px;
   text-transform: uppercase;
 }
+
 .aux-nav-filter .ant-menu .ant-menu-item {
-  color: #999;
+  color: @color-grey;
 }
+
 .aux-nav-filter .ant-menu .ant-menu-item-active,
 .aux-nav-filter .ant-menu .ant-menu-item-selected {
-  color: #795548;
+  color: @color-primary;
 }
+
 .aux-nav .ant-menu .ant-menu-submenu,
 .aux-nav .ant-menu .ant-menu-submenu:hover,
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
@@ -29,40 +37,50 @@
 .aux-nav .ant-menu .ant-menu-item-selected,
 .aux-nav .ant-menu .ant-menu-submenu-selected,
 .aux-nav .ant-menu .ant-menu-item-active {
-  color: #795548;
+  color: @color-primary;
 }
-.aux-nav .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
-.aux-nav .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:after,
-.aux-nav .ant-menu-submenu-title .ant-menu-submenu-arrow:before,
-.aux-nav .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:before {
-  background: linear-gradient(to right, #795548, #795548);
+
+.aux-nav {
+  //.ant-menu-submenu-arrow,
+  .ant-menu-submenu-title,
+  .ant-menu-submenu-title:hover {
+    .ant-menu-submenu-arrow:after,
+    .ant-menu-submenu-arrow:before {
+      background: linear-gradient(to right, @color-primary, @color-primary);
+    }
+  }
 }
+
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu {
   font-weight: 500;
 }
 .aux-nav .ant-menu .ant-menu-item {
   font-weight: normal;
-  color: #a0a0a0;
+  color: @color-grey-light;
 }
+
 .aux-nav .ant-menu .ant-menu-item:not(.text-green),
 .aux-nav .ant-menu .ant-menu-item-active:not(.text-green):hover,
 .aux-nav .ant-menu .ant-menu-item-active:not(.text-green) {
   font-weight: normal;
 }
+
 .aux-nav .ant-menu .ant-menu-item-selected {
-  color: #795548;
-  background-color: #f0eceb;
+  color: @color-primary;
+  background-color: @color-primary-light;
 }
+
 .aux-nav .ant-menu-vertical .ant-menu-item:after,
 .aux-nav .ant-menu-vertical-left .ant-menu-item:after,
 .aux-nav .ant-menu-vertical-right .ant-menu-item:after,
 .aux-nav .ant-menu-inline .ant-menu-item:after {
-  border-right: 3px solid #795548;
+  border-right: 3px solid @color-primary;
 }
+
 .ant-menu-horizontal > .ant-menu-item:hover,
 .ant-menu-horizontal > .ant-menu-item-active,
 .ant-menu-horizontal > .ant-menu-item-selected {
-  border-bottom-color: #795548;
-  color: #795548;
+  border-bottom-color: @color-primary;
+  color: @color-primary;
 }

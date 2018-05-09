@@ -60,18 +60,18 @@ class NavLeft extends Component {
             position: "fixed",
             left: 0,
             top: "65px",
-            width: "90px",
-            background: "#305ebe"
+            width: "90px"
           }}
           width={"90px"}
           collapsedWidth={90}
           collapsed={true}
+          className="bg-primary"
         >
           <Menu
             theme="dark"
             mode="inline"
             selectedKeys={[this.state.activePath]}
-            style={{ background: "#305ebe" }}
+            className="bg-primary"
           >
             {_.map(menuList, function(m, index) {
               return (

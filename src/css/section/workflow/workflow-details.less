@@ -1,18 +1,23 @@
+@import url("../../utilities/variables.less");
+
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
   background: transparent;
-  color: #795548;
+  color: @color-primary;
 }
+
 .workflow-details-container
   .ant-layout-sider
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #f0eceb;
-  color: #795548;
+  background: @color-primary-light;
+  color: @color-primary;
 }
+
 .aux-nav-menu {
   overflow-x: visible !important;
 }
+
 .ant-form.step-form .ant-form-item-label label {
   display: block;
 }

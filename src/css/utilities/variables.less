@@ -1,0 +1,33 @@
+//@import "~antd/dist/antd.less";
+
+//@primary-color: red;
+
+@color-primary: #795548; //#305ebe; //#795548 ;//#f9a825; //#d84315 ;//#00838f; //#6a1b9a;
+@color-primary-light: tint(@color-primary, 89%); //#e9effa
+@color-primary-dark: shade(@color-primary, 32%); //#214081;
+@color-primary-midtone: fade(@color-primary, 50%);
+@color-metal: lighten(
+  desaturate(@color-primary, 37%),
+  17%
+); //desaturate(@color-primary,30%); //#8c9ab8
+
+@color-red: #fd4d4a;
+@color-danger: @color-red;
+
+@color-orange: #ff7429;
+@color-warning: @color-orange;
+
+@color-yellow: #ffd554;
+
+@color-green: #8bcd36;
+@color-success: @color-green;
+
+@color-black: #000;
+@color-white: #fff;
+
+@color-grey-dark: #505050;
+@color-grey: #999;
+@color-grey-d: #d9d9d9;
+@color-grey-light: #a0a0a0;
+
+@base-text-color: @color-grey-dark;

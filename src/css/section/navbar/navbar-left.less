@@ -1,6 +1,9 @@
+@import url("../../utilities/variables.less");
+
 .navbar-left .ant-menu-vertical.ant-menu-dark {
-  background: #795548;
+  background: @color-primary;
 }
+
 .navbar-left .ant-menu-vertical > .ant-menu-item {
   height: 80px;
   line-height: 1;
@@ -9,9 +12,11 @@
 .navbar-left .ant-menu-vertical > .ant-menu-item:first-child {
   margin-top: 0px;
 }
+
 .navbar-left .ant-menu-vertical > .ant-menu-item-selected {
-  background: #523a31;
+  background: @color-primary-dark;
 }
+
 .ant-menu-inline-collapsed > .ant-menu-item,
 .ant-menu-inline-collapsed
   > .ant-menu-item-group
@@ -19,22 +24,27 @@
   > .ant-menu-item {
   padding: 0 !important;
 }
+
 .navbar-left .ant-menu-vertical > .ant-menu-item .nav-text {
   width: 100%;
   display: block;
   text-align: center;
   font-size: 12px;
-  color: #fff;
+  color: @color-white;
 }
+
 .navbar-left .ant-menu-vertical > .ant-menu-item .nav-text:hover {
   /*opacity: 0.8;*/
 }
+
 .navbar-left .ant-menu-vertical > .ant-menu-item .nav-text:hover {
   text-decoration: none;
 }
+
 .navbar-left .ant-menu-vertical > .ant-menu-item .nav-text-tooltip:hover {
   text-decoration: none;
 }
+
 .navbar-left .ant-menu-inline-collapsed > .ant-menu-item .anticon {
   font-size: 28px;
   line-height: 58px;
