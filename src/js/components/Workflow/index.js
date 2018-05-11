@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon } from "antd";
+import { Layout, Icon, Button } from "antd";
 import WorkflowList from "./workflow-list";
 import { workflowActions } from "../../actions";
 import FilterSidebar from "./filter";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
 import data from "../../data/data.js";
+import { Filter2 } from "./custom-filter.js";
 
 const { Content } = Layout;
 
@@ -30,7 +31,11 @@ class Workflow extends Component {
     this.props.dispatch(workflowActions.getAll());
   };
 
-  render() {
+  // callBackCollapser = () => {
+  //   this.setState({ sidebar: !this.state.sidebar });
+  // };
+
+  render = () => {
     return (
       <Layout className="workflow-container inner-container">
         <FilterSidebar />
@@ -38,7 +43,12 @@ class Workflow extends Component {
         <Layout
           style={{ marginLeft: 250, background: "#FBFBFF", minHeight: "100vh" }}
         >
-          {this.props.workflowFilters.kind ? <WorkflowFilterTop /> : null}
+          {this.props.workflowFilters.kind.filterValue !== null ? (
+            <WorkflowFilterTop
+              {...this.props}
+              tag={this.props.workflowFilters.kind.meta.value.tag}
+            />
+          ) : null}
 
           {this.props.workflow.loading ? (
             <div className="text-center text-bold mr-top-lg">
@@ -53,12 +63,29 @@ class Workflow extends Component {
               </div>
             </div>
           ) : (
-            <WorkflowList profile={this.props.match} {...this.props} />
+            <div className="clearfix">
+              {/*<div className="filter-section mr-top-lg mr-left-lg clearfix">
+                <Button
+                  type={this.state.sidebar ? "primary" : "default"}
+                  className="constom button anchor"
+                  onClick={this.callBackCollapser}
+                >
+                  Custom filter
+                </Button>
+              </div>*/}
+
+              <WorkflowList profile={this.props.match} {...this.props} />
+              {/*<Filter2
+                sidebar={this.state.sidebar}
+                toggleSidebar={this.callBackCollapser}
+              />
+              */}
+            </div>
           )}
         </Layout>
       </Layout>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {

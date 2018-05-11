@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { Select, Spin, Layout, Icon, Tooltip, Menu } from "antd";
 import debounce from "lodash.debounce";
-import { workflowFiltersActions } from "../../actions";
+import {
+  workflowFiltersActions,
+  workflowActions,
+  workflowKindActions
+} from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -48,43 +52,36 @@ const filterTypeSelect = [
   }
 ];
 
+//REACT COMPONENT FOR ANTD SELECT TYPE FILTERS SO THAT STATE FOR INDIVISUAL FILTERS ARE HANDLED SMOOTHLY.
 class WorkflowFilter extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  //SELECT TYPE FILTER DISPATCHED HERE
   handleChange = value => {
     this.setState({ value });
+    let fType = this.props.placeholder.toLowerCase();
+    let payload = { filterType: fType, filterValue: [] };
 
-    console.log(value, this);
-
-    if (value === []) {
-      let fType = value[0].key.split("-")[1];
-      let fId = value[0].key.split("-")[0];
-      let payload = { filterType: fType, filterValue: [] };
-
-      // if(fType === "status"){
-      //   let payload ={filterType: fType, filterValue: [] }
-      // } else if (fType === "business") {
-      //   let payload ={filterType: fType, filterValue: [] }
-      // } else if (fType === "region"){
-      //   let payload ={filterType: fType, filterValue: [] }
-      // }
-
-      _.map(value, function(f) {
-        let filterId = f.key.split("-")[0];
-        payload.filterValue.push(filterId);
-      });
-
-      console.log("payload--------------------------");
-      this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    if (value !== undefined && value.length !== 0) {
+      if (Array.isArray(value)) {
+        _.map(value, function(f) {
+          payload.filterValue.push(f.key);
+        });
+      } else {
+        payload.filterValue.push(value.key);
+      }
+    } else {
+      payload = { filterType: fType, filterValue: [] };
     }
+
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
   render() {
     const { value } = this.state;
-    //console.log(this.props)
     var that = this;
     return (
       <div>
@@ -92,22 +89,20 @@ class WorkflowFilter extends Component {
           <label>{this.props.placeholder}</label>
         </div>
         <Select
-          mode="multiple"
+          mode="single"
           label={this.props.placeholder}
           value={value}
           placeholder={this.props.placeholder}
           onChange={this.handleChange}
+          onDeselect={this.onDeselect}
+          onSelect={this.onSelect}
           style={{ width: "100%" }}
           allowClear={true}
           labelInValue={true}
         >
           {_.map(this.props.childeren, function(c, index) {
             return (
-              <Option
-                prop={c}
-                title={c.value}
-                key={c.id + "-" + that.props.placeholder}
-              >
+              <Option prop={c} title={c.value} key={c.id}>
                 {c.label}
               </Option>
             );
@@ -118,9 +113,13 @@ class WorkflowFilter extends Component {
   }
 }
 
-class FilterSidebar extends Component {
+//WORKFLOW KIND FILTER COMPONENT
+class WorkflowKindFilter extends Component {
   constructor(props) {
-    super(props);
+    super();
+    this.state = {
+      selected: null
+    };
   }
 
   componentDidMount = () => {
@@ -128,31 +127,91 @@ class FilterSidebar extends Component {
   };
 
   workflowKindList = workflowKind => {
+    let that = this;
+    let { mouserover, selected } = this.state;
     return _.map(workflowKind, function(i, index) {
       return (
-        <Menu.Item key={i.tag}>
+        <li
+          className={
+            "ant-menu-item " +
+            (that.state.selected === i.id ? "ant-menu-item-selected " : "")
+          }
+          key={i.id}
+          kind={i.id}
+          onClick={that.onFilterSelected.bind(this, i)}
+          style={{ paddingLeft: "24px" }}
+        >
           <i className="material-icons icon">
             {i.icon ? i.icon : "library_books"}
           </i>
           {i.name}
-        </Menu.Item>
+        </li>
       );
     });
   };
-
   onFilterSelected = value => {
+    let id = "";
+    this.state.selected != value.id ? (id = value.id) : (id = "");
+    this.setState({ selected: id });
     this.props.dispatch(
       workflowFiltersActions.setFilters({
         filterType: "kind",
-        filterValue: [value.key]
+        filterValue: [id],
+        meta: { value }
       })
     );
+
+    //console.log(this.props)
+    //this.fetchGroupData(value.tag)
+  };
+
+  fetchGroupData = tag => {
+    this.props.dispatch(workflowKindActions.getCount(tag));
   };
 
   render = () => {
     let that = this,
       workflowKind = null,
       workflowKindList = null,
+      workflowFilterType = this.props.workflowFilterType;
+
+    if (this.props.workflowKind) {
+      let workflowKind = this.props.workflowKind.workflowKind;
+      workflowKindList = this.workflowKindList(workflowKind);
+    }
+
+    return (
+      <ul
+        className="ant-menu ant-menu-light ant-menu-root ant-menu-inline"
+        style={{
+          width: "100%",
+          height: "vh100",
+          overflowX: "hidden",
+          background: "transparent"
+        }}
+      >
+        {workflowKindList}
+      </ul>
+    );
+  };
+}
+
+class FilterSidebar extends Component {
+  constructor(props) {
+    super(props);
+    // console.log('this.props filter props')
+    // console.log(this.props)
+  }
+
+  componentWillReceiveProps = nextProps => {
+    //reload workflow list if the filters change.
+    if (this.props.workflowFilters !== nextProps.workflowFilters) {
+      this.props.dispatch(workflowActions.getAll());
+    }
+  };
+
+  render = () => {
+    let that = this,
       workflowFilterType = this.props.workflowFilterType,
       filterList = filterTypeSelect;
 
@@ -170,11 +229,6 @@ class FilterSidebar extends Component {
       }
     }
 
-    if (this.props.workflowKind) {
-      let workflowKind = this.props.workflowKind.workflowKind;
-      workflowKindList = this.workflowKindList(workflowKind);
-    }
-
     return (
       <Sider
         width={250}
@@ -183,19 +237,7 @@ class FilterSidebar extends Component {
       >
         <h5 className="aux-item aux-lead">Filters</h5>
         <div className="filter-section section-kind">
-          <Menu
-            onClick={this.onFilterSelected.bind(this)}
-            style={{
-              width: "100%",
-              height: "vh100",
-              overflowX: "hidden",
-              background: "transparent"
-            }}
-            defaultSelectedKeys={["1"]}
-            mode="inline"
-          >
-            {workflowKindList}
-          </Menu>
+          <WorkflowKindFilter {...this.props} />
         </div>
 
         <div className="filter-section">
@@ -217,10 +259,11 @@ class FilterSidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowFilterType } = state;
+  const { workflowKind, workflowFilterType, workflowFilters } = state;
   return {
     workflowKind,
-    workflowFilterType
+    workflowFilterType,
+    workflowFilters
   };
 }
 

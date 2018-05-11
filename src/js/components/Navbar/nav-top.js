@@ -14,6 +14,7 @@ import { workflowKindActions, createWorkflow } from "../../actions";
 import {} from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
+import { Filter } from "../Workflow/custom-filter.js";
 
 const { Header } = Layout;
 
@@ -122,55 +123,58 @@ class NavTop extends Component {
     );
 
     return (
-      <div className="container navbar-top" id="navbar-top">
-        <Header
-          className="ant-nav"
-          style={{
-            background: "#fff",
-            position: "fixed",
-            width: "100%",
-            left: 0,
-            zIndex: 2,
-            boxShadow: "0 1px 4px 0 rgba(0,0,0,0.09)"
-          }}
-        >
-          <span className="logo" style={{ float: "left" }}>
-            <img alt="mckinsey logo" src={logo} height="60" />
-          </span>
-
-          <Menu
-            theme="light"
-            mode="horizontal"
-            style={{ lineHeight: "64px", float: "right" }}
+      <div>
+        <div className="container navbar-top" id="navbar-top">
+          <Header
+            className="ant-nav"
+            style={{
+              background: "#fff",
+              position: "fixed",
+              width: "100%",
+              left: 0,
+              zIndex: 2,
+              boxShadow: "0 1px 4px 0 rgba(0,0,0,0.09)"
+            }}
           >
-            <Menu.Item key="2">
-              <Popover
-                placement="bottomRight"
-                title={"Notifications"}
-                content={content}
-                trigger="click"
-              >
-                <Badge count={5}>
-                  <i className="material-icons text-primary text-middle">
-                    notifications
-                  </i>
-                </Badge>
-              </Popover>
-            </Menu.Item>
-          </Menu>
-          <span className="float-right mr-right">
-            <Dropdown overlay={menu} placement="bottomRight">
-              <Button
-                type="primary"
-                size="default"
-                loading={this.props.workflowKind.loading}
-                className="shadow-2"
-              >
-                + Create <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </span>
-        </Header>
+            <span className="logo" style={{ float: "left" }}>
+              <img alt="mckinsey logo" src={logo} height="60" />
+            </span>
+
+            <Menu
+              theme="light"
+              mode="horizontal"
+              style={{ lineHeight: "64px", float: "right" }}
+            >
+              <Menu.Item key="2">
+                <Popover
+                  placement="bottomRight"
+                  title={"Notifications"}
+                  content={content}
+                  trigger="click"
+                >
+                  <Badge count={5}>
+                    <i className="material-icons text-primary text-middle">
+                      notifications
+                    </i>
+                  </Badge>
+                </Popover>
+              </Menu.Item>
+            </Menu>
+
+            <span className="float-right mr-right">
+              <Dropdown overlay={menu} placement="bottomRight">
+                <Button
+                  type="primary"
+                  size="default"
+                  loading={this.props.workflowKind.loading}
+                  className="shadow-2"
+                >
+                  + Create <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </span>
+          </Header>
+        </div>
       </div>
     );
   };

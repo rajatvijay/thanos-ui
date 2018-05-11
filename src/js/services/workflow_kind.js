@@ -1,7 +1,8 @@
 import { authHeader, handleResponse, baseUrl } from "../_helpers";
 
 export const workflowKindService = {
-  getAll
+  getAll,
+  getCount
 };
 
 function getAll() {
@@ -14,6 +15,19 @@ function getAll() {
   return fetch(baseUrl + "workflow-kinds/", requestOptions).then(
     handleResponse
   );
+}
+
+function getCount(tag) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  return fetch(
+    baseUrl + "workflow-kinds/" + tag + "/count/",
+    requestOptions
+  ).then(handleResponse);
 }
 
 // function handleResponse(response) {
