@@ -15,7 +15,8 @@ const initialState = {
   region: null,
   business: null,
   multifilter: null,
-  stepgroupdef: null
+  stepgroupdef: null,
+  advFilter: null
 };
 
 // FUCNTION FOR FILTERING THE WORKFLOW WITH THE FILTER OPTION ON THE LEFT SIDEBAR.

@@ -97,6 +97,9 @@
   color: #305ebe;
   background-color: #d4ddf1;
 }
+.aux-nav-filter .ant-form-item {
+  margin-bottom: 8px;
+}
 .filter-top-list .filter-top-list-item {
   cursor: pointer;
   padding: 16px;
@@ -119,4 +122,14 @@
 .filter-top-list .filter-top-list-item.active {
   background: #8d9bb7;
   color: #fff;
+}
+.adv-filter-list .adv-filter-item {
+  cursor: pointer;
+  font-size: 12px;
+  background: #d4ddf1;
+  border-radius: 3px;
+  word-break: break-word;
+  padding: 6px 23px 6px 14px;
+  line-height: 1.2;
+  margin-bottom: 8px;
 }

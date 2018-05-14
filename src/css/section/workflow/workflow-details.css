@@ -71,3 +71,30 @@
 .ant-form.step-form .ant-input-number:hover {
   border-color: #305ebe;
 }
+.ant-form.step-form .file-upload-field {
+  width: 100%;
+  border: 2px dashed #a0a0a0;
+  height: 150px;
+  text-align: center;
+  border-radius: 3px;
+}
+.ant-form.step-form .file-upload-field .upload-drag-icon {
+  padding: 20px 20px 0 20px;
+}
+.ant-form.step-form .file-upload-field:hover {
+  border-color: #305ebe;
+}
+.ant-form.step-form .file-upload-field:focus,
+.ant-form.step-form .file-upload-field.file-upload-field-active {
+  border-color: #305ebe;
+}
+.ant-form.step-form .file-upload-field.file-upload-field-reject {
+  border-color: #fd4d4a;
+}
+.ant-form.step-form .dropped-files ul {
+  list-style: none;
+  padding: 20px 0;
+}
+.ant-form.step-form .dropped-files li a {
+  color: #305ebe;
+}
