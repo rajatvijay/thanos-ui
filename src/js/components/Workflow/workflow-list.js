@@ -6,8 +6,10 @@ import Config from "../../utils/config";
 import WorkflowItem, { WorkflowHeader, WorkflowBody } from "./workflow-item";
 import { workflowActions } from "../../actions";
 import _ from "lodash";
+import { calculatedDate } from "./calculated-data";
 
 const { Content } = Layout;
+const { getProcessedData, getProgressData } = calculatedDate;
 
 const Panel = Collapse.Panel;
 
@@ -19,6 +21,7 @@ class WorkflowList extends Component {
 
   render() {
     const data = this.props.workflow;
+    let that = this;
     let page = 1;
     if (data.next) {
       page = data.next.split("?page=");
@@ -41,6 +44,8 @@ class WorkflowList extends Component {
             <div>
               <Collapse accordion className="workflow-list ">
                 {_.map(data.workflow, function(item, index) {
+                  let proccessedData = getProcessedData(item);
+
                   return (
                     <Panel
                       showArrow={false}
@@ -48,7 +53,7 @@ class WorkflowList extends Component {
                       key={index}
                       className="lc-card"
                     >
-                      <WorkflowBody workflow={item} />
+                      <WorkflowBody workflow={item} pData={proccessedData} />
                     </Panel>
                   );
                 })}
