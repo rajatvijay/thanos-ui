@@ -6,8 +6,8 @@
  * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md)
  */
 *,
-*::before,
-*::after {
+::after,
+::before {
   box-sizing: border-box;
 }
 html {
@@ -67,8 +67,8 @@ p {
   margin-top: 0;
   margin-bottom: 1rem;
 }
-abbr[title],
-abbr[data-original-title] {
+abbr[data-original-title],
+abbr[title] {
   text-decoration: underline;
   -webkit-text-decoration: underline dotted;
   text-decoration: underline dotted;
@@ -80,16 +80,16 @@ address {
   font-style: normal;
   line-height: inherit;
 }
+dl,
 ol,
-ul,
-dl {
+ul {
   margin-top: 0;
   margin-bottom: 1rem;
 }
 ol ol,
-ul ul,
 ol ul,
-ul ol {
+ul ol,
+ul ul {
   margin-bottom: 0;
 }
 dt {
@@ -139,17 +139,17 @@ a:not([href]):not([tabindex]) {
   color: inherit;
   text-decoration: none;
 }
-a:not([href]):not([tabindex]):hover,
-a:not([href]):not([tabindex]):focus {
+a:not([href]):not([tabindex]):focus,
+a:not([href]):not([tabindex]):hover {
   color: inherit;
   text-decoration: none;
 }
 a:not([href]):not([tabindex]):focus {
   outline: 0;
 }
-pre,
 code,
 kbd,
+pre,
 samp {
   font-family: monospace, monospace;
   font-size: 1em;
@@ -194,10 +194,10 @@ button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
 }
-input,
 button,
-select,
+input,
 optgroup,
+select,
 textarea {
   margin: 0;
   font-family: inherit;
@@ -212,28 +212,28 @@ button,
 select {
   text-transform: none;
 }
-button,
-html [type="button"],
 [type="reset"],
-[type="submit"] {
+[type="submit"],
+button,
+html [type="button"] {
   -webkit-appearance: button;
 }
-button::-moz-focus-inner,
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
+[type="submit"]::-moz-focus-inner,
+button::-moz-focus-inner {
   padding: 0;
   border-style: none;
 }
-input[type="radio"],
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="radio"] {
   box-sizing: border-box;
   padding: 0;
 }
 input[type="date"],
-input[type="time"],
 input[type="datetime-local"],
-input[type="month"] {
+input[type="month"],
+input[type="time"] {
   -webkit-appearance: listbox;
 }
 textarea {
@@ -289,4 +289,4 @@ template {
 [hidden] {
   display: none !important;
 }
-/*# sourceMappingURL=bootstrap-reboot.css.map */
+/*# sourceMappingURL=bootstrap-reboot.min.css.map */
