@@ -1,14 +1,14 @@
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
   background: transparent;
-  color: #795548;
+  color: #305ebe;
 }
 .workflow-details-container
   .ant-layout-sider
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #f0eceb;
-  color: #795548;
+  background: #e8edf8;
+  color: #305ebe;
 }
 .aux-nav-menu {
   overflow-x: visible !important;

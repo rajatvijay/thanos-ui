@@ -2,7 +2,7 @@
   display: block;
 }
 .login-overlay {
-  background-color: #795548;
+  background-color: #305ebe;
   position: absolute;
   height: 100%;
   left: 0;
@@ -16,29 +16,29 @@
     top,
     #ffffff 0%,
     #ffffff 35%,
-    #795548 35%,
-    #795548 100%
+    #305ebe 35%,
+    #305ebe 100%
   );
   /* FF3.6-15 */
   background: -webkit-linear-gradient(
     top,
     #ffffff 0%,
     #ffffff 35%,
-    #795548 35%,
-    #795548 100%
+    #305ebe 35%,
+    #305ebe 100%
   );
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
     to bottom,
     #ffffff 0%,
     #ffffff 35%,
-    #795548 35%,
-    #795548 100%
+    #305ebe 35%,
+    #305ebe 100%
   );
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient(
       startColorstr="#ffffff",
-      endColorstr=#795548,
+      endColorstr=#305ebe,
       GradientType=0
     );
   /* IE6-9 */

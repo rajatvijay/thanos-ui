@@ -9,7 +9,7 @@
   right: 0;
   cursor: pointer;
   padding: 0 10px;
-  color: #795548;
+  color: #305ebe;
   font-weight: normal;
   font-size: 12px;
   text-transform: lowercase;
@@ -34,7 +34,7 @@
 .aux-filter-list li:hover,
 .aux-filter-list li:active,
 .aux-filter-list li.active {
-  background: #8c8c8c;
+  background: #8d9bb7;
   color: #fff;
 }
 .filter-top {
@@ -84,7 +84,7 @@
   background: #f1f2f6;
 }
 .filter-top .ant-menu-horizontal > .ant-menu-item-selected .group {
-  color: #795548;
+  color: #305ebe;
 }
 .aux-nav-filter .ant-menu .ant-menu-item:hover {
   color: #305ebe;
@@ -113,6 +113,6 @@
 }
 .filter-top-list .filter-top-list-item:active,
 .filter-top-list .filter-top-list-item.active {
-  background: #8c8c8c;
+  background: #8d9bb7;
   color: #fff;
 }

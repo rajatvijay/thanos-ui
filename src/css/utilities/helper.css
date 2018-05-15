@@ -1,9 +1,9 @@
 /*text colors*/
 .text-primary {
-  color: #795548;
+  color: #305ebe;
 }
 .text-primary-light {
-  color: #f0eceb;
+  color: #e8edf8;
 }
 .text-red {
   color: #fd4d4a;
@@ -21,7 +21,7 @@
   color: #505050;
 }
 .text-metal {
-  color: #8c8c8c;
+  color: #8d9bb7;
 }
 .text-light {
   color: #999;
@@ -101,10 +101,10 @@
 }
 /*Background Colors*/
 .bg-primary {
-  background-color: #795548;
+  background-color: #305ebe;
 }
 .bg-primary-light {
-  background: #f0eceb;
+  background: #e8edf8;
 }
 .bg-red {
   background-color: #fd4d4a;
@@ -122,7 +122,7 @@
   background-color: #505050;
 }
 .bg-metal {
-  background-color: #8c8c8c;
+  background-color: #8d9bb7;
 }
 .bg-light {
   background-color: #999;
