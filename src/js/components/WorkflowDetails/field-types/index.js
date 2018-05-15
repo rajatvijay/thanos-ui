@@ -16,6 +16,6 @@ export const getFieldType = props => {
       return Number(props);
 
     default:
-      return "grey";
+      return Text(props);
   }
 };

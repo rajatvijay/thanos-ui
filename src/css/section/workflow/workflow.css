@@ -89,3 +89,15 @@
 .lc-card .lc-card-body .groupaz ul li a:hover {
   text-decoration: none;
 }
+
+.lc-card .lc-card-body .groupaz ul li a.text-metal:hover {
+  color: #8c9ab8;
+}
+
+.lc-card .lc-card-body .groupaz ul li a.text-green:hover {
+  color: #8bcd36;
+}
+
+.lc-card .lc-card-body .groupaz ul li a.text-red:hover {
+  color: #fd4d4a;
+}

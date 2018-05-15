@@ -3,9 +3,6 @@ import { connect } from "react-redux";
 import { Layout, Icon, Row, Col, Avatar, Progress, Tag, Popover } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
-import data from "../../data/data.js";
-import dataSteps from "../../data/data-details.js";
-//import realDataSteps from "../../data/realdata.js";
 import StepBody from "./step-body.js";
 import { baseUrl, authHeader } from "../../_helpers";
 import { workflowDetailsActions, workflowActions } from "../../actions";
@@ -84,10 +81,6 @@ class WorkflowDetails extends Component {
   componentDidMount = () => {
     var that = this;
     var id = parseInt(that.props.match.params.id, 10);
-    var wfData = _.find(data, function(o) {
-      return o.id === id;
-    });
-
     //this.getUser(this.props);
 
     this.props.dispatch(workflowDetailsActions.getStepGroup(id));
@@ -120,9 +113,9 @@ class WorkflowDetails extends Component {
   // }
 
   onStepSelected = cb => {
-    var steps = dataSteps.steps;
-    var selected = _.find(steps, { id: parseInt(cb.key, 10) });
-    this.setState({ selectedStep: selected });
+    //var steps = dataSteps.steps;
+    //var selected = _.find(steps, { id: parseInt(cb.key, 10) });
+    this.setState({ selectedStep: 1 });
 
     this.getStepData(cb.key);
   };
@@ -179,7 +172,6 @@ class WorkflowDetails extends Component {
               ? this.props.workflowDetails.workflowDetails.stepGroups.results
               : null
           }
-          step={dataSteps}
           defaultSelectedGroup={this.state.selectedStep}
           defaultSelectedStep={["1"]}
           onStepSelected={this.onStepSelected.bind(this)}
