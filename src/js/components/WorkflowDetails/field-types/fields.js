@@ -27,19 +27,17 @@ export const getLabel = props => {
 
 //Field Type Text
 export const Text = props => {
-  console.log("on filed changeprops");
-  console.log(props);
-
   return (
     <FormItem
       label={getLabel(props)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      message="dfsdf"
+      message=""
       required={props.field.is_required}
       help={props.field.help_text}
-      validateStatus={props.field.completed_at ? "success" : null}
+      hasFeedback
+      validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <Input
         defaultValue={

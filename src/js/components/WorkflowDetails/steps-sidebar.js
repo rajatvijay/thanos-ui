@@ -53,6 +53,10 @@ class StepSidebarMenu extends Component {
 
   getGroups(data) {
     let that = this;
+
+    console.log("group data-------data");
+    console.log(data);
+
     return _.map(data, function(g, index) {
       return (
         <SubMenu
@@ -93,10 +97,6 @@ class StepSidebarMenu extends Component {
 
   render() {
     let grouping = this.props.step2;
-
-    if (this.props.step.deadline) {
-      var isOverdue = moment(this.props.step.deadline).isBefore(new Date());
-    }
 
     return (
       <div>

@@ -64,7 +64,15 @@ class WorkflowFilterTop extends Component {
               return (
                 <Menu.Item key={item.id} className="text-grey-dark">
                   <div>
-                    <div className="count">{item.count}</div>
+                    <div className="count">
+                      {item.count}{" "}
+                      <span
+                        className="text-small text-red"
+                        style={{ fontSize: "18px" }}
+                      >
+                        (0)
+                      </span>
+                    </div>
                     <span className="group text-metal">{item.name}</span>
                   </div>
                 </Menu.Item>
@@ -72,7 +80,7 @@ class WorkflowFilterTop extends Component {
             })}
           </Menu>
         ) : (
-          <div className="text-center">loading</div>
+          <div className="text-center" />
         )}
       </div>
     );
