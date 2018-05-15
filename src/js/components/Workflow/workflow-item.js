@@ -15,6 +15,9 @@ import {
   Col,
   Tag
 } from "antd";
+import { calculatedDate } from "./calculated-data";
+
+const { getProcessedData, getProgressData } = calculatedDate;
 
 /*workflow Head*/
 const HeaderTitle = props => {
@@ -38,10 +41,18 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          {_.map(props.workflow.step_groups, function(groupitem, index) {
+          {_.map(getProcessedData(props.workflow).step_groups, function(
+            groupitem,
+            index
+          ) {
+            let completed = groupitem.completed;
+
             return (
               <span
-                className={"grp-status text-medium mr-right-lg text-metal"}
+                className={
+                  "grp-status text-medium mr-right-lg " +
+                  (completed ? "text-green" : "text-metal")
+                }
                 key={"item-" + index}
               >
                 <i
@@ -53,14 +64,15 @@ const HeaderWorkflowGroup = props => {
                     width: "18px"
                   }}
                 >
-                  panorama_fish_eye_
+                  {completed ? "check_circle" : "panorama_fish_eye"}
                 </i>
+
                 <span>{groupitem.definition.name}</span>
               </span>
             );
           })}
         </div>
-        <Progress showInfo={false} percent={0} />
+        <Progress showInfo={false} percent={getProgressData(props.workflow)} />
       </div>
     </Col>
   );
@@ -117,6 +129,7 @@ const HeaderOptions = props => {
         return "grey";
     }
   };
+
   return (
     <Col span="6">
       <Row>
@@ -171,13 +184,25 @@ const HeaderOptions = props => {
 };
 
 export const WorkflowHeader = props => {
+  console.log("props.pdata----------->>");
+  console.log(props);
+
+  let proccessedData = getProcessedData(props.workflow);
+  let progressData = getProgressData(props.workflow);
+
   return (
     <Row type="flex" align="middle" className="lc-card-head">
       <Col span={1} className="text-center text-metal ">
         <Icon type="copy" style={{ fontSize: "18px" }} />
       </Col>
       <HeaderTitle {...props} />
-      <HeaderWorkflowGroup {...props} />
+
+      <HeaderWorkflowGroup
+        {...props}
+        progressData={progressData}
+        pdata={proccessedData}
+      />
+
       <HeaderOptions {...props} />
     </Row>
   );
@@ -208,7 +233,9 @@ const StepGroupList = props => {
   return (
     <div className="sub-step-list">
       <ul className="groupaz-list" id="groupaz-list">
-        {_.map(props.workflow.step_groups, function(group, index) {
+        {_.map(props.pData.step_groups, function(group, index) {
+          let completed = group.completed;
+
           return (
             <li className="groupaz" key={"group-" + index}>
               <div
@@ -217,8 +244,14 @@ const StepGroupList = props => {
                   group.definition.status
                 }
               >
-                <span className="grp-name">
-                  <i className="material-icons">panorama_fish_eye_</i>{" "}
+                <span
+                  className={
+                    "grp-name " + (completed ? "text-green" : "text-metal")
+                  }
+                >
+                  <i className="material-icons">
+                    {completed ? "check_circle" : "panorama_fish_eye"}
+                  </i>{" "}
                   {group.definition.name}
                 </span>
               </div>

@@ -51,7 +51,7 @@ class StepBody extends Component {
     } else {
       this.props.dispatch(workflowStepActions.updateField(data));
     }
-  }, 500);
+  }, 1000);
 
   getUserById = (id, status) => {
     let that = this;
