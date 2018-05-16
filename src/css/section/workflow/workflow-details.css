@@ -1,18 +1,20 @@
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
-  background: transparent;
-  color: #305ebe;
-}
-.workflow-details-container
-  .ant-layout-sider
-  .ant-menu-submenu
-  > .ant-menu:not(.ant-menu-horizontal)
-  .ant-menu-item-selected {
   background: #e8edf8;
   color: #305ebe;
+}
+.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: #d4ddf1;
+  color: #305ebe;
+}
+.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected.text-green {
+  color: #8bcd36;
 }
 .aux-nav-menu {
   overflow-x: visible !important;
 }
 .ant-form.step-form .ant-form-item-label label {
   display: block;
+}
+.ant-form.step-form .has-success.has-feedback:after {
+  color: #8bcd36;
 }

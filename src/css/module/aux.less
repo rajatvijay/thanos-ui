@@ -40,13 +40,38 @@
   color: @color-primary;
 }
 
+.aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title:hover,
+.aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title {
+  color: @color-green;
+}
+
+.aux-nav .ant-menu .ant-menu-submenu {
+  &.completed {
+    color: @color-green;
+    &:hover {
+      color: @color-green;
+    }
+  }
+}
+
 .aux-nav {
   //.ant-menu-submenu-arrow,
-  .ant-menu-submenu-title,
-  .ant-menu-submenu-title:hover {
-    .ant-menu-submenu-arrow:after,
-    .ant-menu-submenu-arrow:before {
-      background: linear-gradient(to right, @color-primary, @color-primary);
+  .ant-menu-submenu {
+    .ant-menu-submenu-title,
+    .ant-menu-submenu-title:hover {
+      .ant-menu-submenu-arrow:after,
+      .ant-menu-submenu-arrow:before {
+        background: linear-gradient(to right, @color-primary, @color-primary);
+      }
+    }
+    &.completed {
+      .ant-menu-submenu-title,
+      .ant-menu-submenu-title:hover {
+        .ant-menu-submenu-arrow:after,
+        .ant-menu-submenu-arrow:before {
+          background: linear-gradient(to right, @color-green, @color-green);
+        }
+      }
     }
   }
 }
@@ -58,6 +83,13 @@
 .aux-nav .ant-menu .ant-menu-item {
   font-weight: normal;
   color: @color-grey-light;
+  &:hover {
+    color: @color-primary;
+    //background-color:@color-primary-light;
+  }
+  &.text-green {
+    color: @color-green;
+  }
 }
 
 .aux-nav .ant-menu .ant-menu-item:not(.text-green),

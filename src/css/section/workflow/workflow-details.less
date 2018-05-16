@@ -1,7 +1,7 @@
 @import url("../../utilities/variables.less");
 
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
-  background: transparent;
+  background: @color-primary-light;
   color: @color-primary;
 }
 
@@ -10,8 +10,11 @@
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: @color-primary-light;
+  background: @color-primary-light-detone;
   color: @color-primary;
+  &.text-green {
+    color: @color-green;
+  }
 }
 
 .aux-nav-menu {
@@ -20,4 +23,10 @@
 
 .ant-form.step-form .ant-form-item-label label {
   display: block;
+}
+
+.ant-form.step-form {
+  .has-success.has-feedback:after {
+    color: @color-green;
+  }
 }

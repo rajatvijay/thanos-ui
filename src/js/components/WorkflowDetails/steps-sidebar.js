@@ -5,9 +5,11 @@ import moment from "moment";
 import { Layout, Menu, Icon } from "antd";
 //import Utils from "../../utils/utils";
 //import Config from "../../utils/config";
+import { calculatedDate } from "../Workflow/calculated-data";
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
+const { getProcessedData, getProgressData } = calculatedDate;
 
 // const getMenuList = (data)=> (
 //   var list =
@@ -22,6 +24,9 @@ const SubMenu = Menu.SubMenu;
 // )
 
 const StepSidebar = props => {
+  console.log("props>>>>>>>>>>>>>>>>>>");
+  console.log(props);
+
   return (
     <Sider
       width={250}
@@ -53,20 +58,20 @@ class StepSidebarMenu extends Component {
 
   getGroups(data) {
     let that = this;
-
+    let data2 = getProcessedData(data);
     console.log("group data-------data");
-    console.log(data);
+    console.log(data2);
 
-    return _.map(data, function(g, index) {
+    return _.map(data2, function(g, index) {
       return (
         <SubMenu
           key={"sub-" + g.id}
           //style={{ backgroundColor: "transparent" }}
-          //className={g.completed_at === null ? "text-metal" : "text-green"}
+          className={!g.completed ? "text-primary " : "text-green completed"}
           title={
             <span>
               <i className="material-icons t-14 pd-right-sm">
-                panorama_fish_eye
+                {g.completed ? "check_circle" : "panorama_fish_eye"}
               </i>
               <span>{g.definition.name}</span>
             </span>
@@ -97,6 +102,9 @@ class StepSidebarMenu extends Component {
 
   render() {
     let grouping = this.props.step2;
+
+    // console.log('this.props StepSidebar--------')
+    // console.log(this.props)
 
     return (
       <div>
