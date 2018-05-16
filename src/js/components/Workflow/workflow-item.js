@@ -41,7 +41,7 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          {_.map(getProcessedData(props.workflow).step_groups, function(
+          {_.map(getProcessedData(props.workflow.step_groups), function(
             groupitem,
             index
           ) {
@@ -184,10 +184,7 @@ const HeaderOptions = props => {
 };
 
 export const WorkflowHeader = props => {
-  console.log("props.pdata----------->>");
-  console.log(props);
-
-  let proccessedData = getProcessedData(props.workflow);
+  let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
 
   return (
@@ -233,7 +230,7 @@ const StepGroupList = props => {
   return (
     <div className="sub-step-list">
       <ul className="groupaz-list" id="groupaz-list">
-        {_.map(props.pData.step_groups, function(group, index) {
+        {_.map(props.pData, function(group, index) {
           let completed = group.completed;
 
           return (

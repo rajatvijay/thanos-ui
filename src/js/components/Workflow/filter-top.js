@@ -67,7 +67,7 @@ class WorkflowFilterTop extends Component {
                     <div className="count">
                       {item.count}{" "}
                       <span
-                        className="text-small text-red"
+                        className="text-small text-red overdue"
                         style={{ fontSize: "18px" }}
                       >
                         (0)

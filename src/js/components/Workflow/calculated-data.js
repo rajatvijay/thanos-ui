@@ -8,7 +8,7 @@ export const calculatedDate = {
 
 function getProcessedData(item) {
   let data = item;
-  _.map(data.step_groups, function(group, index) {
+  _.map(data, function(group, index) {
     let groupComplete = true;
     _.map(group.steps, function(step) {
       if (step.completed_at === null) {
@@ -16,7 +16,7 @@ function getProcessedData(item) {
       }
     });
 
-    data.step_groups[index].completed = groupComplete;
+    data[index].completed = groupComplete;
   });
 
   return data;

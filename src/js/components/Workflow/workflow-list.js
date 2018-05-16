@@ -44,7 +44,7 @@ class WorkflowList extends Component {
             <div>
               <Collapse accordion className="workflow-list ">
                 {_.map(data.workflow, function(item, index) {
-                  let proccessedData = getProcessedData(item);
+                  let proccessedData = getProcessedData(item.step_groups);
 
                   return (
                     <Panel

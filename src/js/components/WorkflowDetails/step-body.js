@@ -156,7 +156,7 @@ class StepBody extends Component {
     return (
       <Form
         layout="vertical"
-        hideRequiredMark={true}
+        //hideRequiredMark={true}
         onSubmit={this.handleSubmit}
         className="step-form"
       >

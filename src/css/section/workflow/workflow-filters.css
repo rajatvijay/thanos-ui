@@ -64,6 +64,10 @@
 .filter-top .ant-menu-horizontal > .ant-menu-item .count {
   font-size: 30px;
 }
+.filter-top .ant-menu-horizontal > .ant-menu-item .count .overdue {
+  position: relative;
+  top: -3px;
+}
 .filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child) {
   /*border-right: 1px solid #d9d9d9;*/
 }
@@ -91,7 +95,7 @@
 }
 .aux-nav-filter .ant-menu .ant-menu-item-selected {
   color: #305ebe;
-  background-color: #dae3f9;
+  background-color: #d4ddf1;
 }
 .filter-top-list .filter-top-list-item {
   cursor: pointer;

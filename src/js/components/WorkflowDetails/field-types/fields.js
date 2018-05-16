@@ -16,12 +16,7 @@ export const getLabel = props => {
   if (!props.field.is_required) {
     return props.field.body;
   } else {
-    return (
-      <div className="clearfix">
-        <span className="float-right small text-light">required</span>{" "}
-        {props.field.body}
-      </div>
-    );
+    return props.field.body;
   }
 };
 

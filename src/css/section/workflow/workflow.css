@@ -20,6 +20,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.lc-card-head .group-overview .ant-progress-bg {
+  background-color: #305ebe;
+}
 .lc-card-head .group-overview .overflow-wrapper {
   width: 100%;
 }

@@ -31,11 +31,51 @@
 .aux-nav .ant-menu .ant-menu-item-active {
   color: #305ebe;
 }
-.aux-nav .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
-.aux-nav .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:after,
-.aux-nav .ant-menu-submenu-title .ant-menu-submenu-arrow:before,
-.aux-nav .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:before {
+.aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title:hover,
+.aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title {
+  color: #8bcd36;
+}
+.aux-nav .ant-menu .ant-menu-submenu.completed {
+  color: #8bcd36;
+}
+.aux-nav .ant-menu .ant-menu-submenu.completed:hover {
+  color: #8bcd36;
+}
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:before,
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:before {
   background: linear-gradient(to right, #305ebe, #305ebe);
+}
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:before,
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:before {
+  background: linear-gradient(to right, #8bcd36, #8bcd36);
 }
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu {
@@ -44,6 +84,12 @@
 .aux-nav .ant-menu .ant-menu-item {
   font-weight: normal;
   color: #a0a0a0;
+}
+.aux-nav .ant-menu .ant-menu-item:hover {
+  color: #305ebe;
+}
+.aux-nav .ant-menu .ant-menu-item.text-green {
+  color: #8bcd36;
 }
 .aux-nav .ant-menu .ant-menu-item:not(.text-green),
 .aux-nav .ant-menu .ant-menu-item-active:not(.text-green):hover,

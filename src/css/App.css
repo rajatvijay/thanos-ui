@@ -2614,11 +2614,51 @@ html {
 .aux-nav .ant-menu .ant-menu-item-active {
   color: #305ebe;
 }
-.aux-nav .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
-.aux-nav .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:after,
-.aux-nav .ant-menu-submenu-title .ant-menu-submenu-arrow:before,
-.aux-nav .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:before {
+.aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title:hover,
+.aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title {
+  color: #8bcd36;
+}
+.aux-nav .ant-menu .ant-menu-submenu.completed {
+  color: #8bcd36;
+}
+.aux-nav .ant-menu .ant-menu-submenu.completed:hover {
+  color: #8bcd36;
+}
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:before,
+.aux-nav
+  .ant-menu-submenu
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:before {
   background: linear-gradient(to right, #305ebe, #305ebe);
+}
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:after,
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title
+  .ant-menu-submenu-arrow:before,
+.aux-nav
+  .ant-menu-submenu.completed
+  .ant-menu-submenu-title:hover
+  .ant-menu-submenu-arrow:before {
+  background: linear-gradient(to right, #8bcd36, #8bcd36);
 }
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu {
@@ -2627,6 +2667,12 @@ html {
 .aux-nav .ant-menu .ant-menu-item {
   font-weight: normal;
   color: #a0a0a0;
+}
+.aux-nav .ant-menu .ant-menu-item:hover {
+  color: #305ebe;
+}
+.aux-nav .ant-menu .ant-menu-item.text-green {
+  color: #8bcd36;
 }
 .aux-nav .ant-menu .ant-menu-item:not(.text-green),
 .aux-nav .ant-menu .ant-menu-item-active:not(.text-green):hover,
@@ -2809,6 +2855,9 @@ html {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.lc-card-head .group-overview .ant-progress-bg {
+  background-color: #305ebe;
+}
 .lc-card-head .group-overview .overflow-wrapper {
   width: 100%;
 }
@@ -2865,7 +2914,7 @@ html {
   text-decoration: none;
 }
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
-  background: transparent;
+  background: #e8edf8;
   color: #305ebe;
 }
 .workflow-details-container
@@ -2873,14 +2922,24 @@ html {
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #e8edf8;
+  background: #d4ddf1;
   color: #305ebe;
+}
+.workflow-details-container
+  .ant-layout-sider
+  .ant-menu-submenu
+  > .ant-menu:not(.ant-menu-horizontal)
+  .ant-menu-item-selected.text-green {
+  color: #8bcd36;
 }
 .aux-nav-menu {
   overflow-x: visible !important;
 }
 .ant-form.step-form .ant-form-item-label label {
   display: block;
+}
+.ant-form.step-form .has-success.has-feedback:after {
+  color: #8bcd36;
 }
 .aux-nav .filter-section {
   margin-bottom: 40px;
@@ -2948,6 +3007,10 @@ html {
 .filter-top .ant-menu-horizontal > .ant-menu-item .count {
   font-size: 30px;
 }
+.filter-top .ant-menu-horizontal > .ant-menu-item .count .overdue {
+  position: relative;
+  top: -3px;
+}
 .filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child) {
   /*border-right: 1px solid #d9d9d9;*/
 }
@@ -2975,7 +3038,7 @@ html {
 }
 .aux-nav-filter .ant-menu .ant-menu-item-selected {
   color: #305ebe;
-  background-color: #dae3f9;
+  background-color: #d4ddf1;
 }
 .filter-top-list .filter-top-list-item {
   cursor: pointer;
