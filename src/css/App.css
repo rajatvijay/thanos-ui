@@ -237,7 +237,7 @@
 .float-right {
   float: right;
 }
-.clear-fix {
+.color-grey-dark-fix {
   clear: both;
 }
 /* box shadow */
@@ -2940,6 +2940,51 @@ html {
 }
 .ant-form.step-form .has-success.has-feedback:after {
   color: #8bcd36;
+}
+.ant-form.step-form .step-form-paragraph {
+  margin-bottom: 24px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #505050;
+}
+.ant-form.step-form .step-form-break {
+  height: 1px;
+  margin-bottom: 34px;
+}
+.ant-form.step-form .ant-form-item {
+  margin-bottom: 24px;
+}
+.ant-form.step-form .ant-form-item .ant-form-item-label {
+  padding-bottom: 5px;
+}
+.ant-form.step-form .ant-form-item .ant-form-item-label label {
+  margin-bottom: 0;
+}
+.ant-form.step-form .react-tel-input {
+  width: 100%;
+}
+.ant-form.step-form .react-tel-input input {
+  box-shadow: none;
+  height: 30px;
+}
+.ant-form.step-form .react-tel-input input:focus,
+.ant-form.step-form .react-tel-input input:hover {
+  border-color: #305ebe;
+}
+.ant-form.step-form .ant-radio-inner:after {
+  background-color: #305ebe;
+}
+.ant-form.step-form .ant-input:hover,
+.ant-form.step-form
+  .ant-input-affix-wrapper:hover
+  .ant-input:not(.ant-input-disabled),
+.ant-form.step-form .ant-radio-wrapper:hover .ant-radio .ant-radio-inner,
+.ant-form.step-form .ant-radio:hover .ant-radio-inner,
+.ant-form.step-form .ant-radio-focused .ant-radio-inner,
+.ant-form.step-form .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
+.ant-form.step-form .ant-input-number-focused,
+.ant-form.step-form .ant-input-number:hover {
+  border-color: #305ebe;
 }
 .aux-nav .filter-section {
   margin-bottom: 40px;

@@ -29,4 +29,84 @@
   .has-success.has-feedback:after {
     color: @color-green;
   }
+
+  .step-form-paragraph {
+    margin-bottom: 24px;
+    font-size: 18px;
+    font-weight: 500;
+    color: @color-grey-dark;
+  }
+
+  .step-form-break {
+    height: 1px;
+    margin-bottom: 34px;
+  }
+  .ant-form-item {
+    margin-bottom: 24px;
+    .ant-form-item-label {
+      padding-bottom: 5px;
+      label {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  //phone input style 
+  .react-tel-input {
+    width: 100%;
+    input {
+      box-shadow: none;
+      height: 30px;
+      &:focus, &:hover{
+        border-color: @color-primary;
+      }
+    }
+  }
+  .ant-radio-inner:after{background-color: @color-primary}
+
+  .ant-input:hover,
+  .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
+  .ant-radio-wrapper:hover .ant-radio .ant-radio-inner, 
+  .ant-radio:hover .ant-radio-inner, 
+  .ant-radio-focused .ant-radio-inner,
+  .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
+  .ant-input-number-focused,
+  .ant-input-number:hover{
+    border-color: @color-primary;    
+  }
+
+  .file-upload-field {
+    width: 100%;
+    border: 2px dashed @color-grey-light;
+    height: 150px;
+    text-align: center;
+    border-radius: 3px;
+    .upload-drag-icon {
+      padding: 20px 20px 0 20px;
+    }
+    &:hover{
+      border-color:@color-primary;
+    }
+    &:focus, &.file-upload-field-active{
+      border-color:@color-primary;
+      //box-shadow:0 0 0 2px @fade(@color-primary,80%);
+    }
+    &.file-upload-field-reject{
+      border-color: @color-red;
+    }
+  }
+  .dropped-files {
+    ul {
+
+      list-style: none;
+      padding: 20px 0 ;
+    }
+    li {
+      a {
+        color: @color-primary;
+      }
+    }
+  }
 }
+
+
