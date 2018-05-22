@@ -2986,6 +2986,33 @@ html {
 .ant-form.step-form .ant-input-number:hover {
   border-color: #305ebe;
 }
+.ant-form.step-form .file-upload-field {
+  width: 100%;
+  border: 2px dashed #a0a0a0;
+  height: 150px;
+  text-align: center;
+  border-radius: 3px;
+}
+.ant-form.step-form .file-upload-field .upload-drag-icon {
+  padding: 20px 20px 0 20px;
+}
+.ant-form.step-form .file-upload-field:hover {
+  border-color: #305ebe;
+}
+.ant-form.step-form .file-upload-field:focus,
+.ant-form.step-form .file-upload-field.file-upload-field-active {
+  border-color: #305ebe;
+}
+.ant-form.step-form .file-upload-field.file-upload-field-reject {
+  border-color: #fd4d4a;
+}
+.ant-form.step-form .dropped-files ul {
+  list-style: none;
+  padding: 20px 0;
+}
+.ant-form.step-form .dropped-files li a {
+  color: #305ebe;
+}
 .aux-nav .filter-section {
   margin-bottom: 40px;
 }
@@ -3085,6 +3112,9 @@ html {
   color: #305ebe;
   background-color: #d4ddf1;
 }
+.aux-nav-filter .ant-form-item {
+  margin-bottom: 8px;
+}
 .filter-top-list .filter-top-list-item {
   cursor: pointer;
   padding: 16px;
@@ -3107,6 +3137,16 @@ html {
 .filter-top-list .filter-top-list-item.active {
   background: #8d9bb7;
   color: #fff;
+}
+.adv-filter-list .adv-filter-item {
+  cursor: pointer;
+  font-size: 12px;
+  background: #d4ddf1;
+  border-radius: 3px;
+  word-break: break-word;
+  padding: 6px 23px 6px 14px;
+  line-height: 1.2;
+  margin-bottom: 8px;
 }
 /*
 a {
