@@ -490,9 +490,12 @@ class FileUpload extends Component {
         </Dropzone>
 
         <div className="ant-upload-list ant-upload-list-text">
-          {_.map(this.state.filesList, function(file) {
+          {_.map(this.state.filesList, function(file, index) {
             return (
-              <div className="ant-upload-list-item ant-upload-list-item-done">
+              <div
+                className="ant-upload-list-item ant-upload-list-item-done"
+                key={"file-" + index}
+              >
                 <div className="ant-upload-list-item-info">
                   <span>
                     <i className="anticon anticon-paper-clip" />
@@ -512,9 +515,12 @@ class FileUpload extends Component {
             );
           })}
 
-          {_.map(this.state.rejectedFilesList, function(file) {
+          {_.map(this.state.rejectedFilesList, function(file, index) {
             return (
-              <div className="ant-upload-list-item ant-upload-list-item-error">
+              <div
+                className="ant-upload-list-item ant-upload-list-item-error"
+                key={"file-" + index}
+              >
                 <div className="ant-upload-list-item-info">
                   <span>
                     <i className="anticon anticon-paper-clip" />

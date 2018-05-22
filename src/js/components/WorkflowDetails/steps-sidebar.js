@@ -24,9 +24,6 @@ const { getProcessedData, getProgressData } = calculatedDate;
 // )
 
 const StepSidebar = props => {
-  console.log("props>>>>>>>>>>>>>>>>>>");
-  console.log(props);
-
   return (
     <Sider
       width={250}
