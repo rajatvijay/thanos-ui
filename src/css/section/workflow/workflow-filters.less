@@ -172,6 +172,52 @@
     word-break: break-word;
     padding: 6px 23px 6px 14px;
     line-height: 1.2;
-    margin-bottom: 8px;
+    margin-bottom: 20px;
+    position: relative;
+    &:after {
+      content: "\E62E";
+      font-family: anticon;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      visibility: visible;
+      pointer-events: none;
+      width: 32px;
+      height: 20px;
+      line-height: 20px;
+      margin-top: -10px;
+      text-align: center;
+      font-size: 12px;
+      -webkit-animation: zoomIn 0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+      animation: zoomIn 0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+      font-family: anticon;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      z-index: 1;
+      color: @color-grey-light;
+    }
+    &:not(:last-child):before {
+      content: "&";
+      //font-family: anticon;
+      position: absolute;
+      top: 125%;
+      left: 0;
+      visibility: visible;
+      pointer-events: none;
+      width: 32px;
+      height: 20px;
+      line-height: 20px;
+      margin-top: -10px;
+      text-align: center;
+      font-size: 12px;
+      -webkit-animation: zoomIn 0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+      animation: zoomIn 0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+      //font-family: anticon;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      z-index: 1;
+    }
   }
 }

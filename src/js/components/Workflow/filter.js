@@ -144,6 +144,7 @@ class WorkflowKindFilter extends Component {
   workflowKindList = workflowKind => {
     let that = this;
     let { mouserover, selected } = this.state;
+
     return _.map(workflowKind, function(i, index) {
       return (
         <li
@@ -164,10 +165,13 @@ class WorkflowKindFilter extends Component {
       );
     });
   };
+
   onFilterSelected = value => {
     let id = "";
     this.state.selected != value.id ? (id = value.id) : (id = "");
+
     this.setState({ selected: id });
+
     this.props.dispatch(
       workflowFiltersActions.setFilters({
         filterType: "kind",
@@ -177,7 +181,7 @@ class WorkflowKindFilter extends Component {
     );
 
     //console.log(this.props)
-    //this.fetchGroupData(value.tag)
+    //this.fetchGroupData(value.tag);
   };
 
   fetchGroupData = tag => {
@@ -235,10 +239,7 @@ class WorkflowAdvFilter extends Component {
         break;
     }
 
-    this.setState({ filterBuilder: fb }, function() {
-      console.log("this.state.filterBuilder");
-      console.log(this.state.filterBuilder);
-    });
+    this.setState({ filterBuilder: fb }, function() {});
   };
 
   componentDidMount = () => {
@@ -248,17 +249,14 @@ class WorkflowAdvFilter extends Component {
       credentials: "include"
     };
 
-    // fetch(baseUrl + "fields/export-json/", requestOptions)
-    // .then(response => response.json())
-    // .then(body => {
-    //   this.setState({ fieldOptions: body, fetching: false });
-    // });
+    fetch(baseUrl + "fields/export-json/", requestOptions)
+      .then(response => response.json())
+      .then(body => {
+        this.setState({ fieldOptions: body, fetching: false });
+      });
   };
 
   onAddFilterItem = () => {
-    console.log("_.some(props.this.state.filterBuilder, _.isEmpty)");
-    console.log(_.some(this.state.filterBuilder, _.isEmpty));
-
     let filterList = this.state.filterList;
 
     if (_.some(this.state.filterBuilder, _.isEmpty)) {
@@ -273,10 +271,6 @@ class WorkflowAdvFilter extends Component {
         //filterBuilder: { field: null, operator: null, value: null },
         advFilterErr: false
       });
-
-      console.log("this.props------");
-      console.log(this.props);
-
       this.props.form.resetFields();
 
       this.setFilter(filterList);
@@ -285,8 +279,9 @@ class WorkflowAdvFilter extends Component {
 
   setFilter = filterList => {
     let a = [];
+
     _.map(filterList, function(i) {
-      let f = i.filed + "__" + i.operator + "__" + i.value;
+      let f = i.field + "__" + i.operator + "__" + i.value;
       a.push(f);
     });
 
@@ -408,8 +403,6 @@ class WorkflowAdvFilter extends Component {
 class FilterSidebar extends Component {
   constructor(props) {
     super(props);
-    // console.log('this.props filter props')
-    // console.log(this.props)
   }
 
   componentWillReceiveProps = nextProps => {

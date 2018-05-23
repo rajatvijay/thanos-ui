@@ -1,4 +1,4 @@
-import { authHeader, handleResponse, baseUrl } from "../_helpers";
+import { authHeader, baseUrl } from "../_helpers";
 
 export const workflowKindService = {
   getAll,
@@ -30,10 +30,12 @@ function getCount(tag) {
   ).then(handleResponse);
 }
 
-// function handleResponse(response) {
-//   if (!response.ok) {
-//     return Promise.reject(response.statusText);
-//   }
-
-//   return response.json();
-// }
+function handleResponse(response) {
+  if (!response.ok) {
+    return Promise.reject(response.statusText);
+  }
+  let l = response.json();
+  console.log("l lag gaye ahai ahai ");
+  console.log(l);
+  return l;
+}
