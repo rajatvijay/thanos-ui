@@ -30,9 +30,9 @@ export const getFieldType = props => {
     case "integer":
       return Number(props);
     case "file":
-      return File(props);
-    case "attachment":
       return Attachment(props);
+    case "attachment":
+      return File(props);
     case "list":
       return List(props);
     case "date":
