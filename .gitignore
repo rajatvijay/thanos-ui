@@ -20,6 +20,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-
+#editor project files
 krypton-ui.sublime-project
 krypton-ui.sublime-workspace
+
+#extra css files
+/src/*.css
+/src/*.map
+!App.css

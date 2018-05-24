@@ -96,6 +96,7 @@ class NavTop extends Component {
     let that = this;
     const { workflowKind } = this.props.workflowKind;
 
+    //workflow Kind list
     const menu = (
       <Menu>
         {_.map(workflowKind, function(item, index) {
@@ -119,6 +120,16 @@ class NavTop extends Component {
             </span>
           </Menu.Item>
         ) : null}
+
+        {_.isEmpty(this.props.workflowKind.workflowKind) ? (
+          <Menu.Item key="1" className="text-grey text-medium" disabled>
+            <span>
+              <i className="material-icons t-14 pd-right-sm">error</i> Empty
+            </span>
+          </Menu.Item>
+        ) : (
+          ""
+        )}
       </Menu>
     );
 

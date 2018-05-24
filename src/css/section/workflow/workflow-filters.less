@@ -106,9 +106,9 @@
   width: 1px;
   background: @color-grey-d;
   position: absolute;
-  top: 8px;
+  top: 0px;
   right: -1px;
-  height: 86px;
+  height: 100%;
 }
 
 .filter-top .ant-menu-horizontal > .ant-menu-item-active .count {
@@ -118,8 +118,11 @@
 .filter-top .ant-menu-horizontal > .ant-menu-item-selected {
   background: #f1f2f6;
 }
-.filter-top .ant-menu-horizontal > .ant-menu-item-selected .group {
-  color: @color-primary;
+.filter-top .ant-menu-horizontal > .ant-menu-item-selected {
+  .group,
+  .material-icons {
+    color: @color-primary;
+  }
 }
 
 .aux-nav-filter .ant-menu .ant-menu-item:hover {

@@ -8,6 +8,9 @@
 .workflow-list.ant-collapse > .ant-collapse-item:hover {
   background: #f1f2f6;
 }
+.lc-card .ant-steps-item .material-icons {
+  vertical-align: middle;
+}
 .lc-card .ant-collapse-header:hover {
   /*background: #f7f7f7;*/
 }
