@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { baseUrl, authHeader } from "../../_helpers";
 import { Select, Spin, Layout, Icon, Tooltip, Menu } from "antd";
 import debounce from "lodash.debounce";
+import { connect } from "react-redux";
 import { workflowFiltersActions } from "../../actions";
 import _ from "lodash";
 
@@ -18,16 +19,39 @@ class WorkflowFilterTop extends Component {
   state = {
     data: [],
     fetching: false,
-    countData: null
+    //countData: null,
+    activeFilter: []
   };
 
   handleClick = value => {
-    let payload = { filterType: "stepgroupdef", filterValue: [value.key] };
+    if (this.state.activeFilter[0] === value.id) {
+      this.setState({ activeFilter: [] }, function() {
+        this.setFilter();
+      });
+    } else {
+      this.setState({ activeFilter: [value.id] }, function() {
+        this.setFilter();
+      });
+    }
+  };
+
+  setFilter = () => {
+    let payload = {
+      filterType: "stepgroupdef",
+      filterValue: this.state.activeFilter
+    };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
   componentDidMount = () => {
-    this.fetchCountData();
+    //this.fetchCountData();
+  };
+
+  componentWillReceiveProps = nextProps => {
+    if (this.props.tag !== nextProps.tag) {
+      console.log("resloaaaaaaadddddd");
+      this.fetchCountData();
+    }
   };
 
   fetchCountData = () => {
@@ -48,10 +72,6 @@ class WorkflowFilterTop extends Component {
       });
   };
 
-  setitem(item) {
-    console.log(item);
-  }
-
   render() {
     let that = this;
     const { fetching, data } = this.state;
@@ -59,26 +79,38 @@ class WorkflowFilterTop extends Component {
     return (
       <div className="filter-top">
         {!fetching ? (
-          <Menu onClick={this.handleClick} mode="horizontal">
-            {_.map(data.stepgroupdef_counts, function(item, index) {
-              return (
-                <Menu.Item key={item.id} className="text-grey-dark">
-                  <div>
-                    <div className="count">
-                      {item.count}{" "}
-                      <span
-                        className="text-small text-red overdue"
-                        style={{ fontSize: "18px" }}
-                      >
-                        (0)
-                      </span>
+          <div>
+            <ul className="filter-top-list--disabel ant-menu ant-menu-light ant-menu-root ant-menu-horizontal">
+              {_.map(data.stepgroupdef_counts, function(item, index) {
+                return (
+                  <li
+                    key={item.id}
+                    className={
+                      "filter-top-list-item--disable ant-menu-item text-grey-dark " +
+                      (that.state.activeFilter[0] === item.id
+                        ? "ant-menu-item-selected"
+                        : "")
+                    }
+                    onClick={that.handleClick.bind(that, item)}
+                  >
+                    <div>
+                      <div className="count">
+                        {item.count}{" "}
+                        <span
+                          className="text-small text-red overdue"
+                          style={{ fontSize: "18px" }}
+                        >
+                          (0)
+                        </span>
+                      </div>
+
+                      <span className="group text-metal">{item.name}</span>
                     </div>
-                    <span className="group text-metal">{item.name}</span>
-                  </div>
-                </Menu.Item>
-              );
-            })}
-          </Menu>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         ) : (
           <div className="text-center" />
         )}
@@ -87,4 +119,12 @@ class WorkflowFilterTop extends Component {
   }
 }
 
-export default WorkflowFilterTop;
+function mapStateToProps(state) {
+  const { workflowKind, workflowGroupCount } = state;
+  return {
+    workflowKind,
+    workflowGroupCount
+  };
+}
+
+export default connect(mapStateToProps)(WorkflowFilterTop);

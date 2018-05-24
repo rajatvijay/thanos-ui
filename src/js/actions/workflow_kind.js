@@ -29,6 +29,7 @@ function getAll() {
   }
 }
 
+//get workflow agrrated filter data i.e group counts
 function getCount(tag) {
   return dispatch => {
     dispatch(request(tag));
@@ -42,12 +43,15 @@ function getCount(tag) {
   };
 
   function request() {
-    return { type: workflowKindConstants.GETALL_REQUEST };
+    return { type: workflowKindConstants.GET_COUNT_REQUEST };
   }
   function success(workflowGroupCount) {
-    return { type: workflowKindConstants.GETALL_SUCCESS, workflowGroupCount };
+    return {
+      type: workflowKindConstants.GET_COUNT_SUCCESS,
+      workflowGroupCount
+    };
   }
   function failure(error) {
-    return { type: workflowKindConstants.GETALL_FAILURE, error };
+    return { type: workflowKindConstants.GET_COUNT_FAILURE, error };
   }
 }

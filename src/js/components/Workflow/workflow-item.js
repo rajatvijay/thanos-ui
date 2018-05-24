@@ -46,12 +46,13 @@ const HeaderWorkflowGroup = props => {
             index
           ) {
             let completed = groupitem.completed;
+            let od = groupitem.overdue;
 
             return (
               <span
                 className={
                   "grp-status text-medium mr-right-lg " +
-                  (completed ? "text-green" : "text-metal")
+                  (completed ? "text-green" : od ? "text-red" : "text-metal")
                 }
                 key={"item-" + index}
               >
@@ -64,7 +65,9 @@ const HeaderWorkflowGroup = props => {
                     width: "18px"
                   }}
                 >
-                  {completed ? "check_circle" : "panorama_fish_eye"}
+                  {completed
+                    ? "check_circle"
+                    : od ? "alarm" : "panorama_fish_eye"}
                 </i>
 
                 <span>{groupitem.definition.name}</span>
@@ -227,11 +230,15 @@ export const WorkflowBody = props => {
 };
 
 const StepGroupList = props => {
+  console.log("workflow list steps fasdta props");
+  console.log(props);
+
   return (
     <div className="sub-step-list">
       <ul className="groupaz-list" id="groupaz-list">
         {_.map(props.pData, function(group, index) {
           let completed = group.completed;
+          let od = group.overdue;
 
           return (
             <li className="groupaz" key={"group-" + index}>
@@ -243,11 +250,14 @@ const StepGroupList = props => {
               >
                 <span
                   className={
-                    "grp-name " + (completed ? "text-green" : "text-metal")
+                    "grp-name " +
+                    (completed ? "text-green" : od ? "text-red" : "text-metal")
                   }
                 >
                   <i className="material-icons">
-                    {completed ? "check_circle" : "panorama_fish_eye"}
+                    {completed
+                      ? "check_circle"
+                      : od ? "alarm" : "panorama_fish_eye"}
                   </i>{" "}
                   {group.definition.name}
                 </span>
