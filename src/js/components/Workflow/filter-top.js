@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { baseUrl, authHeader } from "../../_helpers";
-import { Select, Spin, Layout, Icon, Tooltip, Menu } from "antd";
+import { Select, Spin, Layout, Icon, Tooltip, Menu, Divider } from "antd";
 import debounce from "lodash.debounce";
 import { connect } from "react-redux";
 import { workflowFiltersActions } from "../../actions";
@@ -44,14 +44,14 @@ class WorkflowFilterTop extends Component {
   };
 
   componentDidMount = () => {
-    //this.fetchCountData();
+    this.fetchCountData();
   };
 
   componentWillReceiveProps = nextProps => {
-    if (this.props.tag !== nextProps.tag) {
-      console.log("resloaaaaaaadddddd");
-      this.fetchCountData();
-    }
+    // if (this.props.tag !== nextProps.tag) {
+    //   console.log("resloaaaaaaadddddd");
+    //   this.fetchCountData();
+    // }
   };
 
   fetchCountData = () => {
@@ -94,17 +94,22 @@ class WorkflowFilterTop extends Component {
                     onClick={that.handleClick.bind(that, item)}
                   >
                     <div>
-                      <div className="count">
-                        {item.count}{" "}
-                        <span
-                          className="text-small text-red overdue"
-                          style={{ fontSize: "18px" }}
-                        >
-                          (0)
+                      <i className="material-icons text-metal">
+                        {item.icon ? item.icon : "circle"}
+                      </i>
+                      <br />
+                      <span className="group text-metal">{item.name}</span>
+                      <Divider
+                        style={{ marginTop: "8px", marginBottom: "8px" }}
+                      />
+                      <div className="">
+                        <span className="" style={{ fontSize: "16px" }}>
+                          {item.count}{" "}
+                        </span>
+                        <span className="text-small text-red overdue">
+                          {item.overdue_count !== 0 ? item.overdue_count : ""}
                         </span>
                       </div>
-
-                      <span className="group text-metal">{item.name}</span>
                     </div>
                   </li>
                 );
@@ -120,10 +125,11 @@ class WorkflowFilterTop extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowGroupCount } = state;
+  const { workflowKind, workflowGroupCount, WorkflowFilters } = state;
   return {
     workflowKind,
-    workflowGroupCount
+    workflowGroupCount,
+    WorkflowFilters
   };
 }
 

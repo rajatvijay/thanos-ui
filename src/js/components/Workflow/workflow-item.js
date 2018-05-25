@@ -13,11 +13,14 @@ import {
   Divider,
   Row,
   Col,
-  Tag
+  Tag,
+  Steps,
+  Popover
 } from "antd";
 import { calculatedDate } from "./calculated-data";
 
 const { getProcessedData, getProgressData } = calculatedDate;
+const Step = Steps.Step;
 
 /*workflow Head*/
 const HeaderTitle = props => {
@@ -41,41 +44,45 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          {_.map(getProcessedData(props.workflow.step_groups), function(
-            groupitem,
-            index
-          ) {
-            let completed = groupitem.completed;
-            let od = groupitem.overdue;
-
-            return (
-              <span
-                className={
-                  "grp-status text-medium mr-right-lg " +
-                  (completed ? "text-green" : od ? "text-red" : "text-metal")
-                }
-                key={"item-" + index}
-              >
-                <i
-                  className="material-icons md-18"
-                  style={{
-                    fontSize: "14px",
-                    marginRight: "5px",
-                    verticalAlign: "middle",
-                    width: "18px"
-                  }}
-                >
-                  {completed
-                    ? "check_circle"
-                    : od ? "alarm" : "panorama_fish_eye"}
-                </i>
-
-                <span>{groupitem.definition.name}</span>
-              </span>
-            );
-          })}
+          <Steps className="step-ui">
+            {_.map(getProcessedData(props.workflow.step_groups), function(
+              groupitem,
+              index
+            ) {
+              let completed = groupitem.completed;
+              let od = groupitem.overdue;
+              return (
+                <Step
+                  key={index}
+                  className="step-item"
+                  status={completed ? "wait" : od ? "error" : "finish"}
+                  icon={
+                    <Popover
+                      content={
+                        <div className="text-center">
+                          {groupitem.definition.name}
+                          {completed ? (
+                            <div className="small">completed</div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      }
+                    >
+                      <i className="material-icons">
+                        {completed
+                          ? "check_circle_outline"
+                          : groupitem.definition.icon
+                            ? groupitem.definition.icon
+                            : "check_circle"}
+                      </i>
+                    </Popover>
+                  }
+                />
+              );
+            })}
+          </Steps>
         </div>
-        <Progress showInfo={false} percent={getProgressData(props.workflow)} />
       </div>
     </Col>
   );
@@ -254,11 +261,7 @@ const StepGroupList = props => {
                     (completed ? "text-green" : od ? "text-red" : "text-metal")
                   }
                 >
-                  <i className="material-icons">
-                    {completed
-                      ? "check_circle"
-                      : od ? "alarm" : "panorama_fish_eye"}
-                  </i>{" "}
+                  <i className="material-icons">{group.definition.icon}</i>{" "}
                   {group.definition.name}
                 </span>
               </div>

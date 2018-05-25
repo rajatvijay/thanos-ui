@@ -2843,6 +2843,18 @@ html {
 .workflow-list.ant-collapse > .ant-collapse-item:hover {
   background: #f1f2f6;
 }
+.lc-card .ant-steps-item .material-icons {
+  vertical-align: middle;
+}
+.lc-card .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: #8d9bb7;
+}
+.lc-card
+  .ant-steps-item-finish
+  > .ant-steps-item-content
+  > .ant-steps-item-title:after {
+  background-color: #8d9bb7;
+}
 .lc-card .ant-collapse-header:hover {
   /*background: #f7f7f7;*/
 }
@@ -3092,9 +3104,9 @@ html {
   width: 1px;
   background: #d9d9d9;
   position: absolute;
-  top: 8px;
+  top: 0px;
   right: -1px;
-  height: 86px;
+  height: 100%;
 }
 .filter-top .ant-menu-horizontal > .ant-menu-item-active .count {
   color: #505050;
@@ -3102,7 +3114,8 @@ html {
 .filter-top .ant-menu-horizontal > .ant-menu-item-selected {
   background: #f1f2f6;
 }
-.filter-top .ant-menu-horizontal > .ant-menu-item-selected .group {
+.filter-top .ant-menu-horizontal > .ant-menu-item-selected .group,
+.filter-top .ant-menu-horizontal > .ant-menu-item-selected .material-icons {
   color: #305ebe;
 }
 .aux-nav-filter .ant-menu .ant-menu-item:hover {
