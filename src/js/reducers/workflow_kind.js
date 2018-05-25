@@ -23,6 +23,9 @@ export function workflowKind(state = {}, action) {
 }
 
 export function workflowGroupCount(state = {}, action) {
+  // console.log('action workflowGroupCountworkflowGroupCount')
+  // console.log(action)
+
   switch (action.type) {
     case workflowKindConstants.GET_COUNT_REQUEST:
       return {
@@ -32,7 +35,7 @@ export function workflowGroupCount(state = {}, action) {
     case workflowKindConstants.GET_COUNT_SUCCESS:
       return {
         loading: false,
-        workflowGroupCount: { ...action.workflowGroupCount }
+        ...action.workflowGroupCount
       };
 
     case workflowKindConstants.GET_COUNT_FAILURE:

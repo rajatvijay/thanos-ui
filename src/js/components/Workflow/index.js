@@ -44,10 +44,7 @@ class Workflow extends Component {
           style={{ marginLeft: 250, background: "#FBFBFF", minHeight: "100vh" }}
         >
           {this.props.workflowFilters.kind.filterValue !== null ? (
-            <WorkflowFilterTop
-              {...this.props}
-              tag={this.props.workflowFilters.kind.meta.value.tag}
-            />
+            <WorkflowFilterTop {...this.props} />
           ) : null}
 
           {this.props.workflow.loading ? (

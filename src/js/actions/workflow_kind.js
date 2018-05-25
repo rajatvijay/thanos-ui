@@ -37,7 +37,7 @@ function getCount(tag) {
     workflowKindService
       .getCount(tag)
       .then(
-        workflowGroupCount => dispatch(success(workflowGroupCount.results)),
+        workflowGroupCount => dispatch(success(workflowGroupCount)),
         error => dispatch(failure(error))
       );
   };

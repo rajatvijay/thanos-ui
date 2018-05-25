@@ -76,6 +76,10 @@
   width: 20px;
 }
 
+.lc-card .lc-card-body .groupaz .lc-step i {
+  font-size: 20px;
+}
+
 .lc-card .lc-card-body .groupaz ul {
   list-style: none;
   padding-left: 25px;
@@ -107,9 +111,17 @@
     color: @color-metal;
   }
 
+  .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+    color: @color-primary;
+  }
+
   .ant-steps-item-finish
     > .ant-steps-item-content
     > .ant-steps-item-title:after {
     background-color: @color-metal;
+  }
+
+  .ant-steps-item-wait > .ant-steps-item-content > .ant-steps-item-title:after {
+    background-color: @color-primary;
   }
 }
