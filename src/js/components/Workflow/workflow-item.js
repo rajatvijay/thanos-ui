@@ -258,7 +258,9 @@ const StepGroupList = props => {
                 <span
                   className={
                     "grp-name " +
-                    (completed ? "text-green" : od ? "text-red" : "text-metal")
+                    (completed
+                      ? "text-primary"
+                      : od ? "text-red" : "text-metal")
                   }
                 >
                   <i className="material-icons">{group.definition.icon}</i>{" "}
@@ -298,7 +300,7 @@ const StepItem = props => {
         }
         className={
           step_complete
-            ? "text-green text-nounderline"
+            ? "text-primary text-nounderline"
             : "text-metal text-nounderline"
         }
       >
