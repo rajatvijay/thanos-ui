@@ -101,7 +101,6 @@ export const Number = props => {
       className="from-label"
       style={{ display: "block", width: "100%" }}
       key={props.field.id}
-      message="dfsdf"
       hasFeedback
       required={props.field.is_required}
       help={props.field.definition.help_text}
@@ -148,7 +147,7 @@ export const Date = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <DatePicker
-        style={{ display: "block", width: "100%" }}
+        style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
         defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
@@ -295,29 +294,6 @@ export const Select = props => {
   );
 };
 
-//Field Type File Attachment
-export const Attachment = props => {
-  return (
-    <FormItem
-      label={getLabel(props)}
-      className="from-label"
-      style={{ display: "block" }}
-      key={props.field.id}
-      message="dfsdf"
-      required={props.field.is_required}
-      help={props.field.definition.help_text}
-      //validateStatus={props.field.completed_at ? "success" : null}
-    >
-      <div className="attachment-link-wrapper">
-        <Button href={props.field.attachment} icon="paper-clip">
-          {" "}
-          Important_File_Name.pdf{props.field.attachment}
-        </Button>
-        {/*<a className="link antd-info" href={"#"} style={{display:'block'}}><Icon type="download"/> file name.docx{props.field.attachment}</a>*/}
-      </div>
-    </FormItem>
-  );
-};
 
 //Field Type Phone Number
 export const Phone = props => {
@@ -423,19 +399,19 @@ class FileUpload extends Component {
   getBase64 = files => {
     let arr = [];
 
-    _.map(files, function(file) {
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function() {
-        arr.push(reader.result);
-        console.log(reader.result);
-      };
-      reader.onerror = function(error) {
-        console.log("Error: ", error);
-      };
-    });
+    // _.map(files, function(file) {
+    //   var reader = new FileReader();
+    //   reader.readAsDataURL(file);
+    //   reader.onload = function() {
+    //     arr.push(reader.result);
+    //     console.log(reader.result);
+    //   };
+    //   reader.onerror = function(error) {
+    //     console.log("Error: ", error);
+    //   };
+    // });
 
-    this.props.onFieldChange(arr[0], this.props, "file");
+    // this.props.onFieldChange(arr[0], this.props, "file");
   };
 
   render = () => {
@@ -445,7 +421,6 @@ class FileUpload extends Component {
         className="from-label"
         style={{ display: "block" }}
         key={this.props.field.id}
-        message="dfsdf"
         required={this.props.field.is_required}
         help={this.props.field.definition.help_text}
         validateStatus={this.props.field.updated_at ? "success" : null}
@@ -545,4 +520,61 @@ class FileUpload extends Component {
 
 export const File = props => {
   return <FileUpload {...props} />;
+};
+
+//Field Type File Attachment
+class AttachmentDownload extends Component {
+  state = { fetching: false };
+
+  generateFile = () => {
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
+
+    this.setState({ fetching: true });
+
+    fetch(
+      "http://slackcart.com/api/v1/responses/43/generate_doc/?format=json",
+      requestOptions
+    )
+      .then(response => response.json())
+      .then(body => {
+        console.log(body);
+
+        this.setState({ fetching: false }, function() {
+          window.open(body.object_url, "_blank");
+        });
+      });
+  };
+
+  render = () => {
+    return (
+      <FormItem
+        label={getLabel(this.props)}
+        className="from-label"
+        style={{ display: "block" }}
+        key={this.props.field.id}
+        required={this.props.field.is_required}
+        help={this.props.field.definition.help_text}
+        validateStatus={this.props.field.definition.updated_at ? "success" : null}
+      >
+        <div className="attachment-link-wrapper">
+          <Button
+            icon="paper-clip"
+            onClick={this.generateFile}
+            loading={this.state.fetching}
+          >
+            Download file
+          </Button>
+          {/*<a className="link antd-info" href={"#"} style={{display:'block'}}><Icon type="download"/> file name.docx{props.field.attachment}</a>*/}
+        </div>
+      </FormItem>
+    );
+  };
+}
+
+export const Attachment = props => {
+  return <AttachmentDownload {...props} />;
 };
