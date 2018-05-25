@@ -22,9 +22,6 @@ class StepBodyForm extends Component {
   onFieldChange = (e, payload, calculated) => {
     //sanitize this function later
     if (calculated === "file") {
-      console.log("file type");
-      console.log(e, payload);
-
       let method = "save";
       let data = {
         attachment: e,
@@ -187,9 +184,6 @@ class StepBodyForm extends Component {
         onSubmit={this.handleSubmit}
         className="step-form"
       >
-        {console.log("this.props.stepData-------")}
-        {console.log(this.props.stepData)}
-
         {_.map(this.props.stepData.data_fields, function(f) {
           let wf_id =
             that.props.workflowDetails.workflowDetails.stepGroups.results[0]
