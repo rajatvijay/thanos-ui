@@ -56,19 +56,16 @@ class StepSidebarMenu extends Component {
   getGroups(data) {
     let that = this;
     let data2 = getProcessedData(data);
-    console.log("group data-------data");
-    console.log(data2);
 
     return _.map(data2, function(g, index) {
       return (
         <SubMenu
           key={"sub-" + g.id}
-          //style={{ backgroundColor: "transparent" }}
           className={!g.completed ? "text-primary " : "text-green completed"}
           title={
             <span>
               <i className="material-icons t-14 pd-right-sm">
-                {g.completed ? "check_circle" : "panorama_fish_eye"}
+                {g.completed ? "check_circle_outline" : g.definition.icon}
               </i>
               <span>{g.definition.name}</span>
             </span>
