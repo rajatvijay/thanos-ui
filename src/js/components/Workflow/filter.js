@@ -150,7 +150,10 @@ class WorkflowKindFilter extends Component {
         <li
           className={
             "ant-menu-item " +
-            (that.state.selected === i.id ? "ant-menu-item-selected " : "")
+            (that.state.selected === i.id ||
+            that.props.workflowFilters.kind.filterValue[0] === i.id
+              ? "ant-menu-item-selected "
+              : "")
           }
           key={i.id}
           kind={i.id}
@@ -181,7 +184,7 @@ class WorkflowKindFilter extends Component {
     );
 
     //console.log(this.props)
-    //this.fetchGroupData(value.tag);
+    this.fetchGroupData(value.tag);
   };
 
   fetchGroupData = tag => {

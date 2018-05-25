@@ -10,7 +10,11 @@ const openNotificationWithIcon = data => {
 };
 
 const initialState = {
-  kind: { filterType: "kind", filterValue: null },
+  kind: {
+    filterType: "kind",
+    filterValue: [2],
+    meta: { tag: "enroll-supplier" }
+  },
   status: null,
   region: null,
   business: null,

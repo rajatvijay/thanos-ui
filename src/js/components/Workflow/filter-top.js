@@ -3,7 +3,7 @@ import { baseUrl, authHeader } from "../../_helpers";
 import { Select, Spin, Layout, Icon, Tooltip, Menu, Divider } from "antd";
 import debounce from "lodash.debounce";
 import { connect } from "react-redux";
-import { workflowFiltersActions } from "../../actions";
+import { workflowFiltersActions, workflowKindActions } from "../../actions";
 import _ from "lodash";
 
 const SubMenu = Menu.SubMenu;
@@ -17,9 +17,6 @@ class WorkflowFilterTop extends Component {
   }
 
   state = {
-    data: [],
-    fetching: false,
-    //countData: null,
     activeFilter: []
   };
 
@@ -44,80 +41,64 @@ class WorkflowFilterTop extends Component {
   };
 
   componentDidMount = () => {
-    this.fetchCountData();
-  };
+    //this.fetchCountData();
 
-  componentWillReceiveProps = nextProps => {
-    // if (this.props.tag !== nextProps.tag) {
-    //   console.log("resloaaaaaaadddddd");
-    //   this.fetchCountData();
-    // }
-  };
-
-  fetchCountData = () => {
-    this.setState({ fetching: true });
-
-    const tag = this.props.tag;
-
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
-
-    fetch(baseUrl + "workflow-kinds/" + tag + "/count/", requestOptions)
-      .then(response => response.json())
-      .then(body => {
-        this.setState({ data: body, fetching: false });
-      });
+    let tag = this.props.workflowFilters.kind.meta.tag;
+    this.props.dispatch(workflowKindActions.getCount(tag));
   };
 
   render() {
     let that = this;
-    const { fetching, data } = this.state;
+    const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
 
     return (
       <div className="filter-top">
-        {!fetching ? (
-          <div>
-            <ul className="filter-top-list--disabel ant-menu ant-menu-light ant-menu-root ant-menu-horizontal">
-              {_.map(data.stepgroupdef_counts, function(item, index) {
-                return (
-                  <li
-                    key={item.id}
-                    className={
-                      "filter-top-list-item--disable ant-menu-item text-grey-dark " +
-                      (that.state.activeFilter[0] === item.id
-                        ? "ant-menu-item-selected"
-                        : "")
-                    }
-                    onClick={that.handleClick.bind(that, item)}
-                  >
-                    <div>
-                      <i className="material-icons text-metal">
-                        {item.icon ? item.icon : "circle"}
-                      </i>
-                      <br />
-                      <span className="group text-metal">{item.name}</span>
-                      <Divider
-                        style={{ marginTop: "8px", marginBottom: "8px" }}
-                      />
-                      <div className="">
-                        <span className="" style={{ fontSize: "16px" }}>
-                          {item.count}{" "}
-                        </span>
-                        <span className="text-small text-red overdue">
-                          {item.overdue_count !== 0 ? item.overdue_count : ""}
-                        </span>
+        {!loading ? (
+          _.isEmpty(stepgroupdef_counts) ? (
+            <div className="text-center text-grey">Empty workflow def</div>
+          ) : (
+            <div>
+              <ul className="filter-top-list--disabel ant-menu ant-menu-light ant-menu-root ant-menu-horizontal">
+                {_.map(stepgroupdef_counts, function(item, index) {
+                  return (
+                    <li
+                      key={item.id}
+                      className={
+                        "filter-top-list-item--disable ant-menu-item text-grey-dark " +
+                        (that.state.activeFilter[0] === item.id
+                          ? "ant-menu-item-selected"
+                          : "")
+                      }
+                      onClick={that.handleClick.bind(that, item)}
+                    >
+                      <div>
+                        <i className="material-icons text-metal">
+                          {item.icon ? item.icon : "circle"}
+                        </i>
+                        <br />
+                        <span className="group text-metal">{item.name}</span>
+                        <Divider
+                          style={{ marginTop: "8px", marginBottom: "8px" }}
+                        />
+                        <div className="">
+                          <span className="" style={{ fontSize: "16px" }}>
+                            {item.count}{" "}
+                          </span>
+                          <span className="text-small text-red overdue">
+                            {item.overdue_count !== 0 ? item.overdue_count : ""}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
         ) : (
-          <div className="text-center" />
+          <div className="text-center">
+            <Icon type="loading" loading />{" "}
+          </div>
         )}
       </div>
     );
@@ -125,11 +106,11 @@ class WorkflowFilterTop extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowGroupCount, WorkflowFilters } = state;
+  const { workflowKind, workflowGroupCount, workflowFilters } = state;
   return {
     workflowKind,
     workflowGroupCount,
-    WorkflowFilters
+    workflowFilters
   };
 }
 
