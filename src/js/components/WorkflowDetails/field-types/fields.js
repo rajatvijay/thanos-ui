@@ -29,11 +29,7 @@ const Dragger = Upload.Dragger;
 const Option = AntSelect.Option;
 
 export const getLabel = props => {
-  if (!props.field.is_required) {
-    return props.field.body;
-  } else {
-    return props.field.body;
-  }
+  return props.field.definition.body;
 };
 
 function onFieldChange(props, value, value2) {
@@ -50,7 +46,7 @@ export const Text = props => {
       key={props.field.id}
       message=""
       required={props.field.is_required}
-      help={props.field.help_text}
+      help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -60,7 +56,7 @@ export const Text = props => {
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
-            : props.field.defaultValue
+            : props.field.definition.defaultValue
         }
         onChange={e => props.onFieldChange(e, props)}
       />
@@ -72,7 +68,7 @@ export const Text = props => {
 export const Bool = props => {
   let defVal = props.field.answers[0]
     ? props.field.answers[0].answer
-    : props.field.defaultValue ? 1 : 2;
+    : props.field.definition.defaultValue ? 1 : 2;
 
   return (
     <FormItem
@@ -80,13 +76,13 @@ export const Bool = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      message="dfsdf"
       required={props.field.is_required}
-      help={props.field.help_text}
+      help={props.field.definition.help_text}
       hasFeedback
-      validateStatus={props.field.completed_at ? "success" : null}
+      validateStatus={props.field.updated_at ? "success" : null}
     >
       <RadioGroup
+        style={{ width: "100%" }}
         onChange={e => props.onFieldChange(e, props)}
         defaultValue={parseInt(defVal)}
       >
@@ -108,18 +104,18 @@ export const Number = props => {
       message="dfsdf"
       hasFeedback
       required={props.field.is_required}
-      help={props.field.help_text}
+      help={props.field.definition.help_text}
       //validateStatus={"error"}
     >
       <InputNumber
         min={1}
         type="number"
-        style={{ display: "block", width: "100%" }}
+        style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
-            : props.field.defaultValue
+            : props.field.definition.defaultValue
         }
         onChange={onFieldChange.bind(this, props)}
       />
@@ -131,7 +127,7 @@ export const Number = props => {
 export const Date = props => {
   let defaultAnswer = props.field.answers[0]
     ? props.field.answers[0].answer
-    : props.field.defaultValue;
+    : props.field.definition.defaultValue;
 
   let defaultDate = moment(defaultAnswer, "YYYY-MM-DD").isValid();
   let defaultAnswer2 = moment().format("YYYY/MM/DD");
@@ -147,7 +143,7 @@ export const Date = props => {
       key={props.field.id}
       message=""
       required={props.field.is_required}
-      help={props.field.help_text}
+      help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -178,7 +174,7 @@ export const Email = props => {
       {getFieldDecorator("email", {
         initialValue: props.field.answers[0]
           ? props.field.answers[0].answer
-          : props.field.defaultValue,
+          : props.field.definition.defaultValue,
         rules: [
           {
             type: "email",
@@ -219,7 +215,7 @@ export const URL = props => {
       {getFieldDecorator("url", {
         initialValue: props.field.answers[0]
           ? props.field.answers[0].answer
-          : props.field.defaultValue,
+          : props.field.definition.defaultValue,
         rules: [
           {
             type: "url",
@@ -254,7 +250,7 @@ export const Checkbox = props => {
       key={props.field.id}
       message=""
       required={props.field.is_required}
-      help={props.field.help_text}
+      help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -263,7 +259,7 @@ export const Checkbox = props => {
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
-            : props.field.defaultValue
+            : props.field.definition.defaultValue
         }
       >
         {getLabel(props)}
@@ -282,7 +278,7 @@ export const Select = props => {
       key={props.field.id}
       message=""
       required={props.field.is_required}
-      help={props.field.help_text}
+      help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -309,8 +305,8 @@ export const Attachment = props => {
       key={props.field.id}
       message="dfsdf"
       required={props.field.is_required}
-      help={props.field.help_text}
-      validateStatus={props.field.completed_at ? "success" : null}
+      help={props.field.definition.help_text}
+      //validateStatus={props.field.completed_at ? "success" : null}
     >
       <div className="attachment-link-wrapper">
         <Button href={props.field.attachment} icon="paper-clip">
@@ -333,7 +329,7 @@ export const Phone = props => {
       key={props.field.id}
       message=""
       required={props.field.is_required}
-      help={props.field.help_text}
+      help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -341,7 +337,7 @@ export const Phone = props => {
         value={
           props.field.answers[0]
             ? props.field.answers[0].answer
-            : props.field.defaultValue
+            : props.field.definition.defaultValue
         }
         className="tel-input"
         style={{ width: "100%" }}
@@ -381,7 +377,7 @@ export const List = props => {
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
-            : props.field.defaultValue
+            : props.field.definition.defaultValue
         }
         onChange={e => props.onFieldChange(e, props)}
       />
@@ -451,8 +447,8 @@ class FileUpload extends Component {
         key={this.props.field.id}
         message="dfsdf"
         required={this.props.field.is_required}
-        help={this.props.field.help_text}
-        validateStatus={this.props.field.completed_at ? "success" : null}
+        help={this.props.field.definition.help_text}
+        validateStatus={this.props.field.updated_at ? "success" : null}
       >
         <Dropzone
           //accept="image/jpeg, image/png"

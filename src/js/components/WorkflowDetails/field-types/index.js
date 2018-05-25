@@ -19,7 +19,10 @@ import {
 } from "./fields";
 
 export const getFieldType = props => {
-  switch (props.field.field_type) {
+  console.log("get field type propsprops");
+  console.log(props);
+
+  switch (props.field.definition.field_type) {
     case "text":
       return Text(props);
     case "bool":
