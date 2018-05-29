@@ -15,7 +15,7 @@
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected.text-green {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav-menu {
   overflow-x: visible !important;
@@ -24,7 +24,7 @@
   display: block;
 }
 .ant-form.step-form .has-success.has-feedback:after {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .ant-form.step-form .step-form-paragraph {
   margin-bottom: 24px;
@@ -46,6 +46,7 @@
   margin-bottom: 0;
 }
 .ant-form.step-form .react-tel-input {
+  display: inline-block;
   width: 100%;
 }
 .ant-form.step-form .react-tel-input input {

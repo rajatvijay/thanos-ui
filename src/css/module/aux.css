@@ -33,13 +33,13 @@
 }
 .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav .ant-menu .ant-menu-submenu.completed {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav .ant-menu .ant-menu-submenu.completed:hover {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav
   .ant-menu-submenu
@@ -75,7 +75,7 @@
   .ant-menu-submenu.completed
   .ant-menu-submenu-title:hover
   .ant-menu-submenu-arrow:before {
-  background: linear-gradient(to right, #8bcd36, #8bcd36);
+  background: linear-gradient(to right, #3c763d, #3c763d);
 }
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu {
@@ -89,7 +89,7 @@
   color: #305ebe;
 }
 .aux-nav .ant-menu .ant-menu-item.text-green {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav .ant-menu .ant-menu-item:not(.text-green),
 .aux-nav .ant-menu .ant-menu-item-active:not(.text-green):hover,

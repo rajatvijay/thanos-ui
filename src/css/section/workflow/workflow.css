@@ -62,6 +62,9 @@
   margin-right: 10px;
   width: 20px;
 }
+.lc-card .lc-card-body .groupaz .lc-step i {
+  font-size: 20px;
+}
 .lc-card .lc-card-body .groupaz ul {
   list-style: none;
   padding-left: 25px;
@@ -84,6 +87,21 @@
 .step-ui .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
   color: #8d9bb7;
 }
-.step-ui .ant-steps-item-finish > .ant-steps-item-content > .ant-steps-item-title:after {
+.step-ui .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+  color: #305ebe;
+}
+.step-ui
+  .ant-steps-item-finish
+  > .ant-steps-item-content
+  > .ant-steps-item-title:after {
   background-color: #8d9bb7;
+}
+.step-ui
+  .ant-steps-item-wait
+  > .ant-steps-item-content
+  > .ant-steps-item-title:after {
+  background-color: #305ebe;
+}
+.step-ui .ant-steps-item-title:after {
+  height: 2px;
 }
