@@ -33,14 +33,16 @@ export const getLabel = props => {
 };
 
 function onFieldChange(props, value, value2) {
+  console.log("props-------------");
+  console.log(props);
+  console.log(value);
+  console.log(value2);
+
   props.onFieldChange(value, props, true);
 }
 
 //Field Type Text
 export const Text = props => {
-  console.log("field props props");
-  console.log(props);
-
   return (
     <FormItem
       label={getLabel(props)}
@@ -254,7 +256,11 @@ export const URL = props => {
 };
 
 //Field Type Checkbox
+const CheckboxGroup = AntCheckbox.Group;
 export const Checkbox = props => {
+  console.log("checkbox props");
+  console.log(props);
+
   return (
     <FormItem
       label={getLabel(props)}
@@ -265,25 +271,24 @@ export const Checkbox = props => {
       required={props.field.is_required}
       help={props.field.definition.help_text}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      validateStatus={_.isEmpty(props.field.answers) ? null : "success"}
     >
-      <AntCheckbox
-        onChange={e => props.onFieldChange(e, props)}
-        disabled={props.completed}
-        defaultValue={
-          props.field.answers[0]
-            ? props.field.answers[0].answer
-            : props.field.definition.defaultValue
-        }
-      >
-        {getLabel(props)}
-      </AntCheckbox>
+      <CheckboxGroup
+        style={{ width: "100%" }}
+        options={props.field.definition.extra}
+        onChange={onFieldChange.bind(this, props)}
+        // defaultValue={props.field.answers[0]
+        //   ? props.field.answers
+        //   : props.field.definition.defaultValue}
+      />
     </FormItem>
   );
 };
 
 //Field Type Select
 export const Select = props => {
+  console.log("props.field.definition");
+
   return (
     <FormItem
       label={getLabel(props)}
@@ -298,13 +303,20 @@ export const Select = props => {
     >
       <AntSelect
         disabled={props.completed}
-        defaultValue="lucy"
-        onChange={e => props.onFieldChange(e, props)}
+        defaultValue={
+          props.field.answers[0]
+            ? props.field.answers[0].answer
+            : props.field.definition.defaultValue
+        }
+        onChange={onFieldChange.bind(this, props)}
       >
-        <Option value="jack">Jack</Option>
-        <Option value="lucy">Lucy</Option>
-        <Option value="disabled">Disabled</Option>
-        <Option value="Yiminghe">yiminghe</Option>
+        {_.map(props.field.definition.extra, function(item, index) {
+          return (
+            <Option key={index} value={item.value}>
+              {item.label}
+            </Option>
+          );
+        })}
       </AntSelect>
     </FormItem>
   );
@@ -365,15 +377,7 @@ export const List = props => {
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
-      <Input
-        disabled={props.completed}
-        defaultValue={
-          props.field.answers[0]
-            ? props.field.answers[0].answer
-            : props.field.definition.defaultValue
-        }
-        onChange={e => props.onFieldChange(e, props)}
-      />
+      list
     </FormItem>
   );
 };
@@ -558,7 +562,7 @@ class AttachmentDownload extends Component {
     )
       .then(response => response.json())
       .then(body => {
-        console.log(body);
+        //console.log(body);
 
         this.setState({ fetching: false }, function() {
           window.open(body.object_url, "_blank");

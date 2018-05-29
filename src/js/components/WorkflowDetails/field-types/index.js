@@ -19,9 +19,6 @@ import {
 } from "./fields";
 
 export const getFieldType = props => {
-  console.log("get field type propsprops");
-  console.log(props);
-
   switch (props.field.definition.field_type) {
     case "text":
       return Text(props);
@@ -29,9 +26,9 @@ export const getFieldType = props => {
       return Bool(props);
     case "integer":
       return Number(props);
-    case "file":
-      return Attachment(props);
     case "attachment":
+      return Attachment(props);
+    case "file":
       return File(props);
     case "list":
       return List(props);
@@ -49,7 +46,7 @@ export const getFieldType = props => {
       return Break(props);
     case "divider":
       return Divider(props);
-    case "select":
+    case "choice":
       return Select(props);
     case "url":
       return URL(props);
