@@ -179,6 +179,8 @@ export const Email = props => {
       type="email"
       //help={"The input is not valid E-mail!"}
       required={props.field.is_required}
+      hasFeedback
+      validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       {getFieldDecorator("email", {
         initialValue: props.field.answers[0]
@@ -330,7 +332,7 @@ export const Phone = props => {
             : props.field.definition.defaultValue
         }
         className="tel-input"
-        style={{ width: "100%" }}
+        //style={{ width: "100%" }}
         defaultCountry="us"
         flagsImagePath={flags}
         onChange={onFieldChange.bind(this, props)}

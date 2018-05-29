@@ -15,7 +15,7 @@
   color: #ffd554;
 }
 .text-green {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .text-grey-dark {
   color: #505050;
@@ -116,7 +116,7 @@
   background-color: #ffd554;
 }
 .bg-green {
-  background-color: #8bcd36;
+  background-color: #3c763d;
 }
 .bg-grey-dark {
   background-color: #505050;
@@ -2616,13 +2616,13 @@ html {
 }
 .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav .ant-menu .ant-menu-submenu.completed {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav .ant-menu .ant-menu-submenu.completed:hover {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav
   .ant-menu-submenu
@@ -2658,7 +2658,7 @@ html {
   .ant-menu-submenu.completed
   .ant-menu-submenu-title:hover
   .ant-menu-submenu-arrow:before {
-  background: linear-gradient(to right, #8bcd36, #8bcd36);
+  background: linear-gradient(to right, #3c763d, #3c763d);
 }
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu {
@@ -2672,7 +2672,7 @@ html {
   color: #305ebe;
 }
 .aux-nav .ant-menu .ant-menu-item.text-green {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav .ant-menu .ant-menu-item:not(.text-green),
 .aux-nav .ant-menu .ant-menu-item-active:not(.text-green):hover,
@@ -2897,6 +2897,9 @@ html {
   margin-right: 10px;
   width: 20px;
 }
+.lc-card .lc-card-body .groupaz .lc-step i {
+  font-size: 20px;
+}
 .lc-card .lc-card-body .groupaz ul {
   list-style: none;
   padding-left: 25px;
@@ -2919,11 +2922,23 @@ html {
 .step-ui .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
   color: #8d9bb7;
 }
+.step-ui .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+  color: #305ebe;
+}
 .step-ui
   .ant-steps-item-finish
   > .ant-steps-item-content
   > .ant-steps-item-title:after {
   background-color: #8d9bb7;
+}
+.step-ui
+  .ant-steps-item-wait
+  > .ant-steps-item-content
+  > .ant-steps-item-title:after {
+  background-color: #305ebe;
+}
+.step-ui .ant-steps-item-title:after {
+  height: 2px;
 }
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
   background: #e8edf8;
@@ -2942,7 +2957,7 @@ html {
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected.text-green {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .aux-nav-menu {
   overflow-x: visible !important;
@@ -2951,7 +2966,7 @@ html {
   display: block;
 }
 .ant-form.step-form .has-success.has-feedback:after {
-  color: #8bcd36;
+  color: #3c763d;
 }
 .ant-form.step-form .step-form-paragraph {
   margin-bottom: 24px;
@@ -2973,6 +2988,7 @@ html {
   margin-bottom: 0;
 }
 .ant-form.step-form .react-tel-input {
+  display: inline-block;
   width: 100%;
 }
 .ant-form.step-form .react-tel-input input {
