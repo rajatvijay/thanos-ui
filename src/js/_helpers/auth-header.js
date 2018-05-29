@@ -1,13 +1,10 @@
 import { getValueFromCookie } from "../utils/request";
 
-// let domain = window.location.hostname;
-// domain = domain.split(".");
-// let client = domain[0];
-
 export const authHeader = {
   get,
   post,
-  requestOptions
+  requestOptions,
+  getClient
 };
 
 function get() {
@@ -34,4 +31,12 @@ function requestOptions(method) {
     credentials: "include",
     mode: "no-cors"
   };
+}
+
+function getClient() {
+  let domain = window.location.hostname;
+  domain = domain.split(".");
+  let client = domain[0];
+
+  return client;
 }

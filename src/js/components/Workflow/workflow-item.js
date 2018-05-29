@@ -30,9 +30,9 @@ const HeaderTitle = props => {
         to={"instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
+        <Avatar size="large">{props.workflow.name}</Avatar>
         <span className="mr-left-sm text-grey-dark text-medium">
-          {props.workflow.name} {props.workflow.id}
+          {props.workflow.name}
         </span>
       </Link>
     </Col>
