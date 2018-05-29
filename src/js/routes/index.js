@@ -20,6 +20,7 @@ import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
 import WorkflowDetails from "../components/WorkflowDetails";
 import Users from "../components/Users";
+import ExportList from "../components/ExportPage";
 import "antd/dist/antd.css";
 
 function mapStateToProps(state) {
@@ -74,6 +75,7 @@ class MainRoutes extends React.Component {
                 component={WorkflowDetails}
               />
               <PrivateRoute path="/users/:id?" component={Users} />
+              <PrivateRoute path="/export-list" component={ExportList} />
 
               <Route path="/" component={GenericNotFound} />
             </Switch>
