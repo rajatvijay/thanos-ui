@@ -21,7 +21,7 @@ import {
 import { connect } from "react-redux";
 import _ from "lodash";
 import FieldData from "../../data/fieldData";
-import { cascaderOptions } from "./cascader-dummy-data";
+//import { cascaderOptions } from "./cascader-dummy-data";
 
 //const filter = {};
 const SubMenu = Menu.SubMenu;
@@ -224,6 +224,7 @@ class WorkflowAdvFilter extends Component {
     value: "",
     filterBuilder: { field: null, operator: null, value: null },
     filterList: [],
+    fieldOptions: null,
     advFilterErr: false
   };
 
@@ -232,7 +233,9 @@ class WorkflowAdvFilter extends Component {
 
     switch (type) {
       case "field":
-        fb.field = value[2];
+        let fieldLast = value.length - 1;
+
+        fb.field = value[fieldLast];
         break;
       case "operator":
         fb.operator = value;
@@ -255,7 +258,7 @@ class WorkflowAdvFilter extends Component {
     fetch(baseUrl + "fields/export-json/", requestOptions)
       .then(response => response.json())
       .then(body => {
-        this.setState({ fieldOptions: body, fetching: false });
+        this.setState({ fieldOptions: body.results, fetching: false });
       });
   };
 
@@ -335,7 +338,7 @@ class WorkflowAdvFilter extends Component {
               }
             >
               <Cascader
-                options={cascaderOptions}
+                options={this.state.fieldOptions}
                 onChange={this.handleChange.bind(this, "field")}
                 placeholder="Please select field"
               />
