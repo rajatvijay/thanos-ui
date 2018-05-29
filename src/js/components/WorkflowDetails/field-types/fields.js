@@ -452,7 +452,7 @@ class FileUpload extends Component {
           rejectClassName="file-upload-field-reject"
           onDrop={this.onDrop}
           multiple={false}
-          disabled={this.state.loading || props.completed}
+          disabled={this.state.loading || this.props.completed}
         >
           <div className="drop-area-text">
             {!this.state.loading ? (
@@ -581,7 +581,7 @@ class AttachmentDownload extends Component {
       >
         <div className="attachment-link-wrapper">
           <Button
-            disabled={props.completed}
+            disabled={this.props.completed}
             icon="paper-clip"
             onClick={this.generateFile}
             loading={this.state.fetching}
