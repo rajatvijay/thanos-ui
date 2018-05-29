@@ -543,6 +543,11 @@ export const File = props => {
 class AttachmentDownload extends Component {
   state = { fetching: false };
 
+  componentDidMount = () => {
+    console.log(" attachemnt this.props");
+    console.log(this.props);
+  };
+
   generateFile = () => {
     const requestOptions = {
       method: "GET",
@@ -553,7 +558,9 @@ class AttachmentDownload extends Component {
     this.setState({ fetching: true });
 
     fetch(
-      "http://slackcart.com/api/v1/responses/43/generate_doc/?format=json",
+      "http://slackcart.com/api/v1/responses/" +
+        this.props.field.workflow +
+        "/generate_doc/?format=json",
       requestOptions
     )
       .then(response => response.json())
