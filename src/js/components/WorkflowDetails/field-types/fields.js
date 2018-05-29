@@ -38,6 +38,9 @@ function onFieldChange(props, value, value2) {
 
 //Field Type Text
 export const Text = props => {
+  console.log("field props props");
+  console.log(props);
+
   return (
     <FormItem
       label={getLabel(props)}
@@ -51,6 +54,7 @@ export const Text = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <Input
+        disabled={props.completed}
         type="text"
         placeholder={props.field.placeholder}
         defaultValue={
@@ -86,8 +90,12 @@ export const Bool = props => {
         onChange={e => props.onFieldChange(e, props)}
         defaultValue={parseInt(defVal)}
       >
-        <Radio value={1}>Yes</Radio>
-        <Radio value={2}>No</Radio>
+        <Radio disabled={props.completed} value={1}>
+          Yes
+        </Radio>
+        <Radio disabled={props.completed} value={2}>
+          No
+        </Radio>
       </RadioGroup>
     </FormItem>
   );
@@ -107,6 +115,7 @@ export const Number = props => {
       //validateStatus={"error"}
     >
       <InputNumber
+        disabled={props.completed}
         min={1}
         type="number"
         style={{ width: "100%" }}
@@ -147,6 +156,7 @@ export const Date = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <DatePicker
+        disabled={props.completed}
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
@@ -186,6 +196,7 @@ export const Email = props => {
         ]
       })(
         <Input
+          disabled={props.completed}
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
@@ -228,6 +239,7 @@ export const URL = props => {
         ]
       })(
         <Input
+          disabled={props.completed}
           placeholder={props.field.placeholder}
           prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="url"
@@ -255,6 +267,7 @@ export const Checkbox = props => {
     >
       <AntCheckbox
         onChange={e => props.onFieldChange(e, props)}
+        disabled={props.completed}
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
@@ -282,6 +295,7 @@ export const Select = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <AntSelect
+        disabled={props.completed}
         defaultValue="lucy"
         onChange={e => props.onFieldChange(e, props)}
       >
@@ -293,7 +307,6 @@ export const Select = props => {
     </FormItem>
   );
 };
-
 
 //Field Type Phone Number
 export const Phone = props => {
@@ -310,6 +323,7 @@ export const Phone = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <ReactTelInput
+        disabled={props.completed}
         value={
           props.field.answers[0]
             ? props.field.answers[0].answer
@@ -350,6 +364,7 @@ export const List = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <Input
+        disabled={props.completed}
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
@@ -435,7 +450,7 @@ class FileUpload extends Component {
           rejectClassName="file-upload-field-reject"
           onDrop={this.onDrop}
           multiple={false}
-          disabled={this.state.loading}
+          disabled={this.state.loading || props.completed}
         >
           <div className="drop-area-text">
             {!this.state.loading ? (
@@ -558,10 +573,13 @@ class AttachmentDownload extends Component {
         key={this.props.field.id}
         required={this.props.field.is_required}
         help={this.props.field.definition.help_text}
-        validateStatus={this.props.field.definition.updated_at ? "success" : null}
+        validateStatus={
+          this.props.field.definition.updated_at ? "success" : null
+        }
       >
         <div className="attachment-link-wrapper">
           <Button
+            disabled={props.completed}
             icon="paper-clip"
             onClick={this.generateFile}
             loading={this.state.fetching}

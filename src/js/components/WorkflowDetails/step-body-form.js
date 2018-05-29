@@ -187,17 +187,21 @@ class StepBodyForm extends Component {
         onSubmit={this.handleSubmit}
         className="step-form"
       >
+        {console.log("this.props.stepData-------")}
+        {console.log(this.props.stepData)}
+
         {_.map(this.props.stepData.data_fields, function(f) {
           let wf_id =
             that.props.workflowDetails.workflowDetails.stepGroups.results[0]
               .workflow;
-          let payload = {
+          let param = {
             field: f,
             onFieldChange: that.onFieldChange,
             workflowId: wf_id,
-            formProps: that.props.form
+            formProps: that.props.form,
+            completed: that.props.stepData.completed_at ? true : false
           };
-          let field = getFieldType(payload);
+          let field = getFieldType(param);
 
           return field;
         })}
