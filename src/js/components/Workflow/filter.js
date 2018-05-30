@@ -41,6 +41,7 @@ const filterTypeSelect = [
 
   {
     filterType: "Business",
+    filterName: "business unit(s)",
     results: [
       { id: 1, filterType: "bu", value: "main", label: "Main Group" },
       { id: 2, filterType: "bu", value: "ae_uae_ou", label: "AE UAE OU" },
@@ -58,6 +59,7 @@ const filterTypeSelect = [
   },
   {
     filterType: "region",
+    filterName: "region",
     results: [
       { id: 1, filterType: "region", value: "EMEA", label: "EMEA" },
       { id: 2, filterType: "region", value: "LATAM", label: "LATAM" },
@@ -101,7 +103,7 @@ class WorkflowFilter extends Component {
     return (
       <div>
         <div>
-          <label>{this.props.placeholder}</label>
+          <label>{this.props.label}</label>
         </div>
         <Select
           mode="single"
@@ -454,6 +456,7 @@ class FilterSidebar extends Component {
             return (
               <div className="aux-item aux-lead" key={"filter-2-" + index}>
                 <WorkflowFilter
+                  label={f.filterName}
                   placeholder={f.filterType}
                   childeren={f.results}
                   {...that.props}
