@@ -103,7 +103,9 @@ class WorkflowFilter extends Component {
     return (
       <div>
         <div>
-          <label>{this.props.label}</label>
+          <label>
+            {this.props.label ? this.props.label : this.props.placeholder}
+          </label>
         </div>
         <Select
           mode="single"

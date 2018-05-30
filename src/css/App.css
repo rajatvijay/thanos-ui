@@ -2940,6 +2940,12 @@ html {
   background-color: #8d9bb7;
 }
 .step-ui
+  .ant-steps-item-error
+  > .ant-steps-item-content
+  > .ant-steps-item-title:after {
+  background-color: #fd4d4a;
+}
+.step-ui
   .ant-steps-item-wait
   > .ant-steps-item-content
   > .ant-steps-item-title:after {
