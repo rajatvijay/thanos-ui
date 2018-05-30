@@ -21,9 +21,7 @@ class ExportList extends Component {
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <Row type="flex" justify="center">
               <Col span={18}>
-                <h4 className="text-metal mr-bottom">
-                  Get the report for workflow
-                </h4>
+                <h4 className="text-metal mr-bottom">Export workflow data</h4>
 
                 <Card>
                   <List
@@ -38,10 +36,9 @@ class ExportList extends Component {
                           <Button
                             icon="downlaod"
                             type="primary"
+                            target="_blank"
                             href={
-                              "http://" +
-                              authHeader.getClient() +
-                              ".slackcart.com/api/v1/worflow/defs/" +
+                              "http://slackcart.com/api/v1/workflow/defs/" +
                               item.id +
                               "/data-export/"
                             }

@@ -563,7 +563,7 @@ class AttachmentDownload extends Component {
 
     fetch(
       "http://slackcart.com/api/v1/responses/" +
-        this.props.field.workflow +
+        this.props.field.id +
         "/generate_doc/?format=json",
       requestOptions
     )
