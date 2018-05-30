@@ -237,9 +237,6 @@ export const WorkflowBody = props => {
 };
 
 const StepGroupList = props => {
-  console.log("workflow list steps fasdta props");
-  console.log(props);
-
   return (
     <div className="sub-step-list">
       <ul className="groupaz-list" id="groupaz-list">
@@ -288,6 +285,7 @@ const StepGroupList = props => {
 
 const StepItem = props => {
   let step_complete = props.stepData.completed_at ? true : false;
+  let overdue = props.stepData.overdue ? true : false;
 
   return (
     <li className={""} title={props.stepData.name}>
@@ -301,7 +299,9 @@ const StepItem = props => {
         className={
           step_complete
             ? "text-primary text-nounderline"
-            : "text-metal text-nounderline"
+            : overdue
+              ? "text-red text-nounderline"
+              : "text-metal text-nounderline"
         }
       >
         <i className="material-icons">
