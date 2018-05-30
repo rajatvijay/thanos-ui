@@ -42,14 +42,19 @@
 
 .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title {
-  color: @color-green;
+  color: @color-primary;
+}
+
+.aux-nav .ant-menu .ant-menu-submenu.overdue .ant-menu-submenu-title:hover,
+.aux-nav .ant-menu .ant-menu-submenu.overdue .ant-menu-submenu-title {
+  color: @color-red;
 }
 
 .aux-nav .ant-menu .ant-menu-submenu {
   &.completed {
-    color: @color-green;
+    color: @color-primary;
     &:hover {
-      color: @color-green;
+      color: @color-primary;
     }
   }
 }
@@ -61,7 +66,7 @@
     .ant-menu-submenu-title:hover {
       .ant-menu-submenu-arrow:after,
       .ant-menu-submenu-arrow:before {
-        background: linear-gradient(to right, @color-primary, @color-primary);
+        background: linear-gradient(to right, @color-metal, @color-metal);
       }
     }
     &.completed {
@@ -69,7 +74,7 @@
       .ant-menu-submenu-title:hover {
         .ant-menu-submenu-arrow:after,
         .ant-menu-submenu-arrow:before {
-          background: linear-gradient(to right, @color-green, @color-green);
+          background: linear-gradient(to right, @color-primary, @color-primary);
         }
       }
     }
@@ -79,16 +84,20 @@
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu {
   font-weight: 500;
+  margin-bottom: 14px;
 }
 .aux-nav .ant-menu .ant-menu-item {
   font-weight: normal;
-  color: @color-grey-light;
+  color: @color-metal;
   &:hover {
     color: @color-primary;
     //background-color:@color-primary-light;
   }
-  &.text-green {
-    color: @color-green;
+  &.text-primary {
+    color: @color-primary;
+  }
+  &.overdue {
+    color: @color-red;
   }
 }
 

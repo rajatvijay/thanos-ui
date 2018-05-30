@@ -54,6 +54,9 @@ class StepSidebarMenu extends Component {
   }
 
   getGroups(data) {
+    console.log("grou pdata asdf asdfdata");
+    console.log(data);
+
     let that = this;
     let data2 = getProcessedData(data);
 
@@ -61,7 +64,11 @@ class StepSidebarMenu extends Component {
       return (
         <SubMenu
           key={"sub-" + g.id}
-          className={!g.completed ? "text-primary " : "text-green completed"}
+          className={
+            !g.completed
+              ? g.overdue ? "text-red overdue" : "text-metal "
+              : "text-primary completed"
+          }
           title={
             <span>
               <i className="material-icons t-14 pd-right-sm">
@@ -82,7 +89,11 @@ class StepSidebarMenu extends Component {
       return (
         <Menu.Item
           key={group_id + "_" + s.id}
-          className={s.completed_at === null ? "text-metal" : "text-green"}
+          className={
+            s.completed_at === null
+              ? s.overdue ? "text-red overdue" : "text-metal"
+              : "text-primary completed"
+          }
         >
           <i className="material-icons t-14 pd-right-sm">
             {s.completed_at === null ? "panorama_fish_eye" : "check_circle"}
