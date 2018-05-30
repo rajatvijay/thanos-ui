@@ -11,7 +11,7 @@ const { Sider } = Layout;
 const menuList = [
   { name: "Workflows", path: "/workflows/instances", icon: "switcher" },
   { name: "People", path: "/users", icon: "user" },
-  { name: "Export csv", path: "/export-list", icon: "download" }
+  { name: "Export data", path: "/export-list", icon: "download" }
   //  { name: "Insight", path: "/insight", icon: "line-chart" }
   //{ name: "Logout", path: "/login", icon: "logout" }
 ];
