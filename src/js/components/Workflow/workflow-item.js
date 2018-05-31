@@ -92,17 +92,12 @@ const menu = (
   <Menu>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="">
-        Change status to "Archive"
+        Archive
       </a>
     </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="">
-        Change status to "On hold"
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-        Change status to "Completed"
+        On hold
       </a>
     </Menu.Item>
   </Menu>

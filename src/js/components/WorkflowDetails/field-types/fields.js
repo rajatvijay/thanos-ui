@@ -33,12 +33,37 @@ export const getLabel = props => {
 };
 
 function onFieldChange(props, value, value2) {
-  console.log("props-------------");
-  console.log(props);
-  console.log(value);
   console.log(value2);
 
   props.onFieldChange(value, props, true);
+}
+
+function onFiedlChangeArray(props, value) {
+  let answer = arrayToString(value);
+  onFieldChange(props, answer);
+}
+
+function arrayToString(arr) {
+  let string = "";
+  _.map(arr, function(i, index) {
+    string = string + i;
+    if (index != arr.length - 1) string = string + "~";
+  });
+
+  return string;
+}
+
+function stringToArray(string) {
+  console.log("string-----------");
+  console.log(string);
+  let arr = [];
+  if (string.answer.isArray) {
+    arr = string.answer[0].split("~");
+  } else {
+    arr = string.answer.split("~");
+  }
+  console.log(arr);
+  return arr;
 }
 
 //Field Type Text
@@ -276,10 +301,12 @@ export const Checkbox = props => {
       <CheckboxGroup
         style={{ width: "100%" }}
         options={props.field.definition.extra}
-        onChange={onFieldChange.bind(this, props)}
-        // defaultValue={props.field.answers[0]
-        //   ? props.field.answers
-        //   : props.field.definition.defaultValue}
+        onChange={onFiedlChangeArray.bind(this, props)}
+        defaultValue={
+          props.field.answers[0]
+            ? stringToArray(props.field.answers[0])
+            : props.field.definition.defaultValue
+        }
       />
     </FormItem>
   );
@@ -308,7 +335,7 @@ export const Select = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
-        onChange={onFieldChange.bind(this, props)}
+        onChange={onFiedlChangeArray.bind(this, props)}
       >
         {_.map(props.field.definition.extra, function(item, index) {
           return (
