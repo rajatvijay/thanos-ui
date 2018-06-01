@@ -2713,6 +2713,17 @@ html {
   background-color: #214081;
   border-color: #214081;
 }
+.ant-progress-circle-path {
+  stroke: #305ebe;
+}
+.ant-progress-circle-trail {
+  stroke: #eee;
+}
+.ant-checkbox-checked .ant-checkbox-inner,
+.ant-checkbox-indeterminate .ant-checkbox-inner {
+  background-color: #305ebe;
+  border-color: #305ebe;
+}
 .inner-container {
   display: block;
   margin-left: 90px;
