@@ -15,7 +15,8 @@ import {
   Col,
   Tag,
   Steps,
-  Popover
+  Popover,
+  Tooltip
 } from "antd";
 import { calculatedDate } from "./calculated-data";
 
@@ -24,13 +25,22 @@ const Step = Steps.Step;
 
 /*workflow Head*/
 const HeaderTitle = props => {
+  let progressData = getProgressData(props.workflow);
+
   return (
     <Col span={5}>
       <Link
         to={"instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <Avatar size="large">{props.workflow.name}</Avatar>
+        <Progress
+          type="circle"
+          percent={progressData}
+          width={46}
+          format={percent => (
+            <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
+          )}
+        />
         <span className="mr-left-sm text-grey-dark text-medium">
           {props.workflow.name}
         </span>
@@ -190,18 +200,23 @@ const HeaderOptions = props => {
 
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
-  let progressData = getProgressData(props.workflow);
+  //let progressData = getProgressData(props.workflow);
+
+  console.log("this workf porps kind saf");
+  console.log(props);
 
   return (
     <Row type="flex" align="middle" className="lc-card-head">
       <Col span={1} className="text-center text-metal ">
         <Icon type="copy" style={{ fontSize: "18px" }} />
+        {/*<Tooltip title="workf kind">
+                </Tooltip>*/}
       </Col>
       <HeaderTitle {...props} />
 
       <HeaderWorkflowGroup
         {...props}
-        progressData={progressData}
+        //progressData={progressData}
         pdata={proccessedData}
       />
 
