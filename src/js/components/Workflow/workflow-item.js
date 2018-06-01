@@ -33,14 +33,17 @@ const HeaderTitle = props => {
         to={"instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <Progress
-          type="circle"
-          percent={progressData}
-          width={46}
-          format={percent => (
-            <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
-          )}
-        />
+        <Popover content={progressData + "% completed"}>
+          <Progress
+            type="circle"
+            percent={progressData}
+            width={46}
+            format={percent => (
+              <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
+            )}
+          />
+        </Popover>
+
         <span className="mr-left-sm text-grey-dark text-medium">
           {props.workflow.name}
         </span>
@@ -54,44 +57,54 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          <Steps className="step-ui">
-            {_.map(getProcessedData(props.workflow.step_groups), function(
-              groupitem,
-              index
-            ) {
-              let completed = groupitem.completed;
-              let od = groupitem.overdue;
-              return (
-                <Step
-                  key={index}
-                  className="step-item"
-                  status={completed ? "wait" : od ? "error" : "finish"}
-                  icon={
-                    <Popover
-                      content={
-                        <div className="text-center">
-                          {groupitem.definition.name}
-                          {completed ? (
-                            <div className="small">completed</div>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      }
-                    >
-                      <i className="material-icons">
-                        {completed
-                          ? "check_circle_outline"
-                          : groupitem.definition.icon
-                            ? groupitem.definition.icon
-                            : "check_circle"}
-                      </i>
-                    </Popover>
-                  }
-                />
-              );
-            })}
-          </Steps>
+          {_.map(getProcessedData(props.workflow.step_groups), function(
+            groupitem,
+            index
+          ) {
+            let completed = groupitem.completed;
+            let od = groupitem.overdue;
+            return (
+              <span
+                className={
+                  "grp-status text-medium mr-right-lg " +
+                  (completed ? "text-green" : od ? "text-red" : "text-metal")
+                }
+                key={"item-" + index}
+              >
+                {/* <i
+                                     className="material-icons md-18"
+                                     style={{
+                                       fontSize: "14px",
+                                       marginRight: "5px",
+                                       verticalAlign: "middle",
+                                       width: "18px"
+                                     }}
+                                   >
+                                     {completed
+                                       ? "check_circle"
+                                       : od ? "alarm" : "panorama_fish_eye"}
+                                   </i>*/}
+
+                <i
+                  className="material-icons md-18"
+                  style={{
+                    fontSize: "16px",
+                    marginRight: "5px",
+                    verticalAlign: "middle",
+                    width: "18px"
+                  }}
+                >
+                  {completed
+                    ? "check_circle_outline"
+                    : groupitem.definition.icon
+                      ? groupitem.definition.icon
+                      : "check_circle"}
+                </i>
+
+                <span>{groupitem.definition.name}</span>
+              </span>
+            );
+          })}
         </div>
       </div>
     </Col>
