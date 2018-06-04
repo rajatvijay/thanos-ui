@@ -33,7 +33,7 @@ const FormItem = Form.Item;
 const filterTypeSelect = [
   {
     filterType: "Business",
-    filterName: "business unit(s)",
+    filterName: "business unit",
     results: [
       { id: 1, filterType: "bu", value: "main", label: "Main Group" },
       { id: 2, filterType: "bu", value: "ae_uae_ou", label: "AE UAE OU" },
