@@ -31,14 +31,6 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 
 const filterTypeSelect = [
-  // {
-  //   filterType: "Status",
-  //   results: [
-  //   { filterType: "status", label: "Archive" , value:"archive"},
-  //   { filterType: "status", label: "Complete", value:"complete" },
-  //   { filterType: "status", label: "On hold" , value:"onHold"}]
-  // },
-
   {
     filterType: "Business",
     filterName: "business unit(s)",
@@ -108,6 +100,7 @@ class WorkflowFilter extends Component {
           </label>
         </div>
         <Select
+          showSearch
           mode="single"
           label={this.props.placeholder}
           value={value}
@@ -118,6 +111,11 @@ class WorkflowFilter extends Component {
           style={{ width: "100%" }}
           allowClear={true}
           labelInValue={true}
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
+            0
+          }
         >
           {_.map(this.props.childeren, function(c, index) {
             return (
