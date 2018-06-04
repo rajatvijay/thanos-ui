@@ -39,7 +39,7 @@ class NavLeft extends Component {
       code = "0";
     } else if (url.includes("/users")) {
       code = "1";
-    } else if (url.includes("/insight")) {
+    } else if (url.includes("/export-list")) {
       code = "2";
     } else {
       code = "0";
