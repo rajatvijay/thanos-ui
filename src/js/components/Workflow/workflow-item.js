@@ -293,6 +293,7 @@ const StepGroupList = props => {
                     <StepItem
                       {...props}
                       stepData={steps}
+                      group={group}
                       key={"step-" + index}
                     />
                   );
@@ -316,7 +317,9 @@ const StepItem = props => {
         to={
           "/workflows/instances/" +
           props.workflow.id +
-          "?step=" +
+          "?group=" +
+          props.group.id +
+          "&step=" +
           props.stepData.id
         }
         className={

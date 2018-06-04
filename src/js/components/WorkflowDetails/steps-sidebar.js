@@ -121,8 +121,10 @@ class StepSidebarMenu extends Component {
             overflowX: "hidden",
             background: "transparent"
           }}
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub-" + this.props.defaultSelectedGroup]}
+          defaultSelectedKeys={[
+            this.props.defaultOpenKeys + "_" + this.props.defaultSelectedKeys
+          ]}
+          defaultOpenKeys={["sub-" + this.props.defaultOpenKeys]}
           mode="inline"
         >
           {this.getGroups(grouping)}

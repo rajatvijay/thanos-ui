@@ -8,42 +8,16 @@ import { baseUrl, authHeader } from "../../_helpers";
 import { workflowDetailsActions, workflowActions } from "../../actions";
 import { WorkflowHeader } from "../Workflow/workflow-item";
 
-// const WorkflowHead=()=>{
-//   return <div>
-
-//   </div>
-// }
-
 const requestOptions = {
   method: "GET",
   headers: authHeader.get(),
   credentials: "include"
 };
 
-const fethcWorkflow = id => {
-  const requestOptions = {
-    method: "GET",
-    headers: authHeader.get(),
-    credentials: "include"
-  };
-
-  return fetch(baseUrl + "workflows/" + id + "/", requestOptions)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error("Something went wrong ...");
-      }
-    })
-    .then(data => this.setState({ data, isLoading: false }))
-    .catch(error => this.setState({ error, isLoading: false }));
-};
-
 class WorkflowDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sidebar: false,
       workflowId: null,
       selectedStep: null,
       selectedGroup: null
@@ -51,8 +25,6 @@ class WorkflowDetails extends Component {
   }
 
   componentWillReceiveProps = nextProps => {
-    //if (newProps) this.getUser(newProps);
-
     if (nextProps.workflowDetails.loading === false) {
       let wfd = nextProps.workflowDetails.workflowDetails;
       let wf_id = parseInt(this.props.match.params.id, 10);
@@ -65,27 +37,32 @@ class WorkflowDetails extends Component {
         stepId: step_id
       };
 
-      this.setState(
-        {
-          selectedGroup: stepGroup_id,
-          selectedStep: step_id
-        },
+      //Get target step and group data from url.
+      let params = this.props.location.search;
+      let qs = this.queryStringToObject(params);
 
-        function() {
-          this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
-        }
-      );
+      if (!_.isEmpty(qs)) {
+        this.setState({ selectedStep: qs.step, selectedGroup: qs.group });
+        stepTrack = {
+          workflowId: wf_id,
+          groupId: qs.group,
+          stepId: qs.step
+        };
+      } else {
+        this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
+      }
+
+      this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
     }
   };
 
   componentDidMount = () => {
     var that = this;
     var id = parseInt(that.props.match.params.id, 10);
-    //this.getUser(this.props);
 
     this.props.dispatch(workflowDetailsActions.getStepGroup(id));
 
-    //getworkflow data
+    //Get workflow  basic data
     fetch(baseUrl + "workflows/" + id + "/", requestOptions)
       .then(response => {
         if (response.ok) {
@@ -98,25 +75,35 @@ class WorkflowDetails extends Component {
       .catch(error => this.setState({ error, isLoading: false }));
   };
 
-  callBackCollapser = () => {
-    this.setState({ sidebar: !this.state.sidebar });
+  //Quesry string  to object
+  queryStringToObject = qs => {
+    if (qs[0] === "?") {
+      qs = qs.slice(1);
+    }
+    var obj = {};
+    _.each(qs.split("&"), function(param) {
+      if (param !== "") {
+        param = param.split("=");
+        var name = param[0];
+        var value = param[1];
+        var old_value = obj[name];
+        if (old_value === undefined) {
+          obj[name] = value;
+        } else {
+          if (_.isArray(old_value)) {
+            old_value.push(value);
+            obj[name] = old_value;
+          } else {
+            var new_value = [old_value, value];
+            obj[name] = new_value;
+          }
+        }
+      }
+    });
+    return obj;
   };
 
-  // getUser(props) {
-  //   if (props.profile.params.id !== undefined) {
-  //     const uid = parseInt(props.profile.params.id);
-  //     var user = _.find(usersList, { id: uid });
-  //     this.setState({ sidebar: false, userId: uid, user: user }, function() {
-  //       console.log(this.state);
-  //     });
-  //   }
-  // }
-
   onStepSelected = cb => {
-    //var steps = dataSteps.steps;
-    //var selected = _.find(steps, { id: parseInt(cb.key, 10) });
-    this.setState({ selectedStep: 1 });
-
     this.getStepData(cb.key);
   };
 
@@ -134,17 +121,13 @@ class WorkflowDetails extends Component {
 
   getHeaderData = () => {
     let id = parseInt(this.props.match.params.id, 10);
-    // if(!id){
-    // }
     return this.props.dispatch(workflowActions.getById(id));
   };
 
   render() {
     let workflowDetails = this.props.workflowDetails.workflowDetails;
     let stepLoading = this.props.workflowDetails.loading;
-    //let workflowData2 = this.getHeaderData();
-    // console.log('workflowData2');
-    // console.log(workflowData2);
+
     return (
       <Layout className="workflow-details-container inner-container">
         <div
@@ -172,8 +155,8 @@ class WorkflowDetails extends Component {
               ? this.props.workflowDetails.workflowDetails.stepGroups.results
               : null
           }
-          defaultSelectedGroup={this.state.selectedStep}
-          defaultSelectedStep={["1"]}
+          defaultSelectedKeys={this.state.selectedStep}
+          defaultOpenKeys={this.state.selectedGroup}
           onStepSelected={this.onStepSelected.bind(this)}
           loading={stepLoading}
         />
@@ -182,13 +165,7 @@ class WorkflowDetails extends Component {
           style={{ marginLeft: 250, background: "#FBFBFF", height: "100vh" }}
         >
           <div className="mr-ard-md  shadow-1 bg-white">
-            <StepBody
-            // stepBody={
-            //   this.state.selectedStep
-            //     ? this.state.selectedStep
-            //     : dataSteps.steps[0]
-            // }
-            />
+            <StepBody />
           </div>
         </Layout>
       </Layout>
