@@ -14,7 +14,7 @@ function saveField(payload) {
     method: "POST",
     headers: {
       ...authHeader.post(),
-      "Content-Type": payload.answer.preview
+      "Content-Type": payload.attachment
         ? "multipart/form-data"
         : "application/json"
     },
@@ -31,7 +31,7 @@ function updateField(payload) {
     method: "PATCH",
     headers: {
       ...authHeader.post(),
-      "Content-Type": payload.answer.preview
+      "Content-Type": payload.attachment
         ? "multipart/form-data"
         : "application/json"
     },
