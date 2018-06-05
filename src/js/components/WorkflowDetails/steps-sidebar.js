@@ -54,9 +54,6 @@ class StepSidebarMenu extends Component {
   }
 
   getGroups(data) {
-    console.log("grou pdata asdf asdfdata");
-    console.log(data);
-
     let that = this;
     let data2 = getProcessedData(data);
 
@@ -107,9 +104,6 @@ class StepSidebarMenu extends Component {
 
   render() {
     let grouping = this.props.step2;
-
-    // console.log('this.props StepSidebar--------')
-    // console.log(this.props)
 
     return (
       <div>

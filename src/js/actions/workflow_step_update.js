@@ -1,13 +1,12 @@
 import { workflowFieldConstants, workflowStepConstants } from "../constants";
 import { workflowStepService } from "../services";
-import { notification } from "antd";
+import { notification, message } from "antd";
 
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body
-  });
-};
+message.config({
+  top: 10,
+  duration: 1,
+  maxCount: 2
+});
 
 export const workflowStepActions = {
   saveField,
@@ -33,11 +32,7 @@ function saveField(payload) {
     return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
   }
   function success(field) {
-    openNotificationWithIcon({
-      type: "success",
-      message: "Saved successfully",
-      body: ""
-    });
+    message.success("Saved successfully");
 
     return {
       type: workflowFieldConstants.POST_FIELD_SUCCESS,
@@ -45,11 +40,8 @@ function saveField(payload) {
     };
   }
   function failure(error) {
-    openNotificationWithIcon({
-      type: "error",
-      message: "something went wrong",
-      body: ""
-    });
+    message.error("Something went wrong");
+
     return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
   }
 }
@@ -71,22 +63,16 @@ function updateField(payload) {
     return { type: workflowFieldConstants.PATCH_FIELD_REQUEST, payload };
   }
   function success(field) {
-    openNotificationWithIcon({
-      type: "success",
-      message: "Saved successfully",
-      body: ""
-    });
+    message.success("Saved successfully");
+
     return {
       type: workflowFieldConstants.PATCH_FIELD_SUCCESS,
       field
     };
   }
   function failure(error) {
-    openNotificationWithIcon({
-      type: "error",
-      message: "Something went wrong",
-      body: ""
-    });
+    message.error("Something went wrong");
+
     return { type: workflowFieldConstants.PATCH_FIELD_FAILURE, error };
   }
 }
@@ -108,11 +94,7 @@ function submitStepData(payload) {
     return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
   function success(stepData) {
-    openNotificationWithIcon({
-      type: "success",
-      message: "Step submitted successfully",
-      body: ""
-    });
+    message.success("Step submitted successfully");
 
     return {
       type: workflowStepConstants.SUBMIT_SUCCESS,
@@ -120,11 +102,7 @@ function submitStepData(payload) {
     };
   }
   function failure(error) {
-    openNotificationWithIcon({
-      type: "error",
-      message: "Failed to submit step.",
-      body: "There was an error while submitting the step, please try again."
-    });
+    message.error("Failed to submit step.");
 
     return { type: workflowStepConstants.SUBMIT_FAILURE, error };
   }
@@ -146,11 +124,7 @@ function approveStep(payload) {
     return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
   function success(stepData) {
-    openNotificationWithIcon({
-      type: "success",
-      message: "Step approved successfully",
-      body: ""
-    });
+    message.success("Step approved successfully");
 
     return {
       type: workflowStepConstants.SUBMIT_SUCCESS,
@@ -158,11 +132,7 @@ function approveStep(payload) {
     };
   }
   function failure(error) {
-    openNotificationWithIcon({
-      type: "error",
-      message: "Failed to approve step.",
-      body: "There was an error while approval of the step, please try again."
-    });
+    message.error("Failed to approve step.");
 
     return { type: workflowStepConstants.SUBMIT_FAILURE, error };
   }

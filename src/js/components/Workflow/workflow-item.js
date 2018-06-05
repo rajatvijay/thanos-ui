@@ -206,10 +206,6 @@ const HeaderOptions = props => {
 
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
-  //let progressData = getProgressData(props.workflow);
-
-  console.log("this workf porps kind saf");
-  console.log(props);
 
   return (
     <Row type="flex" align="middle" className="lc-card-head">
