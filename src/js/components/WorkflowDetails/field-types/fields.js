@@ -32,6 +32,7 @@ export const getLabel = props => {
   return props.field.definition.body;
 };
 
+//Utility func
 function onFieldChange(props, value, value2) {
   props.onFieldChange(value, props, true);
 }
@@ -422,8 +423,8 @@ export const Divider = props => {
 
 //Field Type File Upload
 class FileUpload extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       filesList: null,
       rejectedFilesList: null,
@@ -433,33 +434,20 @@ class FileUpload extends Component {
 
   //on File drag n drop change
   onDrop = (acceptedFiles, rejectedFiles) => {
-    this.getBase64(acceptedFiles);
     this.setState({
       filesList: acceptedFiles,
       rejectedFilesList: rejectedFiles
     });
-  };
 
-  //covert to file base 64.
-  getBase64 = files => {
-    let arr = [];
+    let file = acceptedFiles[0];
 
-    // _.map(files, function(file) {
-    //   var reader = new FileReader();
-    //   reader.readAsDataURL(file);
-    //   reader.onload = function() {
-    //     arr.push(reader.result);
-    //     console.log(reader.result);
-    //   };
-    //   reader.onerror = function(error) {
-    //     console.log("Error: ", error);
-    //   };
-    // });
-
-    // this.props.onFieldChange(arr[0], this.props, "file");
+    this.props.onFieldChange(file, this.props, "file");
   };
 
   render = () => {
+    console.log("drop ka this.props");
+    console.log(this.props);
+
     return (
       <FormItem
         label={getLabel(this.props)}

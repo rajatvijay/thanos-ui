@@ -12,7 +12,12 @@ export const workflowStepService = {
 function saveField(payload) {
   const requestOptions = {
     method: "POST",
-    headers: { ...authHeader.post(), "Content-Type": "application/json" },
+    headers: {
+      ...authHeader.post(),
+      "Content-Type": payload.answer.preview
+        ? "multipart/form-data"
+        : "application/json"
+    },
     credentials: "include",
     body: JSON.stringify(payload)
   };
@@ -24,7 +29,12 @@ function saveField(payload) {
 function updateField(payload) {
   const requestOptions = {
     method: "PATCH",
-    headers: { ...authHeader.post(), "Content-Type": "application/json" },
+    headers: {
+      ...authHeader.post(),
+      "Content-Type": payload.answer.preview
+        ? "multipart/form-data"
+        : "application/json"
+    },
     credentials: "include",
     body: JSON.stringify({ answer: payload.answer })
   };
