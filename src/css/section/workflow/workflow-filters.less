@@ -100,16 +100,20 @@
   /*border-right: 1px solid #d9d9d9;*/
 }
 
-.filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child):after {
-  content: " ";
-  display: inline-block;
-  width: 1px;
-  background: @color-grey-d;
-  position: absolute;
-  top: 0px;
-  right: -1px;
-  height: 100%;
+.filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child) {
+  border-right: 1px solid @color-grey-d;
 }
+
+// .filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child):after {
+//   content: " ";
+//   display: inline-block;
+//   width: 1px;
+//   background: @color-grey-d;
+//   position: absolute;
+//   top: 0px;
+//   right: -1px;
+//   height: 100%;
+// }
 
 .filter-top .ant-menu-horizontal > .ant-menu-item-active .count {
   color: @color-grey-dark;

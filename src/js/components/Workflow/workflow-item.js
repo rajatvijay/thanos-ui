@@ -25,24 +25,13 @@ const Step = Steps.Step;
 
 /*workflow Head*/
 const HeaderTitle = props => {
-  let progressData = getProgressData(props.workflow);
-
   return (
     <Col span={5}>
       <Link
         to={"instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <Popover content={progressData + "% completed"}>
-          <Progress
-            type="circle"
-            percent={progressData}
-            width={46}
-            format={percent => (
-              <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
-            )}
-          />
-        </Popover>
+        <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
 
         <span className="mr-left-sm text-grey-dark text-medium">
           {props.workflow.name}
@@ -53,6 +42,7 @@ const HeaderTitle = props => {
 };
 
 const HeaderWorkflowGroup = props => {
+  let progressData = getProgressData(props.workflow);
   return (
     <Col span={12}>
       <div className="group-overview">
@@ -67,7 +57,7 @@ const HeaderWorkflowGroup = props => {
               <span
                 className={
                   "grp-status text-medium mr-right-lg " +
-                  (completed ? "text-green" : od ? "text-red" : "text-metal")
+                  (completed ? "text-primary" : od ? "text-red" : "text-metal")
                 }
                 key={"item-" + index}
               >
@@ -88,8 +78,8 @@ const HeaderWorkflowGroup = props => {
                 <i
                   className="material-icons md-18"
                   style={{
-                    fontSize: "16px",
-                    marginRight: "5px",
+                    fontSize: "20px",
+                    marginRight: "10px",
                     verticalAlign: "middle",
                     width: "18px"
                   }}
@@ -105,6 +95,9 @@ const HeaderWorkflowGroup = props => {
               </span>
             );
           })}
+          <div>
+            <Progress percent={progressData} showInfo={false} />
+          </div>
         </div>
       </div>
     </Col>
