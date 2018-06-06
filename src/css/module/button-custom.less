@@ -16,15 +16,78 @@
 
 //override color for progressbar  circle
 
+.ant-progress-circle.ant-progress-status-success .ant-progress-text {
+  &,
+  .material-icons {
+    color: @color-primary;
+  }
+}
+
+.ant-progress-status-success .ant-progress-circle-path {
+  stroke: @color-primary;
+}
+
+.ant-progress-text {
+  .material-icons {
+    color: @color-primary-light;
+  }
+}
+
 .ant-progress-circle-path {
   stroke: @color-primary;
 }
 
 .ant-progress-circle-trail {
-  stroke: @color-grey-lightest;
+  stroke: @color-primary-light;
 }
 
 //Dropdown <a> override
 .ant-dropdown-menu-item a:hover {
   text-decoration: none;
+}
+
+//step group list icons ui
+.step-ui {
+  .ant-steps-item {
+    .material-icons {
+      vertical-align: middle;
+    }
+  }
+
+  // .ant-steps-item-finish {
+  //   .ant-progress-status-success .ant-progress-circle-path {
+  //     stroke: @color-primary;
+  //   }
+  //   //color: @color-metal;
+  // }
+
+  .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+    color: @color-primary;
+  }
+
+  .ant-steps-item-finish
+    > .ant-steps-item-content
+    > .ant-steps-item-title:after {
+    background-color: @color-primary-light;
+  }
+
+  .ant-steps-item-error
+    > .ant-steps-item-content
+    > .ant-steps-item-title:after {
+    background-color: @color-red;
+  }
+
+  .ant-steps-item-error {
+    .material-icons {
+      color: @color-red;
+    }
+  }
+
+  .ant-steps-item-wait > .ant-steps-item-content > .ant-steps-item-title:after {
+    background-color: @color-primary;
+  }
+
+  .ant-steps-item-title:after {
+    height: 2px;
+  }
 }

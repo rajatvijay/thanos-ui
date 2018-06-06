@@ -41,63 +41,72 @@ const HeaderTitle = props => {
   );
 };
 
+const getGroupProgress = group => {
+  let progress = 0;
+  let allSteps = group.steps.length;
+  let stepCompleted = 0;
+
+  _.map(group.steps, function(step) {
+    if (step.completed_at !== null) {
+      stepCompleted += 1;
+    }
+  });
+
+  return (progress = Math.trunc(stepCompleted / allSteps * 100));
+};
+
 const HeaderWorkflowGroup = props => {
   let progressData = getProgressData(props.workflow);
   return (
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          {_.map(getProcessedData(props.workflow.step_groups), function(
-            groupitem,
-            index
-          ) {
-            let completed = groupitem.completed;
-            let od = groupitem.overdue;
-            return (
-              <span
-                className={
-                  "grp-status text-medium mr-right-lg " +
-                  (completed ? "text-primary" : od ? "text-red" : "text-metal")
-                }
-                key={"item-" + index}
-              >
-                {/* <i
-                                     className="material-icons md-18"
-                                     style={{
-                                       fontSize: "14px",
-                                       marginRight: "5px",
-                                       verticalAlign: "middle",
-                                       width: "18px"
-                                     }}
-                                   >
-                                     {completed
-                                       ? "check_circle"
-                                       : od ? "alarm" : "panorama_fish_eye"}
-                                   </i>*/}
+          <Steps className="step-ui">
+            {_.map(getProcessedData(props.workflow.step_groups), function(
+              groupitem,
+              index
+            ) {
+              let completed = groupitem.completed;
+              let od = groupitem.overdue;
 
-                <i
-                  className="material-icons md-18"
-                  style={{
-                    fontSize: "20px",
-                    marginRight: "10px",
-                    verticalAlign: "middle",
-                    width: "18px"
-                  }}
-                >
-                  {completed
-                    ? "check_circle_outline"
-                    : groupitem.definition.icon
-                      ? groupitem.definition.icon
-                      : "check_circle"}
-                </i>
+              console.log("groupitem------------------");
+              console.log(groupitem);
+              let groupProgress = getGroupProgress(groupitem);
 
-                <span>{groupitem.definition.name}</span>
-              </span>
-            );
-          })}
-          <div>
-            <Progress percent={progressData} showInfo={false} />
-          </div>
+              return (
+                <Step
+                  key={index}
+                  className="step-item"
+                  status={completed ? "wait" : od ? "error" : "finish"}
+                  icon={
+                    <Popover
+                      content={
+                        <div className="text-center">
+                          {groupitem.definition.name}
+                          {completed ? (
+                            <div className="small">completed</div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      }
+                    >
+                      <Progress
+                        type="circle"
+                        percent={groupProgress}
+                        width={30}
+                        format={percent => (
+                          <i className="material-icons">
+                            {groupitem.definition.icon}
+                          </i>
+                        )}
+                      />
+                    </Popover>
+                  }
+                />
+              );
+            })}
+          </Steps>
         </div>
       </div>
     </Col>
