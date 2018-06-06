@@ -33,8 +33,6 @@ export const getLabel = props => {
 };
 
 function onFieldChange(props, value, value2) {
-  console.log(value2);
-
   props.onFieldChange(value, props, true);
 }
 
@@ -54,8 +52,6 @@ function arrayToString(arr) {
 }
 
 function stringToArray(string) {
-  console.log("string-----------");
-  console.log(string);
   let arr = [];
   if (string.answer.isArray) {
     arr = string.answer[0].split("~");
@@ -283,8 +279,7 @@ export const URL = props => {
 //Field Type Checkbox
 const CheckboxGroup = AntCheckbox.Group;
 export const Checkbox = props => {
-  console.log("checkbox props");
-  console.log(props);
+  let defVal = [{ label: "Yes", value: "true" }];
 
   return (
     <FormItem
@@ -300,7 +295,11 @@ export const Checkbox = props => {
     >
       <CheckboxGroup
         style={{ width: "100%" }}
-        options={props.field.definition.extra}
+        options={
+          !_.isEmpty(props.field.definition.extra)
+            ? props.field.definition.extra
+            : defVal
+        }
         onChange={onFiedlChangeArray.bind(this, props)}
         defaultValue={
           props.field.answers[0]
@@ -314,8 +313,6 @@ export const Checkbox = props => {
 
 //Field Type Select
 export const Select = props => {
-  console.log("props.field.definition");
-
   return (
     <FormItem
       label={getLabel(props)}
@@ -574,10 +571,7 @@ export const File = props => {
 class AttachmentDownload extends Component {
   state = { fetching: false };
 
-  componentDidMount = () => {
-    console.log(" attachemnt this.props");
-    console.log(this.props);
-  };
+  componentDidMount = () => {};
 
   generateFile = () => {
     const requestOptions = {
