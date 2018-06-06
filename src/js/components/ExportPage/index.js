@@ -38,7 +38,7 @@ class ExportList extends Component {
                             type="primary"
                             target="_blank"
                             href={
-                              "http://slackcart.com/api/v1/workflow/defs/" +
+                              "http://vetted.slackcart.com/api/v1/workflow/defs/" +
                               item.id +
                               "/data-export/"
                             }
