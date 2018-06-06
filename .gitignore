@@ -24,7 +24,7 @@ yarn-error.log*
 krypton-ui.sublime-project
 krypton-ui.sublime-workspace
 
-#extra css files
+#extra css files not to be tracked anymore as we are using less
 /src/*.css
 /src/*.map
 !App.css
