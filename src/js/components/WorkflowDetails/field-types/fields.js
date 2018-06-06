@@ -583,17 +583,17 @@ class AttachmentDownload extends Component {
     this.setState({ fetching: true });
 
     fetch(
-      "http://slackcart.com/api/v1/responses/" +
+      "http://vetted.slackcart.com/api/v1/responses/" +
         this.props.field.id +
         "/generate_doc/?format=json",
       requestOptions
     )
-      .then(response => response.json())
+      .then(response => response)
       .then(body => {
-        //console.log(body);
+        console.log(body);
 
         this.setState({ fetching: false }, function() {
-          window.open(body.object_url, "_blank");
+          window.open(body.url, "_blank");
         });
       });
   };
