@@ -95,14 +95,15 @@ class StepBodyForm extends Component {
   };
 
   onApproveStep = step => {
-    //console.log(this.props, step)
     this.props.dispatch(workflowStepActions.approveStep(step));
+  };
+
+  onUndoStep = step => {
+    this.props.dispatch(workflowStepActions.undoStep(step));
   };
 
   getStepStatus = stepData => {
     const step = stepData;
-    // step.completed_at = "12 march 2018";
-    // step.completed_by = "Jagmeet Lamba";
 
     if (step.completed_at || step.approved_at) {
       //this.getUserById(step.completed_by, 'completed');
@@ -113,7 +114,10 @@ class StepBodyForm extends Component {
         <Alert
           message={
             <div className="">
-              <span className="float-right text-anchor text-underline text-primary">
+              <span
+                className="float-right text-anchor text-underline text-primary"
+                onClick={this.onUndoStep.bind(this, step)}
+              >
                 Undo completion
               </span>
               <span className="float-right pd-right-sm pd-left-sm">|</span>

@@ -1,4 +1,4 @@
-import { workflowDetailsConstants, workflowStepConstants } from "../constants";
+import { workflowDetailsConstants } from "../constants";
 
 export function workflowDetails(state = {}, action) {
   switch (action.type) {

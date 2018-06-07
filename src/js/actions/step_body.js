@@ -58,30 +58,3 @@ function getStepGroup(id) {
     return { type: workflowDetailsConstants.GET_STEPGROUPS_FAILURE, error };
   }
 }
-
-//fetch stepgroup  data i.e steps list
-function submitStepData(payload) {
-  return dispatch => {
-    dispatch(request(payload));
-
-    workflowDetailsService
-      .getStepGroup(payload)
-      .then(
-        stepData => dispatch(success(stepData)),
-        error => dispatch(failure(error))
-      );
-  };
-
-  function request() {
-    return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
-  }
-  function success(stepData) {
-    return {
-      type: workflowStepConstants.SUBMIT_SUCCESS,
-      stepData
-    };
-  }
-  function failure(error) {
-    return { type: workflowStepConstants.SUBMIT_FAILURE, error };
-  }
-}

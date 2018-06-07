@@ -9,8 +9,9 @@ import { workflowCreate } from "./workflow_create";
 import { workflowKind, workflowGroupCount } from "./workflow_kind";
 import { workflowDetails } from "./workflow_details";
 import { workflowFilters, workflowFilterType } from "./workflow_filters";
-import { currentStepFields /*currentStepData */ } from "./workflow_step";
+import { currentStepFields } from "./workflow_step";
 
+//THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
   authentication,
   registration,
@@ -22,7 +23,6 @@ const rootReducer = combineReducers({
   workflowDetails,
   workflowCreate,
   currentStepFields,
-  //currentStepData,
   workflowFilters,
   workflowFilterType
 });
