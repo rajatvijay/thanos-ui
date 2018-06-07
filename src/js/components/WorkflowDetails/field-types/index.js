@@ -7,6 +7,7 @@ import {
   List,
   Date,
   Checkbox,
+  CascaderField,
   Email,
   Phone,
   Paragraph,
@@ -46,8 +47,12 @@ export const getFieldType = props => {
       return Break(props);
     case "divider":
       return Divider(props);
-    case "choice":
+    case "single_select":
       return Select(props);
+    case "multi_select":
+      return Select(props);
+    case "cascader":
+      return CascaderField(props);
     case "url":
       return URL(props);
 

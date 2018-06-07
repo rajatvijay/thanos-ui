@@ -14,7 +14,8 @@ import {
   Divider as AntDivider,
   Upload,
   message,
-  Button
+  Button,
+  Cascader
 } from "antd";
 import _ from "lodash";
 import moment from "moment";
@@ -36,7 +37,7 @@ function onFieldChange(props, value, value2) {
   props.onFieldChange(value, props, true);
 }
 
-function onFiedlChangeArray(props, value) {
+function onFieldChangeArray(props, value) {
   let answer = arrayToString(value);
   onFieldChange(props, answer);
 }
@@ -58,7 +59,6 @@ function stringToArray(string) {
   } else {
     arr = string.answer.split("~");
   }
-  console.log(arr);
   return arr;
 }
 
@@ -300,7 +300,7 @@ export const Checkbox = props => {
             ? props.field.definition.extra
             : defVal
         }
-        onChange={onFiedlChangeArray.bind(this, props)}
+        onChange={onFieldChangeArray.bind(this, props)}
         defaultValue={
           props.field.answers[0]
             ? stringToArray(props.field.answers[0])
@@ -313,6 +313,14 @@ export const Checkbox = props => {
 
 //Field Type Select
 export const Select = props => {
+  let single =
+    props.field.definition.field_type === "single_select" ? true : false;
+  let save = onFieldChange.bind(this, props);
+
+  if (!single) {
+    save = onFieldChangeArray.bind(this, props);
+  }
+
   return (
     <FormItem
       label={getLabel(props)}
@@ -326,13 +334,16 @@ export const Select = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <AntSelect
+        mode={single ? "default" : "multiple"}
         disabled={props.completed}
         defaultValue={
           props.field.answers[0]
-            ? props.field.answers[0].answer
+            ? single
+              ? props.field.answers[0].answer
+              : stringToArray(props.field.answers[0])
             : props.field.definition.defaultValue
         }
-        onChange={onFiedlChangeArray.bind(this, props)}
+        onChange={save}
       >
         {_.map(props.field.definition.extra, function(item, index) {
           return (
@@ -629,4 +640,32 @@ class AttachmentDownload extends Component {
 
 export const Attachment = props => {
   return <AttachmentDownload {...props} />;
+};
+
+//Field Type Cascader
+export const CascaderField = props => {
+  return (
+    <FormItem
+      label={getLabel(props)}
+      className="from-label"
+      style={{ display: "block" }}
+      key={props.field.id}
+      message=""
+      required={props.field.is_required}
+      help={props.field.definition.help_text}
+      hasFeedback
+      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+    >
+      <Cascader
+        disabled={props.completed}
+        defaultValue={
+          props.field.answers[0]
+            ? stringToArray(props.field.answers[0])
+            : props.field.definition.defaultValue
+        }
+        onChange={onFieldChangeArray.bind(this, props)}
+        options={props.field.definition.extra}
+      />
+    </FormItem>
+  );
 };
