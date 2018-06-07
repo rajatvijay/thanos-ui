@@ -5,7 +5,8 @@ export const workflowStepService = {
   saveField,
   updateField,
   submitStep,
-  approveStep
+  approveStep,
+  undoStep
 };
 
 function saveField(payload) {
@@ -77,6 +78,28 @@ function approveStep(payload) {
     "/steps/" +
     payload.id +
     "/approve/";
+
+  return fetch(url, requestOptions).then(handleResponse);
+}
+
+function undoStep(payload) {
+  console.log(payload);
+
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader.post(), "Content-Type": "application/json" },
+    credentials: "include"
+  };
+
+  const url =
+    baseUrl +
+    "workflows/" +
+    payload.workflow +
+    "/stepgroups/" +
+    payload.step_group +
+    "/steps/" +
+    payload.id +
+    "/undo/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

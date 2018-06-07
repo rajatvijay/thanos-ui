@@ -445,8 +445,6 @@ class FilterSidebar extends Component {
         style={{ overflow: "auto", height: "100vh", position: "fixed" }}
         className="aux-nav aux-nav-filter bg-primary-light"
       >
-        <h5 className="aux-item aux-lead">Filters </h5>
-
         <div className="filter-section section-kind">
           <WorkflowKindFilter {...this.props} />
         </div>

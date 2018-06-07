@@ -68,9 +68,6 @@ const HeaderWorkflowGroup = props => {
             ) {
               let completed = groupitem.completed;
               let od = groupitem.overdue;
-
-              console.log("groupitem------------------");
-              console.log(groupitem);
               let groupProgress = getGroupProgress(groupitem);
 
               return (
