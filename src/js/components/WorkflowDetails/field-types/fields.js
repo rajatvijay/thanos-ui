@@ -574,25 +574,26 @@ class AttachmentDownload extends Component {
 
   generateFile = () => {
     const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
+      method: "POST",
+      headers: authHeader.post(),
+      credentials: "include",
+      body: JSON.stringify({ workflow: this.props.workflowId })
     };
 
     this.setState({ fetching: true });
 
     fetch(
-      "http://vetted.slackcart.com/api/v1/responses/" +
-        this.props.field.id +
-        "/generate_doc/?format=json",
+      "http://vetted.slackcart.com/api/v1/fields/" +
+        this.props.field.definition.id +
+        "/download_attachment/?format=json",
       requestOptions
     )
-      .then(response => response)
+      .then(response => response.json())
       .then(body => {
         console.log(body);
 
         this.setState({ fetching: false }, function() {
-          window.open(body.url, "_blank");
+          window.open(body.object_url);
         });
       });
   };

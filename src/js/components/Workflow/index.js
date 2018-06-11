@@ -6,15 +6,15 @@ import { workflowActions } from "../../actions";
 import FilterSidebar from "./filter";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
-import data from "../../data/data.js";
+//import data from "../../data/data.js";
 import { Filter2 } from "./custom-filter.js";
 
 const { Content } = Layout;
 
-const workflowListData = data;
+//const workflowListData = data;
 
 const Workflows = ({ props }) => (
-  <WorkflowList profile={props.match} listData={workflowListData} {...props} />
+  <WorkflowList profile={props.match} {...props} />
 );
 
 class Workflow extends Component {
