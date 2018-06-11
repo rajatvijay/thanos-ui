@@ -21,6 +21,7 @@ class StepBodyForm extends Component {
 
   onFieldChange = (e, payload, calculated) => {
     //sanitize this function later
+
     if (calculated === "file") {
       let method = "save";
       let data = {
