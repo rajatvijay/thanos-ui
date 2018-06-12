@@ -20,8 +20,6 @@ import {
 } from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
-import FieldData from "../../data/fieldData";
-//import { cascaderOptions } from "./cascader-dummy-data";
 
 //const filter = {};
 const SubMenu = Menu.SubMenu;
