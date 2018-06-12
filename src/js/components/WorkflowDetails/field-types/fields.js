@@ -201,7 +201,7 @@ export const Email = props => {
       style={{ display: "block" }}
       key={props.field.id}
       type="email"
-      //help={"The input is not valid E-mail!"}
+      //help={"The input is not valid e-mail"}
       required={props.field.is_required}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
@@ -213,11 +213,11 @@ export const Email = props => {
         rules: [
           {
             type: "email",
-            message: "The input is not valid E-mail!"
+            message: "The input is not valid e-mail"
           },
           {
             required: props.field.is_required,
-            message: "Please input your E-mail!"
+            message: "Please input your e-mail"
           }
         ]
       })(
@@ -226,7 +226,7 @@ export const Email = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
-          message="The input is not valid E-mail!"
+          message="The input is not valid e-mail"
           onChange={e => props.onFieldChange(e, props)}
         />
       )}
@@ -256,11 +256,11 @@ export const URL = props => {
           {
             type: "url",
             message:
-              'The input is not valid url! Valid format is "https://www.yourwebsite.com"'
+              'The input is not valid url. Valid format is "https://www.yourwebsite.com"'
           },
           {
             required: props.field.is_required,
-            message: "Please input url!"
+            message: "Please input url."
           }
         ]
       })(
@@ -269,7 +269,7 @@ export const URL = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="url"
-          message="The input is not valid E-mail!"
+          message="The input is not valid e-mail"
           onChange={e => props.onFieldChange(e, props)}
         />
       )}
@@ -295,6 +295,7 @@ export const Checkbox = props => {
       validateStatus={_.isEmpty(props.field.answers) ? null : "success"}
     >
       <CheckboxGroup
+        disabled={props.completed}
         style={{ width: "100%" }}
         options={
           !_.isEmpty(props.field.definition.extra)
@@ -379,7 +380,7 @@ export const Phone = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
-        className="tel-input"
+        className={props.completed ? "tel-input disabled" : "tel-input"}
         //style={{ width: "100%" }}
         defaultCountry="us"
         flagsImagePath={flags}
@@ -474,7 +475,11 @@ class FileUpload extends Component {
           //ref={"dropzoneRef"}
           // onDragEnter={this.onDragEnter.bind(this)}
           // onDragLeave={this.onDragLeave.bind(this)}
-          className="file-upload-field"
+          className={
+            this.props.completed
+              ? "file-upload-field disabled"
+              : "file-upload-field"
+          }
           activeClassName=" file-upload-field-active"
           rejectClassName="file-upload-field-reject"
           onDrop={this.onDrop}

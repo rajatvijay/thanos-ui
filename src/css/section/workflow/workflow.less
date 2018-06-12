@@ -1,100 +1,99 @@
 @import url("../../utilities/variables.less");
 
-/*.ant-collapse {
-  transition: all 0.5s ease-in-out;
-}*/
-
-.workflow-list.ant-collapse > .ant-collapse-item {
-  background: @color-white;
-  transition: all 0.8s ease-in-out;
-}
-
-.workflow-list.ant-collapse > .ant-collapse-item:hover {
-  background: #f1f2f6;
-}
-
-.lc-card .ant-collapse-header:hover {
-  /*background: #f7f7f7;*/
-}
-
-.lc-card-head {
-  padding: 8px 0px;
-}
-
-.lc-card-head .group-overview {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  .ant-progress-bg {
-    background-color: @color-primary;
+.workflow-list.ant-collapse {
+  > .ant-collapse-item {
+    background: @color-white;
+    transition: all 0.8s ease-in-out;
+    &:hover {
+      background: #f1f2f6;
+    }
   }
 }
-.lc-card-head .group-overview .overflow-wrapper {
-  width: 100%;
+
+//LC CARD HEAR/COLLAPSED VIEW
+.lc-card-head {
+  padding: 8px 0px;
+  .group-overview {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .ant-progress-bg {
+      background-color: @color-primary;
+    }
+
+    .overflow-wrapper {
+      width: 100%;
+    }
+
+    .grp-status .material-icons {
+      width: 20px;
+    }
+  }
 }
 
-.lc-card-head .group-overview .grp-status .material-icons {
-  width: 20px;
-}
+//LC CARD EXPANDED VIEW
+.lc-card {
+  .sub-step-list {
+    display: block;
+    overflow-x: auto;
+  }
+  .lc-card-body {
+    .sub-step-list {
+      .groupaz-list {
+        padding: 0;
+        white-space: nowrap;
+        list-style: none;
+      }
 
-.lc-card .sub-step-list {
-  display: block;
-  overflow-x: auto;
-}
+      .groupaz {
+        display: inline-block;
+        vertical-align: top;
+        max-width: 250px;
+        margin-right: 20px;
 
-.lc-card .lc-card-body .sub-step-list .groupaz-list {
-  padding: 0;
-  white-space: nowrap;
-  list-style: none;
-}
+        .grp-class {
+          font-weight: 500;
+          display: block;
+          .grp-name {
+            display: inline-block;
+            width: 80%;
+            /*border-bottom: 1px solid #f3f5fa;*/
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+          }
+        }
 
-.lc-card .lc-card-body .sub-step-list .groupaz {
-  display: inline-block;
-  vertical-align: top;
-  max-width: 250px;
-  margin-right: 20px;
-}
+        .lc-step i,
+        ul li i {
+          font-size: 14px;
+          vertical-align: middle;
+          margin-right: 10px;
+          width: 20px;
+        }
 
-.lc-card .lc-card-body .groupaz .grp-class {
-  font-weight: 500;
-  display: block;
-}
-.lc-card .lc-card-body .groupaz .grp-class .grp-name {
-  display: inline-block;
-  width: 80%;
-  /*border-bottom: 1px solid #f3f5fa;*/
-  padding-bottom: 12px;
-  border-bottom: 1px solid #eee;
-}
+        .lc-step i {
+          font-size: 20px;
+        }
 
-.lc-card .lc-card-body .groupaz .lc-step i,
-.lc-card .lc-card-body .groupaz ul li i {
-  font-size: 14px;
-  vertical-align: middle;
-  margin-right: 10px;
-  width: 20px;
-}
-
-.lc-card .lc-card-body .groupaz .lc-step i {
-  font-size: 20px;
-}
-
-.lc-card .lc-card-body .groupaz ul {
-  list-style: none;
-  padding-left: 25px;
-  padding-right: 25px;
-  margin-top: 24px;
-  border-right: 1px solid #eee;
-}
-
-.lc-card .lc-card-body .groupaz ul li {
-  height: 40px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.lc-card .lc-card-body .groupaz ul li a:hover {
-  text-decoration: none;
+        ul {
+          list-style: none;
+          padding-left: 25px;
+          padding-right: 25px;
+          margin-top: 24px;
+          border-right: 1px solid #eee;
+          li {
+            height: 40px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            a:hover {
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+  }
 }

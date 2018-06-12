@@ -20,6 +20,7 @@ import {
 } from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
+import { Scrollbars } from "react-custom-scrollbars";
 
 //const filter = {};
 const SubMenu = Menu.SubMenu;
@@ -443,38 +444,41 @@ class FilterSidebar extends Component {
         style={{ overflow: "auto", height: "100vh", position: "fixed" }}
         className="aux-nav aux-nav-filter bg-primary-light"
       >
-        <div className="filter-section section-kind">
-          <WorkflowKindFilter {...this.props} />
-        </div>
-
-        <div className="filter-section">
-          {_.map(filterTypeSelect, function(f, index) {
-            return (
-              <div className="aux-item aux-lead" key={"filter-2-" + index}>
-                <WorkflowFilter
-                  label={f.filterName}
-                  placeholder={f.filterType}
-                  childeren={f.results}
-                  {...that.props}
-                />
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="filter-section">
-          <h5 className="aux-item aux-lead">Advanced filter</h5>
-          <div className="aux-item aux-lead">
-            <WrappedAdvancedFilterForm {...this.props} />
+        <Scrollbars autoWidth autoHide style={{ height: "100%" }}>
+          <div className="filter-section section-kind">
+            <WorkflowKindFilter {...this.props} />
           </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
+
+          <div className="filter-section">
+            {_.map(filterTypeSelect, function(f, index) {
+              return (
+                <div className="aux-item aux-lead" key={"filter-2-" + index}>
+                  <WorkflowFilter
+                    label={f.filterName}
+                    placeholder={f.filterType}
+                    childeren={f.results}
+                    {...that.props}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="filter-section">
+            <h5 className="aux-item aux-lead">Advanced filter</h5>
+            <div className="aux-item aux-lead">
+              <WrappedAdvancedFilterForm {...this.props} />
+            </div>
+          </div>
+
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </Scrollbars>
       </Sider>
     );
   };
