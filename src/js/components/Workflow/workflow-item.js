@@ -23,15 +23,43 @@ import { calculatedDate } from "./calculated-data";
 const { getProcessedData, getProgressData } = calculatedDate;
 const Step = Steps.Step;
 
+const getpercent = group => {
+  let total = group.steps.length;
+  let completed = 0;
+  _.map(group.steps, function(item) {
+    if (item.completed_at) {
+      completed += 1;
+    }
+  });
+
+  return Math.trunc(completed / total * 100);
+};
+
 /*workflow Head*/
 const HeaderTitle = props => {
+  let progressData = getProgressData(props.workflow);
   return (
     <Col span={5}>
       <Link
         to={"instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
+        <Popover
+          content={
+            <div className="text-center">
+              <div className="small">{progressData}% completed</div>
+            </div>
+          }
+        >
+          <Progress
+            type="circle"
+            percent={progressData}
+            width={45}
+            format={percent => (
+              <Avatar size="large">{props.workflow.name.charAt(0)}</Avatar>
+            )}
+          />
+        </Popover>
 
         <span className="mr-left-sm text-grey-dark text-medium">
           {props.workflow.name}
@@ -52,7 +80,8 @@ const getGroupProgress = group => {
     }
   });
 
-  return (progress = Math.trunc(stepCompleted / allSteps * 100));
+  progress = Math.trunc(stepCompleted / allSteps * 100);
+  return progress;
 };
 
 const HeaderWorkflowGroup = props => {
@@ -80,11 +109,9 @@ const HeaderWorkflowGroup = props => {
                       content={
                         <div className="text-center">
                           {groupitem.definition.name}
-                          {completed ? (
-                            <div className="small">completed</div>
-                          ) : (
-                            ""
-                          )}
+                          <div className="small">
+                            {groupProgress}% completed
+                          </div>
                         </div>
                       }
                     >
@@ -127,11 +154,6 @@ const menu = (
 
 const menu2 = (
   <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="">
-        Refresh Preview
-      </a>
-    </Menu.Item>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="">
         Add site
@@ -233,7 +255,9 @@ export const WorkflowHeader = props => {
   );
 };
 
+//////////////////
 /*workflow body*/
+/////////////////
 export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">

@@ -147,9 +147,10 @@ class StepBodyForm extends Component {
                   {" "}
                   and approved by{" "}
                   <span className="text-medium ">
-                    {this.state.stepApprovedBy
+                    {/*this.state.stepApprovedBy
                       ? this.state.stepApprovedBy.first_name
-                      : "..."}
+                      : "..."*/}
+                    ...
                   </span>{" "}
                   on <Moment format="MM/DD/YYYY">{step.approved_at}</Moment>
                 </span>

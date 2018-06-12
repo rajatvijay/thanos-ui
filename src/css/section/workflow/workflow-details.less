@@ -62,17 +62,27 @@
         border-color: @color-primary;
       }
     }
+    &.disabled {
+      input {
+        background-color: #f5f5f5;
+        border-color: #e6d8d8;
+        color: rgba(0, 0, 0, 0.25);
+        &:hover,&:focus {
+          border-color: #cacaca;
+        }
+      }
+    }
   }
   .ant-radio-inner:after{background-color: @color-primary}
 
-  .ant-input:hover,
+  .ant-input:not(.ant-input-disabled):hover,
   .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
   .ant-radio-wrapper:hover .ant-radio .ant-radio-inner, 
   .ant-radio:hover .ant-radio-inner, 
   .ant-radio-focused .ant-radio-inner,
   .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
   .ant-input-number-focused,
-  .ant-input-number:hover{
+  .ant-input-number:not(.ant-input-disabled):hover{
     border-color: @color-primary;    
   }
 
@@ -82,16 +92,19 @@
     height: 150px;
     text-align: center;
     border-radius: 3px;
+    &.disabled {
+      background-color: #f5f5f5;
+      border-color: #e6d8d8;
+      cursor: not-allowed;
+      color: rgba(0, 0, 0, 0.25);
+    }
     .upload-drag-icon {
       padding: 20px 20px 0 20px;
     }
-    &:hover{
+    &:not(.disabled):hover{
       border-color:@color-primary;
     }
-    &:focus, &.file-upload-field-active{
-      border-color:@color-primary;
-      //box-shadow:0 0 0 2px @fade(@color-primary,80%);
-    }
+
     &.file-upload-field-reject{
       border-color: @color-red;
     }

@@ -4,104 +4,38 @@
 .aux-nav .aux-lead-secondary {
   color: #505050;
 }
-.aux-nav .clear-filter {
-  position: absolute;
-  right: 0;
-  cursor: pointer;
-  padding: 0 10px;
-  color: #305ebe;
-  font-weight: normal;
-  font-size: 12px;
-  text-transform: lowercase;
-}
 .aux-nav .section-kind .icon {
   font-size: 16px;
   vertical-align: middle;
   padding-right: 8px;
 }
-.aux-filter-list {
-  padding: 0;
-  list-style: none;
-  /*//transition: all 0.3s ease-in-out;*/
-}
-.aux-filter-list li {
-  padding: 10px 16px;
-  color: #999;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-}
-.aux-filter-list li:hover,
-.aux-filter-list li:active,
-.aux-filter-list li.active {
-  background: #8d9bb7;
-  color: #fff;
-}
-.filter-top {
-  position: relative;
-  /*//width: 98%;*/
-  overflow-x: hidden;
-}
-.filter-top .ant-menu-horizontal {
-  margin: 24px 16px 0;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-}
-.filter-top-list {
-  width: 100%;
-  padding: 0;
-  list-style: none;
-  margin: 20px 16px;
-  white-space: nowrap;
-  overflow-x: auto;
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item {
-  text-align: center;
-  line-height: 1.45;
-  padding: 20px;
-  min-width: 100px;
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item .count {
-  font-size: 30px;
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item .count .overdue {
-  position: relative;
-  top: -3px;
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child) {
-  /*border-right: 1px solid #d9d9d9;*/
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child):after {
-  content: " ";
-  display: inline-block;
-  width: 1px;
-  background: #d9d9d9;
-  position: absolute;
-  top: 0px;
-  right: -1px;
-  height: 100%;
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item-active .count {
-  color: #505050;
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item-selected {
-  background: #f1f2f6;
-}
-.filter-top .ant-menu-horizontal > .ant-menu-item-selected .group,
-.filter-top .ant-menu-horizontal > .ant-menu-item-selected .material-icons {
-  color: #305ebe;
-}
 .aux-nav-filter .ant-menu .ant-menu-item:hover {
   color: #305ebe;
 }
-.aux-nav-filter .ant-menu .ant-menu-item-selected {
+.aux-nav-filter .ant-menu .ant-menu-item:hover:after {
+  border-right: 3px solid #305ebe;
+}
+.aux-nav-filter .ant-menu .ant-menu-item:hover .ant-menu-item-selected {
   color: #305ebe;
   background-color: #d4ddf1;
 }
 .aux-nav-filter .ant-form-item {
   margin-bottom: 8px;
 }
-.filter-top-list .filter-top-list-item {
+.filter-top {
+  position: relative;
+  overflow-x: hidden;
+  margin: 24px 16px 0;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+.filter-top .filter-top-list {
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+.filter-top .filter-top-list .filter-top-list-item {
   cursor: pointer;
   padding: 16px;
   display: inline-block;
@@ -116,13 +50,45 @@
   transition: all 0.3s ease-in-out;
   /*line-height: 60px;*/
 }
-.filter-top-list .filter-top-list-item:hover {
+.filter-top .filter-top-list .filter-top-list-item:hover {
   background: #f6f6f6;
 }
-.filter-top-list .filter-top-list-item:active,
-.filter-top-list .filter-top-list-item.active {
+.filter-top .filter-top-list .filter-top-list-item:active,
+.filter-top .filter-top-list .filter-top-list-item.active {
   background: #8d9bb7;
   color: #fff;
+}
+.filter-top .filter-top-horizontal,
+.filter-top .ant-menu-horizontal {
+  white-space: nowrap;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item {
+  text-align: center;
+  line-height: 1.45;
+  padding: 20px;
+  min-width: 100px;
+  float: none !important;
+  display: inline-block;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item .count {
+  font-size: 30px;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item .count .overdue {
+  position: relative;
+  top: -3px;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item:not(:last-child) {
+  border-right: 1px solid #d9d9d9;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item-active .count {
+  color: #505050;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item-selected {
+  background: #f1f2f6;
+}
+.filter-top .ant-menu-horizontal > .ant-menu-item-selected .group,
+.filter-top .ant-menu-horizontal > .ant-menu-item-selected .material-icons {
+  color: #305ebe;
 }
 .adv-filter-list .adv-filter-item {
   cursor: pointer;
