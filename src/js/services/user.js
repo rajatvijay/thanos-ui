@@ -21,7 +21,7 @@ function login(username, password) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-DTS-SCHEMA": "vetted"
+      "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
     },
     credentials: "include",
     body: JSON.stringify({ email: username, password: password })
