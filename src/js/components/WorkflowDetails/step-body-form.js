@@ -33,11 +33,6 @@ class StepBodyForm extends Component {
         workflow: payload.workflowId
       };
 
-      if (payload.field.answers.length !== 0) {
-        method = "update";
-        data.answerId = payload.field.answers[0].id;
-      }
-
       this.callDispatch(data, method);
 
       // console.log(e.target);
@@ -49,10 +44,6 @@ class StepBodyForm extends Component {
         workflow: payload.workflowId
       };
 
-      if (payload.field.answers.length !== 0) {
-        method = "update";
-        data.answerId = payload.field.answers[0].id;
-      }
       this.callDispatch(data, method);
     } else if (e.target) {
       let method = "save";
@@ -61,11 +52,6 @@ class StepBodyForm extends Component {
         field: payload.field.id,
         workflow: payload.workflowId
       };
-
-      if (payload.field.answers.length !== 0) {
-        method = "update";
-        data.answerId = payload.field.answers[0].id;
-      }
 
       this.callDispatch(data, method);
     }
