@@ -2715,6 +2715,11 @@ html {
   background-color: #214081;
   border-color: #214081;
 }
+.ant-btn:hover,
+.ant-btn:focus {
+  border-color: #305ebe;
+  color: #305ebe;
+}
 .ant-progress-circle.ant-progress-status-success .ant-progress-text,
 .ant-progress-circle.ant-progress-status-success
   .ant-progress-text
@@ -3044,6 +3049,9 @@ html {
 .ant-form.step-form .react-tel-input.disabled input:focus {
   border-color: #cacaca;
 }
+.ant-form.step-form .react-tel-input input.invalid-number:hover {
+  border-color: #fd4d4a;
+}
 .ant-form.step-form .ant-radio-inner:after {
   background-color: #305ebe;
 }
@@ -3056,7 +3064,8 @@ html {
 .ant-form.step-form .ant-radio-focused .ant-radio-inner,
 .ant-form.step-form .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
 .ant-form.step-form .ant-input-number-focused,
-.ant-form.step-form .ant-input-number:not(.ant-input-number-disabled):hover {
+.ant-form.step-form .ant-input-number:not(.ant-input-number-disabled):hover,
+.ant-form.step-form .ant-select-enabled .ant-select-selection:hover {
   border-color: #305ebe;
 }
 .ant-form.step-form .file-upload-field {

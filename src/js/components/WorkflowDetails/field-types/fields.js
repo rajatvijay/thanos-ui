@@ -133,10 +133,10 @@ export const Number = props => {
       className="from-label"
       style={{ display: "block", width: "100%" }}
       key={props.field.id}
-      hasFeedback
       required={props.field.is_required}
       help={props.field.definition.help_text}
-      //validateStatus={"error"}
+      hasFeedback
+      validateStatus={props.field.updated_at ? "success" : null}
     >
       <InputNumber
         disabled={props.completed}

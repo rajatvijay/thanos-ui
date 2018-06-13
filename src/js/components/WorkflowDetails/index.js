@@ -162,7 +162,7 @@ class WorkflowDetails extends Component {
         />
 
         <Layout
-          style={{ marginLeft: 250, background: "#FBFBFF", height: "100vh" }}
+          style={{ marginLeft: 250, background: "#FBFBFF", minHeight: "100vh" }}
         >
           <div className="mr-ard-md  shadow-1 bg-white">
             <StepBody />
