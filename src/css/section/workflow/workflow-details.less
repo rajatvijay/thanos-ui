@@ -72,6 +72,9 @@
         }
       }
     }
+    input.invalid-number:hover{
+      border-color: @color-red;
+    }
   }
   .ant-radio-inner:after{background-color: @color-primary}
 
@@ -82,7 +85,8 @@
   .ant-radio-focused .ant-radio-inner,
   .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
   .ant-input-number-focused,
-  .ant-input-number:not(.ant-input-number-disabled):hover{
+  .ant-input-number:not(.ant-input-number-disabled):hover,
+  .ant-select-enabled .ant-select-selection:hover{
     border-color: @color-primary;    
   }
 

@@ -11,23 +11,11 @@ const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 const { getProcessedData, getProgressData } = calculatedDate;
 
-// const getMenuList = (data)=> (
-//   var list =
-// )
-
-// const getGroups = (data)=> (
-
-// )
-
-// const getSteps = (data)=> (
-//   //var list = data;
-// )
-
 const StepSidebar = props => {
   return (
     <Sider
       width={250}
-      style={{ overflow: "auto", height: "100vh", position: "absolute" }}
+      style={{ overflow: "auto", height: "100%", position: "absolute" }}
       className="aux-nav aux-nav-menu bg-primary-light"
     >
       {props.loading || props.step2 === null ? (
@@ -57,7 +45,10 @@ class StepSidebarMenu extends Component {
     let that = this;
     let data2 = getProcessedData(data);
 
-    return _.map(data2, function(g, index) {
+    return _.map(_.orderBy(data2, [{ id: Number }], ["asc"]), function(
+      g,
+      index
+    ) {
       return (
         <SubMenu
           key={"sub-" + g.id}
