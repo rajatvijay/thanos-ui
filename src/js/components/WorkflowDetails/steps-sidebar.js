@@ -83,6 +83,9 @@ class StepSidebarMenu extends Component {
 
   getSteps(data, group_id) {
     let steps = _.map(data, function(s, key) {
+      // console.log('--------------------------------------------------f')
+      // console.log(s)
+
       return (
         <Menu.Item
           key={group_id + "_" + s.id}
