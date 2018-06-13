@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import _ from "lodash";
 import { Form, Divider, Row, Col, Alert, Button } from "antd";
 import { workflowStepActions } from "../../actions";
@@ -173,7 +172,6 @@ class StepBodyForm extends Component {
 
   render = () => {
     let that = this;
-    const { getFieldDecorator } = this.props.form;
     let row = [];
 
     return (
@@ -201,6 +199,9 @@ class StepBodyForm extends Component {
               completed: that.props.stepData.completed_at ? true : false
             };
             let field = getFieldType(param);
+
+            ///row size method
+            //todo: clean up this mess
             row.length === 2 ? (row = []) : null;
 
             if (f.definition.size === 3) {
@@ -238,8 +239,8 @@ class StepBodyForm extends Component {
                 );
               }
             }
-
             //return field;
+            //ends
           }
         )}
 

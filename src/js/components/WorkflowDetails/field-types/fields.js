@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
 import {
-  Spin,
   Icon,
   Form,
   Input,
@@ -12,8 +10,6 @@ import {
   Select as AntSelect,
   Checkbox as AntCheckbox,
   Divider as AntDivider,
-  Upload,
-  message,
   Button,
   Cascader
 } from "antd";
@@ -26,7 +22,6 @@ import Dropzone from "react-dropzone";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const Dragger = Upload.Dragger;
 const Option = AntSelect.Option;
 
 export const getLabel = props => {
@@ -47,7 +42,7 @@ function arrayToString(arr) {
   let string = "";
   _.map(arr, function(i, index) {
     string = string + i;
-    if (index != arr.length - 1) string = string + "~";
+    if (index !== arr.length - 1) string = string + "~";
   });
 
   return string;
@@ -112,7 +107,7 @@ export const Bool = props => {
       <RadioGroup
         style={{ width: "100%" }}
         onChange={e => props.onFieldChange(e, props)}
-        defaultValue={parseInt(defVal)}
+        defaultValue={parseInt(defVal, 10)}
       >
         <Radio disabled={props.completed} value={1}>
           Yes
@@ -201,7 +196,7 @@ export const Email = props => {
       style={{ display: "block" }}
       key={props.field.id}
       type="email"
-      //help={"The input is not valid e-mail"}
+      //help={"The input is not valid email"}
       required={props.field.is_required}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
@@ -213,11 +208,11 @@ export const Email = props => {
         rules: [
           {
             type: "email",
-            message: "The input is not valid e-mail"
+            message: "The input is not valid email"
           },
           {
             required: props.field.is_required,
-            message: "Please input your e-mail"
+            message: "Please input your email"
           }
         ]
       })(
@@ -226,7 +221,7 @@ export const Email = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
-          message="The input is not valid e-mail"
+          message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
         />
       )}
@@ -269,7 +264,7 @@ export const URL = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="url"
-          message="The input is not valid e-mail"
+          message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
         />
       )}
@@ -444,31 +439,34 @@ class FileUpload extends Component {
     };
   }
 
-  //on File drag n drop change
-  onDrop = (acceptedFiles, rejectedFiles) => {
+  componentWillReceiveProps = nextProps => {
+    //reload workflow list if the filters change.
+    if (this.props !== nextProps) {
+      this.setState({ loading: false });
+    }
+  };
+
+  onUpload = e => {
     this.setState({
-      filesList: acceptedFiles,
-      rejectedFilesList: rejectedFiles
+      filesList: e,
+      loading: true
+      //rejectedFilesList: rejectedFiles
     });
-
-    let file = acceptedFiles[0];
-
-    this.props.onFieldChange(file, this.props, "file");
+    let value = e[0];
+    this.props.onFieldChange(value, this.props, "file");
   };
 
   render = () => {
-    console.log("drop ka this.props");
-    console.log(this.props);
-
+    const { field } = this.props;
     return (
       <FormItem
         label={getLabel(this.props)}
         className="from-label"
         style={{ display: "block" }}
-        key={this.props.field.id}
-        required={this.props.field.is_required}
-        help={this.props.field.definition.help_text}
-        validateStatus={this.props.field.updated_at ? "success" : null}
+        key={field.id}
+        required={field.is_required}
+        help={field.definition.help_text}
+        validateStatus={field.updated_at ? "success" : null}
       >
         <Dropzone
           //accept="image/jpeg, image/png"
@@ -482,7 +480,7 @@ class FileUpload extends Component {
           }
           activeClassName=" file-upload-field-active"
           rejectClassName="file-upload-field-reject"
-          onDrop={this.onDrop}
+          onDrop={this.onUpload}
           multiple={false}
           disabled={this.state.loading || this.props.completed}
         >
@@ -510,30 +508,54 @@ class FileUpload extends Component {
         </Dropzone>
 
         <div className="ant-upload-list ant-upload-list-text">
-          {_.map(this.state.filesList, function(file, index) {
-            return (
-              <div
-                className="ant-upload-list-item ant-upload-list-item-done"
-                key={"file-" + index}
-              >
-                <div className="ant-upload-list-item-info">
-                  <span>
-                    <i className="anticon anticon-paper-clip" />
-                    <a
-                      href=""
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ant-upload-list-item-name"
-                      title={file.name}
-                    >
-                      {file.name}
-                    </a>
-                  </span>
+          {this.state.filesList ? (
+            _.map(this.state.filesList, function(file, index) {
+              return (
+                <div
+                  className="ant-upload-list-item ant-upload-list-item-done"
+                  key={"file-" + index}
+                >
+                  <div className="ant-upload-list-item-info">
+                    <span>
+                      <i className="anticon anticon-paper-clip" />
+                      <a
+                        href=""
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ant-upload-list-item-name"
+                        title={file.name}
+                      >
+                        {file.name}
+                      </a>
+                    </span>
+                  </div>
+                  <i title="Remove file" className="anticon anticon-cross" />
                 </div>
-                <i title="Remove file" className="anticon anticon-cross" />
+              );
+            })
+          ) : (
+            <div
+              className="ant-upload-list-item ant-upload-list-item-done"
+              key={"file-1"}
+            >
+              <div className="ant-upload-list-item-info">
+                <span>
+                  <i className="anticon anticon-paper-clip" />
+                  <a
+                    href={field.answers[0].attachment}
+                    target="_blank"
+                    className="ant-upload-list-item-name"
+                  >
+                    {field.answers[0].attachment.substring(
+                      field.answers[0].attachment.lastIndexOf("/") + 1,
+                      field.answers[0].attachment.lastIndexOf("?")
+                    )}
+                  </a>
+                </span>
               </div>
-            );
-          })}
+              <i title="Remove file" className="anticon anticon-cross" />
+            </div>
+          )}
 
           {_.map(this.state.rejectedFilesList, function(file, index) {
             return (

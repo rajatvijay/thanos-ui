@@ -1,5 +1,4 @@
 import { authHeader, baseUrl, handleResponse } from "../_helpers";
-import { getValueFromCookie } from "../utils/request";
 
 export const workflowDetailsService = {
   getById,
@@ -26,7 +25,7 @@ function getStepGroup(id) {
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
     //baseUrl + "workflows/" + id + "/stepgroups/",
-    baseUrl + "workflows/" + parseInt(id) + "/stepgroups/",
+    baseUrl + "workflows/" + parseInt(id, 10) + "/stepgroups/",
     requestOptions
   ).then(handleResponse);
 }

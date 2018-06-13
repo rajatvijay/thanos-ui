@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 //import Redux from "redux";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
@@ -15,25 +15,24 @@ import {
   Col,
   Tag,
   Steps,
-  Popover,
-  Tooltip
+  Popover
 } from "antd";
 import { calculatedDate } from "./calculated-data";
 
 const { getProcessedData, getProgressData } = calculatedDate;
 const Step = Steps.Step;
 
-const getpercent = group => {
-  let total = group.steps.length;
-  let completed = 0;
-  _.map(group.steps, function(item) {
-    if (item.completed_at) {
-      completed += 1;
-    }
-  });
+// const getpercent = group => {
+//   let total = group.steps.length;
+//   let completed = 0;
+//   _.map(group.steps, function(item) {
+//     if (item.completed_at) {
+//       completed += 1;
+//     }
+//   });
 
-  return Math.trunc(completed / total * 100);
-};
+//   return Math.trunc(completed / total * 100);
+// };
 
 /*workflow Head*/
 const HeaderTitle = props => {

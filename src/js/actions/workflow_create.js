@@ -1,6 +1,5 @@
 import { workflowCreateConstants } from "../constants";
 import { workflowCreateService } from "../services";
-import { history } from "../_helpers";
 import { workflowActions } from "../actions";
 
 export const createWorkflow = payload => async dispatch => {

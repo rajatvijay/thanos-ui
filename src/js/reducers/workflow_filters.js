@@ -1,13 +1,4 @@
 import { workflowFiltersConstants } from "../constants";
-import { notification } from "antd";
-import { store } from "../_helpers";
-
-// const openNotificationWithIcon = data => {
-//   notification[data.type]({
-//     message: data.message,
-//     description: data.body
-//   });
-// };
 
 const initialState = {
   kind: {

@@ -1,6 +1,5 @@
 import { workflowFiltersConstants } from "../constants";
 import { workflowFiltersService } from "../services";
-import { history } from "../_helpers";
 
 export const workflowFiltersActions = {
   setFilters,

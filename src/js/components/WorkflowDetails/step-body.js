@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Icon } from "antd";
-import _ from "lodash";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
 

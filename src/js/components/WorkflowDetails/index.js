@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Row, Col, Avatar, Progress, Tag, Popover } from "antd";
+import { Layout, Icon } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import StepBody from "./step-body.js";
@@ -125,7 +125,6 @@ class WorkflowDetails extends Component {
   };
 
   render() {
-    let workflowDetails = this.props.workflowDetails.workflowDetails;
     let stepLoading = this.props.workflowDetails.loading;
 
     return (

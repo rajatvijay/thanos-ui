@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Button, Card, Layout, List, Row, Col } from "antd";
-import _ from "lodash";
 import { connect } from "react-redux";
-import { authHeader } from "../../_helpers";
 
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 
 class ExportList extends Component {
   constructor(props) {

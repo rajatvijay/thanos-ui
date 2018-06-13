@@ -14,7 +14,6 @@ import { workflowKindActions, createWorkflow } from "../../actions";
 import {} from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Filter } from "../Workflow/custom-filter.js";
 
 const { Header } = Layout;
 
@@ -24,7 +23,7 @@ const content = (
       <List.Item key="1">
         <List.Item.Meta
           avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="#">Data pull for Step</a>}
+          title={<a href="">Data pull for Step</a>}
           description="'Detailed Company Profile' was initiated by Vetted Bot"
         />
         <div className="text-right text-light small">4 days ago</div>
@@ -33,7 +32,7 @@ const content = (
       <List.Item key="2">
         <List.Item.Meta
           avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="#">Step:</a>}
+          title={<a href="">Step:</a>}
           description="'D&B Select Company' was completed by palak abrol"
         />
         <div className="text-right text-light small">4 days ago</div>
@@ -42,7 +41,7 @@ const content = (
       <List.Item key="3">
         <List.Item.Meta
           avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="#">Step</a>}
+          title={<a href="">Step</a>}
           description="' Adverse Media' was initiated by Vetted Bot"
         />
         <div className="text-right text-light small">1 week ago</div>
@@ -51,7 +50,7 @@ const content = (
       <List.Item key="4">
         <List.Item.Meta
           avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="#">Step</a>}
+          title={<a href="">Step</a>}
           description="'' Adverse Media' was completed by VETTED bot as value of no. of hits is '0' which is equals to '0' "
         />
         <div className="text-right text-light small">1 week ago</div>
@@ -60,7 +59,7 @@ const content = (
       <List.Item key="5">
         <List.Item.Meta
           avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="#">Step</a>}
+          title={<a href="">Step</a>}
           description="' Prohibited List Check' was completed by palak abrol"
         />
         <div className="text-right text-light small">1 week ago</div>

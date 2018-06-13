@@ -1,21 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Button } from "antd";
+import { Layout, Icon } from "antd";
 import WorkflowList from "./workflow-list";
 import { workflowActions } from "../../actions";
 import FilterSidebar from "./filter";
 import WorkflowFilterTop from "./filter-top";
-import _ from "lodash";
-//import data from "../../data/data.js";
-import { Filter2 } from "./custom-filter.js";
-
-const { Content } = Layout;
-
-//const workflowListData = data;
-
-const Workflows = ({ props }) => (
-  <WorkflowList profile={props.match} {...props} />
-);
 
 class Workflow extends Component {
   constructor(props) {
