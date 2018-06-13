@@ -2667,6 +2667,8 @@ html {
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu {
   font-weight: 500;
+}
+.aux-nav .ant-menu .ant-menu-submenu {
   margin-bottom: 14px;
 }
 .aux-nav .ant-menu .ant-menu-item {
@@ -3054,7 +3056,7 @@ html {
 .ant-form.step-form .ant-radio-focused .ant-radio-inner,
 .ant-form.step-form .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
 .ant-form.step-form .ant-input-number-focused,
-.ant-form.step-form .ant-input-number:not(.ant-input-disabled):hover {
+.ant-form.step-form .ant-input-number:not(.ant-input-number-disabled):hover {
   border-color: #305ebe;
 }
 .ant-form.step-form .file-upload-field {

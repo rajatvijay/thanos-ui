@@ -618,7 +618,7 @@ class AttachmentDownload extends Component {
       >
         <div className="attachment-link-wrapper">
           <Button
-            disabled={this.props.completed}
+            //disabled={this.props.completed}
             icon="paper-clip"
             onClick={this.generateFile}
             loading={this.state.fetching}

@@ -19,6 +19,9 @@ class StepBodyForm extends Component {
     );
   };
 
+  ///////////////////////////////////////
+  //ON Field Change save or update data//
+  //////////////////////////////////////
   onFieldChange = (e, payload, calculated) => {
     //sanitize this function later
 
@@ -68,6 +71,8 @@ class StepBodyForm extends Component {
     }
   };
 
+  //////////////////////////////////////
+  //Dispatch field update /save actions/
   callDispatch = _.debounce((data, method) => {
     if (method === "save") {
       this.props.dispatch(workflowStepActions.saveField(data));
@@ -103,6 +108,7 @@ class StepBodyForm extends Component {
     this.props.dispatch(workflowStepActions.undoStep(step));
   };
 
+  //Calculate step completions and approval
   getStepStatus = stepData => {
     const step = stepData;
 
@@ -182,6 +188,7 @@ class StepBodyForm extends Component {
   render = () => {
     let that = this;
     const { getFieldDecorator } = this.props.form;
+    let row = [];
 
     return (
       <Form
@@ -190,21 +197,65 @@ class StepBodyForm extends Component {
         onSubmit={this.handleSubmit}
         className="step-form"
       >
-        {_.map(this.props.stepData.data_fields, function(f) {
-          let wf_id =
-            that.props.workflowDetails.workflowDetails.stepGroups.results[0]
-              .workflow;
-          let param = {
-            field: f,
-            onFieldChange: that.onFieldChange,
-            workflowId: wf_id,
-            formProps: that.props.form,
-            completed: that.props.stepData.completed_at ? true : false
-          };
-          let field = getFieldType(param);
+        {_.map(
+          _.orderBy(
+            this.props.stepData.data_fields,
+            [{ orderBy: Number }],
+            ["asc"]
+          ),
+          function(f) {
+            let wf_id =
+              that.props.workflowDetails.workflowDetails.stepGroups.results[0]
+                .workflow;
+            let param = {
+              field: f,
+              onFieldChange: that.onFieldChange,
+              workflowId: wf_id,
+              formProps: that.props.form,
+              completed: that.props.stepData.completed_at ? true : false
+            };
+            let field = getFieldType(param);
+            row.length === 2 ? (row = []) : null;
 
-          return field;
-        })}
+            if (f.definition.size === 3) {
+              row.push(field);
+              if (row.length === 2) {
+                return (
+                  <Row gutter={16}>
+                    {_.map(row, function(r) {
+                      return <Col span={12}>{r}</Col>;
+                    })}
+                  </Row>
+                );
+              }
+            } else if (f.definition.size === 1) {
+              if (!_.isEmpty(row)) {
+                row.push(field);
+                let bow = (
+                  <div>
+                    {_.map(row, function(r, index) {
+                      return (
+                        <Row gutter={16}>
+                          <Col span={index === 0 ? "12" : "24"}>{r}</Col>
+                        </Row>
+                      );
+                    })}
+                  </div>
+                );
+                row = [];
+                return bow;
+              } else {
+                return (
+                  <Row gutter={16}>
+                    <Col span="24">{field}</Col>
+                  </Row>
+                );
+              }
+            }
+
+            //return field;
+          }
+        )}
 
         <Divider />
         <Row>
