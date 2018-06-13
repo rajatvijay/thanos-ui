@@ -38,8 +38,8 @@ class ExportList extends Component {
                             type="primary"
                             target="_blank"
                             href={
-                              "http://vetted.slackcart.com/api/v1/workflow/defs/" +
-                              item.id +
+                              "http://vetted.slackcart.com/api/v1/workflow-kinds/" +
+                              item.tag +
                               "/data-export/"
                             }
                           >
