@@ -8,19 +8,21 @@ export const authHeader = {
 };
 
 function get() {
+  let client = getClient();
   return {
     "Content-Type": "application/json",
-    "X-DTS-SCHEMA": "vetted"
-    //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
+    //"X-DTS-SCHEMA": "vetted"
+    "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
   };
 }
 
 function post() {
+  let client = getClient();
   return {
     "Content-Type": "application/json",
-    "X-DTS-SCHEMA": "vetted",
-    "X-CSRFToken": getValueFromCookie("csrftoken")
-    //"X-DTS-SCHEMA": client !== ("www" || "localhost") ? client : "vetted"
+    //"X-DTS-SCHEMA": "vetted",
+    "X-CSRFToken": getValueFromCookie("csrftoken"),
+    "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
   };
 }
 
