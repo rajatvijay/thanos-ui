@@ -1,8 +1,8 @@
 import React from "react";
-//import Redux from "redux";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import _ from "lodash";
+import { Scrollbars } from "react-custom-scrollbars";
 import {
   Button,
   Icon,
@@ -34,7 +34,9 @@ const Step = Steps.Step;
 //   return Math.trunc(completed / total * 100);
 // };
 
+//////////////////
 /*workflow Head*/
+/////////////////
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   return (
@@ -89,47 +91,54 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          <Steps className="step-ui">
-            {_.map(getProcessedData(props.workflow.step_groups), function(
-              groupitem,
-              index
-            ) {
-              let completed = groupitem.completed;
-              let od = groupitem.overdue;
-              let groupProgress = getGroupProgress(groupitem);
+          <Scrollbars autoWidth autoHide autoHeight>
+            <Steps className="step-ui">
+              {_.map(getProcessedData(props.workflow.step_groups), function(
+                groupitem,
+                index
+              ) {
+                let completed = groupitem.completed;
+                let od = groupitem.overdue;
+                let groupProgress = getGroupProgress(groupitem);
 
-              return (
-                <Step
-                  key={index}
-                  className="step-item"
-                  status={completed ? "wait" : od ? "error" : "finish"}
-                  icon={
-                    <Popover
-                      content={
-                        <div className="text-center">
-                          {groupitem.definition.name}
-                          <div className="small">
-                            {groupProgress}% completed
+                return (
+                  <Step
+                    key={index}
+                    title={
+                      <span className="title-c text-light">
+                        {groupitem.definition.name}
+                      </span>
+                    }
+                    className="step-item"
+                    status={completed ? "wait" : od ? "error" : "finish"}
+                    icon={
+                      <Popover
+                        content={
+                          <div className="text-center">
+                            {groupitem.definition.name}
+                            <div className="small">
+                              {groupProgress}% completed
+                            </div>
                           </div>
-                        </div>
-                      }
-                    >
-                      <Progress
-                        type="circle"
-                        percent={groupProgress}
-                        width={30}
-                        format={percent => (
-                          <i className="material-icons">
-                            {groupitem.definition.icon}
-                          </i>
-                        )}
-                      />
-                    </Popover>
-                  }
-                />
-              );
-            })}
-          </Steps>
+                        }
+                      >
+                        <Progress
+                          type="circle"
+                          percent={groupProgress}
+                          width={30}
+                          format={percent => (
+                            <i className="material-icons">
+                              {groupitem.definition.icon}
+                            </i>
+                          )}
+                        />
+                      </Popover>
+                    }
+                  />
+                );
+              })}
+            </Steps>
+          </Scrollbars>
         </div>
       </div>
     </Col>
