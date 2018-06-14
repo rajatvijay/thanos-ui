@@ -2721,11 +2721,6 @@ html {
   border-color: #214081;
   color: #fff;
 }
-.ant-btn:hover,
-.ant-btn:focus {
-  border-color: #305ebe;
-  color: #305ebe;
-}
 .ant-progress-circle.ant-progress-status-success .ant-progress-text,
 .ant-progress-circle.ant-progress-status-success
   .ant-progress-text
@@ -3011,6 +3006,9 @@ html {
 }
 .ant-form.step-form .ant-form-item-label label {
   display: block;
+}
+.ant-form.step-form .ant-form-item-label label {
+  text-transform: uppercase;
 }
 .ant-form.step-form .has-success.has-feedback:after {
   color: #3c763d;
