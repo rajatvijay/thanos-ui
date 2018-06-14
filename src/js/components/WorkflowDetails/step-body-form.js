@@ -187,7 +187,7 @@ class StepBodyForm extends Component {
             [{ orderBy: Number }],
             ["asc"]
           ),
-          function(f) {
+          function(f, index) {
             let wf_id =
               that.props.workflowDetails.workflowDetails.stepGroups.results[0]
                 .workflow;
@@ -205,15 +205,23 @@ class StepBodyForm extends Component {
             row.length === 2 ? (row = []) : null;
 
             if (f.definition.size === 3) {
-              row.push(field);
-              if (row.length === 2) {
+              if (index === that.props.stepData.data_fields.length - 1) {
                 return (
                   <Row gutter={16}>
-                    {_.map(row, function(r) {
-                      return <Col span={12}>{r}</Col>;
-                    })}
+                    <Col span={12}>{field}</Col>
                   </Row>
                 );
+              } else {
+                row.push(field);
+                if (row.length === 2) {
+                  return (
+                    <Row gutter={16}>
+                      {_.map(row, function(r) {
+                        return <Col span={12}>{r}</Col>;
+                      })}
+                    </Row>
+                  );
+                }
               }
             } else if (f.definition.size === 1) {
               if (!_.isEmpty(row)) {
