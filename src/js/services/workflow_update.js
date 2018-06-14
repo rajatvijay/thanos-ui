@@ -1,5 +1,4 @@
 import { authHeader, baseUrl } from "../_helpers";
-import { getValueFromCookie } from "../utils/request";
 
 export const workflowStepService = {
   saveField,
@@ -10,17 +9,35 @@ export const workflowStepService = {
 };
 
 function saveField(payload) {
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      ...authHeader.post(),
-      "Content-Type": payload.attachment
-        ? "multipart/form-data"
-        : "application/json"
-    },
-    credentials: "include",
-    body: JSON.stringify(payload)
-  };
+  let requestOptions = {};
+
+  if (payload.attachment) {
+    let data = new FormData();
+    data.append("workflow", payload.workflow);
+    data.append("field", payload.field);
+    data.append("attachment", payload.attachment);
+
+    requestOptions = {
+      method: "POST",
+      headers: {
+        ...authHeader.post()
+      },
+      credentials: "include",
+      body: data
+    };
+
+    delete requestOptions.headers["Content-Type"];
+  } else {
+    requestOptions = {
+      method: "POST",
+      headers: {
+        ...authHeader.post(),
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify(payload)
+    };
+  }
 
   return fetch(baseUrl + "responses/", requestOptions).then(handleResponse);
 }

@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-//import { Select, Spin } from "antd";
 import _ from "lodash";
-import moment from "moment";
 import { Layout, Menu, Icon } from "antd";
-//import Utils from "../../utils/utils";
-//import Config from "../../utils/config";
 import { calculatedDate } from "../Workflow/calculated-data";
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-const { getProcessedData, getProgressData } = calculatedDate;
+const { getProcessedData } = calculatedDate;
 
 const StepSidebar = props => {
   return (

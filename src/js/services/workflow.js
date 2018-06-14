@@ -22,7 +22,6 @@ function getAll(filter) {
 
   let filters = store.getState().workflowFilters,
     filterParams = getFilterParams(filters),
-    params = "",
     url = baseUrl + "workflows/";
 
   url += filterParams;

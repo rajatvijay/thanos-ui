@@ -1,15 +1,12 @@
 import React, { Component } from "react";
 import { Layout, Collapse, Pagination } from "antd";
-import Moment from "react-moment";
-import { Link } from "react-router-dom";
-import Config from "../../utils/config";
-import WorkflowItem, { WorkflowHeader, WorkflowBody } from "./workflow-item";
+import { WorkflowHeader, WorkflowBody } from "./workflow-item";
 import { workflowActions } from "../../actions";
 import _ from "lodash";
 import { calculatedDate } from "./calculated-data";
 
 const { Content } = Layout;
-const { getProcessedData, getProgressData } = calculatedDate;
+const { getProcessedData } = calculatedDate;
 
 const Panel = Collapse.Panel;
 
@@ -21,14 +18,13 @@ class WorkflowList extends Component {
 
   render() {
     const data = this.props.workflow;
-    let that = this;
     let page = 1;
     if (data.next) {
       page = data.next.split("?page=");
-      page = parseInt(page[1]) - 1;
+      page = parseInt(page[1], 10) - 1;
     } else if (data.previous) {
       page = data.previous.split("?page=");
-      page = parseInt(page[1]) + 1;
+      page = parseInt(page[1], 10) + 1;
     }
 
     return (

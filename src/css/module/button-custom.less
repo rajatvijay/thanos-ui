@@ -1,5 +1,11 @@
 @import url("../utilities/variables.less");
 
+.ant-btn:hover,
+.ant-btn:focus {
+  border-color: @color-primary;
+  color: @color-primary;
+}
+
 .ant-btn-primary {
   background-color: @color-primary;
   border-color: @color-primary;
@@ -10,12 +16,7 @@
 .ant-btn-primary:active {
   background-color: @color-primary-dark;
   border-color: @color-primary-dark;
-}
-
-.ant-btn:hover,
-.ant-btn:focus {
-  border-color: @color-primary;
-  color: @color-primary;
+  color: @color-white;
 }
 
 //make this override module for all the ant style

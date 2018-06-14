@@ -1,6 +1,6 @@
 import { workflowFieldConstants, workflowStepConstants } from "../constants";
 import { workflowStepService } from "../services";
-import { notification, message } from "antd";
+import { notification } from "antd";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({

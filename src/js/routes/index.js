@@ -12,7 +12,6 @@ import { alertActions } from "../actions";
 
 import { PrivateRoute } from "../components/PrivateRoute";
 import { GenericNotFound } from "../components/notfound";
-import { HomePage } from "../components/HomePage";
 import { LoginPage } from "../components/LoginPage";
 import { MagicLoginPage } from "../components/LoginPage/MagicLinkPage";
 import { RegisterPage } from "../components/RegisterPage";
@@ -64,7 +63,6 @@ class MainRoutes extends React.Component {
               <Route path="/register" exact component={RegisterPage} />
 
               <Redirect from="/" exact to="/workflows/instances/" />
-              <PrivateRoute path="/insight" exact component={HomePage} />
               <PrivateRoute
                 path="/workflows/instances/"
                 exact

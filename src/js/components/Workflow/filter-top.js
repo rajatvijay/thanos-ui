@@ -1,22 +1,11 @@
 import React, { Component } from "react";
-import { baseUrl, authHeader } from "../../_helpers";
-import { Select, Spin, Layout, Icon, Tooltip, Menu, Divider } from "antd";
-import debounce from "lodash.debounce";
+import { Icon, Divider } from "antd";
 import { connect } from "react-redux";
 import { workflowFiltersActions, workflowKindActions } from "../../actions";
 import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-
 class WorkflowFilterTop extends Component {
-  constructor(props) {
-    super(props);
-    // this.lastFetchId = 0;
-    // this.fetchUser = debounce(this.fetchUser, 800);
-  }
-
   state = {
     activeFilter: []
   };

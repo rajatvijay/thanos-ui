@@ -1,5 +1,4 @@
 import { authHeader, baseUrl, handleResponse } from "../_helpers";
-import { getValueFromCookie } from "../utils/request";
 
 export const workflowFiltersService = {
   // getFilters,

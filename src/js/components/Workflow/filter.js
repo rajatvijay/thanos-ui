@@ -1,17 +1,5 @@
 import React, { Component } from "react";
-import {
-  Button,
-  Select,
-  Spin,
-  Layout,
-  Icon,
-  Tooltip,
-  Menu,
-  Input,
-  Cascader,
-  Form
-} from "antd";
-import debounce from "lodash.debounce";
+import { Button, Select, Layout, Input, Cascader, Form } from "antd";
 import { baseUrl, authHeader } from "../../_helpers";
 import {
   workflowFiltersActions,
@@ -23,8 +11,6 @@ import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 
 //const filter = {};
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 const { Sider } = Layout;
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -90,7 +76,6 @@ class WorkflowFilter extends Component {
 
   render() {
     const { value } = this.state;
-    var that = this;
     return (
       <div>
         <div>
@@ -144,7 +129,6 @@ class WorkflowKindFilter extends Component {
 
   workflowKindList = workflowKind => {
     let that = this;
-    let { mouserover, selected } = this.state;
 
     return _.map(workflowKind, function(i, index) {
       return (
@@ -172,7 +156,7 @@ class WorkflowKindFilter extends Component {
 
   onFilterSelected = value => {
     let id = "";
-    this.state.selected != value.id ? (id = value.id) : (id = "");
+    this.state.selected !== value.id ? (id = value.id) : (id = "");
 
     this.setState({ selected: id });
 
@@ -193,10 +177,7 @@ class WorkflowKindFilter extends Component {
   };
 
   render = () => {
-    let that = this,
-      workflowKind = null,
-      workflowKindList = null,
-      workflowFilterType = this.props.workflowFilterType;
+    let workflowKindList = null;
 
     if (this.props.workflowKind) {
       let workflowKind = this.props.workflowKind.workflowKind;
@@ -408,10 +389,6 @@ class WorkflowAdvFilter extends Component {
 }
 
 class FilterSidebar extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
     if (this.props.workflowFilters !== nextProps.workflowFilters) {
@@ -421,7 +398,6 @@ class FilterSidebar extends Component {
 
   render = () => {
     let that = this,
-      workflowFilterType = this.props.workflowFilterType,
       filterList = filterTypeSelect;
 
     if (
@@ -444,7 +420,7 @@ class FilterSidebar extends Component {
         style={{ overflow: "auto", height: "100vh", position: "fixed" }}
         className="aux-nav aux-nav-filter bg-primary-light"
       >
-        <Scrollbars autoWidth autoHide style={{ height: "100%" }}>
+        <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
           <div className="filter-section section-kind">
             <WorkflowKindFilter {...this.props} />
           </div>

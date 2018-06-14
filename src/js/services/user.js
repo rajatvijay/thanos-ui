@@ -1,7 +1,5 @@
 import { authHeader, baseUrl } from "../_helpers";
-//import axios from "axios";
 
-import { getValueFromCookie } from "../utils/request";
 export const userService = {
   login,
   register,

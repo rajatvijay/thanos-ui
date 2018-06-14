@@ -2705,6 +2705,11 @@ html {
   border-bottom-color: #305ebe;
   color: #305ebe;
 }
+.ant-btn:hover,
+.ant-btn:focus {
+  border-color: #305ebe;
+  color: #305ebe;
+}
 .ant-btn-primary {
   background-color: #305ebe;
   border-color: #305ebe;
@@ -2714,6 +2719,7 @@ html {
 .ant-btn-primary:active {
   background-color: #214081;
   border-color: #214081;
+  color: #fff;
 }
 .ant-btn:hover,
 .ant-btn:focus {
