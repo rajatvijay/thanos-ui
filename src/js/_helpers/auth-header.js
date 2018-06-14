@@ -11,8 +11,7 @@ function get() {
   let client = getClient();
   return {
     "Content-Type": "application/json",
-    //"X-DTS-SCHEMA": "vetted"
-    "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
+    "X-DTS-SCHEMA": client
   };
 }
 
@@ -20,9 +19,8 @@ function post() {
   let client = getClient();
   return {
     "Content-Type": "application/json",
-    //"X-DTS-SCHEMA": "vetted",
     "X-CSRFToken": getValueFromCookie("csrftoken"),
-    "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
+    "X-DTS-SCHEMA": client
   };
 }
 
