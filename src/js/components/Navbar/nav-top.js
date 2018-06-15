@@ -9,7 +9,7 @@ import {
   Popover,
   List
 } from "antd";
-import logo from "../../../images/client-logo/mck.png";
+import logo from "../../../images/client-logo/amex.png";
 import { workflowKindActions, createWorkflow } from "../../actions";
 import {} from "../../actions";
 import { connect } from "react-redux";
