@@ -539,19 +539,21 @@ class FileUpload extends Component {
               key={"file-1"}
             >
               <div className="ant-upload-list-item-info">
-                <span>
-                  <i className="anticon anticon-paper-clip" />
-                  <a
-                    href={field.answers[0].attachment}
-                    target="_blank"
-                    className="ant-upload-list-item-name"
-                  >
-                    {field.answers[0].attachment.substring(
-                      field.answers[0].attachment.lastIndexOf("/") + 1,
-                      field.answers[0].attachment.lastIndexOf("?")
-                    )}
-                  </a>
-                </span>
+                {field.answers[0] ? (
+                  <span>
+                    <i className="anticon anticon-paper-clip" />
+                    <a
+                      href={field.answers[0].attachment}
+                      target="_blank"
+                      className="ant-upload-list-item-name"
+                    >
+                      {field.answers[0].attachment.substring(
+                        field.answers[0].attachment.lastIndexOf("/") + 1,
+                        field.answers[0].attachment.lastIndexOf("?")
+                      )}
+                    </a>
+                  </span>
+                ) : null}
               </div>
               <i title="Remove file" className="anticon anticon-cross" />
             </div>
