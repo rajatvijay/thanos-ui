@@ -10,8 +10,6 @@ import {
   List
 } from "antd";
 import logo from "../../../images/client-logo/amex.png";
-import { workflowKindActions, createWorkflow } from "../../actions";
-import {} from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -73,64 +71,8 @@ class NavTop extends Component {
     super(props);
   }
 
-  componentDidMount = () => {
-    this.loadWorkflowKind();
-  };
-
-  loadWorkflowKind = () => {
-    this.props.dispatch(workflowKindActions.getAll());
-  };
-
-  clicked = tag => {
-    //dispatch
-    let payload = {
-      status: 1,
-      kind: tag,
-      name: "Draft"
-    };
-    this.props.dispatch(createWorkflow(payload));
-  };
-
   render = () => {
     let that = this;
-    const { workflowKind } = this.props.workflowKind;
-
-    //workflow Kind list
-    const menu = (
-      <Menu>
-        {_.map(workflowKind, function(item, index) {
-          return (
-            <Menu.Item
-              key={"key-" + index}
-              className="text-primary text-medium"
-            >
-              <span onClick={that.clicked.bind(this, item.tag)}>
-                <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
-                {item.name}
-              </span>
-            </Menu.Item>
-          );
-        })}
-
-        {this.props.workflowKind.error ? (
-          <Menu.Item key="1" className="text-primary text-medium">
-            <span onClick={that.loadWorkflowKind}>
-              <i className="material-icons t-14 pd-right-sm">refresh</i> Reload
-            </span>
-          </Menu.Item>
-        ) : null}
-
-        {_.isEmpty(this.props.workflowKind.workflowKind) ? (
-          <Menu.Item key="1" className="text-grey text-medium" disabled>
-            <span>
-              <i className="material-icons t-14 pd-right-sm">error</i> Empty
-            </span>
-          </Menu.Item>
-        ) : (
-          ""
-        )}
-      </Menu>
-    );
 
     return (
       <div>
@@ -170,19 +112,6 @@ class NavTop extends Component {
                 </Popover>
               </Menu.Item>
             </Menu>
-
-            <span className="float-right mr-right">
-              <Dropdown overlay={menu} placement="bottomRight">
-                <Button
-                  type="primary"
-                  size="default"
-                  loading={this.props.workflowKind.loading}
-                  className="shadow-2"
-                >
-                  + Create <Icon type="down" />
-                </Button>
-              </Dropdown>
-            </span>
           </Header>
         </div>
       </div>

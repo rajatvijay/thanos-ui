@@ -1,10 +1,22 @@
 import React, { Component } from "react";
-import { Button, Select, Layout, Input, Cascader, Form } from "antd";
+import {
+  Button,
+  Select,
+  Layout,
+  Input,
+  Cascader,
+  Form,
+  Dropdown,
+  Popover,
+  Icon,
+  Menu
+} from "antd";
 import { baseUrl, authHeader } from "../../_helpers";
 import {
   workflowFiltersActions,
   workflowActions,
-  workflowKindActions
+  workflowKindActions,
+  createWorkflow
 } from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -396,6 +408,24 @@ class FilterSidebar extends Component {
     }
   };
 
+  componentDidMount = () => {
+    this.loadWorkflowKind();
+  };
+
+  loadWorkflowKind = () => {
+    this.props.dispatch(workflowKindActions.getAll());
+  };
+
+  clicked = tag => {
+    //dispatch
+    let payload = {
+      status: 1,
+      kind: tag,
+      name: "Draft"
+    };
+    this.props.dispatch(createWorkflow(payload));
+  };
+
   render = () => {
     let that = this,
       filterList = filterTypeSelect;
@@ -414,6 +444,45 @@ class FilterSidebar extends Component {
       }
     }
 
+    const { workflowKind } = this.props.workflowKind;
+
+    //workflow Kind list
+    const menu = (
+      <Menu className="kind-menu">
+        {_.map(workflowKind, function(item, index) {
+          return (
+            <Menu.Item
+              key={"key-" + index}
+              className="text-primary text-medium"
+            >
+              <span onClick={that.clicked.bind(this, item.tag)}>
+                <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
+                {item.name}
+              </span>
+            </Menu.Item>
+          );
+        })}
+
+        {this.props.workflowKind.error ? (
+          <Menu.Item key="1" className="text-primary text-medium">
+            <span onClick={that.loadWorkflowKind}>
+              <i className="material-icons t-14 pd-right-sm">refresh</i> Reload
+            </span>
+          </Menu.Item>
+        ) : null}
+
+        {_.isEmpty(this.props.workflowKind.workflowKind) ? (
+          <Menu.Item key="1" className="text-grey text-medium" disabled>
+            <span>
+              <i className="material-icons t-14 pd-right-sm">error</i> Empty
+            </span>
+          </Menu.Item>
+        ) : (
+          ""
+        )}
+      </Menu>
+    );
+
     return (
       <Sider
         width={250}
@@ -421,7 +490,21 @@ class FilterSidebar extends Component {
         className="aux-nav aux-nav-filter bg-primary-light"
       >
         <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
+          <div className="mr-ard-md  mr-bottom-lg">
+            <Dropdown overlay={menu} placement="bottomRight">
+              <Button
+                type="primary"
+                size="large"
+                loading={this.props.workflowKind.loading}
+                className="shadow-2 btn-block"
+              >
+                + Create <Icon type="down" />
+              </Button>
+            </Dropdown>
+          </div>
+
           <div className="filter-section section-kind">
+            <h5 className="aux-item aux-lead">Filter by workflow</h5>
             <WorkflowKindFilter {...this.props} />
           </div>
 

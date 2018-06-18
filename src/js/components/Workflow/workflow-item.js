@@ -105,7 +105,13 @@ const HeaderWorkflowGroup = props => {
                   <Step
                     key={index}
                     title={
-                      <span className="title-c text-light">
+                      <span
+                        className={
+                          completed
+                            ? "title-c text-primary"
+                            : od ? "title-c text-red" : "title-c text-metal"
+                        }
+                      >
                         {groupitem.definition.name}
                       </span>
                     }
@@ -227,13 +233,19 @@ const HeaderOptions = props => {
           className="text-right pd-right "
           style={{ position: "relative" }}
         >
-          <Dropdown overlay={menu2}>
-            <a className="ant-dropdown-link" href="#">
-              <i className="material-icons text-primary opacity-half">
-                more_vert{" "}
-              </i>
-            </a>
-          </Dropdown>
+          <a className="ant-dropdown-link" href="#">
+            <i className="material-icons text-primary opacity-half">
+              more_vert{" "}
+            </i>
+          </a>
+
+          {/*<Dropdown overlay={menu2}>
+                      <a className="ant-dropdown-link" href="#">
+                        <i className="material-icons text-primary opacity-half">
+                          more_vert{" "}
+                        </i>
+                      </a>
+                    </Dropdown>*/}
         </Col>
       </Row>
     </Col>
