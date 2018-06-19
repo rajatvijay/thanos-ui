@@ -89,6 +89,9 @@ class LoginLinkForm extends React.Component {
               onSubmit={this.onSubmit}
               className="login-form"
             >
+              <h4 className=" text-medium text-grey-dark mr-bottom">
+                Enter your email address to login.
+              </h4>
               <FormItem
                 validateStatus={errors.email && "error"}
                 hasFeedback

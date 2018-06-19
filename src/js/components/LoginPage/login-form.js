@@ -129,7 +129,7 @@ class LoginForm extends React.Component {
           </FormItem>
           <Divider />
           <div>
-            <Link to="/login/magic">Forgot password?</Link>
+            <Link to="/login/magic">Generate magic link</Link>
           </div>
         </Form>
       </div>
