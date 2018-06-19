@@ -112,13 +112,14 @@ class StepBodyForm extends Component {
               >
                 Undo completion
               </span>
+              {/*
               <span className="float-right pd-right-sm pd-left-sm">|</span>
               <span
-                className="float-right text-anchor text-underline text-primary"
-                onClick={this.onApproveStep.bind(this, step)}
-              >
-                {step.approved_at ? "Undo approval" : "Approve step"}
-              </span>
+                              className="float-right text-anchor text-underline text-primary"
+                              onClick={this.onApproveStep.bind(this, step)}
+                            >
+                              {step.approved_at ? "Undo approval" : "Approve step"}
+                            </span>*/}
 
               {step.completed_at ? (
                 <span>
@@ -133,19 +134,21 @@ class StepBodyForm extends Component {
                 </span>
               ) : null}
 
+              {/*
               {step.approved_at ? (
                 <span>
                   {" "}
                   and approved by{" "}
                   <span className="text-medium ">
-                    {/*this.state.stepApprovedBy
+                    this.state.stepApprovedBy
                       ? this.state.stepApprovedBy.first_name
-                      : "..."*/}
+                      : "..."
                     ...
                   </span>{" "}
                   on <Moment format="MM/DD/YYYY">{step.approved_at}</Moment>
                 </span>
               ) : null}
+                  */}
             </div>
           }
           type="success"

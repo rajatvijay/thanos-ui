@@ -2691,7 +2691,7 @@ html {
 }
 .aux-nav .ant-menu .ant-menu-item-selected {
   color: #305ebe;
-  background-color: #e8edf8;
+  background-color: #d4ddf1;
 }
 .aux-nav .ant-menu-vertical .ant-menu-item:after,
 .aux-nav .ant-menu-vertical-left .ant-menu-item:after,
@@ -2720,6 +2720,9 @@ html {
   background-color: #214081;
   border-color: #214081;
   color: #fff;
+}
+.btn-block {
+  width: 100%;
 }
 .ant-progress-circle.ant-progress-status-success .ant-progress-text,
 .ant-progress-circle.ant-progress-status-success
@@ -2960,6 +2963,9 @@ html {
   width: 70px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 500;
+  max-height: 60px;
 }
 .lc-card-head .ant-steps .ant-steps-item-icon {
   margin-right: 20px;
@@ -3039,17 +3045,15 @@ html {
   overflow-x: visible !important;
 }
 .ant-form.step-form .ant-form-item-label label {
-  display: block;
-}
-.ant-form.step-form .ant-form-item-label label {
   text-transform: uppercase;
+  white-space: normal;
 }
 .ant-form.step-form .has-success.has-feedback:after {
   color: #3c763d;
 }
 .ant-form.step-form .step-form-paragraph {
   margin-bottom: 24px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: #505050;
 }
@@ -3138,10 +3142,7 @@ html {
 .aux-nav .ant-menu .ant-menu-submenu,
 .aux-nav .ant-menu .ant-menu-submenu:hover,
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
-.aux-nav .ant-menu .ant-menu-submenu-active,
-.aux-nav .ant-menu .ant-menu-item-selected,
-.aux-nav .ant-menu .ant-menu-submenu-selected,
-.aux-nav .ant-menu .ant-menu-item-active {
+.aux-nav .ant-menu .ant-menu-submenu-active {
   color: #8d9bb7;
 }
 .aux-nav .ant-menu .ant-menu-submenu-title .material-icons,
@@ -3173,6 +3174,10 @@ html {
 }
 .aux-nav-filter .ant-form-item {
   margin-bottom: 8px;
+}
+.kind-menu .ant-dropdown-menu-item .material-icons {
+  display: inline-block;
+  width: 20px;
 }
 .filter-top {
   position: relative;
