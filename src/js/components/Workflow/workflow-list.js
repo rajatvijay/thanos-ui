@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { Layout, Collapse, Pagination } from "antd";
 import { WorkflowHeader, WorkflowBody } from "./workflow-item";
-import { workflowActions } from "../../actions";
+import { workflowActions, createWorkflow } from "../../actions";
 import _ from "lodash";
 import { calculatedDate } from "./calculated-data";
+import Collapsible from "react-collapsible";
+import { connect } from "react-redux";
 
 const { Content } = Layout;
 const { getProcessedData } = calculatedDate;
@@ -16,7 +18,10 @@ class WorkflowList extends Component {
     this.props.dispatch(workflowActions.getAll(param));
   };
 
+  onExpand;
+
   render() {
+    let that = this;
     const data = this.props.workflow;
     let page = 1;
     if (data.next) {
@@ -31,29 +36,46 @@ class WorkflowList extends Component {
       <div>
         <Content
           style={{
-            margin: "24px 16px 0",
-            overflow: "initial",
-            background: "#fff"
+            margin: "24px 24px 0",
+            overflow: "initial"
+            //background: "#fff"
           }}
         >
           {data.workflow && data.workflow.length > 0 ? (
             <div>
-              <Collapse accordion className="workflow-list ">
+              <div className="workflow-list">
                 {_.map(data.workflow, function(item, index) {
                   let proccessedData = getProcessedData(item.step_groups);
-
                   return (
-                    <Panel
-                      showArrow={false}
-                      header={<WorkflowHeader workflow={item} />}
+                    <WorkflowItem
+                      pData={proccessedData}
+                      workflow={item}
                       key={index}
-                      className="lc-card"
-                    >
-                      <WorkflowBody workflow={item} pData={proccessedData} />
-                    </Panel>
+                      kinds={that.props.workflowKind}
+                      dispatch={that.props.dispatch}
+                      workflowFilterType={that.props.workflowFilterType}
+                    />
                   );
                 })}
-              </Collapse>
+              </div>
+
+              {/* <Collapse accordion className="workflow-list ">
+                                     {_.map(data.workflow, function(item, index) {
+                                       let proccessedData = getProcessedData(item.step_groups);
+                     
+                                       return (
+                                           <Panel
+                                             showArrow={false}
+                                             header={<WorkflowHeader workflow={item} />}
+                                             key={index}
+                                             className="lc-card"
+                                           >
+                                             <WorkflowBody workflow={item} pData={proccessedData} />
+                                           </Panel>
+                     
+                                       );
+                                     })}
+                                   </Collapse>*/}
 
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
@@ -75,4 +97,150 @@ class WorkflowList extends Component {
   }
 }
 
-export default WorkflowList;
+class WorkflowItem extends React.Component {
+  state = {
+    realtedWorkflow: null,
+    showRelatedWorkflow: false
+  };
+
+  componentDidMount = () => {
+    this.setState({ relatedWorkflow: this.getRelatedTypes() });
+  };
+
+  getRelatedTypes = () => {
+    let that = this;
+    let rt = [];
+    if (this.props.workflow.definition.related_types.length !== 0) {
+      _.map(this.props.workflow.definition.related_types, function(rtc) {
+        _.filter(that.props.kinds.workflowKind, function(kind) {
+          if (kind.tag === rtc) {
+            rt.push(kind);
+          }
+        });
+      });
+    }
+    return rt;
+  };
+
+  // showRelatedType = () => {
+  //   this.setState({
+  //     relatedWorkflow: !this.state.relatedWorkflow,
+  //     open: this.state.relatedWorkflow
+  //   });
+  // };
+
+  onChildSelect = e => {
+    let payload = {
+      status: 1,
+      kind: e.key,
+      name: "Draft",
+      parent: this.props.workflow.id
+    };
+
+    this.props.dispatch(createWorkflow(payload));
+  };
+
+  expandChildWorkflow = () => {
+    this.setState({ showRelatedWorkflow: !this.state.showRelatedWorkflow });
+  };
+
+  render = () => {
+    let that = this;
+
+    const { statusType } = this.props.workflowFilterType;
+    const hasChildren = !_.isEmpty(this.props.workflow.children);
+    const isChild = this.props.workflow.parent === null ? true : false;
+
+    return (
+      <div className="workflow-list-item">
+        <div className="collapse-wrapper">
+          <Collapsible
+            trigger={
+              <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
+                <WorkflowHeader
+                  workflow={this.props.workflow}
+                  statusType={statusType}
+                />
+              </div>
+            }
+            lazyRender={true}
+            transitionTime={200}
+          >
+            <div className="lc-card">
+              <WorkflowBody
+                showRelatedType={this.showRelatedType}
+                realtedKind={this.state.relatedWorkflow}
+                onChildSelect={this.onChildSelect}
+                workflow={this.props.workflow}
+                pData={this.props.pData}
+                ondata={this.ondata}
+              />
+            </div>
+          </Collapsible>
+
+          {hasChildren ? (
+            <span
+              className="child-workflow-expander text-anchor"
+              onClick={this.expandChildWorkflow}
+              title="Show child workflow"
+            >
+              <i className="material-icons">
+                {this.state.showRelatedWorkflow ? "remove" : "add"}
+              </i>
+            </span>
+          ) : null}
+        </div>
+
+        {hasChildren && this.state.showRelatedWorkflow ? (
+          <div className="child-workflow-wrapper">
+            {_.map(this.props.workflow.children, function(item, index) {
+              let proccessedData = getProcessedData(item.step_groups);
+              return (
+                <WorkflowItem
+                  pData={proccessedData}
+                  workflow={item}
+                  key={index}
+                  kinds={that.props.kinds}
+                  dispatch={that.props.dispatch}
+                  workflowFilterType={that.props.workflowFilterType}
+                />
+              );
+            })}
+          </div>
+        ) : null}
+
+        {/*this.props.workflow ? (
+          <div className="child-workflow-wrapper">
+            //]=o  <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
+                  <WorkflowHeader
+                    workflow={this.props.workflow}
+                    statusType={statusType}
+                  />
+                </div>
+              }
+              lazyRender={true}
+              transitionTime={200}
+            >
+              <div className="lc-card">
+                <WorkflowBody
+                  workflow={this.props.workflow}
+                  pData={this.props.pData}
+                />
+              </div>
+            </Collapsible>
+          </div>
+        ) : null*/}
+      </div>
+    );
+  };
+}
+
+function mapPropsToState(state) {
+  const { workflowKind, workflowFilterType } = state;
+  return {
+    workflowKind,
+    workflowFilterType
+  };
+}
+
+export default connect(mapPropsToState)(WorkflowList);

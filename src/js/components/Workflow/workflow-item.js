@@ -21,6 +21,7 @@ import { calculatedDate } from "./calculated-data";
 
 const { getProcessedData, getProgressData } = calculatedDate;
 const Step = Steps.Step;
+const SubMenu = Menu.SubMenu;
 
 // const getpercent = group => {
 //   let total = group.steps.length;
@@ -151,31 +152,6 @@ const HeaderWorkflowGroup = props => {
   );
 };
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="">
-        Archive
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="">
-        On hold
-      </a>
-    </Menu.Item>
-  </Menu>
-);
-
-const menu2 = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="">
-        Add site
-      </a>
-    </Menu.Item>
-  </Menu>
-);
-
 const HeaderOptions = props => {
   const getStatusColor = status => {
     status = status.toUpperCase();
@@ -192,6 +168,16 @@ const HeaderOptions = props => {
         return "grey";
     }
   };
+
+  const menu = (
+    <Menu>
+      {_.map(props.statusType.results, function(status) {
+        if (status.label !== props.workflow.status.label) {
+          return <Menu.Item key={status.label}>{status.label}</Menu.Item>;
+        }
+      })}
+    </Menu>
+  );
 
   return (
     <Col span="6">
@@ -238,14 +224,6 @@ const HeaderOptions = props => {
               more_vert{" "}
             </i>
           </a>
-
-          {/*<Dropdown overlay={menu2}>
-                      <a className="ant-dropdown-link" href="#">
-                        <i className="material-icons text-primary opacity-half">
-                          more_vert{" "}
-                        </i>
-                      </a>
-                    </Dropdown>*/}
         </Col>
       </Row>
     </Col>
@@ -256,29 +234,50 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
 
   return (
-    <Row type="flex" align="middle" className="lc-card-head">
-      <Col span={1} className="text-center text-metal ">
-        <Icon type="copy" style={{ fontSize: "18px" }} />
-        {/*<Tooltip title="workf kind">
+    <div className="ant-collapse-header">
+      <Row type="flex" align="middle" className="lc-card-head">
+        <Col span={1} className="text-center text-metal text-anchor">
+          <Icon type="copy" style={{ fontSize: "18px" }} />
+          {/*<Tooltip title="workf kind">
                 </Tooltip>*/}
-      </Col>
-      <HeaderTitle {...props} />
+        </Col>
+        <HeaderTitle {...props} />
 
-      <HeaderWorkflowGroup
-        {...props}
-        //progressData={progressData}
-        pdata={proccessedData}
-      />
+        <HeaderWorkflowGroup
+          {...props}
+          //progressData={progressData}
+          pdata={proccessedData}
+        />
 
-      <HeaderOptions {...props} />
-    </Row>
+        <HeaderOptions {...props} />
+      </Row>
+    </div>
   );
 };
 
 //////////////////
 /*workflow body*/
 /////////////////
+
 export const WorkflowBody = props => {
+  const menuItems = () => {
+    let realtedKind = props.realtedKind;
+
+    return (
+      <Menu onClick={props.onChildSelect}>
+        {!_.isEmpty(realtedKind) ? (
+          _.map(props.realtedKind, function(item, index) {
+            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          })
+        ) : (
+          <Menu.Item disabled>No related workflow kind</Menu.Item>
+        )}
+      </Menu>
+    );
+  };
+
+  const childWorkflowMenu = menuItems(props);
+
   return (
     <div className="lc-card-body">
       <Row>
@@ -289,7 +288,17 @@ export const WorkflowBody = props => {
         </Col>
         <Col span="12" className="text-right text-light small">
           <Moment format="YYYY/MM/DD">{props.workflow.created_at}</Moment>{" "}
-          <b>&middot;</b> #{props.workflow.increment_id}{" "}
+          <b>&middot;</b> #{props.workflow.id} <b>&middot;</b>{" "}
+          <Dropdown
+            overlay={childWorkflowMenu}
+            className="child-workflow-dropdown"
+            placement="bottomRight"
+          >
+            <a className="ant-dropdown-link ant-btn" href="#">
+              Add child workflow{" "}
+              <i className="material-icons t-14">keyboard_arrow_down</i>
+            </a>
+          </Dropdown>
         </Col>
       </Row>
       <Divider />
