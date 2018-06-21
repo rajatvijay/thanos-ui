@@ -29,9 +29,7 @@ class Workflow extends Component {
       <Layout className="workflow-container inner-container">
         <FilterSidebar />
 
-        <Layout
-          style={{ marginLeft: 250, background: "#FBFBFF", minHeight: "100vh" }}
-        >
+        <Layout style={{ marginLeft: 250, minHeight: "100vh" }}>
           {this.props.workflowFilters.kind.filterValue !== null ? (
             <WorkflowFilterTop {...this.props} />
           ) : null}

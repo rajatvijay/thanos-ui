@@ -1,12 +1,49 @@
 @import url("../../utilities/variables.less");
 
-.workflow-list.ant-collapse {
-  > .ant-collapse-item {
-    background: @color-white;
-    transition: all 0.8s ease-in-out;
-    &:hover {
-      background: #f1f2f6;
+.workflow-container {
+}
+
+.workflow-list {
+  &.ant-collapse {
+    > .ant-collapse-item {
+      background: @color-white;
+      transition: all 0.8s ease-in-out;
+      &:hover {
+        background: #f1f2f6;
+      }
     }
+  }
+  .Collapsible {
+    cursor: pointer;
+    border-bottom: 1px solid #d9d9d9;
+    background-color: @color-white;
+    margin-bottom: 16px;
+    .ant-collapse-header {
+      padding: 16px;
+    }
+  }
+  .collapse-wrapper {
+    position: relative;
+  }
+  .child-workflow-expander {
+    position: absolute;
+    left: 0px;
+    z-index: 1;
+    width: 30px;
+    height: auto;
+    vertical-align: middle;
+    line-height: 93px;
+    text-align: center;
+    display: inline-block;
+    top: 0;
+    i {
+      font-size: 16px;
+    }
+  }
+  .child-workflow-wrapper {
+    padding-left: 30px;
+  }
+  .workflow-list-item {
   }
 }
 
@@ -16,6 +53,7 @@
   .group-overview {
     max-width: 100%;
     overflow: hidden;
+    max-height: 45px;
     text-overflow: ellipsis;
     white-space: nowrap;
 
@@ -62,6 +100,8 @@
       margin-right: 20px;
     }
   }
+  .child-workflow-dropdown {
+  }
 }
 
 //LC CARD EXPANDED VIEW
@@ -71,6 +111,8 @@
     overflow-x: auto;
   }
   .lc-card-body {
+    padding: 16px;
+    border-top: 1px solid #d9d9d9;
     .sub-step-list {
       .groupaz-list {
         padding: 0;

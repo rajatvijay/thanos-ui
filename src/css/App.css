@@ -2915,12 +2915,43 @@ html {
 .workflow-list.ant-collapse > .ant-collapse-item:hover {
   background: #f1f2f6;
 }
+.workflow-list .Collapsible {
+  cursor: pointer;
+  border-bottom: 1px solid #d9d9d9;
+  background-color: #fff;
+  margin-bottom: 16px;
+}
+.workflow-list .Collapsible .ant-collapse-header {
+  padding: 16px;
+}
+.workflow-list .collapse-wrapper {
+  position: relative;
+}
+.workflow-list .child-workflow-expander {
+  position: absolute;
+  left: 0px;
+  z-index: 1;
+  width: 30px;
+  height: auto;
+  vertical-align: middle;
+  line-height: 93px;
+  text-align: center;
+  display: inline-block;
+  top: 0;
+}
+.workflow-list .child-workflow-expander i {
+  font-size: 16px;
+}
+.workflow-list .child-workflow-wrapper {
+  padding-left: 30px;
+}
 .lc-card-head {
   padding: 8px 0px;
 }
 .lc-card-head .group-overview {
   max-width: 100%;
   overflow: hidden;
+  max-height: 45px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -2973,6 +3004,10 @@ html {
 .lc-card .sub-step-list {
   display: block;
   overflow-x: auto;
+}
+.lc-card .lc-card-body {
+  padding: 16px;
+  border-top: 1px solid #d9d9d9;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz-list {
   padding: 0;
@@ -3182,7 +3217,7 @@ html {
 .filter-top {
   position: relative;
   overflow-x: hidden;
-  margin: 24px 16px 0;
+  margin: 24px 24px 0;
   background-color: #fff;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
