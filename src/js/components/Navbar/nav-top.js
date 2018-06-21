@@ -9,7 +9,7 @@ import {
   Popover,
   List
 } from "antd";
-import logo from "../../../images/client-logo/amex.png";
+import logo from "../../../images/client-logo/walmart_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
 
