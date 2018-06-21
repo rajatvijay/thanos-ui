@@ -5,7 +5,11 @@ import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import StepBody from "./step-body.js";
 import { baseUrl, authHeader } from "../../_helpers";
-import { workflowDetailsActions, workflowActions } from "../../actions";
+import {
+  workflowDetailsActions,
+  workflowActions,
+  workflowFiltersActions
+} from "../../actions";
 import { WorkflowHeader } from "../Workflow/workflow-item";
 
 const requestOptions = {
@@ -73,6 +77,7 @@ class WorkflowDetails extends Component {
       })
       .then(wfdata => this.setState({ wfdata, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
+    this.props.dispatch(workflowFiltersActions.getStatusData());
   };
 
   //Quesry string  to object
@@ -127,6 +132,9 @@ class WorkflowDetails extends Component {
   render() {
     let stepLoading = this.props.workflowDetails.loading;
 
+    console.log("this.props---- wkfdeat");
+    console.log(this.props);
+
     return (
       <Layout className="workflow-details-container inner-container">
         <div
@@ -143,7 +151,10 @@ class WorkflowDetails extends Component {
             </div>
           ) : (
             <div>
-              <WorkflowHeader workflow={this.state.wfdata} />
+              <WorkflowHeader
+                workflow={this.state.wfdata}
+                statusType={this.props.workflowFilterType.statusType}
+              />
             </div>
           )}
         </div>
@@ -173,9 +184,10 @@ class WorkflowDetails extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowDetails } = state;
+  const { workflowDetails, workflowFilterType } = state;
   return {
-    workflowDetails
+    workflowDetails,
+    workflowFilterType
   };
 }
 

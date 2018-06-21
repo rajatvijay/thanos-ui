@@ -153,6 +153,9 @@ const HeaderWorkflowGroup = props => {
 };
 
 const HeaderOptions = props => {
+  console.log("props----");
+  console.log(props);
+
   const getStatusColor = status => {
     status = status.toUpperCase();
     switch (status) {
@@ -171,11 +174,13 @@ const HeaderOptions = props => {
 
   const menu = (
     <Menu>
-      {_.map(props.statusType.results, function(status) {
-        if (status.label !== props.workflow.status.label) {
-          return <Menu.Item key={status.label}>{status.label}</Menu.Item>;
-        }
-      })}
+      {props.statusType
+        ? _.map(props.statusType.results, function(status) {
+            if (status.label !== props.workflow.status.label) {
+              return <Menu.Item key={status.label}>{status.label}</Menu.Item>;
+            }
+          })
+        : null}
     </Menu>
   );
 
