@@ -1,5 +1,5 @@
 export { history } from "./history";
 export { store } from "./store";
 export { authHeader } from "./auth-header";
-export { baseUrl } from "./api-url";
+export { baseUrl } from "./api-url-local";
 export { handleResponse } from "./response-common";

@@ -58,6 +58,32 @@ function stringToArray(string) {
   return arr;
 }
 
+function field_error(props) {
+  let error = props.error || {};
+  if(error[props.field.id]) {
+    return {  
+      'help': error[props.field.id],
+      'validateStatus': 'error'
+    }
+  }
+  return { 
+    'help': props.field.definition.help_text,
+    'validateStatus': props.field.answers.length !== 0 ? "success" : null
+  }
+}
+
+function getRequired(props) {
+  return props.field.is_required || props.field.definition.is_required;
+}
+
+function feedValue(props) {
+  var opts = {}
+  if(props.field.definition.disabled) {
+    opts['value'] = _.size(props.field.answers) ? props.field.answers[0].answer : props.field.definition.defaultValue;
+  }
+  return opts;
+}
+
 //Field Type Text
 export const Text = props => {
   return (
@@ -67,13 +93,14 @@ export const Text = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={props.field.is_required}
-      help={props.field.definition.help_text}
+      required={getRequired(props)}
+      //help={props.field.definition.help_text}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      //validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      {...field_error(props)}
     >
       <Input
-        disabled={props.completed}
+        disabled={props.completed || props.field.definition.disabled}
         type="text"
         placeholder={props.field.placeholder}
         defaultValue={
@@ -81,6 +108,7 @@ export const Text = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
+        {...feedValue(props)}
         onChange={e => props.onFieldChange(e, props)}
       />
     </FormItem>
@@ -99,7 +127,7 @@ export const Bool = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.updated_at ? "success" : null}
@@ -109,10 +137,10 @@ export const Bool = props => {
         onChange={e => props.onFieldChange(e, props)}
         defaultValue={parseInt(defVal, 10)}
       >
-        <Radio disabled={props.completed} value={1}>
+        <Radio disabled={props.completed || props.definition.disabled} value={1}>
           Yes
         </Radio>
-        <Radio disabled={props.completed} value={2}>
+        <Radio disabled={props.completed || props.definition.disabled} value={2}>
           No
         </Radio>
       </RadioGroup>
@@ -128,13 +156,13 @@ export const Number = props => {
       className="from-label"
       style={{ display: "block", width: "100%" }}
       key={props.field.id}
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.updated_at ? "success" : null}
     >
       <InputNumber
-        disabled={props.completed}
+        disabled={props.completed || props.definition.disabled}
         min={1}
         type="number"
         style={{ width: "100%" }}
@@ -144,6 +172,7 @@ export const Number = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
+        {...feedValue(props)}
         onChange={onFieldChange.bind(this, props)}
       />
     </FormItem>
@@ -169,13 +198,13 @@ export const Date = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <DatePicker
-        disabled={props.completed}
+        disabled={props.completed || props.definition.disabled}
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
@@ -197,7 +226,7 @@ export const Email = props => {
       key={props.field.id}
       type="email"
       //help={"The input is not valid email"}
-      required={props.field.is_required}
+      required={getRequired(props)}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -217,12 +246,13 @@ export const Email = props => {
         ]
       })(
         <Input
-          disabled={props.completed}
+          disabled={props.completed || props.definition.disabled}
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
           message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
+          {...feedValue(props)}
         />
       )}
     </FormItem>
@@ -238,7 +268,7 @@ export const URL = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      required={props.field.is_required}
+      required={getRequired(props)}
       //help={props.field.help_text}
       //hasFeedback
       //validateStatus={props.field.answers.length !== 0 ? "success" : null}
@@ -260,12 +290,13 @@ export const URL = props => {
         ]
       })(
         <Input
-          disabled={props.completed}
+          disabled={props.completed || props.definition.disabled}
           placeholder={props.field.placeholder}
           prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="url"
           message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
+          {...feedValue(props)}
         />
       )}
     </FormItem>
@@ -284,13 +315,13 @@ export const Checkbox = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.definition.help_text}
       hasFeedback
       validateStatus={_.isEmpty(props.field.answers) ? null : "success"}
     >
       <CheckboxGroup
-        disabled={props.completed}
+        disabled={props.completed || props.definition.disabled}
         style={{ width: "100%" }}
         options={
           !_.isEmpty(props.field.definition.extra)
@@ -303,6 +334,7 @@ export const Checkbox = props => {
             ? stringToArray(props.field.answers[0])
             : props.field.definition.defaultValue
         }
+        {...feedValue(props)}
       />
     </FormItem>
   );
@@ -325,14 +357,14 @@ export const Select = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <AntSelect
         mode={single ? "default" : "multiple"}
-        disabled={props.completed}
+        disabled={props.completed || props.definition.disabled}
         defaultValue={
           props.field.answers[0]
             ? single
@@ -363,13 +395,13 @@ export const Phone = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <ReactTelInput
-        disabled={props.completed}
+        disabled={props.completed || props.definition.disabled}
         value={
           props.field.answers[0]
             ? props.field.answers[0].answer
@@ -404,7 +436,7 @@ export const List = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
@@ -634,7 +666,7 @@ class AttachmentDownload extends Component {
         className="from-label"
         style={{ display: "block" }}
         key={this.props.field.id}
-        required={this.props.field.is_required}
+        required={getRequired(this.props)}
         help={this.props.field.definition.help_text}
         validateStatus={
           this.props.field.definition.updated_at ? "success" : null
@@ -669,13 +701,13 @@ export const CascaderField = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={props.field.is_required}
+      required={getRequired(props)}
       help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <Cascader
-        disabled={props.completed}
+        disabled={props.completed || props.definition.disabled}
         defaultValue={
           props.field.answers[0]
             ? stringToArray(props.field.answers[0])

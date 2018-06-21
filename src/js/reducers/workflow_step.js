@@ -22,7 +22,8 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        currentStepFields: action.stepFields
+        currentStepFields: action.stepFields,
+        error: {}
       };
     case stepConstants.GET_STEPFIELDS_FAILURE:
       return {
@@ -59,6 +60,7 @@ export function currentStepFields(state = initialState, action) {
         loading: false
       };
     case fieldConstants.POST_FIELD_SUCCESS:
+      console.log(action.field)
       return {
         ...state,
         loading: false,

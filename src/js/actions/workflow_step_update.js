@@ -24,7 +24,8 @@ export const workflowStepActions = {
 function saveField(payload) {
   return dispatch => {
     dispatch(request(payload));
-
+    dispatch(remove_errors({}));
+    
     workflowStepService
       .saveField(payload)
       .then(
@@ -36,7 +37,17 @@ function saveField(payload) {
   function request(payload) {
     return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
   }
+
+  function remove_errors(payload) {
+    return { type: workflowFieldConstants.POST_FIELD_FAILURE, payload };
+  }
+
   function success(field) {
+    // hack for to avoid response.json promise in case of failure
+    if(!field.id) {
+      return failure(field)
+    }
+
     openNotificationWithIcon({
       type: "success",
       message: "Saved successfully"
@@ -44,12 +55,12 @@ function saveField(payload) {
 
     return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
   }
+
   function failure(error) {
     openNotificationWithIcon({
       type: "error",
       message: "Unable to save."
     });
-
     return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
   }
 }
@@ -97,7 +108,8 @@ function updateField(payload) {
 function submitStepData(payload) {
   return dispatch => {
     dispatch(request(payload));
-
+    dispatch(remove_errors({}));
+     
     workflowStepService
       .submitStep(payload)
       .then(
@@ -109,7 +121,16 @@ function submitStepData(payload) {
   function request() {
     return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
+
+  function remove_errors(payload) {
+    return { type: workflowFieldConstants.POST_FIELD_FAILURE, payload };
+  }
+
   function success(stepData) {
+    // hack for to avoid response.json promise in case of failure
+    if(!stepData.id) {
+      return failure(stepData)
+    }
     openNotificationWithIcon({
       type: "success",
       message: "Submitted successfully"
@@ -117,6 +138,7 @@ function submitStepData(payload) {
 
     return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData };
   }
+
   function failure(error) {
     openNotificationWithIcon({
       type: "error",
