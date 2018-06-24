@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Icon } from "antd";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
+import _ from "lodash";
 
 class StepBody extends Component {
   constructor(props) {
@@ -34,11 +35,21 @@ class StepBody extends Component {
     if (!loading && this.props.currentStepFields) {
       stepData = this.props.currentStepFields.currentStepFields;
     } else {
-      stepData = "no data";
+      stepData = {};
+    }
+
+    var locked_tag = null
+    if(stepData.is_locked) {
+      let dependent_steps = stepData.definition.dependent_steps;
+      let dependent_step_name = _.map(dependent_steps, function(ds) { return ds['label'];});
+      locked_tag = <div><div data-show="true" class="ant-tag">To initiate this step, please complete the following steps first:&nbsp; 
+        <b>{dependent_step_name.join(", ")}</b></div></div>
     }
 
     return (
       <div className="pd-ard-lg">
+        {locked_tag}
+        { locked_tag ? <br/> : null }
         {loading ? (
           <div className="text-center mr-top-lg">
             <Icon type={"loading"} />

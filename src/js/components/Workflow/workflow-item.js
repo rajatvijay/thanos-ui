@@ -320,6 +320,10 @@ const StepGroupList = props => {
           let completed = group.completed;
           let od = group.overdue;
 
+          if(!_.size(group.steps)) {
+            return null;
+          }
+
           return (
             <li className="groupaz" key={"group-" + index}>
               <div
@@ -363,6 +367,12 @@ const StepGroupList = props => {
 const StepItem = props => {
   let step_complete = props.stepData.completed_at ? true : false;
   let overdue = props.stepData.overdue ? true : false;
+  let icon_cls = 'panorama_fish_eye';
+  if(step_complete) {
+    icon_cls = 'check_circle';
+  } else if(props.stepData.is_locked) {
+    icon_cls = 'lock'
+  }
 
   return (
     <li className={""} title={props.stepData.name}>
@@ -384,7 +394,7 @@ const StepItem = props => {
         }
       >
         <i className="material-icons">
-          {step_complete ? "check_circle" : "panorama_fish_eye"}{" "}
+          {icon_cls}
         </i>
         <span>{props.stepData.name}</span>
       </Link>
