@@ -45,6 +45,9 @@ class StepSidebarMenu extends Component {
       g,
       index
     ) {
+      if(!_.size(g.steps)) {  // checking for steps inside group
+        return null;
+      }
       return (
         <SubMenu
           key={"sub-" + g.id}
@@ -72,7 +75,12 @@ class StepSidebarMenu extends Component {
     let steps = _.map(data, function(s, key) {
       // console.log('--------------------------------------------------f')
       // console.log(s)
-
+      let icon_cls = 'panorama_fish_eye';
+      if(s.completed_at) {
+        icon_cls = 'check_circle';
+      } else if(s.is_locked) {
+        icon_cls = 'lock'
+      }
       return (
         <Menu.Item
           key={group_id + "_" + s.id}
@@ -83,7 +91,7 @@ class StepSidebarMenu extends Component {
           }
         >
           <i className="material-icons t-14 pd-right-sm">
-            {s.completed_at === null ? "panorama_fish_eye" : "check_circle"}
+            {icon_cls}
           </i>
           {s.name}
         </Menu.Item>
