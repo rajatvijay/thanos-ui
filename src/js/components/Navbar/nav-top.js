@@ -10,7 +10,7 @@ import {
   List
 } from "antd";
 import { configActions } from "../../actions";
-import logo from "../../../images/client-logo/walmart_logo.png";
+import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
 
@@ -94,15 +94,16 @@ class NavTop extends Component {
             }}
           >
             <span className="logo" style={{ float: "left" }}>
-              {!this.props.config.loading && this.props.config.logo ? (
-                <img
-                  alt={this.props.config.name}
-                  src={this.props.config.logo}
-                  height="60"
-                />
-              ) : (
-                <h2>{this.props.config.name}</h2>
-              )}
+              <a href="/">
+                {!this.props.config.loading && this.props.config.logo ? (
+                  <img
+                    alt={this.props.config.name}
+                    src={this.props.config.logo}
+                  />
+                ) : (
+                  <img alt={this.props.config.name} src={logo} />
+                )}
+              </a>
             </span>
 
             <Menu
