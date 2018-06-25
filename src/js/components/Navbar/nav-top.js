@@ -9,6 +9,7 @@ import {
   Popover,
   List
 } from "antd";
+import { configActions } from "../../actions";
 import logo from "../../../images/client-logo/walmart_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -71,6 +72,10 @@ class NavTop extends Component {
     super(props);
   }
 
+  componentDidMount = () => {
+    this.props.dispatch(configActions.getConfig());
+  };
+
   render = () => {
     let that = this;
 
@@ -89,7 +94,15 @@ class NavTop extends Component {
             }}
           >
             <span className="logo" style={{ float: "left" }}>
-              <img alt="mckinsey logo" src={logo} height="60" />
+              {!this.props.config.loading && this.props.config.logo ? (
+                <img
+                  alt={this.props.config.name}
+                  src={this.props.config.logo}
+                  height="60"
+                />
+              ) : (
+                <h2>{this.props.config.name}</h2>
+              )}
             </span>
 
             <Menu
@@ -120,10 +133,11 @@ class NavTop extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, authentication } = state;
+  const { workflowKind, authentication, config } = state;
   return {
     workflowKind,
-    authentication
+    authentication,
+    config
   };
 }
 
