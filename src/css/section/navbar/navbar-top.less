@@ -13,9 +13,40 @@
     height: auto;
     max-height: 60px;
   }
+  .ant-menu-horizontal >  {
+    .ant-menu-submenu:hover,
+    .ant-menu-submenu-selected,
+    .ant-menu-submenu-active {
+      //color: @color-primary;
+      border-color: @color-primary;
+    }
+    .ant-menu-item:hover,
+    .ant-menu-item-selected,
+    .ant-menu-item-active {
+      border-color: @color-primary;
+    }
+  }
+
+  //  .ant-menu-item:hover,
+  //  .ant-menu-submenu:hover,
+  //  .ant-menu-item-active,
+  //  .ant-menu-submenu-active,
+  //  .ant-menu-item-open,
+  //  .ant-menu-submenu-open,
+  //  .ant-menu-item-selected,
+  //  .ant-menu-submenu-selected {
+
+  // }
 }
 
 .navbar-top .ant-menu-item .anticon {
   font-size: 24px;
   color: @color-primary;
+}
+
+.ant-menu-submenu-popup {
+  .ant-menu-item-active {
+    color: @color-text;
+    background-color: @color-primary;
+  }
 }

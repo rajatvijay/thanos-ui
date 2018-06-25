@@ -132,9 +132,6 @@ class WorkflowDetails extends Component {
   render() {
     let stepLoading = this.props.workflowDetails.loading;
 
-    console.log("this.props---- wkfdeat");
-    console.log(this.props);
-
     return (
       <Layout className="workflow-details-container inner-container">
         <div
@@ -152,6 +149,8 @@ class WorkflowDetails extends Component {
           ) : (
             <div>
               <WorkflowHeader
+                detailsPage={true}
+                kind={this.props.workflowKind}
                 workflow={this.state.wfdata}
                 statusType={this.props.workflowFilterType.statusType}
               />
@@ -184,10 +183,11 @@ class WorkflowDetails extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowDetails, workflowFilterType } = state;
+  const { workflowDetails, workflowFilterType, workflowKind } = state;
   return {
     workflowDetails,
-    workflowFilterType
+    workflowFilterType,
+    workflowKind
   };
 }
 

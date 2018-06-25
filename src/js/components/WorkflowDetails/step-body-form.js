@@ -107,7 +107,7 @@ class StepBodyForm extends Component {
           message={
             <div className="">
               <span
-                className="float-right text-anchor text-underline text-primary"
+                className="float-right text-anchor text-underline "
                 onClick={this.onUndoStep.bind(this, step)}
               >
                 Undo completion

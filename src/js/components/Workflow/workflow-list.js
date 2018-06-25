@@ -36,10 +36,11 @@ class WorkflowList extends Component {
       <div>
         <Content
           style={{
-            margin: "24px 24px 0",
+            //margin: "54px 54px 0",
             overflow: "initial"
             //background: "#fff"
           }}
+          className="workflow-list-wrapper"
         >
           {data.workflow && data.workflow.length > 0 ? (
             <div>
@@ -100,10 +101,13 @@ class WorkflowList extends Component {
 class WorkflowItem extends React.Component {
   state = {
     realtedWorkflow: null,
-    showRelatedWorkflow: false
+    showRelatedWorkflow: false,
+    opened: false
   };
 
   componentDidMount = () => {
+    console.log(this.props);
+
     this.setState({ relatedWorkflow: this.getRelatedTypes() });
   };
 
@@ -144,6 +148,13 @@ class WorkflowItem extends React.Component {
     this.setState({ showRelatedWorkflow: !this.state.showRelatedWorkflow });
   };
 
+  onOpen = () => {
+    this.setState({ opened: true });
+  };
+  onClose = () => {
+    this.setState({ opened: false });
+  };
+
   render = () => {
     let that = this;
 
@@ -152,7 +163,11 @@ class WorkflowItem extends React.Component {
     const isChild = this.props.workflow.parent === null ? true : false;
 
     return (
-      <div className="workflow-list-item">
+      <div
+        className={
+          "workflow-list-item " + (this.state.opened ? "shadow-2" : "")
+        }
+      >
         <div className="collapse-wrapper">
           <Collapsible
             trigger={
@@ -160,11 +175,14 @@ class WorkflowItem extends React.Component {
                 <WorkflowHeader
                   workflow={this.props.workflow}
                   statusType={statusType}
+                  kind={this.props.kinds}
                 />
               </div>
             }
             lazyRender={true}
             transitionTime={200}
+            onOpen={this.onOpen}
+            onClose={this.onClose}
           >
             <div className="lc-card">
               <WorkflowBody
@@ -180,11 +198,11 @@ class WorkflowItem extends React.Component {
 
           {hasChildren ? (
             <span
-              className="child-workflow-expander text-anchor"
+              className="child-workflow-expander text-anchor "
               onClick={this.expandChildWorkflow}
               title="Show child workflow"
             >
-              <i className="material-icons">
+              <i className="material-icons" style={{ verticalAlign: "middle" }}>
                 {this.state.showRelatedWorkflow ? "remove" : "add"}
               </i>
             </span>

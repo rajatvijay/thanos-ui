@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Divider } from "antd";
+import { Icon, Divider, Badge } from "antd";
 import { connect } from "react-redux";
 import { workflowFiltersActions, workflowKindActions } from "../../actions";
 import _ from "lodash";
@@ -47,7 +47,7 @@ class WorkflowFilterTop extends Component {
           _.isEmpty(stepgroupdef_counts) ? (
             <div className="text-center text-grey">Empty workflow def</div>
           ) : (
-            <Scrollbars style={{ width: "100%" }} autoHeight>
+            <Scrollbars style={{ width: "100%", height: "110px" }} autoHide>
               <div>
                 <ul className="filter-top-list--disabel filter-top-horizontal ant-menu ant-menu-light ant-menu-root ant-menu-horizontal">
                   {_.map(stepgroupdef_counts, function(item, index) {
@@ -63,32 +63,28 @@ class WorkflowFilterTop extends Component {
                         onClick={that.handleClick.bind(that, item)}
                       >
                         <div>
-                          <i className="material-icons text-metal">
-                            {item.icon ? item.icon : "panorama_fish_eye"}
-                          </i>
-                          <br />
                           <span
-                            className="group text-metal "
+                            className="group "
                             style={{ display: "inlineBlock" }}
                           >
                             {item.name}&nbsp;
                           </span>
-                          <Divider
-                            style={{ marginTop: "8px", marginBottom: "8px" }}
-                          />
+
                           <div className="">
-                            <span className="" style={{ fontSize: "16px" }}>
-                              {item.count}{" "}
-                            </span>
-                            <span
-                              className=" text-red overdue"
-                              style={{ fontSize: "16px" }}
-                              title="overdue"
+                            <Badge
+                              count={
+                                item.overdue_count !== 0
+                                  ? item.overdue_count
+                                  : 0
+                              }
+                              offset={[8, 12]}
+                              title="Overdue"
+                              overflowCount={99}
                             >
-                              {item.overdue_count !== 0
-                                ? "(" + item.overdue_count + ")"
-                                : ""}
-                            </span>
+                              <span className="text-base workflow-count">
+                                {item.count}
+                              </span>
+                            </Badge>
                           </div>
                         </div>
                       </li>

@@ -155,7 +155,7 @@ class WorkflowKindFilter extends Component {
           key={i.id}
           kind={i.id}
           onClick={that.onFilterSelected.bind(this, i)}
-          style={{ paddingLeft: "24px" }}
+          style={{ paddingLeft: "30px", paddingRight: "30px" }}
         >
           <i className="material-icons icon">
             {i.icon ? i.icon : "library_books"}
@@ -448,13 +448,10 @@ class FilterSidebar extends Component {
 
     //workflow Kind list
     const menu = (
-      <Menu className="kind-menu">
+      <Menu className="kind-menu" theme="Light">
         {_.map(workflowKind, function(item, index) {
           return (
-            <Menu.Item
-              key={"key-" + index}
-              className="text-primary text-medium"
-            >
+            <Menu.Item key={"key-" + index} className="">
               <span onClick={that.clicked.bind(this, item.tag)}>
                 <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
                 {item.name}
@@ -485,26 +482,26 @@ class FilterSidebar extends Component {
 
     return (
       <Sider
-        width={250}
+        width={235}
         style={{ overflow: "auto", height: "100vh", position: "fixed" }}
-        className="aux-nav aux-nav-filter bg-primary-light"
+        className="aux-nav aux-nav-filter bg-white"
       >
         <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
-          <div className="mr-ard-md  mr-bottom-lg">
+          <div className="create-btn">
             <Dropdown overlay={menu} placement="bottomRight">
               <Button
                 type="primary"
                 size="large"
                 loading={this.props.workflowKind.loading}
-                className="shadow-2 btn-block"
+                className="shadow-2 btn-block btn-create"
               >
-                + Create <Icon type="down" />
+                Create new <Icon type="down" />
               </Button>
             </Dropdown>
           </div>
 
           <div className="filter-section section-kind">
-            <h5 className="aux-item aux-lead">Filter by workflow</h5>
+            <h5 className="aux-item aux-lead">Filter workflow type</h5>
             <WorkflowKindFilter {...this.props} />
           </div>
 
