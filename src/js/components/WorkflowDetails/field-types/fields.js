@@ -373,6 +373,7 @@ export const Select = props => {
             : props.field.definition.defaultValue
         }
         onChange={save}
+        showSearch={true}
       >
         {_.map(props.field.definition.extra, function(item, index) {
           return (
