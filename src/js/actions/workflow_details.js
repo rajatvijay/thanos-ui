@@ -26,7 +26,6 @@ function getById() {
     return { type: workflowDetailsConstants.GET_REQUEST };
   }
   function success(workflowDetails) {
-    console.log(workflowDetails);
 
     return { type: workflowDetailsConstants.GET_SUCCESS, workflowDetails };
   }

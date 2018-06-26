@@ -1,6 +1,10 @@
 import { workflowFieldConstants, workflowStepConstants } from "../constants";
 import { workflowStepService } from "../services";
 import { notification } from "antd";
+import { 
+  workflowDetailsActions, 
+  workflowActions
+} from "../actions";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -113,7 +117,12 @@ function submitStepData(payload) {
     workflowStepService
       .submitStep(payload)
       .then(
-        stepData => dispatch(success(stepData)),
+        stepData => {
+          dispatch(success(stepData));
+          if(stepData.id) { 
+            dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          }
+        },
         error => dispatch(failure(error))
       );
   };
@@ -195,7 +204,12 @@ function undoStep(payload) {
     workflowStepService
       .undoStep(payload)
       .then(
-        stepData => dispatch(success(stepData)),
+        stepData => {
+          dispatch(success(stepData))
+          if(stepData.id) {
+            dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          }
+        },
         error => dispatch(failure(error))
       );
   };

@@ -28,12 +28,41 @@ class WorkflowDetails extends Component {
     };
   }
 
+  currentActiveStep = wfd => {
+    let activeStepGroup = null;
+    let activeStep = null;
+    _.forEach(wfd.stepGroups.results, function(step_group) {
+      if(step_group.is_complete) {
+        return;
+      }
+      activeStepGroup = step_group;
+      _.forEach(step_group.steps, function(step) {
+        if(!step.completed_at && !step.is_locked) {
+          activeStep = step;
+          return false;
+        }
+      })
+      if(activeStep) {
+        return false;
+      }
+    });
+    if(!activeStepGroup) {
+      activeStepGroup = wfd.stepGroups.results[0];
+      activeStep = wfd.stepGroups.results[0].steps[0]
+    }
+    return {
+      'activeStepGroup': activeStepGroup, 
+      'activeStep': activeStep
+    } 
+  }
+
   componentWillReceiveProps = nextProps => {
     if (nextProps.workflowDetails.loading === false) {
       let wfd = nextProps.workflowDetails.workflowDetails;
       let wf_id = parseInt(this.props.match.params.id, 10);
-      let stepGroup_id = wfd.stepGroups.results[0].id;
-      let step_id = wfd.stepGroups.results[0].steps[0].id;
+      let active_step_data = this.currentActiveStep(wfd);
+      let stepGroup_id = active_step_data['activeStepGroup'].id;
+      let step_id = active_step_data['activeStep'].id;
 
       let stepTrack = {
         workflowId: wf_id,
@@ -44,6 +73,7 @@ class WorkflowDetails extends Component {
       //Get target step and group data from url.
       let params = this.props.location.search;
       let qs = this.queryStringToObject(params);
+
 
       if (!_.isEmpty(qs)) {
         this.setState({ selectedStep: qs.step, selectedGroup: qs.group });
