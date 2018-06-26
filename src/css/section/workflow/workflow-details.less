@@ -1,8 +1,8 @@
 @import url("../../utilities/variables.less");
 
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
-  background: @color-primary-light;
-  color: @color-primary;
+  //background: @color-primary-light;
+  //color: @color-text;
 }
 
 .workflow-details-container
@@ -10,12 +10,29 @@
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: @color-primary-light-detone;
-  color: @color-primary;
+  background: @color-primary;
+  color: @color-text;
   &.text-green {
-    color: @color-green;
+    //color: @color-green;
   }
 }
+
+.aux-step-sidebar {
+  .ant-menu {
+    .ant-menu-item {
+      &:-active {
+        color: @color-text
+      }
+      &:-selected{
+        color: @color-text
+      }
+      &:hover{
+        color: @color-text
+      }
+    }
+  }
+}
+
 
 .aux-nav-menu {
   overflow-x: visible !important;
@@ -23,8 +40,11 @@
 
 .ant-form.step-form .ant-form-item-label label {
   //display: block;
+  color: @color-text;
 }
 
+
+//Form componenet style
 .ant-form.step-form {
   .ant-form-item-label label {
     text-transform: uppercase;
@@ -146,7 +166,7 @@
     //.ant-menu-submenu-selected, 
     //.ant-menu-item-active 
     {
-      color: @color-metal;
+      color: @color-text;
     }
 
     .ant-menu-submenu-title .material-icons ,

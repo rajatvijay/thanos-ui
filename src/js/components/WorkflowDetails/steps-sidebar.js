@@ -12,7 +12,7 @@ const StepSidebar = props => {
     <Sider
       width={250}
       style={{ overflow: "auto", height: "100%", position: "absolute" }}
-      className="aux-nav aux-nav-menu bg-primary-light"
+      className="aux-nav aux-nav-menu aux-step-sidebar"
     >
       {props.loading || props.step2 === null ? (
         <div className="text-center" style={{ fontSize: 24 }}>
@@ -45,7 +45,8 @@ class StepSidebarMenu extends Component {
       g,
       index
     ) {
-      if(!_.size(g.steps)) {  // checking for steps inside group
+      if (!_.size(g.steps)) {
+        // checking for steps inside group
         return null;
       }
       return (
@@ -53,8 +54,8 @@ class StepSidebarMenu extends Component {
           key={"sub-" + g.id}
           className={
             !g.completed
-              ? g.overdue ? "text-red overdue" : "text-metal "
-              : "text-primary completed"
+              ? g.overdue ? "text-red overdue" : "text-light "
+              : "text-base completed text-medium"
           }
           title={
             <span>
@@ -75,24 +76,22 @@ class StepSidebarMenu extends Component {
     let steps = _.map(data, function(s, key) {
       // console.log('--------------------------------------------------f')
       // console.log(s)
-      let icon_cls = 'panorama_fish_eye';
-      if(s.completed_at) {
-        icon_cls = 'check_circle';
-      } else if(s.is_locked) {
-        icon_cls = 'lock'
+      let icon_cls = "panorama_fish_eye";
+      if (s.completed_at) {
+        icon_cls = "check_circle";
+      } else if (s.is_locked) {
+        icon_cls = "lock";
       }
       return (
         <Menu.Item
           key={group_id + "_" + s.id}
           className={
             s.completed_at === null
-              ? s.overdue ? "text-red overdue" : "text-metal"
-              : "text-primary completed"
+              ? s.overdue ? "text-red overdue" : "text-light"
+              : "text-base completed text-medium"
           }
         >
-          <i className="material-icons t-14 pd-right-sm">
-            {icon_cls}
-          </i>
+          <i className="material-icons t-14 pd-right-sm">{icon_cls}</i>
           {s.name}
         </Menu.Item>
       );

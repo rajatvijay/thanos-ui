@@ -7,14 +7,17 @@ import {
   Dropdown,
   Badge,
   Popover,
-  List
+  List,
+  Avatar
 } from "antd";
-import { configActions } from "../../actions";
+import { configActions, logout } from "../../actions";
 import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
 
 const { Header } = Layout;
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 const content = (
   <div className="" style={{ maxWidth: "300px", maxHeight: "500px" }}>
@@ -76,9 +79,19 @@ class NavTop extends Component {
     this.props.dispatch(configActions.getConfig());
   };
 
+  onLogout(key) {
+    console.log("key-----");
+    console.log(key);
+
+    this.props.dispatch(logout());
+  }
+
   render = () => {
     let that = this;
+    let user = this.props.authentication.user;
 
+    console.log("user-----------------------");
+    console.log(user);
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -119,12 +132,26 @@ class NavTop extends Component {
                   trigger="click"
                 >
                   <Badge count={5}>
-                    <i className="material-icons text-primary text-middle">
+                    <i className="material-icons text-base text-middle">
                       notifications
                     </i>
                   </Badge>
                 </Popover>
               </Menu.Item>
+
+              <SubMenu
+                title={
+                  <span>
+                    <Avatar>{user.first_name.charAt(0)}</Avatar>
+                  </span>
+                }
+                onClick={this.onLogout.bind(this, "key")}
+              >
+                <Menu.Item key="setting:2" disabled>
+                  Profile
+                </Menu.Item>
+                <Menu.Item key="setting:1">Logout</Menu.Item>
+              </SubMenu>
             </Menu>
           </Header>
         </div>

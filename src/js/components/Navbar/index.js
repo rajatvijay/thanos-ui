@@ -7,7 +7,7 @@ class Navbar extends Component {
     return (
       <div className="navbar" id="navbar">
         <NavTop />
-        <NavLeft />
+        {/*<NavLeft />*/}
       </div>
     );
   }
