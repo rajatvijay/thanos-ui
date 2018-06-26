@@ -262,7 +262,7 @@ class StepBodyForm extends Component {
         <Row>
           <Col span="18">{this.getStepStatus(this.props.stepData)}</Col>
           <Col span="6" className="text-right">
-            {this.props.stepData.completed_at ? null : (
+            {this.props.stepData.completed_at || this.props.stepData.is_locked ? null : (
               <FormItem>
                 <Button type="primary" htmlType="submit">
                   Submit
