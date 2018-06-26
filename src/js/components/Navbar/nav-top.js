@@ -80,9 +80,6 @@ class NavTop extends Component {
   };
 
   onLogout(key) {
-    console.log("key-----");
-    console.log(key);
-
     this.props.dispatch(logout());
   }
 
@@ -90,8 +87,6 @@ class NavTop extends Component {
     let that = this;
     let user = this.props.authentication.user;
 
-    console.log("user-----------------------");
-    console.log(user);
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
