@@ -120,22 +120,6 @@ const HeaderWorkflowGroup = props => {
 };
 
 const HeaderOptions = props => {
-  const getStatusColor = status => {
-    status = status.toUpperCase();
-    switch (status) {
-      case "IN PROGRESS":
-        return "orange";
-      case "EXPIRED":
-        return "red";
-      case "STALLED":
-        return "grey";
-      case "COMPLETED":
-        return "green";
-      default:
-        return "grey";
-    }
-  };
-
   const menu = (
     <Menu>
       {props.statusType
@@ -155,27 +139,6 @@ const HeaderOptions = props => {
           {props.workflow.status.label}
           <Icon className="pd-left-sm" type="down" style={{ fontSize: 11 }} />
         </Button>
-
-        {/*<Tag
-                  color={getStatusColor(
-                    props.workflow.status ? props.workflow.status.label : "In Progress "
-                  )}
-                >
-                  {props.workflow.status ? (
-                    <span>
-                      {props.workflow.status.label}{" "}
-                      <Icon
-                        className="pd-left-sm"
-                        type="down"
-                        style={{ fontSize: 11 }}
-                      />
-                    </span>
-                  ) : (
-                    <span>
-                      In Progress{" "}
-                    </span>
-                  )}
-                </Tag>*/}
       </Dropdown>
     </Col>
   );
@@ -184,8 +147,6 @@ const HeaderOptions = props => {
 const getIcon = (id, kinds) => {
   let returnKind = _.filter(kinds.workflowKind, ["id", id]);
   let icon = returnKind[0].icon;
-
-  console.log(icon, returnKind);
 
   if (icon) {
     return icon;
@@ -269,17 +230,19 @@ export const WorkflowBody = props => {
         <Col span="12" className="text-right text-light small">
           <Moment format="YYYY/MM/DD">{props.workflow.created_at}</Moment>{" "}
           <b>&middot;</b> #{props.workflow.id} <b>&middot;</b>{" "}
-          {!props.workflow.parent ? (
-            <Dropdown
-              overlay={childWorkflowMenu}
-              className="child-workflow-dropdown"
-              placement="bottomRight"
-            >
-              <a className="ant-dropdown-link ant-btn" href="#">
-                Add child workflow{" "}
-                <i className="material-icons t-14">keyboard_arrow_down</i>
-              </a>
-            </Dropdown>
+          {!props.isChild ? (
+            props.realtedKind.length !== 0 ? (
+              <Dropdown
+                overlay={childWorkflowMenu}
+                className="child-workflow-dropdown"
+                placement="bottomRight"
+              >
+                <a className="ant-dropdown-link ant-btn" href="#">
+                  Add child workflow{" "}
+                  <i className="material-icons t-14">keyboard_arrow_down</i>
+                </a>
+              </Dropdown>
+            ) : null
           ) : null}
         </Col>
       </Row>

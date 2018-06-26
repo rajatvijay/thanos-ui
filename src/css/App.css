@@ -2778,7 +2778,8 @@ html {
   border-color: #17ead9;
 }
 .ant-select-dropdown-menu-item:hover,
-.ant-select-dropdown-menu-item-active {
+.ant-select-dropdown-menu-item-active,
+.ant-cascader-menu-item:hover {
   background-color: #17ead9;
 }
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
@@ -3252,6 +3253,9 @@ html {
   vertical-align: middle;
   padding-right: 8px;
 }
+.aux-nav-filter .aux-lead {
+  text-transform: capitalize;
+}
 .aux-nav-filter .ant-form-item {
   margin-bottom: 8px;
 }
@@ -3281,7 +3285,7 @@ html {
   margin: 0 54px;
   background-color: transparent;
   border-bottom: 1px solid #343b4c;
-  padding-bottom: 15px;
+  padding-bottom: 30px;
 }
 .filter-top .filter-top-list {
   width: 100%;

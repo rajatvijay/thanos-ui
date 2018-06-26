@@ -47,6 +47,7 @@ class WorkflowList extends Component {
               <div className="workflow-list">
                 {_.map(data.workflow, function(item, index) {
                   let proccessedData = getProcessedData(item.step_groups);
+
                   return (
                     <WorkflowItem
                       pData={proccessedData}
@@ -106,8 +107,6 @@ class WorkflowItem extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props);
-
     this.setState({ relatedWorkflow: this.getRelatedTypes() });
   };
 
@@ -186,6 +185,7 @@ class WorkflowItem extends React.Component {
           >
             <div className="lc-card">
               <WorkflowBody
+                isChild={this.props.isChild}
                 showRelatedType={this.showRelatedType}
                 realtedKind={this.state.relatedWorkflow}
                 onChildSelect={this.onChildSelect}
@@ -215,6 +215,7 @@ class WorkflowItem extends React.Component {
               let proccessedData = getProcessedData(item.step_groups);
               return (
                 <WorkflowItem
+                  isChild={true}
                   pData={proccessedData}
                   workflow={item}
                   key={index}
