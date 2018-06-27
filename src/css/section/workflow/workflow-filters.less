@@ -11,17 +11,28 @@
   .ant-menu-item-selected {
 }
 
+.waiting-filter-warpper {
+  overflow: hidden;
+}
+
 .aux-nav-filter {
   .create-btn {
-    margin: 85px 30px 40px;
+    margin: 126px 45px 30px;
     border-bottom: 2px solid #f4f5f7;
+  }
+
+  .filter-divider {
+    margin: 30px 45px 23px;
+    border-bottom: solid 3px rgba(82, 95, 127, 0.05);
   }
 
   .filter-section {
     margin-bottom: 40px;
     .ant-menu-item {
-      line-height: 30px;
-      height: 30px;
+      line-height: 26px;
+      height: 26px;
+      padding-left: 45px;
+      padding-right: 45px;
     }
   }
   .aux-lead-secondary {
@@ -34,6 +45,12 @@
   }
   .aux-lead {
     text-transform: capitalize;
+    padding-right: 45px;
+    padding-left: 45px;
+    &.filter-title {
+      font-size: 14px;
+      font-weight: normal;
+    }
   }
 }
 
@@ -89,7 +106,7 @@
   margin: 0 54px;
   background-color: transparent;
   border-bottom: 1px solid @color-text;
-  padding-bottom: 30px;
+  padding-bottom: 40px;
   //border-radius: 4px;
 
   .filter-top-list {
@@ -142,7 +159,10 @@
       }
     }
     .workflow-count {
-      font-weight: 500;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol";
+      font-weight: 400;
       font-size: 34px;
     }
   }

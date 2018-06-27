@@ -10,7 +10,7 @@ import _ from "lodash";
 class Workflow extends Component {
   constructor(props) {
     super(props);
-    this.state = { sidebar: false, workflowId: null };
+    this.state = { sidebar: false, workflowId: null, showWaitingFitler: false };
   }
 
   componentDidMount = () => {
@@ -58,6 +58,10 @@ class Workflow extends Component {
     );
   };
 
+  toggleWaitingFilter = () => {
+    this.setState({ showWaitingFitler: !this.state.showWaitingFitler });
+  };
+
   render = () => {
     // let kind = this.props.workflowKind.workflowKind;
     // let kindMenu = <Menu>{_.map(kind, function(item, index){
@@ -71,11 +75,21 @@ class Workflow extends Component {
       <Layout className="workflow-container inner-container">
         <FilterSidebar />
 
-        <Layout style={{ marginLeft: 235, minHeight: "100vh" }}>
+        <Layout style={{ marginLeft: 250, minHeight: "100vh" }}>
           <div className="section-top ">
             <Row>
               <Col span="12" className="waiting-section">
-                Waiting on <i className="material-icons">keyboard_arrow_down</i>
+                <span
+                  className="waiting-filter-trigger text-anchor"
+                  onClick={this.toggleWaitingFilter}
+                >
+                  Waiting on{" "}
+                  <i className="material-icons">
+                    {this.state.showWaitingFitler
+                      ? "keyboard_arrow_down"
+                      : "keyboard_arrow_up"}
+                  </i>
+                </span>
               </Col>
               <Col span="12" className="text-right export-section">
                 <Dropdown overlay={this.getExportList()}>
@@ -87,9 +101,16 @@ class Workflow extends Component {
             </Row>
           </div>
 
-          {this.props.workflowFilters.kind.filterValue !== null ? (
-            <WorkflowFilterTop {...this.props} />
-          ) : null}
+          <div
+            className={
+              "waiting-filter-warpper animated " +
+              (this.state.showWaitingFitler ? " grow " : " shrink")
+            }
+          >
+            {this.props.workflowFilters.kind.filterValue !== null ? (
+              <WorkflowFilterTop {...this.props} />
+            ) : null}
+          </div>
 
           {this.props.workflow.loading ? (
             <div className="text-center text-bold mr-top-lg">

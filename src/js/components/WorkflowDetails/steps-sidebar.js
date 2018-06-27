@@ -78,7 +78,7 @@ class StepSidebarMenu extends Component {
       // console.log(s)
       let icon_cls = "panorama_fish_eye";
       if (s.completed_at) {
-        icon_cls = "check_circle";
+        icon_cls = "check_circle_outline";
       } else if (s.is_locked) {
         icon_cls = "lock";
       }

@@ -151,7 +151,7 @@ const getIcon = (id, kinds) => {
   if (icon) {
     return icon;
   } else {
-    return "folder";
+    return "folder_open";
   }
 };
 
@@ -177,7 +177,7 @@ export const WorkflowHeader = props => {
             >
               {props.kind === ""
                 ? getIcon(props.workflow.definition.kind, props.kind)
-                : "folder"}
+                : "folder_open"}
             </i>
           )}
         </Col>
@@ -313,7 +313,7 @@ const StepItem = props => {
   let overdue = props.stepData.overdue ? true : false;
   let icon_cls = "";
   if (step_complete) {
-    icon_cls = "check_circle";
+    icon_cls = "check_circle_outline";
   } else if (props.stepData.is_locked) {
     icon_cls = "lock";
   } else if (overdue) {
