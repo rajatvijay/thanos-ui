@@ -6,6 +6,7 @@ import _ from "lodash";
 import { calculatedDate } from "./calculated-data";
 import Collapsible from "react-collapsible";
 import { connect } from "react-redux";
+import moment from "moment";
 
 const { Content } = Layout;
 const { getProcessedData } = calculatedDate;
@@ -32,6 +33,54 @@ class WorkflowList extends Component {
       page = parseInt(page[1], 10) + 1;
     }
 
+    var occurrenceDay = function(occurrence) {
+      console.log("occurrence-----");
+      console.log(occurrence);
+
+      var today = moment().startOf("day");
+      var thisWeek = moment().startOf("week");
+      var thisMonth = moment().startOf("month");
+
+      if (moment(occurrence.created_at).isAfter(today)) {
+        return "Today";
+      }
+      if (moment(occurrence.created_at).isAfter(thisWeek)) {
+        return "This week";
+      }
+      if (moment(occurrence.created_at).isAfter(thisMonth)) {
+        return "This month";
+      }
+      return moment(occurrence.created_at).format("MMM");
+    };
+
+    var result = _.groupBy(data.workflow, occurrenceDay);
+
+    console.log(result);
+
+    var ListCompletes = _.map(result, function(list, key, index) {
+      var listL = _.map(list, function(item, index) {
+        let proccessedData = getProcessedData(item.step_groups);
+
+        return (
+          <WorkflowItem
+            pData={proccessedData}
+            workflow={item}
+            key={index}
+            kinds={that.props.workflowKind}
+            dispatch={that.props.dispatch}
+            workflowFilterType={that.props.workflowFilterType}
+          />
+        );
+      });
+
+      return (
+        <span key={key} className="month-group">
+          <div className={"h6 grouping-head " + key}>{key}</div>
+          <div className="paper">{listL}</div>
+        </span>
+      );
+    });
+
     return (
       <div>
         <Content
@@ -44,22 +93,7 @@ class WorkflowList extends Component {
         >
           {data.workflow && data.workflow.length > 0 ? (
             <div>
-              <div className="workflow-list">
-                {_.map(data.workflow, function(item, index) {
-                  let proccessedData = getProcessedData(item.step_groups);
-
-                  return (
-                    <WorkflowItem
-                      pData={proccessedData}
-                      workflow={item}
-                      key={index}
-                      kinds={that.props.workflowKind}
-                      dispatch={that.props.dispatch}
-                      workflowFilterType={that.props.workflowFilterType}
-                    />
-                  );
-                })}
-              </div>
+              <div className="workflow-list">{ListCompletes}</div>
 
               {/* <Collapse accordion className="workflow-list ">
                                      {_.map(data.workflow, function(item, index) {
@@ -164,7 +198,7 @@ class WorkflowItem extends React.Component {
     return (
       <div
         className={
-          "workflow-list-item " + (this.state.opened ? "shadow-2" : "")
+          "workflow-list-item " + (this.state.opened ? "shadow-2 opened" : "")
         }
       >
         <div className="collapse-wrapper">

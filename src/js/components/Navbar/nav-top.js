@@ -4,11 +4,14 @@ import {
   Menu,
   Icon,
   Button,
+  Input,
   Dropdown,
   Badge,
   Popover,
   List,
-  Avatar
+  Avatar,
+  Row,
+  Col
 } from "antd";
 import { configActions, logout } from "../../actions";
 import logo from "../../../images/client-logo/dnb_logo.png";
@@ -101,53 +104,77 @@ class NavTop extends Component {
               boxShadow: "0 1px 4px 0 rgba(0,0,0,0.09)"
             }}
           >
-            <span className="logo" style={{ float: "left" }}>
-              <a href="/">
-                {!this.props.config.loading && this.props.config.logo ? (
-                  <img
-                    alt={this.props.config.name}
-                    src={this.props.config.logo}
+            <Row>
+              {/*logo wrapper*/}
+              <Col span={4}>
+                <span className="logo" style={{ float: "left" }}>
+                  <a href="/">
+                    {!this.props.config.loading && this.props.config.logo ? (
+                      <img
+                        alt={this.props.config.name}
+                        src={this.props.config.logo}
+                      />
+                    ) : (
+                      <img alt={this.props.config.name} src={logo} />
+                    )}
+                  </a>
+                </span>
+              </Col>
+
+              <Col span={8}>
+                <div className="search-box">
+                  <Input
+                    placeholder="Search for workflow"
+                    prefix={
+                      <Icon
+                        type="search"
+                        style={{ color: "rgba(0,0,0,.25)" }}
+                      />
+                    }
+                    //suffix={suffix}
+                    //value={userName}
+                    //onChange={this.onChangeUserName}
+                    //ref={node => this.userNameInput = node}
                   />
-                ) : (
-                  <img alt={this.props.config.name} src={logo} />
-                )}
-              </a>
-            </span>
-
-            <Menu
-              theme="light"
-              mode="horizontal"
-              style={{ lineHeight: "64px", float: "right" }}
-            >
-              <Menu.Item key="2">
-                <Popover
-                  placement="bottomRight"
-                  title={"Notifications"}
-                  content={content}
-                  trigger="click"
+                </div>
+              </Col>
+              <Col span={12}>
+                <Menu
+                  theme="light"
+                  mode="horizontal"
+                  style={{ lineHeight: "64px", float: "right" }}
                 >
-                  <Badge count={5}>
-                    <i className="material-icons text-base text-middle">
-                      notifications
-                    </i>
-                  </Badge>
-                </Popover>
-              </Menu.Item>
+                  {/*<Menu.Item key="2">
+                      <Popover
+                        placement="bottomRight"
+                        title={"Notifications"}
+                        content={content}
+                        trigger="click"
+                      >
+                        <Badge count={5}>
+                          <i className="material-icons text-base text-middle">
+                            notifications
+                          </i>
+                        </Badge>
+                      </Popover>
+                    </Menu.Item>*/}
 
-              <SubMenu
-                title={
-                  <span>
-                    <Avatar>{user.first_name.charAt(0)}</Avatar>
-                  </span>
-                }
-                onClick={this.onLogout.bind(this, "key")}
-              >
-                <Menu.Item key="setting:2" disabled>
-                  Profile
-                </Menu.Item>
-                <Menu.Item key="setting:1">Logout</Menu.Item>
-              </SubMenu>
-            </Menu>
+                  <SubMenu
+                    title={
+                      <span>
+                        <Avatar>{user.first_name.charAt(0)}</Avatar>
+                      </span>
+                    }
+                    onClick={this.onLogout.bind(this, "key")}
+                  >
+                    <Menu.Item key="setting:2" disabled>
+                      Profile
+                    </Menu.Item>
+                    <Menu.Item key="setting:1">Logout</Menu.Item>
+                  </SubMenu>
+                </Menu>
+              </Col>
+            </Row>
           </Header>
         </div>
       </div>

@@ -155,7 +155,6 @@ class WorkflowKindFilter extends Component {
           key={i.id}
           kind={i.id}
           onClick={that.onFilterSelected.bind(this, i)}
-          style={{ paddingLeft: "30px", paddingRight: "30px" }}
         >
           <i className="material-icons icon">
             {i.icon ? i.icon : "library_books"}
@@ -482,7 +481,7 @@ class FilterSidebar extends Component {
 
     return (
       <Sider
-        width={235}
+        width={250}
         style={{ overflow: "auto", height: "100vh", position: "fixed" }}
         className="aux-nav aux-nav-filter bg-white"
       >
@@ -499,16 +498,22 @@ class FilterSidebar extends Component {
               </Button>
             </Dropdown>
           </div>
+          <div className="filter-divider" />
 
           <div className="filter-section section-kind">
             <h5 className="aux-item aux-lead">Filter workflow type</h5>
             <WorkflowKindFilter {...this.props} />
           </div>
 
+          <div className="filter-divider" />
+
           <div className="filter-section">
             {_.map(filterTypeSelect, function(f, index) {
               return (
-                <div className="aux-item aux-lead" key={"filter-2-" + index}>
+                <div
+                  className="aux-item aux-lead filter-title"
+                  key={"filter-2-" + index}
+                >
                   <WorkflowFilter
                     label={f.filterName}
                     placeholder={f.filterType}
@@ -521,7 +526,7 @@ class FilterSidebar extends Component {
           </div>
 
           <div className="filter-section">
-            <h5 className="aux-item aux-lead">Advanced filter</h5>
+            <h5 className="aux-item aux-lead filter-title">Advanced filter</h5>
             <div className="aux-item aux-lead">
               <WrappedAdvancedFilterForm {...this.props} />
             </div>
