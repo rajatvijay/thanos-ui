@@ -47,7 +47,7 @@ class WorkflowFilterTop extends Component {
           _.isEmpty(stepgroupdef_counts) ? (
             <div className="text-center text-grey">Empty workflow def</div>
           ) : (
-            <Scrollbars style={{ width: "100%", height: "110px" }} autoHide>
+            <Scrollbars style={{ width: "100%", height: "115px" }} autoHide>
               <div>
                 <ul className="filter-top-list--disabel filter-top-horizontal ant-menu ant-menu-light ant-menu-root ant-menu-horizontal">
                   {_.map(stepgroupdef_counts, function(item, index) {

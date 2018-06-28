@@ -44,7 +44,7 @@ const HeaderTitle = props => {
   return (
     <Col span={5}>
       <Link
-        to={"instances/" + props.workflow.id + "/"}
+        to={"/workflows/instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
         <Popover
@@ -237,7 +237,7 @@ export const WorkflowBody = props => {
                 className="child-workflow-dropdown"
                 placement="bottomRight"
               >
-                <a className="ant-dropdown-link ant-btn" href="#">
+                <a className="ant-dropdown-link ant-btn btn-cyan" href="#">
                   Add child workflow{" "}
                   <i className="material-icons t-14">keyboard_arrow_down</i>
                 </a>
@@ -283,7 +283,7 @@ const StepGroupList = props => {
                   <i className="material-icons mr-right-lg ">
                     {group.definition.icon}
                   </i>
-                  <span className="text-underline pd-ard-sm">
+                  <span className="text-underline pd-ard-sm t-14">
                     {group.definition.name}
                   </span>
                 </span>

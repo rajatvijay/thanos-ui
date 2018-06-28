@@ -3,10 +3,10 @@
 .workflow-container {
   background: #f6f7f9;
   .workflow-list-wrapper {
-    padding: 50px 54px;
+    padding: 50px 78px;
   }
   .section-top {
-    margin: 54px 54px 20px;
+    margin: 54px 78px 20px;
     .waiting-section {
       i {
         font-size: 16px;
@@ -23,7 +23,7 @@
 .workflow-list {
   .grouping-head {
     font-size: 14px;
-    font-weight: 900;
+    font-weight: 700;
     color: @color-text;
     margin-bottom: 12px;
   }
@@ -67,23 +67,26 @@
   .child-workflow-wrapper {
     padding-left: 30px;
   }
-  .workflow-list-item {
-    transition: margin 0.3s ease;
-    &.opened {
-      margin: 20px -20px;
-    }
-
-    // &.unOpened {
-    //   margin: 20px -20px;
-    // }
-  }
-
   .paper {
     margin-bottom: 58px;
-    .Collapsible {
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
-      margin-bottom: 0;
-      border-bottom: 1px solid @color-grey-light;
+    .workflow-list-item {
+      transition: margin 0.3s ease;
+      .Collapsible {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+        margin-bottom: 0;
+        border-bottom: 1px solid @color-grey-light;
+      }
+      &.opened {
+        margin: 20px -20px;
+        box-shadow:0 2px 6px 0 rgba(0, 0, 0, 0.15) .Collapsible {
+          border: none;
+        }
+      }
+    }
+    .workflow-item:last-child {
+      .Collapsible {
+        border: none;
+      }
     }
   }
 }

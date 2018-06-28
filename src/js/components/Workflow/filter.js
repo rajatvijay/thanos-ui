@@ -302,19 +302,6 @@ class WorkflowAdvFilter extends Component {
     return (
       <Form>
         <div>
-          <div className="adv-filter-list">
-            {_.map(this.state.filterList, function(i, index) {
-              return (
-                <div
-                  className="adv-filter-item"
-                  key={index}
-                  onClick={that.removeFilterItem.bind(that, index)}
-                >
-                  where <b>{i.field}</b> {i.operator} to <b>{i.value}</b>
-                </div>
-              );
-            })}
-          </div>
           <div>
             <FormItem
               hasFeedback={
@@ -393,6 +380,20 @@ class WorkflowAdvFilter extends Component {
           >
             Add Filter
           </Button>
+
+          <div className="adv-filter-list">
+            {_.map(this.state.filterList, function(i, index) {
+              return (
+                <div
+                  className="adv-filter-item"
+                  key={index}
+                  onClick={that.removeFilterItem.bind(that, index)}
+                >
+                  where <b>{i.field}</b> {i.operator} to <b>{i.value}</b>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </Form>
     );
@@ -400,6 +401,8 @@ class WorkflowAdvFilter extends Component {
 }
 
 class FilterSidebar extends Component {
+  state = { showAdvFilters: false };
+
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
     if (this.props.workflowFilters !== nextProps.workflowFilters) {
@@ -423,6 +426,10 @@ class FilterSidebar extends Component {
       name: "Draft"
     };
     this.props.dispatch(createWorkflow(payload));
+  };
+
+  toggleAdvFilters = () => {
+    this.setState({ showAdvFilters: !this.state.showAdvFilters });
   };
 
   render = () => {
@@ -507,31 +514,50 @@ class FilterSidebar extends Component {
 
           <div className="filter-divider" />
 
-          <div className="filter-section">
-            {_.map(filterTypeSelect, function(f, index) {
-              return (
-                <div
-                  className="aux-item aux-lead filter-title"
-                  key={"filter-2-" + index}
-                >
-                  <WorkflowFilter
-                    label={f.filterName}
-                    placeholder={f.filterType}
-                    childeren={f.results}
-                    {...that.props}
-                  />
-                </div>
-              );
-            })}
+          <div>
+            <h5
+              className="aux-item aux-lead  text-anchor"
+              onClick={this.toggleAdvFilters}
+            >
+              Advanced filter{" "}
+              <i className="material-icons t-14">
+                {this.state.showAdvFilters
+                  ? "keyboard_arrow_down"
+                  : "keyboard_arrow_up  "}
+              </i>
+            </h5>
           </div>
 
-          <div className="filter-section">
-            <h5 className="aux-item aux-lead filter-title">Advanced filter</h5>
-            <div className="aux-item aux-lead">
-              <WrappedAdvancedFilterForm {...this.props} />
+          <div
+            className={
+              "animated " + (this.state.showAdvFilters ? "fadeIn" : "fadeOut")
+            }
+          >
+            <div className="filter-section">
+              {_.map(filterTypeSelect, function(f, index) {
+                return (
+                  <div
+                    className="aux-item aux-lead filter-title"
+                    key={"filter-2-" + index}
+                  >
+                    <WorkflowFilter
+                      label={f.filterName}
+                      placeholder={f.filterType}
+                      childeren={f.results}
+                      {...that.props}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="filter-section">
+              <h5 className="aux-item aux-lead filter-title">Select Field</h5>
+              <div className="aux-item aux-lead">
+                <WrappedAdvancedFilterForm {...this.props} />
+              </div>
             </div>
           </div>
-
           <br />
           <br />
           <br />
@@ -539,6 +565,11 @@ class FilterSidebar extends Component {
           <br />
           <br />
           <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <div style={{ height: "150px" }} />
         </Scrollbars>
       </Sider>
     );

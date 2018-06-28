@@ -17,7 +17,7 @@
 
 .aux-nav-filter {
   .create-btn {
-    margin: 126px 45px 30px;
+    margin: 45px 45px 30px;
     border-bottom: 2px solid #f4f5f7;
   }
 
@@ -45,7 +45,7 @@
   }
   .aux-lead {
     text-transform: capitalize;
-    padding-right: 45px;
+    padding-right: 30px;
     padding-left: 45px;
     &.filter-title {
       font-size: 14px;
@@ -103,7 +103,7 @@
 .filter-top {
   position: relative;
   overflow-x: hidden;
-  margin: 0 54px;
+  margin: 0 78px;
   background-color: transparent;
   border-bottom: 1px solid @color-text;
   padding-bottom: 40px;
@@ -144,11 +144,13 @@
       box-shadow: 0 1px 5px rgba(0, 0, 0, 0.06), 0 1px 6px rgba(0, 0, 0, 0.12);
       background-color: @color-white;
       color: @color-text;
+      border: 1px solid @color-white;
+      height: 110px;
       &:hover,
       &.ant-menu-item-selected {
         box-shadow: none;
         background-color: #ecedf1;
-        border-bottom: none;
+        border: 1px solid @color-text;
       }
       .group {
         margin-bottom: 10px;
@@ -180,7 +182,7 @@
       min-width: 100px;
       float: none !important;
       display: inline-block;
-      margin-right: 10px;
+      margin-right: 6px;
     }
 
     > .ant-menu-item-active .count {
@@ -199,10 +201,11 @@
 }
 
 .adv-filter-list {
+  margin-top: 20px;
   .adv-filter-item {
     cursor: pointer;
     font-size: 12px;
-    background: @color-primary-light-detone;
+    background: #f2f5fa; //@color-primary-light-detone;
     border-radius: 3px;
     word-break: break-word;
     padding: 6px 23px 6px 14px;
