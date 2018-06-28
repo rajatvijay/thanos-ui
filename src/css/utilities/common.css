@@ -40,3 +40,6 @@ a {
 .ant-pagination-item:focus {
   border-color: @color-primary;
 }*/
+body {
+  color: #343b4c;
+}

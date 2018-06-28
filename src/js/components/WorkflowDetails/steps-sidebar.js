@@ -41,6 +41,9 @@ class StepSidebarMenu extends Component {
     let that = this;
     let data2 = getProcessedData(data);
 
+    console.log("data------sidebar");
+    console.log(data);
+
     return _.map(_.orderBy(data2, [{ id: Number }], ["asc"]), function(
       g,
       index

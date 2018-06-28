@@ -586,8 +586,8 @@ template {
   padding-right: 30px;
 }
 .aux-lead {
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: 14px;
+  margin-bottom: 14px;
   color: #343b4c;
   font-size: 18px;
   font-weight: 400;
@@ -666,6 +666,7 @@ template {
   box-shadow: none;
 }
 .ant-btn.btn-create {
+  font-size: 18px;
   background: #17ead9;
   /* Old browsers */
   background: -moz-linear-gradient(left, #17ead9 0%, #6078ea 100%);
@@ -687,6 +688,10 @@ template {
 .ant-btn.btn-create:active {
   border-color: none;
   box-shadow: none;
+}
+.ant-btn.btn-cyan {
+  background-color: #4af6e6;
+  color: #343b4c;
 }
 .ant-dropdown-button button,
 .ant-dropdown-button button:hover {
@@ -865,6 +870,7 @@ template {
 }
 .navbar-top .ant-layout-header {
   padding-left: 30px;
+  padding-right: 78px;
 }
 .navbar-top .logo img {
   max-width: 200px;
@@ -873,11 +879,19 @@ template {
 }
 .navbar-top .search-box {
   max-width: 300px;
-  margin-left: 30px;
+  margin-left: 27px;
 }
 .navbar-top .search-box .ant-input {
   border-radius: 0;
   border: none;
+  font-size: 18px;
+}
+.navbar-top .search-box .ant-input-affix-wrapper .ant-input:not(:first-child) {
+  padding-left: 40px;
+}
+.navbar-top .search-box .anticon {
+  font-size: 18px;
+  color: #343b4c;
 }
 .navbar-top .ant-menu-horizontal .ant-menu-submenu:hover,
 .navbar-top .ant-menu-horizontal .ant-menu-submenu-selected,
@@ -942,10 +956,10 @@ template {
   background: #f6f7f9;
 }
 .workflow-container .workflow-list-wrapper {
-  padding: 50px 54px;
+  padding: 50px 78px;
 }
 .workflow-container .section-top {
-  margin: 54px 54px 20px;
+  margin: 54px 78px 20px;
 }
 .workflow-container .section-top .waiting-section i {
   font-size: 16px;
@@ -957,7 +971,7 @@ template {
 }
 .workflow-list .grouping-head {
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
   color: #343b4c;
   margin-bottom: 12px;
 }
@@ -997,19 +1011,33 @@ template {
 .workflow-list .child-workflow-wrapper {
   padding-left: 30px;
 }
-.workflow-list .workflow-list-item {
-  transition: margin 0.3s ease;
-}
-.workflow-list .workflow-list-item.opened {
-  margin: 20px -20px;
-}
 .workflow-list .paper {
   margin-bottom: 58px;
 }
-.workflow-list .paper .Collapsible {
+.workflow-list .paper .workflow-list-item {
+  transition: margin 0.3s ease;
+}
+.workflow-list .paper .workflow-list-item .Collapsible {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
   margin-bottom: 0;
   border-bottom: 1px solid #a0a0a0;
+}
+.workflow-list .paper .workflow-list-item.opened {
+  margin: 20px -20px;
+}
+.workflow-list
+  .paper
+  .workflow-list-item.opened
+  box-shadow:0
+  2px
+  6px
+  0
+  rgba(0, 0, 0, 0.15)
+  .Collapsible {
+  border: none;
+}
+.workflow-list .paper .workflow-item:last-child .Collapsible {
+  border: none;
 }
 .lc-card-head {
   padding: 8px 0px;
@@ -1265,7 +1293,7 @@ template {
   overflow: hidden;
 }
 .aux-nav-filter .create-btn {
-  margin: 126px 45px 30px;
+  margin: 45px 45px 30px;
   border-bottom: 2px solid #f4f5f7;
 }
 .aux-nav-filter .filter-divider {
@@ -1291,7 +1319,7 @@ template {
 }
 .aux-nav-filter .aux-lead {
   text-transform: capitalize;
-  padding-right: 45px;
+  padding-right: 30px;
   padding-left: 45px;
 }
 .aux-nav-filter .aux-lead.filter-title {
@@ -1324,7 +1352,7 @@ template {
 .filter-top {
   position: relative;
   overflow-x: hidden;
-  margin: 0 54px;
+  margin: 0 78px;
   background-color: transparent;
   border-bottom: 1px solid #343b4c;
   padding-bottom: 40px;
@@ -1364,12 +1392,14 @@ template {
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.06), 0 1px 6px rgba(0, 0, 0, 0.12);
   background-color: #fff;
   color: #343b4c;
+  border: 1px solid #fff;
+  height: 110px;
 }
 .filter-top .filter-top-horizontal .ant-menu-item:hover,
 .filter-top .filter-top-horizontal .ant-menu-item.ant-menu-item-selected {
   box-shadow: none;
   background-color: #ecedf1;
-  border-bottom: none;
+  border: 1px solid #343b4c;
 }
 .filter-top .filter-top-horizontal .ant-menu-item .group {
   margin-bottom: 10px;
@@ -1396,12 +1426,15 @@ template {
   min-width: 100px;
   float: none !important;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 6px;
+}
+.adv-filter-list {
+  margin-top: 20px;
 }
 .adv-filter-list .adv-filter-item {
   cursor: pointer;
   font-size: 12px;
-  background: #cefbf7;
+  background: #f2f5fa;
   border-radius: 3px;
   word-break: break-word;
   padding: 6px 23px 6px 14px;
@@ -1497,8 +1530,8 @@ body {
   color: #343b4c;
 }
 .animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }

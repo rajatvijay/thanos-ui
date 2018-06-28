@@ -197,9 +197,7 @@ class WorkflowItem extends React.Component {
 
     return (
       <div
-        className={
-          "workflow-list-item " + (this.state.opened ? "shadow-2 opened" : "")
-        }
+        className={"workflow-list-item " + (this.state.opened ? " opened" : "")}
       >
         <div className="collapse-wrapper">
           <Collapsible
