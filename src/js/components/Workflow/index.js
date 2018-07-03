@@ -34,7 +34,9 @@ class Workflow extends Component {
             <Menu.Item key={index}>
               <a
                 href={
-                  "http://vetted.slackcart.com/api/v1/workflow-kinds/" +
+                  "http://" +
+                  document.location.hostname.split(".")[0] +
+                  ".slackcart.com/api/v1/workflow-kinds/" +
                   item.tag +
                   "/data-export/"
                 }
@@ -93,7 +95,7 @@ class Workflow extends Component {
               </Col>
               <Col span="12" className="text-right export-section">
                 <Dropdown overlay={this.getExportList()}>
-                  <Button className="main-btn">
+                  <Button className="btn-grey">
                     <i className="material-icons">save_alt</i>
                   </Button>
                 </Dropdown>

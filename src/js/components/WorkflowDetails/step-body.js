@@ -38,18 +38,27 @@ class StepBody extends Component {
       stepData = {};
     }
 
-    var locked_tag = null
-    if(stepData.is_locked) {
+    var locked_tag = null;
+    if (stepData.is_locked) {
       let dependent_steps = stepData.definition.dependent_steps;
-      let dependent_step_name = _.map(dependent_steps, function(ds) { return ds['label'];});
-      locked_tag = <div><div data-show="true" class="ant-tag">To initiate this step, please complete the following steps first:&nbsp; 
-        <b>{dependent_step_name.join(", ")}</b></div></div>
+      let dependent_step_name = _.map(dependent_steps, function(ds) {
+        return ds["label"];
+      });
+      locked_tag = (
+        <div>
+          <div data-show="true" class="ant-tag">
+            To initiate this step, please complete the following steps
+            first:&nbsp;
+            <b>{dependent_step_name.join(", ")}</b>
+          </div>
+        </div>
+      );
     }
 
     return (
       <div className="pd-ard-lg">
         {locked_tag}
-        { locked_tag ? <br/> : null }
+        {locked_tag ? <br /> : null}
         {loading ? (
           <div className="text-center mr-top-lg">
             <Icon type={"loading"} />

@@ -405,6 +405,29 @@ class FilterSidebar extends Component {
 
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
+    //set default kind
+    if (this.props.config !== nextProps.config) {
+      console.log(nextProps);
+
+      if (nextProps.config.configuration) {
+        let defaultKind = nextProps.config.configuration.default_workflow_kind;
+        console.log("dispathcing");
+        // this.props.dispatch(
+        //   workflowFiltersActions.setFilters({
+        //     filterType: "kind",
+        //     //filterValue: defaultKind.id,
+        //     filterValue: [3],
+        //     //meta: { defaultKind}
+        //     meta: { tag: "users" }
+        //   })
+        // );
+
+        // console.log('dispathceeedd')
+        // if(defaultKind){
+        // }
+      }
+    }
+
     if (this.props.workflowFilters !== nextProps.workflowFilters) {
       this.props.dispatch(workflowActions.getAll());
     }
@@ -577,8 +600,9 @@ class FilterSidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowFilterType, workflowFilters } = state;
+  const { workflowKind, workflowFilterType, workflowFilters, config } = state;
   return {
+    config,
     workflowKind,
     workflowFilterType,
     workflowFilters

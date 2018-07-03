@@ -32,26 +32,26 @@
 }
 
 .main-btn {
-  background: #7f93f4; /* Old browsers */
+  background: #8a9df9; /* Old browsers */
 
   background: -moz-linear-gradient(
     left,
-    #7f93f4 0%,
-    #6178ea 100%
+    #8a9df9 0%,
+    #6078ea 100%
   ); /* FF3.6-15 */
   background: -webkit-linear-gradient(
     left,
-    #7f93f4 0%,
-    #6178ea 100%
+    #8a9df9 0%,
+    #6078ea 100%
   ); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
     to right,
-    #7f93f4 0%,
-    #6178ea 100%
+    #8a9df9 0%,
+    #6078ea 100%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient(
-      startColorstr="#7f93f4",
-      endColorstr="#6178ea",
+      startColorstr="#8a9df9",
+      endColorstr="#6078ea",
       GradientType=1
     ); /* IE6-9 */
   color: @color-white;
@@ -64,9 +64,25 @@
   }
 }
 
+.btn-grey {
+  background-color: transparent;
+  color: @color-darkblue;
+  border: 1px solid @color-darkblue;
+  &:hover,
+  &:active,
+  &:focus {
+    box-shadow: none;
+    color: darken(@color-darkblue, 10);
+    border: 1px solid darken(@color-darkblue, 10);
+  }
+}
+
 .ant-btn {
   &.main-btn {
     .main-btn();
+  }
+  &.btn-grey {
+    .btn-grey();
   }
 }
 
@@ -105,6 +121,11 @@
 .ant-btn.btn-cyan {
   background-color: @color-cyan;
   color: @color-text;
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: @color-cyan;
+  }
 }
 
 .ant-dropdown-button {
@@ -239,4 +260,16 @@
 .ant-select-dropdown-menu-item-active,
 .ant-cascader-menu-item:hover {
   background-color: @color-primary;
+}
+
+// input font over ride
+.ant-input {
+  font-family: @base-font;
+}
+
+// pagination color override
+.ant-pagination-item-active,
+.ant-pagination-item-active:focus,
+.ant-pagination-item-active:hover {
+  border-color: @color-primary;
 }

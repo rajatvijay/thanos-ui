@@ -92,7 +92,6 @@ class NavLeft extends Component {
 
           <br />
           <Menu
-            theme="dark"
             mode="inline"
             selectedKeys={["0"]}
             style={{ position: "absolute", bottom: "61px" }}

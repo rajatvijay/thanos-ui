@@ -84,7 +84,31 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          <Scrollbars autoWidth autoHide style={{ height: "25px" }}>
+          <Scrollbars
+            autoWidth
+            autoHide
+            style={{ height: "30px" }}
+            autoHideTimeout={300}
+            renderTrackHorizontal={({ style, ...props }) => (
+              <div
+                {...props}
+                style={{
+                  ...style,
+                  height: "3px",
+                  right: "2px",
+                  bottom: "2px",
+                  left: "2px",
+                  borderRadius: "3px"
+                }}
+              />
+            )}
+            renderTrackVertical={({ style, ...props }) => (
+              <div
+                {...props}
+                style={{ ...style, opacity: 0, display: "none" }}
+              />
+            )}
+          >
             <div className="step-ui">
               {_.map(getProcessedData(props.workflow.step_groups), function(
                 groupitem,
@@ -223,13 +247,18 @@ export const WorkflowBody = props => {
     <div className="lc-card-body">
       <Row>
         <Col span="12" className="">
+          <Avatar>{props.workflow.name.charAt(0)}</Avatar>{" "}
+          <span className="pd-left">
+            Created <Moment fromNow>{props.workflow.created_at}</Moment>
+          </span>
+          <span className="pd-left pd-right">|</span>
           <Link to={"/workflows/instances/" + props.workflow.id}>
-            <Button type="primary">View details</Button>
+            <span className="pd-ard-sm text-medium text-base text-underline">
+              View details
+            </span>
           </Link>
         </Col>
         <Col span="12" className="text-right text-light small">
-          <Moment format="YYYY/MM/DD">{props.workflow.created_at}</Moment>{" "}
-          <b>&middot;</b> #{props.workflow.id} <b>&middot;</b>{" "}
           {!props.isChild ? (
             props.realtedKind.length !== 0 ? (
               <Dropdown
@@ -238,8 +267,7 @@ export const WorkflowBody = props => {
                 placement="bottomRight"
               >
                 <a className="ant-dropdown-link ant-btn btn-cyan" href="#">
-                  Add child workflow{" "}
-                  <i className="material-icons t-14">keyboard_arrow_down</i>
+                  Add <i className="material-icons t-14">keyboard_arrow_down</i>
                 </a>
               </Dropdown>
             ) : null
@@ -321,7 +349,7 @@ const StepItem = props => {
   }
 
   return (
-    <li className={""} title={props.stepData.name}>
+    <li className={"t-14"} title={props.stepData.name}>
       <Link
         to={
           "/workflows/instances/" +
