@@ -455,15 +455,23 @@ export const Phone = props => {
   );
 };
 
-// const getLink  = (text)=> {
-//   (http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
-// };
+//create link from text
+const getLink = text => {
+  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+  return text.replace(urlRegex, function(url) {
+    return '<a href="' + url + '">' + url + "</a>";
+  });
+};
 
 //Field Type Paragraph
 export const Paragraph = props => {
   return (
     <h2 key={props.field.id} className="step-form-paragraph">
-      <span>{getLabel(props)}</span>
+      <span
+        dangerouslySetInnerHTML={{
+          __html: getLink(props.field.definition.body)
+        }}
+      />
     </h2>
   );
 };
