@@ -67,7 +67,13 @@ export const sendEmailAuthToken = async email => {
     body: JSON.stringify({ email })
   };
   try {
-    const response = await fetch(baseUrl + "users/magic_link/", requestOptions);
+    const response = await fetch(
+      document.location.protocol +
+        document.location.hostname +
+        "/api/v1/" +
+        "users/magic_link/",
+      requestOptions
+    );
     return response;
   } catch (error) {
     throw error;

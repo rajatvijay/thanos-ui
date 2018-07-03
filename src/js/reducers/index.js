@@ -11,6 +11,7 @@ import { workflowKind, workflowGroupCount } from "./workflow_kind";
 import { workflowDetails } from "./workflow_details";
 import { workflowFilters, workflowFilterType } from "./workflow_filters";
 import { currentStepFields } from "./workflow_step";
+import { changeStatus } from "./change_status";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   workflowCreate,
   currentStepFields,
   workflowFilters,
-  workflowFilterType
+  workflowFilterType,
+  changeStatus
 });
 
 export default rootReducer;

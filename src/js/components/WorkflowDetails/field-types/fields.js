@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { authHeader } from "../../../_helpers";
+import { authHeader, baseUrl } from "../../../_helpers";
 import {
   Icon,
   Form,
@@ -67,7 +67,13 @@ function field_error(props) {
     };
   }
   return {
-    help: props.field.definition.help_text,
+    help: (
+      <span
+        dangerouslySetInnerHTML={{
+          __html: getLink(props.field.definition.help_text)
+        }}
+      />
+    ),
     validateStatus: props.field.answers.length !== 0 ? "success" : null
   };
 }
@@ -121,16 +127,11 @@ export const Text = props => {
 
 //Field Type Boolean
 export const Bool = props => {
-  console.log("radio ---------------props");
-  console.log(props);
-
   let defVal = props.field.answers[0]
     ? props.field.answers[0].answer
     : props.field.definition.defaultValue !== ""
       ? props.field.definition.defaultValue
       : null;
-
-  console.log(defVal);
 
   return (
     <FormItem
@@ -139,9 +140,9 @@ export const Bool = props => {
       style={{ display: "block" }}
       key={props.field.id}
       required={getRequired(props)}
-      help={props.field.definition.help_text}
       hasFeedback
       validateStatus={props.field.updated_at ? "success" : null}
+      {...field_error(props)}
     >
       <RadioGroup
         style={{ width: "100%" }}
@@ -182,7 +183,13 @@ export const Number = props => {
       style={{ display: "block", width: "100%" }}
       key={props.field.id}
       required={getRequired(props)}
-      help={props.field.definition.help_text}
+      help={
+        <span
+          dangerouslySetInnerHTML={{
+            __html: getLink(props.field.definition.help_text)
+          }}
+        />
+      }
       hasFeedback
       validateStatus={props.field.updated_at ? "success" : null}
     >
@@ -226,7 +233,7 @@ export const Date = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      help={props.field.definition.help_text}
+      {...field_error(props)}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -353,7 +360,7 @@ export const Checkbox = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      help={props.field.definition.help_text}
+      {...field_error(props)}
       hasFeedback
       validateStatus={_.isEmpty(props.field.answers) ? null : "success"}
     >
@@ -397,7 +404,7 @@ export const Select = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      help={props.field.definition.help_text}
+      {...field_error(props)}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -439,7 +446,7 @@ export const Phone = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      help={props.field.definition.help_text}
+      {...field_error(props)}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -464,11 +471,18 @@ export const Phone = props => {
 };
 
 //create link from text
-const getLink = text => {
-  var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
-  return text.replace(urlRegex, function(url) {
-    return '<a href="' + url + '">' + url + "</a>";
-  });
+export const getLink = text => {
+  var urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+
+  if (_.includes(urlRegex, "@")) {
+    return text.replace(urlRegex, function(url) {
+      return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
+    });
+  } else {
+    return text.replace(urlRegex, function(url) {
+      return '<a href="' + url + '" target="_blank">' + url + "</a>";
+    });
+  }
 };
 
 //Field Type Paragraph
@@ -494,7 +508,7 @@ export const List = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      help={props.field.help_text}
+      {...field_error(props)}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
@@ -547,14 +561,15 @@ class FileUpload extends Component {
 
   render = () => {
     const { field } = this.props;
+
     return (
       <FormItem
         label={getLabel(this.props)}
         className="from-label"
         style={{ display: "block" }}
         key={field.id}
-        required={getRequired(field)}
-        help={field.definition.help_text}
+        required={getRequired(this.props)}
+        {...field_error(this.props)}
         validateStatus={field.updated_at ? "success" : null}
       >
         <Dropzone
@@ -701,15 +716,14 @@ class AttachmentDownload extends Component {
     this.setState({ fetching: true });
 
     fetch(
-      "http://vetted.slackcart.com/api/v1/fields/" +
+      baseUrl +
+        "fields/" +
         this.props.field.definition.id +
         "/download_attachment/?format=json",
       requestOptions
     )
       .then(response => response.json())
       .then(body => {
-        console.log(body);
-
         this.setState({ fetching: false }, function() {
           window.open(body.object_url);
         });
@@ -724,7 +738,13 @@ class AttachmentDownload extends Component {
         style={{ display: "block" }}
         key={this.props.field.id}
         required={getRequired(this.props)}
-        help={this.props.field.definition.help_text}
+        help={
+          <span
+            dangerouslySetInnerHTML={{
+              __html: getLink(this.props.field.definition.help_text)
+            }}
+          />
+        }
         validateStatus={
           this.props.field.definition.updated_at ? "success" : null
         }
@@ -759,7 +779,7 @@ export const CascaderField = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      help={props.field.definition.help_text}
+      {...field_error(props)}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >

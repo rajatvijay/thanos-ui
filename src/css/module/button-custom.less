@@ -32,29 +32,20 @@
 }
 
 .main-btn {
-  background: #8a9df9; /* Old browsers */
-
-  background: -moz-linear-gradient(
-    left,
-    #8a9df9 0%,
-    #6078ea 100%
-  ); /* FF3.6-15 */
-  background: -webkit-linear-gradient(
-    left,
-    #8a9df9 0%,
-    #6078ea 100%
-  ); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(
-    to right,
-    #8a9df9 0%,
-    #6078ea 100%
-  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(
-      startColorstr="#8a9df9",
-      endColorstr="#6078ea",
-      GradientType=1
-    ); /* IE6-9 */
+  background: @color-secondary;
   color: @color-white;
+  border: none;
+  &:focus,
+  &:hover,
+  &:active {
+    border-color: none;
+    box-shadow: none;
+  }
+}
+
+.secondary-btn {
+  background: lighten(@color-secondary, 25%);
+  color: @color-text;
   border: none;
   &:focus,
   &:hover,
@@ -66,14 +57,14 @@
 
 .btn-grey {
   background-color: transparent;
-  color: @color-darkblue;
-  border: 1px solid @color-darkblue;
+  color: @color-grey-light;
+  border: 1px solid @color-grey-light;
   &:hover,
   &:active,
   &:focus {
     box-shadow: none;
-    color: darken(@color-darkblue, 10);
-    border: 1px solid darken(@color-darkblue, 10);
+    color: @color-grey-light;
+    border: 1px solid @color-grey-light;
   }
 }
 
@@ -83,6 +74,9 @@
   }
   &.btn-grey {
     .btn-grey();
+  }
+  &.secondary-btn {
+    .secondary-btn();
   }
 }
 
@@ -145,26 +139,26 @@
 .ant-progress-circle.ant-progress-status-success .ant-progress-text {
   &,
   .material-icons {
-    color: @color-primary;
+    color: @color-secondary;
   }
 }
 
 .ant-progress-status-success .ant-progress-circle-path {
-  stroke: @color-primary;
+  stroke: @color-secondary;
 }
 
 .ant-progress-text {
   .material-icons {
-    color: @color-primary-light;
+    //color: @color-primary-light;
   }
 }
 
 .ant-progress-circle-path {
-  stroke: @color-primary;
+  stroke: @color-secondary;
 }
 
 .ant-progress-circle-trail {
-  stroke: @color-primary-light;
+  stroke: @color-grey-lightest;
 }
 
 //Dropdown <a> override
@@ -177,7 +171,7 @@
       color: inherit;
     }
     &-active {
-      background-color: @color-primary;
+      background-color: @color-grey-lightest;
     }
   }
 }
@@ -251,7 +245,7 @@
 .ant-menu {
   .ant-menu-item {
     &:after {
-      border-color: @color-primary;
+      border-color: @color-secondary;
     }
   }
 }
@@ -259,7 +253,7 @@
 .ant-select-dropdown-menu-item:hover,
 .ant-select-dropdown-menu-item-active,
 .ant-cascader-menu-item:hover {
-  background-color: @color-primary;
+  background-color: @color-grey-lightest;
 }
 
 // input font over ride
@@ -271,5 +265,9 @@
 .ant-pagination-item-active,
 .ant-pagination-item-active:focus,
 .ant-pagination-item-active:hover {
-  border-color: @color-primary;
+  border-color: @color-secondary;
+}
+
+.ant-menu-horizontal {
+  border-bottom: none;
 }

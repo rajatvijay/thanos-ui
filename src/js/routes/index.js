@@ -8,8 +8,7 @@ import {
 } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
-import { alertActions } from "../actions";
-
+import { alertActions, configActions } from "../actions";
 import { PrivateRoute } from "../components/PrivateRoute";
 import { GenericNotFound } from "../components/notfound";
 import { LoginPage } from "../components/LoginPage";
@@ -23,9 +22,10 @@ import ExportList from "../components/ExportPage";
 import "antd/dist/antd.css";
 
 function mapStateToProps(state) {
-  const { alert } = state;
+  const { alert, config } = state;
   return {
-    alert
+    alert,
+    config
   };
 }
 
@@ -38,6 +38,7 @@ class MainRoutes extends React.Component {
       // clear alert on location change
       dispatch(alertActions.clear());
     });
+    dispatch(configActions.getConfig());
   }
 
   render() {
@@ -63,6 +64,7 @@ class MainRoutes extends React.Component {
               <Route path="/register" exact component={RegisterPage} />
 
               <Redirect from="/" exact to="/workflows/instances/" />
+
               <PrivateRoute
                 path="/workflows/instances/"
                 exact

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Row, Col, Button, Dropdown, Menu } from "antd";
+import { Layout, Icon, Row, Col, Button, Dropdown, Menu, Tooltip } from "antd";
 import WorkflowList from "./workflow-list";
-import { workflowActions } from "../../actions";
+import { workflowActions, workflowFiltersActions } from "../../actions";
 import FilterSidebar from "./filter";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
@@ -14,16 +14,63 @@ class Workflow extends Component {
   }
 
   componentDidMount = () => {
-    this.reloadWorkflowList();
+    //this.reloadWorkflowList();
+  };
+
+  componentDidUpdate = prevProps => {
+    if (this.props.workflowKind !== prevProps.workflowKind) {
+      if (this.props.workflowKind.workflowKind) {
+        if (!this.props.config.loading) {
+          this.getDefaultKind();
+        }
+      }
+    }
+
+    /*//////////////////////////////////////////////////
+      When filter is change workflow is reloaded/fetched and by 
+      default we set workflow kind filter that makes an extra call
+      for workflow fetch so  by removing this call we reduced the 
+      extra call for workflow fetch thus reducing time to load
+    */ ////////////////////////////////////////////////////
+
+    // if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind ) {
+    //     this.reloadWorkflowList();
+    // }
+  };
+
+  getDefaultKind = () => {
+    let kindList = this.props.workflowKind.workflowKind;
+    let kindId = this.props.config.configuration.default_workflow_kind
+      ? this.props.config.configuration.default_workflow_kind
+      : kindList[0].id;
+    let defKind = null;
+
+    if (kindId) {
+      _.map(kindList, function(kind) {
+        if (kind.id === parseInt(kindId, 10)) {
+          defKind = kind;
+        }
+      });
+    } else {
+      defKind = kindList[0];
+    }
+
+    if (defKind) {
+      this.setState({ defKind: defKind });
+
+      this.props.dispatch(
+        workflowFiltersActions.setFilters({
+          filterType: "kind",
+          filterValue: [defKind.id],
+          meta: defKind
+        })
+      );
+    }
   };
 
   reloadWorkflowList = () => {
     this.props.dispatch(workflowActions.getAll());
   };
-
-  // callBackCollapser = () => {
-  //   this.setState({ sidebar: !this.state.sidebar });
-  // };
 
   getExportList = () => {
     let kind = this.props.workflowKind.workflowKind;
@@ -64,15 +111,11 @@ class Workflow extends Component {
     this.setState({ showWaitingFitler: !this.state.showWaitingFitler });
   };
 
-  render = () => {
-    // let kind = this.props.workflowKind.workflowKind;
-    // let kindMenu = <Menu>{_.map(kind, function(item, index){
-    //       return <Menu.Item key={index}>
-    //         <a href={"http://vetted.slackcart.com/api/v1/workflow-kinds/" +item.tag +"/data-export/"}>{item.name}</a>
-    //       </Menu.Item>
-    //     })}
-    // </Menu>
+  loadExportList = () => {
+    console.log("lodad");
+  };
 
+  render = () => {
     return (
       <Layout className="workflow-container inner-container">
         <FilterSidebar />
@@ -94,11 +137,17 @@ class Workflow extends Component {
                 </span>
               </Col>
               <Col span="12" className="text-right export-section">
-                <Dropdown overlay={this.getExportList()}>
-                  <Button className="btn-grey">
-                    <i className="material-icons">save_alt</i>
-                  </Button>
-                </Dropdown>
+                <Tooltip title={"Export workflow data"}>
+                  <Dropdown
+                    overlay={this.getExportList()}
+                    trigger="click"
+                    onClick={this.loadExportList}
+                  >
+                    <Button className="btn-grey">
+                      <i className="material-icons">save_alt</i>
+                    </Button>
+                  </Dropdown>
+                </Tooltip>
               </Col>
             </Row>
           </div>
@@ -109,14 +158,30 @@ class Workflow extends Component {
               (this.state.showWaitingFitler ? " grow " : " shrink")
             }
           >
-            {this.props.workflowFilters.kind.filterValue !== null ? (
-              <WorkflowFilterTop {...this.props} />
-            ) : null}
+            {this.state.defKind ? <WorkflowFilterTop {...this.props} /> : null}
           </div>
 
-          {this.props.workflow.loading ? (
+          <div className="divider-top" />
+
+          {this.props.workflow.loading ? null : (
+            <div className="workflow-count">
+              {this.props.workflow.count} Workflows
+            </div>
+          )}
+
+          {this.props.config.loading ||
+          this.props.workflow.loading ||
+          this.props.workflowKind.loading ? (
             <div className="text-center text-bold mr-top-lg">
               <Icon type="loading" style={{ fontSize: 24 }} />
+              <span className="text-normal pd-left">
+                {" "}
+                {this.props.config.loading
+                  ? "Loading configurations..."
+                  : this.props.workflowKind.loading
+                    ? "Loading filters..."
+                    : this.props.workflow.loading ? "Fetching data..." : null}
+              </span>
             </div>
           ) : this.props.workflow.loadingStatus === "failed" ? (
             <div className="mr-top-lg text-center text-bold text-metal">
@@ -153,8 +218,15 @@ class Workflow extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowFilters, workflow, authentication, workflowKind } = state;
+  const {
+    config,
+    workflowFilters,
+    workflow,
+    authentication,
+    workflowKind
+  } = state;
   return {
+    config,
     workflow,
     workflowFilters,
     workflowKind,

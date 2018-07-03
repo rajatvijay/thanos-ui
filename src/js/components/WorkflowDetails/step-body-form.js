@@ -176,7 +176,6 @@ class StepBodyForm extends Component {
   render = () => {
     let that = this;
     let row = [];
-
     let errors = this.props.currentStepFields.error;
     return (
       <Form
@@ -204,17 +203,26 @@ class StepBodyForm extends Component {
               completed: that.props.stepData.completed_at ? true : false,
               is_locked: that.props.stepData.is_locked
             };
+
             let field = getFieldType(param);
 
             ///row size method
             //todo: clean up this mess
-            row.length === 2 ? (row = []) : null;
+            if (row.length === 2) {
+              row = [];
+            }
 
             if (f.definition.size === 3) {
+              //If size is 50%
+
               if (index === that.props.stepData.data_fields.length - 1) {
+                row.push(field);
+
                 return (
                   <Row gutter={16}>
-                    <Col span={12}>{field}</Col>
+                    {_.map(row, function(col) {
+                      return <Col span={12}>{col}</Col>;
+                    })}
                   </Row>
                 );
               } else {
@@ -222,8 +230,8 @@ class StepBodyForm extends Component {
                 if (row.length === 2) {
                   return (
                     <Row gutter={16}>
-                      {_.map(row, function(r) {
-                        return <Col span={12}>{r}</Col>;
+                      {_.map(row, function(col) {
+                        return <Col span={12}>{col}</Col>;
                       })}
                     </Row>
                   );

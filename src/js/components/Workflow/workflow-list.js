@@ -3,13 +3,13 @@ import { Layout, Collapse, Pagination } from "antd";
 import { WorkflowHeader, WorkflowBody } from "./workflow-item";
 import { workflowActions, createWorkflow } from "../../actions";
 import _ from "lodash";
-import { calculatedDate } from "./calculated-data";
+import { calculatedData } from "./calculated-data";
 import Collapsible from "react-collapsible";
 import { connect } from "react-redux";
 import moment from "moment";
 
 const { Content } = Layout;
-const { getProcessedData } = calculatedDate;
+const { getProcessedData } = calculatedData;
 
 const Panel = Collapse.Panel;
 
@@ -19,17 +19,19 @@ class WorkflowList extends Component {
     this.props.dispatch(workflowActions.getAll(param));
   };
 
-  onExpand;
+  onStatusChange = status => {
+    console.log(status);
+  };
 
   render() {
     let that = this;
     const data = this.props.workflow;
     let page = 1;
     if (data.next) {
-      page = data.next.split("?page=");
+      page = data.next.split("page=");
       page = parseInt(page[1], 10) - 1;
     } else if (data.previous) {
-      page = data.previous.split("?page=");
+      page = data.previous.split("page=");
       page = parseInt(page[1], 10) + 1;
     }
 
@@ -63,6 +65,7 @@ class WorkflowList extends Component {
             kinds={that.props.workflowKind}
             dispatch={that.props.dispatch}
             workflowFilterType={that.props.workflowFilterType}
+            onStatusChange={that.onStatusChange}
           />
         );
       });
@@ -129,7 +132,7 @@ class WorkflowList extends Component {
 
 class WorkflowItem extends React.Component {
   state = {
-    realtedWorkflow: null,
+    relatedWorkflow: null,
     showRelatedWorkflow: false,
     opened: false
   };
@@ -201,6 +204,7 @@ class WorkflowItem extends React.Component {
                   workflow={this.props.workflow}
                   statusType={statusType}
                   kind={this.props.kinds}
+                  onStatusChange={this.props.onStatusChange}
                 />
               </div>
             }
@@ -213,7 +217,7 @@ class WorkflowItem extends React.Component {
               <WorkflowBody
                 isChild={this.props.isChild}
                 showRelatedType={this.showRelatedType}
-                realtedKind={this.state.relatedWorkflow}
+                relatedKind={this.state.relatedWorkflow}
                 onChildSelect={this.onChildSelect}
                 workflow={this.props.workflow}
                 pData={this.props.pData}
