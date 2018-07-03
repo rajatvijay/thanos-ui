@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon } from "antd";
+import { Layout, Icon, Tooltip } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import StepBody from "./step-body.js";
@@ -207,14 +207,16 @@ class WorkflowDetails extends Component {
             <StepBody />
           </div>
           <div className="text-right pd-ard mr-ard-md">
-            <span
-              className="text-anchor"
-              onClick={() => {
-                window.scrollTo(0, 0);
-              }}
-            >
-              <i className="material-icons">arrow_upward</i>
-            </span>
+            <Tooltip title="Scroll to top" placement="topRight">
+              <span
+                className="text-anchor"
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                }}
+              >
+                <i className="material-icons">arrow_upward</i>
+              </span>
+            </Tooltip>
           </div>
         </Layout>
       </Layout>
