@@ -4,7 +4,8 @@ import { notification } from "antd";
 const openNotificationWithIcon = data => {
   notification[data.type]({
     message: data.message,
-    description: data.body
+    description: data.body,
+    placement: "bottomLeft"
   });
 };
 
@@ -18,9 +19,7 @@ export function workflowCreate(state = {}, action) {
     case workflowCreateConstants.CREATE_SUCCESS:
       openNotificationWithIcon({
         type: "success",
-        message: "Workflow created successfully",
-        placement: "bottomLeft",
-        body: ""
+        message: "Workflow created successfully"
       });
 
       return {
@@ -30,10 +29,9 @@ export function workflowCreate(state = {}, action) {
     case workflowCreateConstants.CREATE_FAILURE:
       openNotificationWithIcon({
         type: "error",
-        placement: "bottomLeft",
-        message: "Workflow creatation failed.",
+        message: "Workflow creation failed.",
         body:
-          "Failed to create workflow, sorry for the inconvenience. Please try again later"
+          "Failed to create workflow, sorry for the inconvenience. Contact care@thevetted.com for assistance"
       });
 
       return {
