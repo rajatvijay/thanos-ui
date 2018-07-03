@@ -242,6 +242,7 @@ class WorkflowAdvFilter extends Component {
   };
 
   componentDidMount = () => {
+    //convert  this to redux action and store to redux store
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),

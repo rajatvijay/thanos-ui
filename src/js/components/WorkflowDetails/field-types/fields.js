@@ -402,6 +402,7 @@ export const Select = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <AntSelect
+        allowClear
         mode={single ? "default" : "multiple"}
         disabled={
           props.completed || props.is_locked || props.field.definition.disabled
