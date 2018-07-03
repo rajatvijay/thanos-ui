@@ -94,10 +94,12 @@ const HeaderWorkflowGroup = props => {
                 {...props}
                 style={{
                   ...style,
-                  height: "3px",
+                  height: "0px",
                   right: "2px",
                   bottom: "2px",
                   left: "2px",
+                  opacity: 0,
+                  visibility: "hidden",
                   borderRadius: "3px"
                 }}
               />
