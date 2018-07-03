@@ -1,10 +1,7 @@
 import { workflowFieldConstants, workflowStepConstants } from "../constants";
 import { workflowStepService } from "../services";
 import { notification } from "antd";
-import { 
-  workflowDetailsActions, 
-  workflowActions
-} from "../actions";
+import { workflowDetailsActions, workflowActions } from "../actions";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -29,7 +26,7 @@ function saveField(payload) {
   return dispatch => {
     dispatch(request(payload));
     dispatch(remove_errors({}));
-    
+
     workflowStepService
       .saveField(payload)
       .then(
@@ -48,8 +45,8 @@ function saveField(payload) {
 
   function success(field) {
     // hack for to avoid response.json promise in case of failure
-    if(!field.id) {
-      return failure(field)
+    if (!field.id) {
+      return failure(field);
     }
 
     openNotificationWithIcon({
@@ -113,18 +110,16 @@ function submitStepData(payload) {
   return dispatch => {
     dispatch(request(payload));
     dispatch(remove_errors({}));
-     
-    workflowStepService
-      .submitStep(payload)
-      .then(
-        stepData => {
-          dispatch(success(stepData));
-          if(stepData.id) { 
-            dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
-          }
-        },
-        error => dispatch(failure(error))
-      );
+
+    workflowStepService.submitStep(payload).then(
+      stepData => {
+        dispatch(success(stepData));
+        if (stepData.id) {
+          dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+        }
+      },
+      error => dispatch(failure(error))
+    );
   };
 
   function request() {
@@ -137,8 +132,8 @@ function submitStepData(payload) {
 
   function success(stepData) {
     // hack for to avoid response.json promise in case of failure
-    if(!stepData.id) {
-      return failure(stepData)
+    if (!stepData.id) {
+      return failure(stepData);
     }
     openNotificationWithIcon({
       type: "success",
@@ -201,17 +196,15 @@ function undoStep(payload) {
   return dispatch => {
     dispatch(request(payload));
 
-    workflowStepService
-      .undoStep(payload)
-      .then(
-        stepData => {
-          dispatch(success(stepData))
-          if(stepData.id) {
-            dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
-          }
-        },
-        error => dispatch(failure(error))
-      );
+    workflowStepService.undoStep(payload).then(
+      stepData => {
+        dispatch(success(stepData));
+        if (stepData.id) {
+          dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+        }
+      },
+      error => dispatch(failure(error))
+    );
   };
 
   function request() {

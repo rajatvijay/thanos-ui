@@ -66,7 +66,7 @@ class LoginForm extends React.Component {
   validate = data => {
     const errors = {};
     //if (!validator.isEmail(data.email)) errors.email = "Invalid email";
-    if (!data.username) errors.username = "username can't be empty";
+    if (!data.username) errors.username = "email can't be empty";
     if (!data.password) errors.password = "Password can't be empty";
     return errors;
   };
@@ -96,7 +96,7 @@ class LoginForm extends React.Component {
               name="username"
               type="text"
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="Username or email"
+              placeholder="email"
               value={data.username}
               onChange={this.onInputChange}
             />

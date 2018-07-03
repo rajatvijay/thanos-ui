@@ -93,20 +93,10 @@ class NavTop extends Component {
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
-          <Header
-            className="ant-nav"
-            style={{
-              background: "#fff",
-              position: "fixed",
-              width: "100%",
-              left: 0,
-              zIndex: 2,
-              boxShadow: "0 1px 4px 0 rgba(0,0,0,0.09)"
-            }}
-          >
+          <Header className="ant-nav">
             <Row>
               {/*logo wrapper*/}
-              <Col span={4}>
+              <Col span={12}>
                 <span className="logo" style={{ float: "left" }}>
                   <a href="/">
                     {!this.props.config.loading && this.props.config.logo ? (
@@ -119,9 +109,7 @@ class NavTop extends Component {
                     )}
                   </a>
                 </span>
-              </Col>
 
-              <Col span={8}>
                 <div className="search-box">
                   <Input
                     placeholder="Search for workflow"
@@ -162,7 +150,10 @@ class NavTop extends Component {
                   <SubMenu
                     title={
                       <span>
-                        <Avatar>{user.first_name.charAt(0)}</Avatar>
+                        <Avatar>{user.first_name.charAt(0)}</Avatar>{" "}
+                        <i className="material-icons t-14">
+                          keyboard_arrow_down
+                        </i>
                       </span>
                     }
                     onClick={this.onLogout.bind(this, "key")}

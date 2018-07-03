@@ -5,22 +5,40 @@
 }
 
 .navbar-top {
+  .ant-nav {
+    background: #fff;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    z-index: 2;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
+  }
   .ant-menu-item:first-child {
     margin-top: 0px;
   }
   .ant-layout-header {
-    padding-left: 30px;
+    padding-left: 45px;
     padding-right: 78px;
   }
-  .logo img {
-    max-width: 200px;
-    height: auto;
-    max-height: 60px;
+  .logo {
+    width: 200px;
+    height: 30px;
+    display: inline-block;
+
+    img {
+      max-width: 200px;
+      max-height: 25px;
+      height: auto;
+    }
   }
 
   .search-box {
+    display: inline-block;
+    position: absolute;
     max-width: 300px;
-    margin-left: 27px;
+    left: 270px;
+    top: 3px;
+    //margin-left: 27px;
     .ant-input {
       border-radius: 0;
       border: none;

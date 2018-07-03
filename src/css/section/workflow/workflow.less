@@ -3,10 +3,10 @@
 .workflow-container {
   background: #f6f7f9;
   .workflow-list-wrapper {
-    padding: 50px 78px;
+    padding: 40px 78px;
   }
   .section-top {
-    margin: 54px 78px 20px;
+    margin: 54px 78px 14px;
     .waiting-section {
       i {
         font-size: 16px;
@@ -42,7 +42,7 @@
     background-color: @color-white;
     //margin-bottom: 10px;
     .ant-collapse-header {
-      padding: 16px;
+      padding: 20px 26px;
     }
   }
   .collapse-wrapper {
@@ -55,7 +55,7 @@
     width: 30px;
     height: auto;
     vertical-align: middle;
-    line-height: 80px;
+    line-height: 89px;
     text-align: center;
     display: inline-block;
     top: 0;
@@ -71,14 +71,21 @@
     margin-bottom: 58px;
     .workflow-list-item {
       transition: margin 0.3s ease;
+      border-bottom: 1px solid fade(@color-grey-light, 50%);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
       .Collapsible {
         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
         margin-bottom: 0;
-        border-bottom: 1px solid @color-grey-light;
       }
       &.opened {
-        margin: 20px -20px;
-        box-shadow:0 2px 6px 0 rgba(0, 0, 0, 0.15) .Collapsible {
+        margin: 32px -20px;
+        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+        border-bottom: none;
+        .Collapsible {
           border: none;
         }
       }
@@ -160,7 +167,7 @@
     overflow-x: auto;
   }
   .lc-card-body {
-    padding: 16px;
+    padding: 28px;
     border-top: 1px solid #d9d9d9;
     .sub-step-list {
       .groupaz-list {

@@ -60,16 +60,16 @@ function stringToArray(string) {
 
 function field_error(props) {
   let error = props.error || {};
-  if(error[props.field.id]) {
-    return {  
-      'help': error[props.field.id],
-      'validateStatus': 'error'
-    }
+  if (error[props.field.id]) {
+    return {
+      help: error[props.field.id],
+      validateStatus: "error"
+    };
   }
-  return { 
-    'help': props.field.definition.help_text,
-    'validateStatus': props.field.answers.length !== 0 ? "success" : null
-  }
+  return {
+    help: props.field.definition.help_text,
+    validateStatus: props.field.answers.length !== 0 ? "success" : null
+  };
 }
 
 function getRequired(props) {
@@ -77,9 +77,11 @@ function getRequired(props) {
 }
 
 function feedValue(props) {
-  var opts = {}
-  if(props.field.definition.disabled) {
-    opts['value'] = _.size(props.field.answers) ? props.field.answers[0].answer : props.field.definition.defaultValue;
+  var opts = {};
+  if (props.field.definition.disabled) {
+    opts["value"] = _.size(props.field.answers)
+      ? props.field.answers[0].answer
+      : props.field.definition.defaultValue;
   }
   return opts;
 }
@@ -100,7 +102,9 @@ export const Text = props => {
       {...field_error(props)}
     >
       <Input
-        disabled={props.completed || props.is_locked || props.field.definition.disabled}
+        disabled={
+          props.completed || props.is_locked || props.field.definition.disabled
+        }
         type="text"
         placeholder={props.field.placeholder}
         defaultValue={
@@ -135,12 +139,26 @@ export const Bool = props => {
       <RadioGroup
         style={{ width: "100%" }}
         onChange={e => props.onFieldChange(e, props)}
-        defaultValue={parseInt(defVal, 10)}
+        defaultValue={defVal ? parseInt(defVal, 10) : null}
       >
-        <Radio disabled={props.completed || props.is_locked || props.field.definition.disabled} value={1}>
+        <Radio
+          disabled={
+            props.completed ||
+            props.is_locked ||
+            props.field.definition.disabled
+          }
+          value={1}
+        >
           Yes
         </Radio>
-        <Radio disabled={props.completed || props.is_locked || props.field.definition.disabled} value={2}>
+        <Radio
+          disabled={
+            props.completed ||
+            props.is_locked ||
+            props.field.definition.disabled
+          }
+          value={2}
+        >
           No
         </Radio>
       </RadioGroup>
@@ -162,7 +180,9 @@ export const Number = props => {
       validateStatus={props.field.updated_at ? "success" : null}
     >
       <InputNumber
-        disabled={props.completed || props.is_locked || props.field.definition.disabled}
+        disabled={
+          props.completed || props.is_locked || props.field.definition.disabled
+        }
         min={1}
         type="number"
         style={{ width: "100%" }}
@@ -204,7 +224,9 @@ export const Date = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <DatePicker
-        disabled={props.completed || props.is_locked || props.field.definition.disabled}
+        disabled={
+          props.completed || props.is_locked || props.field.definition.disabled
+        }
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
@@ -246,7 +268,11 @@ export const Email = props => {
         ]
       })(
         <Input
-          disabled={props.completed || props.is_locked || props.field.definition.disabled}
+          disabled={
+            props.completed ||
+            props.is_locked ||
+            props.field.definition.disabled
+          }
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
@@ -290,7 +316,11 @@ export const URL = props => {
         ]
       })(
         <Input
-          disabled={props.completed || props.is_locked || props.field.definition.disabled}
+          disabled={
+            props.completed ||
+            props.is_locked ||
+            props.field.definition.disabled
+          }
           placeholder={props.field.placeholder}
           prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="url"
@@ -321,7 +351,9 @@ export const Checkbox = props => {
       validateStatus={_.isEmpty(props.field.answers) ? null : "success"}
     >
       <CheckboxGroup
-        disabled={props.completed || props.is_locked || props.field.definition.disabled}
+        disabled={
+          props.completed || props.is_locked || props.field.definition.disabled
+        }
         style={{ width: "100%" }}
         options={
           !_.isEmpty(props.field.definition.extra)
@@ -364,7 +396,9 @@ export const Select = props => {
     >
       <AntSelect
         mode={single ? "default" : "multiple"}
-        disabled={props.completed || props.is_locked || props.field.definition.disabled}
+        disabled={
+          props.completed || props.is_locked || props.field.definition.disabled
+        }
         defaultValue={
           props.field.answers[0]
             ? single
@@ -402,7 +436,9 @@ export const Phone = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <ReactTelInput
-        disabled={props.completed || props.is_locked || props.field.definition.disabled}
+        disabled={
+          props.completed || props.is_locked || props.field.definition.disabled
+        }
         value={
           props.field.answers[0]
             ? props.field.answers[0].answer
@@ -418,6 +454,10 @@ export const Phone = props => {
     </FormItem>
   );
 };
+
+// const getLink  = (text)=> {
+//   (http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+// };
 
 //Field Type Paragraph
 export const Paragraph = props => {
@@ -708,7 +748,9 @@ export const CascaderField = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       <Cascader
-        disabled={props.completed || props.is_locked || props.field.definition.disabled}
+        disabled={
+          props.completed || props.is_locked || props.field.definition.disabled
+        }
         defaultValue={
           props.field.answers[0]
             ? stringToArray(props.field.answers[0])

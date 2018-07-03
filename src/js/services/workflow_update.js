@@ -133,7 +133,7 @@ function undoStep(payload) {
 
 function handleResponse(response) {
   if (!response.ok) {
-    return response.json()
+    return response.json();
   }
   return response.json();
 }

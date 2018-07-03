@@ -60,7 +60,7 @@ export function currentStepFields(state = initialState, action) {
         loading: false
       };
     case fieldConstants.POST_FIELD_SUCCESS:
-      console.log(action.field)
+      console.log(action.field);
       return {
         ...state,
         loading: false,

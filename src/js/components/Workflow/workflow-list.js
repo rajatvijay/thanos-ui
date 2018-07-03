@@ -34,9 +34,6 @@ class WorkflowList extends Component {
     }
 
     var occurrenceDay = function(occurrence) {
-      console.log("occurrence-----");
-      console.log(occurrence);
-
       var today = moment().startOf("day");
       var thisWeek = moment().startOf("week");
       var thisMonth = moment().startOf("month");
@@ -54,9 +51,6 @@ class WorkflowList extends Component {
     };
 
     var result = _.groupBy(data.workflow, occurrenceDay);
-
-    console.log(result);
-
     var ListCompletes = _.map(result, function(list, key, index) {
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
