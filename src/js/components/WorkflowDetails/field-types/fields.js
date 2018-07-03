@@ -121,9 +121,16 @@ export const Text = props => {
 
 //Field Type Boolean
 export const Bool = props => {
+  console.log("radio ---------------props");
+  console.log(props);
+
   let defVal = props.field.answers[0]
     ? props.field.answers[0].answer
-    : props.field.definition.defaultValue ? 1 : 2;
+    : props.field.definition.defaultValue !== ""
+      ? props.field.definition.defaultValue
+      : null;
+
+  console.log(defVal);
 
   return (
     <FormItem
