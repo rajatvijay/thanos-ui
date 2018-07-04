@@ -9,3 +9,4 @@ export { workflowDetailsConstants } from "./workflow_details";
 export { workflowStepConstants } from "./workflow_steps";
 export { workflowFieldConstants } from "./workflow_step_update";
 export { workflowFiltersConstants } from "./workflow_filters";
+export { workflowCommentsConstants } from "./workflow_comment";

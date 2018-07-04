@@ -8,15 +8,19 @@ import { baseUrl, authHeader } from "../../_helpers";
 import {
   workflowDetailsActions,
   workflowActions,
-  workflowFiltersActions
+  workflowFiltersActions,
+  workflowStepActions
 } from "../../actions";
 import { WorkflowHeader } from "../Workflow/workflow-item";
+import Comments from "./comments";
 
 const requestOptions = {
   method: "GET",
   headers: authHeader.get(),
   credentials: "include"
 };
+
+const { Sider, Content } = Layout;
 
 class WorkflowDetails extends Component {
   constructor(props) {
@@ -26,6 +30,11 @@ class WorkflowDetails extends Component {
       selectedStep: null,
       selectedGroup: null
     };
+    let params = props.location.search;
+    let qs = this.queryStringToObject(params);
+    if (qs.object_id && qs.type) {
+      props.dispatch(workflowDetailsActions.getComment(qs.object_id, qs.type));
+    }
   }
 
   currentActiveStep = wfd => {
@@ -84,8 +93,9 @@ class WorkflowDetails extends Component {
       } else {
         this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
       }
-
-      this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+      if (!this.state.loading_sidebar) {
+        this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+      }
     }
   };
 
@@ -159,9 +169,23 @@ class WorkflowDetails extends Component {
     return this.props.dispatch(workflowActions.getById(id));
   };
 
+  callBackCollapser = (object_id, content_type) => {
+    this.state.loading_sidebar = true;
+    this.state.object_id = object_id;
+    this.props.dispatch(
+      workflowDetailsActions.getComment(object_id, content_type)
+    );
+  };
+
+  addComment = payload => {
+    this.state.adding_comment = true;
+    this.state.object_id = payload.object_id;
+    this.props.dispatch(workflowStepActions.addComment(payload));
+  };
+
   render() {
     let stepLoading = this.props.workflowDetails.loading;
-
+    let comment_data = this.props.workflowComments.data;
     return (
       <Layout className="workflow-details-container inner-container">
         <div
@@ -172,7 +196,7 @@ class WorkflowDetails extends Component {
             boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
           }}
         >
-          {this.state.loading || !this.state.wfdata ? (
+          {stepLoading || !this.state.wfdata ? (
             <div className="text-center">
               <Icon type="loading" />
             </div>
@@ -183,6 +207,7 @@ class WorkflowDetails extends Component {
                 kind={this.props.workflowKind}
                 workflow={this.state.wfdata}
                 statusType={this.props.workflowFilterType.statusType}
+                showCommentIcon={true}
               />
             </div>
           )}
@@ -201,10 +226,15 @@ class WorkflowDetails extends Component {
         />
 
         <Layout
-          style={{ marginLeft: 250, background: "#FBFBFF", minHeight: "100vh" }}
+          style={{
+            marginLeft: 250,
+            background: "#FBFBFF",
+            minHeight: "100vh",
+            paddingTop: "23px"
+          }}
         >
           <div className="mr-ard-md  shadow-1 bg-white">
-            <StepBody />
+            <StepBody toggleSidebar={this.callBackCollapser} />
           </div>
           <div className="text-right pd-ard mr-ard-md">
             <Tooltip title="Scroll to top" placement="topRight">
@@ -219,17 +249,32 @@ class WorkflowDetails extends Component {
             </Tooltip>
           </div>
         </Layout>
+
+        {comment_data && _.size(comment_data.results) ? (
+          <Comments
+            object_id={this.state.object_id}
+            toggleSidebar={this.callBackCollapser}
+            addComment={this.addComment}
+            {...this.props}
+          />
+        ) : null}
       </Layout>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { workflowDetails, workflowFilterType, workflowKind } = state;
+  const {
+    workflowDetails,
+    workflowFilterType,
+    workflowKind,
+    workflowComments
+  } = state;
   return {
     workflowDetails,
     workflowFilterType,
-    workflowKind
+    workflowKind,
+    workflowComments
   };
 }
 

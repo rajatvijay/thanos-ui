@@ -25,6 +25,10 @@ class StepBody extends Component {
     }
   };
 
+  addComment = stepData => {
+    this.props.toggleSidebar(stepData.id, "step");
+  };
+
   render = () => {
     const loading =
       this.props.currentStepFields.loading ||
@@ -54,11 +58,32 @@ class StepBody extends Component {
         </div>
       );
     }
+    var step_comment_btn = null;
+    if (_.size(stepData)) {
+      let comment_btn_text = "Add comment";
+      if (stepData.comment_count == 1) {
+        comment_btn_text = "1 comment";
+      } else if (stepData.comment_count > 1) {
+        comment_btn_text = stepData.comment_count + " comments";
+      }
 
+      var step_comment_btn = (
+        <div className="float-right">
+          <span
+            style={{ position: "relative", top: "-57px", right: "-25px" }}
+            onClick={this.addComment.bind(this, stepData)}
+            className="ant-btn ant-btn-sm"
+          >
+            {comment_btn_text}
+          </span>
+        </div>
+      );
+    }
     return (
       <div className="pd-ard-lg">
         {locked_tag}
         {locked_tag ? <br /> : null}
+        {!loading ? step_comment_btn : null}
         {loading ? (
           <div className="text-center mr-top-lg">
             <Icon type={"loading"} />

@@ -1,4 +1,8 @@
-import { workflowDetailsConstants, workflowStepConstants } from "../constants";
+import {
+  workflowDetailsConstants,
+  workflowStepConstants,
+  workflowCommentsConstants
+} from "../constants";
 import { workflowDetailsService } from "../services";
 //import { alertActions } from "./";
 //import { history } from "../_helpers";
@@ -6,7 +10,8 @@ import { workflowDetailsService } from "../services";
 export const workflowDetailsActions = {
   getById,
   getStepGroup,
-  getStepFields
+  getStepFields,
+  getComment
 };
 
 //Get workflow details
@@ -63,7 +68,9 @@ function getStepGroup(id) {
 //Get workflow step fileds data.
 function getStepFields(step) {
   return dispatch => {
-    dispatch(request(step));
+    if (!step.doNotRefresh) {
+      dispatch(request(step));
+    }
 
     workflowDetailsService
       .getStepFields(step)
@@ -85,5 +92,36 @@ function getStepFields(step) {
   }
   function failure(error) {
     return { type: workflowStepConstants.GET_STEPFIELDS_FAILURE, error };
+  }
+}
+
+// Get workflow/step/field Comments
+function getComment(object_id, content_type) {
+  let payload = {
+    object_id: object_id,
+    type: content_type
+  };
+  return dispatch => {
+    dispatch(request(payload));
+    if (payload.object_id) {
+      workflowDetailsService
+        .getComments(payload)
+        .then(
+          commentData => dispatch(success(commentData)),
+          error => dispatch(failure(error))
+        );
+    }
+  };
+
+  function request(payload) {
+    return { type: workflowCommentsConstants.GET_COMMENTS_REQUEST, payload };
+  }
+
+  function success(data) {
+    return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
+  }
+
+  function failure(error) {
+    return { type: workflowCommentsConstants.GET_COMMENTS_FAILURE, error };
   }
 }

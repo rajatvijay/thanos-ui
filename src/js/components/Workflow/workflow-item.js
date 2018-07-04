@@ -5,6 +5,7 @@ import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import {
   Button,
+  Badge,
   Icon,
   Avatar,
   Progress,
@@ -192,6 +193,13 @@ const HeaderOptions = props => {
 
   return (
     <Col span="5" className="text-right">
+      {props.showCommentIcon && false ? (
+        <span style={{ position: "relative", right: "25px" }}>
+          <Badge count={5}>
+            <i class="material-icons">comment</i>
+          </Badge>
+        </span>
+      ) : null}
       <Dropdown overlay={menu}>
         <Button
           className="main-btn status-btn"
