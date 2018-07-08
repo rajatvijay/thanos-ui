@@ -553,7 +553,7 @@ class FileUpload extends Component {
         className="from-label"
         style={{ display: "block" }}
         key={field.id}
-        required={field.is_required}
+        required={getRequired(field)}
         help={field.definition.help_text}
         validateStatus={field.updated_at ? "success" : null}
       >

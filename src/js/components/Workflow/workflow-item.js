@@ -18,9 +18,11 @@ import {
   Popover
 } from "antd";
 import { calculatedDate } from "./calculated-data";
+import { utils } from "./utils";
 import { history } from "../../_helpers";
 
 const { getProcessedData, getProgressData } = calculatedDate;
+const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
 const Step = Steps.Step;
 const SubMenu = Menu.SubMenu;
 
@@ -80,6 +82,7 @@ const getGroupProgress = group => {
 
 const HeaderWorkflowGroup = props => {
   let progressData = getProgressData(props.workflow);
+  let visible_steps = getVisibleSteps(props.workflow.step_groups);
   return (
     <Col span={12}>
       <div className="group-overview">
@@ -116,6 +119,13 @@ const HeaderWorkflowGroup = props => {
                 groupitem,
                 index
               ) {
+                if (!_.size(groupitem.steps)) {
+                  // checking for steps inside group
+                  return null;
+                }
+                if (!isLockedStepGroupEnable(groupitem, visible_steps)) {
+                  return null;
+                }
                 let completed = groupitem.completed;
                 let od = groupitem.overdue;
                 let groupProgress = getGroupProgress(groupitem);
@@ -283,6 +293,7 @@ export const WorkflowBody = props => {
 };
 
 const StepGroupList = props => {
+  let visible_steps = getVisibleSteps(props.pData);
   return (
     <div className="sub-step-list">
       <ul className="groupaz-list" id="groupaz-list">
@@ -293,7 +304,9 @@ const StepGroupList = props => {
           if (!_.size(group.steps)) {
             return null;
           }
-
+          if (!isLockedStepGroupEnable(group, visible_steps)) {
+            return null;
+          }
           return (
             <li className="groupaz" key={"group-" + index}>
               <div
@@ -325,6 +338,7 @@ const StepGroupList = props => {
                       {...props}
                       stepData={steps}
                       group={group}
+                      visible_steps={visible_steps}
                       key={"step-" + index}
                     />
                   );
@@ -346,6 +360,9 @@ const StepItem = props => {
     icon_cls = "check_circle_outline";
   } else if (props.stepData.is_locked) {
     icon_cls = "lock";
+    if (!isLockedStepEnable(props.stepData, props.visible_steps)) {
+      return null;
+    }
   } else if (overdue) {
     icon_cls = "trending_flat";
   }
