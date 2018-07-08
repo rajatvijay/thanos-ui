@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { Layout, Menu, Icon } from "antd";
 import { calculatedDate } from "../Workflow/calculated-data";
+import { utils } from "../Workflow/utils";
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 const { getProcessedData } = calculatedDate;
+const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
 
 const StepSidebar = props => {
   return (
@@ -40,9 +42,7 @@ class StepSidebarMenu extends Component {
   getGroups(data) {
     let that = this;
     let data2 = getProcessedData(data);
-
-    console.log("data------sidebar");
-    console.log(data);
+    let visible_steps = getVisibleSteps(data);
 
     return _.map(_.orderBy(data2, [{ id: Number }], ["asc"]), function(
       g,
@@ -50,6 +50,10 @@ class StepSidebarMenu extends Component {
     ) {
       if (!_.size(g.steps)) {
         // checking for steps inside group
+        return null;
+      }
+
+      if (!isLockedStepGroupEnable(g, visible_steps)) {
         return null;
       }
       return (
@@ -69,13 +73,13 @@ class StepSidebarMenu extends Component {
             </span>
           }
         >
-          {that.getSteps(g.steps, g.id)}
+          {that.getSteps(g.steps, g.id, visible_steps)}
         </SubMenu>
       );
     });
   }
 
-  getSteps(data, group_id) {
+  getSteps(data, group_id, visible_steps) {
     let steps = _.map(data, function(s, key) {
       // console.log('--------------------------------------------------f')
       // console.log(s)
@@ -84,6 +88,10 @@ class StepSidebarMenu extends Component {
         icon_cls = "check_circle_outline";
       } else if (s.is_locked) {
         icon_cls = "lock";
+        // checking if all dependent_steps are visible, else return null
+        if (!isLockedStepEnable(s, visible_steps)) {
+          return null;
+        }
       }
       return (
         <Menu.Item
