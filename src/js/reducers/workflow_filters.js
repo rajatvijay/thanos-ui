@@ -3,8 +3,8 @@ import { workflowFiltersConstants } from "../constants";
 const initialState = {
   kind: {
     filterType: "kind",
-    filterValue: [2],
-    meta: { tag: "enroll-supplier" }
+    filterValue: [],
+    meta: {}
   },
   status: null,
   region: null,

@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export const calculatedDate = {
+export const calculatedData = {
   getProcessedData,
   getProgressData
 };

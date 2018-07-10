@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Layout, Menu, Icon } from "antd";
-import { calculatedDate } from "../Workflow/calculated-data";
+import { calculatedData } from "../Workflow/calculated-data";
 import { utils } from "../Workflow/utils";
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-const { getProcessedData } = calculatedDate;
+const { getProcessedData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
 
 const StepSidebar = props => {
@@ -81,8 +81,6 @@ class StepSidebarMenu extends Component {
 
   getSteps(data, group_id, visible_steps) {
     let steps = _.map(data, function(s, key) {
-      // console.log('--------------------------------------------------f')
-      // console.log(s)
       let icon_cls = "panorama_fish_eye";
       if (s.completed_at) {
         icon_cls = "check_circle_outline";

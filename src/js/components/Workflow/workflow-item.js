@@ -17,11 +17,11 @@ import {
   Steps,
   Popover
 } from "antd";
-import { calculatedDate } from "./calculated-data";
+import { calculatedData } from "./calculated-data";
 import { utils } from "./utils";
 import { history } from "../../_helpers";
 
-const { getProcessedData, getProgressData } = calculatedDate;
+const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
 const Step = Steps.Step;
 const SubMenu = Menu.SubMenu;
@@ -44,22 +44,14 @@ const SubMenu = Menu.SubMenu;
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   return (
-    <Col span={5}>
+    <Col span={5} className="text-left">
       <Link
         to={"/workflows/instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <Popover
-          content={
-            <div className="text-center">
-              <div className="small">{progressData}% completed</div>
-            </div>
-          }
-        >
-          <span className="mr-left-sm text-base text-bold company-name">
-            {props.workflow.name}
-          </span>
-        </Popover>
+        <span className=" text-base text-bold company-name">
+          {props.workflow.name}
+        </span>
       </Link>
     </Col>
   );
@@ -80,6 +72,10 @@ const getGroupProgress = group => {
   return progress;
 };
 
+const getStatusIcon = () => {
+  return <i className="material-icons">check_circle_outline</i>;
+};
+
 const HeaderWorkflowGroup = props => {
   let progressData = getProgressData(props.workflow);
   let visible_steps = getVisibleSteps(props.workflow.step_groups);
@@ -90,7 +86,7 @@ const HeaderWorkflowGroup = props => {
           <Scrollbars
             autoWidth
             autoHide
-            style={{ height: "30px" }}
+            style={{ height: "25px" }}
             autoHideTimeout={300}
             renderTrackHorizontal={({ style, ...props }) => (
               <div
@@ -132,10 +128,36 @@ const HeaderWorkflowGroup = props => {
 
                 return (
                   <span key={index} className="step-item">
+                    <span className="pd-right-sm">
+                      <Popover
+                        content={
+                          <div className="text-center">
+                            {groupitem.definition.name}
+                            {completed ? (
+                              <div className="small">completed</div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        }
+                      >
+                        {groupProgress === 100 ? (
+                          <i className="material-icons text-middle t-22 text-secondary">
+                            check_circle_outline
+                          </i>
+                        ) : (
+                          <Progress
+                            type="circle"
+                            percent={groupProgress}
+                            width={25}
+                          />
+                        )}
+                      </Popover>
+                    </span>
                     <span
                       className={
                         completed
-                          ? "title-c text-medium text-base"
+                          ? "title-c text-medium text-secondary"
                           : od
                             ? "title-c text-red text-normal "
                             : "title-c text-normal text-light"
@@ -143,7 +165,7 @@ const HeaderWorkflowGroup = props => {
                     >
                       {groupitem.definition.name}
                     </span>
-                    <span className="dash"> -</span>
+                    <span className="dash"> </span>
                   </span>
                 );
               })}
@@ -157,11 +179,11 @@ const HeaderWorkflowGroup = props => {
 
 const HeaderOptions = props => {
   const menu = (
-    <Menu>
+    <Menu onClick={props.onStatusChange}>
       {props.statusType
         ? _.map(props.statusType.results, function(status) {
             if (status.label !== props.workflow.status.label) {
-              return <Menu.Item key={status.label}>{status.label}</Menu.Item>;
+              return <Menu.Item key={status.id}>{status.label}</Menu.Item>;
             }
           })
         : null}
@@ -169,7 +191,7 @@ const HeaderOptions = props => {
   );
 
   return (
-    <Col span="6" className="text-right">
+    <Col span="5" className="text-right">
       <Dropdown overlay={menu}>
         <Button className="main-btn" type="main">
           {props.workflow.status.label}
@@ -193,10 +215,11 @@ const getIcon = (id, kinds) => {
 
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
+  let progressData = getProgressData(props.workflow);
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
-        <Col span={1} className="text-center text-anchor">
+        <Col span={2} className="text-center text-anchor">
           {props.detailsPage ? (
             <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
               <i
@@ -207,14 +230,23 @@ export const WorkflowHeader = props => {
               </i>
             </span>
           ) : (
-            <i
-              className="material-icons"
-              style={{ fontSize: "18px", verticalAlign: "middle" }}
-            >
-              {props.kind === ""
-                ? getIcon(props.workflow.definition.kind, props.kind)
-                : "folder_open"}
-            </i>
+            <span className="pd-right">
+              <Progress
+                type="circle"
+                percent={progressData}
+                width={35}
+                format={percent => (
+                  <i
+                    className="material-icons"
+                    style={{ fontSize: "18px", verticalAlign: "middle" }}
+                  >
+                    {props.kind === ""
+                      ? getIcon(props.workflow.definition.kind, props.kind)
+                      : "folder_open"}
+                  </i>
+                )}
+              />
+            </span>
           )}
         </Col>
 
@@ -237,13 +269,13 @@ export const WorkflowHeader = props => {
 /////////////////
 
 export const WorkflowBody = props => {
-  const menuItems = () => {
-    let realtedKind = props.realtedKind;
+  const relatedKind = props.relatedKind;
 
+  const menuItems = () => {
     return (
       <Menu onClick={props.onChildSelect}>
-        {!_.isEmpty(realtedKind) ? (
-          _.map(props.realtedKind, function(item, index) {
+        {!_.isEmpty(relatedKind) ? (
+          _.map(props.relatedKind, function(item, index) {
             return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
           })
         ) : (
@@ -272,13 +304,13 @@ export const WorkflowBody = props => {
         </Col>
         <Col span="12" className="text-right text-light small">
           {!props.isChild ? (
-            props.realtedKind.length !== 0 ? (
+            props.relatedKind ? (
               <Dropdown
                 overlay={childWorkflowMenu}
                 className="child-workflow-dropdown"
                 placement="bottomRight"
               >
-                <a className="ant-dropdown-link ant-btn btn-cyan" href="#">
+                <a className="ant-dropdown-link ant-btn secondary-btn" href="#">
                   Add <i className="material-icons t-14">keyboard_arrow_down</i>
                 </a>
               </Dropdown>
@@ -368,7 +400,7 @@ const StepItem = props => {
   }
 
   return (
-    <li className={"t-14"} title={props.stepData.name}>
+    <li className={"t-14 "} title={props.stepData.name}>
       <Link
         to={
           "/workflows/instances/" +
@@ -380,13 +412,13 @@ const StepItem = props => {
         }
         className={
           step_complete
-            ? "text-base text-nounderline text-medium"
+            ? "text-secondary text-nounderline text-medium"
             : overdue
               ? "text-red text-nounderline text-normal"
-              : "text-light text-nounderline text-normal"
+              : "text-base text-nounderline text-normal"
         }
       >
-        <i className="material-icons">{icon_cls}</i>
+        <i className="material-icons text-middle">{icon_cls}</i>
         <span>{props.stepData.name}</span>
       </Link>
     </li>

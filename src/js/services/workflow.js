@@ -56,7 +56,7 @@ const getFilterParams = filters => {
 const pageUrl = filter => {
   let url = _.map(filter, function(i, index) {
     let g = "";
-    g = g + "&" + i.label + "=" + i.values;
+    g = g + "&" + i.label + "=" + i.value;
     // if (index === 0) {
     //   g = g + "?" + i.label + "=" + i.value;
     // } else {

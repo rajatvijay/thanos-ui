@@ -17,7 +17,7 @@
 
 .aux-nav-filter {
   .create-btn {
-    margin: 45px 45px 30px;
+    margin: 67px 45px 30px;
     border-bottom: 2px solid #f4f5f7;
   }
 
@@ -84,11 +84,9 @@
     }
   }
 }
+
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background-color: @color-primary;
-  .icon {
-    color: @color-text;
-  }
+  background-color: #f2f5fa;
 }
 
 .kind-menu {
@@ -105,8 +103,7 @@
   overflow-x: hidden;
   margin: 0 78px;
   background-color: transparent;
-  border-bottom: 1px solid @color-text;
-  padding-bottom: 40px;
+  //padding-bottom: 40px;
   //border-radius: 4px;
 
   .filter-top-list {
@@ -145,6 +142,7 @@
       background-color: @color-white;
       color: @color-text;
       border: 1px solid @color-white;
+      border-bottom: 3px solid @color-white;
       height: 110px;
       font-family: Avenir, Roboto, "Helvetica Neue", Arial, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -152,7 +150,8 @@
       &.ant-menu-item-selected {
         box-shadow: none;
         background-color: #f6f7f9;
-        border: 1px solid @color-text;
+        border: 1px solid #eaeaea;
+        border-bottom: 3px solid @color-secondary;
       }
       .group {
         margin-bottom: 10px;
@@ -162,7 +161,7 @@
         font-weight: 700;
       }
     }
-    .workflow-count {
+    .workflow-group-count {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
         "Segoe UI Emoji", "Segoe UI Symbol";

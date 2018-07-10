@@ -13,7 +13,7 @@ import {
   Row,
   Col
 } from "antd";
-import { configActions, logout } from "../../actions";
+import { logout } from "../../actions";
 import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -78,9 +78,7 @@ class NavTop extends Component {
     super(props);
   }
 
-  componentDidMount = () => {
-    this.props.dispatch(configActions.getConfig());
-  };
+  componentDidMount = () => {};
 
   onLogout(key) {
     this.props.dispatch(logout());
@@ -149,12 +147,14 @@ class NavTop extends Component {
 
                   <SubMenu
                     title={
-                      <span>
-                        <Avatar>{user.first_name.charAt(0)}</Avatar>{" "}
-                        <i className="material-icons t-14">
-                          keyboard_arrow_down
-                        </i>
-                      </span>
+                      this.props.authentication.user ? (
+                        <span>
+                          <Avatar>{user.first_name.charAt(0)}</Avatar>{" "}
+                          <i className="material-icons t-14">
+                            keyboard_arrow_down
+                          </i>
+                        </span>
+                      ) : null
                     }
                     onClick={this.onLogout.bind(this, "key")}
                   >

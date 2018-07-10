@@ -8,11 +8,6 @@ import { store } from "./_helpers";
 import "../css/App.css";
 import "antd/dist/antd.css";
 
-// setup fake backend
-//import { configureFakeBackend } from "./_helpers";
-
-//configureFakeBackend();
-
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

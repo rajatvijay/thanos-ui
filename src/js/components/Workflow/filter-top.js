@@ -100,7 +100,7 @@ class WorkflowFilterTop extends Component {
                               title="Overdue"
                               overflowCount={99}
                             >
-                              <span className="text-base workflow-count">
+                              <span className="text-base workflow-group-count">
                                 {item.count}
                               </span>
                             </Badge>

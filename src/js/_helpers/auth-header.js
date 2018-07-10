@@ -10,7 +10,7 @@ export const authHeader = {
 function get() {
   let client = getClient();
   return {
-    "Content-Type": "application/json",
+    //"Content-Type": "application/json",
     "X-DTS-SCHEMA": client
   };
 }
@@ -29,7 +29,7 @@ function requestOptions(method) {
     method: method === "get" ? "GET" : "POST",
     headers: method === "get" ? get() : post(),
     credentials: "include",
-    mode: "no-cors"
+    mode: "cors"
   };
 }
 
