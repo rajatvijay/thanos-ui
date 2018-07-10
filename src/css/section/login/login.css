@@ -2,7 +2,7 @@
   display: block;
 }
 .login-overlay {
-  background-color: #305ebe;
+  background-color: #17ead9;
   position: absolute;
   height: 100%;
   left: 0;
@@ -16,29 +16,29 @@
     top,
     #ffffff 0%,
     #ffffff 35%,
-    #305ebe 35%,
-    #305ebe 100%
+    #17ead9 35%,
+    #17ead9 100%
   );
   /* FF3.6-15 */
   background: -webkit-linear-gradient(
     top,
     #ffffff 0%,
     #ffffff 35%,
-    #305ebe 35%,
-    #305ebe 100%
+    #17ead9 35%,
+    #17ead9 100%
   );
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(
     to bottom,
     #ffffff 0%,
     #ffffff 35%,
-    #305ebe 35%,
-    #305ebe 100%
+    #17ead9 35%,
+    #17ead9 100%
   );
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient(
       startColorstr="#ffffff",
-      endColorstr=#305ebe,
+      endColorstr=#17ead9,
       GradientType=0
     );
   /* IE6-9 */
@@ -54,7 +54,7 @@
   box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.19);
   background: #fff;
   text-align: center;
-  padding: 24px;
+  padding: 50px 24px;
 }
 .login-box .btn-login {
   margin-top: 100px;

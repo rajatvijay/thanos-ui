@@ -54,7 +54,7 @@ class MainRoutes extends React.Component {
         <Router history={history}>
           <div>
             {localStorage.getItem("user") ||
-            !history.location.pathname === "/login" ? (
+            !history.location.pathname === "/login/magic/" ? (
               <Navbar />
             ) : null}
 
