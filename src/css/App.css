@@ -29,6 +29,9 @@
 .text-white {
   color: #fff;
 }
+.text-base {
+  color: #505050;
+}
 /*Text aligmnet*/
 .text-center {
   text-align: center;

@@ -127,9 +127,13 @@ class LoginForm extends React.Component {
             </Button>
             {/*<Link to="/register"> Sign up</Link>*/}
           </FormItem>
-          <Divider />
-          <div>
-            <Link to="/login/magic">Forgot password?</Link>
+          <Divider>or</Divider>
+          <div className="t-16">
+            <Link to="/login/magic">
+              Login using email only<i className="material-icons t-14 text-middle pd-left-sm">
+                arrow_forward
+              </i>
+            </Link>
           </div>
         </Form>
       </div>

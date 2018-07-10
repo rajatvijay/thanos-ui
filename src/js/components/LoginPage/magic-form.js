@@ -84,6 +84,9 @@ class LoginLinkForm extends React.Component {
       <div className="login-form-box">
         {!this.props.submitted ? (
           <div>
+            <div className="text-center mr-bottom t-18 text-base">
+              Enter your email address to Login
+            </div>
             <Form
               layout="vertical"
               onSubmit={this.onSubmit}
@@ -120,7 +123,12 @@ class LoginLinkForm extends React.Component {
             </Form>
             <Divider>or</Divider>
             <div>
-              <Link to="/login">Go to login page</Link>
+              <Link to="/login">
+                Login using email and password
+                <i className="material-icons t-14 text-middle pd-left-sm">
+                  arrow_forward
+                </i>
+              </Link>
             </div>
           </div>
         ) : (
@@ -135,15 +143,14 @@ class LoginLinkForm extends React.Component {
                 <span className="text-grey-dark">
                   We have sent and email to <b>{this.state.data.email}</b>{" "}
                   <br />
-                  If this email is registered with VETTED you will find a link
-                  to log you in.<br />
+                  Please check your inbox<br />
                   <br />
                 </span>
               </p>
               <div className="t-12">NOTE: The link expires in 24 hours.</div>
               <Divider />
               <div>
-                <Link to="/login">Go to login page</Link>
+                <Link to="/login/magic">Go to login page </Link>
               </div>
             </div>
           </div>
