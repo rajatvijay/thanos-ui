@@ -1,4 +1,4 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader, baseUrl, baseUrl2 } from "../_helpers";
 
 export const userService = {
   login,
@@ -68,10 +68,7 @@ export const sendEmailAuthToken = async email => {
   };
   try {
     const response = await fetch(
-      document.location.protocol +
-        document.location.hostname +
-        "/api/v1/" +
-        "users/magic_link/",
+      baseUrl2 + "users/magic_link/",
       requestOptions
     );
     return response;

@@ -133,23 +133,23 @@ const HeaderWorkflowGroup = props => {
                         content={
                           <div className="text-center">
                             {groupitem.definition.name}
-                            {completed ? (
-                              <div className="small">completed</div>
-                            ) : (
-                              ""
-                            )}
+                            <div className="small">
+                              {groupProgress}% completed
+                            </div>
                           </div>
                         }
                       >
                         {groupProgress === 100 ? (
-                          <i className="material-icons text-middle t-22 text-secondary">
+                          <i className="material-icons text-middle t-18 text-secondary">
                             check_circle_outline
                           </i>
                         ) : (
                           <Progress
+                            showInfo={false}
                             type="circle"
                             percent={groupProgress}
-                            width={25}
+                            width={18}
+                            strokeWidth={8}
                           />
                         )}
                       </Popover>
@@ -160,7 +160,7 @@ const HeaderWorkflowGroup = props => {
                           ? "title-c text-medium text-secondary"
                           : od
                             ? "title-c text-red text-normal "
-                            : "title-c text-normal text-light"
+                            : "title-c text-normal text-base"
                       }
                     >
                       {groupitem.definition.name}
@@ -193,9 +193,17 @@ const HeaderOptions = props => {
   return (
     <Col span="5" className="text-right">
       <Dropdown overlay={menu}>
-        <Button className="main-btn" type="main">
-          {props.workflow.status.label}
-          <Icon className="pd-left-sm" type="down" style={{ fontSize: 11 }} />
+        <Button
+          className="main-btn status-btn"
+          type="main"
+          title={props.workflow.status.label}
+        >
+          <span className="status-text">{props.workflow.status.label}</span>
+          <Icon
+            className="pd-left-sm icon"
+            type="down"
+            style={{ fontSize: 11 }}
+          />
         </Button>
       </Dropdown>
     </Col>
