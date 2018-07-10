@@ -36,7 +36,7 @@ export const logout = () => async dispatch => {
     dispatch({
       type: userConstants.LOGOUT
     });
-    history.push("/login");
+    history.push("/login/magic");
   } catch (error) {
     throw error;
   }
