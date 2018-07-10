@@ -24,13 +24,16 @@
   color: #85d2cc;
 }
 .text-light {
-  color: #999;
+  color: rgba(52, 59, 76, 0.6);
 }
 .text-white {
   color: #fff;
 }
 .text-base {
   color: #343b4c;
+}
+.text-secondary {
+  color: #6178ea;
 }
 /*Text aligmnet*/
 .text-center {
@@ -48,15 +51,19 @@
 /*Text weight*/
 .text-bold {
   font-weight: bold;
+  font-weight: 700;
 }
 .text-medium {
+  font-weight: medium;
   font-weight: 500;
 }
 .text-normal {
   font-weight: normal;
+  font-weight: 400;
 }
 .text-thin {
-  font-weight: 400;
+  font-weight: thin;
+  font-weight: 300;
 }
 /*Text size*/
 .t-12 {
@@ -128,7 +135,7 @@
   background-color: #85d2cc;
 }
 .bg-light {
-  background-color: #999;
+  background-color: rgba(52, 59, 76, 0.6);
 }
 .bg-white {
   background-color: #fff;
