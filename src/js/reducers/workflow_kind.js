@@ -1,6 +1,9 @@
 import { workflowKindConstants } from "../constants";
 
-export function workflowKind(state = {}, action) {
+export function workflowKind(
+  state = { loading: false, workflowKind: null },
+  action
+) {
   switch (action.type) {
     case workflowKindConstants.GETALL_REQUEST:
       return {

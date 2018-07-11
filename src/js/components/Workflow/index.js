@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Icon, Row, Col, Button, Dropdown, Menu, Tooltip } from "antd";
 import WorkflowList from "./workflow-list";
-import { workflowActions, workflowFiltersActions } from "../../actions";
+import {
+  workflowActions,
+  workflowFiltersActions,
+  configActions
+} from "../../actions";
 import FilterSidebar from "./filter";
 import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
@@ -16,12 +20,27 @@ class Workflow extends Component {
 
   componentDidMount = () => {
     //this.reloadWorkflowList();
+    if (!this.props.config.configuration || this.props.config.error) {
+      this.props.dispatch(configActions.getConfig());
+    }
   };
 
   componentDidUpdate = prevProps => {
-    if (this.props.workflowKind !== prevProps.workflowKind) {
+    if (
+      this.props.workflowKind.workflowKind !==
+      prevProps.workflowKind.workflowKind
+    ) {
+      console.log("this.props.workflowKind");
+      console.log(prevProps.workflowKind.workflowKind);
+      console.log(this.props.workflowKind.workflowKind);
+
       if (this.props.workflowKind.workflowKind) {
+        console.log("this.props.workflowKind-kind------------");
+        console.log(this.props.workflowKind.workflowKind);
+
         if (!this.props.config.loading) {
+          console.log("this.props.config-kind------------");
+          console.log(this.props.config);
           this.getDefaultKind();
         }
       }
@@ -59,6 +78,7 @@ class Workflow extends Component {
     if (defKind) {
       this.setState({ defKind: defKind });
 
+      console.log("dispatchingiiiiiii-----");
       this.props.dispatch(
         workflowFiltersActions.setFilters({
           filterType: "kind",
@@ -66,6 +86,8 @@ class Workflow extends Component {
           meta: defKind
         })
       );
+    } else {
+      //this.reloadWorkflowList()
     }
   };
 

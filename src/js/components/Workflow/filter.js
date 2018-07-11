@@ -185,8 +185,6 @@ class WorkflowKindFilter extends Component {
   onFilterSelected = value => {
     let id = "";
 
-    console.log("value---------");
-    console.log(value);
     this.state.selected !== value.id ? (id = value.id) : (id = "");
 
     this.setState({ selected: id });
@@ -237,27 +235,27 @@ class FilterSidebar extends Component {
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
     //set default kind
-    if (this.props.config !== nextProps.config) {
-      console.log(nextProps);
 
-      if (nextProps.config.configuration) {
-        let defaultKind = nextProps.config.configuration.default_workflow_kind;
-        console.log("dispathcing");
-        // this.props.dispatch(
-        //   workflowFiltersActions.setFilters({
-        //     filterType: "kind",
-        //     //filterValue: defaultKind.id,
-        //     filterValue: [3],
-        //     //meta: { defaultKind}
-        //     meta: { tag: "users" }
-        //   })
-        // );
+    // if (this.props.config !== nextProps.config) {
+    //   //console.log(nextProps);
 
-        // console.log('dispathceeedd')
-        // if(defaultKind){
-        // }
-      }
-    }
+    //   // if (nextProps.config.configuration) {
+    //   //   let defaultKind = nextProps.config.configuration.default_workflow_kind;
+    //   //   // this.props.dispatch(
+    //   //   //   workflowFiltersActions.setFilters({
+    //   //   //     filterType: "kind",
+    //   //   //     //filterValue: defaultKind.id,
+    //   //   //     filterValue: [3],
+    //   //   //     //meta: { defaultKind}
+    //   //   //     meta: { tag: "users" }
+    //   //   //   })
+    //   //   // );
+
+    //   //   // console.log('dispathceeedd')
+    //   //   // if(defaultKind){
+    //   //   // }
+    //   // }
+    // }
 
     if (this.props.workflowFilters !== nextProps.workflowFilters) {
       this.props.dispatch(workflowActions.getAll());
