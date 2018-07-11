@@ -14,7 +14,7 @@ const initialState = {
   },
   loading: false,
   items: {},
-  error: ""
+  error: null
 };
 
 export function users(state = initialState, action) {
@@ -45,7 +45,7 @@ export function users(state = initialState, action) {
     case userConstants.LOGIN_LINK_FAILURE:
       return {
         ...state,
-        emailAuth: { ...state.emailAuth, loading: false, errors: action.errors }
+        emailAuth: { ...state.emailAuth, loading: false, errors: action.error }
       };
 
     //GET LIST OF ALL USERS

@@ -1,5 +1,5 @@
 export { alertActions } from "./alert";
-export { userActions, login, logout } from "./user";
+export { userActions, login, logout, checkAuth } from "./user";
 export { configActions } from "./config";
 export { workflowActions } from "./workflows";
 export { workflowDetailsActions } from "./workflow_details";

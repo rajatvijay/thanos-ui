@@ -6,7 +6,8 @@ export const userService = {
   getAll,
   getById,
   update,
-  delete: _delete
+  delete: _delete,
+  checkAuth
 };
 
 //Get client name for form headers.
@@ -76,6 +77,30 @@ export const sendEmailAuthToken = async email => {
     throw error;
   }
 };
+
+function checkAuth() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  return fetch(baseUrl + "users/me/?format=json", requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(response.statusText);
+      }
+      return response.json();
+    })
+    .then(user => {
+      // login successful if there's a jwt token in the response
+      if (user) {
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem("user", JSON.stringify(user));
+      }
+      return user;
+    });
+}
 
 // function logout() {
 //   // remove user from local storage to log user out

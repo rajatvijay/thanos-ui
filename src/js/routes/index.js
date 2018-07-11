@@ -8,7 +8,12 @@ import {
 } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
-import { alertActions, configActions } from "../actions";
+import {
+  alertActions,
+  configActions,
+  userActions,
+  checkAuth
+} from "../actions";
 import { PrivateRoute } from "../components/PrivateRoute";
 import { GenericNotFound } from "../components/notfound";
 import { LoginPage } from "../components/LoginPage";
@@ -38,11 +43,19 @@ class MainRoutes extends React.Component {
       // clear alert on location change
       dispatch(alertActions.clear());
     });
+
     dispatch(configActions.getConfig());
+
+    //get active user if user not avaiable
+    //for redirection from magic link
+    if (!localStorage.getItem("user")) {
+      dispatch(checkAuth());
+    }
   }
 
   render() {
     const { alert } = this.props;
+
     return (
       <div className="main-container">
         <div className="error" style={{ position: "relative", zIndex: 111 }}>
