@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
   currentStepFields,
   workflowFilters,
   workflowFilterType,
-  changeStatus
+  changeStatus,
   workflowComments
 });
 
