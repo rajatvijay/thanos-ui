@@ -77,12 +77,16 @@ class LoginLinkForm extends React.Component {
     this.handleChange(e);
   };
 
+  refresh = () => {
+    window.location.reload();
+  };
+
   render() {
     const { data, errors } = this.state;
 
     return (
       <div className="login-form-box">
-        {!this.props.submitted ? (
+        {!this.props.emailAuth.submitted ? (
           <div>
             <div className="text-center mr-bottom t-18 text-base">
               Enter your email address to Login
@@ -93,9 +97,9 @@ class LoginLinkForm extends React.Component {
               className="login-form"
             >
               <FormItem
-                validateStatus={errors.email && "error"}
+                validateStatus={errors.message && "error"}
                 hasFeedback
-                help={errors.email}
+                help={errors.message}
               >
                 <Input
                   id="email"
@@ -150,7 +154,9 @@ class LoginLinkForm extends React.Component {
               <div className="t-12">NOTE: The link expires in 24 hours.</div>
               <Divider />
               <div>
-                <Link to="/login/magic">Go to login page </Link>
+                <a href="#" onClick={this.refresh}>
+                  Go to login page{" "}
+                </a>
               </div>
             </div>
           </div>
