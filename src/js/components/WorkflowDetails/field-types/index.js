@@ -25,7 +25,7 @@ export const getFieldType = props => {
       return Bool(props);
     case "integer":
       return Number(props);
-    case "attachment":
+    case "attachment" || "word_document":
       return Attachment(props);
     case "file":
       return File(props);
