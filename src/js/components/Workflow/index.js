@@ -82,7 +82,6 @@ class Workflow extends Component {
             <Menu.Item key={index}>
               <a
                 href={baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"}
-                target="_blank"
               >
                 <i
                   className="material-icons"
