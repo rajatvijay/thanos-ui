@@ -55,10 +55,21 @@ class WorkflowDetails extends Component {
         return false;
       }
     });
+
+    // this conditions is satisfied only when all step groups are completed
     if (!activeStepGroup) {
-      activeStepGroup = wfd.stepGroups.results[0];
-      activeStep = wfd.stepGroups.results[0].steps[0];
+      let last_sg_index = wfd.stepGroups.results.length - 1;
+      activeStepGroup = wfd.stepGroups.results[last_sg_index];
+      let last_step_index = activeStepGroup.steps - 1;
+      activeStep = activeStepGroup.steps[last_step_index];
     }
+
+    // this condition will occur when step is available but steps inside are not available for edit (i.e. locked/completed)
+    if (activeStepGroup && !activeStep) {
+      let last_step_index = activeStepGroup.steps.length - 1;
+      activeStep = activeStepGroup.steps[last_step_index];
+    }
+
     return {
       activeStepGroup: activeStepGroup,
       activeStep: activeStep

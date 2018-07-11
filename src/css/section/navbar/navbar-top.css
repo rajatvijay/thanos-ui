@@ -1,10 +1,65 @@
 .navbar {
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.09);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
+}
+.navbar-top .ant-nav {
+  background: #fff;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  z-index: 2;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
 }
 .navbar-top .ant-menu-item:first-child {
   margin-top: 0px;
 }
+.navbar-top .ant-layout-header {
+  padding-left: 45px;
+  padding-right: 78px;
+}
+.navbar-top .logo {
+  width: 200px;
+  height: 30px;
+  display: inline-block;
+}
+.navbar-top .logo img {
+  max-width: 200px;
+  max-height: 25px;
+  height: auto;
+}
+.navbar-top .search-box {
+  display: inline-block;
+  position: absolute;
+  max-width: 300px;
+  left: 270px;
+  top: 3px;
+}
+.navbar-top .search-box .ant-input {
+  border-radius: 0;
+  border: none;
+  font-size: 18px;
+}
+.navbar-top .search-box .ant-input-affix-wrapper .ant-input:not(:first-child) {
+  padding-left: 40px;
+}
+.navbar-top .search-box .anticon {
+  font-size: 18px;
+  color: #343b4c;
+}
+.navbar-top .ant-menu-horizontal .ant-menu-submenu:hover,
+.navbar-top .ant-menu-horizontal .ant-menu-submenu-selected,
+.navbar-top .ant-menu-horizontal .ant-menu-submenu-active {
+  border-color: #17ead9;
+}
+.navbar-top .ant-menu-horizontal .ant-menu-item:hover,
+.navbar-top .ant-menu-horizontal .ant-menu-item-selected,
+.navbar-top .ant-menu-horizontal .ant-menu-item-active {
+  border-color: #17ead9;
+}
 .navbar-top .ant-menu-item .anticon {
   font-size: 24px;
-  color: #305ebe;
+  color: #17ead9;
+}
+.ant-menu-submenu-popup .ant-menu-item-active {
+  color: #343b4c;
+  background-color: #17ead9;
 }

@@ -1,5 +1,5 @@
 .navbar-left .ant-menu-vertical.ant-menu-dark {
-  background: #305ebe;
+  background: #17ead9;
 }
 .navbar-left .ant-menu-vertical > .ant-menu-item {
   height: 80px;
@@ -10,7 +10,7 @@
   margin-top: 0px;
 }
 .navbar-left .ant-menu-vertical > .ant-menu-item-selected {
-  background: #214081;
+  background: #109f94;
 }
 .ant-menu-inline-collapsed > .ant-menu-item,
 .ant-menu-inline-collapsed
