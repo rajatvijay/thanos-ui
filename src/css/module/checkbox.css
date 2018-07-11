@@ -1,5 +1,5 @@
-.ant-checkbox-checked .ant-checkbox-inner,
+.ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
-  background-color: #305ebe;
-  border-color: #305ebe;
+  background-color: #17ead9;
+  border-color: #17ead9;
 }

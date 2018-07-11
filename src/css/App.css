@@ -52,7 +52,7 @@
   color: #fff;
 }
 .text-base {
-  color: #505050;
+  color: #343b4c;
 }
 .text-secondary {
   color: #6178ea;
@@ -842,6 +842,23 @@ template {
   top: 65px;
   min-height: 100vh;
 }
+.add_comment_btn {
+  float: right;
+  font-size: 12px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+.mentions {
+  background: #eaf5fc;
+  color: #0576b9;
+}
+.comment_step_bar {
+  width: 100%;
+  color: #000000;
+  background: #e6fffd;
+  border: 1px solid #8bded8;
+  font-size: 13px;
+}
 .card-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -1496,7 +1513,7 @@ template {
 .filter-top .filter-top-horizontal .ant-menu-item .ant-badge-count {
   font-weight: 700;
 }
-.filter-top .filter-top-horizontal .workflow-count {
+.filter-top .filter-top-horizontal .workflow-group-count {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";

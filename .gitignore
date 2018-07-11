@@ -30,3 +30,9 @@ krypton-ui.sublime-workspace
 !App.css
 
 /src/js/_helpers/api-url-local.js
+
+src/css/*/*.css
+src/css/*/*.map
+
+src/css/*/*/*.css
+src/css/*/*/*.map

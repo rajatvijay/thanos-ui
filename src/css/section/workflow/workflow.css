@@ -1,6 +1,34 @@
-/*.ant-collapse {
-  transition: all 0.5s ease-in-out;
-}*/
+.workflow-container {
+  background: #f6f7f9;
+}
+.workflow-container .workflow-list-wrapper {
+  padding: 15px 78px 40px;
+}
+.workflow-container .section-top {
+  margin: 78px 80px 14px;
+}
+.workflow-container .section-top .waiting-section i {
+  font-size: 16px;
+  vertical-align: middle;
+}
+.workflow-container .section-top .waiting-section .waiting-filter-trigger {
+  padding-bottom: 3px;
+  border-bottom: 2px solid #17ead9;
+  font-weight: 500;
+}
+.workflow-container .divider-top {
+  border-bottom: 1px solid #343b4c;
+  margin: 40px 78px 40px;
+}
+.workflow-container .workflow-count {
+  margin: 0 78px;
+}
+.workflow-list .grouping-head {
+  font-size: 14px;
+  font-weight: 700;
+  color: #343b4c;
+  margin-bottom: 12px;
+}
 .workflow-list.ant-collapse > .ant-collapse-item {
   background: #fff;
   transition: all 0.8s ease-in-out;
@@ -8,20 +36,75 @@
 .workflow-list.ant-collapse > .ant-collapse-item:hover {
   background: #f1f2f6;
 }
-.lc-card .ant-collapse-header:hover {
-  /*background: #f7f7f7;*/
+.workflow-list .Collapsible {
+  cursor: pointer;
+  background-color: #fff;
+}
+.workflow-list .Collapsible .ant-collapse-header {
+  padding: 20px 26px;
+}
+.workflow-list .collapse-wrapper {
+  position: relative;
+}
+.workflow-list .child-workflow-expander {
+  position: absolute;
+  left: 0px;
+  z-index: 1;
+  width: 30px;
+  height: auto;
+  vertical-align: middle;
+  line-height: 89px;
+  text-align: center;
+  display: inline-block;
+  top: 0;
+}
+.workflow-list .child-workflow-expander i {
+  font-size: 16px;
+  color: #343b4c;
+}
+.workflow-list .child-workflow-wrapper {
+  padding-left: 30px;
+}
+.workflow-list .paper {
+  margin-bottom: 58px;
+}
+.workflow-list .paper .workflow-list-item {
+  transition: margin 0.3s ease;
+  border-bottom: 1px solid rgba(160, 160, 160, 0.5);
+}
+.workflow-list .paper .workflow-list-item:last-child {
+  border-bottom: none;
+}
+.workflow-list .paper .workflow-list-item .Collapsible {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+  margin-bottom: 0;
+}
+.workflow-list .paper .workflow-list-item.opened {
+  margin: 32px -20px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+  border-bottom: none;
+}
+.workflow-list .paper .workflow-list-item.opened .Collapsible {
+  border: none;
+}
+.workflow-list .paper .workflow-item:last-child .Collapsible {
+  border: none;
 }
 .lc-card-head {
   padding: 8px 0px;
 }
+.lc-card-head .company-name {
+  font-size: 18px;
+}
 .lc-card-head .group-overview {
   max-width: 100%;
   overflow: hidden;
+  max-height: 45px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .lc-card-head .group-overview .ant-progress-bg {
-  background-color: #305ebe;
+  background-color: #17ead9;
 }
 .lc-card-head .group-overview .overflow-wrapper {
   width: 100%;
@@ -29,9 +112,74 @@
 .lc-card-head .group-overview .grp-status .material-icons {
   width: 20px;
 }
+.lc-card-head .ant-steps .ant-steps-item {
+  display: inline-block;
+  min-width: 100px;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+.lc-card-head .ant-steps .ant-steps-item .ant-steps-item-content {
+  white-space: normal;
+}
+.lc-card-head
+  .ant-steps
+  .ant-steps-item
+  .ant-steps-item-content
+  > .ant-steps-item-title {
+  line-height: 1.17;
+  margin-top: 3px;
+  vertical-align: middle;
+}
+.lc-card-head
+  .ant-steps
+  .ant-steps-item
+  .ant-steps-item-content
+  > .ant-steps-item-title
+  .title-c {
+  display: inline-block;
+  width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  max-height: 60px;
+}
+.lc-card-head
+  .ant-steps
+  .ant-steps-item
+  .ant-steps-item-content
+  > .ant-steps-item-title:after {
+  background-color: #343b4c;
+}
+.lc-card-head .ant-steps .ant-steps-item-icon {
+  margin-right: 20px;
+}
+.lc-card-head .status-btn {
+  position: relative;
+  width: 120px;
+}
+.lc-card-head .status-btn .status-text {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  padding-right: 5px;
+  line-height: 32px;
+}
+.lc-card-head .status-btn .icon {
+  position: absolute;
+  top: 11px;
+  right: 6px;
+}
 .lc-card .sub-step-list {
   display: block;
   overflow-x: auto;
+}
+.lc-card .lc-card-body {
+  padding: 28px;
+  border-top: 1px solid #d9d9d9;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz-list {
   padding: 0;
@@ -44,40 +192,39 @@
   max-width: 250px;
   margin-right: 20px;
 }
-.lc-card .lc-card-body .groupaz .grp-class {
+.lc-card .lc-card-body .sub-step-list .groupaz .grp-class {
   font-weight: 500;
   display: block;
 }
-.lc-card .lc-card-body .groupaz .grp-class .grp-name {
+.lc-card .lc-card-body .sub-step-list .groupaz .grp-class .grp-name {
   display: inline-block;
   width: 80%;
   /*border-bottom: 1px solid #f3f5fa;*/
   padding-bottom: 12px;
-  border-bottom: 1px solid #eee;
 }
-.lc-card .lc-card-body .groupaz .lc-step i,
-.lc-card .lc-card-body .groupaz ul li i {
+.lc-card .lc-card-body .sub-step-list .groupaz .lc-step i,
+.lc-card .lc-card-body .sub-step-list .groupaz ul li i {
   font-size: 14px;
   vertical-align: middle;
-  margin-right: 10px;
-  width: 20px;
+  margin-right: 5px;
+  width: 16px;
 }
-.lc-card .lc-card-body .groupaz .lc-step i {
+.lc-card .lc-card-body .sub-step-list .groupaz .lc-step i {
   font-size: 20px;
 }
-.lc-card .lc-card-body .groupaz ul {
+.lc-card .lc-card-body .sub-step-list .groupaz ul {
   list-style: none;
   padding-left: 25px;
   padding-right: 25px;
   margin-top: 24px;
-  border-right: 1px solid #eee;
 }
-.lc-card .lc-card-body .groupaz ul li {
+.lc-card .lc-card-body .sub-step-list .groupaz ul li {
   height: 40px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.lc-card .lc-card-body .groupaz ul li a:hover {
+.lc-card .lc-card-body .sub-step-list .groupaz ul li a:hover {
   text-decoration: none;
+  color: #343b4c;
 }

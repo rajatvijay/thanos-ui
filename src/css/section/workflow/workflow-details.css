@@ -1,34 +1,36 @@
-.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu {
-  background: #e8edf8;
-  color: #305ebe;
-}
 .workflow-details-container
   .ant-layout-sider
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #d4ddf1;
-  color: #305ebe;
+  background: #17ead9;
+  color: #343b4c;
 }
-.workflow-details-container
-  .ant-layout-sider
-  .ant-menu-submenu
-  > .ant-menu:not(.ant-menu-horizontal)
-  .ant-menu-item-selected.text-green {
-  color: #3c763d;
+.aux-step-sidebar .ant-menu .ant-menu-item:-active {
+  color: #343b4c;
+}
+.aux-step-sidebar .ant-menu .ant-menu-item:-selected {
+  color: #343b4c;
+}
+.aux-step-sidebar .ant-menu .ant-menu-item:hover {
+  color: #343b4c;
 }
 .aux-nav-menu {
   overflow-x: visible !important;
 }
 .ant-form.step-form .ant-form-item-label label {
-  display: block;
+  color: #343b4c;
+}
+.ant-form.step-form .ant-form-item-label label {
+  text-transform: uppercase;
+  white-space: normal;
 }
 .ant-form.step-form .has-success.has-feedback:after {
   color: #3c763d;
 }
 .ant-form.step-form .step-form-paragraph {
   margin-bottom: 24px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: #505050;
 }
@@ -55,12 +57,24 @@
 }
 .ant-form.step-form .react-tel-input input:focus,
 .ant-form.step-form .react-tel-input input:hover {
-  border-color: #305ebe;
+  border-color: #17ead9;
+}
+.ant-form.step-form .react-tel-input.disabled input {
+  background-color: #f5f5f5;
+  border-color: #e6d8d8;
+  color: rgba(0, 0, 0, 0.25);
+}
+.ant-form.step-form .react-tel-input.disabled input:hover,
+.ant-form.step-form .react-tel-input.disabled input:focus {
+  border-color: #cacaca;
+}
+.ant-form.step-form .react-tel-input input.invalid-number:hover {
+  border-color: #f16b51;
 }
 .ant-form.step-form .ant-radio-inner:after {
-  background-color: #305ebe;
+  background-color: #17ead9;
 }
-.ant-form.step-form .ant-input:hover,
+.ant-form.step-form .ant-input:not(.ant-input-disabled):hover,
 .ant-form.step-form
   .ant-input-affix-wrapper:hover
   .ant-input:not(.ant-input-disabled),
@@ -69,8 +83,9 @@
 .ant-form.step-form .ant-radio-focused .ant-radio-inner,
 .ant-form.step-form .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
 .ant-form.step-form .ant-input-number-focused,
-.ant-form.step-form .ant-input-number:hover {
-  border-color: #305ebe;
+.ant-form.step-form .ant-input-number:not(.ant-input-number-disabled):hover,
+.ant-form.step-form .ant-select-enabled .ant-select-selection:hover {
+  border-color: #17ead9;
 }
 .ant-form.step-form .file-upload-field {
   width: 100%;
@@ -79,32 +94,37 @@
   text-align: center;
   border-radius: 3px;
 }
+.ant-form.step-form .file-upload-field.disabled {
+  background-color: #f5f5f5;
+  border-color: #e6d8d8;
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 0.25);
+}
 .ant-form.step-form .file-upload-field .upload-drag-icon {
   padding: 20px 20px 0 20px;
 }
-.ant-form.step-form .file-upload-field:hover {
-  border-color: #305ebe;
-}
-.ant-form.step-form .file-upload-field:focus,
-.ant-form.step-form .file-upload-field.file-upload-field-active {
-  border-color: #305ebe;
+.ant-form.step-form .file-upload-field:not(.disabled):hover {
+  border-color: #17ead9;
 }
 .ant-form.step-form .file-upload-field.file-upload-field-reject {
-  border-color: #fd4d4a;
+  border-color: #f16b51;
 }
 .ant-form.step-form .dropped-files ul {
   list-style: none;
   padding: 20px 0;
 }
 .ant-form.step-form .dropped-files li a {
-  color: #305ebe;
+  color: #17ead9;
 }
 .aux-nav .ant-menu .ant-menu-submenu,
 .aux-nav .ant-menu .ant-menu-submenu:hover,
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
-.aux-nav .ant-menu .ant-menu-submenu-active,
-.aux-nav .ant-menu .ant-menu-item-selected,
-.aux-nav .ant-menu .ant-menu-submenu-selected,
-.aux-nav .ant-menu .ant-menu-item-active {
-  color: #8d9bb7;
+.aux-nav .ant-menu .ant-menu-submenu-active {
+  color: #343b4c;
+}
+.aux-nav .ant-menu .ant-menu-submenu-title .material-icons,
+.aux-nav .ant-menu .ant-menu-submenu .material-icons,
+.aux-nav .ant-menu .ant-menu-submenu > .ant-menu-item .material-icons {
+  font-size: 20px;
+  vertical-align: middle;
 }
