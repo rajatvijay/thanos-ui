@@ -89,7 +89,7 @@ class LoginLinkForm extends React.Component {
         {!this.props.emailAuth.submitted ? (
           <div>
             <div className="text-center mr-bottom t-18 text-base">
-              Enter your email address to Login
+              Enter your email address to login
             </div>
             <Form
               layout="vertical"
@@ -145,8 +145,7 @@ class LoginLinkForm extends React.Component {
               <br />
               <p className="t-14">
                 <span className="text-grey-dark">
-                  We have sent and email to <b>{this.state.data.email}</b>{" "}
-                  <br />
+                  We have sent an email to <b>{this.state.data.email}</b> <br />
                   Please check your inbox<br />
                   <br />
                 </span>
