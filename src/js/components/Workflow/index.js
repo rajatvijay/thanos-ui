@@ -4,6 +4,7 @@ import { Layout, Icon, Row, Col, Button, Dropdown, Menu, Tooltip } from "antd";
 import WorkflowList from "./workflow-list";
 import { workflowActions, workflowFiltersActions } from "../../actions";
 import FilterSidebar from "./filter";
+import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
 
@@ -80,13 +81,8 @@ class Workflow extends Component {
           return (
             <Menu.Item key={index}>
               <a
-                href={
-                  "http://" +
-                  document.location.hostname.split(".")[0] +
-                  ".slackcart.com/api/v1/workflow-kinds/" +
-                  item.tag +
-                  "/data-export/"
-                }
+                href={baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"}
+                target="_blank"
               >
                 <i
                   className="material-icons"
