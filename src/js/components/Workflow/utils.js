@@ -34,7 +34,7 @@ function isLockedStepEnable(s, visible_steps) {
 function isLockedStepGroupEnable(sg, visible_steps) {
   let locked_step_count = 0;
   _.forEach(sg.steps, function(step) {
-    if (!isLockedStepEnable(step, visible_steps)) {
+    if (step.is_locked && !isLockedStepEnable(step, visible_steps)) {
       locked_step_count++;
     }
   });
