@@ -92,6 +92,24 @@ function feedValue(props) {
   return opts;
 }
 
+function addComment(props) {
+  props.addComment(props.field.id, "field");
+}
+
+function addCommentBtn(e, props) {
+  let comment_btn_text = "Add comment";
+  if (props.field.comment_count == 1) {
+    comment_btn_text = "1 comment";
+  } else if (props.field.comment_count > 1) {
+    comment_btn_text = props.field.comment_count + " comments";
+  }
+  return (
+    <div className="add_comment_btn" onClick={addComment.bind(e, props)}>
+      <span>{comment_btn_text}</span>
+    </div>
+  );
+}
+
 //Field Type Text
 export const Text = props => {
   return (
@@ -121,6 +139,8 @@ export const Text = props => {
         {...feedValue(props)}
         onChange={e => props.onFieldChange(e, props)}
       />
+
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -170,6 +190,7 @@ export const Bool = props => {
           No
         </Radio>
       </RadioGroup>
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -209,6 +230,7 @@ export const Number = props => {
         {...feedValue(props)}
         onChange={onFieldChange.bind(this, props)}
       />
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -247,6 +269,7 @@ export const Date = props => {
         defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"MM-DD-YYYY"}
       />
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -295,6 +318,7 @@ export const Email = props => {
           {...feedValue(props)}
         />
       )}
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -343,6 +367,7 @@ export const URL = props => {
           {...feedValue(props)}
         />
       )}
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -382,6 +407,7 @@ export const Checkbox = props => {
         }
         {...feedValue(props)}
       />
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -432,6 +458,7 @@ export const Select = props => {
           );
         })}
       </AntSelect>
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -466,6 +493,7 @@ export const Phone = props => {
         onChange={onFieldChange.bind(this, props)}
         //onBlur={handleInputBlur}
       />
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -513,6 +541,7 @@ export const List = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       list
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -688,6 +717,7 @@ class FileUpload extends Component {
             );
           })}
         </div>
+        {addCommentBtn(this, this.props)}
       </FormItem>
     );
   };
@@ -760,6 +790,7 @@ class AttachmentDownload extends Component {
           </Button>
           {/*<a className="link antd-info" href={"#"} style={{display:'block'}}><Icon type="download"/> file name.docx{props.field.attachment}</a>*/}
         </div>
+        {addCommentBtn(this, this.props)}
       </FormItem>
     );
   };
@@ -795,6 +826,7 @@ export const CascaderField = props => {
         onChange={onFieldChangeArray.bind(this, props)}
         options={props.field.definition.extra}
       />
+      {addCommentBtn(this, props)}
     </FormItem>
   );
 };

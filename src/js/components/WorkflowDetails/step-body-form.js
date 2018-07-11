@@ -201,7 +201,8 @@ class StepBodyForm extends Component {
               workflowId: wf_id,
               formProps: that.props.form,
               completed: that.props.stepData.completed_at ? true : false,
-              is_locked: that.props.stepData.is_locked
+              is_locked: that.props.stepData.is_locked,
+              addComment: that.props.toggleSidebar
             };
 
             let field = getFieldType(param);

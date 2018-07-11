@@ -128,7 +128,7 @@ class NavTop extends Component {
                 <Menu
                   theme="light"
                   mode="horizontal"
-                  style={{ lineHeight: "64px", float: "right" }}
+                  style={{ lineHeight: "62px", float: "right" }}
                 >
                   {/*<Menu.Item key="2">
                       <Popover
