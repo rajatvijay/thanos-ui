@@ -38,10 +38,15 @@ class Workflow extends Component {
         console.log("this.props.workflowKind-kind------------");
         console.log(this.props.workflowKind.workflowKind);
 
-        if (!this.props.config.loading) {
+        if (this.props.config.loading) {
           console.log("this.props.config-kind------------");
           console.log(this.props.config);
-          this.getDefaultKind();
+          setTimeout(this.getDefaultKind(), 300);
+        } else if (
+          !this.props.config.loading &&
+          this.props.config.configuration
+        ) {
+          this.getDefaultKind(true);
         }
       }
     }
@@ -58,12 +63,16 @@ class Workflow extends Component {
     // }
   };
 
-  getDefaultKind = () => {
+  getDefaultKind = config_loaded => {
     let kindList = this.props.workflowKind.workflowKind;
-    let kindId = this.props.config.configuration.default_workflow_kind
-      ? this.props.config.configuration.default_workflow_kind
-      : kindList[0].id;
+    let kindId = 2;
     let defKind = null;
+
+    if (config_loaded) {
+      kindId = this.props.config.configuration.default_workflow_kind;
+    } else {
+      kindId = kindList[0].id;
+    }
 
     if (kindId) {
       _.map(kindList, function(kind) {
@@ -87,7 +96,8 @@ class Workflow extends Component {
         })
       );
     } else {
-      //this.reloadWorkflowList()
+      console.log("loading normal-----");
+      this.reloadWorkflowList();
     }
   };
 
