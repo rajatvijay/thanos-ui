@@ -14,7 +14,8 @@ class WorkflowAdvFilter extends Component {
     filterBuilder: { field: null, operator: null, value: null },
     filterList: [],
     fieldOptions: null,
-    advFilterErr: false
+    advFilterErr: false,
+    fetching: false
   };
 
   handleChange = (type, value) => {
@@ -44,6 +45,7 @@ class WorkflowAdvFilter extends Component {
   componentDidUpdate = prevProps => {
     if (prevProps.showAdvFilters !== this.props.showAdvFilters) {
       if (this.props.showAdvFilters) {
+        this.setState({ fetching: true });
         const requestOptions = {
           method: "GET",
           headers: authHeader.get(),
@@ -115,11 +117,14 @@ class WorkflowAdvFilter extends Component {
                   : false
               }
               validateStatus={
-                this.state.advFilterErr &&
-                this.state.filterBuilder.field === null
-                  ? "error"
-                  : ""
+                this.state.fetching
+                  ? "validating"
+                  : this.state.advFilterErr &&
+                    this.state.filterBuilder.field === null
+                    ? "error"
+                    : ""
               }
+              help={this.state.fetching ? "Fetching fields data..." : ""}
             >
               <Cascader
                 options={this.state.fieldOptions}
