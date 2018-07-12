@@ -68,9 +68,9 @@ class StepBody extends Component {
       }
 
       var step_comment_btn = (
-        <div className="float-right">
+        <div className="text-right">
           <span
-            style={{ position: "relative", top: "-57px", right: "-25px" }}
+            style={{ position: "relative", top: "-62px", right: "-25px" }}
             onClick={this.addComment.bind(this, stepData)}
             className="ant-btn ant-btn-sm"
           >
