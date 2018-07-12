@@ -24,6 +24,8 @@ import Dropzone from "react-dropzone";
 import validator from "validator";
 import { commonFunctions } from "./commons";
 import validator from "validator";
+import { commonFunctions } from "./commons";
+import validator from "validator";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -75,7 +77,7 @@ export const Text = props => {
         autoComplete="new-password"
         autoComplete="new-password"
         onChange={e => props.onFieldChange(e, props)}
-        //onBlur={e => props.onFieldChange(e, props)}
+        onBlur={e => props.onFieldChange(e, props)}
       />
 
       {addCommentBtn(this, props)}
@@ -161,6 +163,7 @@ export const Number = props => {
         autoComplete="new-password"
         autoComplete="new-password"
         onChange={onFieldChange.bind(this, props)}
+        onBlur={e => props.onFieldChange(e, props)}
       />
       {addCommentBtn(this, props)}
     </FormItem>
@@ -268,6 +271,7 @@ class Email2 extends React.Component {
           autoComplete="new-password"
           message="The input is not valid email"
           onChange={e => this.onChangeValidate(e)}
+          onBlur={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
 
@@ -340,6 +344,7 @@ class URL2 extends React.Component {
               ? props.field.answers[0].answer
               : props.field.definition.defaultValue
           }
+          onBlur={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
 
@@ -468,6 +473,7 @@ export const Phone = props => {
         defaultCountry="us"
         flagsImagePath={flags}
         onChange={onFieldChange.bind(this, props)}
+        onBlur={e => props.onFieldChange(e, props)}
         //onBlur={handleInputBlur}
       />
       {addCommentBtn(this, props)}

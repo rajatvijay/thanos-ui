@@ -32,6 +32,12 @@ class WorkflowDetails extends Component {
     };
     let params = props.location.search;
     let qs = this.queryStringToObject(params);
+    this.props.location.search = "";
+    if (!_.isEmpty(qs)) {
+      this.state.selectedStep = qs.step;
+      this.state.selectedGroup = qs.group;
+      this.state.from_params = true;
+    }
     if (qs.object_id && qs.type) {
       props.dispatch(workflowDetailsActions.getComment(qs.object_id, qs.type));
     }
@@ -60,7 +66,7 @@ class WorkflowDetails extends Component {
     if (!activeStepGroup) {
       let last_sg_index = wfd.stepGroups.results.length - 1;
       activeStepGroup = wfd.stepGroups.results[last_sg_index];
-      let last_step_index = activeStepGroup.steps - 1;
+      let last_step_index = activeStepGroup.steps.length - 1;
       activeStep = activeStepGroup.steps[last_step_index];
     }
 
@@ -90,20 +96,21 @@ class WorkflowDetails extends Component {
         stepId: step_id
       };
 
-      //Get target step and group data from url.
-      let params = this.props.location.search;
-      let qs = this.queryStringToObject(params);
-
-      if (!_.isEmpty(qs)) {
-        this.setState({ selectedStep: qs.step, selectedGroup: qs.group });
+      if (
+        this.state.selectedStep &&
+        this.state.selectedGroup &&
+        this.state.from_params
+      ) {
         stepTrack = {
           workflowId: wf_id,
-          groupId: qs.group,
-          stepId: qs.step
+          groupId: this.state.selectedGroup,
+          stepId: this.state.selectedStep
         };
+        this.state.from_params = false;
       } else {
         this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
       }
+
       if (!this.state.loading_sidebar) {
         this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
       }

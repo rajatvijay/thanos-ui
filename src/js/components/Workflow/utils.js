@@ -11,7 +11,7 @@ function getVisibleSteps(step_data) {
   var visible_step_id = [];
   _.forEach(step_data, function(sg) {
     _.forEach(sg.steps, function(step) {
-      visible_step_id.push(step.id);
+      visible_step_id.push(step.definition);
     });
   });
   return visible_step_id;
