@@ -1314,6 +1314,10 @@ template {
 .ant-form.step-form .ant-form-item .ant-form-item-label label {
   margin-bottom: 0;
 }
+.ant-form.step-form .ant-form-item.attachment-field .ant-form-item-children {
+  display: inline-block;
+  width: 100%;
+}
 .ant-form.step-form .react-tel-input {
   display: inline-block;
   width: 100%;

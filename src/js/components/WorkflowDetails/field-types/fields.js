@@ -161,7 +161,6 @@ export const Bool = props => {
       key={props.field.id}
       required={getRequired(props)}
       hasFeedback
-      validateStatus={props.field.updated_at ? "success" : null}
       {...field_error(props)}
     >
       <RadioGroup
@@ -201,18 +200,11 @@ export const Number = props => {
     <FormItem
       label={getLabel(props)}
       className="from-label"
-      style={{ display: "block", width: "100%" }}
+      style={{ display: "block" }}
       key={props.field.id}
       required={getRequired(props)}
-      help={
-        <span
-          dangerouslySetInnerHTML={{
-            __html: getLink(props.field.definition.help_text)
-          }}
-        />
-      }
       hasFeedback
-      validateStatus={props.field.updated_at ? "success" : null}
+      {...field_error(props)}
     >
       <InputNumber
         disabled={
@@ -253,11 +245,9 @@ export const Date = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      message=""
       required={getRequired(props)}
-      {...field_error(props)}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      {...field_error(props)}
     >
       <DatePicker
         disabled={
@@ -284,10 +274,9 @@ export const Email = props => {
       style={{ display: "block" }}
       key={props.field.id}
       type="email"
-      //help={"The input is not valid email"}
       required={getRequired(props)}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      {...field_error(props)}
     >
       {getFieldDecorator("email", {
         initialValue: props.field.answers[0]
@@ -333,9 +322,8 @@ export const URL = props => {
       style={{ display: "block" }}
       key={props.field.id}
       required={getRequired(props)}
-      //help={props.field.help_text}
-      //hasFeedback
-      //validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      hasFeedback
+      {...field_error(props)}
     >
       {getFieldDecorator("url", {
         initialValue: props.field.answers[0]
@@ -383,11 +371,9 @@ export const Checkbox = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      message=""
       required={getRequired(props)}
-      {...field_error(props)}
       hasFeedback
-      validateStatus={_.isEmpty(props.field.answers) ? null : "success"}
+      {...field_error(props)}
     >
       <CheckboxGroup
         disabled={
@@ -430,9 +416,8 @@ export const Select = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      {...field_error(props)}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      {...field_error(props)}
     >
       <AntSelect
         allowClear
@@ -473,9 +458,8 @@ export const Phone = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      {...field_error(props)}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      {...field_error(props)}
     >
       <ReactTelInput
         disabled={
@@ -597,7 +581,6 @@ class FileUpload extends Component {
         key={field.id}
         required={getRequired(this.props)}
         {...field_error(this.props)}
-        validateStatus={field.updated_at ? "success" : null}
       >
         <Dropzone
           //accept="image/jpeg, image/png"
@@ -760,24 +743,16 @@ class AttachmentDownload extends Component {
 
   render = () => {
     return (
-      <FormItem
-        label={getLabel(this.props)}
-        className="from-label"
-        style={{ display: "block" }}
-        key={this.props.field.id}
-        required={getRequired(this.props)}
-        help={
-          <span
-            dangerouslySetInnerHTML={{
-              __html: getLink(this.props.field.definition.help_text)
-            }}
-          />
-        }
-        validateStatus={
-          this.props.field.definition.updated_at ? "success" : null
-        }
-      >
-        <div className="attachment-link-wrapper">
+      <div>
+        <FormItem
+          label={getLabel(this.props)}
+          className="from-label attachment-field"
+          style={{ display: "block" }}
+          key={this.props.field.id}
+          required={getRequired(this.props)}
+          hasFeedback
+          {...field_error(this.props)}
+        >
           <Button
             //disabled={this.props.completed}
             icon="paper-clip"
@@ -786,10 +761,9 @@ class AttachmentDownload extends Component {
           >
             Download file
           </Button>
-          {/*<a className="link antd-info" href={"#"} style={{display:'block'}}><Icon type="download"/> file name.docx{props.field.attachment}</a>*/}
-        </div>
+        </FormItem>
         {addCommentBtn(this, this.props)}
-      </FormItem>
+      </div>
     );
   };
 }
@@ -806,11 +780,9 @@ export const CascaderField = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      message=""
       required={getRequired(props)}
-      {...field_error(props)}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      {...field_error(props)}
     >
       <Cascader
         disabled={
