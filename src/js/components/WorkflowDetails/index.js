@@ -241,7 +241,7 @@ class WorkflowDetails extends Component {
             marginLeft: 250,
             background: "#FBFBFF",
             minHeight: "100vh",
-            paddingTop: "23px"
+            paddingTop: "30px"
           }}
         >
           <div className="mr-ard-md  shadow-1 bg-white">
