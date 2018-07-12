@@ -30,18 +30,8 @@ class Workflow extends Component {
       this.props.workflowKind.workflowKind !==
       prevProps.workflowKind.workflowKind
     ) {
-      console.log("this.props.workflowKind");
-      console.log(prevProps.workflowKind.workflowKind);
-      console.log(this.props.workflowKind.workflowKind);
-
       if (this.props.workflowKind.workflowKind) {
-        console.log("this.props.workflowKind-kind------------");
-        console.log(this.props.workflowKind.workflowKind);
-
         if (this.props.config.loading) {
-          console.log("this.props.config-kind------------");
-          console.log(this.props.config);
-          setTimeout(this.getDefaultKind(), 300);
         } else if (
           !this.props.config.loading &&
           this.props.config.configuration
