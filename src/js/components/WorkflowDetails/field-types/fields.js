@@ -11,7 +11,9 @@ import {
   Checkbox as AntCheckbox,
   Divider as AntDivider,
   Button,
-  Cascader
+  Cascader,
+  Row,
+  Col
 } from "antd";
 import _ from "lodash";
 import moment from "moment";
@@ -26,7 +28,7 @@ const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const Option = AntSelect.Option;
 
-//Common utility fucntions bundled in one file.
+//Common utility fucntions bundled in one file commons.js//
 const {
   getLabel,
   onFieldChange,
