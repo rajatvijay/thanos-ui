@@ -137,7 +137,9 @@ export const Text = props => {
             : props.field.definition.defaultValue
         }
         {...feedValue(props)}
+        autoComplete={false}
         onChange={e => props.onFieldChange(e, props)}
+        //onBlur={e => props.onFieldChange(e, props)}
       />
 
       {addCommentBtn(this, props)}
@@ -220,6 +222,7 @@ export const Number = props => {
             : props.field.definition.defaultValue
         }
         {...feedValue(props)}
+        autoComplete={false}
         onChange={onFieldChange.bind(this, props)}
       />
       {addCommentBtn(this, props)}
@@ -302,6 +305,7 @@ export const Email = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
+          autoComplete={false}
           message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
           {...feedValue(props)}
@@ -350,6 +354,7 @@ export const URL = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="url"
+          autoComplete={false}
           message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
           {...feedValue(props)}
