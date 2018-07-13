@@ -8,8 +8,8 @@ export function changeStatus(state = {}, action) {
       };
     case changeStatusConstants.CHANGE_SUCCESS:
       return {
-        loading: false
-        //workflowCreate: action.workflowCreate
+        loading: false,
+        ...action.response
       };
     case changeStatusConstants.CHANGE_FAILURE:
       return {

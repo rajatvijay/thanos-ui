@@ -16,6 +16,14 @@ export const userActions = {
   //checkAuth
 };
 
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
+
 export const login = (username, password) => async dispatch => {
   dispatch({ type: userConstants.LOGIN_REQUEST, username });
   try {
@@ -55,9 +63,10 @@ export const sendEmailAuthToken = email => async dispatch => {
     if (response.ok) {
       history.push("/");
     } else {
-      notification["error"]({
+      openNotificationWithIcon({
+        type: "error",
         message: "Something went wrong.",
-        description:
+        body:
           "There was an error while submitting the form, please try again. If the proplem still persist pleas contact our team "
       });
     }
@@ -76,15 +85,8 @@ export const checkAuth = () => async dispatch => {
       type: userConstants.GETME_SUCCESS,
       user: response
     });
-    if (response.ok) {
-      history.push("/");
-    } else {
-      notification["error"]({
-        message: "Something went wrong.",
-        description:
-          "There was an error while submitting the form, please try again. If the proplem still persist pleas contact our team "
-      });
-    }
+
+    history.push("/");
   } catch (error) {
     dispatch({ type: userConstants.GETME_FAILURE, error });
     // dispatch(alertActions.error(error));

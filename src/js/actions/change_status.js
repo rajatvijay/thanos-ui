@@ -1,21 +1,35 @@
-import { workflowCreateConstants } from "../constants";
-import { workflowCreateService } from "../services";
-import { workflowActions } from "../actions";
-import { history } from "../_helpers";
+import { changeStatusConstants } from "../constants";
+import { changeStatusService } from "../services";
+import { notification } from "antd";
 
-export const createWorkflow = payload => async dispatch => {
-  dispatch({ type: workflowCreateConstants.CREATE_REQUEST, payload });
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
+
+export const changeStatusActions = payload => async dispatch => {
+  dispatch({ type: changeStatusConstants.CHANGE_REQUEST, payload });
   try {
-    const response = await workflowCreateService.crerateWorkflow(payload);
+    const response = await changeStatusService.update(payload);
     dispatch({
-      type: workflowCreateConstants.CREATE_SUCCESS,
-      workflowCreate: response
+      type: changeStatusConstants.CHANGE_SUCCESS,
+      response: response
     });
-    history.push("/workflows/instances/" + response.id);
-    dispatch(workflowActions.getAll());
+
+    openNotificationWithIcon({
+      type: "success",
+      message: "Status changed."
+    });
   } catch (error) {
     console.log(error);
-    dispatch({ type: workflowCreateConstants.CREATE_FAILURE, error });
+    dispatch({ type: changeStatusConstants.CHANGE_FAILURE, error });
+    openNotificationWithIcon({
+      type: "error",
+      message: "Failed"
+    });
     // dispatch(alertActions.error(error));
   }
 };

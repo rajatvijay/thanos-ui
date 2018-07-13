@@ -205,6 +205,7 @@ class WorkflowItem extends React.Component {
                   statusType={statusType}
                   kind={this.props.kinds}
                   onStatusChange={this.props.onStatusChange}
+                  dispatch={this.props.dispatch}
                 />
               </div>
             }

@@ -21,6 +21,7 @@ import {
 import { calculatedData } from "./calculated-data";
 import { utils } from "./utils";
 import { history } from "../../_helpers";
+import { changeStatusActions } from "../../actions";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -50,7 +51,10 @@ const HeaderTitle = props => {
         to={"/workflows/instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <span className=" text-base text-bold company-name">
+        <span
+          className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
+          title={props.workflow.name}
+        >
           {props.workflow.name}
         </span>
       </Link>
@@ -84,99 +88,145 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          <Scrollbars
-            autoWidth
-            autoHide
-            style={{ height: "25px" }}
-            autoHideTimeout={300}
-            renderTrackHorizontal={({ style, ...props }) => (
-              <div
-                {...props}
-                style={{
-                  ...style,
-                  height: "0px",
-                  right: "2px",
-                  bottom: "2px",
-                  left: "2px",
-                  opacity: 0,
-                  visibility: "hidden",
-                  borderRadius: "3px"
-                }}
-              />
-            )}
-            renderTrackVertical={({ style, ...props }) => (
-              <div
-                {...props}
-                style={{ ...style, opacity: 0, display: "none" }}
-              />
-            )}
-          >
-            <div className="step-ui">
-              {_.map(getProcessedData(props.workflow.step_groups), function(
-                groupitem,
-                index
-              ) {
-                if (!_.size(groupitem.steps)) {
-                  // checking for steps inside group
-                  return null;
-                }
-                if (!isLockedStepGroupEnable(groupitem, visible_steps)) {
-                  return null;
-                }
-                let completed = groupitem.completed;
-                let od = groupitem.overdue;
-                let groupProgress = getGroupProgress(groupitem);
+          <div className="step-ui">
+            {_.map(getProcessedData(props.workflow.step_groups), function(
+              groupitem,
+              index
+            ) {
+              if (!_.size(groupitem.steps)) {
+                // checking for steps inside group
+                return null;
+              }
+              if (!isLockedStepGroupEnable(groupitem, visible_steps)) {
+                return null;
+              }
+              let completed = groupitem.completed;
+              let od = groupitem.overdue;
+              let groupProgress = getGroupProgress(groupitem);
 
-                return (
-                  <span key={index} className="step-item">
-                    <span className="pd-right-sm">
-                      <Popover
-                        content={
-                          <div className="text-center">
-                            {groupitem.definition.name}
-                            <div className="small">
-                              {groupProgress}% completed
-                            </div>
+              return (
+                <span key={index} className="step-item">
+                  <span className="pd-right-sm">
+                    <Popover
+                      content={
+                        <div className="text-center">
+                          {groupitem.definition.name}
+                          <div className="small">
+                            {groupProgress}% completed
                           </div>
-                        }
-                      >
-                        {groupProgress === 100 ? (
-                          <i className="material-icons text-middle t-18 text-secondary">
-                            check_circle_outline
-                          </i>
-                        ) : (
-                          <Progress
-                            showInfo={false}
-                            type="circle"
-                            percent={groupProgress}
-                            width={18}
-                            strokeWidth={8}
-                          />
-                        )}
-                      </Popover>
-                    </span>
-                    <span
-                      className={
-                        completed
-                          ? "title-c text-medium text-secondary"
-                          : od
-                            ? "title-c text-red text-normal "
-                            : "title-c text-normal text-base"
+                        </div>
                       }
                     >
-                      {groupitem.definition.name}
-                    </span>
-                    <span className="dash"> </span>
+                      {groupProgress === 100 ? (
+                        <i className="material-icons text-middle t-18 text-secondary">
+                          check_circle_outline
+                        </i>
+                      ) : (
+                        <Progress
+                          showInfo={false}
+                          type="circle"
+                          percent={groupProgress}
+                          width={18}
+                          strokeWidth={8}
+                        />
+                      )}
+                    </Popover>
                   </span>
-                );
-              })}
-            </div>
-          </Scrollbars>
+                  <span
+                    className={
+                      completed
+                        ? "title-c text-medium text-secondary"
+                        : od
+                          ? "title-c text-red text-normal "
+                          : "title-c text-normal text-base"
+                    }
+                  >
+                    {groupitem.definition.name}
+                  </span>
+                  <span className="dash"> </span>
+                </span>
+              );
+            })}
+          </div>
         </div>
       </div>
     </Col>
   );
 };
+
+class HeaderOptions2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { current: this.props.workflow.status.label };
+  }
+
+  componentDidMount = () => {
+    console.log("this.props.statusType.results");
+    //console.log(this.props.statusType.results)
+  };
+
+  onStatusChange = key => {
+    let id = parseInt(key.key, 10);
+    let selected = {};
+    _.map(this.props.statusType.results, function(i) {
+      if (i.id === id) {
+        selected = i;
+      }
+    });
+
+    this.setState({ current: selected.label });
+
+    let payload = {
+      workflowId: this.props.workflow.id,
+      statusId: id
+    };
+
+    this.props.dispatch(changeStatusActions(payload));
+  };
+
+  render = () => {
+    const props = this.props;
+
+    const menu = (
+      <Menu onClick={this.onStatusChange}>
+        {props.statusType
+          ? _.map(props.statusType.results, function(status) {
+              if (status.label !== props.workflow.status.label) {
+                return <Menu.Item key={status.id}>{status.label}</Menu.Item>;
+              }
+            })
+          : null}
+      </Menu>
+    );
+
+    return (
+      <Col span="5" className="text-right">
+        {props.showCommentIcon && false ? (
+          <span style={{ position: "relative", right: "25px" }}>
+            <Badge count={5}>
+              <i class="material-icons">comment</i>
+            </Badge>
+          </span>
+        ) : null}
+
+        <Dropdown overlay={menu}>
+          <Button
+            className="main-btn status-btn"
+            type="main"
+            title={props.workflow.status.label}
+          >
+            <span className="status-text">{this.state.current}</span>
+            <Icon
+              className="pd-left-sm icon"
+              type="down"
+              style={{ fontSize: 11 }}
+            />
+          </Button>
+        </Dropdown>
+      </Col>
+    );
+  };
+}
 
 const HeaderOptions = props => {
   const menu = (
@@ -247,21 +297,29 @@ export const WorkflowHeader = props => {
             </span>
           ) : (
             <span className="pd-right">
-              <Progress
-                type="circle"
-                percent={progressData}
-                width={35}
-                format={percent => (
-                  <i
-                    className="material-icons"
-                    style={{ fontSize: "18px", verticalAlign: "middle" }}
-                  >
-                    {props.kind === ""
-                      ? getIcon(props.workflow.definition.kind, props.kind)
-                      : "folder_open"}
-                  </i>
-                )}
-              />
+              <Popover
+                content={
+                  <div className="text-center">
+                    <div className="small">{progressData}% completed</div>
+                  </div>
+                }
+              >
+                <Progress
+                  type="circle"
+                  percent={progressData}
+                  width={35}
+                  format={percent => (
+                    <i
+                      className="material-icons"
+                      style={{ fontSize: "18px", verticalAlign: "middle" }}
+                    >
+                      {props.kind === ""
+                        ? getIcon(props.workflow.definition.kind, props.kind)
+                        : "folder_open"}
+                    </i>
+                  )}
+                />
+              </Popover>
             </span>
           )}
         </Col>
@@ -274,7 +332,7 @@ export const WorkflowHeader = props => {
           pdata={proccessedData}
         />
 
-        <HeaderOptions {...props} />
+        <HeaderOptions2 {...props} />
       </Row>
     </div>
   );

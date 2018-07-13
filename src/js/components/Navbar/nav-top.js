@@ -14,9 +14,10 @@ import {
   Col
 } from "antd";
 import { logout } from "../../actions";
-import logo from "../../../images/client-logo/dnb_logo.png";
+//import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
+import { authHeader } from "../../_helpers";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -102,8 +103,10 @@ class NavTop extends Component {
                         alt={this.props.config.name}
                         src={this.props.config.logo}
                       />
+                    ) : !this.props.config.loading ? (
+                      <h3>{this.props.config.name}</h3>
                     ) : (
-                      <img alt={this.props.config.name} src={logo} />
+                      <h3>{authHeader.getClient()}</h3>
                     )}
                   </a>
                 </span>

@@ -7,3 +7,4 @@ export { workflowKindActions } from "./workflow_kind";
 export { createWorkflow } from "./workflow_create";
 export { workflowStepActions } from "./workflow_step_update";
 export { workflowFiltersActions } from "./workflow_filters";
+export { changeStatusActions } from "./change_status";

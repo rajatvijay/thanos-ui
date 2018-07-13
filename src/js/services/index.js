@@ -6,3 +6,4 @@ export { workflowKindService } from "./workflow_kind";
 export { workflowCreateService } from "./workflow_create";
 export { workflowStepService } from "./workflow_update";
 export { workflowFiltersService } from "./workflow_filters";
+export { changeStatusService } from "./change_status";
