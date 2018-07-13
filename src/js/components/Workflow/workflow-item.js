@@ -21,6 +21,7 @@ import {
 import { calculatedData } from "./calculated-data";
 import { utils } from "./utils";
 import { history } from "../../_helpers";
+import { changeStatusActions } from "../../actions";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -50,7 +51,10 @@ const HeaderTitle = props => {
         to={"/workflows/instances/" + props.workflow.id + "/"}
         className="text-nounderline"
       >
-        <span className=" text-base text-bold company-name">
+        <span
+          className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
+          title={props.workflow.name}
+        >
           {props.workflow.name}
         </span>
       </Link>
@@ -149,6 +153,80 @@ const HeaderWorkflowGroup = props => {
     </Col>
   );
 };
+
+class HeaderOptions2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { current: this.props.workflow.status.label };
+  }
+
+  componentDidMount = () => {
+    console.log("this.props.statusType.results");
+    //console.log(this.props.statusType.results)
+  };
+
+  onStatusChange = key => {
+    let id = parseInt(key.key, 10);
+    let selected = {};
+    _.map(this.props.statusType.results, function(i) {
+      if (i.id === id) {
+        selected = i;
+      }
+    });
+
+    this.setState({ current: selected.label });
+
+    let payload = {
+      workflowId: this.props.workflow.id,
+      statusId: id
+    };
+
+    this.props.dispatch(changeStatusActions(payload));
+  };
+
+  render = () => {
+    const props = this.props;
+
+    const menu = (
+      <Menu onClick={this.onStatusChange}>
+        {props.statusType
+          ? _.map(props.statusType.results, function(status) {
+              if (status.label !== props.workflow.status.label) {
+                return <Menu.Item key={status.id}>{status.label}</Menu.Item>;
+              }
+            })
+          : null}
+      </Menu>
+    );
+
+    return (
+      <Col span="5" className="text-right">
+        {props.showCommentIcon && false ? (
+          <span style={{ position: "relative", right: "25px" }}>
+            <Badge count={5}>
+              <i class="material-icons">comment</i>
+            </Badge>
+          </span>
+        ) : null}
+
+        <Dropdown overlay={menu}>
+          <Button
+            className="main-btn status-btn"
+            type="main"
+            title={props.workflow.status.label}
+          >
+            <span className="status-text">{this.state.current}</span>
+            <Icon
+              className="pd-left-sm icon"
+              type="down"
+              style={{ fontSize: 11 }}
+            />
+          </Button>
+        </Dropdown>
+      </Col>
+    );
+  };
+}
 
 const HeaderOptions = props => {
   const menu = (
@@ -254,7 +332,7 @@ export const WorkflowHeader = props => {
           pdata={proccessedData}
         />
 
-        <HeaderOptions {...props} />
+        <HeaderOptions2 {...props} />
       </Row>
     </div>
   );

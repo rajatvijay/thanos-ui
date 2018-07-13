@@ -76,8 +76,6 @@ class Workflow extends Component {
 
     if (defKind) {
       this.setState({ defKind: defKind });
-
-      console.log("dispatchingiiiiiii-----");
       this.props.dispatch(
         workflowFiltersActions.setFilters({
           filterType: "kind",
@@ -86,7 +84,6 @@ class Workflow extends Component {
         })
       );
     } else {
-      console.log("loading normal-----");
       this.reloadWorkflowList();
     }
   };
