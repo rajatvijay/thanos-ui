@@ -106,6 +106,31 @@ export function users(state = initialState, action) {
           return user;
         })
       };
+
+    //get authenticated use
+    case userConstants.GETME_REQUEST:
+      return {
+        ...state,
+        me: { loading: true }
+      };
+    case userConstants.GETME_SUCCESS:
+      if (action.user.ok) {
+        return {
+          ...state,
+          me: { loading: false, ...action.users }
+        };
+      } else {
+        return {
+          ...state,
+          me: { loading: false, error: action.error }
+        };
+      }
+    case userConstants.GETME_FAILURE:
+      return {
+        ...state,
+        me: { loading: false, error: action.error }
+      };
+
     default:
       return state;
   }

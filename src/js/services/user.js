@@ -82,6 +82,7 @@ function checkAuth() {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
+    credentials: "same-origin",
     credentials: "include"
   };
 
