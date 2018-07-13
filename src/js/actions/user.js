@@ -76,15 +76,8 @@ export const checkAuth = () => async dispatch => {
       type: userConstants.GETME_SUCCESS,
       user: response
     });
-    if (response.ok) {
-      history.push("/");
-    } else {
-      notification["error"]({
-        message: "Something went wrong.",
-        description:
-          "There was an error while submitting the form, please try again. If the proplem still persist pleas contact our team "
-      });
-    }
+
+    history.push("/");
   } catch (error) {
     dispatch({ type: userConstants.GETME_FAILURE, error });
     // dispatch(alertActions.error(error));

@@ -84,94 +84,66 @@ const HeaderWorkflowGroup = props => {
     <Col span={12}>
       <div className="group-overview">
         <div className="overflow-wrapper">
-          <Scrollbars
-            autoWidth
-            autoHide
-            style={{ height: "25px" }}
-            autoHideTimeout={300}
-            renderTrackHorizontal={({ style, ...props }) => (
-              <div
-                {...props}
-                style={{
-                  ...style,
-                  height: "0px",
-                  right: "2px",
-                  bottom: "2px",
-                  left: "2px",
-                  opacity: 0,
-                  visibility: "hidden",
-                  borderRadius: "3px"
-                }}
-              />
-            )}
-            renderTrackVertical={({ style, ...props }) => (
-              <div
-                {...props}
-                style={{ ...style, opacity: 0, display: "none" }}
-              />
-            )}
-          >
-            <div className="step-ui">
-              {_.map(getProcessedData(props.workflow.step_groups), function(
-                groupitem,
-                index
-              ) {
-                if (!_.size(groupitem.steps)) {
-                  // checking for steps inside group
-                  return null;
-                }
-                if (!isLockedStepGroupEnable(groupitem, visible_steps)) {
-                  return null;
-                }
-                let completed = groupitem.completed;
-                let od = groupitem.overdue;
-                let groupProgress = getGroupProgress(groupitem);
+          <div className="step-ui">
+            {_.map(getProcessedData(props.workflow.step_groups), function(
+              groupitem,
+              index
+            ) {
+              if (!_.size(groupitem.steps)) {
+                // checking for steps inside group
+                return null;
+              }
+              if (!isLockedStepGroupEnable(groupitem, visible_steps)) {
+                return null;
+              }
+              let completed = groupitem.completed;
+              let od = groupitem.overdue;
+              let groupProgress = getGroupProgress(groupitem);
 
-                return (
-                  <span key={index} className="step-item">
-                    <span className="pd-right-sm">
-                      <Popover
-                        content={
-                          <div className="text-center">
-                            {groupitem.definition.name}
-                            <div className="small">
-                              {groupProgress}% completed
-                            </div>
+              return (
+                <span key={index} className="step-item">
+                  <span className="pd-right-sm">
+                    <Popover
+                      content={
+                        <div className="text-center">
+                          {groupitem.definition.name}
+                          <div className="small">
+                            {groupProgress}% completed
                           </div>
-                        }
-                      >
-                        {groupProgress === 100 ? (
-                          <i className="material-icons text-middle t-18 text-secondary">
-                            check_circle_outline
-                          </i>
-                        ) : (
-                          <Progress
-                            showInfo={false}
-                            type="circle"
-                            percent={groupProgress}
-                            width={18}
-                            strokeWidth={8}
-                          />
-                        )}
-                      </Popover>
-                    </span>
-                    <span
-                      className={
-                        completed
-                          ? "title-c text-medium text-secondary"
-                          : od
-                            ? "title-c text-red text-normal "
-                            : "title-c text-normal text-base"
+                        </div>
                       }
                     >
-                      {groupitem.definition.name}
-                    </span>
-                    <span className="dash"> </span>
+                      {groupProgress === 100 ? (
+                        <i className="material-icons text-middle t-18 text-secondary">
+                          check_circle_outline
+                        </i>
+                      ) : (
+                        <Progress
+                          showInfo={false}
+                          type="circle"
+                          percent={groupProgress}
+                          width={18}
+                          strokeWidth={8}
+                        />
+                      )}
+                    </Popover>
                   </span>
-                );
-              })}
-            </div>
-          </Scrollbars>
+                  <span
+                    className={
+                      completed
+                        ? "title-c text-medium text-secondary"
+                        : od
+                          ? "title-c text-red text-normal "
+                          : "title-c text-normal text-base"
+                    }
+                  >
+                    {groupitem.definition.name}
+                  </span>
+                  <span className="dash"> </span>
+                </span>
+              );
+            })}
+          </div>
         </div>
       </div>
     </Col>
@@ -247,21 +219,29 @@ export const WorkflowHeader = props => {
             </span>
           ) : (
             <span className="pd-right">
-              <Progress
-                type="circle"
-                percent={progressData}
-                width={35}
-                format={percent => (
-                  <i
-                    className="material-icons"
-                    style={{ fontSize: "18px", verticalAlign: "middle" }}
-                  >
-                    {props.kind === ""
-                      ? getIcon(props.workflow.definition.kind, props.kind)
-                      : "folder_open"}
-                  </i>
-                )}
-              />
+              <Popover
+                content={
+                  <div className="text-center">
+                    <div className="small">{progressData}% completed</div>
+                  </div>
+                }
+              >
+                <Progress
+                  type="circle"
+                  percent={progressData}
+                  width={35}
+                  format={percent => (
+                    <i
+                      className="material-icons"
+                      style={{ fontSize: "18px", verticalAlign: "middle" }}
+                    >
+                      {props.kind === ""
+                        ? getIcon(props.workflow.definition.kind, props.kind)
+                        : "folder_open"}
+                    </i>
+                  )}
+                />
+              </Popover>
             </span>
           )}
         </Col>
