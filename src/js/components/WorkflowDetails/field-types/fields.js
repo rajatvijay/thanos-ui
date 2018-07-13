@@ -122,6 +122,7 @@ export const Text = props => {
       required={getRequired(props)}
       //help={props.field.definition.help_text}
       hasFeedback
+      autoComplete="new-password"
       //validateStatus={props.field.answers.length !== 0 ? "success" : null}
       {...field_error(props)}
     >
@@ -137,7 +138,8 @@ export const Text = props => {
             : props.field.definition.defaultValue
         }
         {...feedValue(props)}
-        autoComplete={false}
+        autoComplete="new-password"
+        autoComplete="new-password"
         onChange={e => props.onFieldChange(e, props)}
         //onBlur={e => props.onFieldChange(e, props)}
       />
@@ -222,7 +224,8 @@ export const Number = props => {
             : props.field.definition.defaultValue
         }
         {...feedValue(props)}
-        autoComplete={false}
+        autoComplete="new-password"
+        autoComplete="new-password"
         onChange={onFieldChange.bind(this, props)}
       />
       {addCommentBtn(this, props)}
@@ -279,6 +282,7 @@ export const Email = props => {
       type="email"
       required={getRequired(props)}
       hasFeedback
+      autoComplete="new-password"
       {...field_error(props)}
     >
       {getFieldDecorator("email", {
@@ -305,7 +309,7 @@ export const Email = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
-          autoComplete={false}
+          autoComplete="new-password"
           message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
           {...feedValue(props)}
@@ -354,7 +358,7 @@ export const URL = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="url"
-          autoComplete={false}
+          autoComplete="new-password"
           message="The input is not valid email"
           onChange={e => props.onFieldChange(e, props)}
           {...feedValue(props)}

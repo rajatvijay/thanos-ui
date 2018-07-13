@@ -183,6 +183,7 @@ class StepBodyForm extends Component {
         //hideRequiredMark={true}
         onSubmit={this.handleSubmit}
         className="step-form"
+        autoComplete="off"
       >
         {_.map(
           _.orderBy(
