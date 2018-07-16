@@ -116,6 +116,27 @@ export function currentStepFields(state = initialState, action) {
         error: action.error
       };
 
+    /////////////////////
+    ///Duns select item//
+    /////////////////////
+    case dunsFieldConstants.DUNS_SELECT_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case dunsFieldConstants.DUNS_SELECT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        currentStepFields: action.stepFields,
+        error: {}
+      };
+    case dunsFieldConstants.DUNS_SELECT_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
     default:
       return state;
   }
