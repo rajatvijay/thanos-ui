@@ -21,7 +21,6 @@ import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
 import flags from "../../../../images/flags.png";
 import Dropzone from "react-dropzone";
-import validator from "validator";
 import { commonFunctions } from "./commons";
 import validator from "validator";
 
