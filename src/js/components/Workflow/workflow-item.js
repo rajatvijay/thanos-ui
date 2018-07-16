@@ -168,7 +168,7 @@ class HeaderOptions2 extends React.Component {
   onStatusChange = key => {
     let id = parseInt(key.key, 10);
     let selected = {};
-    _.map(this.props.statusType.results, function(i) {
+    _.map(this.props.statusType, function(i) {
       if (i.id === id) {
         selected = i;
       }
@@ -190,7 +190,7 @@ class HeaderOptions2 extends React.Component {
     const menu = (
       <Menu onClick={this.onStatusChange}>
         {props.statusType
-          ? _.map(props.statusType.results, function(status) {
+          ? _.map(props.statusType, function(status) {
               if (status.label !== props.workflow.status.label) {
                 return <Menu.Item key={status.id}>{status.label}</Menu.Item>;
               }
@@ -232,7 +232,7 @@ const HeaderOptions = props => {
   const menu = (
     <Menu onClick={props.onStatusChange}>
       {props.statusType
-        ? _.map(props.statusType.results, function(status) {
+        ? _.map(props.statusType, function(status) {
             if (status.label !== props.workflow.status.label) {
               return <Menu.Item key={status.id}>{status.label}</Menu.Item>;
             }

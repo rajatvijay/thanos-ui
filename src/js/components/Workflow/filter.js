@@ -295,9 +295,13 @@ class FilterSidebar extends Component {
       this.props.workflowFilterType.statusType
     ) {
       let sFilter = this.props.workflowFilterType.statusType;
+
+      console.log("sFilter----------");
+      console.log(sFilter);
+
       let statusFilter = {
         filterType: "Status",
-        results: sFilter.results
+        results: sFilter
       };
       if (filterList.length === 2) {
         filterList.unshift(statusFilter);
