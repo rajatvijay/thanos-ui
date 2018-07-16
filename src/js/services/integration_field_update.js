@@ -1,7 +1,8 @@
 import { authHeader, baseUrl } from "../_helpers";
 
 export const dunsFieldService = {
-  saveDunsField
+  saveDunsField,
+  selectDunsItem
 };
 
 function saveDunsField(payload) {
@@ -12,6 +13,7 @@ function saveDunsField(payload) {
   };
 
   let url =
+    baseUrl +
     "integrations/dnb/?field_id=" +
     payload.fieldId +
     "&" +
@@ -23,10 +25,25 @@ function saveDunsField(payload) {
     "=" +
     payload.option2Value;
 
-  console.log("url----------");
-  console.log(url);
+  return fetch(url, requestOptions).then(handleResponse);
+}
 
-  return fetch(baseUrl + url, requestOptions).then(handleResponse);
+function selectDunsItem(payload) {
+  const requestOptions = {
+    method: "PATCH",
+    headers: {
+      ...authHeader.post(),
+      "Content-Type": payload.attachment
+        ? "multipart/form-data"
+        : "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({ data: payload })
+  };
+
+  let url = baseUrl + "integrations/dnb/";
+
+  return fetch(url, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

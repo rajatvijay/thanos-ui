@@ -131,6 +131,14 @@ class DunsSearch extends Component {
     this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
   };
 
+  selectItem = data => {
+    let payload = {
+      duns: data.DUNSNumber,
+      field_id: this.props.field.id
+    };
+    this.props.dispatch(dunsFieldActions.dunsSelectItem(payload));
+  };
+
   render = () => {
     let { field } = this.props;
     field.definition.search_param_json = search_param_json;
@@ -146,14 +154,14 @@ class DunsSearch extends Component {
       <div>
         {getFields(props)}
         <div className="mr-top-lg mr-bottom-lg">
-          <GetTable />
+          <GetTable selectItem={this.selectItem} />
         </div>
       </div>
     );
   };
 }
 
-const GetTable = () => {
+const GetTable = props => {
   const data =
     dunsData.GetCleanseMatchResponse.GetCleanseMatchResponseDetail
       .MatchResponseDetail.MatchCandidate;
@@ -178,6 +186,20 @@ const GetTable = () => {
       title: "Status",
       dataIndex: "OperatingStatusText[$]",
       key: "OperatingStatusText[$]"
+    },
+    {
+      title: "Action",
+      key: "index",
+      render: record => (
+        <span>
+          <span
+            className="text-secondary text-anchor"
+            onClick={() => props.selectItem(record)}
+          >
+            Select
+          </span>
+        </span>
+      )
     }
   ];
 
