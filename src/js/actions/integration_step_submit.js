@@ -24,7 +24,7 @@ function dunsSaveField(payload) {
     //dispatch(remove_errors({}));
 
     dunsFieldService
-      .dunsSaveField(payload)
+      .saveDunsField(payload)
       .then(
         field => dispatch(success(field)),
         error => dispatch(failure(error))
