@@ -388,7 +388,7 @@ class URL2 extends React.Component {
         key={props.field.id}
         required={getRequired(props)}
         hasFeedback
-        {...fielderror(props)}
+        {...this.fielderror(props)}
       >
         <Input
           disabled={
