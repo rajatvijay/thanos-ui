@@ -24,8 +24,6 @@ import Dropzone from "react-dropzone";
 import validator from "validator";
 import { commonFunctions } from "./commons";
 import validator from "validator";
-import { commonFunctions } from "./commons";
-import validator from "validator";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
