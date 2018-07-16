@@ -100,7 +100,7 @@ const HeaderWorkflowGroup = props => {
               if (!isLockedStepGroupEnable(groupitem, visible_steps)) {
                 return null;
               }
-              let completed = groupitem.completed;
+              let completed = groupitem.is_complete;
               let od = groupitem.overdue;
               let groupProgress = getGroupProgress(groupitem);
 
