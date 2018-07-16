@@ -1,6 +1,7 @@
 import {
   workflowStepConstants as stepConstants,
-  workflowFieldConstants as fieldConstants
+  workflowFieldConstants as fieldConstants,
+  dunsFieldConstants
 } from "../constants";
 
 const initialState = {
@@ -91,6 +92,50 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         loading: false,
+        error: action.error
+      };
+
+    ///////////////////////
+    ///Duns field update///
+    ///////////////////////
+    case dunsFieldConstants.DUNS_FIELD_REQUEST:
+      return {
+        ...state,
+        integration_data_loading: true
+      };
+    case dunsFieldConstants.DUNS_FIELD_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        integration_data_loading: false,
+        currentStepFields: action.field,
+        error: {}
+      };
+    case dunsFieldConstants.DUNS_FIELD_FAILURE:
+      return {
+        ...state,
+        error: action.error
+      };
+
+    /////////////////////
+    ///Duns select item//
+    /////////////////////
+    case dunsFieldConstants.DUNS_SELECT_REQUEST:
+      return {
+        ...state,
+        integration_data_loading: true
+      };
+    case dunsFieldConstants.DUNS_SELECT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        integration_data_loading: false,
+        currentStepFields: action.field,
+        error: {}
+      };
+    case dunsFieldConstants.DUNS_SELECT_FAILURE:
+      return {
+        ...state,
         error: action.error
       };
 

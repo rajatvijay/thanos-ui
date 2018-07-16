@@ -15,12 +15,17 @@ import {
   URL,
   Attachment,
   File
+  //Duns
 } from "./fields";
+
+import { Duns } from "./duns-search";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
     case "text":
       return Text(props);
+    case "dnb_duns_search":
+      return Duns(props);
     case "bool":
       return Bool(props);
     case "integer":

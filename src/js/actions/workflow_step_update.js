@@ -28,7 +28,7 @@ export const workflowStepActions = {
 ////////////////////////////////
 // update data on field change//
 ////////////////////////////////
-function saveField(payload) {
+function saveField(payload, event_type) {
   return dispatch => {
     dispatch(request(payload));
     dispatch(remove_errors({}));
@@ -36,7 +36,7 @@ function saveField(payload) {
     workflowStepService
       .saveField(payload)
       .then(
-        field => dispatch(success(field)),
+        field => dispatch(success(field, event_type)),
         error => dispatch(failure(error))
       );
   };
@@ -55,10 +55,12 @@ function saveField(payload) {
       return failure(field);
     }
 
-    openNotificationWithIcon({
-      type: "success",
-      message: "Saved successfully"
-    });
+    if (event_type != "blur") {
+      openNotificationWithIcon({
+        type: "success",
+        message: "Saved successfully"
+      });
+    }
 
     return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
   }
@@ -206,7 +208,8 @@ function undoStep(payload) {
       stepData => {
         dispatch(success(stepData));
         if (stepData.id) {
-          dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          //dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          // call an action to update the sidebar here
         }
       },
       error => dispatch(failure(error))
@@ -221,7 +224,6 @@ function undoStep(payload) {
       type: "success",
       message: "Successfully reverted step completion"
     });
-
     return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData }; //{type: workflowStepConstants.UNDO_SUCCESS,stepData};
   }
   function failure(error) {

@@ -23,6 +23,13 @@ class StepBodyForm extends Component {
   //////////////////////////////////////
   onFieldChange = (e, payload, calculated) => {
     //sanitize this function later
+    /*if (
+      _.size(payload.field.answers) &&
+      payload.field.answers[0].answer == e.target.value
+    ) {
+      console.log("not calling");
+      return false;
+    }*/
 
     if (calculated === "file") {
       let method = "save";
@@ -52,7 +59,11 @@ class StepBodyForm extends Component {
         workflow: payload.workflowId
       };
 
-      this.callDispatch(data, method);
+      if (e.type == "blur") {
+        this.props.dispatch(workflowStepActions.saveField(data, "blur"));
+      } else {
+        this.callDispatch(data, method);
+      }
     }
   };
 
@@ -177,6 +188,7 @@ class StepBodyForm extends Component {
     let that = this;
     let row = [];
     let errors = this.props.currentStepFields.error;
+    let currentStepFields = this.props.currentStepFields;
     return (
       <Form
         layout="vertical"
@@ -197,13 +209,15 @@ class StepBodyForm extends Component {
                 .workflow;
             let param = {
               field: f,
+              currentStepFields: currentStepFields,
               error: errors,
               onFieldChange: that.onFieldChange,
               workflowId: wf_id,
               formProps: that.props.form,
               completed: that.props.stepData.completed_at ? true : false,
               is_locked: that.props.stepData.is_locked,
-              addComment: that.props.toggleSidebar
+              addComment: that.props.toggleSidebar,
+              dispatch: that.props.dispatch
             };
 
             let field = getFieldType(param);

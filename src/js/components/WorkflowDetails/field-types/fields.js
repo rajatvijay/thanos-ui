@@ -11,7 +11,9 @@ import {
   Checkbox as AntCheckbox,
   Divider as AntDivider,
   Button,
-  Cascader
+  Cascader,
+  Row,
+  Col
 } from "antd";
 import _ from "lodash";
 import moment from "moment";
@@ -19,97 +21,27 @@ import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
 import flags from "../../../../images/flags.png";
 import Dropzone from "react-dropzone";
+import { commonFunctions } from "./commons";
 import validator from "validator";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const Option = AntSelect.Option;
 
-export const getLabel = props => {
-  return props.field.definition.body;
-};
-
-//Utility func
-function onFieldChange(props, value, value2) {
-  props.onFieldChange(value, props, true);
-}
-
-function onFieldChangeArray(props, value) {
-  let answer = arrayToString(value);
-  onFieldChange(props, answer);
-}
-
-function arrayToString(arr) {
-  let string = "";
-  _.map(arr, function(i, index) {
-    string = string + i;
-    if (index !== arr.length - 1) string = string + "~";
-  });
-
-  return string;
-}
-
-function stringToArray(string) {
-  let arr = [];
-  if (string.answer.isArray) {
-    arr = string.answer[0].split("~");
-  } else {
-    arr = string.answer.split("~");
-  }
-  return arr;
-}
-
-function field_error(props) {
-  let error = props.error || {};
-  if (error[props.field.id]) {
-    return {
-      help: error[props.field.id],
-      validateStatus: "error"
-    };
-  }
-  return {
-    help: (
-      <span
-        dangerouslySetInnerHTML={{
-          __html: getLink(props.field.definition.help_text)
-        }}
-      />
-    ),
-    validateStatus: props.field.answers.length !== 0 ? "success" : null
-  };
-}
-
-function getRequired(props) {
-  return props.field.is_required || props.field.definition.is_required;
-}
-
-function feedValue(props) {
-  var opts = {};
-  if (props.field.definition.disabled) {
-    opts["value"] = _.size(props.field.answers)
-      ? props.field.answers[0].answer
-      : props.field.definition.defaultValue;
-  }
-  return opts;
-}
-
-function addComment(props) {
-  props.addComment(props.field.id, "field");
-}
-
-function addCommentBtn(e, props) {
-  let comment_btn_text = "Add comment";
-  if (props.field.comment_count == 1) {
-    comment_btn_text = "1 comment";
-  } else if (props.field.comment_count > 1) {
-    comment_btn_text = props.field.comment_count + " comments";
-  }
-  return (
-    <div className="add_comment_btn" onClick={addComment.bind(e, props)}>
-      <span>{comment_btn_text}</span>
-    </div>
-  );
-}
+//Common utility fucntions bundled in one file commons.js//
+const {
+  getLabel,
+  onFieldChange,
+  onFieldChangeArray,
+  arrayToString,
+  stringToArray,
+  field_error,
+  getRequired,
+  feedValue,
+  addComment,
+  addCommentBtn,
+  getLink
+} = commonFunctions;
 
 //Field Type Text
 export const Text = props => {
@@ -142,7 +74,7 @@ export const Text = props => {
         autoComplete="new-password"
         autoComplete="new-password"
         onChange={e => props.onFieldChange(e, props)}
-        //onBlur={e => props.onFieldChange(e, props)}
+        onBlur={e => props.onFieldChange(e, props)}
       />
 
       {addCommentBtn(this, props)}
@@ -228,6 +160,7 @@ export const Number = props => {
         autoComplete="new-password"
         autoComplete="new-password"
         onChange={onFieldChange.bind(this, props)}
+        onBlur={e => props.onFieldChange(e, props)}
       />
       {addCommentBtn(this, props)}
     </FormItem>
@@ -335,6 +268,7 @@ class Email2 extends React.Component {
           autoComplete="new-password"
           message="The input is not valid email"
           onChange={e => this.onChangeValidate(e)}
+          onBlur={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
 
@@ -407,6 +341,7 @@ class URL2 extends React.Component {
               ? props.field.answers[0].answer
               : props.field.definition.defaultValue
           }
+          onBlur={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
 
@@ -535,24 +470,12 @@ export const Phone = props => {
         defaultCountry="us"
         flagsImagePath={flags}
         onChange={onFieldChange.bind(this, props)}
+        onBlur={e => props.onFieldChange(e, props)}
         //onBlur={handleInputBlur}
       />
       {addCommentBtn(this, props)}
     </FormItem>
   );
-};
-
-//create link from text
-export const getLink = text => {
-  var urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.()~#?&//=]*)/gi;
-
-  return text.replace(urlRegex, function(url) {
-    if (_.includes(url, "@")) {
-      return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
-    } else {
-      return '<a href="' + url + '" target="_blank">' + url + "</a>";
-    }
-  });
 };
 
 //Field Type Paragraph
