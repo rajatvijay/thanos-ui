@@ -30,7 +30,7 @@ function saveDunsField(payload) {
 
 function selectDunsItem(payload) {
   const requestOptions = {
-    method: "PATCH",
+    method: "POST",
     headers: {
       ...authHeader.post(),
       "Content-Type": payload.attachment
@@ -38,7 +38,7 @@ function selectDunsItem(payload) {
         : "application/json"
     },
     credentials: "include",
-    body: JSON.stringify({ data: payload })
+    body: JSON.stringify(payload)
   };
 
   let url = baseUrl + "integrations/dnb/";

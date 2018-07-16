@@ -177,6 +177,7 @@ class StepBodyForm extends Component {
     let that = this;
     let row = [];
     let errors = this.props.currentStepFields.error;
+    let currentStepFields = this.props.currentStepFields;
     return (
       <Form
         layout="vertical"
@@ -197,6 +198,7 @@ class StepBodyForm extends Component {
                 .workflow;
             let param = {
               field: f,
+              currentStepFields: currentStepFields,
               error: errors,
               onFieldChange: that.onFieldChange,
               workflowId: wf_id,

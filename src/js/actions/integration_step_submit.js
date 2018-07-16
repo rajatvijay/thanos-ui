@@ -45,11 +45,6 @@ function dunsSaveField(payload) {
       return failure(field);
     }
 
-    openNotificationWithIcon({
-      type: "success",
-      message: "Saved successfully"
-    });
-
     return { type: dunsFieldConstants.DUNS_FIELD_SUCCESS, field };
   }
 

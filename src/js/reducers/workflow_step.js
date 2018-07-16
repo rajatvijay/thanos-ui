@@ -101,13 +101,14 @@ export function currentStepFields(state = initialState, action) {
     case dunsFieldConstants.DUNS_FIELD_REQUEST:
       return {
         ...state,
-        loading: true
+        integration_data_loading: true
       };
     case dunsFieldConstants.DUNS_FIELD_SUCCESS:
       return {
         ...state,
         loading: false,
-        currentStepFields: action.stepFields,
+        integration_data_loading: false,
+        currentStepFields: action.field,
         error: {}
       };
     case dunsFieldConstants.DUNS_FIELD_FAILURE:
@@ -122,13 +123,14 @@ export function currentStepFields(state = initialState, action) {
     case dunsFieldConstants.DUNS_SELECT_REQUEST:
       return {
         ...state,
-        loading: true
+        integration_data_loading: true
       };
     case dunsFieldConstants.DUNS_SELECT_SUCCESS:
       return {
         ...state,
         loading: false,
-        currentStepFields: action.stepFields,
+        integration_data_loading: false,
+        currentStepFields: action.field,
         error: {}
       };
     case dunsFieldConstants.DUNS_SELECT_FAILURE:

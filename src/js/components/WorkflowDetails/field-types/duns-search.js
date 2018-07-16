@@ -88,10 +88,10 @@ const getFields = props => {
         }
       })}
 
-      <Col span={6}>
+      <Col span={3}>
         <FormItem label={" "}>
           <Button type="primary" className="btn-block" onClick={props.onSearch}>
-            Submit
+            Search
           </Button>
         </FormItem>
       </Col>
@@ -121,13 +121,14 @@ class DunsSearch extends Component {
     let payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id,
-      option1Tag: this.props.field.definition.search_param_json[0].tag,
-      option2Tag: this.props.field.definition.search_param_json[1].tag,
+      option1Tag: this.props.field.definition.search_param_json[0]
+        .ref_field_tag,
+      option2Tag: this.props.field.definition.search_param_json[1]
+        .ref_field_tag,
       option1Value: this.state.field,
       option2Value: this.state.country
     };
 
-    console.log(payload);
     this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
   };
 
@@ -141,7 +142,6 @@ class DunsSearch extends Component {
 
   render = () => {
     let { field } = this.props;
-    field.definition.search_param_json = search_param_json;
 
     const props = {
       field: field,
@@ -150,12 +150,36 @@ class DunsSearch extends Component {
       onSearch: this.onSearch
     };
 
+    let final_html = null;
+    if (this.props.currentStepFields.integration_data_loading) {
+      final_html = (
+        <div>
+          <div className="text-center mr-top-lg">
+            <Icon type={"loading"} />
+          </div>
+        </div>
+      );
+    } else if (
+      _.size(field.integration_json) &&
+      !field.integration_json.selected_match
+    ) {
+      final_html = (
+        <div>
+          {_.size(field.integration_json) ? (
+            <div className="mr-top-lg mr-bottom-lg">
+              <GetTable
+                selectItem={this.selectItem}
+                jsonData={field.integration_json}
+              />
+            </div>
+          ) : null}
+        </div>
+      );
+    }
+
     return (
       <div>
-        {getFields(props)}
-        <div className="mr-top-lg mr-bottom-lg">
-          <GetTable selectItem={this.selectItem} />
-        </div>
+        {getFields(props)} {final_html}
       </div>
     );
   };
@@ -163,7 +187,7 @@ class DunsSearch extends Component {
 
 const GetTable = props => {
   const data =
-    dunsData.GetCleanseMatchResponse.GetCleanseMatchResponseDetail
+    props.jsonData.GetCleanseMatchResponse.GetCleanseMatchResponseDetail
       .MatchResponseDetail.MatchCandidate;
 
   const columns = [

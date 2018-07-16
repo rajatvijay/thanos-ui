@@ -24,7 +24,7 @@ export const getFieldType = props => {
   switch (props.field.definition.field_type) {
     case "text":
       return Text(props);
-    case "bool":
+    case "dnb_duns_search":
       //return Bool(props);
       return Duns(props);
     case "integer":
