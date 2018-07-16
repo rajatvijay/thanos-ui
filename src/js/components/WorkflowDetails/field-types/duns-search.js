@@ -1,179 +1,187 @@
 import React, { Component } from "react";
 //import { authHeader, baseUrl } from "../../../_helpers";
-import { Form, Input, Button, Row, Col, Table, Icon, Divider } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Row,
+  Col,
+  Table,
+  Icon,
+  Divider,
+  Select
+} from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
+import { countries } from "./countries.js";
+import { dunsData } from "./duns_data.js";
+import { dunsFieldActions } from "../../../actions";
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 const { Column, ColumnGroup } = Table;
+
+//const dunsResponse = JSON.parse(dunsData);
 
 const {
   getLabel,
-  // onFieldChange,
-  // onFieldChangeArray,
-  // arrayToString,
-  // stringToArray,
   field_error,
   getRequired,
   feedValue,
-  // addComment,
   addCommentBtn
-  // getLink
 } = commonFunctions;
 
 //Field Type DUNS SEARCH
 
+const search_param_json = [
+  {
+    label: "Search by company name",
+    tag: "duns_search_company",
+    type: "text",
+    placeholder: "Enter company name",
+    size: 2
+  },
+  {
+    label: "Country",
+    tag: "duns_search_country",
+    type: "country",
+    placeholder: "Select country",
+    size: 3
+  }
+];
+
+const getFields = props => {
+  return (
+    <Row gutter={16}>
+      {_.map(props.field.definition.search_param_json, function(item) {
+        if (item.type === "text") {
+          return (
+            <Col span={item.size === 2 ? 12 : 6}>
+              <FormItem label={item.label}>
+                <Input
+                  type="text"
+                  id={item.tag}
+                  placeholder={item.placeholder}
+                  onChange={props.queryChange}
+                />
+              </FormItem>
+            </Col>
+          );
+        } else {
+          return (
+            <Col span={item.size === 2 ? 12 : 6}>
+              <FormItem label={item.label}>
+                <Select
+                  id={item.tag}
+                  showSearch
+                  placeholder="Select "
+                  optionFilterProp="children"
+                  onChange={props.countryChange}
+                >
+                  {_.map(countries, function(item) {
+                    return <Option value={item.code}>{item.name}</Option>;
+                  })}
+                </Select>
+              </FormItem>
+            </Col>
+          );
+        }
+      })}
+
+      <Col span={6}>
+        <FormItem label={" "}>
+          <Button type="primary" className="btn-block" onClick={props.onSearch}>
+            Submit
+          </Button>
+        </FormItem>
+      </Col>
+    </Row>
+  );
+};
+
 //duns field
 class DunsSearch extends Component {
+  constructor() {
+    super();
+    this.state = {
+      field: null,
+      country: null
+    };
+  }
+
+  queryChange = val => {
+    this.setState({ field: val.target.value });
+  };
+
+  countryChange = val => {
+    this.setState({ country: val });
+  };
+
+  onSearch = () => {
+    let payload = {
+      workflow: this.props.workflowId,
+      fieldId: this.props.field.id,
+      option1Tag: this.props.field.definition.search_param_json[0].tag,
+      option2Tag: this.props.field.definition.search_param_json[1].tag,
+      option1Value: this.state.field,
+      option2Value: this.state.country
+    };
+
+    console.log(payload);
+    this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
+  };
+
   render = () => {
-    const { field } = this.props;
+    let { field } = this.props;
+    field.definition.search_param_json = search_param_json;
+
+    const props = {
+      field: field,
+      queryChange: this.queryChange,
+      countryChange: this.countryChange,
+      onSearch: this.onSearch
+    };
 
     return (
       <div>
-        <div className="ant-form-item-label">
-          <label
-            className={getRequired(this.props) ? "ant-form-item-required" : ""}
-            title={getLabel(this.props)}
-          >
-            {getLabel(this.props)}
-          </label>
-        </div>
-        <Row gutter={16}>
-          <Col span={12}>
-            <FormItem
-              //label={getLabel(this.props)}
-              labelCol={24}
-              //className="from-label"
-              style={{ display: "block" }}
-              key={field.id + "-1"}
-              wrapperCol={12}
-              required={getRequired(this.props)}
-              {...field_error(this.props)}
-              validateStatus={field.updated_at ? "success" : null}
-            >
-              <Input
-                disabled={
-                  this.props.completed ||
-                  this.props.is_locked ||
-                  this.props.field.definition.disabled
-                }
-                type="text"
-                placeholder={this.props.field.placeholder}
-                defaultValue={
-                  this.props.field.answers[0]
-                    ? this.props.field.answers[0].answer
-                    : this.props.field.definition.defaultValue
-                }
-                {...feedValue(this.props)}
-                //onChange={e => this.props.onFieldChange(e, this.props)}
-              />
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            <FormItem
-              className="from-label"
-              style={{ display: "block" }}
-              key={field.id + "-2"}
-              wrapperCol={8}
-              required={getRequired(this.props)}
-              {...field_error(this.props)}
-              validateStatus={field.updated_at ? "success" : null}
-            >
-              <Input
-                disabled={
-                  this.props.completed ||
-                  this.props.is_locked ||
-                  this.props.field.definition.disabled
-                }
-                type="text"
-                placeholder={this.props.field.placeholder}
-                defaultValue={
-                  this.props.field.answers[0]
-                    ? this.props.field.answers[0].answer
-                    : this.props.field.definition.defaultValue
-                }
-                {...feedValue(this.props)}
-                //onChange={e => props.onFieldChange(e, props)}
-              />
-            </FormItem>
-          </Col>
-          <Col span={4}>
-            <FormItem
-              wrapperCol={4}
-              style={{ display: "block" }}
-              key={field.id + "-3"}
-              required={getRequired(this.props)}
-              {...field_error(this.props)}
-              validateStatus={field.updated_at ? "success" : null}
-            >
-              <Button type="primary" className="btn-block">
-                Check
-              </Button>
-            </FormItem>
-          </Col>
-        </Row>
-
-        <div className="table">
+        {getFields(props)}
+        <div className="mr-top-lg mr-bottom-lg">
           <GetTable />
         </div>
-        <div>{addCommentBtn(this, this.props)}</div>
       </div>
     );
   };
-
-  // render = () => {
-  //   return <div>llkkll</div>;
-  // };
 }
 
 const GetTable = () => {
-  const data = [
+  const data =
+    dunsData.GetCleanseMatchResponse.GetCleanseMatchResponseDetail
+      .MatchResponseDetail.MatchCandidate;
+
+  const columns = [
     {
-      key: "1",
-      firstName: "John",
-      lastName: "Brown",
-      age: 32,
-      address: "New York No. 1 Lake Park"
+      title: "DUNS",
+      dataIndex: "DUNSNumber",
+      key: "DUNSNumber"
     },
     {
-      key: "2",
-      firstName: "Jim",
-      lastName: "Green",
-      age: 42,
-      address: "London No. 1 Lake Park"
+      title: "Organization Name",
+      dataIndex: "OrganizationPrimaryName[OrganizationName][$]",
+      key: "OrganizationPrimaryName[OrganizationName][$]"
     },
     {
-      key: "3",
-      firstName: "Joe",
-      lastName: "Black",
-      age: 32,
-      address: "Sidney No. 1 Lake Park"
+      title: "Address",
+      dataIndex: "PrimaryAddress[PrimaryTownName]",
+      key: "PrimaryAddress[PrimaryTownName]"
+    },
+    {
+      title: "Status",
+      dataIndex: "OperatingStatusText[$]",
+      key: "OperatingStatusText[$]"
     }
   ];
 
-  return (
-    <Table dataSource={data} pagination={false} bordered={true}>
-      <Column title="First Name" dataIndex="firstName" key="firstName" />
-      <Column title="Last Name" dataIndex="lastName" key="lastName" />
-      <Column title="Age" dataIndex="age" key="age" />
-      <Column title="Address" dataIndex="address" key="address" />
-      <Column
-        title="Action"
-        key="action"
-        // render={(text, record) => (
-        //   <span>
-        //     <a href="javascript:;">Action 一 {record.name}</a>
-        //     <Divider type="vertical" />
-        //     <a href="javascript:;">Delete</a>
-        //     <Divider type="vertical" />
-        //     <a href="javascript:;" className="ant-dropdown-link">
-        //       More actions <Icon type="down" />
-        //     </a>
-        //   </span>
-        // )}
-      />
-    </Table>
-  );
+  return <Table dataSource={data} pagination={false} columns={columns} />;
 };
 
 export const Duns = props => {

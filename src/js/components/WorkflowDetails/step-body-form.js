@@ -203,7 +203,8 @@ class StepBodyForm extends Component {
               formProps: that.props.form,
               completed: that.props.stepData.completed_at ? true : false,
               is_locked: that.props.stepData.is_locked,
-              addComment: that.props.toggleSidebar
+              addComment: that.props.toggleSidebar,
+              dispatch: that.props.dispatch
             };
 
             let field = getFieldType(param);

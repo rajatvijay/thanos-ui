@@ -10,3 +10,4 @@ export { workflowStepConstants } from "./workflow_steps";
 export { workflowFieldConstants } from "./workflow_step_update";
 export { workflowFiltersConstants } from "./workflow_filters";
 export { workflowCommentsConstants } from "./workflow_comment";
+export { dunsFieldConstants } from "./integration_field_update";
