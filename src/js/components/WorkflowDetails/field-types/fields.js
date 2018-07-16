@@ -19,6 +19,7 @@ import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
 import flags from "../../../../images/flags.png";
 import Dropzone from "react-dropzone";
+import validator from "validator";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -271,35 +272,52 @@ export const Date = props => {
 };
 
 //Field Type Email
-export const Email = props => {
-  const { getFieldDecorator } = props.formProps;
-  return (
-    <FormItem
-      label={getLabel(props)}
-      className="from-label"
-      style={{ display: "block" }}
-      key={props.field.id}
-      type="email"
-      required={getRequired(props)}
-      hasFeedback
-      autoComplete="new-password"
-      {...field_error(props)}
-    >
-      {getFieldDecorator("email", {
-        initialValue: props.field.answers[0]
-          ? props.field.answers[0].answer
-          : props.field.definition.defaultValue,
-        rules: [
-          {
-            type: "email",
-            message: "The input is not valid email"
-          },
-          {
-            required: props.field.is_required,
-            message: "Please input your email"
-          }
-        ]
-      })(
+
+class Email2 extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      isValidEamil: ""
+    };
+  }
+
+  onChangeValidate = e => {
+    let valid = validator.isEmail(e.target.value);
+    this.setState({ isValidEamil: valid });
+    if (valid) {
+      this.props.onFieldChange(e, this.props);
+    }
+  };
+
+  fielderror = () => {
+    let ferr = field_error(this.props);
+
+    if (this.state.isValidEamil === false) {
+      return {
+        help: "Invalid email",
+        validateStatus: "error"
+      };
+    } else {
+      return ferr;
+    }
+  };
+
+  render = () => {
+    const props = this.props;
+    return (
+      <FormItem
+        label={getLabel(props)}
+        className="from-label"
+        style={{ display: "block" }}
+        key={props.field.id}
+        type="email"
+        required={getRequired(props)}
+        hasFeedback
+        autoComplete="new-password"
+        help={this.state.isValidEamil === false ? "invalid email" : null}
+        validateStatus={this.state.isValidEamil === false && "error"}
+        {...this.fielderror()}
+      >
         <Input
           disabled={
             props.completed ||
@@ -309,46 +327,69 @@ export const Email = props => {
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
+          defaultValue={
+            props.field.answers[0]
+              ? props.field.answers[0].answer
+              : props.field.definition.defaultValue
+          }
           autoComplete="new-password"
           message="The input is not valid email"
-          onChange={e => props.onFieldChange(e, props)}
+          onChange={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
-      )}
-      {addCommentBtn(this, props)}
-    </FormItem>
-  );
+
+        {addCommentBtn(this, props)}
+      </FormItem>
+    );
+  };
+}
+
+export const Email = props => {
+  return <Email2 {...props} />;
 };
 
 //Field Type url
-export const URL = props => {
-  const { getFieldDecorator } = props.formProps;
-  return (
-    <FormItem
-      label={getLabel(props)}
-      className="from-label"
-      style={{ display: "block" }}
-      key={props.field.id}
-      required={getRequired(props)}
-      hasFeedback
-      {...field_error(props)}
-    >
-      {getFieldDecorator("url", {
-        initialValue: props.field.answers[0]
-          ? props.field.answers[0].answer
-          : props.field.definition.defaultValue,
-        rules: [
-          {
-            type: "url",
-            message:
-              'The input is not valid url. Valid format is "https://www.yourwebsite.com"'
-          },
-          {
-            required: props.field.is_required,
-            message: "Please input url."
-          }
-        ]
-      })(
+class URL2 extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      isValidUrl: null
+    };
+  }
+
+  onChangeValidate = e => {
+    let valid = validator.isURL(e.target.value);
+    this.setState({ isValidUrl: valid });
+    if (valid) {
+      this.props.onFieldChange(e, this.props);
+    }
+  };
+
+  fielderror = () => {
+    let ferr = field_error(this.props);
+
+    if (this.state.isValidUrl === false) {
+      return {
+        help: "Invalid url",
+        validateStatus: "error"
+      };
+    } else {
+      return ferr;
+    }
+  };
+
+  render = () => {
+    const props = this.props;
+    return (
+      <FormItem
+        label={getLabel(props)}
+        className="from-label"
+        style={{ display: "block" }}
+        key={props.field.id}
+        required={getRequired(props)}
+        hasFeedback
+        {...fielderror(props)}
+      >
         <Input
           disabled={
             props.completed ||
@@ -360,13 +401,23 @@ export const URL = props => {
           type="url"
           autoComplete="new-password"
           message="The input is not valid email"
-          onChange={e => props.onFieldChange(e, props)}
+          onChange={e => this.onChangeValidate(e)}
+          defaultValue={
+            props.field.answers[0]
+              ? props.field.answers[0].answer
+              : props.field.definition.defaultValue
+          }
           {...feedValue(props)}
         />
-      )}
-      {addCommentBtn(this, props)}
-    </FormItem>
-  );
+
+        {addCommentBtn(this, props)}
+      </FormItem>
+    );
+  };
+}
+
+export const URL = props => {
+  return <URL2 {...props} />;
 };
 
 //Field Type Checkbox
