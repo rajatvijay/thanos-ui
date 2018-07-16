@@ -25,8 +25,9 @@ export const getFieldType = props => {
     case "text":
       return Text(props);
     case "dnb_duns_search":
-      //return Bool(props);
       return Duns(props);
+    case "bool":
+      return Bool(props);
     case "integer":
       return Number(props);
     case "attachment":
