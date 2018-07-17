@@ -72,18 +72,18 @@ class StepBodyForm extends Component {
   callDispatch = (data, method, payload) => {
     console.log(payload.field.definition.field_type);
 
-    //let saveNowType = ["dnb_duns_search", "bool", "file", "list", "date", "checkbox", "single_select", "multi_select", "cascader", ];
-    if (
-      payload.field.definition.field_type === "dnb_duns_search" ||
-      "bool" ||
-      "file" ||
-      "list" ||
-      "date" ||
-      "checkbox" ||
-      "single_select" ||
-      "multi_select" ||
+    let saveNowType = [
+      "dnb_duns_search",
+      "bool",
+      "file",
+      "list",
+      "date",
+      "checkbox",
+      "single_select",
+      "multi_select",
       "cascader"
-    ) {
+    ];
+    if (saveNowType.includes(payload.field.definition.field_type)) {
       this.props.dispatch(workflowStepActions.saveField(data));
     } else {
       this.dispatchDebounced(data, method);

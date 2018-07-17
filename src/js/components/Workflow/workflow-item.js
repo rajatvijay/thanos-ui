@@ -77,10 +77,6 @@ const getGroupProgress = group => {
   return progress;
 };
 
-const getStatusIcon = () => {
-  return <i className="material-icons">check_circle_outline</i>;
-};
-
 const HeaderWorkflowGroup = props => {
   let progressData = getProgressData(props.workflow);
   let visible_steps = getVisibleSteps(props.workflow.step_groups);
@@ -321,8 +317,8 @@ export const WorkflowHeader = props => {
                       style={{ fontSize: "18px", verticalAlign: "middle" }}
                     >
                       {props.kind === ""
-                        ? getIcon(props.workflow.definition.kind, props.kind)
-                        : "folder_open"}
+                        ? "folder_open"
+                        : getIcon(props.workflow.definition.kind, props.kind)}
                     </i>
                   )}
                 />

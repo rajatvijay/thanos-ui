@@ -14,7 +14,6 @@ import {
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { countries } from "./countries.js";
-import { dunsData } from "./duns_data.js";
 import { dunsFieldActions } from "../../../actions";
 
 const FormItem = Form.Item;
@@ -32,23 +31,6 @@ const {
 } = commonFunctions;
 
 //Field Type DUNS SEARCH
-
-const search_param_json = [
-  {
-    label: "Search by company name",
-    tag: "duns_search_company",
-    type: "text",
-    placeholder: "Enter company name",
-    size: 2
-  },
-  {
-    label: "Country",
-    tag: "duns_search_country",
-    type: "country",
-    placeholder: "Select country",
-    size: 3
-  }
-];
 
 const getFields = props => {
   return (
@@ -95,13 +77,7 @@ class DunsSearch extends Component {
   onSearch = () => {
     let payload = {
       workflow: this.props.workflowId,
-      fieldId: this.props.field.id,
-      option1Tag: this.props.field.definition.search_param_json[0]
-        .ref_field_tag,
-      option2Tag: this.props.field.definition.search_param_json[1]
-        .ref_field_tag,
-      option1Value: this.state.field,
-      option2Value: this.state.country
+      fieldId: this.props.field.id
     };
 
     this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
@@ -161,6 +137,18 @@ class DunsSearch extends Component {
 }
 
 const GetTable = props => {
+  // for error
+  if (
+    props.jsonData.GetCleanseMatchResponse.TransactionResult.ResultText !=
+    "Success"
+  ) {
+    return (
+      <div className="text-center text-red">
+        {props.jsonData.GetCleanseMatchResponse.TransactionResult.ResultText}
+      </div>
+    );
+  }
+
   const data =
     props.jsonData.GetCleanseMatchResponse.GetCleanseMatchResponseDetail
       .MatchResponseDetail.MatchCandidate;
@@ -185,6 +173,12 @@ const GetTable = props => {
       title: "Status",
       dataIndex: "OperatingStatusText[$]",
       key: "OperatingStatusText[$]"
+    },
+    {
+      title: "Confidence Score",
+      dataIndex: "MatchQualityInformation[ConfidenceCodeValue]",
+      key: "MatchQualityInformation[ConfidenceCodeValue]",
+      defaultSortOrder: "descend"
     },
     {
       title: "Action",

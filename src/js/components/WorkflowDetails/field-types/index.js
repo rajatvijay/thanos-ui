@@ -19,6 +19,7 @@ import {
 } from "./fields";
 
 import { Duns } from "./duns-search";
+import { LexisNexis } from "./ln_field";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -28,6 +29,10 @@ export const getFieldType = props => {
       return Duns(props);
     case "bool":
       return Bool(props);
+
+    case "ln_search":
+      return LexisNexis(props);
+
     case "integer":
       return Number(props);
     case "attachment":
