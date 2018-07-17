@@ -17,69 +17,16 @@ import { logout } from "../../actions";
 //import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { authHeader } from "../../_helpers";
+import { authHeader, baseUrl } from "../../_helpers";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
-const content = (
-  <div className="" style={{ maxWidth: "300px", maxHeight: "500px" }}>
-    <List itemLayout="vertical" size="small">
-      <List.Item key="1">
-        <List.Item.Meta
-          avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="">Data pull for Step</a>}
-          description="'Detailed Company Profile' was initiated by Vetted Bot"
-        />
-        <div className="text-right text-light small">4 days ago</div>
-      </List.Item>
-
-      <List.Item key="2">
-        <List.Item.Meta
-          avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="">Step:</a>}
-          description="'D&B Select Company' was completed by palak abrol"
-        />
-        <div className="text-right text-light small">4 days ago</div>
-      </List.Item>
-
-      <List.Item key="3">
-        <List.Item.Meta
-          avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="">Step</a>}
-          description="' Adverse Media' was initiated by Vetted Bot"
-        />
-        <div className="text-right text-light small">1 week ago</div>
-      </List.Item>
-
-      <List.Item key="4">
-        <List.Item.Meta
-          avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="">Step</a>}
-          description="'' Adverse Media' was completed by VETTED bot as value of no. of hits is '0' which is equals to '0' "
-        />
-        <div className="text-right text-light small">1 week ago</div>
-      </List.Item>
-
-      <List.Item key="5">
-        <List.Item.Meta
-          avatar={<i className="material-icons text-primary">check_circle</i>}
-          title={<a href="">Step</a>}
-          description="' Prohibited List Check' was completed by palak abrol"
-        />
-        <div className="text-right text-light small">1 week ago</div>
-      </List.Item>
-    </List>
-  </div>
-);
-
 class NavTop extends Component {
   constructor(props) {
     super(props);
   }
-
-  componentDidMount = () => {};
 
   onLogout(key) {
     this.props.dispatch(logout());
@@ -133,21 +80,19 @@ class NavTop extends Component {
                   mode="horizontal"
                   style={{ lineHeight: "62px", float: "right" }}
                 >
-                  {/*<Menu.Item key="2">
-                      <Popover
-                        placement="bottomRight"
-                        title={"Notifications"}
-                        content={content}
-                        trigger="click"
-                      >
-                        <Badge count={5}>
-                          <i className="material-icons text-base text-middle">
-                            notifications
-                          </i>
-                        </Badge>
-                      </Popover>
-                    </Menu.Item>*/}
-
+                  {/* <Menu.Item key="2">
+                       <Popover
+                         placement="bottomRight"
+                         title={<span className="text-medium">Activity log</span>}
+                         content={<AuditList />}
+                         trigger="click"
+                       >
+                         <i className="material-icons text-grey text-middle">
+                           restore
+                         </i>
+                       </Popover>
+                     </Menu.Item>
+                 */}
                   <SubMenu
                     title={
                       this.props.authentication.user ? (

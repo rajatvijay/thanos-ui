@@ -131,10 +131,13 @@ class Workflow extends Component {
 
   render = () => {
     return (
-      <Layout className="workflow-container inner-container">
+      <Layout className="workflow-container inner-container" hasSider={false}>
         <FilterSidebar />
 
-        <Layout style={{ marginLeft: 250, minHeight: "100vh" }}>
+        <Layout
+          style={{ marginLeft: 250, minHeight: "100vh" }}
+          hasSider={false}
+        >
           <div className="section-top ">
             <Row>
               <Col span="12" className="waiting-section">
