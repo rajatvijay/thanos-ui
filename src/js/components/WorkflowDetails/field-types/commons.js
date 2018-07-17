@@ -103,15 +103,13 @@ function addCommentBtn(e, props) {
 
 //create link from text
 function getLink(text) {
-  var urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+  var urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.()~#?&//=]*)/gi;
 
-  if (_.includes(urlRegex, "@")) {
-    return text.replace(urlRegex, function(url) {
+  return text.replace(urlRegex, function(url) {
+    if (_.includes(url, "@")) {
       return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
-    });
-  } else {
-    return text.replace(urlRegex, function(url) {
+    } else {
       return '<a href="' + url + '" target="_blank">' + url + "</a>";
-    });
-  }
+    }
+  });
 }
