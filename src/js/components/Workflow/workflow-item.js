@@ -191,9 +191,16 @@ class HeaderOptions2 extends React.Component {
       <Menu onClick={this.onStatusChange}>
         {props.statusType
           ? _.map(props.statusType, function(status) {
-              if (status.label !== props.workflow.status.label) {
-                return <Menu.Item key={status.id}>{status.label}</Menu.Item>;
-              }
+              return (
+                <Menu.Item
+                  key={status.id}
+                  disabled={
+                    status.label === props.workflow.status.label ? true : false
+                  }
+                >
+                  {status.label}
+                </Menu.Item>
+              );
             })
           : null}
       </Menu>
