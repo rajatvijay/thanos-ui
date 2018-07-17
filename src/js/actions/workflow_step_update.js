@@ -22,7 +22,8 @@ export const workflowStepActions = {
   submitStepData,
   approveStep,
   undoStep,
-  addComment
+  addComment,
+  removeAttachment
 };
 
 ////////////////////////////////
@@ -60,6 +61,45 @@ function saveField(payload, event_type) {
         type: "success",
         message: "Saved successfully"
       });
+    }
+
+    return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
+  }
+
+  function failure(error) {
+    openNotificationWithIcon({
+      type: "error",
+      message: "Unable to save."
+    });
+    return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
+  }
+}
+
+function removeAttachment(payload, event_type) {
+  return dispatch => {
+    dispatch(request(payload));
+    dispatch(remove_errors({}));
+
+    workflowStepService
+      .removeAttachment(payload)
+      .then(
+        field => dispatch(success(field, event_type)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request(payload) {
+    return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
+  }
+
+  function remove_errors(payload) {
+    return { type: workflowFieldConstants.POST_FIELD_FAILURE, payload };
+  }
+
+  function success(field) {
+    // hack for to avoid response.json promise in case of failure
+    if (!field.id) {
+      return failure(field);
     }
 
     return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
