@@ -21,6 +21,7 @@ import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
 import flags from "../../../../images/flags.png";
 import Dropzone from "react-dropzone";
+import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import validator from "validator";
 
@@ -536,6 +537,11 @@ class FileUpload extends Component {
     };
   }
 
+  componentDidMount = () => {
+    console.log("this.props----------");
+    console.log(this.props);
+  };
+
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
     if (this.props !== nextProps) {
@@ -553,7 +559,20 @@ class FileUpload extends Component {
     this.props.onFieldChange(value, this.props, "file");
   };
 
+  removeFile = () => {
+    this.setState({ loading: true });
+    let payload = {
+      workflow: this.props.workflowId,
+      field: this.props.field.definition.id,
+      responseId: this.props.field.answers[0].id
+    };
+
+    this.props.dispatch(workflowStepActions.removeAttachment(payload));
+    console.log("file removed");
+  };
+
   render = () => {
+    let that = this;
     const { field } = this.props;
 
     return (
@@ -605,58 +624,35 @@ class FileUpload extends Component {
         </Dropzone>
 
         <div className="ant-upload-list ant-upload-list-text">
-          {this.state.filesList ? (
-            _.map(this.state.filesList, function(file, index) {
-              return (
-                <div
-                  className="ant-upload-list-item ant-upload-list-item-done"
-                  key={"file-" + index}
-                >
-                  <div className="ant-upload-list-item-info">
-                    <span>
-                      <i className="anticon anticon-paper-clip" />
-                      <a
-                        href=""
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ant-upload-list-item-name"
-                        title={file.name}
-                      >
-                        {file.name}
-                      </a>
-                    </span>
-                  </div>
-                  <i title="Remove file" className="anticon anticon-cross" />
-                </div>
-              );
-            })
-          ) : (
+          {field.answers[0] && field.answers[0].attachment !== null ? (
             <div
               className="ant-upload-list-item ant-upload-list-item-done"
               key={"file-1"}
             >
               <div className="ant-upload-list-item-info">
-                {field.answers[0] ? (
-                  <span>
-                    <i className="anticon anticon-paper-clip" />
-                    <a
-                      href={field.answers[0].attachment}
-                      target="_blank"
-                      className="ant-upload-list-item-name"
-                    >
-                      {field.answers[0].attachment.substring(
-                        field.answers[0].attachment.lastIndexOf("/") + 1,
-                        field.answers[0].attachment.lastIndexOf("?")
-                      )}
-                    </a>
-                  </span>
-                ) : null}
+                <span>
+                  <i className="anticon anticon-paper-clip" />
+                  <a
+                    href={field.answers[0].attachment}
+                    target="_blank"
+                    className="ant-upload-list-item-name"
+                  >
+                    {field.answers[0].attachment.substring(
+                      field.answers[0].attachment.lastIndexOf("/") + 1,
+                      field.answers[0].attachment.lastIndexOf("?")
+                    )}
+                  </a>
+                </span>
               </div>
-              <i title="Remove file" className="anticon anticon-cross" />
+              <i
+                title="Remove file"
+                className="anticon anticon-cross"
+                onClick={this.removeFile}
+              />
             </div>
-          )}
+          ) : null}
 
-          {_.map(this.state.rejectedFilesList, function(file, index) {
+          {/*_.map(this.state.rejectedFilesList, function(file, index) {
             return (
               <div
                 className="ant-upload-list-item ant-upload-list-item-error"
@@ -679,7 +675,7 @@ class FileUpload extends Component {
                 <i title="Remove file" className="anticon anticon-cross" />
               </div>
             );
-          })}
+          })*/}
         </div>
         {addCommentBtn(this, this.props)}
       </FormItem>

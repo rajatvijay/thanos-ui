@@ -6,7 +6,8 @@ export const workflowStepService = {
   submitStep,
   approveStep,
   undoStep,
-  addComment
+  addComment,
+  removeAttachment
 };
 
 function saveField(payload) {
@@ -41,6 +42,24 @@ function saveField(payload) {
   }
 
   return fetch(baseUrl + "responses/", requestOptions).then(handleResponse);
+}
+
+function removeAttachment(payload) {
+  let requestOptions = {};
+
+  let data = { attachment: null };
+
+  requestOptions = {
+    method: "PATCH",
+    headers: { ...authHeader.post() },
+    credentials: "include",
+    body: JSON.stringify(data)
+  };
+
+  return fetch(
+    baseUrl + "responses/" + payload.responseId + "/",
+    requestOptions
+  ).then(handleResponse);
 }
 
 //update fields onchange
