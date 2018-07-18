@@ -39,7 +39,7 @@ class StepBodyForm extends Component {
         workflow: payload.workflowId
       };
 
-      this.callDispatch(data, method);
+      this.callDispatch(data, method, payload);
 
       // console.log(e.target);
     } else if (calculated) {
@@ -50,7 +50,7 @@ class StepBodyForm extends Component {
         workflow: payload.workflowId
       };
 
-      this.callDispatch(data, method);
+      this.callDispatch(data, method, payload);
     } else if (e.target) {
       let method = "save";
       let data = {
@@ -62,19 +62,36 @@ class StepBodyForm extends Component {
       if (e.type == "blur") {
         this.props.dispatch(workflowStepActions.saveField(data, "blur"));
       } else {
-        this.callDispatch(data, method);
+        this.callDispatch(data, method, payload);
       }
     }
   };
 
   //////////////////////////////////////
   //Dispatch field update /save actions/
-  callDispatch = _.debounce((data, method) => {
-    if (method === "save") {
+  callDispatch = (data, method, payload) => {
+    console.log(payload.field.definition.field_type);
+
+    //let saveNowType = ["dnb_duns_search", "bool", "file", "list", "date", "checkbox", "single_select", "multi_select", "cascader", ];
+    if (
+      payload.field.definition.field_type === "dnb_duns_search" ||
+      "bool" ||
+      "file" ||
+      "list" ||
+      "date" ||
+      "checkbox" ||
+      "single_select" ||
+      "multi_select" ||
+      "cascader"
+    ) {
       this.props.dispatch(workflowStepActions.saveField(data));
     } else {
-      this.props.dispatch(workflowStepActions.updateField(data));
+      this.dispatchDebounced(data, method);
     }
+  };
+
+  dispatchDebounced = _.debounce((data, method) => {
+    this.props.dispatch(workflowStepActions.saveField(data));
   }, 1500);
 
   getUserById = (id, status) => {
