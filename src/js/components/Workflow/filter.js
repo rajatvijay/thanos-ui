@@ -316,10 +316,13 @@ class FilterSidebar extends Component {
         {_.map(workflowKind, function(item, index) {
           return (
             <Menu.Item key={"key-" + index} className="">
-              <span onClick={that.clicked.bind(this, item.tag)}>
+              <div
+                onClick={that.clicked.bind(this, item.tag)}
+                className="kind-item "
+              >
                 <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
                 {item.name}
-              </span>
+              </div>
             </Menu.Item>
           );
         })}
