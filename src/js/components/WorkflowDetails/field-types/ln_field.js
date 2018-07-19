@@ -200,9 +200,15 @@ const GetTabsFilter = props => {
     return <div className="text-center text-red">{message}</div>;
   }
 
-  const data =
-    props.jsonData.Envelope.Body.SearchResponse.SearchResult.Records
-      .ResultRecord.Watchlist.Matches.WLMatch;
+  const data = [];
+  try {
+    const data =
+      props.jsonData.Envelope.Body.SearchResponse.SearchResult.Records
+        .ResultRecord.Watchlist.Matches.WLMatch;
+  } catch (err) {
+    console.log("LN error ---->", props.jsonData);
+    return <div className="text-center text-red">Something went wrong!</div>;
+  }
 
   const getFilterData = data => {
     let fList = [

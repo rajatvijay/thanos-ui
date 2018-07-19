@@ -19,20 +19,15 @@ import {
 } from "./fields";
 
 import { Duns } from "./duns-search";
+import { DnBCommon } from "./dnb-common.js";
 import { LexisNexis } from "./ln_field";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
     case "text":
       return Text(props);
-    case "dnb_duns_search":
-      return Duns(props);
     case "bool":
       return Bool(props);
-
-    case "ln_search":
-      return LexisNexis(props);
-
     case "integer":
       return Number(props);
     case "attachment":
@@ -65,6 +60,18 @@ export const getFieldType = props => {
       return CascaderField(props);
     case "url":
       return URL(props);
+
+    // Integrations
+    case "dnb_duns_search":
+      return Duns(props);
+    case "dnb_company_profile":
+      return DnBCommon(props);
+    case "dnb_risk_score":
+      return DnBCommon(props);
+    case "dnb_data_reader":
+      return DnBCommon(props);
+    case "ln_search":
+      return LexisNexis(props);
 
     default:
       return Text(props);
