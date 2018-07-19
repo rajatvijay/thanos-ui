@@ -190,7 +190,7 @@ class HeaderOptions2 extends React.Component {
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
-      if (o.kind === props.workflow.definition.kind) {
+      if (o.workflow_kind === props.workflow.definition.kind) {
         return o;
       }
     });
