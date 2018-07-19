@@ -4,7 +4,7 @@ import {
   workflowCommentsConstants
 } from "../constants";
 import { workflowStepService } from "../services";
-import { notification } from "antd";
+import { notification, message } from "antd";
 import _ from "lodash";
 import { workflowDetailsActions, workflowActions } from "../actions";
 
@@ -43,30 +43,34 @@ function saveField(payload, event_type) {
   };
 
   function request(payload) {
+    message.loading("", 10);
     return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
   }
 
   function remove_errors(payload) {
+    //message.destroy();
     return { type: workflowFieldConstants.POST_FIELD_FAILURE, payload };
   }
 
   function success(field) {
+    message.destroy();
     // hack for to avoid response.json promise in case of failure
     if (!field.id) {
       return failure(field);
     }
 
     if (event_type != "blur") {
-      openNotificationWithIcon({
-        type: "success",
-        message: "Saved successfully"
-      });
+      // openNotificationWithIcon({
+      //   type: "success",
+      //   message: "Saved successfully"
+      // });
     }
 
     return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
   }
 
   function failure(error) {
+    message.destroy();
     openNotificationWithIcon({
       type: "error",
       message: "Unable to save."
@@ -130,18 +134,21 @@ function updateField(payload) {
   };
 
   function request(payload) {
+    message.loading("", 10);
     return { type: workflowFieldConstants.PATCH_FIELD_REQUEST, payload };
   }
 
   function success(field) {
-    openNotificationWithIcon({
-      type: "success",
-      message: "Saved successfully"
-    });
+    message.destroy();
+    // openNotificationWithIcon({
+    //   type: "success",
+    //   message: "Saved successfully"
+    // });
 
     return { type: workflowFieldConstants.PATCH_FIELD_SUCCESS, field };
   }
   function failure(error) {
+    message.destroy();
     openNotificationWithIcon({
       type: "error",
       message: "Unable to update."

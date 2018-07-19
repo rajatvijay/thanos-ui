@@ -367,19 +367,27 @@ export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
       <Row>
-        <Col span="12" className="">
-          <Avatar>{props.workflow.name.charAt(0)}</Avatar>{" "}
+        <Col span="18" className="">
+          <span className="text-bold text-primary"> ETA 8/2/18</span>
+          <span className="pd-left pd-right">|</span>
           <span className="pd-left">
             Created <Moment fromNow>{props.workflow.created_at}</Moment>
           </span>
           <span className="pd-left pd-right">|</span>
+          {props.workflow.lc_id ? (
+            <span>
+              <span className="">ID 003920303</span>
+              <span className="pd-left pd-right">|</span>
+            </span>
+          ) : null}
           <Link to={"/workflows/instances/" + props.workflow.id}>
             <span className="pd-ard-sm text-medium text-base text-underline">
               View details
             </span>
           </Link>
         </Col>
-        <Col span="12" className="text-right text-light small">
+
+        <Col span="6" className="text-right text-light small">
           {!props.isChild ? (
             props.relatedKind ? (
               <Dropdown
@@ -433,9 +441,9 @@ const StepGroupList = props => {
                   }
                 >
                   <i className="material-icons mr-right-lg ">
-                    {group.definition.icon}
+                    {completed ? "check_circle_outline" : "panorama_fish_eye"}
                   </i>
-                  <span className="text-underline pd-ard-sm t-14">
+                  <span className=" pd-left-sm t-14">
                     {group.definition.name}
                   </span>
                 </span>
@@ -464,7 +472,7 @@ const StepGroupList = props => {
 const StepItem = props => {
   let step_complete = props.stepData.completed_at ? true : false;
   let overdue = props.stepData.overdue ? true : false;
-  let icon_cls = "";
+  let icon_cls = "panorama_fish_eye";
   if (step_complete) {
     icon_cls = "check_circle_outline";
   } else if (props.stepData.is_locked) {
@@ -473,7 +481,7 @@ const StepItem = props => {
       return null;
     }
   } else if (overdue) {
-    icon_cls = "trending_flat";
+    icon_cls = "alarm";
   }
 
   return (

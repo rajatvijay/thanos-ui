@@ -120,6 +120,7 @@
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 .text-anchor {
   cursor: pointer;
@@ -293,6 +294,9 @@
 }
 .opacity-half {
   opacity: 0.5;
+}
+.display-inline-block {
+  display: inline-block;
 }
 .hidden {
   display: none;
@@ -830,10 +834,14 @@ template {
 .ant-menu-horizontal {
   border-bottom: none;
 }
+.ant-dropdown-menu-item,
+.ant-select-dropdown-menu-item {
+  white-space: normal;
+}
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
-  background-color: #17ead9;
-  border-color: #17ead9;
+  background-color: #6178ea;
+  border-color: #6178ea;
 }
 .inner-container {
   display: block;
@@ -979,12 +987,14 @@ template {
 .navbar-top .ant-menu-horizontal .ant-menu-submenu:hover,
 .navbar-top .ant-menu-horizontal .ant-menu-submenu-selected,
 .navbar-top .ant-menu-horizontal .ant-menu-submenu-active {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .navbar-top .ant-menu-horizontal .ant-menu-item:hover,
 .navbar-top .ant-menu-horizontal .ant-menu-item-selected,
 .navbar-top .ant-menu-horizontal .ant-menu-item-active {
-  border-color: #17ead9;
+  border-color: #6178ea;
+  color: #343b4c;
+  border-background: #f2f5fa;
 }
 .navbar-top .ant-menu-item .anticon {
   font-size: 24px;
@@ -992,7 +1002,7 @@ template {
 }
 .ant-menu-submenu-popup .ant-menu-item-active {
   color: #343b4c;
-  background-color: #17ead9;
+  background-color: #f2f5fa;
 }
 .navbar-left .ant-menu-vertical.ant-menu-dark {
   background: #17ead9;
@@ -1042,7 +1052,7 @@ template {
   padding: 15px 78px 40px;
 }
 .workflow-container .section-top {
-  margin: 78px 80px 14px;
+  margin: 48px 80px 14px;
 }
 .workflow-container .section-top .waiting-section i {
   font-size: 16px;
@@ -1050,12 +1060,12 @@ template {
 }
 .workflow-container .section-top .waiting-section .waiting-filter-trigger {
   padding-bottom: 3px;
-  border-bottom: 2px solid #17ead9;
+  border-bottom: 2px solid #6178ea;
   font-weight: 500;
 }
 .workflow-container .divider-top {
   border-bottom: 1px solid #343b4c;
-  margin: 40px 78px 40px;
+  margin: 20px 78px 30px;
 }
 .workflow-container .workflow-count {
   margin: 0 78px;
@@ -1078,7 +1088,7 @@ template {
   background-color: #fff;
 }
 .workflow-list .Collapsible .ant-collapse-header {
-  padding: 20px 26px;
+  padding: 20px 23px;
 }
 .workflow-list .collapse-wrapper {
   position: relative;
@@ -1107,7 +1117,7 @@ template {
 }
 .workflow-list .paper .workflow-list-item {
   transition: margin 0.3s ease;
-  border-bottom: 1px solid rgba(160, 160, 160, 0.5);
+  border-bottom: 1px solid #ffffff;
 }
 .workflow-list .paper .workflow-list-item:last-child {
   border-bottom: none;
@@ -1128,7 +1138,7 @@ template {
   border: none;
 }
 .lc-card-head {
-  padding: 8px 0px;
+  padding: 0px 0px;
 }
 .lc-card-head .company-name {
   font-size: 18px;
@@ -1236,8 +1246,8 @@ template {
 .lc-card .lc-card-body .sub-step-list .groupaz .grp-class .grp-name {
   display: inline-block;
   width: 80%;
-  /*border-bottom: 1px solid #f3f5fa;*/
   padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .lc-step i,
 .lc-card .lc-card-body .sub-step-list .groupaz ul li i {
@@ -1254,6 +1264,7 @@ template {
   padding-left: 25px;
   padding-right: 25px;
   margin-top: 24px;
+  border-right: 1px solid #eee;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz ul li {
   height: 40px;
@@ -1270,7 +1281,7 @@ template {
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #17ead9;
+  background: #f2f5fa;
   color: #343b4c;
 }
 .aux-step-sidebar .ant-menu .ant-menu-item:-active {
@@ -1314,10 +1325,6 @@ template {
 .ant-form.step-form .ant-form-item .ant-form-item-label label {
   margin-bottom: 0;
 }
-.ant-form.step-form .ant-form-item.attachment-field .ant-form-item-children {
-  display: inline-block;
-  width: 100%;
-}
 .ant-form.step-form .react-tel-input {
   display: inline-block;
   width: 100%;
@@ -1328,7 +1335,7 @@ template {
 }
 .ant-form.step-form .react-tel-input input:focus,
 .ant-form.step-form .react-tel-input input:hover {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .ant-form.step-form .react-tel-input.disabled input {
   background-color: #f5f5f5;
@@ -1343,7 +1350,7 @@ template {
   border-color: #f16b51;
 }
 .ant-form.step-form .ant-radio-inner:after {
-  background-color: #17ead9;
+  background-color: #6178ea;
 }
 .ant-form.step-form .ant-input:not(.ant-input-disabled):hover,
 .ant-form.step-form
@@ -1356,7 +1363,7 @@ template {
 .ant-form.step-form .ant-input-number-focused,
 .ant-form.step-form .ant-input-number:not(.ant-input-number-disabled):hover,
 .ant-form.step-form .ant-select-enabled .ant-select-selection:hover {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .ant-form.step-form .file-upload-field {
   width: 100%;
@@ -1375,7 +1382,7 @@ template {
   padding: 20px 20px 0 20px;
 }
 .ant-form.step-form .file-upload-field:not(.disabled):hover {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .ant-form.step-form .file-upload-field.file-upload-field-reject {
   border-color: #f16b51;
@@ -1385,13 +1392,19 @@ template {
   padding: 20px 0;
 }
 .ant-form.step-form .dropped-files li a {
-  color: #17ead9;
+  color: #6178ea;
 }
 .aux-nav .ant-menu .ant-menu-submenu,
 .aux-nav .ant-menu .ant-menu-submenu:hover,
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu-active {
   color: #343b4c;
+}
+.aux-nav .ant-menu .ant-menu-submenu.completed,
+.aux-nav .ant-menu .ant-menu-submenu:hover.completed,
+.aux-nav .ant-menu .ant-menu-submenu-title:hover.completed,
+.aux-nav .ant-menu .ant-menu-submenu-active.completed {
+  color: #6178ea;
 }
 .aux-nav .ant-menu .ant-menu-submenu-title .material-icons,
 .aux-nav .ant-menu .ant-menu-submenu .material-icons,
@@ -1403,7 +1416,7 @@ template {
   overflow: hidden;
 }
 .aux-nav-filter .create-btn {
-  margin: 67px 45px 30px;
+  margin: 40px 45px 30px;
   border-bottom: 2px solid #f4f5f7;
 }
 .aux-nav-filter .filter-divider {
@@ -1452,6 +1465,12 @@ template {
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background-color: #f2f5fa;
 }
+.kind-menu .ant-dropdown-menu-item {
+  padding: 0px 0px;
+}
+.kind-menu .ant-dropdown-menu-item .kind-item {
+  padding: 4px 18px;
+}
 .kind-menu .ant-dropdown-menu-item .material-icons {
   display: inline-block;
   width: 20px;
@@ -1461,6 +1480,9 @@ template {
   overflow-x: hidden;
   margin: 0 78px;
   background-color: transparent;
+}
+.filter-top .ant-badge-multiple-words {
+  padding: 0 4px;
 }
 .filter-top .filter-top-list {
   width: 100%;
@@ -1499,7 +1521,7 @@ template {
   color: #343b4c;
   border: 1px solid #fff;
   border-bottom: 3px solid #fff;
-  height: 110px;
+  height: 100px;
   font-family: Avenir, Roboto, "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
@@ -1518,11 +1540,11 @@ template {
   font-weight: 700;
 }
 .filter-top .filter-top-horizontal .workflow-group-count {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  font-family: Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
   font-weight: 400;
-  font-size: 34px;
+  font-size: 30px;
 }
 .filter-top .filter-top-horizontal,
 .filter-top .ant-menu-horizontal {
@@ -1531,7 +1553,7 @@ template {
 .filter-top .ant-menu-horizontal > .ant-menu-item {
   text-align: center;
   line-height: 1.45;
-  padding: 20px;
+  padding: 15px;
   min-width: 100px;
   float: none !important;
   display: inline-block;
@@ -1644,6 +1666,12 @@ body {
 .animated {
   -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+.animated-long {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
@@ -2833,8 +2861,99 @@ body {
   -webkit-animation-name: grow;
   animation-name: grow;
 }
+@-webkit-keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+@keyframes pulse {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+  50% {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+.pulse {
+  -webkit-animation-name: pulse;
+  animation-name: pulse;
+}
+@-webkit-keyframes headShake {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  6.5% {
+    -webkit-transform: translateX(-6px) rotateY(-9deg);
+    transform: translateX(-6px) rotateY(-9deg);
+  }
+  18.5% {
+    -webkit-transform: translateX(5px) rotateY(7deg);
+    transform: translateX(5px) rotateY(7deg);
+  }
+  31.5% {
+    -webkit-transform: translateX(-3px) rotateY(-5deg);
+    transform: translateX(-3px) rotateY(-5deg);
+  }
+  43.5% {
+    -webkit-transform: translateX(2px) rotateY(3deg);
+    transform: translateX(2px) rotateY(3deg);
+  }
+  50% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@keyframes headShake {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  6.5% {
+    -webkit-transform: translateX(-6px) rotateY(-9deg);
+    transform: translateX(-6px) rotateY(-9deg);
+  }
+  18.5% {
+    -webkit-transform: translateX(5px) rotateY(7deg);
+    transform: translateX(5px) rotateY(7deg);
+  }
+  31.5% {
+    -webkit-transform: translateX(-3px) rotateY(-5deg);
+    transform: translateX(-3px) rotateY(-5deg);
+  }
+  43.5% {
+    -webkit-transform: translateX(2px) rotateY(3deg);
+    transform: translateX(2px) rotateY(3deg);
+  }
+  50% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+.headShake {
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-name: headShake;
+  animation-name: headShake;
+}
 body,
 * {
-  font-family: "Avenir LT Std", Avenir, Roboto, "Helvetica Neue", Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "AvenirLTPro-Book", "Avenir LT Std", Avenir, Roboto,
+    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }

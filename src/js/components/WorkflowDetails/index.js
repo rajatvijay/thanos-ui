@@ -251,7 +251,7 @@ class WorkflowDetails extends Component {
             paddingTop: "30px"
           }}
         >
-          <div className="mr-ard-md  shadow-1 bg-white">
+          <div className="mr-ard-lg  shadow-1 bg-white">
             <StepBody toggleSidebar={this.callBackCollapser} />
           </div>
           <div className="text-right pd-ard mr-ard-md">
