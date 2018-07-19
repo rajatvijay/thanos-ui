@@ -198,7 +198,7 @@ class HeaderOptions2 extends React.Component {
     const menu = (
       <Menu onClick={this.onStatusChange}>
         {props.statusType
-          ? _.map(filteredStatus, function(status) {
+          ? _.map(props.statusType, function(status) {
               return (
                 <Menu.Item
                   key={status.id}
