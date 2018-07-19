@@ -14,6 +14,7 @@ import {
   Divider,
   Row,
   Col,
+  Tooltip,
   Tag,
   Steps,
   Popover
@@ -22,6 +23,8 @@ import { calculatedData } from "./calculated-data";
 import { utils } from "./utils";
 import { history } from "../../_helpers";
 import { changeStatusActions } from "../../actions";
+import Sidebar from "../common/sidebar";
+import AuditList from "../Navbar/audit_log";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -346,68 +349,109 @@ export const WorkflowHeader = props => {
 /////////////////
 
 export const WorkflowBody = props => {
-  const relatedKind = props.relatedKind;
-
-  const menuItems = () => {
-    return (
-      <Menu onClick={props.onChildSelect}>
-        {!_.isEmpty(relatedKind) ? (
-          _.map(props.relatedKind, function(item, index) {
-            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-          })
-        ) : (
-          <Menu.Item disabled>No related workflow kind</Menu.Item>
-        )}
-      </Menu>
-    );
-  };
-
-  const childWorkflowMenu = menuItems(props);
-
   return (
     <div className="lc-card-body">
-      <Row>
-        <Col span="18" className="">
-          <span className="text-bold text-primary"> ETA 8/2/18</span>
-          <span className="pd-left pd-right">|</span>
-          <span className="pd-left">
-            Created <Moment fromNow>{props.workflow.created_at}</Moment>
-          </span>
-          <span className="pd-left pd-right">|</span>
-          {props.workflow.lc_id ? (
-            <span>
-              <span className="">ID 003920303</span>
-              <span className="pd-left pd-right">|</span>
-            </span>
-          ) : null}
-          <Link to={"/workflows/instances/" + props.workflow.id}>
-            <span className="pd-ard-sm text-medium text-base text-underline">
-              View details
-            </span>
-          </Link>
-        </Col>
-
-        <Col span="6" className="text-right text-light small">
-          {!props.isChild ? (
-            props.relatedKind ? (
-              <Dropdown
-                overlay={childWorkflowMenu}
-                className="child-workflow-dropdown"
-                placement="bottomRight"
-              >
-                <a className="ant-dropdown-link ant-btn secondary-btn" href="#">
-                  Add <i className="material-icons t-14">keyboard_arrow_down</i>
-                </a>
-              </Dropdown>
-            ) : null
-          ) : null}
-        </Col>
-      </Row>
+      <MetaRow {...props} />
       <Divider />
       <StepGroupList {...props} />
     </div>
   );
 };
+
+class MetaRow extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      showSidebar: false
+    };
+  }
+
+  toggleSidebar = () => {
+    this.setState({ showSidebar: !this.state.showSidebar });
+  };
+
+  render = () => {
+    const props = this.props;
+
+    const relatedKind = props.relatedKind;
+
+    const menuItems = () => {
+      return (
+        <Menu onClick={props.onChildSelect}>
+          {!_.isEmpty(relatedKind) ? (
+            _.map(props.relatedKind, function(item, index) {
+              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+            })
+          ) : (
+            <Menu.Item disabled>No related workflow kind</Menu.Item>
+          )}
+        </Menu>
+      );
+    };
+
+    const childWorkflowMenu = menuItems(props);
+
+    return (
+      <div>
+        <Row>
+          <Col span="18" className="">
+            <Avatar>{props.workflow.name.charAt(0)}</Avatar>{" "}
+            <span className="pd-left">
+              Created <Moment fromNow>{props.workflow.created_at}</Moment>
+            </span>
+            <span className="pd-left pd-right">|</span>
+            <Link to={"/workflows/instances/" + props.workflow.id}>
+              <span className="pd-ard-sm text-medium text-base text-underline">
+                View details
+              </span>
+            </Link>
+            <span className="pd-left pd-right">|</span>
+            <span
+              className="mr-right mr-left text-anchor text-underline"
+              onClick={this.toggleSidebar}
+            >
+              View activity log{" "}
+              <i className="material-icons text-middle t-16">restore</i>
+            </span>
+          </Col>
+          <Col span="6" className="text-right text-light small">
+            {!props.isChild ? (
+              props.relatedKind ? (
+                <Dropdown
+                  overlay={childWorkflowMenu}
+                  className="child-workflow-dropdown"
+                  placement="bottomRight"
+                >
+                  <a
+                    className="ant-dropdown-link ant-btn secondary-btn"
+                    href="#"
+                  >
+                    Add{" "}
+                    <i className="material-icons t-14">keyboard_arrow_down</i>
+                  </a>
+                </Dropdown>
+              ) : null
+            ) : null}
+          </Col>
+        </Row>
+        {this.state.showSidebar ? (
+          <Sidebar
+            sidebar={this.state.showSidebar}
+            title={"Activity log"}
+            toggleSidebar={this.toggleSidebar}
+          >
+            <AuditList id={props.workflow.id} />
+          </Sidebar>
+        ) : null}
+      </div>
+
+
+
+
+      
+    );
+  };
+}
 
 const StepGroupList = props => {
   let visible_steps = getVisibleSteps(props.pData);

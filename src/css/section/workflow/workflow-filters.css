@@ -98,6 +98,7 @@
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 .text-anchor {
   cursor: pointer;
@@ -272,6 +273,9 @@
 .opacity-half {
   opacity: 0.5;
 }
+.display-inline-block {
+  display: inline-block;
+}
 .hidden {
   display: none;
 }
@@ -327,6 +331,12 @@
 }
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background-color: #f2f5fa;
+}
+.kind-menu .ant-dropdown-menu-item {
+  padding: 0px 0px;
+}
+.kind-menu .ant-dropdown-menu-item .kind-item {
+  padding: 4px 18px;
 }
 .kind-menu .ant-dropdown-menu-item .material-icons {
   display: inline-block;
