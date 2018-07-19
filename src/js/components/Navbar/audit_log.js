@@ -7,6 +7,7 @@ import {
   Badge,
   Popover,
   List,
+  Timeline,
   Avatar
 } from "antd";
 import _ from "lodash";
@@ -47,11 +48,7 @@ class AuditList extends Component {
     fetch(url, requestOptions)
       .then(response => response.json())
       .then(body => {
-        console.log("body----");
-        console.log(body);
-
         this.appendData(body);
-
         //this.setState({ data: body, activityLoading: false });
       });
   };
@@ -61,10 +58,6 @@ class AuditList extends Component {
     let newData = body;
     let concatList = oldData.concat(newData.results);
     newData.results = concatList;
-
-    console.log("newData");
-    console.log(newData);
-
     this.setState({ data: newData, activityLoading: false });
   };
 
@@ -84,10 +77,10 @@ class AuditList extends Component {
 const AuditContent = props => {
   return (
     <div
-      className="activity-log-wrapper pd-ard-lg"
+      className="activity-log-wrapper pd-ard-lg text-left"
       //style={{ maxWidth: "300px", maxHeight: "500px", overflow: "auto" }}
     >
-      <Scrollbars autoHide={true} style={{ width: "300px", height: "500px" }}>
+      <Scrollbars autoHide={true} autoWidth style={{ height: "100vh" }}>
         <InfiniteScroll
           pageStart={0}
           loadMore={props.loadData}
@@ -99,26 +92,47 @@ const AuditContent = props => {
           }
           useWindow={false}
         >
-          <List itemLayout="vertical" size="small">
+          <Timeline>
             {_.map(props.data.results, function(item, index) {
               console.log("item---");
               console.log(item);
               //return <div>------------</div>;
+              let icon = "panorama_fish_eye";
+              if (
+                item.action === "step_viewed" ||
+                item.action === "workflow_viewed"
+              ) {
+                icon = "remove_red_eye";
+              } else if (item.action === "step_submitted") {
+                icon = "check_circle_outline";
+              }
+
               return (
-                <List.Item key={index}>
-                  <List.Item.Meta
-                    //avatar={<Avatar>{item.actor.first_name.charAt(0)}</Avatar>}
-                    title={<a href="">{item.action_title}</a>}
-                    description={item.message}
-                  />
-                  <div className="text-right text-light small">
-                    <Moment fromNow>{item.datetime}</Moment>
-                  </div>
-                </List.Item>
+                <Timeline.Item
+                  key={index}
+                  dot={<i className="material-icons t-14">{icon}</i>}
+                >
+                  <p className="pd-left-sm">
+                    <a
+                      className="text-medium text-base"
+                      href={"mailto:" + item.actor.email}
+                    >
+                      {item.actor.email}
+                    </a>
+                    {""}
+                    {item.message}
+                    <br />
+                    <span className="small text-light">
+                      {" "}
+                      <Moment fromNow>{item.datetime}</Moment>
+                    </span>
+                  </p>
+                </Timeline.Item>
               );
+
               //cons
             })}
-          </List>
+          </Timeline>
         </InfiniteScroll>
       </Scrollbars>
     </div>

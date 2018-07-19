@@ -156,13 +156,13 @@ const HeaderWorkflowGroup = props => {
 class HeaderOptions2 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { current: this.props.workflow.status.label };
+    this.state = {
+      current: this.props.workflow.status.label,
+      showSidebar: false
+    };
   }
 
-  componentDidMount = () => {
-    console.log("this.props.statusType.results");
-    //console.log(this.props.statusType.results)
-  };
+  componentDidMount = () => {};
 
   onStatusChange = key => {
     let id = parseInt(key.key, 10);
@@ -181,6 +181,10 @@ class HeaderOptions2 extends React.Component {
     };
 
     this.props.dispatch(changeStatusActions(payload));
+  };
+
+  toggleSidebar = () => {
+    this.setState({ showSidebar: !this.state.showSidebar });
   };
 
   render = () => {
@@ -215,6 +219,17 @@ class HeaderOptions2 extends React.Component {
           </span>
         ) : null}
 
+        {this.props.detailsPage ? (
+          <Tooltip title="View activity log">
+            <span
+              className="mr-right mr-left text-anchor display-inline-block"
+              onClick={this.toggleSidebar}
+            >
+              <i className="material-icons t-22">restore</i>
+            </span>
+          </Tooltip>
+        ) : null}
+
         <Dropdown overlay={menu}>
           <Button
             className="main-btn status-btn"
@@ -229,6 +244,15 @@ class HeaderOptions2 extends React.Component {
             />
           </Button>
         </Dropdown>
+        {this.state.showSidebar ? (
+          <Sidebar
+            sidebar={this.state.showSidebar}
+            title={"Activity log"}
+            toggleSidebar={this.toggleSidebar}
+          >
+            <AuditList id={props.workflow.id} />
+          </Sidebar>
+        ) : null}
       </Col>
     );
   };
@@ -359,17 +383,6 @@ export const WorkflowBody = props => {
 };
 
 class MetaRow extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      showSidebar: false
-    };
-  }
-
-  toggleSidebar = () => {
-    this.setState({ showSidebar: !this.state.showSidebar });
-  };
-
   render = () => {
     const props = this.props;
 
@@ -405,14 +418,6 @@ class MetaRow extends React.Component {
                 View details
               </span>
             </Link>
-            <span className="pd-left pd-right">|</span>
-            <span
-              className="mr-right mr-left text-anchor text-underline"
-              onClick={this.toggleSidebar}
-            >
-              View activity log{" "}
-              <i className="material-icons text-middle t-16">restore</i>
-            </span>
           </Col>
           <Col span="6" className="text-right text-light small">
             {!props.isChild ? (
@@ -434,21 +439,7 @@ class MetaRow extends React.Component {
             ) : null}
           </Col>
         </Row>
-        {this.state.showSidebar ? (
-          <Sidebar
-            sidebar={this.state.showSidebar}
-            title={"Activity log"}
-            toggleSidebar={this.toggleSidebar}
-          >
-            <AuditList id={props.workflow.id} />
-          </Sidebar>
-        ) : null}
       </div>
-
-
-
-
-      
     );
   };
 }
