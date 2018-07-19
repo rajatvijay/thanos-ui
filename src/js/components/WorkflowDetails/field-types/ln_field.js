@@ -200,9 +200,9 @@ const GetTabsFilter = props => {
     return <div className="text-center text-red">{message}</div>;
   }
 
-  const data = [];
+  let data = [];
   try {
-    const data =
+    data =
       props.jsonData.Envelope.Body.SearchResponse.SearchResult.Records
         .ResultRecord.Watchlist.Matches.WLMatch;
   } catch (err) {
