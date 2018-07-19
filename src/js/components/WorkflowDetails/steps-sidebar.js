@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { Layout, Menu, Icon } from "antd";
+import { Layout, Menu, Icon, Affix } from "antd";
 import { calculatedData } from "../Workflow/calculated-data";
 import { utils } from "../Workflow/utils";
 
@@ -58,11 +58,12 @@ class StepSidebarMenu extends Component {
       }
       return (
         <SubMenu
+          title={g.definition.name}
           key={"sub-" + g.id}
           className={
             !g.completed
               ? g.overdue ? "text-red overdue" : "text-light "
-              : "text-base completed text-medium"
+              : "text-secondary completed text-medium"
           }
           title={
             <span>
@@ -93,11 +94,12 @@ class StepSidebarMenu extends Component {
       }
       return (
         <Menu.Item
+          title={s.name}
           key={group_id + "_" + s.id}
           className={
             s.completed_at === null
               ? s.overdue ? "text-red overdue" : "text-light"
-              : "text-base completed text-medium"
+              : "text-secondary completed text-medium"
           }
         >
           <i className="material-icons t-14 pd-right-sm">{icon_cls}</i>

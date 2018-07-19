@@ -10,7 +10,7 @@
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: @color-primary;
+  background: #f2f5fa;
   color: @color-text;
   &.text-green {
     //color: @color-green;
@@ -84,7 +84,7 @@
       box-shadow: none;
       height: 30px;
       &:focus, &:hover{
-        border-color: @color-primary;
+        border-color: @color-secondary;
       }
     }
     &.disabled {
@@ -103,7 +103,7 @@
   }
 
 
-  .ant-radio-inner:after{background-color: @color-primary}
+  .ant-radio-inner:after{background-color: @color-secondary}
 
   .ant-input:not(.ant-input-disabled):hover,
   .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
@@ -114,7 +114,7 @@
   .ant-input-number-focused,
   .ant-input-number:not(.ant-input-number-disabled):hover,
   .ant-select-enabled .ant-select-selection:hover{
-    border-color: @color-primary;    
+    border-color: @color-secondary;    
   }
 
   .file-upload-field {
@@ -133,7 +133,7 @@
       padding: 20px 20px 0 20px;
     }
     &:not(.disabled):hover{
-      border-color:@color-primary;
+      border-color:@color-secondary;
     }
 
     &.file-upload-field-reject{
@@ -148,7 +148,7 @@
     }
     li {
       a {
-        color: @color-primary;
+        color: @color-secondary;
       }
     }
   }
@@ -167,6 +167,10 @@
     //.ant-menu-item-active 
     {
       color: @color-text;
+
+      &.completed {
+        color: @color-secondary;
+      }
     }
 
     .ant-menu-submenu-title .material-icons ,

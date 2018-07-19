@@ -11,15 +11,16 @@ class WorkflowFilterTop extends Component {
   };
 
   handleClick = value => {
-    if (this.state.activeFilter[0] === value.id) {
-      this.setState({ activeFilter: [] }, function() {
-        this.setFilter();
-      });
-    } else {
-      this.setState({ activeFilter: [value.id] }, function() {
-        this.setFilter();
-      });
-    }
+    this.setState({ activeFilter: [value.id] }, function() {
+      this.setFilter();
+    });
+
+    // if (this.state.activeFilter[0] === value.id) {
+    //   this.setState({ activeFilter: [] }, function() {
+    //     this.setFilter();
+    //   });
+    // } else {
+    // }
   };
 
   setFilter = () => {
@@ -96,7 +97,7 @@ class WorkflowFilterTop extends Component {
                                   ? item.overdue_count
                                   : 0
                               }
-                              offset={[8, 12]}
+                              offset={[12, 12]}
                               title="Overdue"
                               overflowCount={99}
                             >

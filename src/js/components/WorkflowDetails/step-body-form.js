@@ -151,14 +151,15 @@ class StepBodyForm extends Component {
 
               {step.completed_at ? (
                 <span>
-                  Completed by{" "}
-                  <span className="text-medium ">
-                    ...
-                    {/*this.state.stepCompletedBy
-                      ? this.state.stepCompletedBy.first_name
-                      : "..."*/}
-                  </span>{" "}
-                  on <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
+                  {/* Completed by{" "}
+                                   <span className="text-medium ">
+                                     ...
+                                     {this.state.stepCompletedBy
+                                       ? this.state.stepCompletedBy.first_name
+                                       : "..."
+                                   </span>{" "}*/}
+                  Completed on{" "}
+                  <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
                 </span>
               ) : null}
 
@@ -186,10 +187,10 @@ class StepBodyForm extends Component {
     } else if (step.updated_at) {
       return (
         <Alert
+          className="animated-long"
           message={
             <div className="">
-              Last updated at{" "}
-              <Moment format="MM/DD/YYYY">{step.updated_at}</Moment>{" "}
+              Last updated at <Moment fromNow>{step.updated_at}</Moment>{" "}
             </div>
           }
           type="info"
