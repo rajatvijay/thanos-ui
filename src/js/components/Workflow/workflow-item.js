@@ -413,7 +413,12 @@ class MetaRow extends React.Component {
       <div>
         <Row>
           <Col span="18" className="">
-            <Avatar>{props.workflow.name.charAt(0)}</Avatar>{" "}
+            {props.workflow.lc_id ? (
+              <span>
+                <span className="">ID {props.workflow.lc_id}</span>
+                <span className="pd-left pd-right">|</span>
+              </span>
+            ) : null}
             <span className="pd-left">
               Created <Moment fromNow>{props.workflow.created_at}</Moment>
             </span>
