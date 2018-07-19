@@ -190,7 +190,7 @@ class HeaderOptions2 extends React.Component {
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
-      if (o.kind === props.workflow.definition.kind) {
+      if (o.workflow_kind === props.workflow.definition.kind) {
         return o;
       }
     });
@@ -198,7 +198,7 @@ class HeaderOptions2 extends React.Component {
     const menu = (
       <Menu onClick={this.onStatusChange}>
         {props.statusType
-          ? _.map(props.statusType, function(status) {
+          ? _.map(filteredStatus, function(status) {
               return (
                 <Menu.Item
                   key={status.id}
