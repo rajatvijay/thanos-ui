@@ -200,6 +200,7 @@ const GetTabsFilter = props => {
     return <div className="text-center text-red">{message}</div>;
   }
 
+  const data = [];
   try {
     const data =
       props.jsonData.Envelope.Body.SearchResponse.SearchResult.Records
