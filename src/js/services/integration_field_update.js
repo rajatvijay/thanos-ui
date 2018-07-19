@@ -12,18 +12,7 @@ function saveDunsField(payload) {
     credentials: "include"
   };
 
-  let url =
-    baseUrl +
-    "integrations/dnb/?field_id=" +
-    payload.fieldId +
-    "&" +
-    payload.option1Tag +
-    "=" +
-    payload.option1Value +
-    "&" +
-    payload.option2Tag +
-    "=" +
-    payload.option2Value;
+  let url = baseUrl + "integrations/?field_id=" + payload.fieldId;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
