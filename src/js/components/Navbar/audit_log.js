@@ -80,7 +80,11 @@ const AuditContent = props => {
       className="activity-log-wrapper pd-ard-lg text-left"
       //style={{ maxWidth: "300px", maxHeight: "500px", overflow: "auto" }}
     >
-      <Scrollbars autoHide={true} autoWidth style={{ height: "100vh" }}>
+      <Scrollbars
+        autoHide={true}
+        autoWidth
+        style={{ width: 260, height: "100vh" }}
+      >
         <InfiniteScroll
           pageStart={0}
           loadMore={props.loadData}
@@ -105,6 +109,8 @@ const AuditContent = props => {
                 icon = "remove_red_eye";
               } else if (item.action === "step_submitted") {
                 icon = "check_circle_outline";
+              } else if (item.action === "queued") {
+                icon = "email";
               }
 
               return (
@@ -113,12 +119,15 @@ const AuditContent = props => {
                   dot={<i className="material-icons t-14">{icon}</i>}
                 >
                   <p className="pd-left-sm">
-                    <a
-                      className="text-medium text-base"
-                      href={"mailto:" + item.actor.email}
-                    >
-                      {item.actor.email}
-                    </a>
+                    {item.actor ? (
+                      <a
+                        className="text-medium text-base"
+                        href={"mailto:" + item.actor.email}
+                      >
+                        {item.actor.email}
+                      </a>
+                    ) : null}
+
                     {""}
                     {item.message}
                     <br />
