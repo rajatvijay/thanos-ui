@@ -19,8 +19,8 @@ class WorkflowList extends Component {
     this.props.dispatch(workflowActions.getAll(param));
   };
 
-  onStatusChange = status => {
-    console.log(status);
+  reload = () => {
+    this.props.dispatch(workflowActions.getAll());
   };
 
   render() {
@@ -91,25 +91,6 @@ class WorkflowList extends Component {
           {data.workflow && data.workflow.length > 0 ? (
             <div>
               <div className="workflow-list">{ListCompletes}</div>
-
-              {/* <Collapse accordion className="workflow-list ">
-                                     {_.map(data.workflow, function(item, index) {
-                                       let proccessedData = getProcessedData(item.step_groups);
-                     
-                                       return (
-                                           <Panel
-                                             showArrow={false}
-                                             header={<WorkflowHeader workflow={item} />}
-                                             key={index}
-                                             className="lc-card"
-                                           >
-                                             <WorkflowBody workflow={item} pData={proccessedData} />
-                                           </Panel>
-                     
-                                       );
-                                     })}
-                                   </Collapse>*/}
-
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
                   defaultCurrent={page ? page : 1}
@@ -121,7 +102,13 @@ class WorkflowList extends Component {
           ) : (
             <div className="text-center text-medium text-metal">
               {" "}
-              No workflows to show. Try clearing the filters.
+              No workflows to show. Try clearing the filters or{" "}
+              <span
+                className="text-underline text-anchor"
+                onClick={this.reload}
+              >
+                reload
+              </span>
             </div>
           )}
         </Content>

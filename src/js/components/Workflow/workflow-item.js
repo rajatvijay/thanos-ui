@@ -17,7 +17,9 @@ import {
   Tooltip,
   Tag,
   Steps,
-  Popover
+  Popover,
+  Drawer,
+  Alert
 } from "antd";
 import { calculatedData } from "./calculated-data";
 import { utils } from "./utils";
@@ -252,13 +254,17 @@ class HeaderOptions2 extends React.Component {
         {/*<Dropdown overlay={menu} >
                 </Dropdown>*/}
         {this.state.showSidebar ? (
-          <Sidebar
-            sidebar={this.state.showSidebar}
-            title={"Activity log"}
-            toggleSidebar={this.toggleSidebar}
+          <Drawer
+            title="Activity log"
+            placement="right"
+            closable={true}
+            //style={{top:'64px'}}
+            onClose={this.toggleSidebar}
+            visible={this.state.showSidebar}
+            width={300}
           >
             <AuditList id={props.workflow.id} />
-          </Sidebar>
+          </Drawer>
         ) : null}
       </Col>
     );
@@ -415,9 +421,20 @@ class MetaRow extends React.Component {
       <div>
         <Row>
           <Col span="18" className="">
+            {props.workflow.lc_duedate ? (
+              <span>
+                <span className="text-bold text-primary">
+                  EAT {props.workflow.lc_duedate}
+                </span>
+                <span className="pd-left pd-right">|</span>
+              </span>
+            ) : null}
+
             {props.workflow.lc_id ? (
               <span>
-                <span className="">ID {props.workflow.lc_id}</span>
+                <span className="">
+                  <b>ID: </b> {props.workflow.lc_id}
+                </span>
                 <span className="pd-left pd-right">|</span>
               </span>
             ) : null}
@@ -451,6 +468,13 @@ class MetaRow extends React.Component {
             ) : null}
           </Col>
         </Row>
+        {props.workflow.lc_message ? (
+          <Row>
+            <Col span="24" className="mr-top">
+              <Alert message={props.workflow.lc_message} type="info" showIcon />
+            </Col>
+          </Row>
+        ) : null}
       </div>
     );
   };
@@ -483,7 +507,7 @@ const StepGroupList = props => {
                   className={
                     "grp-name " +
                     (completed
-                      ? "text-base text-medium"
+                      ? "text-secondary text-medium"
                       : od ? "text-red text-normal" : "text-light  text-normal")
                   }
                 >

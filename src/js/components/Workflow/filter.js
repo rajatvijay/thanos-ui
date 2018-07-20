@@ -184,11 +184,8 @@ class WorkflowKindFilter extends Component {
 
   onFilterSelected = value => {
     let id = "";
-
-    this.state.selected !== value.id ? (id = value.id) : (id = "");
-
+    id = value.id;
     this.setState({ selected: id });
-
     this.props.dispatch(
       workflowFiltersActions.setFilters({
         filterType: "kind",
@@ -197,7 +194,6 @@ class WorkflowKindFilter extends Component {
       })
     );
 
-    //console.log(this.props)
     this.fetchGroupData(value.tag);
   };
 

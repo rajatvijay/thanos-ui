@@ -1,4 +1,9 @@
 import { workflowConstants } from "../constants";
+const initialState = {
+  loading: false,
+  workflow: [],
+  count: 0
+};
 
 export function workflow(state = {}, action) {
   switch (action.type) {
