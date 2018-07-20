@@ -8,7 +8,7 @@ import {
   Popover,
   List,
   Timeline,
-  Avatar
+  Tooltip
 } from "antd";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
@@ -78,6 +78,7 @@ const AuditContent = props => {
   return (
     <div
       className="activity-log-wrapper pd-ard-lg text-left"
+      style={{ overflow: "hidden" }}
       //style={{ maxWidth: "300px", maxHeight: "500px", overflow: "auto" }}
     >
       <Scrollbars
@@ -98,19 +99,19 @@ const AuditContent = props => {
         >
           <Timeline>
             {_.map(props.data.results, function(item, index) {
-              console.log("item---");
               console.log(item);
               //return <div>------------</div>;
               let icon = "panorama_fish_eye";
-              if (
-                item.action === "step_viewed" ||
-                item.action === "workflow_viewed"
-              ) {
+              if (item.action.type === "viewed") {
                 icon = "remove_red_eye";
-              } else if (item.action === "step_submitted") {
+              } else if (item.action.type === "submitted") {
                 icon = "check_circle_outline";
-              } else if (item.action === "queued") {
+              } else if (item.object.type === "email") {
                 icon = "email";
+              } else if (item.action.type === "approved") {
+                icon = "check_circle_outline";
+              } else if (item.action.type === "undo") {
+                icon = "restore";
               }
 
               return (
@@ -118,24 +119,40 @@ const AuditContent = props => {
                   key={index}
                   dot={<i className="material-icons t-14">{icon}</i>}
                 >
-                  <p className="pd-left-sm">
-                    {item.actor ? (
+                  {item.object.type === "email" ? (
+                    <p className="pd-left-sm">
+                      Email &#8220;{item.object.name}&#8221;{" "}
+                      {item.action.type ? item.action.type : item.action.name}{" "}
                       <a
                         className="text-medium text-base"
                         href={"mailto:" + item.actor.email}
                       >
                         {item.actor.email}
                       </a>
-                    ) : null}
-
-                    {""}
-                    {item.message}
-                    <br />
-                    <span className="small text-light">
-                      {" "}
-                      <Moment fromNow>{item.datetime}</Moment>
-                    </span>
-                  </p>
+                      <br />
+                      <span className="small text-light">
+                        <Tooltip title={item.actiontime.humanize_time}>
+                          <Moment fromNow>{item.actiontime.datetime}</Moment>
+                        </Tooltip>
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="pd-left-sm">
+                      <a
+                        className="text-medium text-base"
+                        href={"mailto:" + item.actor.email}
+                      >
+                        {item.actor.email}
+                      </a>{" "}
+                      {item.action.type} {item.object.name}
+                      <br />
+                      <span className="small text-light">
+                        <Tooltip title={item.actiontime.humanize_time}>
+                          <Moment fromNow>{item.actiontime.datetime}</Moment>
+                        </Tooltip>
+                      </span>
+                    </p>
+                  )}
                 </Timeline.Item>
               );
 
