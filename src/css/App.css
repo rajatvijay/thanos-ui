@@ -598,11 +598,12 @@ template {
   box-shadow: -30px 0 38px 0 rgba(0, 0, 0, 0.07);
 }
 .sidebar-head {
-  background: #fff;
+  background: #17ead9;
   padding: 14px;
   color: #fff;
   font-size: 14px;
   font-weight: bold;
+  text-align: left;
 }
 .close-trigger {
   float: right;
@@ -837,6 +838,9 @@ template {
 .ant-dropdown-menu-item,
 .ant-select-dropdown-menu-item {
   white-space: normal;
+}
+.ant-timeline-item-head-custom {
+  left: 6px;
 }
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
