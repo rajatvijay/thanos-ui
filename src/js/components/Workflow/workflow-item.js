@@ -507,7 +507,7 @@ const StepGroupList = props => {
                   className={
                     "grp-name " +
                     (completed
-                      ? "text-base text-medium"
+                      ? "text-secondary text-medium"
                       : od ? "text-red text-normal" : "text-light  text-normal")
                   }
                 >
