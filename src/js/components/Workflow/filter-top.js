@@ -11,16 +11,15 @@ class WorkflowFilterTop extends Component {
   };
 
   handleClick = value => {
-    this.setState({ activeFilter: [value.id] }, function() {
-      this.setFilter();
-    });
-
-    // if (this.state.activeFilter[0] === value.id) {
-    //   this.setState({ activeFilter: [] }, function() {
-    //     this.setFilter();
-    //   });
-    // } else {
-    // }
+    if (this.state.activeFilter[0] === value.id) {
+      this.setState({ activeFilter: [] }, function() {
+        this.setFilter();
+      });
+    } else {
+      this.setState({ activeFilter: [value.id] }, function() {
+        this.setFilter();
+      });
+    }
   };
 
   setFilter = () => {

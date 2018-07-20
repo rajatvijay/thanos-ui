@@ -76,91 +76,97 @@ class AuditList extends Component {
 
 const AuditContent = props => {
   return (
-    <div
-      className="activity-log-wrapper pd-ard-lg text-left"
-      style={{ overflow: "hidden" }}
-      //style={{ maxWidth: "300px", maxHeight: "500px", overflow: "auto" }}
-    >
-      <Scrollbars
-        autoHide={true}
-        autoWidth
-        style={{ width: 260, height: "100vh" }}
+    <div className="activity-log-wrapper text-left">
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={props.loadData}
+        hasMore={props.data.next ? true : false}
+        loader={
+          <div className="loader" key={0}>
+            Loading ...
+          </div>
+        }
+        useWindow={false}
       >
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={props.loadData}
-          hasMore={props.data.next ? true : false}
-          loader={
-            <div className="loader" key={0}>
-              Loading ...
-            </div>
-          }
-          useWindow={false}
-        >
-          <Timeline>
-            {_.map(props.data.results, function(item, index) {
-              console.log(item);
-              //return <div>------------</div>;
-              let icon = "panorama_fish_eye";
-              if (item.action.type === "viewed") {
-                icon = "remove_red_eye";
-              } else if (item.action.type === "submitted") {
-                icon = "check_circle_outline";
-              } else if (item.object.type === "email") {
-                icon = "email";
-              } else if (item.action.type === "approved") {
-                icon = "check_circle_outline";
-              } else if (item.action.type === "undo") {
-                icon = "restore";
+        <Timeline>
+          {_.map(props.data.results, function(item, index) {
+            console.log(item);
+
+            let icon = "panorama_fish_eye";
+            let color = "blue";
+
+            if (item.action.type === "viewed") {
+              icon = "remove_red_eye";
+            } else if (item.action.type === "submitted") {
+              icon = "check_circle_outline";
+              color = "green";
+            } else if (item.object.type === "email") {
+              icon = "email";
+              if (item.action.type === "rejected") {
+                color = "red";
+              } else if (item.action.type === "delivered") {
+                color = "green";
               }
+            } else if (item.action.type === "approved") {
+              icon = "check_circle_outline";
+              color = "green";
+            } else if (item.action.type === "undo") {
+              icon = "restore";
+              color = "orange";
+            }
 
-              return (
-                <Timeline.Item
-                  key={index}
-                  dot={<i className="material-icons t-14">{icon}</i>}
-                >
-                  {item.object.type === "email" ? (
-                    <p className="pd-left-sm">
-                      Email &#8220;{item.object.name}&#8221;{" "}
-                      {item.action.type ? item.action.type : item.action.name}{" "}
-                      <a
-                        className="text-medium text-base"
-                        href={"mailto:" + item.actor.email}
-                      >
-                        {item.actor.email}
-                      </a>
-                      <br />
-                      <span className="small text-light">
-                        <Tooltip title={item.actiontime.humanize_time}>
-                          <Moment fromNow>{item.actiontime.datetime}</Moment>
-                        </Tooltip>
-                      </span>
-                    </p>
-                  ) : (
-                    <p className="pd-left-sm">
-                      <a
-                        className="text-medium text-base"
-                        href={"mailto:" + item.actor.email}
-                      >
-                        {item.actor.email}
-                      </a>{" "}
-                      {item.action.type} {item.object.name}
-                      <br />
-                      <span className="small text-light">
-                        <Tooltip title={item.actiontime.humanize_time}>
-                          <Moment fromNow>{item.actiontime.datetime}</Moment>
-                        </Tooltip>
-                      </span>
-                    </p>
-                  )}
-                </Timeline.Item>
-              );
+            return (
+              <Timeline.Item
+                key={index}
+                dot={<i className="material-icons t-14">{icon}</i>}
+                color={color}
+              >
+                {item.object.type === "email" ? (
+                  <p className="pd-left-sm">
+                    Email{" "}
+                    {item.object.name ? (
+                      <span>&#8220;{item.object.name}&#8221;</span>
+                    ) : (
+                      " "
+                    )}
+                    {item.action.type ? item.action.type : item.action.name}{" "}
+                    <a
+                      className="text-medium text-base"
+                      href={"mailto:" + item.actor.email}
+                    >
+                      {item.actor.email}
+                    </a>
+                    <br />
+                    <span className="small text-light">
+                      <Tooltip title={item.actiontime.humanize_time}>
+                        <Moment fromNow>{item.actiontime.datetime}</Moment>
+                      </Tooltip>
+                    </span>
+                  </p>
+                ) : (
+                  <p className="pd-left-sm">
+                    <a
+                      className="text-medium text-base"
+                      href={"mailto:" + item.actor.email}
+                    >
+                      {item.actor.email}
+                    </a>{" "}
+                    {item.action.type} {item.object.name}
+                    <br />
+                    <span className="small text-light">
+                      <Tooltip title={item.actiontime.humanize_time}>
+                        <Moment fromNow>{item.actiontime.datetime}</Moment>
+                      </Tooltip>
+                    </span>
+                  </p>
+                )}
+              </Timeline.Item>
+            );
 
-              //cons
-            })}
-          </Timeline>
-        </InfiniteScroll>
-      </Scrollbars>
+            //cons
+          })}
+        </Timeline>
+      </InfiniteScroll>
     </div>
   );
 };

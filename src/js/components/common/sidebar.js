@@ -29,7 +29,8 @@ class Sidebar extends Component {
           zIndex: 2,
           right: 0,
           top: 65,
-          width: 300
+          width: 300,
+          ...this.props.style
         }}
         //width={350}
         //defaultCollapsed={true}
