@@ -235,20 +235,22 @@ class HeaderOptions2 extends React.Component {
           </Tooltip>
         ) : null}
 
-        <Dropdown overlay={menu}>
+        <Tooltip title={props.workflow.status.label}>
           <Button
             className="main-btn status-btn"
             type="main"
             title={props.workflow.status.label}
           >
             <span className="status-text">{this.state.current}</span>
-            <Icon
-              className="pd-left-sm icon"
-              type="down"
-              style={{ fontSize: 11 }}
-            />
+            {/*<Icon
+                          className="pd-left-sm icon"
+                          type="down"
+                          style={{ fontSize: 11 }}
+                        />*/}
           </Button>
-        </Dropdown>
+        </Tooltip>
+        {/*<Dropdown overlay={menu} >
+                </Dropdown>*/}
         {this.state.showSidebar ? (
           <Sidebar
             sidebar={this.state.showSidebar}

@@ -160,9 +160,9 @@ class Workflow extends Component {
                     trigger="click"
                     onClick={this.loadExportList}
                   >
-                    <Button className="btn-grey">
+                    <span className="pd-ard-sm text-light text-anchor">
                       <i className="material-icons">save_alt</i>
-                    </Button>
+                    </span>
                   </Dropdown>
                 </Tooltip>
               </Col>
