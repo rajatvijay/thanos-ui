@@ -306,17 +306,20 @@ class FilterSidebar extends Component {
     const menu = (
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKind, function(item, index) {
-          return (
-            <Menu.Item key={"key-" + index} className="">
-              <div
-                onClick={that.clicked.bind(this, item.tag)}
-                className="kind-item "
-              >
-                <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
-                {item.name}
-              </div>
-            </Menu.Item>
-          );
+          //Hide users workflow kind from create button. Temporary
+          if (item.tag !== "users") {
+            return (
+              <Menu.Item key={"key-" + index} className="">
+                <div
+                  onClick={that.clicked.bind(this, item.tag)}
+                  className="kind-item "
+                >
+                  <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
+                  {item.name}
+                </div>
+              </Menu.Item>
+            );
+          }
         })}
 
         {this.props.workflowKind.error ? (
