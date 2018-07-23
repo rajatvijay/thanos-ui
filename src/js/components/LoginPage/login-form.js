@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Input, Icon, Divider } from "antd";
+import { Form, Button, Input, Icon, Divider, Alert } from "antd";
 //import validator from "validator";
+import { connect } from "react-redux";
 import { login } from "../../actions";
 
 const FormItem = Form.Item;
@@ -83,6 +84,9 @@ class LoginForm extends React.Component {
   render() {
     const { data, errors } = this.state;
 
+    console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+    console.log(this.props);
+
     return (
       <div className="login-form-box">
         <Form layout="vertical" onSubmit={this.onSubmit} className="login-form">
@@ -127,6 +131,14 @@ class LoginForm extends React.Component {
             </Button>
             {/*<Link to="/register"> Sign up</Link>*/}
           </FormItem>
+          {this.props.error ? (
+            <Alert
+              message="Username and password does not match"
+              type="error"
+              showIcon
+            />
+          ) : null}
+
           <Divider>or</Divider>
           <div className="t-16">
             <Link to="/login/magic">

@@ -34,18 +34,30 @@ export const login = (username, password) => async dispatch => {
     });
     history.push("/");
   } catch (error) {
+    console.log("error login");
+    console.log(error);
+
     dispatch({ type: userConstants.LOGIN_FAILURE, error });
     // dispatch(alertActions.error(error));
   }
 };
 
+function removeCookies() {
+  var res = document.cookie;
+  var multiple = res.split(";");
+  for (var i = 0; i < multiple.length; i++) {
+    var key = multiple[i].split("=");
+    document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
+  }
+}
+
 export const logout = () => async dispatch => {
   try {
     const response = await UserLogout();
-    dispatch({
-      type: userConstants.LOGOUT
-    });
-    history.push("/login/magic");
+    dispatch({ type: userConstants.LOGOUT });
+    removeCookies();
+    //history.push("/login/magic");
+    document.location.reload();
   } catch (error) {
     throw error;
   }
