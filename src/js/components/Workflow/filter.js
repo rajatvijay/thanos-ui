@@ -347,7 +347,11 @@ class FilterSidebar extends Component {
       >
         <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
           <div className="create-btn">
-            <Dropdown overlay={menu} placement="bottomRight">
+            <Dropdown
+              overlay={menu}
+              placement="bottomRight"
+              className="create-workflow-dropdown"
+            >
               <Button
                 type="primary"
                 size="large"

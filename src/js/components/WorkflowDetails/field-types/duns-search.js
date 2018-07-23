@@ -37,7 +37,7 @@ const getFields = props => {
     <Row gutter={16} style={{ marginBottom: "50px" }}>
       <Col span={4}>
         <Button type="primary" className="btn-block" onClick={props.onSearch}>
-          Search DUNS
+          Search D-U-N-S
         </Button>
       </Col>
 
@@ -155,7 +155,7 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "DUNS",
+      title: "D-U-N-S",
       dataIndex: "DUNSNumber",
       key: "DUNSNumber"
     },
@@ -175,7 +175,7 @@ const GetTable = props => {
       key: "OperatingStatusText[$]"
     },
     {
-      title: "Confidence Score",
+      title: "Confidence code (10=highest)",
       dataIndex: "MatchQualityInformation[ConfidenceCodeValue]",
       key: "MatchQualityInformation[ConfidenceCodeValue]",
       defaultSortOrder: "descend"

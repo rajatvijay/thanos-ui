@@ -107,7 +107,7 @@ class NavTop extends Component {
                     onClick={this.onLogout.bind(this, "key")}
                   >
                     <Menu.Item key="setting:2" disabled>
-                      Profile
+                      {user.first_name + user.last_name}
                     </Menu.Item>
                     <Menu.Item key="setting:1">Logout</Menu.Item>
                   </SubMenu>
