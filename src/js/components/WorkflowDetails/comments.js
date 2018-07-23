@@ -107,7 +107,7 @@ class Comments extends Component {
                       className="ant-form-item-label"
                       style={{ marginTop: "5px" }}
                     >
-                      <div style={{ fontSize: "14px" }}>
+                      <div style={{ fontSize: "14px", textAlign: "left" }}>
                         {c.target.field_details.name}
                       </div>
                       <div style={{ textAlign: "left", fontSize: "13px" }}>
