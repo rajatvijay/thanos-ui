@@ -70,7 +70,7 @@ class Comments extends Component {
           top: "65px",
           zIndex: 1
         }}
-        width="350"
+        width="400"
         collapsed={false}
         collapsedWidth={0}
         collapsible
