@@ -6,15 +6,20 @@ const initialState = {
 };
 
 export function workflow(state = {}, action) {
+  console.log("search ------action");
+  console.log(action);
+
   switch (action.type) {
     //GET ALL THE WORKFLOWS
     case workflowConstants.GETALL_REQUEST:
       return {
-        loading: true
+        loading: true,
+        search: false
       };
     case workflowConstants.GETALL_SUCCESS:
       workflow = action.workflow;
       return {
+        search: false,
         loading: false,
         workflow: workflow.results,
         count: workflow.count,
@@ -24,7 +29,34 @@ export function workflow(state = {}, action) {
     case workflowConstants.GETALL_FAILURE:
       console.log("failed to load ");
       return {
+        search: false,
         loading: false,
+        loadingStatus: "failed",
+        error: action.error
+      };
+
+    //SEARCH LIST
+    case workflowConstants.SEARCH_REQUEST:
+      return {
+        loading: true,
+        search: true
+      };
+    case workflowConstants.SEARCH_SUCCESS:
+      workflow = action.workflow;
+      return {
+        search: true,
+        loading: false,
+        workflow: workflow.results,
+        count: workflow.count,
+        next: workflow.next,
+        previous: workflow.previous
+      };
+    case workflowConstants.SEARCH_FAILURE:
+      console.log("failed to load ");
+      return {
+        search: true,
+        loading: false,
+        workflow: null,
         loadingStatus: "failed",
         error: action.error
       };

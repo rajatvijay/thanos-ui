@@ -4,7 +4,8 @@ import { workflowService } from "../services";
 export const workflowActions = {
   getAll,
   getById,
-  delete: _delete
+  delete: _delete,
+  searchWorkflow
 };
 
 function getAll(filter) {
@@ -76,5 +77,28 @@ function _delete(id) {
   }
   function failure(id, error) {
     return { type: workflowConstants.DELETE_FAILURE, id, error };
+  }
+}
+
+function searchWorkflow(query) {
+  return dispatch => {
+    dispatch(request(query));
+
+    workflowService
+      .searchWorkflow(query)
+      .then(
+        workflow => dispatch(success(workflow)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request() {
+    return { type: workflowConstants.SEARCH_REQUEST };
+  }
+  function success(workflow) {
+    return { type: workflowConstants.SEARCH_SUCCESS, workflow };
+  }
+  function failure(error) {
+    return { type: workflowConstants.SEARCH_FAILURE, error };
   }
 }

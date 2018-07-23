@@ -13,7 +13,7 @@ import {
   Row,
   Col
 } from "antd";
-import { logout } from "../../actions";
+import { logout, workflowActions } from "../../actions";
 //import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -22,6 +22,7 @@ import { authHeader, baseUrl } from "../../_helpers";
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
+const Search = Input.Search;
 
 class NavTop extends Component {
   constructor(props) {
@@ -31,6 +32,14 @@ class NavTop extends Component {
   onLogout(key) {
     this.props.dispatch(logout());
   }
+
+  onSearch = e => {
+    if (e) {
+      this.props.dispatch(workflowActions.searchWorkflow(e));
+    } else {
+      this.props.dispatch(workflowActions.getAll());
+    }
+  };
 
   render = () => {
     let that = this;
@@ -58,21 +67,21 @@ class NavTop extends Component {
                   </a>
                 </span>
 
-                <div className="search-box">
-                  <Input
-                    placeholder="Search for workflow"
-                    prefix={
-                      <Icon
-                        type="search"
-                        style={{ color: "rgba(0,0,0,.25)" }}
-                      />
-                    }
-                    //suffix={suffix}
-                    //value={userName}
-                    //onChange={this.onChangeUserName}
-                    //ref={node => this.userNameInput = node}
-                  />
-                </div>
+                {document.location.pathname === "/workflows/instances/" ? (
+                  <div className={"search-box "}>
+                    <Search
+                      placeholder="Search"
+                      onSearch={value => this.onSearch(value)}
+                      // prefix={
+                      //   <Icon
+                      //     type="search"
+                      //     style={{ color: "rgba(0,0,0,.25)" }}
+                      //   />
+                      // }
+                      style={{ width: 300 }}
+                    />
+                  </div>
+                ) : null}
               </Col>
               <Col span={12}>
                 <Menu
