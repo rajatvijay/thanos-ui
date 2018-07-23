@@ -24,7 +24,7 @@ import {
 import { calculatedData } from "./calculated-data";
 import { utils } from "./utils";
 import { history } from "../../_helpers";
-import { changeStatusActions } from "../../actions";
+import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
 import AuditList from "../Navbar/audit_log";
 
@@ -189,6 +189,11 @@ class HeaderOptions2 extends React.Component {
     this.setState({ showSidebar: !this.state.showSidebar });
   };
 
+  openCommentSidebar = () => {
+    let object_id = this.props.workflow.id;
+    this.props.getCommentSidebar(object_id, "all_data");
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -227,14 +232,25 @@ class HeaderOptions2 extends React.Component {
         ) : null}
 
         {this.props.detailsPage ? (
-          <Tooltip title="View activity log">
-            <span
-              className="mr-right mr-left text-anchor display-inline-block"
-              onClick={this.toggleSidebar}
-            >
-              <i className="material-icons t-22">restore</i>
-            </span>
-          </Tooltip>
+          <span>
+            <Tooltip title="Comments">
+              <span
+                className="mr-right mr-left text-anchor display-inline-block"
+                onClick={this.openCommentSidebar}
+              >
+                <i className="material-icons t-22">message</i>
+              </span>
+            </Tooltip>
+
+            <Tooltip title="View activity log">
+              <span
+                className="mr-right mr-left text-anchor display-inline-block"
+                onClick={this.toggleSidebar}
+              >
+                <i className="material-icons t-22">restore</i>
+              </span>
+            </Tooltip>
+          </span>
         ) : null}
 
         <Tooltip title={props.workflow.status.label}>

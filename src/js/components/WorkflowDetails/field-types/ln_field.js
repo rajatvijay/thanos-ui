@@ -210,6 +210,10 @@ const GetTabsFilter = props => {
     return <div className="text-center text-red">Something went wrong!</div>;
   }
 
+  if (!Array.isArray(data)) {
+    data = [data];
+  }
+
   const getFilterData = data => {
     let fList = [
       {
@@ -224,7 +228,7 @@ const GetTabsFilter = props => {
       { label: "PEP", value: "pep", data: [], count: 0 },
       { label: "Enforcement", value: "enforcement", data: [], count: 0 },
       { label: "Registrations", value: "registrations", data: [], count: 0 },
-      { label: "Adverse Media", value: "adversemedia", data: [], count: 0 },
+      { label: "Adverse Media", value: "adverse media", data: [], count: 0 },
       {
         label: "Associated Entity",
         value: "associatedentity",
