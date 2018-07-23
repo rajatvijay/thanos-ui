@@ -151,14 +151,14 @@ class StepBodyForm extends Component {
 
               {step.completed_at ? (
                 <span>
-                  {/* Completed by{" "}
-                                   <span className="text-medium ">
-                                     ...
-                                     {this.state.stepCompletedBy
-                                       ? this.state.stepCompletedBy.first_name
-                                       : "..."
-                                   </span>{" "}*/}
-                  Completed on{" "}
+                  Completed by{" "}
+                  <span className="text-medium ">
+                    {step.completed_by
+                      ? step.completed_by.first_name
+                      : step.completed_by.email
+                        ? step.completed_by.email
+                        : "..."}
+                  </span>{" "}
                   <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
                 </span>
               ) : null}
