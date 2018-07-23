@@ -907,6 +907,9 @@ template {
 .ant-progress-status-success .ant-progress-circle-path {
   stroke: #6178ea;
 }
+.ant-progress-text .material-icons {
+  color: #109f94;
+}
 .ant-progress-circle-path {
   stroke: #6178ea;
 }
@@ -1395,10 +1398,11 @@ template {
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .lc-step i,
 .lc-card .lc-card-body .sub-step-list .groupaz ul li i {
-  font-size: 14px;
-  vertical-align: middle;
+  font-size: 18px;
+  vertical-align: sub;
   margin-right: 5px;
   width: 16px;
+  padding-right: 20px;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .lc-step i {
   font-size: 20px;
@@ -1624,6 +1628,7 @@ template {
 .kind-menu .ant-dropdown-menu-item .material-icons {
   display: inline-block;
   width: 20px;
+  color: #109f94;
 }
 .filter-top {
   position: relative;
