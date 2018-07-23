@@ -57,6 +57,7 @@ class Comments extends Component {
       ? this.props.workflowComments.data
       : {};
     let that = this;
+    let single_comments = _.size(comments.results) <= 1 ? true : false;
     return (
       <Sider
         className="comments-sidebar profile-sidebar sidebar-right"
@@ -69,7 +70,7 @@ class Comments extends Component {
           top: "65px",
           zIndex: 1
         }}
-        width="350"
+        width="400"
         collapsed={false}
         collapsedWidth={0}
         collapsible
@@ -90,6 +91,9 @@ class Comments extends Component {
           </div>
           <Content style={{ padding: "15px" }}>
             {_.map(comments.results, function(c) {
+              if (!single_comments && !_.size(c.messages)) {
+                return null;
+              }
               return (
                 <div>
                   <Tag style={{ width: "100%" }} className="comment_step_bar">
@@ -103,7 +107,7 @@ class Comments extends Component {
                       className="ant-form-item-label"
                       style={{ marginTop: "5px" }}
                     >
-                      <div style={{ fontSize: "14px" }}>
+                      <div style={{ fontSize: "14px", textAlign: "left" }}>
                         {c.target.field_details.name}
                       </div>
                       <div style={{ textAlign: "left", fontSize: "13px" }}>
@@ -116,22 +120,25 @@ class Comments extends Component {
 
                   <Divider />
 
-                  <div>
-                    <span
-                      style={{
-                        position: "relative",
-                        top: "-39px",
-                        fontSize: "12px",
-                        backgroundColor: "#fff",
-                        paddingRight: "10px",
-                        color: "#575757"
-                      }}
-                    >
-                      {c.messages.length
-                        ? c.messages.length + " Comment/s"
-                        : "Comments"}{" "}
-                    </span>
-                  </div>
+                  {single_comments || c.messages.length ? (
+                    <div>
+                      <span
+                        style={{
+                          position: "relative",
+                          top: "-39px",
+                          fontSize: "12px",
+                          backgroundColor: "#fff",
+                          paddingRight: "10px",
+                          color: "#575757"
+                        }}
+                      >
+                        {c.messages.length
+                          ? c.messages.length + " Comment/s"
+                          : "Comments"}{" "}
+                      </span>
+                    </div>
+                  ) : null}
+
                   <div style={{ position: "relative", top: "-30px" }}>
                     {_.map(c.messages, function(msg) {
                       return (
@@ -171,24 +178,27 @@ class Comments extends Component {
                     })}
                   </div>
 
-                  <div style={{ position: "relative", top: "-20px" }}>
-                    <Mention
-                      style={{ width: "100%", height: 60 }}
-                      suggestions={c.mentions}
-                      placeholder="Enter comment"
-                      multiLines
-                      onChange={that.onChange}
-                      value={that.state.message}
-                    />
-                  </div>
-
-                  <Button
-                    className="float-right"
-                    style={{ marginTop: "-8px" }}
-                    onClick={that.addComment.bind(this, c)}
-                  >
-                    Post
-                  </Button>
+                  {single_comments ? (
+                    <span>
+                      <div style={{ position: "relative", top: "-20px" }}>
+                        <Mention
+                          style={{ width: "100%", height: 60 }}
+                          suggestions={c.mentions}
+                          placeholder="Enter comment"
+                          multiLines
+                          onChange={that.onChange}
+                          value={that.state.message}
+                        />
+                      </div>
+                      <Button
+                        className="float-right"
+                        style={{ marginTop: "-8px" }}
+                        onClick={that.addComment.bind(this, c)}
+                      >
+                        Post
+                      </Button>{" "}
+                    </span>
+                  ) : null}
                 </div>
               );
             })}
