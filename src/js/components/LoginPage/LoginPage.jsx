@@ -38,10 +38,11 @@ class LoginPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { loggingIn } = state.authentication;
+  const { loggingIn, error } = state.authentication;
   const { alert } = state;
   return {
     loggingIn,
+    error,
     alert
   };
 }
