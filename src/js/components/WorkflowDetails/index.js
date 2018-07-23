@@ -226,6 +226,7 @@ class WorkflowDetails extends Component {
                 workflow={this.state.wfdata}
                 statusType={this.props.workflowFilterType.statusType}
                 showCommentIcon={true}
+                getCommentSidebar={this.callBackCollapser}
               />
             </div>
           )}
