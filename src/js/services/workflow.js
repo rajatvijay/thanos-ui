@@ -4,7 +4,8 @@ import { store } from "../_helpers";
 
 export const workflowService = {
   getAll,
-  getById
+  getById,
+  searchWorkflow
 };
 
 //FETCH THE LIST OF WORLFOWS FOR WORKFLOW LIST PAGE
@@ -77,6 +78,18 @@ function getById(id) {
   return fetch(baseUrl + "workflows/" + id + "/", requestOptions).then(
     handleResponse
   );
+}
+
+function searchWorkflow(query) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  let url = baseUrl + "workflows/?q=" + query;
+
+  return fetch(url, requestOptions).then(handleResponse);
 }
 
 //COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
