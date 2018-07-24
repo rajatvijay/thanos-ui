@@ -90,6 +90,10 @@ class WorkflowFilter extends Component {
 
   render() {
     const { value } = this.state;
+
+    console.log("value");
+    console.log(this.props);
+
     return (
       <div>
         <div>
@@ -97,7 +101,7 @@ class WorkflowFilter extends Component {
             {this.props.label ? this.props.label : this.props.placeholder}
           </label>
         </div>
-        {this.props.placeholder === "region" ? (
+        {this.props.placeholder === "Business" ? (
           <Cascader
             options={regionData}
             onChange={this.handleChange}
@@ -349,14 +353,10 @@ class FilterSidebar extends Component {
         {_.map(workflowKind, function(item, index) {
           //Hide users workflow kind from create button. Temporary
 
-          console.log("item-----");
-          console.log(item);
-
           if (item.tag === "users") {
             return;
           } else if (item.tag === "entity-id") {
-            console.log("entneitneineitnientienti");
-            console.log(item);
+            return;
           } else {
             return (
               <Menu.Item key={"key-" + index} className="">
