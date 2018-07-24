@@ -1086,6 +1086,9 @@ template {
   z-index: 2;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
 }
+.navbar-top .navbar-top .search-box .anticon {
+  color: #bfbfbf;
+}
 .navbar-top .ant-menu-item:first-child {
   margin-top: 0px;
 }
