@@ -327,7 +327,16 @@ class FilterSidebar extends Component {
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKind, function(item, index) {
           //Hide users workflow kind from create button. Temporary
-          if (!item.tag === "users" || !item.tag === "entity-id") {
+
+          console.log("item-----");
+          console.log(item);
+
+          if (item.tag === "users") {
+            return;
+          } else if (item.tag === "entity-id") {
+            console.log("entneitneineitnientienti");
+            console.log(item);
+          } else {
             return (
               <Menu.Item key={"key-" + index} className="">
                 <div
@@ -340,6 +349,8 @@ class FilterSidebar extends Component {
               </Menu.Item>
             );
           }
+          // if (!item.tag === "users") {
+          // }
         })}
 
         {this.props.workflowKind.error ? (
