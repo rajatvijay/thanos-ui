@@ -36,3 +36,7 @@ src/css/*/*.map
 
 src/css/*/*/*.css
 src/css/*/*/*.map
+
+*.css
+*.css.map
+!App.css
