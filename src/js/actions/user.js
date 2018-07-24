@@ -56,8 +56,8 @@ export const logout = () => async dispatch => {
     const response = await UserLogout();
     dispatch({ type: userConstants.LOGOUT });
     removeCookies();
-    document.location.reload();
     history.push("/login/magic");
+    document.location.reload();
   } catch (error) {
     throw error;
   }
