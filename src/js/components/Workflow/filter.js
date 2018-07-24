@@ -22,6 +22,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
+import { regionData } from "./regionData";
 
 //const filter = {};
 const { Sider } = Layout;
@@ -89,6 +90,10 @@ class WorkflowFilter extends Component {
 
   render() {
     const { value } = this.state;
+
+    console.log("value");
+    console.log(this.props);
+
     return (
       <div>
         <div>
@@ -96,32 +101,52 @@ class WorkflowFilter extends Component {
             {this.props.label ? this.props.label : this.props.placeholder}
           </label>
         </div>
-        <Select
-          showSearch
-          mode="single"
-          label={this.props.placeholder}
-          value={value}
-          placeholder={this.props.placeholder}
-          onChange={this.handleChange}
-          onDeselect={this.onDeselect}
-          onSelect={this.onSelect}
-          style={{ width: "100%" }}
-          allowClear={true}
-          labelInValue={true}
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
-            0
-          }
-        >
-          {_.map(this.props.childeren, function(c, index) {
-            return (
-              <Option prop={c} title={c.value} key={c.id}>
-                {c.label}
-              </Option>
-            );
-          })}
-        </Select>
+        {this.props.placeholder === "Business" ? (
+          <Cascader
+            options={regionData}
+            onChange={this.handleChange}
+            label={this.props.placeholder}
+            placeholder={this.props.placeholder}
+            value={value}
+            onDeselect={this.onDeselect}
+            onSelect={this.onSelect}
+            style={{ width: "100%" }}
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.props.children
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
+            }
+          />
+        ) : (
+          <Select
+            showSearch
+            mode="single"
+            label={this.props.placeholder}
+            value={value}
+            placeholder={this.props.placeholder}
+            onChange={this.handleChange}
+            onDeselect={this.onDeselect}
+            onSelect={this.onSelect}
+            style={{ width: "100%" }}
+            allowClear={true}
+            labelInValue={true}
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.props.children
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {_.map(this.props.childeren, function(c, index) {
+              return (
+                <Option prop={c} title={c.value} key={c.id}>
+                  {c.label}
+                </Option>
+              );
+            })}
+          </Select>
+        )}
       </div>
     );
   }
@@ -328,14 +353,10 @@ class FilterSidebar extends Component {
         {_.map(workflowKind, function(item, index) {
           //Hide users workflow kind from create button. Temporary
 
-          console.log("item-----");
-          console.log(item);
-
           if (item.tag === "users") {
             return;
           } else if (item.tag === "entity-id") {
-            console.log("entneitneineitnientienti");
-            console.log(item);
+            return;
           } else {
             return (
               <Menu.Item key={"key-" + index} className="">
