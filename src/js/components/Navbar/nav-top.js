@@ -104,7 +104,7 @@ class NavTop extends Component {
                  */}
                   <SubMenu
                     title={
-                      this.props.authentication.user ? (
+                      user ? (
                         <span>
                           <Avatar>{user.first_name.charAt(0)}</Avatar>{" "}
                           <i className="material-icons t-14">
@@ -116,7 +116,7 @@ class NavTop extends Component {
                     onClick={this.onLogout.bind(this, "key")}
                   >
                     <Menu.Item key="setting:2" disabled>
-                      {user.first_name + user.last_name}
+                      {user ? user.first_name + user.last_name : null}
                     </Menu.Item>
                     <Menu.Item key="setting:1">Logout</Menu.Item>
                   </SubMenu>

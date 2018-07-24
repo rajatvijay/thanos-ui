@@ -6,9 +6,6 @@ const initialState = {
 };
 
 export function workflow(state = {}, action) {
-  console.log("search ------action");
-  console.log(action);
-
   switch (action.type) {
     //GET ALL THE WORKFLOWS
     case workflowConstants.GETALL_REQUEST:
