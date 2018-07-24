@@ -112,7 +112,7 @@ class Workflow extends Component {
                 href={baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"}
               >
                 <i
-                  className="material-icons"
+                  className="material-icons text-primary-dark"
                   style={{
                     width: "20px",
                     fontSize: "14px",

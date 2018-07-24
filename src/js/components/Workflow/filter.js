@@ -303,11 +303,31 @@ class FilterSidebar extends Component {
     const { workflowKind } = this.props.workflowKind;
 
     //workflow Kind list
+
+    //kind temp hide list
+
+    const getTagToHide = tag => {
+      let pass = true;
+
+      switch (tag) {
+        case "users":
+          pass = false;
+          break;
+        case "entity-id":
+          pass = false;
+          break;
+        default:
+          pass = false;
+      }
+
+      return pass;
+    };
+
     const menu = (
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKind, function(item, index) {
           //Hide users workflow kind from create button. Temporary
-          if (item.tag !== "users" || item.tag !== "entity-id") {
+          if (getTagToHide(item.tag)) {
             return (
               <Menu.Item key={"key-" + index} className="">
                 <div
