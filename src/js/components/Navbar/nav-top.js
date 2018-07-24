@@ -108,8 +108,8 @@ class NavTop extends Component {
                         <span>
                           <Avatar>{user.first_name.charAt(0)}</Avatar>{" "}
                           {user.first_name
-                            ? user.first_name + " " + user.last_name + " "
-                            : user.email}
+                            ? " " + user.first_name + " " + user.last_name + " "
+                            : " " + user.email + " "}
                           <i className="material-icons t-14">
                             keyboard_arrow_down
                           </i>
