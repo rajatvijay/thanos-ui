@@ -307,7 +307,7 @@ class FilterSidebar extends Component {
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKind, function(item, index) {
           //Hide users workflow kind from create button. Temporary
-          if (item.tag !== "users") {
+          if (item.tag !== "users" || item.tag !== "entity-id") {
             return (
               <Menu.Item key={"key-" + index} className="">
                 <div

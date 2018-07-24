@@ -15,13 +15,22 @@ import _ from "lodash";
 class Workflow extends Component {
   constructor(props) {
     super(props);
-    this.state = { sidebar: false, workflowId: null, showWaitingFitler: false };
+    this.state = {
+      sidebar: false,
+      workflowId: null,
+      showWaitingFitler: false,
+      isUserAuthenticated: false
+    };
   }
 
   componentDidMount = () => {
     //this.reloadWorkflowList();
     if (!this.props.config.configuration || this.props.config.error) {
       this.props.dispatch(configActions.getConfig());
+    }
+
+    if (this.isUserAuthenticated()) {
+      this.setState({ isUserAuthenticated: true });
     }
   };
 
@@ -129,6 +138,29 @@ class Workflow extends Component {
     console.log("lodad");
   };
 
+  isUserAuthenticated = () => {
+    let pass = false;
+    let currentUser = this.props.authentication.user.id;
+
+    switch (currentUser) {
+      case 11:
+        pass = true;
+        break;
+      case 10:
+        pass = true;
+        break;
+      case 13:
+        pass = true;
+        break;
+      case 2:
+        pass = true;
+        break;
+      default:
+        pass = false;
+    }
+    return pass;
+  };
+
   render = () => {
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
@@ -154,17 +186,19 @@ class Workflow extends Component {
                 </span>
               </Col>
               <Col span="12" className="text-right export-section">
-                <Tooltip title={"Export workflow data"}>
-                  <Dropdown
-                    overlay={this.getExportList()}
-                    trigger="click"
-                    onClick={this.loadExportList}
-                  >
-                    <span className="pd-ard-sm text-light text-anchor">
-                      <i className="material-icons">save_alt</i>
-                    </span>
-                  </Dropdown>
-                </Tooltip>
+                {this.state.isUserAuthenticated ? (
+                  <Tooltip title={"Export workflow data"}>
+                    <Dropdown
+                      overlay={this.getExportList()}
+                      trigger="click"
+                      onClick={this.loadExportList}
+                    >
+                      <span className="pd-ard-sm text-light text-anchor">
+                        <i className="material-icons">save_alt</i>
+                      </span>
+                    </Dropdown>
+                  </Tooltip>
+                ) : null}
               </Col>
             </Row>
           </div>

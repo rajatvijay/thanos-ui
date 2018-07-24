@@ -190,7 +190,7 @@ class StepBodyForm extends Component {
           className="animated-long"
           message={
             <div className="">
-              Last updated at <Moment fromNow>{step.updated_at}</Moment>{" "}
+              Last updated <Moment fromNow>{step.updated_at}</Moment>{" "}
             </div>
           }
           type="info"

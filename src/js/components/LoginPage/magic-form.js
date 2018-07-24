@@ -150,7 +150,10 @@ class LoginLinkForm extends React.Component {
                   <br />
                 </span>
               </p>
-              <div className="t-12">NOTE: The link expires in 24 hours.</div>
+              <div className="t-12">
+                NOTE: The link is single for single use only and expires in 24
+                hours.
+              </div>
               <Divider />
               <div>
                 <a href="#" onClick={this.refresh}>
