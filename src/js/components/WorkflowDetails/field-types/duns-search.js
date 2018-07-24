@@ -174,12 +174,12 @@ const GetTable = props => {
       dataIndex: "OperatingStatusText[$]",
       key: "OperatingStatusText[$]"
     },
-    {
-      title: "Confidence code (10=highest)",
-      dataIndex: "MatchQualityInformation[ConfidenceCodeValue]",
-      key: "MatchQualityInformation[ConfidenceCodeValue]",
-      defaultSortOrder: "descend"
-    },
+    // {
+    //   title: "Confidence code (10=highest)",
+    //   dataIndex: "MatchQualityInformation[ConfidenceCodeValue]",
+    //   key: "MatchQualityInformation[ConfidenceCodeValue]",
+    //   defaultSortOrder: "descend"
+    // },
     {
       title: "Action",
       key: "index",
