@@ -107,6 +107,7 @@ class NavTop extends Component {
                       user ? (
                         <span>
                           <Avatar>{user.first_name.charAt(0)}</Avatar>{" "}
+                          {user.first_name + " " + user.last_name + " "}
                           <i className="material-icons t-14">
                             keyboard_arrow_down
                           </i>
@@ -115,9 +116,6 @@ class NavTop extends Component {
                     }
                     onClick={this.onLogout.bind(this, "key")}
                   >
-                    <Menu.Item key="setting:2" disabled>
-                      {user ? user.first_name + user.last_name : null}
-                    </Menu.Item>
                     <Menu.Item key="setting:1">Logout</Menu.Item>
                   </SubMenu>
                 </Menu>

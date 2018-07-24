@@ -29,7 +29,7 @@ class Workflow extends Component {
       this.props.dispatch(configActions.getConfig());
     }
 
-    if (this.isUserAuthenticated()) {
+    if (this.props.authentication.user && this.isUserAuthenticated()) {
       this.setState({ isUserAuthenticated: true });
     }
   };
@@ -140,7 +140,7 @@ class Workflow extends Component {
 
   isUserAuthenticated = () => {
     let pass = false;
-    let currentUser = this.props.authentication.user.id;
+    let currentUser = this.props.authentication.user.id ?;
 
     switch (currentUser) {
       case 11:
