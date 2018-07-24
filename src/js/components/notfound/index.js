@@ -11,9 +11,8 @@ export const GenericNotFound = () => {
         <br />
         <br />
         <br />
-        <h1>
-          ERROR 404!<br />
-        </h1>
+        <br />
+        <br />
         <br />
         <br />
         <p className="t-22">
