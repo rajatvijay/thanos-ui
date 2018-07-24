@@ -1,3 +1,37 @@
+.Avenir-light {
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-normal {
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-medium {
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-heavy {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
 .ant-btn {
   border-radius: 2px;
 }
@@ -142,6 +176,9 @@
 .ant-progress-status-success .ant-progress-circle-path {
   stroke: #6178ea;
 }
+.ant-progress-text .material-icons {
+  color: #109f94;
+}
 .ant-progress-circle-path {
   stroke: #6178ea;
 }
@@ -200,4 +237,11 @@
 }
 .ant-menu-horizontal {
   border-bottom: none;
+}
+.ant-dropdown-menu-item,
+.ant-select-dropdown-menu-item {
+  white-space: normal;
+}
+.ant-timeline-item-head-custom {
+  left: 6px;
 }

@@ -1,3 +1,37 @@
+.Avenir-light {
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-normal {
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-medium {
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-heavy {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
 .navbar {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
 }
@@ -48,12 +82,14 @@
 .navbar-top .ant-menu-horizontal .ant-menu-submenu:hover,
 .navbar-top .ant-menu-horizontal .ant-menu-submenu-selected,
 .navbar-top .ant-menu-horizontal .ant-menu-submenu-active {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .navbar-top .ant-menu-horizontal .ant-menu-item:hover,
 .navbar-top .ant-menu-horizontal .ant-menu-item-selected,
 .navbar-top .ant-menu-horizontal .ant-menu-item-active {
-  border-color: #17ead9;
+  border-color: #6178ea;
+  color: #343b4c;
+  border-background: #f2f5fa;
 }
 .navbar-top .ant-menu-item .anticon {
   font-size: 24px;
@@ -61,5 +97,5 @@
 }
 .ant-menu-submenu-popup .ant-menu-item-active {
   color: #343b4c;
-  background-color: #17ead9;
+  background-color: #f2f5fa;
 }

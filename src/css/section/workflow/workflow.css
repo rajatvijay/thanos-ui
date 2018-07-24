@@ -1,3 +1,37 @@
+.Avenir-light {
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-normal {
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-medium {
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-heavy {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
 .workflow-container {
   background: #f6f7f9;
 }
@@ -5,7 +39,7 @@
   padding: 15px 78px 40px;
 }
 .workflow-container .section-top {
-  margin: 78px 80px 14px;
+  margin: 48px 80px 14px;
 }
 .workflow-container .section-top .waiting-section i {
   font-size: 16px;
@@ -13,19 +47,25 @@
 }
 .workflow-container .section-top .waiting-section .waiting-filter-trigger {
   padding-bottom: 3px;
-  border-bottom: 2px solid #17ead9;
-  font-weight: 500;
+  border-bottom: 2px solid #6178ea;
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
 }
 .workflow-container .divider-top {
   border-bottom: 1px solid #343b4c;
-  margin: 40px 78px 40px;
+  margin: 20px 78px 30px;
 }
 .workflow-container .workflow-count {
   margin: 0 78px;
 }
 .workflow-list .grouping-head {
   font-size: 14px;
-  font-weight: 700;
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
   color: #343b4c;
   margin-bottom: 12px;
 }
@@ -41,7 +81,7 @@
   background-color: #fff;
 }
 .workflow-list .Collapsible .ant-collapse-header {
-  padding: 20px 26px;
+  padding: 20px 23px;
 }
 .workflow-list .collapse-wrapper {
   position: relative;
@@ -70,7 +110,7 @@
 }
 .workflow-list .paper .workflow-list-item {
   transition: margin 0.3s ease;
-  border-bottom: 1px solid rgba(160, 160, 160, 0.5);
+  border-bottom: 1px solid #ffffff;
 }
 .workflow-list .paper .workflow-list-item:last-child {
   border-bottom: none;
@@ -91,7 +131,7 @@
   border: none;
 }
 .lc-card-head {
-  padding: 8px 0px;
+  padding: 0px 0px;
 }
 .lc-card-head .company-name {
   font-size: 18px;
@@ -193,21 +233,25 @@
   margin-right: 20px;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .grp-class {
-  font-weight: 500;
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
   display: block;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .grp-class .grp-name {
   display: inline-block;
   width: 80%;
-  /*border-bottom: 1px solid #f3f5fa;*/
   padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .lc-step i,
 .lc-card .lc-card-body .sub-step-list .groupaz ul li i {
-  font-size: 14px;
-  vertical-align: middle;
+  font-size: 18px;
+  vertical-align: sub;
   margin-right: 5px;
   width: 16px;
+  padding-right: 20px;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .lc-step i {
   font-size: 20px;
@@ -217,6 +261,7 @@
   padding-left: 25px;
   padding-right: 25px;
   margin-top: 24px;
+  border-right: 1px solid #eee;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz ul li {
   height: 40px;

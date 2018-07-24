@@ -1,9 +1,43 @@
+.Avenir-light {
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-normal {
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-medium {
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.Avenir-heavy {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
 .workflow-details-container
   .ant-layout-sider
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #17ead9;
+  background: #f2f5fa;
   color: #343b4c;
 }
 .aux-step-sidebar .ant-menu .ant-menu-item:-active {
@@ -31,7 +65,10 @@
 .ant-form.step-form .step-form-paragraph {
   margin-bottom: 24px;
   font-size: 16px;
-  font-weight: 500;
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
   color: #505050;
 }
 .ant-form.step-form .step-form-break {
@@ -57,7 +94,7 @@
 }
 .ant-form.step-form .react-tel-input input:focus,
 .ant-form.step-form .react-tel-input input:hover {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .ant-form.step-form .react-tel-input.disabled input {
   background-color: #f5f5f5;
@@ -72,7 +109,7 @@
   border-color: #f16b51;
 }
 .ant-form.step-form .ant-radio-inner:after {
-  background-color: #17ead9;
+  background-color: #6178ea;
 }
 .ant-form.step-form .ant-input:not(.ant-input-disabled):hover,
 .ant-form.step-form
@@ -85,7 +122,7 @@
 .ant-form.step-form .ant-input-number-focused,
 .ant-form.step-form .ant-input-number:not(.ant-input-number-disabled):hover,
 .ant-form.step-form .ant-select-enabled .ant-select-selection:hover {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .ant-form.step-form .file-upload-field {
   width: 100%;
@@ -104,7 +141,7 @@
   padding: 20px 20px 0 20px;
 }
 .ant-form.step-form .file-upload-field:not(.disabled):hover {
-  border-color: #17ead9;
+  border-color: #6178ea;
 }
 .ant-form.step-form .file-upload-field.file-upload-field-reject {
   border-color: #f16b51;
@@ -114,13 +151,19 @@
   padding: 20px 0;
 }
 .ant-form.step-form .dropped-files li a {
-  color: #17ead9;
+  color: #6178ea;
 }
 .aux-nav .ant-menu .ant-menu-submenu,
 .aux-nav .ant-menu .ant-menu-submenu:hover,
 .aux-nav .ant-menu .ant-menu-submenu-title:hover,
 .aux-nav .ant-menu .ant-menu-submenu-active {
   color: #343b4c;
+}
+.aux-nav .ant-menu .ant-menu-submenu.completed,
+.aux-nav .ant-menu .ant-menu-submenu:hover.completed,
+.aux-nav .ant-menu .ant-menu-submenu-title:hover.completed,
+.aux-nav .ant-menu .ant-menu-submenu-active.completed {
+  color: #6178ea;
 }
 .aux-nav .ant-menu .ant-menu-submenu-title .material-icons,
 .aux-nav .ant-menu .ant-menu-submenu .material-icons,
