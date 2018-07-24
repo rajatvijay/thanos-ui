@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const GenericNotFound = () => {
   let param = document.location.search.split("=")[1];
-  if (param === "magic") {
+  if (param === "magic-link") {
     return (
       <div className="text-center">
         <br />
