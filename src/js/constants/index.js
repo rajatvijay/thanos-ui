@@ -5,6 +5,7 @@ export { workflowConstants } from "./workflow";
 export { changeStatusConstants } from "./change_status";
 export { workflowCreateConstants } from "./workflow_create";
 export { workflowKindConstants } from "./workflow_kind";
+export { workflowDetailsheaderConstants } from "./workflow_details_header";
 export { workflowDetailsConstants } from "./workflow_details";
 export { workflowStepConstants } from "./workflow_steps";
 export { workflowFieldConstants } from "./workflow_step_update";

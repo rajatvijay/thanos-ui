@@ -51,6 +51,26 @@ class Comments extends Component {
     this.setState({ message: toContentState("") });
   };
 
+  selectStep = target => {
+    let payload = {
+      workflowId: target.workflow,
+      groupId: target.step_group_details.id,
+      stepId: target.step_details.id
+    };
+    this.props.gotoStep(payload); // select the step
+    this.props.toggleSidebar(); // closing the sidebar
+    this.props.selectActiveStep(
+      target.step_details.id,
+      target.step_group_details.id
+    ); // making the step active (this is not working for now)
+    // open comment sidebar for selected field or steip
+    if (target.field_details.id) {
+      this.props.toggleSidebar(target.field_details.id, "field");
+    } else {
+      this.props.toggleSidebar(target.step_details.id, "step");
+    }
+  };
+
   render() {
     const Panel = Collapse.Panel;
     let comments = this.props.workflowComments
@@ -99,7 +119,9 @@ class Comments extends Component {
                   <Tag style={{ width: "100%" }} className="comment_step_bar">
                     <span>{c.target.step_group_details.name}</span>
                     <span> > </span>
-                    <span>{c.target.step_details.name}</span>
+                    <span onClick={that.selectStep.bind(this, c.target)}>
+                      {c.target.step_details.name}
+                    </span>
                   </Tag>
 
                   {c.target.field_details ? (

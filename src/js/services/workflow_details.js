@@ -7,13 +7,18 @@ export const workflowDetailsService = {
   getComments
 };
 
+//GET WORKFLOW BY ID
 function getById(id) {
   const requestOptions = {
     method: "GET",
-    headers: authHeader.get()
+    headers: authHeader.get(),
+    credentials: "include"
   };
 
-  return fetch("/api/workflow/" + id, requestOptions).then(handleResponse);
+  console.log(baseUrl + "workflows/" + id + "/");
+  return fetch(baseUrl + "workflows/" + id + "/", requestOptions).then(
+    handleResponse
+  );
 }
 
 function getStepGroup(id) {
@@ -50,15 +55,6 @@ function getStepFields(step) {
       "/",
     requestOptions
   ).then(handleResponse);
-}
-
-function getById(id) {
-  const requestOptions = {
-    method: "GET",
-    headers: authHeader.get()
-  };
-
-  return fetch("/api/workflow/" + id, requestOptions).then(handleResponse);
 }
 
 function getComments(payload) {

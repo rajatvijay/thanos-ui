@@ -112,7 +112,6 @@ class StepSidebarMenu extends Component {
 
   render() {
     let grouping = this.props.step2;
-
     return (
       <div>
         <Menu

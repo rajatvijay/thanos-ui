@@ -1,11 +1,22 @@
 import {
   workflowDetailsConstants,
+  workflowDetailsheaderConstants,
   workflowStepConstants,
   workflowCommentsConstants
 } from "../constants";
 import { workflowDetailsService } from "../services";
+import _ from "lodash";
 //import { alertActions } from "./";
 //import { history } from "../_helpers";
+import { notification, message } from "antd";
+
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
 
 export const workflowDetailsActions = {
   getById,
@@ -15,12 +26,12 @@ export const workflowDetailsActions = {
 };
 
 //Get workflow details
-function getById() {
+function getById(id) {
   return dispatch => {
     dispatch(request());
 
     workflowDetailsService
-      .getById()
+      .getById(id)
       .then(
         workflowDetails => dispatch(success(workflowDetails)),
         error => dispatch(failure(error))
@@ -28,13 +39,16 @@ function getById() {
   };
 
   function request() {
-    return { type: workflowDetailsConstants.GET_REQUEST };
+    return { type: workflowDetailsheaderConstants.GET_REQUEST };
   }
   function success(workflowDetails) {
-    return { type: workflowDetailsConstants.GET_SUCCESS, workflowDetails };
+    return {
+      type: workflowDetailsheaderConstants.GET_SUCCESS,
+      workflowDetails
+    };
   }
   function failure(error) {
-    return { type: workflowDetailsConstants.GET_FAILURE, error };
+    return { type: workflowDetailsheaderConstants.GET_FAILURE, error };
   }
 }
 
@@ -118,6 +132,12 @@ function getComment(object_id, content_type) {
   }
 
   function success(data) {
+    if (!_.size(data.results)) {
+      openNotificationWithIcon({
+        type: "error",
+        message: "No messages found!"
+      });
+    }
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
   }
 
