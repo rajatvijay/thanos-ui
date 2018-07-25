@@ -9,6 +9,7 @@ import { workflow } from "./workflow_list";
 import { workflowCreate } from "./workflow_create";
 import { workflowKind, workflowGroupCount } from "./workflow_kind";
 import { workflowDetails } from "./workflow_details";
+import { workflowDetailsHeader } from "./workflow_details_header";
 import { workflowFilters, workflowFilterType } from "./workflow_filters";
 import { currentStepFields } from "./workflow_step";
 import { changeStatus } from "./change_status";
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
   workflowFilters,
   workflowFilterType,
   changeStatus,
-  workflowComments
+  workflowComments,
+  workflowDetailsHeader
 });
 
 export default rootReducer;

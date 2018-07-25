@@ -84,8 +84,6 @@ function updateField(payload) {
 
 //Save step data on submit
 function submitStep(payload) {
-  console.log(payload);
-
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },

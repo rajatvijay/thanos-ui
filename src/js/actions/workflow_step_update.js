@@ -6,7 +6,11 @@ import {
 import { workflowStepService } from "../services";
 import { notification, message } from "antd";
 import _ from "lodash";
-import { workflowDetailsActions, workflowActions } from "../actions";
+import {
+  workflowDetailsActions,
+  workflowActions,
+  workflowFiltersActions
+} from "../actions";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -171,6 +175,8 @@ function submitStepData(payload) {
         dispatch(success(stepData));
         if (stepData.id) {
           dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          dispatch(workflowFiltersActions.getStatusData());
+          dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
       error => dispatch(failure(error))
@@ -257,6 +263,7 @@ function undoStep(payload) {
         if (stepData.id) {
           //dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
           // call an action to update the sidebar here
+          //dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
       error => dispatch(failure(error))

@@ -122,18 +122,8 @@ class WorkflowDetails extends Component {
     var id = parseInt(that.props.match.params.id, 10);
 
     this.props.dispatch(workflowDetailsActions.getStepGroup(id));
-
-    //Get workflow  basic data
-    fetch(baseUrl + "workflows/" + id + "/", requestOptions)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong ...");
-        }
-      })
-      .then(wfdata => this.setState({ wfdata, isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
+    //Get workflow  basic data ( need to move this
+    this.getHeaderData();
     this.props.dispatch(workflowFiltersActions.getStatusData());
     window.scrollTo(0, 0);
   };
@@ -182,9 +172,17 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
   };
 
+  selectActiveStep = (step_id, stepGroup_id) => {
+    this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
+  };
+
+  fetchStepData = payload => {
+    this.props.dispatch(workflowDetailsActions.getStepFields(payload));
+  };
+
   getHeaderData = () => {
     let id = parseInt(this.props.match.params.id, 10);
-    return this.props.dispatch(workflowActions.getById(id));
+    return this.props.dispatch(workflowDetailsActions.getById(id));
   };
 
   callBackCollapser = (object_id, content_type) => {
@@ -214,7 +212,8 @@ class WorkflowDetails extends Component {
             boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
           }}
         >
-          {stepLoading || !this.state.wfdata ? (
+          {this.props.workflowDetailsHeader.loading ||
+          !this.props.workflowDetailsHeader.workflowDetailsHeader ? (
             <div className="text-center">
               <Icon type="loading" />
             </div>
@@ -223,7 +222,9 @@ class WorkflowDetails extends Component {
               <WorkflowHeader
                 detailsPage={true}
                 kind={this.props.workflowKind}
-                workflow={this.state.wfdata}
+                workflow={
+                  this.props.workflowDetailsHeader.workflowDetailsHeader
+                }
                 statusType={this.props.workflowFilterType.statusType}
                 showCommentIcon={true}
                 getCommentSidebar={this.callBackCollapser}
@@ -274,6 +275,8 @@ class WorkflowDetails extends Component {
             object_id={this.state.object_id}
             toggleSidebar={this.callBackCollapser}
             addComment={this.addComment}
+            gotoStep={this.fetchStepData}
+            selectActiveStep={this.selectActiveStep}
             {...this.props}
           />
         ) : null}
@@ -285,12 +288,14 @@ class WorkflowDetails extends Component {
 function mapStateToProps(state) {
   const {
     workflowDetails,
+    workflowDetailsHeader,
     workflowFilterType,
     workflowKind,
     workflowComments
   } = state;
   return {
     workflowDetails,
+    workflowDetailsHeader,
     workflowFilterType,
     workflowKind,
     workflowComments
