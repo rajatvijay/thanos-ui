@@ -157,6 +157,9 @@ class Workflow extends Component {
       case 2:
         pass = true;
         break;
+      case 228:
+        pass = true;
+        break;
       default:
         pass = false;
     }
