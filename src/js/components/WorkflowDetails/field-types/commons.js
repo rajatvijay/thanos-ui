@@ -41,12 +41,17 @@ function arrayToString(arr) {
 
 function stringToArray(string) {
   let arr = [];
-  if (string.answer.isArray) {
-    arr = string.answer[0].split("~");
+
+  if (string) {
+    if (string.answer.isArray) {
+      arr = string.answer[0].split("~");
+    } else {
+      arr = string.answer.split("~");
+    }
+    return arr;
   } else {
-    arr = string.answer.split("~");
+    return arr;
   }
-  return arr;
 }
 
 function field_error(props) {

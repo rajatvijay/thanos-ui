@@ -426,7 +426,7 @@ export const Select = props => {
             ? single
               ? props.field.answers[0].answer
               : stringToArray(props.field.answers[0])
-            : props.field.definition.defaultValue
+            : stringToArray(props.field.definition.defaultValue)
         }
         onChange={save}
         showSearch={true}
