@@ -34,6 +34,9 @@ class WorkflowFilterTop extends Component {
     //this.fetchCountData();
     let tag = this.props.workflowFilters.kind.meta.tag;
     this.props.dispatch(workflowKindActions.getCount(tag));
+
+    this.props.dispatch(workflowKindActions.getStatusCount(tag));
+
     // if(this.props.workflowFilters.kind.meta){
     // }
   };

@@ -6,9 +6,9 @@ const initialState = {
     filterValue: [],
     meta: {}
   },
-  status: null,
-  region: null,
-  business: null,
+  status: [],
+  region: [],
+  business: [],
   multifilter: null,
   stepgroupdef: null,
   advFilter: null
@@ -45,7 +45,8 @@ export function workflowFilterType(state = {}, action) {
   switch (action.type) {
     case workflowFiltersConstants.GET_STATUS_REQUEST:
       return {
-        loading: true
+        loading: true,
+        statusType: []
       };
 
     case workflowFiltersConstants.GET_STATUS_SUCCESS:

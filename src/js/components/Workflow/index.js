@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Row, Col, Button, Dropdown, Menu, Tooltip } from "antd";
+import {
+  Layout,
+  Icon,
+  Row,
+  Col,
+  Button,
+  Dropdown,
+  Menu,
+  Tooltip,
+  Carousel
+} from "antd";
 import WorkflowList from "./workflow-list";
 import {
   workflowActions,
@@ -11,6 +21,7 @@ import FilterSidebar from "./filter";
 import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
+import StatusGraph from "./status-graph";
 
 class Workflow extends Component {
   constructor(props) {
@@ -176,48 +187,80 @@ class Workflow extends Component {
           hasSider={false}
         >
           <div className="section-top ">
-            <Row>
-              <Col span="12" className="waiting-section">
-                <span
-                  className="waiting-filter-trigger text-anchor"
-                  onClick={this.toggleWaitingFilter}
-                >
-                  Waiting on{" "}
-                  <i className="material-icons">
-                    {this.state.showWaitingFitler
-                      ? "keyboard_arrow_down"
-                      : "keyboard_arrow_up"}
-                  </i>
-                </span>
-              </Col>
-              <Col span="12" className="text-right export-section">
-                {this.state.isUserAuthenticated ? (
-                  <Tooltip title={"Export workflow data"}>
-                    <Dropdown
-                      overlay={this.getExportList()}
-                      trigger="click"
-                      onClick={this.loadExportList}
+            <Carousel>
+              <div>
+                <Row>
+                  <Col span="12" className="waiting-section">
+                    <span
+                      className="waiting-filter-trigger text-anchor"
+                      onClick={this.toggleWaitingFilter}
                     >
-                      <span className="pd-ard-sm text-light text-anchor">
-                        <i className="material-icons">save_alt</i>
-                      </span>
-                    </Dropdown>
-                  </Tooltip>
-                ) : null}
-              </Col>
-            </Row>
-          </div>
+                      Waiting on{" "}
+                      <i className="material-icons">
+                        {this.state.showWaitingFitler
+                          ? "keyboard_arrow_down"
+                          : "keyboard_arrow_up"}
+                      </i>
+                    </span>
+                  </Col>
+                  <Col span="12" className="text-right export-section">
+                    {this.state.isUserAuthenticated ? (
+                      <Tooltip title={"Export workflow data"}>
+                        <Dropdown
+                          overlay={this.getExportList()}
+                          trigger="click"
+                          onClick={this.loadExportList}
+                        >
+                          <span className="pd-ard-sm text-light text-anchor">
+                            <i className="material-icons">save_alt</i>
+                          </span>
+                        </Dropdown>
+                      </Tooltip>
+                    ) : null}
+                  </Col>
+                </Row>
+                <div
+                  className={
+                    "waiting-filter-warpper animated " +
+                    (this.state.showWaitingFitler ? " grow " : " shrink")
+                  }
+                >
+                  {this.state.defKind ? (
+                    <WorkflowFilterTop {...this.props} />
+                  ) : null}
+                </div>
+              </div>
 
-          <div
-            className={
-              "waiting-filter-warpper animated " +
-              (this.state.showWaitingFitler ? " grow " : " shrink")
-            }
-          >
-            {this.state.defKind ? <WorkflowFilterTop {...this.props} /> : null}
+              <div>
+                <Row>
+                  <Col span="12" className="waiting-section">
+                    <span
+                      className="waiting-filter-trigger text-anchor"
+                      onClick={this.toggleWaitingFilter}
+                    >
+                      Statuses{" "}
+                    </span>
+                  </Col>
+                  <Col span="12" className="text-right export-section">
+                    {this.state.isUserAuthenticated ? (
+                      <Tooltip title={"Export workflow data"}>
+                        <Dropdown
+                          overlay={this.getExportList()}
+                          trigger="click"
+                          onClick={this.loadExportList}
+                        >
+                          <span className="pd-ard-sm text-light text-anchor">
+                            <i className="material-icons">save_alt</i>
+                          </span>
+                        </Dropdown>
+                      </Tooltip>
+                    ) : null}
+                  </Col>
+                </Row>
+                <StatusGraph />
+              </div>
+            </Carousel>,
           </div>
-
-          <div className="divider-top" />
 
           {this.props.workflow.loading ? null : (
             <div className="workflow-count">
@@ -249,22 +292,7 @@ class Workflow extends Component {
             </div>
           ) : (
             <div className="clearfix">
-              {/*<div className="filter-section mr-top-lg mr-left-lg clearfix">
-                <Button
-                  type={this.state.sidebar ? "primary" : "default"}
-                  className="constom button anchor"
-                  onClick={this.callBackCollapser}
-                >
-                  Custom filter
-                </Button>
-              </div>*/}
-
               <WorkflowList profile={this.props.match} {...this.props} />
-              {/*<Filter2
-                sidebar={this.state.sidebar}
-                toggleSidebar={this.callBackCollapser}
-              />
-              */}
             </div>
           )}
         </Layout>

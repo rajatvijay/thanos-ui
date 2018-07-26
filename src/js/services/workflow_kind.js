@@ -2,7 +2,8 @@ import { authHeader, baseUrl, handleResponse } from "../_helpers";
 
 export const workflowKindService = {
   getAll,
-  getCount
+  getCount,
+  getStatusCount
 };
 
 function getAll() {
@@ -25,7 +26,20 @@ function getCount(tag) {
   };
 
   return fetch(
-    baseUrl + "workflow-kinds/" + tag + "/count/",
+    baseUrl + "workflow-kinds/" + tag + "/count/?type=stepgroup",
+    requestOptions
+  ).then(handleResponse);
+}
+
+function getStatusCount(tag) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  return fetch(
+    baseUrl + "workflow-kinds/" + tag + "/count/?type=status",
     requestOptions
   ).then(handleResponse);
 }
