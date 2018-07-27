@@ -426,6 +426,24 @@ class FilterSidebar extends Component {
 
           <div className="filter-divider" />
 
+          <div className="filter-section">
+            {_.map(filterTypeSelect, function(f, index) {
+              return (
+                <div
+                  className="aux-item aux-lead filter-title"
+                  key={"filter-2-" + index}
+                >
+                  <WorkflowFilter
+                    label={f.filterName}
+                    placeholder={f.filterType}
+                    childeren={f.results}
+                    {...that.props}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
           <div>
             <h5
               className="aux-item aux-lead  text-anchor"
@@ -445,24 +463,6 @@ class FilterSidebar extends Component {
               "animated " + (this.state.showAdvFilters ? "fadeIn" : "fadeOut")
             }
           >
-            <div className="filter-section">
-              {_.map(filterTypeSelect, function(f, index) {
-                return (
-                  <div
-                    className="aux-item aux-lead filter-title"
-                    key={"filter-2-" + index}
-                  >
-                    <WorkflowFilter
-                      label={f.filterName}
-                      placeholder={f.filterType}
-                      childeren={f.results}
-                      {...that.props}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
             <div className="filter-section">
               <h5 className="aux-item aux-lead filter-title">Select Field</h5>
               <div className="aux-item aux-lead">
