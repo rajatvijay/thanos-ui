@@ -235,7 +235,7 @@ class HeaderOptions2 extends React.Component {
           <span>
             <Tooltip title="Comments">
               <span
-                className="mr-right mr-left text-anchor display-inline-block"
+                className="mr-right mr-left text-anchor display-inline-block text-light"
                 onClick={this.openCommentSidebar}
               >
                 <i className="material-icons t-22">message</i>
@@ -244,7 +244,7 @@ class HeaderOptions2 extends React.Component {
 
             <Tooltip title="View activity log">
               <span
-                className="mr-right mr-left text-anchor display-inline-block"
+                className="mr-right mr-left text-anchor display-inline-block text-light"
                 onClick={this.toggleSidebar}
               >
                 <i className="material-icons t-22">restore</i>

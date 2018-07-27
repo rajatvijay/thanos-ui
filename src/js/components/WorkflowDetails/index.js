@@ -207,7 +207,7 @@ class WorkflowDetails extends Component {
         <div
           className="workflow-details-top-card vertical-padder-16 side-padder-16 bg-white"
           style={{
-            //position: "relative",
+            position: "relative",
             zIndex: 1,
             boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
           }}
