@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { Form, Divider, Row, Col, Alert, Button } from "antd";
+import { Form, Divider, Row, Col, Alert, Button, Tooltip } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
@@ -9,6 +9,20 @@ import { getFieldType } from "./field-types";
 const FormItem = Form.Item;
 
 class StepBodyForm extends Component {
+  state = {
+    version: false
+  };
+
+  componentDidUpdate = prev => {
+    if (
+      this.props.stepVersionFields.loading !== prev.stepVersionFields.loading
+    ) {
+      if (this.props.stepVersionFields.stepVersionFields) {
+        this.setState({ version: true });
+      }
+    }
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.dispatch(
@@ -202,11 +216,65 @@ class StepBodyForm extends Component {
     }
   };
 
+  getFiledTypeRelatedVersionResponse = field => {
+    switch (field.definition.type) {
+      case "paragraph":
+        return " ";
+      case "bool":
+        if (field.answers[0].answer === "true") {
+          return "yes";
+        } else {
+          return "no";
+        }
+      case "break":
+        return "";
+
+      default:
+        return field.answers[0].answer;
+    }
+  };
+
+  getVersionField = fieldId => {
+    let data = this.props.stepVersionFields.stepVersionFields.data_fields;
+
+    let fieldReturn = _.find(data, function(field) {
+      if (field.id === parseInt(fieldId)) {
+        return field;
+      }
+    });
+
+    return (
+      <div className="version-item">
+        <span className="float-right">
+          <Tooltip
+            placement="topRight"
+            title={
+              "completed by " +
+              this.props.stepVersionFields.stepVersionFields.completed_by.email
+            }
+          >
+            <i className="material-icons t-14 text-middle text-light">
+              history
+            </i>
+          </Tooltip>
+        </span>
+        <div className="text-medium mr-bottom-sm">
+          {fieldReturn ? fieldReturn.definition.body : ""}
+        </div>
+        {fieldReturn && fieldReturn.answers.length !== 0
+          ? fieldReturn.answers[0] ? fieldReturn.answers[0].answer : " "
+          : " "}
+      </div>
+    );
+  };
+
   render = () => {
     let that = this;
     let row = [];
     let errors = this.props.currentStepFields.error;
     let currentStepFields = this.props.currentStepFields;
+    let v = !_.isEmpty(this.props.stepVersionFields.stepVersionFields);
+
     return (
       <Form
         layout="vertical"
@@ -238,6 +306,9 @@ class StepBodyForm extends Component {
               dispatch: that.props.dispatch
             };
 
+            // console.log('param---------')
+            // console.log(param)
+
             let field = getFieldType(param);
 
             ///row size method
@@ -255,7 +326,11 @@ class StepBodyForm extends Component {
                 return (
                   <Row gutter={16}>
                     {_.map(row, function(col) {
-                      return <Col span={12}>{col}</Col>;
+                      return (
+                        <Col span={12}>
+                          {col} {v ? that.getVersionField(col.key) : ""}{" "}
+                        </Col>
+                      );
                     })}
                   </Row>
                 );
@@ -265,7 +340,11 @@ class StepBodyForm extends Component {
                   return (
                     <Row gutter={16}>
                       {_.map(row, function(col) {
-                        return <Col span={12}>{col}</Col>;
+                        return (
+                          <Col span={12}>
+                            {col} {v ? that.getVersionField(col.key) : null}
+                          </Col>
+                        );
                       })}
                     </Row>
                   );
@@ -279,7 +358,9 @@ class StepBodyForm extends Component {
                     {_.map(row, function(r, index) {
                       return (
                         <Row gutter={16}>
-                          <Col span={index === 0 ? "12" : "24"}>{r}</Col>
+                          <Col span={index === 0 ? "12" : "24"}>
+                            {r} {v ? that.getVersionField(r.key) : null}
+                          </Col>
                         </Row>
                       );
                     })}
@@ -290,7 +371,9 @@ class StepBodyForm extends Component {
               } else {
                 return (
                   <Row gutter={16}>
-                    <Col span="24">{field}</Col>
+                    <Col span="24">
+                      {field} {v ? that.getVersionField(field.key) : null}
+                    </Col>
                   </Row>
                 );
               }

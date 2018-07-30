@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Icon } from "antd";
@@ -67,7 +68,6 @@ class StatusGraph extends Component {
   };
 
   legendClick = e => {
-    //console.log(e)
     this.handleChange(e.payload.id);
   };
 

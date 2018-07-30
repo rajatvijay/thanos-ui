@@ -1,24 +1,20 @@
 .Avenir-light {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .Avenir-normal {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .Avenir-medium {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .Avenir-heavy {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
@@ -27,16 +23,11 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
-.workflow-details-container
-  .ant-layout-sider
-  .ant-menu-submenu
-  > .ant-menu:not(.ant-menu-horizontal)
-  .ant-menu-item-selected {
+.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background: #f2f5fa;
   color: #343b4c;
 }
@@ -64,8 +55,7 @@ h5 {
 .ant-form.step-form .step-form-paragraph {
   margin-bottom: 24px;
   font-size: 16px;
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
   color: #505050;
@@ -111,9 +101,7 @@ h5 {
   background-color: #6178ea;
 }
 .ant-form.step-form .ant-input:not(.ant-input-disabled):hover,
-.ant-form.step-form
-  .ant-input-affix-wrapper:hover
-  .ant-input:not(.ant-input-disabled),
+.ant-form.step-form .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
 .ant-form.step-form .ant-radio-wrapper:hover .ant-radio .ant-radio-inner,
 .ant-form.step-form .ant-radio:hover .ant-radio-inner,
 .ant-form.step-form .ant-radio-focused .ant-radio-inner,
@@ -147,7 +135,7 @@ h5 {
 }
 .ant-form.step-form .dropped-files ul {
   list-style: none;
-  padding: 20px 0;
+  padding: 20px 0 ;
 }
 .ant-form.step-form .dropped-files li a {
   color: #6178ea;
@@ -169,4 +157,35 @@ h5 {
 .aux-nav .ant-menu .ant-menu-submenu > .ant-menu-item .material-icons {
   font-size: 20px;
   vertical-align: middle;
+}
+.version-item {
+  background: #eee;
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 5px solid #a0a0a0;
+  margin-top: -30px;
+  margin-bottom: 30px;
+  position: relative;
+}
+.version-item:before {
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  visibility: visible;
+  pointer-events: none;
+  width: 32px;
+  height: 20px;
+  line-height: 20px;
+  margin-top: -10px;
+  text-align: center;
+  font-size: 14px;
+  -webkit-animation: zoomIn 0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+  animation: zoomIn 0.3s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+  font-family: "anticon";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\E653";
+  z-index: 1;
+  color: #a0a0a0;
 }

@@ -64,8 +64,41 @@ const filterTypeSelect = [
 class WorkflowFilter extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      fieldOptions: [
+        { label: "list empty", value: "list empty", disabled: true }
+      ]
+    };
   }
+
+  componentDidMount = () => {
+    this.getBusinessUnitList();
+  };
+
+  getBusinessUnitList = () => {
+    this.setState({ fetching: true });
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
+
+    fetch(baseUrl + "fields/export-business-json/", requestOptions)
+      .then(response => response.json())
+      .then(body => {
+        console.log(body);
+        if (_.isEmpty(body.results)) {
+          this.setState({
+            fieldOptions: [
+              { label: "list empty", value: "list empty", disabled: true }
+            ],
+            fetching: false
+          });
+        } else {
+          this.setState({ fieldOptions: body.results, fetching: false });
+        }
+      });
+  };
 
   //SELECT TYPE FILTER DISPATCHED HERE
   handleChange = value => {
@@ -88,6 +121,23 @@ class WorkflowFilter extends Component {
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
+  businessUnitFilterChange = value => {
+    console.log("value---");
+    console.log(value[value.length - 1]);
+
+    this.setState({ value });
+
+    let payload = { filterType: "business_unit", filterValue: [] };
+
+    if (value !== undefined && value.length !== 0) {
+      payload.filterValue.push(value[value.length - 1]);
+    } else {
+      payload = { filterType: "business_unit", filterValue: [] };
+    }
+
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
   render() {
     const { value } = this.state;
     return (
@@ -98,16 +148,23 @@ class WorkflowFilter extends Component {
           </label>
         </div>
         {this.props.placeholder === "Business" ? (
-          <Cascader
-            options={regionData}
-            onChange={this.handleChange}
-            label={this.props.placeholder}
-            placeholder={this.props.placeholder}
-            value={value}
-            //onDeselect={this.onDeselect}
-            onSelect={this.onSelect}
-            style={{ width: "100%" }}
-          />
+          <FormItem
+            hasFeedback={this.state.fetching ? true : false}
+            validateStatus={this.state.fetching ? "validating" : null}
+            help={this.state.fetching ? "Fetching fields data..." : ""}
+          >
+            <Cascader
+              options={this.state.fieldOptions}
+              onChange={this.businessUnitFilterChange}
+              label={this.props.placeholder}
+              placeholder={this.props.placeholder}
+              value={value}
+              //onDeselect={this.onDeselect}
+              onSelect={this.onSelect}
+              style={{ width: "100%" }}
+              loading={this.state.fetching}
+            />
+          </FormItem>
         ) : (
           <Select
             showSearch

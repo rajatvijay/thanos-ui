@@ -321,3 +321,6 @@ h5 {
 .hidden {
   display: none;
 }
+.disabled {
+  cursor: not-allowed;
+}

@@ -321,6 +321,9 @@ h5 {
 .hidden {
   display: none;
 }
+.disabled {
+  cursor: not-allowed;
+}
 .waiting-filter-warpper {
   overflow: hidden;
 }
@@ -391,7 +394,7 @@ h5 {
 .filter-top {
   position: relative;
   overflow-x: hidden;
-  margin: 0 78px;
+  margin: 20px 0px;
   background-color: transparent;
 }
 .filter-top .ant-badge-multiple-words {

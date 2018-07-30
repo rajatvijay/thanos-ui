@@ -6,7 +6,8 @@ export const workflowFiltersService = {
   // removeFilters,
 
   // getKindData,
-  getStatusData
+  getStatusData,
+  getBusinessData
 };
 
 function getStatusData() {
@@ -16,6 +17,17 @@ function getStatusData() {
     credentials: "include"
   };
   let url = baseUrl + "workflow-status/";
+
+  return fetch(url, requestOptions).then(handleResponse);
+}
+
+function getBusinessData() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+  let url = baseUrl + "fields/export-business-json/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

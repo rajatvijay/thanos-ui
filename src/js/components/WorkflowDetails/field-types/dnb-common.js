@@ -11,16 +11,17 @@ const getFields = props => {
   // need to figure out how to change the name on search button
 
   let type_button_map = {
-    dnb_company_profile: "Company profile",
-    dnb_risk_score: "Risk scores",
-    dnb_data_reader: "Data"
+    dnb_company_profile: "Get Company profile",
+    dnb_risk_score: "Get Risk scores",
+    dnb_data_reader: "Get Data",
+    salesforce: "Post Salesforce data"
   };
 
   return (
     <Row gutter={16} style={{ marginBottom: "50px" }}>
       <Col span={4}>
         <Button type="primary" className="btn-block" onClick={props.onSearch}>
-          Get {type_button_map[props.field.definition.field_type]}
+          {type_button_map[props.field.definition.field_type]}
         </Button>
       </Col>
 
@@ -80,6 +81,7 @@ class DnBSearch extends Component {
 
     if (_.size(props.field.integration_json)) {
       if (
+        props.field.integration_json.OrderProductResponse &&
         props.field.integration_json.OrderProductResponse.TransactionResult
           .ResultText != "Success"
       ) {

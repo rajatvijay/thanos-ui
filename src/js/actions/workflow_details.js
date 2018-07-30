@@ -2,7 +2,8 @@ import {
   workflowDetailsConstants,
   workflowDetailsheaderConstants,
   workflowStepConstants,
-  workflowCommentsConstants
+  workflowCommentsConstants,
+  stepVersionConstants
 } from "../constants";
 import { workflowDetailsService } from "../services";
 import _ from "lodash";
@@ -22,7 +23,8 @@ export const workflowDetailsActions = {
   getById,
   getStepGroup,
   getStepFields,
-  getComment
+  getComment,
+  getStepVersionFields
 };
 
 //Get workflow details
@@ -145,3 +147,36 @@ function getComment(object_id, content_type) {
     return { type: workflowCommentsConstants.GET_COMMENTS_FAILURE, error };
   }
 }
+
+
+
+//Get workflow step  Version fileds data.
+function getStepVersionFields(step) {
+  return dispatch => {
+    // if (!step.doNotRefresh) {
+    //   dispatch(request(step));
+    // }
+
+    workflowDetailsService
+      .getStepVersionFields(step)
+      .then(
+        stepVersionFields => dispatch(success(stepVersionFields)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request(step) {
+    return { type: stepVersionConstants.GET_VERSION_REQUEST, step };
+  }
+  function success(stepVersionFields, step) {
+    return {
+      type: stepVersionConstants.GET_VERSION_SUCCESS,
+      stepVersionFields,
+      step
+    };
+  }
+  function failure(error) {
+    return { type: stepVersionConstants.GET_VERSION_FAILURE, error };
+  }
+}
+

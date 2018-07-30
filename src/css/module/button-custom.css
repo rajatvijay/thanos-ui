@@ -245,3 +245,23 @@ h5 {
 .ant-timeline-item-head-custom {
   left: 6px;
 }
+.ant-carousel .slick-dots li button {
+  border: 0;
+  cursor: pointer;
+  background: #6178ea;
+  opacity: 1;
+  display: block;
+  width: 20px;
+  height: 5px;
+  border-radius: 1px;
+  outline: none;
+  font-size: 0;
+  color: transparent;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  padding: 0;
+}
+.ant-carousel .slick-dots li.slick-active button {
+  background: #a0a0a0;
+}

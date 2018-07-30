@@ -104,15 +104,15 @@ export const Bool = props => {
       <RadioGroup
         style={{ width: "100%" }}
         onChange={e => props.onFieldChange(e, props)}
-        defaultValue={defVal ? parseInt(defVal, 10) : null}
+        defaultValue={defVal ? defVal : null}
       >
         <Radio
+          value={"True"}
           disabled={
             props.completed ||
             props.is_locked ||
             props.field.definition.disabled
           }
-          value={"True"}
         >
           Yes
         </Radio>

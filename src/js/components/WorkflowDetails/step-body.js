@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Icon } from "antd";
+import { Icon, Menu, Dropdown, Button } from "antd";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
+import { workflowDetailsActions } from "../../actions";
 import _ from "lodash";
 
 class StepBody extends Component {
@@ -27,6 +28,48 @@ class StepBody extends Component {
 
   addComment = stepData => {
     this.props.toggleSidebar(stepData.id, "step");
+  };
+
+  onVersionChange = e => {
+    let stepTrack = {
+      workflowId: this.props.currentStepFields.currentStepFields.workflow,
+      groupId: this.props.currentStepFields.currentStepFields.step_group,
+      stepId: this.props.currentStepFields.currentStepFields.id,
+      versionId: e.key
+    };
+
+    this.props.dispatch(workflowDetailsActions.getStepVersionFields(stepTrack));
+  };
+
+  versionDropDown = () => {
+    const versionList = (
+      <Menu onClick={this.onVersionChange}>
+        {this.props.currentStepFields.currentStepFields.versions ? (
+          _.map(
+            this.props.currentStepFields.currentStepFields.versions,
+            function(i) {
+              return <Menu.Item key={i.value}> {i.label}</Menu.Item>;
+            }
+          )
+        ) : (
+          <Menu.Item key={0} disabled>
+            {" "}
+            No other version available
+          </Menu.Item>
+        )}
+      </Menu>
+    );
+
+    return (
+      <Dropdown overlay={versionList}>
+        <Button
+          style={{ position: "relative", top: "-62px", right: "-25px" }}
+          className="ant-btn-sm"
+        >
+          Pervious versions <Icon type="down" />{" "}
+        </Button>
+      </Dropdown>
+    );
   };
 
   render = () => {
@@ -72,6 +115,8 @@ class StepBody extends Component {
 
       var step_comment_btn = (
         <div className="text-right">
+          {this.versionDropDown()}
+          <span className="display-inline-block pd-right-sm"> </span>
           <span
             style={{ position: "relative", top: "-62px", right: "-25px" }}
             onClick={this.addComment.bind(this, stepData)}
@@ -93,7 +138,11 @@ class StepBody extends Component {
             <Icon type={"loading"} />
           </div>
         ) : stepData ? (
-          <StepBodyForm stepData={stepData} {...this.props} />
+          <StepBodyForm
+            stepData={stepData}
+            {...this.props}
+            version={this.props.stepVersionFields}
+          />
         ) : (
           <div className="text-center mr-top-lg">
             <Icon type={"loading"} />
@@ -105,10 +154,11 @@ class StepBody extends Component {
 }
 
 function mapStateToProps(state) {
-  const { currentStepFields, workflowDetails } = state;
+  const { currentStepFields, workflowDetails, stepVersionFields } = state;
   return {
     currentStepFields,
-    workflowDetails
+    workflowDetails,
+    stepVersionFields
   };
 }
 
