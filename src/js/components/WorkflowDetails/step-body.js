@@ -159,6 +159,7 @@ class StepBody extends Component {
           >
             Print <i className="material-icons t-14 text-middle">print</i>
           </span>
+
           {this.versionDropDown()}
           <span className="display-inline-block pd-right-sm"> </span>
           <span
