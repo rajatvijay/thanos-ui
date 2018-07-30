@@ -81,6 +81,35 @@ class WorkflowFilter extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this.getBusinessUnitList();
+  };
+
+  getBusinessUnitList = () => {
+    this.setState({ fetching: true });
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
+
+    fetch(baseUrl + "fields/export-business-json/", requestOptions)
+      .then(response => response.json())
+      .then(body => {
+        console.log(body);
+        if (_.isEmpty(body.results)) {
+          this.setState({
+            fieldOptions: [
+              { label: "list empty", value: "list empty", disabled: true }
+            ],
+            fetching: false
+          });
+        } else {
+          this.setState({ fieldOptions: body.results, fetching: false });
+        }
+      });
+  };
+
   //SELECT TYPE FILTER DISPATCHED HERE
   handleChange = value => {
     this.setState({ value });
