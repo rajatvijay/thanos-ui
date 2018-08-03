@@ -976,6 +976,26 @@ template {
 .ant-timeline-item-head-custom {
   left: 6px;
 }
+.ant-carousel .slick-dots li button {
+  border: 0;
+  cursor: pointer;
+  background: #6178ea;
+  opacity: 1;
+  display: block;
+  width: 20px;
+  height: 5px;
+  border-radius: 1px;
+  outline: none;
+  font-size: 0;
+  color: transparent;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  padding: 0;
+}
+.ant-carousel .slick-dots li.slick-active button {
+  background: #a0a0a0;
+}
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
   background-color: #6178ea;
@@ -1086,9 +1106,6 @@ template {
   z-index: 2;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
 }
-.navbar-top .navbar-top .search-box .anticon {
-  color: #bfbfbf;
-}
 .navbar-top .ant-menu-item:first-child {
   margin-top: 0px;
 }
@@ -1123,7 +1140,6 @@ template {
 }
 .navbar-top .search-box .anticon {
   font-size: 18px;
-  color: #343b4c;
 }
 .navbar-top .ant-menu-horizontal .ant-menu-submenu:hover,
 .navbar-top .ant-menu-horizontal .ant-menu-submenu-selected,
@@ -1451,7 +1467,6 @@ template {
   color: #343b4c;
 }
 .ant-form.step-form .ant-form-item-label label {
-  text-transform: uppercase;
   white-space: normal;
 }
 .ant-form.step-form .has-success.has-feedback:after {
@@ -1636,7 +1651,7 @@ template {
 .filter-top {
   position: relative;
   overflow-x: hidden;
-  margin: 0 78px;
+  margin: 20px 0px;
   background-color: transparent;
 }
 .filter-top .ant-badge-multiple-words {
@@ -1778,6 +1793,17 @@ template {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   z-index: 1;
+}
+.recharts-wrapper .recharts-default-legend {
+  text-align: left !important;
+}
+.recharts-wrapper .recharts-legend-wrapper .recharts-legend-item {
+  padding: 2px 5px;
+  cursor: pointer;
+}
+.recharts-wrapper .recharts-legend-wrapper .recharts-legend-item:hover {
+  color: #343434;
+  background: rgba(0, 0, 0, 0.02);
 }
 /*
 a {

@@ -90,10 +90,6 @@ class WorkflowFilter extends Component {
 
   render() {
     const { value } = this.state;
-
-    console.log("value");
-    console.log(this.props);
-
     return (
       <div>
         <div>
@@ -108,15 +104,9 @@ class WorkflowFilter extends Component {
             label={this.props.placeholder}
             placeholder={this.props.placeholder}
             value={value}
-            onDeselect={this.onDeselect}
+            //onDeselect={this.onDeselect}
             onSelect={this.onSelect}
             style={{ width: "100%" }}
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.props.children
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            }
           />
         ) : (
           <Select
@@ -224,6 +214,7 @@ class WorkflowKindFilter extends Component {
 
   fetchGroupData = tag => {
     this.props.dispatch(workflowKindActions.getCount(tag));
+    this.props.dispatch(workflowKindActions.getStatusCount(tag));
   };
 
   render = () => {

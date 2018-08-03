@@ -3,7 +3,8 @@ import { workflowKindService } from "../services";
 
 export const workflowKindActions = {
   getAll,
-  getCount
+  getCount,
+  getStatusCount
 };
 
 function getAll() {
@@ -53,5 +54,31 @@ function getCount(tag) {
   }
   function failure(error) {
     return { type: workflowKindConstants.GET_COUNT_FAILURE, error };
+  }
+}
+
+function getStatusCount(tag) {
+  return dispatch => {
+    dispatch(request(tag));
+
+    workflowKindService
+      .getStatusCount(tag)
+      .then(
+        workflowStatusCount => dispatch(success(workflowStatusCount)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request() {
+    return { type: workflowKindConstants.GET_STATUS_REQUEST };
+  }
+  function success(workflowStatusCount) {
+    return {
+      type: workflowKindConstants.GET_STATUS_SUCCESS,
+      workflowStatusCount
+    };
+  }
+  function failure(error) {
+    return { type: workflowKindConstants.GET_STATUS_FAILURE, error };
   }
 }

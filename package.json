@@ -44,6 +44,7 @@
     "react-router-dom": "^4.2.2",
     "react-telephone-input": "^4.71.11",
     "react-transition-group": "^2.2.1",
+    "recharts": "^1.1.0",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6",

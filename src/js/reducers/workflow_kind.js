@@ -52,3 +52,30 @@ export function workflowGroupCount(state = {}, action) {
       return state;
   }
 }
+
+export function workflowKindStatus(state = {}, action) {
+  switch (action.type) {
+    case workflowKindConstants.GET_STATUS_REQUEST:
+      return {
+        loading: true,
+        status_counts: []
+      };
+
+    case workflowKindConstants.GET_STATUS_SUCCESS:
+      return {
+        loading: false,
+        ...action.workflowStatusCount
+      };
+
+    case workflowKindConstants.GET_STATUS_FAILURE:
+      return {
+        loading: false,
+        //status_counts:[],
+        loadingStatus: "failed",
+        error: action.error
+      };
+
+    default:
+      return state;
+  }
+}
