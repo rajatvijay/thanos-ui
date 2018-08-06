@@ -46,10 +46,12 @@ class WorkflowDetails extends Component {
   currentActiveStep = wfd => {
     let activeStepGroup = null;
     let activeStep = null;
+
     _.forEach(wfd.stepGroups.results, function(step_group) {
       if (step_group.is_complete) {
         return;
       }
+
       activeStepGroup = step_group;
       _.forEach(step_group.steps, function(step) {
         if (!step.completed_at && !step.is_locked) {
@@ -82,37 +84,46 @@ class WorkflowDetails extends Component {
     };
   };
 
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.workflowDetails.loading === false) {
-      let wfd = nextProps.workflowDetails.workflowDetails;
-      let wf_id = parseInt(this.props.match.params.id, 10);
-      let active_step_data = this.currentActiveStep(wfd);
-      let stepGroup_id = active_step_data["activeStepGroup"].id;
-      let step_id = active_step_data["activeStep"].id;
+  componentDidUpdate = prevProps => {
+    //componentWillReceiveProps = nextProps => {
 
-      let stepTrack = {
-        workflowId: wf_id,
-        groupId: stepGroup_id,
-        stepId: step_id
-      };
+    if (
+      this.props.workflowDetails.loading !== prevProps.workflowDetails.loading
+    ) {
+      if (this.props.workflowDetails.loading === false) {
+        console.log(this.props);
+        console.log(prevProps);
 
-      if (
-        this.state.selectedStep &&
-        this.state.selectedGroup &&
-        this.state.from_params
-      ) {
-        stepTrack = {
+        let wfd = this.props.workflowDetails.workflowDetails;
+        let wf_id = parseInt(this.props.match.params.id, 10);
+        let active_step_data = this.currentActiveStep(wfd);
+        let stepGroup_id = active_step_data["activeStepGroup"].id;
+        let step_id = active_step_data["activeStep"].id;
+
+        let stepTrack = {
           workflowId: wf_id,
-          groupId: this.state.selectedGroup,
-          stepId: this.state.selectedStep
+          groupId: stepGroup_id,
+          stepId: step_id
         };
-        this.state.from_params = false;
-      } else {
-        this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
-      }
 
-      if (!this.state.loading_sidebar) {
-        this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        if (
+          this.state.selectedStep &&
+          this.state.selectedGroup &&
+          this.state.from_params
+        ) {
+          stepTrack = {
+            workflowId: wf_id,
+            groupId: this.state.selectedGroup,
+            stepId: this.state.selectedStep
+          };
+          this.state.from_params = false;
+        } else {
+          this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
+        }
+
+        if (!this.state.loading_sidebar) {
+          this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        }
       }
     }
   };

@@ -43,6 +43,7 @@ class StepBody extends Component {
     }
 
     var locked_tag = null;
+
     if (stepData.is_locked) {
       let dependent_steps = stepData.definition.dependent_steps;
       let dependent_step_name = _.map(dependent_steps, function(ds) {
@@ -58,7 +59,9 @@ class StepBody extends Component {
         </div>
       );
     }
+
     var step_comment_btn = null;
+
     if (_.size(stepData)) {
       let comment_btn_text = "Add comment";
       if (stepData.comment_count == 1) {
@@ -79,6 +82,7 @@ class StepBody extends Component {
         </div>
       );
     }
+
     return (
       <div className="pd-ard-lg">
         {locked_tag}
