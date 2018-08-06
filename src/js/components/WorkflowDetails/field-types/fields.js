@@ -537,10 +537,7 @@ class FileUpload extends Component {
     };
   }
 
-  componentDidMount = () => {
-    console.log("this.props----------");
-    console.log(this.props);
-  };
+  componentDidMount = () => {};
 
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
@@ -644,11 +641,20 @@ class FileUpload extends Component {
                   </a>
                 </span>
               </div>
-              <i
-                title="Remove file"
-                className="anticon anticon-cross"
-                onClick={this.removeFile}
-              />
+
+              {this.props.completed ? (
+                <i
+                  title="Remove file"
+                  className="anticon anticon-cross disabled"
+                  //onClick={this.removeFile}
+                />
+              ) : (
+                <i
+                  title="Remove file"
+                  className="anticon anticon-cross"
+                  onClick={this.removeFile}
+                />
+              )}
             </div>
           ) : null}
 
