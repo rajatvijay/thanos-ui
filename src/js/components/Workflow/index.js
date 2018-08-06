@@ -259,7 +259,7 @@ class Workflow extends Component {
                 </Row>
                 <StatusGraph />
               </div>
-            </Carousel>,
+            </Carousel>
           </div>
 
           {this.props.workflow.loading ? null : (
