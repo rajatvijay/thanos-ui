@@ -53,10 +53,10 @@ function removeCookies() {
 
 export const logout = () => async dispatch => {
   try {
+    history.push("/login/magic");
     const response = await UserLogout();
     dispatch({ type: userConstants.LOGOUT });
     removeCookies();
-    history.push("/login/magic");
     document.location.reload();
   } catch (error) {
     throw error;
