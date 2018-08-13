@@ -59,6 +59,7 @@ export const logout = () => async dispatch => {
     removeCookies();
     document.location.reload();
   } catch (error) {
+    removeCookies();
     throw error;
   }
 };
