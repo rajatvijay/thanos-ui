@@ -56,7 +56,6 @@ h5 {
   color: #343b4c;
 }
 .ant-form.step-form .ant-form-item-label label {
-  text-transform: uppercase;
   white-space: normal;
 }
 .ant-form.step-form .has-success.has-feedback:after {
