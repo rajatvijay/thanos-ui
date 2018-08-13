@@ -122,7 +122,7 @@ export const Bool = props => {
             props.is_locked ||
             props.field.definition.disabled
           }
-          value={"Flase"}
+          value={"False"}
         >
           No
         </Radio>
