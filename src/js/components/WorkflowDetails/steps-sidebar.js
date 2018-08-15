@@ -3,6 +3,7 @@ import _ from "lodash";
 import { Layout, Menu, Icon, Affix } from "antd";
 import { calculatedData } from "../Workflow/calculated-data";
 import { utils } from "../Workflow/utils";
+import { history } from "../../_helpers";
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -36,6 +37,13 @@ class StepSidebarMenu extends Component {
   componentDidMount() {}
 
   onStepSelected(e) {
+    //console.log(e)
+
+    // let stepMeta = e.key.split("_");
+    // let wid = this.props.step2[0].workflow;
+    // let gid = stepMeta[0];
+    // let sid = stepMeta[1];
+    // history.push("/workflows/instances/" + wid+"/?group="+gid+"&step="+sid);
     this.props.onStepSelected(e);
   }
 
@@ -112,6 +120,7 @@ class StepSidebarMenu extends Component {
 
   render() {
     let grouping = this.props.step2;
+
     return (
       <div>
         <Menu
