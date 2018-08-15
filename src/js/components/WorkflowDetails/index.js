@@ -110,6 +110,7 @@ class WorkflowDetails extends Component {
     }
   };
 
+
   //componentDidUpdate = prevProps => {
   componentWillReceiveProps = nextProps => {
     if (
