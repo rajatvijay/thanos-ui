@@ -23,6 +23,7 @@ import { DnBCommon } from "./dnb-common.js";
 import { LexisNexis } from "./ln_field";
 import { BusinessUnit } from "./business-unit";
 import { Region } from "./region";
+import { GoogleSearch } from "./google-search";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -83,6 +84,8 @@ export const getFieldType = props => {
       return LexisNexis(props);
     case "salesforce":
       return DnBCommon(props);
+    case "google_search":
+      return GoogleSearch(props);
 
     default:
       return Text(props);
