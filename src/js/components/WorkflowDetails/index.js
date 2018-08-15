@@ -127,6 +127,7 @@ class WorkflowDetails extends Component {
         this.state.selectedGroup &&
         this.state.from_params
       ) {
+        stepTrack = {
           workflowId: wf_id,
           groupId: this.state.selectedGroup,
           stepId: this.state.selectedStep

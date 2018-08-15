@@ -96,7 +96,6 @@ class WorkflowFilter extends Component {
     fetch(baseUrl + "fields/export-business-json/", requestOptions)
       .then(response => response.json())
       .then(body => {
-        console.log(body);
         if (_.isEmpty(body.results)) {
           this.setState({
             fieldOptions: [
