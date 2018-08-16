@@ -465,22 +465,16 @@ class MetaRow extends React.Component {
             </Link>
           </Col>
           <Col span="6" className="text-right text-light small">
-            {!props.isChild ? (
-              props.relatedKind ? (
-                <Dropdown
-                  overlay={childWorkflowMenu}
-                  className="child-workflow-dropdown"
-                  placement="bottomRight"
-                >
-                  <a
-                    className="ant-dropdown-link ant-btn secondary-btn"
-                    href="#"
-                  >
-                    Add{" "}
-                    <i className="material-icons t-14">keyboard_arrow_down</i>
-                  </a>
-                </Dropdown>
-              ) : null
+            {props.relatedKind ? (
+              <Dropdown
+                overlay={childWorkflowMenu}
+                className="child-workflow-dropdown"
+                placement="bottomRight"
+              >
+                <a className="ant-dropdown-link ant-btn secondary-btn" href="#">
+                  Add <i className="material-icons t-14">keyboard_arrow_down</i>
+                </a>
+              </Dropdown>
             ) : null}
           </Col>
         </Row>

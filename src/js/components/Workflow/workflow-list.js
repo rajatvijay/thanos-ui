@@ -168,8 +168,16 @@ class WorkflowItem extends React.Component {
   onOpen = () => {
     this.setState({ opened: true });
   };
+
   onClose = () => {
     this.setState({ opened: false });
+  };
+
+  getGroupedData = children => {
+    let grouped = _.groupBy(children, function(child) {
+      return child.definition.kind;
+    });
+    return grouped;
   };
 
   render = () => {
@@ -228,19 +236,27 @@ class WorkflowItem extends React.Component {
         </div>
 
         {hasChildren && this.state.showRelatedWorkflow ? (
-          <div className="child-workflow-wrapper">
-            {_.map(this.props.workflow.children, function(item, index) {
-              let proccessedData = getProcessedData(item.step_groups);
+          <div className="child-workflow-wrapper mr-top">
+            {_.map(this.getGroupedData(this.props.workflow.children), function(
+              childGroup
+            ) {
               return (
-                <WorkflowItem
-                  isChild={true}
-                  pData={proccessedData}
-                  workflow={item}
-                  key={index}
-                  kinds={that.props.kinds}
-                  dispatch={that.props.dispatch}
-                  workflowFilterType={that.props.workflowFilterType}
-                />
+                <div className="mr-bottom">
+                  {_.map(childGroup, function(item, index) {
+                    let proccessedData = getProcessedData(item.step_groups);
+                    return (
+                      <WorkflowItem
+                        isChild={true}
+                        pData={proccessedData}
+                        workflow={item}
+                        key={index}
+                        kinds={that.props.kinds}
+                        dispatch={that.props.dispatch}
+                        workflowFilterType={that.props.workflowFilterType}
+                      />
+                    );
+                  })}
+                </div>
               );
             })}
           </div>
