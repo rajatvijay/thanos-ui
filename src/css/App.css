@@ -1572,6 +1572,14 @@ template {
   margin-bottom: 30px;
   position: relative;
 }
+.dnb-rdc-wrapper .match-value > span {
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+  display: block;
+  margin-bottom: 10px;
+}
 .waiting-filter-warpper {
   overflow: hidden;
 }
