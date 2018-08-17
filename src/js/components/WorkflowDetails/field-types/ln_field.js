@@ -409,7 +409,7 @@ const buildDetails = obj => {
 
 const GetTable = props => {
   const data = props.jsonData;
-  
+
   const columns = [
     {
       title: "Name",
