@@ -86,7 +86,6 @@ class WorkflowFilter extends Component {
     fetch(baseUrl + "fields/export-business-json/", requestOptions)
       .then(response => response.json())
       .then(body => {
-        console.log(body);
         if (_.isEmpty(body.results)) {
           this.setState({
             fieldOptions: [
@@ -122,9 +121,6 @@ class WorkflowFilter extends Component {
   };
 
   businessUnitFilterChange = value => {
-    console.log("value---");
-    console.log(value[value.length - 1]);
-
     this.setState({ value });
 
     let payload = { filterType: "business_unit", filterValue: [] };
