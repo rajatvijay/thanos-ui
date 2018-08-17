@@ -48,10 +48,9 @@ class WorkflowDetails extends Component {
     let activeStep = null;
 
     _.forEach(wfd.stepGroups.results, function(step_group) {
-      if (step_group.is_complete) {
+      if (step_group.is_complete || _.isEmpty(step_group.steps)) {
         return;
       }
-
       activeStepGroup = step_group;
       _.forEach(step_group.steps, function(step) {
         if (!step.completed_at && !step.is_locked) {
@@ -78,10 +77,19 @@ class WorkflowDetails extends Component {
       activeStep = activeStepGroup.steps[last_step_index];
     }
 
-    return {
-      activeStepGroup: activeStepGroup,
-      activeStep: activeStep
-    };
+    if (activeStep) {
+      return {
+        activeStepGroup: activeStepGroup,
+        activeStep: activeStep
+      };
+    } else {
+      let actStepGrp = wfd.stepGroups.results[0];
+      let actStep = wfd.stepGroups.results[0].steps[0];
+      return {
+        activeStepGroup: actStepGrp,
+        activeStep: actStep
+      };
+    }
   };
 
   componentDidUpdate = prevProps => {
@@ -91,14 +99,14 @@ class WorkflowDetails extends Component {
       this.props.workflowDetails.loading !== prevProps.workflowDetails.loading
     ) {
       if (this.props.workflowDetails.loading === false) {
-        console.log(this.props);
-        console.log(prevProps);
-
         let wfd = this.props.workflowDetails.workflowDetails;
         let wf_id = parseInt(this.props.match.params.id, 10);
         let active_step_data = this.currentActiveStep(wfd);
         let stepGroup_id = active_step_data["activeStepGroup"].id;
         let step_id = active_step_data["activeStep"].id;
+
+        console.log("active_step_data;;llldldldlddl");
+        console.log(active_step_data);
 
         let stepTrack = {
           workflowId: wf_id,
