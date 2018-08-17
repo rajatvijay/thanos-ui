@@ -21,9 +21,12 @@ import {
 import { Duns } from "./duns-search";
 import { DnBCommon } from "./dnb-common.js";
 import { LexisNexis } from "./ln_field";
+import { BusinessUnit } from "./business-unit";
+import { Region } from "./region";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
+    //generic fields
     case "text":
       return Text(props);
     case "bool":
@@ -60,6 +63,12 @@ export const getFieldType = props => {
       return CascaderField(props);
     case "url":
       return URL(props);
+
+    //custom
+    case "business_unit":
+      return BusinessUnit(props);
+    case "region":
+      return Region(props);
 
     // Integrations
     case "dnb_duns_search":
