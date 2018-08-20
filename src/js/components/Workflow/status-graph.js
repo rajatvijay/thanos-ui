@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Icon } from "antd";
@@ -32,9 +31,6 @@ class StatusGraph extends Component {
       loading: this.props.workflowKindStatus.loading,
       activeFilter: this.props.workflowFilters.status[0]
     });
-
-    console.log("this.porps");
-    console.log(this.props);
   };
 
   handleChange = value => {
@@ -58,7 +54,6 @@ class StatusGraph extends Component {
     }
 
     if (this.props.workflowFilters.status !== prev.workflowFilters.status) {
-      console.log(this.props.workflowFilters.status);
       this.setState({ activeFilter: this.props.workflowFilters.status[0] });
     }
   };
