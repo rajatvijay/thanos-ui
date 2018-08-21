@@ -210,6 +210,7 @@ class Comments extends Component {
                           multiLines
                           onChange={that.onChange}
                           value={that.state.message}
+                          notFoundContent={"user not found"}
                         />
                       </div>
                       <Button
