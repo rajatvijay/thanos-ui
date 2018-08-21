@@ -192,7 +192,6 @@ class WorkflowFilter extends Component {
                 this.props.placeholder === "region"
                   ? regionData.results
                   : statusData,
-
                 function(c, index) {
                   return (
                     <Option prop={c} title={c.value} key={c.value}>
