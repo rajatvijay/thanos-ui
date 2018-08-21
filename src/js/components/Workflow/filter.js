@@ -22,7 +22,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
-import { regionData } from "./regionData";
+//import { regionData } from "./regionData";
 
 //const filter = {};
 const { Sider } = Layout;
@@ -30,6 +30,16 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 
 const filterTypeSelect = [
+  {
+    filterType: "status",
+    filterName: "Status",
+    results: [
+      { id: 1, filterType: "status", value: "main", label: "Main Group" },
+      { id: 2, filterType: "status", value: "ae_uae_ou", label: "AE UAE OU" },
+      { id: 3, filterType: "status", value: "AO_AGO_OU", label: "AO AGO OU" },
+      { id: 4, filterType: "status", value: "AO_ANG_OU", label: "AO ANG OU" }
+    ]
+  },
   {
     filterType: "Business",
     filterName: "business unit",
@@ -71,34 +81,6 @@ class WorkflowFilter extends Component {
     };
   }
 
-  componentDidMount = () => {
-    this.getBusinessUnitList();
-  };
-
-  getBusinessUnitList = () => {
-    this.setState({ fetching: true });
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
-
-    fetch(baseUrl + "fields/export-business-json/", requestOptions)
-      .then(response => response.json())
-      .then(body => {
-        if (_.isEmpty(body.results)) {
-          this.setState({
-            fieldOptions: [
-              { label: "list empty", value: "list empty", disabled: true }
-            ],
-            fetching: false
-          });
-        } else {
-          this.setState({ fieldOptions: body.results, fetching: false });
-        }
-      });
-  };
-
   //SELECT TYPE FILTER DISPATCHED HERE
   handleChange = value => {
     this.setState({ value });
@@ -136,6 +118,10 @@ class WorkflowFilter extends Component {
 
   render() {
     const { value } = this.state;
+    const regionData = this.props.workflowFilterType.regionType;
+    const businessData = this.props.workflowFilterType.businessType;
+    const statusData = this.props.workflowFilterType.statusType;
+
     return (
       <div>
         <div>
@@ -145,12 +131,12 @@ class WorkflowFilter extends Component {
         </div>
         {this.props.placeholder === "Business" ? (
           <FormItem
-            hasFeedback={this.state.fetching ? true : false}
+            hasFeedback={businessData.loading ? true : false}
             validateStatus={this.state.fetching ? "validating" : null}
-            help={this.state.fetching ? "Fetching fields data..." : ""}
+            help={businessData.loading ? "Fetching fields data..." : ""}
           >
             <Cascader
-              options={this.state.fieldOptions}
+              options={businessData.results}
               onChange={this.businessUnitFilterChange}
               label={this.props.placeholder}
               placeholder={this.props.placeholder}
@@ -158,37 +144,48 @@ class WorkflowFilter extends Component {
               //onDeselect={this.onDeselect}
               onSelect={this.onSelect}
               style={{ width: "100%" }}
-              loading={this.state.fetching}
+              loading={businessData.loading}
             />
           </FormItem>
         ) : (
-          <Select
-            showSearch
-            mode="single"
-            label={this.props.placeholder}
-            value={value}
-            placeholder={this.props.placeholder}
-            onChange={this.handleChange}
-            onDeselect={this.onDeselect}
-            onSelect={this.onSelect}
-            style={{ width: "100%" }}
-            allowClear={true}
-            labelInValue={true}
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.props.children
-                .toLowerCase()
-                .indexOf(input.toLowerCase()) >= 0
-            }
+          <FormItem
+          //hasFeedback={regionData.loading ? true : false}
+          //validateStatus={ "validating" : null}
+          //help={ "Fetching fields data..." : ""}
           >
-            {_.map(this.props.childeren, function(c, index) {
-              return (
-                <Option prop={c} title={c.value} key={c.id}>
-                  {c.label}
-                </Option>
-              );
-            })}
-          </Select>
+            <Select
+              showSearch
+              mode="single"
+              label={this.props.placeholder}
+              value={value}
+              placeholder={this.props.placeholder}
+              onChange={this.handleChange}
+              onDeselect={this.onDeselect}
+              onSelect={this.onSelect}
+              style={{ width: "100%" }}
+              allowClear={true}
+              labelInValue={true}
+              //optionFilterProp="children"
+              // filterOption={(input, option) =>
+              //   option.props.children
+              //     .toLowerCase()
+              //     .indexOf(input.toLowerCase()) >= 0
+              // }
+            >
+              {_.map(
+                this.props.placeholder === "region"
+                  ? regionData.results
+                  : statusData,
+                function(c, index) {
+                  return (
+                    <Option prop={c} title={c.value} key={c.value}>
+                      {c.label}
+                    </Option>
+                  );
+                }
+              )}
+            </Select>
+          </FormItem>
         )}
       </div>
     );
@@ -219,9 +216,9 @@ class WorkflowKindFilter extends Component {
   };
 
   componentDidMount = () => {
-    if (!this.props.workflowFilterType.statusType) {
-      this.props.dispatch(workflowFiltersActions.getStatusData());
-    }
+    // if (!this.props.workflowFilterType.statusType) {
+    //   this.props.dispatch(workflowFiltersActions.getStatusData());
+    // }
   };
 
   workflowKindList = workflowKind => {
@@ -298,30 +295,6 @@ class FilterSidebar extends Component {
   state = { showAdvFilters: false };
 
   componentWillReceiveProps = nextProps => {
-    //reload workflow list if the filters change.
-    //set default kind
-
-    // if (this.props.config !== nextProps.config) {
-    //   //console.log(nextProps);
-
-    //   // if (nextProps.config.configuration) {
-    //   //   let defaultKind = nextProps.config.configuration.default_workflow_kind;
-    //   //   // this.props.dispatch(
-    //   //   //   workflowFiltersActions.setFilters({
-    //   //   //     filterType: "kind",
-    //   //   //     //filterValue: defaultKind.id,
-    //   //   //     filterValue: [3],
-    //   //   //     //meta: { defaultKind}
-    //   //   //     meta: { tag: "users" }
-    //   //   //   })
-    //   //   // );
-
-    //   //   // console.log('dispathceeedd')
-    //   //   // if(defaultKind){
-    //   //   // }
-    //   // }
-    // }
-
     if (this.props.workflowFilters !== nextProps.workflowFilters) {
       this.props.dispatch(workflowActions.getAll());
     }
@@ -331,6 +304,10 @@ class FilterSidebar extends Component {
     if (!this.props.workflowKind.workflowKind) {
       this.loadWorkflowKind();
     }
+
+    this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
+    this.props.dispatch(workflowFiltersActions.getRegionData());
+    this.props.dispatch(workflowFiltersActions.getStatusData());
   };
 
   loadWorkflowKind = () => {
@@ -355,19 +332,19 @@ class FilterSidebar extends Component {
     let that = this,
       filterList = filterTypeSelect;
 
-    if (
-      !this.props.workflowFilterType.loading &&
-      this.props.workflowFilterType.statusType
-    ) {
-      let sFilter = this.props.workflowFilterType.statusType;
-      let statusFilter = {
-        filterType: "Status",
-        results: sFilter
-      };
-      if (filterList.length === 2) {
-        filterList.unshift(statusFilter);
-      }
-    }
+    // if (
+    //   !this.props.workflowFilterType.loading &&
+    //   this.props.workflowFilterType.statusType
+    // ) {
+    //   let sFilter = this.props.workflowFilterType.statusType;
+    //   let statusFilter = {
+    //     filterType: "Status",
+    //     results: sFilter
+    //   };
+    //   if (filterList.length === 2) {
+    //     filterList.unshift(statusFilter);
+    //   }
+    // }
 
     const { workflowKind } = this.props.workflowKind;
 
@@ -414,8 +391,6 @@ class FilterSidebar extends Component {
               </Menu.Item>
             );
           }
-          // if (!item.tag === "users") {
-          // }
         })}
 
         {this.props.workflowKind.error ? (
@@ -517,6 +492,7 @@ class FilterSidebar extends Component {
               </div>
             </div>
           </div>
+
           <br />
           <br />
           <br />

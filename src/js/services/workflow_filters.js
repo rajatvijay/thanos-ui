@@ -7,7 +7,8 @@ export const workflowFiltersService = {
 
   // getKindData,
   getStatusData,
-  getBusinessData
+  getBusinessData,
+  getRegionData
 };
 
 function getStatusData() {
@@ -28,6 +29,17 @@ function getBusinessData() {
     credentials: "include"
   };
   let url = baseUrl + "fields/export-business-json/";
+
+  return fetch(url, requestOptions).then(handleResponse);
+}
+
+function getRegionData() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+  let url = baseUrl + "fields/export-region-json/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

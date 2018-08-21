@@ -6,7 +6,9 @@ export const workflowFiltersActions = {
   getFilters,
   removeFilters,
   // getKindData,
-  getStatusData
+  getStatusData,
+  getBusinessUnitData,
+  getRegionData
 };
 
 //set filter for workflow
@@ -101,5 +103,57 @@ function getStatusData() {
   }
   function failure(error) {
     return { type: workflowFiltersConstants.GET_STATUS_FAILURE, error };
+  }
+}
+
+function getBusinessUnitData() {
+  return dispatch => {
+    dispatch(request());
+
+    workflowFiltersService
+      .getBusinessData()
+      .then(
+        workflowFilterBusiness => dispatch(success(workflowFilterBusiness)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request() {
+    return { type: workflowFiltersConstants.GET_BUSINESS_UNIT_REQUEST };
+  }
+  function success(workflowFilterBusiness) {
+    return {
+      type: workflowFiltersConstants.GET_BUSINESS_UNIT_SUCCESS,
+      workflowFilterBusiness
+    };
+  }
+  function failure(error) {
+    return { type: workflowFiltersConstants.GET_BUSINESS_UNIT_FAILURE, error };
+  }
+}
+
+function getRegionData() {
+  return dispatch => {
+    dispatch(request());
+
+    workflowFiltersService
+      .getRegionData()
+      .then(
+        workflowFilterRegion => dispatch(success(workflowFilterRegion)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request() {
+    return { type: workflowFiltersConstants.GET_REGION_REQUEST };
+  }
+  function success(workflowFilterRegion) {
+    return {
+      type: workflowFiltersConstants.GET_REGION_SUCCESS,
+      workflowFilterRegion
+    };
+  }
+  function failure(error) {
+    return { type: workflowFiltersConstants.GET_REGION_FAILURE, error };
   }
 }
