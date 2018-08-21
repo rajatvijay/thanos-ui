@@ -1,4 +1,4 @@
-import { workflowFiltersConstants } from "../constants";
+fimport { workflowFiltersConstants } from "../constants";
 import _ from "lodash";
 
 const initialState = {
@@ -56,6 +56,7 @@ function normalizeData(data) {
     i.value = item.id;
     arr.push(i);
   });
+
   return arr;
 }
 

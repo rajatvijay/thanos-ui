@@ -192,7 +192,6 @@ class WorkflowFilter extends Component {
                 this.props.placeholder === "region"
                   ? regionData.results
                   : statusData,
-
                 function(c, index) {
                   return (
                     <Option prop={c} title={c.value} key={c.value}>
@@ -324,6 +323,10 @@ class FilterSidebar extends Component {
     if (!this.props.workflowKind.workflowKind) {
       this.loadWorkflowKind();
     }
+
+    this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
+    this.props.dispatch(workflowFiltersActions.getRegionData());
+    this.props.dispatch(workflowFiltersActions.getStatusData());
   };
 
   loadWorkflowKind = () => {
@@ -346,7 +349,7 @@ class FilterSidebar extends Component {
 
   render = () => {
     let that = this,
-      filterList = filterTypeSelect;
+    filterList = filterTypeSelect;
 
     const { workflowKind } = this.props.workflowKind;
 
