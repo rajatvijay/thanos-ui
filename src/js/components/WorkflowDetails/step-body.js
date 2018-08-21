@@ -31,6 +31,8 @@ class StepBody extends Component {
   };
 
   onVersionChange = e => {
+    this.versionToggle();
+
     let stepTrack = {
       workflowId: this.props.currentStepFields.currentStepFields.workflow,
       groupId: this.props.currentStepFields.currentStepFields.step_group,
@@ -41,10 +43,14 @@ class StepBody extends Component {
     this.props.dispatch(workflowDetailsActions.getStepVersionFields(stepTrack));
   };
 
+  versionToggle = () => {
+    this.setState({ showVersion: !this.state.showVersion });
+  };
+
   versionDropDown = () => {
     const versionList = (
       <Menu onClick={this.onVersionChange}>
-        {this.props.currentStepFields.currentStepFields.versions ? (
+        {this.props.currentStepFields.currentStepFields.versions.length > 0 ? (
           _.map(
             this.props.currentStepFields.currentStepFields.versions,
             function(i) {
@@ -142,6 +148,8 @@ class StepBody extends Component {
             stepData={stepData}
             {...this.props}
             version={this.props.stepVersionFields}
+            showVersion={this.state.showVersion}
+            versionToggle={this.versionToggle}
           />
         ) : (
           <div className="text-center mr-top-lg">

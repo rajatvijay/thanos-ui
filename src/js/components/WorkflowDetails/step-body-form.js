@@ -23,6 +23,10 @@ class StepBodyForm extends Component {
     }
   };
 
+  versionToggle = () => {
+    this.setState({ showVersion: !this.state.showVersion });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.dispatch(
@@ -273,7 +277,9 @@ class StepBodyForm extends Component {
     let row = [];
     let errors = this.props.currentStepFields.error;
     let currentStepFields = this.props.currentStepFields;
-    let v = !_.isEmpty(this.props.stepVersionFields.stepVersionFields);
+    let v =
+      !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
+      this.props.showVersion;
 
     return (
       <Form
@@ -283,6 +289,42 @@ class StepBodyForm extends Component {
         className="step-form"
         autoComplete="off"
       >
+        {v ? (
+          <div className=" mr-bottom">
+            <div className="version-item">
+              <span className="float-right">
+                <Tooltip placement="topRight" title={"Hide version"}>
+                  <span
+                    className="text-anchor"
+                    onClick={this.props.versionToggle}
+                  >
+                    <i className="material-icons t-14 text-middle text-light ">
+                      close
+                    </i>
+                  </span>
+                </Tooltip>
+              </span>
+              <div className="text-medium mr-bottom-sm">
+                Version submitted on{" "}
+                <Moment format="MM/DD/YYYY">
+                  <b>
+                    {" "}
+                    {
+                      this.props.stepVersionFields.stepVersionFields
+                        .completed_at
+                    }
+                  </b>
+                </Moment>{" "}
+                by {"  "}
+                {
+                  this.props.stepVersionFields.stepVersionFields.completed_by
+                    .email
+                }
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         {_.map(
           _.orderBy(
             this.props.stepData.data_fields,
