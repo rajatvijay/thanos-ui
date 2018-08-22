@@ -19,6 +19,9 @@ import {
 } from "./fields";
 
 import { Duns } from "./duns-search";
+import { UBO } from "./dnb_ubo";
+import { Livingstone } from "./dnb_livingstone";
+import { DunsDirectPlus } from "./duns_direct_plus";
 import { DnBCommon } from "./dnb-common.js";
 import { LexisNexis } from "./ln_field";
 import { BusinessUnit } from "./business-unit";
@@ -74,10 +77,16 @@ export const getFieldType = props => {
     // Integrations
     case "dnb_duns_search":
       return Duns(props);
+    case "dnb_duns_search_direct_plus":
+      return DunsDirectPlus(props);
     case "dnb_company_profile":
       return DnBCommon(props);
     case "dnb_risk_score":
       return DnBCommon(props);
+    case "dnb_ubo":
+      return UBO(props);
+    case "dnb_livingstone":
+      return Livingstone(props);
     case "dnb_data_reader":
       return DnBCommon(props);
     case "ln_search":

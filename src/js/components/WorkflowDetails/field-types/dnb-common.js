@@ -14,7 +14,8 @@ const getFields = props => {
     dnb_company_profile: "Get Company profile",
     dnb_risk_score: "Get Risk scores",
     dnb_data_reader: "Get Data",
-    salesforce: "Post Salesforce data"
+    salesforce: "Post Salesforce data",
+    dnb_livingstone: "DnB Livingstone"
   };
 
   return (
