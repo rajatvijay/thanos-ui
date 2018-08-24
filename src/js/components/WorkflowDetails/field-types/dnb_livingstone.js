@@ -163,26 +163,46 @@ const GetTable = props => {
         if (_.size(citations)) {
           citations_html = (
             <span>
-              {_.map(citations, function(c) {
-                return (
-                  <span>
-                    <span>Document Date: {c.DocumentDate}</span>
-                    <br />
-                    <span>Effective Date: {c.EffectiveDate}</span>
-                    <br />
-                    <span>Expiration Date: {c.ExpirationDate}</span>
-                    <br />
-                    <br />
-                  </span>
-                );
-              })}
+              <table>
+                <tbody>
+                  <tr>
+                    <th>Document Date</th>
+                    <th>Effective Date</th>
+                    <th>Expiration Date</th>
+                    <th>Citation</th>
+                  </tr>
+                  {_.map(citations, function(c) {
+                    return (
+                      <tr>
+                        <td>{c.DocumentDate}</td>
+                        <td>{c.EffectiveDate}</td>
+                        <td>{c.ExpirationDate}</td>
+                        <td>
+                          {c.DocumentVolumeReferenceIdentifier || ""}:{c.DocumentPageReferenceIdentifier ||
+                            ""}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </span>
           );
         }
 
+        let doc_link =
+          "https://s3.amazonaws.com/vetted-static-assets/livingtone_rpltype.html#" +
+          record.ScreeningListType;
+
         return (
           <span>
-            <b>ScreeningListType: {record.ScreeningListType}</b> <br />
+            <b>
+              RPL Type:{" "}
+              <a target="_blank" href={doc_link}>
+                {record.ScreeningListType}
+              </a>
+            </b>{" "}
+            <br />
             <b>Match Strength Value: {record.MatchStrengthValue}</b> <br />
             <b>
               Screening List Country: {record.ScreeningListCountryISOAlpha2Code}
@@ -192,13 +212,12 @@ const GetTable = props => {
             <table>
               <tbody>
                 <tr>
-                  <td style={{ width: "50%" }}>
+                  <td style={{ width: "40%" }}>
                     <b>Screening Names:</b>
                     <br />
                     {screening_names_html}
                   </td>
-                  <td style={{ width: "50%" }}>
-                    <b>Citations:</b>
+                  <td style={{ width: "60%" }}>
                     <br />
                     {citations_html}
                   </td>
