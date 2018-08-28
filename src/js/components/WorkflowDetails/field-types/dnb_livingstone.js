@@ -37,7 +37,7 @@ const getFields = props => {
     <Row gutter={16} style={{ marginBottom: "50px" }}>
       <Col span={5}>
         <Button type="primary" className="btn-block" onClick={props.onSearch}>
-          Get Livingston Screening
+          Screen for Sanctions & Watchlists
         </Button>
       </Col>
 
