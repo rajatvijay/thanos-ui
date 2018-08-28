@@ -35,7 +35,7 @@ const {
 const getFields = props => {
   return (
     <Row gutter={16} style={{ marginBottom: "50px" }}>
-      <Col span={5}>
+      <Col span={6}>
         <Button type="primary" className="btn-block" onClick={props.onSearch}>
           Screen for Sanctions & Watchlists
         </Button>
