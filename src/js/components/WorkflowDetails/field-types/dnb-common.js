@@ -20,10 +20,6 @@ const getFields = props => {
     iban_search: "Validate IBAN",
     eu_vat_check: "Validate VAT",
     us_tin_check: "Validate TIN",
-    charity_check: "Get Charity Information",
-    dnb_livingstone: "DnB Livingstone",
-    iban_search: "Validate IBAN",
-    eu_vat_check: "Validate VAT"
   };
 
   return (
