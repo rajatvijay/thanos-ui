@@ -9,12 +9,18 @@ import {
   Table,
   Icon,
   Divider,
-  Select
+  Select,
+  Tag
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
+import { integrationCommonFunctions } from "./integration_common";
 import { countries } from "./countries.js";
-import { dunsFieldActions } from "../../../actions";
+import {
+  dunsFieldActions,
+  workflowStepActions,
+  workflowDetailsActions
+} from "../../../actions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -75,6 +81,10 @@ class DnbUBO extends Component {
     this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
   };
 
+  getComment = (e, data) => {
+    this.props.getIntegrationComments(data.MemberID, this.props.field.id);
+  };
+
   render = () => {
     let { field } = this.props;
 
@@ -100,7 +110,12 @@ class DnbUBO extends Component {
         <div>
           {_.size(field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
-              <GetTable jsonData={field.integration_json} />
+              <GetTable
+                getComment={this.getComment}
+                jsonData={field.integration_json}
+                commentCount={field.integration_comment_count}
+                flag_dict={field.selected_flag}
+              />
             </div>
           ) : null}
         </div>
@@ -146,56 +161,35 @@ const GetTable = props => {
       title: "BENEFICIAL OWNERS",
       dataIndex: "PrimaryName",
       render: (text, record, index) => {
-        let addr = record.PrimaryAddress;
-        let addr_arr = [];
-        if (_.size(addr)) {
-          addr_arr = [
-            _.size(addr.StreetAddressLine)
-              ? addr.StreetAddressLine[0]["LineText"]
-              : "",
-            addr.PrimaryTownName || "",
-            addr.TerritoryName || "",
-            addr.CountryOfficialName || "",
-            addr.PostalCode || ""
-          ];
-        }
-        return (
-          <span>
-            <b>{record.PrimaryName}</b> <br />
-            <table>
-              <tbody>
-                <tr>
-                  <td style={{ width: "50%" }}>
-                    D-U-N-S No: {record.DUNSNumber}
-                  </td>
-                  <td style={{ width: "50%" }}>
-                    Member ID: {record.MemberID || "-"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Type:{" "}
-                    {record.SubjectTypeDescription
-                      ? record.SubjectTypeDescription["$"]
-                      : "-"}
-                  </td>
-                  <td>
-                    Legal Form:{" "}
-                    {record.LegalFormText ? record.LegalFormText["$"] : "-"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Address: <br />
-                    {addr_arr.join(", ") || "-"}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </span>
-        );
+        return integrationCommonFunctions.dnb_ubo_html(record);
       },
       key: "PrimaryName"
+    },
+    {
+      title: "Comments",
+      key: "ubo_index",
+      render: record => {
+        let flag_data = _.size(props.flag_dict[record.MemberID])
+          ? props.flag_dict[record.MemberID]
+          : {};
+        flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
+        let css = flag_data.extra || {};
+        let flag_name = flag_data.label || null;
+        return (
+          <span>
+            <span
+              className="text-secondary text-anchor"
+              onClick={e => props.getComment(e, record)}
+            >
+              {props.commentCount[record.MemberID]
+                ? props.commentCount[record.MemberID] + " comment(s)"
+                : "Add comment"}
+            </span>
+            <br />
+            {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
+          </span>
+        );
+      }
     }
   ];
 

@@ -112,10 +112,11 @@ function getStepFields(step) {
 }
 
 // Get workflow/step/field Comments
-function getComment(object_id, content_type) {
+function getComment(object_id, content_type, addtn) {
   let payload = {
     object_id: object_id,
-    type: content_type
+    type: content_type,
+    extra: addtn
   };
   return dispatch => {
     dispatch(request(payload));
@@ -148,8 +149,6 @@ function getComment(object_id, content_type) {
   }
 }
 
-
-
 //Get workflow step  Version fileds data.
 function getStepVersionFields(step) {
   return dispatch => {
@@ -179,4 +178,3 @@ function getStepVersionFields(step) {
     return { type: stepVersionConstants.GET_VERSION_FAILURE, error };
   }
 }
-

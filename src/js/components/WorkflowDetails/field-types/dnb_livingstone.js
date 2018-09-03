@@ -9,12 +9,14 @@ import {
   Table,
   Icon,
   Divider,
-  Select
+  Select,
+  Tag
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
+import { integrationCommonFunctions } from "./integration_common";
 import { countries } from "./countries.js";
-import { dunsFieldActions } from "../../../actions";
+import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -75,6 +77,10 @@ class DnbLivingstone extends Component {
     this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
   };
 
+  getComment = (e, data) => {
+    this.props.getIntegrationComments(data.custom_hash, this.props.field.id);
+  };
+
   render = () => {
     let { field } = this.props;
 
@@ -100,7 +106,12 @@ class DnbLivingstone extends Component {
         <div>
           {_.size(field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
-              <GetTable jsonData={field.integration_json} />
+              <GetTable
+                jsonData={field.integration_json}
+                getComment={this.getComment}
+                commentCount={field.integration_comment_count}
+                flag_dict={field.selected_flag}
+              />
             </div>
           ) : null}
         </div>
@@ -138,96 +149,35 @@ const GetTable = props => {
       title: "Potential Maches",
       dataIndex: "PrimaryName",
       render: (text, record, index) => {
-        let screening_names = record.ScreeningNames;
-        let screening_names_html = "";
-        if (_.size(screening_names)) {
-          screening_names_html = (
-            <span>
-              {_.map(screening_names, function(name) {
-                return (
-                  <span>
-                    <span>Name: {name.SubjectName}</span>
-                    <br />
-                    <span>Match Strength: {name.MatchStrengthValue}</span>
-                    <br />
-                    <br />
-                  </span>
-                );
-              })}
-            </span>
-          );
-        }
-
-        let citations = record.Citations;
-        let citations_html = "";
-        if (_.size(citations)) {
-          citations_html = (
-            <span>
-              <table>
-                <tbody>
-                  <tr>
-                    <th>Document Date</th>
-                    <th>Effective Date</th>
-                    <th>Expiration Date</th>
-                    <th>Citation</th>
-                  </tr>
-                  {_.map(citations, function(c) {
-                    return (
-                      <tr>
-                        <td>{c.DocumentDate}</td>
-                        <td>{c.EffectiveDate}</td>
-                        <td>{c.ExpirationDate}</td>
-                        <td>
-                          {c.DocumentVolumeReferenceIdentifier || ""}:{c.DocumentPageReferenceIdentifier ||
-                            ""}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </span>
-          );
-        }
-
-        let doc_link =
-          "https://s3.amazonaws.com/vetted-static-assets/livingtone_rpltype.html#" +
-          record.ScreeningListType;
-
-        return (
-          <span>
-            <b>
-              RPL Type:{" "}
-              <a target="_blank" href={doc_link}>
-                {record.ScreeningListType}
-              </a>
-            </b>{" "}
-            <br />
-            <b>Match Strength Value: {record.MatchStrengthValue}</b> <br />
-            <b>
-              Screening List Country: {record.ScreeningListCountryISOAlpha2Code}
-            </b>{" "}
-            <br />
-            <br />
-            <table>
-              <tbody>
-                <tr>
-                  <td style={{ width: "40%" }}>
-                    <b>Screening Names:</b>
-                    <br />
-                    {screening_names_html}
-                  </td>
-                  <td style={{ width: "60%" }}>
-                    <br />
-                    {citations_html}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </span>
-        );
+        return integrationCommonFunctions.dnb_livingston_html(record);
       },
       key: "PrimaryName"
+    },
+    {
+      title: "Comments",
+      key: "livingston_index",
+      render: record => {
+        let flag_data = _.size(props.flag_dict[record.custom_hash])
+          ? props.flag_dict[record.custom_hash]
+          : {};
+        flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
+        let css = flag_data.extra || {};
+        let flag_name = flag_data.label || null;
+        return (
+          <span>
+            <span
+              className="text-secondary text-anchor"
+              onClick={e => props.getComment(e, record)}
+            >
+              {props.commentCount[record.custom_hash]
+                ? props.commentCount[record.custom_hash] + " comment(s)"
+                : "Add comment"}
+              <br />
+              {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
+            </span>
+          </span>
+        );
+      }
     }
   ];
 

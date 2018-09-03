@@ -9,12 +9,14 @@ import {
   Table,
   Icon,
   Divider,
-  Select
+  Select,
+  Tag
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
+import { integrationCommonFunctions } from "./integration_common";
 import { countries } from "./countries.js";
-import { dunsFieldActions } from "../../../actions";
+import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -74,6 +76,10 @@ class GoogleSrch extends Component {
     this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
   };
 
+  getComment = (e, data) => {
+    this.props.getIntegrationComments(data.cacheId, this.props.field.id);
+  };
+
   render = () => {
     let { field } = this.props;
 
@@ -100,8 +106,10 @@ class GoogleSrch extends Component {
           {_.size(field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
               <GetTable
-                selectItem={this.selectItem}
+                getComment={this.getComment}
                 jsonData={field.integration_json}
+                commentCount={field.integration_comment_count}
+                flag_dict={field.selected_flag}
               />
             </div>
           ) : null}
@@ -131,19 +139,35 @@ const GetTable = props => {
       dataIndex: "result",
       render: (text, record, index) => {
         //let adrData = record
-        return (
-          <span>
-            <b dangerouslySetInnerHTML={{ __html: record.htmlTitle }} />
-            <br />
-            <span dangerouslySetInnerHTML={{ __html: record.htmlSnippet }} />
-            <br />
-            <a href={record.link} target="_blank">
-              {record.formattedUrl}
-            </a>
-          </span>
-        );
+        return integrationCommonFunctions.google_search_html(record);
       },
       key: "title"
+    },
+    {
+      title: "Comments",
+      key: "google_index",
+      render: record => {
+        let flag_data = _.size(props.flag_dict[record.cacheId])
+          ? props.flag_dict[record.cacheId]
+          : {};
+        flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
+        let css = flag_data.extra || {};
+        let flag_name = flag_data.label || null;
+        return (
+          <span>
+            <span
+              className="text-secondary text-anchor"
+              onClick={e => props.getComment(e, record)}
+            >
+              {props.commentCount[record.cacheId]
+                ? props.commentCount[record.cacheId] + " comment(s)"
+                : "Add comment"}
+            </span>
+            <br />
+            {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
+          </span>
+        );
+      }
     }
   ];
 

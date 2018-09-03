@@ -2,21 +2,26 @@ import React, { Component } from "react";
 import {
   Layout,
   Icon,
+  Select,
   Avatar,
   Collapse,
   Button,
   Breadcrumb,
   Tag,
   Mention,
-  Divider
+  Divider,
+  Menu,
+  Dropdown
 } from "antd";
 import { Link } from "react-router-dom";
 import { workflowDetailsActions } from "../../actions";
+import { integrationCommonFunctions } from "./field-types/integration_common";
 import _ from "lodash";
 import Moment from "react-moment";
 const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
+const Option = Select.Option;
 
 class Comments extends Component {
   constructor(props) {
@@ -38,11 +43,15 @@ class Comments extends Component {
 
   addComment = c => {
     let content_type = "step";
-    if (c.target.field_details) {
+    if (c.content_type == "integrationresult") {
+      content_type = "integrationresult";
+    } else if (c.target.field_details) {
       content_type = "field";
     } else if (c.target.workflow_details) {
       content_type = "workflow";
     }
+
+    console.log(content_type);
     this.props.addComment({
       object_id: c.object_id,
       type: content_type,
@@ -71,6 +80,22 @@ class Comments extends Component {
     }
   };
 
+  selectFlag = flag => {
+    let comments = this.props.workflowComments
+      ? this.props.workflowComments.data
+      : {};
+    let target = _.size(comments.results) ? comments.results[0].target : {};
+    let payload = {
+      workflow: target.workflow,
+      field: target.field_details.id,
+      flag: parseInt(flag.key)
+    };
+    if (target.field_details.is_integration_type) {
+      payload["integration_uid"] = target.uid;
+    }
+    this.props.changeFlag(payload);
+  };
+
   render() {
     const Panel = Collapse.Panel;
     let comments = this.props.workflowComments
@@ -78,6 +103,15 @@ class Comments extends Component {
       : {};
     let that = this;
     let single_comments = _.size(comments.results) <= 1 ? true : false;
+
+    let c = _.size(comments.results) ? comments.results[0] : [];
+    let flag_dropdown = (
+      <Menu onClick={that.selectFlag}>
+        {_.map(c.target.comment_flag_options, function(cfo) {
+          return <Menu.Item key={cfo.value}>{cfo.label}</Menu.Item>;
+        })}
+      </Menu>
+    );
     return (
       <Sider
         className="comments-sidebar profile-sidebar sidebar-right"
@@ -109,13 +143,30 @@ class Comments extends Component {
               style={{ float: "right", marginTop: "4px" }}
             />
           </div>
-          <Content style={{ padding: "15px" }}>
+          <Content style={{ padding: "15px", paddingBottom: "50px" }}>
             {_.map(comments.results, function(c) {
               if (!single_comments && !_.size(c.messages)) {
                 return null;
               }
               return (
                 <div>
+                  {c.target.field_details ? (
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: "21px",
+                        zIndex: "1"
+                      }}
+                    >
+                      <Dropdown overlay={flag_dropdown}>
+                        <a className="ant-dropdown-link" href="#">
+                          <Icon type="flag" theme="twoTone" />{" "}
+                          <Icon type="down" />
+                        </a>
+                      </Dropdown>
+                    </div>
+                  ) : null}
+
                   <Tag style={{ width: "100%" }} className="comment_step_bar">
                     <span>{c.target.step_group_details.name}</span>
                     <span> > </span>
@@ -124,21 +175,7 @@ class Comments extends Component {
                     </span>
                   </Tag>
 
-                  {c.target.field_details ? (
-                    <div
-                      className="ant-form-item-label"
-                      style={{ marginTop: "5px" }}
-                    >
-                      <div style={{ fontSize: "14px", textAlign: "left" }}>
-                        {c.target.field_details.name}
-                      </div>
-                      <div style={{ textAlign: "left", fontSize: "13px" }}>
-                        {_.size(c.target.field_details.answer)
-                          ? c.target.field_details.answer[0].answer
-                          : "-"}
-                      </div>
-                    </div>
-                  ) : null}
+                  {integrationCommonFunctions.comment_answer_body(c)}
 
                   <Divider />
 

@@ -210,6 +210,21 @@ class WorkflowDetails extends Component {
     );
   };
 
+  getIntegrationComments = (uid, field_id) => {
+    this.state.loading_sidebar = true;
+    let payload = {
+      uid: uid,
+      field_id: field_id
+    };
+    this.props.dispatch(
+      workflowDetailsActions.getComment(1, "integrationresult", payload)
+    );
+  };
+
+  changeFlag = payload => {
+    this.props.dispatch(workflowStepActions.updateFlag(payload));
+  };
+
   addComment = payload => {
     this.state.adding_comment = true;
     this.state.object_id = payload.object_id;
@@ -271,7 +286,10 @@ class WorkflowDetails extends Component {
           }}
         >
           <div className="mr-ard-lg  shadow-1 bg-white">
-            <StepBody toggleSidebar={this.callBackCollapser} />
+            <StepBody
+              toggleSidebar={this.callBackCollapser}
+              getIntegrationComments={this.getIntegrationComments}
+            />
           </div>
           <div className="text-right pd-ard mr-ard-md">
             <Tooltip title="Scroll to top" placement="topRight">
@@ -294,6 +312,7 @@ class WorkflowDetails extends Component {
             addComment={this.addComment}
             gotoStep={this.fetchStepData}
             selectActiveStep={this.selectActiveStep}
+            changeFlag={this.changeFlag}
             {...this.props}
           />
         ) : null}

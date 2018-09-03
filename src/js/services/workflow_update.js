@@ -7,6 +7,7 @@ export const workflowStepService = {
   approveStep,
   undoStep,
   addComment,
+  updateFlag,
   removeAttachment
 };
 
@@ -159,6 +160,16 @@ function addComment(payload) {
   return fetch(baseUrl + "channels/addmessage/", requestOptions).then(
     handleResponse
   );
+}
+
+function updateFlag(payload) {
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader.post(), "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(payload)
+  };
+  return fetch(baseUrl + "flags/", requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

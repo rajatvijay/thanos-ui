@@ -65,20 +65,24 @@ function getComments(payload) {
     credentials: "include"
   };
 
+  let request_url =
+    baseUrl +
+    "channels?object_id=" +
+    payload.object_id +
+    "&type=" +
+    payload.type;
+  if (payload.extra) {
+    request_url +=
+      "&field_id=" + payload.extra.field_id + "&uid=" + payload.extra.uid;
+  }
+
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
     //baseUrl + "workflows/" + id + "/stepgroups/",
-    baseUrl +
-      "channels?object_id=" +
-      payload.object_id +
-      "&type=" +
-      payload.type,
+    request_url,
     requestOptions
   ).then(handleResponse);
 }
-
-
-
 
 function getStepVersionFields(step) {
   const requestOptions = {
@@ -96,7 +100,7 @@ function getStepVersionFields(step) {
       step.groupId +
       "/steps/" +
       step.stepId +
-      "/?version="+
+      "/?version=" +
       step.versionId,
     requestOptions
   ).then(handleResponse);

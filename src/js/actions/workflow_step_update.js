@@ -27,6 +27,7 @@ export const workflowStepActions = {
   approveStep,
   undoStep,
   addComment,
+  updateFlag,
   removeAttachment
 };
 
@@ -331,6 +332,52 @@ function addComment(payload) {
     openNotificationWithIcon({
       type: "error",
       message: "Failed to revert completion"
+    });
+    return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };
+  }
+}
+
+////////////////////
+//Updating Flag //
+////////////////////
+function updateFlag(payload) {
+  return dispatch => {
+    //dispatch(request(payload));
+
+    workflowStepService.updateFlag(payload).then(
+      commentData => {
+        dispatch(success(commentData));
+        if (_.size(commentData.results)) {
+          let stepTrack = {
+            workflowId: commentData.results[0].target.workflow,
+            groupId: commentData.results[0].target.step_group_details.id,
+            stepId: commentData.results[0].target.step_details.id,
+            doNotRefresh: true
+          };
+          dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        }
+      },
+      error => dispatch(failure(error))
+    );
+  };
+
+  function request() {
+    return { type: workflowCommentsConstants.ADD_COMMENTS_REQUEST, payload };
+  }
+
+  function success(data) {
+    openNotificationWithIcon({
+      type: "success",
+      message: "Flag updated!"
+    });
+
+    return { type: workflowCommentsConstants.ADD_COMMENTS_SUCCESS, data };
+  }
+
+  function failure(error) {
+    openNotificationWithIcon({
+      type: "error",
+      message: "Failed to update"
     });
     return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };
   }

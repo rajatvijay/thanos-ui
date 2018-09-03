@@ -12,7 +12,8 @@ export const commonFunctions = {
   feedValue,
   addComment,
   addCommentBtn,
-  getLink
+  getLink,
+  getStyle
 };
 
 //Utility func
@@ -123,4 +124,12 @@ function getLink(text) {
       return '<a href="' + url + '" target="_blank">' + url + "</a>";
     }
   });
+}
+
+function getStyle(props, extra) {
+  let css = {};
+  if (props.field.selected_flag[props.field.id]) {
+    css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
+  }
+  return css;
 }

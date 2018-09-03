@@ -41,11 +41,16 @@ const {
   feedValue,
   addComment,
   addCommentBtn,
-  getLink
+  getLink,
+  getStyle
 } = commonFunctions;
 
 //Field Type Text
 export const Text = props => {
+  let css = {};
+  if (props.field.selected_flag[props.field.id]) {
+    css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
+  }
   return (
     <FormItem
       label={getLabel(props)}
@@ -76,6 +81,7 @@ export const Text = props => {
         autoComplete="new-password"
         onChange={e => props.onFieldChange(e, props)}
         onBlur={e => props.onFieldChange(e, props)}
+        style={getStyle(props)}
       />
 
       {addCommentBtn(this, props)}
@@ -418,6 +424,7 @@ export const Select = props => {
       <AntSelect
         allowClear
         mode={single ? "default" : "multiple"}
+        style={getStyle(props)}
         disabled={
           props.completed || props.is_locked || props.field.definition.disabled
         }

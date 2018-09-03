@@ -10,12 +10,13 @@ import {
   Icon,
   Divider,
   Select,
-  Tabs
+  Tabs,
+  Tag
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { countries } from "./countries.js";
-import { dunsFieldActions } from "../../../actions";
+import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -75,12 +76,11 @@ class LexisNexisSearch extends Component {
     this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
   };
 
-  selectItem = data => {
-    let payload = {
-      duns: data.DUNSNumber,
-      field_id: this.props.field.id
-    };
-    this.props.dispatch(dunsFieldActions.dunsSelectItem(payload));
+  getComment = (e, data) => {
+    this.props.getIntegrationComments(
+      data.EntityUniqueID["$"],
+      this.props.field.id
+    );
   };
 
   render = () => {
@@ -106,8 +106,10 @@ class LexisNexisSearch extends Component {
           {_.size(field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
               <GetTabsFilter
-                selectItem={this.selectItem}
+                getComment={this.getComment}
                 jsonData={field.integration_json}
+                commentCount={field.integration_comment_count}
+                flag_dict={field.selected_flag}
               />
             </div>
           ) : null}
@@ -427,9 +429,6 @@ const buildDetails = obj => {
 const GetTable = props => {
   const data = props.jsonData;
 
-  console.log("props----------------------");
-  console.log(props);
-
   const columns = [
     {
       title: "Name",
@@ -478,6 +477,32 @@ const GetTable = props => {
       dataIndex: "BestNameScore[$]",
       key: "BestNameScore[$]",
       defaultSortOrder: "descend"
+    },
+    {
+      title: "Comments",
+      key: "ln_index",
+      render: record => {
+        let flag_data = _.size(props.flag_dict[record.EntityUniqueID["$"]])
+          ? props.flag_dict[record.EntityUniqueID["$"]]
+          : {};
+        flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
+        let css = flag_data.extra || {};
+        let flag_name = flag_data.label || null;
+        return (
+          <span>
+            <span
+              className="text-secondary text-anchor"
+              onClick={e => props.getComment(e, record)}
+            >
+              {props.commentCount[record.EntityUniqueID["$"]]
+                ? props.commentCount[record.EntityUniqueID["$"]] + " comment(s)"
+                : "Add comment"}
+            </span>
+            <br />
+            {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
+          </span>
+        );
+      }
     }
   ];
 
@@ -557,9 +582,6 @@ const GetTabsFilter = props => {
       });
     });
 
-    console.log("fList-------------------");
-    console.log(fList);
-
     return fList;
   };
 
@@ -574,7 +596,12 @@ const GetTabsFilter = props => {
       {_.map(getFilterData(data), function(tab, index) {
         return (
           <TabPane tab={tab.label + " (" + tab.count + ")"} key={tab.value}>
-            <GetTable selectItem={props.selectItem} jsonData={tab.data} />
+            <GetTable
+              getComment={props.getComment}
+              jsonData={tab.data}
+              commentCount={props.commentCount}
+              flag_dict={props.flag_dict}
+            />
           </TabPane>
         );
       })}
