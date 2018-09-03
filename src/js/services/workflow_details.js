@@ -106,9 +106,6 @@ function getStepVersionFields(step) {
   ).then(handleResponse);
 }
 
-
-
-
 function getStepVersionFields(step) {
   const requestOptions = {
     method: "GET",
@@ -125,7 +122,7 @@ function getStepVersionFields(step) {
       step.groupId +
       "/steps/" +
       step.stepId +
-      "/?version="+
+      "/?version=" +
       step.versionId,
     requestOptions
   ).then(handleResponse);
