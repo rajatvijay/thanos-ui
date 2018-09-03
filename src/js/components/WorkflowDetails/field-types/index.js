@@ -89,6 +89,8 @@ export const getFieldType = props => {
       return Livingstone(props);
     case "dnb_data_reader":
       return DnBCommon(props);
+    case "iban_search":
+      return DnBCommon(props);
     case "ln_search":
       return LexisNexis(props);
     case "salesforce":
