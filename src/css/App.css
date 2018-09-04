@@ -962,6 +962,14 @@ template {
 .ant-carousel .slick-dots li.slick-active button {
   background: #a0a0a0;
 }
+.ant-switch-checked {
+  background: #6178ea;
+}
+.ant-radio-group-solid
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background: #6178ea;
+  border-color: #6178ea;
+}
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
   background-color: #6178ea;
@@ -1191,7 +1199,7 @@ template {
   border-bottom: 1px solid #343b4c;
   margin: 20px 78px 30px;
 }
-.workflow-container .workflow-count {
+.workflow-container .list-view-header {
   margin: 0 78px;
 }
 .workflow-list .grouping-head {
@@ -1402,6 +1410,13 @@ template {
 .lc-card .lc-card-body .sub-step-list .groupaz ul li a:hover {
   text-decoration: none;
   color: #343b4c;
+}
+.lc-card .lc-card-body .step-item {
+  display: block;
+  padding: 10px;
+}
+.lc-card .lc-card-body .step-ui .title-c {
+  max-width: 100%;
 }
 .workflow-details-container
   .ant-layout-sider

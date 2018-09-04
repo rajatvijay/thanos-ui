@@ -338,9 +338,41 @@ const getIcon = (id, kinds) => {
   }
 };
 
+const GetQuickData = props => {
+  return (
+    <div className="group-overview">
+      <div className="overflow-wrapper">
+        <div className="step-ui">
+          {_.map(
+            _.orderBy(
+              props.workflow.lc_data,
+              [step => step.label.toLowerCase()],
+              ["desc"]
+            ),
+            function(lcItem, index) {
+              return (
+                <span key={index} className="step-item">
+                  <span className={"title-c text-normal text-light pd-right"}>
+                    {lcItem.label}:
+                    <span className={" text-normal pd-left text-base"}>
+                      {lcItem.value}
+                    </span>
+                  </span>
+                  <span className="dash"> </span>
+                </span>
+              );
+            }
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
+
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
@@ -385,11 +417,17 @@ export const WorkflowHeader = props => {
 
         <HeaderTitle {...props} />
 
-        <HeaderWorkflowGroup
-          {...props}
-          //progressData={progressData}
-          pdata={proccessedData}
-        />
+        {!props.statusView ? (
+          <Col span={12}>
+            <GetQuickData {...props} />
+          </Col>
+        ) : (
+          <HeaderWorkflowGroup
+            {...props}
+            //progressData={progressData}
+            pdata={proccessedData}
+          />
+        )}
 
         <HeaderOptions2 {...props} />
       </Row>
@@ -406,7 +444,14 @@ export const WorkflowBody = props => {
     <div className="lc-card-body">
       <MetaRow {...props} />
       <Divider />
-      <StepGroupList {...props} />
+
+      {!props.statusView ? (
+        <Col span={24}>
+          <GetQuickData {...props} column={true} />
+        </Col>
+      ) : (
+        <StepGroupList {...props} />
+      )}
     </div>
   );
 };
