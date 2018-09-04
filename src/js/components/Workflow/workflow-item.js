@@ -417,7 +417,6 @@ export const WorkflowHeader = props => {
         </Col>
 
         <HeaderTitle {...props} />
-
         {!props.statusView && !props.detailsPage ? (
           <Col span={12}>
             <GetQuickData {...props} />
