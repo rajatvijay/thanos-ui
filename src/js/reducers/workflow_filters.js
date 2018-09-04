@@ -56,7 +56,6 @@ function normalizeData(data) {
     i.value = item.id;
     arr.push(i);
   });
-
   return arr;
 }
 
