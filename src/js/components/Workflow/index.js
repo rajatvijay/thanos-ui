@@ -173,10 +173,6 @@ class Workflow extends Component {
     this.props.dispatch(checkAuth());
   };
 
-  checkAuth = () => {
-    this.props.dispatch(checkAuth());
-  };
-
   render = () => {
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
