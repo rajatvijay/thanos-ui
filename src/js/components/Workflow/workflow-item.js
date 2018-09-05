@@ -340,18 +340,13 @@ const getIcon = (id, kinds) => {
 
 const GetQuickData = props => {
   return (
-    <div className="group-overview">
-      <div className="overflow-wrapper">
-        <div className="step-ui">
-          {_.map(
-            _.orderBy(
-              props.workflow.lc_data,
-              [step => step.label.toLowerCase()],
-              ["desc"]
-            ),
-            function(lcItem, index) {
+      <div className="group-overview">
+        <div className="overflow-wrapper">
+          <div className="step-ui">
+            {_.map(props.workflow.lc_data, function(lcItem, index) {
               return (
                 <span key={index} className="step-item">
+
                   <span className={"title-c text-normal text-light pd-right"}>
                     {lcItem.label}:
                   </span>
@@ -362,11 +357,10 @@ const GetQuickData = props => {
                   {props.column ? null : <span className="dash"> </span>}
                 </span>
               );
-            }
-          )}
+            })}
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 
