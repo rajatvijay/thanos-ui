@@ -43,7 +43,7 @@ const getFields = props => {
     <Row gutter={16} style={{ marginBottom: "50px" }}>
       <Col span={4}>
         <Button type="primary" className="btn-block" onClick={props.onSearch}>
-          Get Directors
+          Get List of Directors
         </Button>
       </Col>
 
