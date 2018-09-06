@@ -3,6 +3,7 @@ import _ from "lodash";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
+  dnb_directors_html,
   dnb_livingston_html,
   lexisnexis_html,
   google_search_html,
@@ -25,6 +26,12 @@ function comment_answer_body(c) {
       return (
         <div style={{ marginTop: "10px", fontSize: "14px" }}>
           {dnb_ubo_html(c.target.row_json)}
+        </div>
+      );
+    } else if (c.target.field_details.type == "dnb_directors") {
+      return (
+        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+          {dnb_directors_html(c.target.row_json)}
         </div>
       );
     } else if (c.target.field_details.type == "google_search") {
@@ -169,6 +176,53 @@ function dnb_ubo_html(record) {
           </tr>
         </tbody>
       </table>
+    </div>
+  );
+}
+
+function dnb_directors_html(record) {
+  let positions = null;
+  if (_.size(record.Position)) {
+    positions = (
+      <span>
+        <div>
+          <b>Positions:</b>
+        </div>
+        <div>
+          {_.map(record.Position, function(p) {
+            return <div>&nbsp;&nbsp;{p.PositionText.$}</div>;
+          })}
+        </div>
+      </span>
+    );
+  }
+
+  return (
+    <div>
+      <div>
+        <b>Name</b>: {record.PrincipalName.FullName.$}
+      </div>
+      {record.MostSeniorPrincipalIndicator ? (
+        <div>
+          <b>Most Senior Principal Indicator</b>:{" "}
+          {record.MostSeniorPrincipalIndicator == true ? "True" : "False"}
+        </div>
+      ) : null}
+
+      {positions ? <div>{positions}</div> : null}
+
+      {_.size(record.PrincipalName.OrganizationPrimaryName) ? (
+        <div>
+          <b>Organization Primary Name</b>:{" "}
+          {record.PrincipalName.OrganizationPrimaryName.OrganizationName.$}
+        </div>
+      ) : null}
+      {_.size(record.PrincipalName.OrganizationRegisteredName) ? (
+        <div>
+          <b>Organization Registered Name</b>:{" "}
+          {record.PrincipalName.OrganizationRegisteredName.OrganizationName.$}
+        </div>
+      ) : null}
     </div>
   );
 }

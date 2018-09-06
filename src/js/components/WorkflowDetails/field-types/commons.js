@@ -128,7 +128,10 @@ function getLink(text) {
 
 function getStyle(props, extra) {
   let css = {};
-  if (props.field.selected_flag[props.field.id]) {
+  if (
+    _.size(props.field.selected_flag) &&
+    props.field.selected_flag[props.field.id]
+  ) {
     css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
   }
   return css;

@@ -20,6 +20,7 @@ import {
 
 import { Duns } from "./duns-search";
 import { UBO } from "./dnb_ubo";
+import { Directors } from "./dnb_directors";
 import { Livingstone } from "./dnb_livingstone";
 import { DunsDirectPlus } from "./duns_direct_plus";
 import { DnBCommon } from "./dnb-common.js";
@@ -85,6 +86,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "dnb_ubo":
       return UBO(props);
+    case "dnb_directors":
+      return Directors(props);
     case "dnb_livingstone":
       return Livingstone(props);
     case "dnb_data_reader":
