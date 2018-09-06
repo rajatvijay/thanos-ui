@@ -965,13 +965,11 @@ template {
 .ant-switch-checked {
   background: #6178ea;
 }
-
 .ant-radio-group-solid
   .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
   background: #6178ea;
   border-color: #6178ea;
 }
-
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
   background-color: #6178ea;
