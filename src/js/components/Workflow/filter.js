@@ -120,7 +120,9 @@ class WorkflowFilter extends Component {
     const { value } = this.state;
     const regionData = this.props.workflowFilterType.regionType;
     const businessData = this.props.workflowFilterType.businessType;
-    const statusData = this.props.workflowFilterType.statusType;
+    const statusData = !this.props.workflowFilterType.statusType.error
+      ? this.props.workflowFilterType.statusType
+      : [{ value: "empty", label: "empty" }];
 
     return (
       <div>
@@ -176,6 +178,7 @@ class WorkflowFilter extends Component {
                 this.props.placeholder === "region"
                   ? regionData.results
                   : statusData,
+
                 function(c, index) {
                   return (
                     <Option prop={c} title={c.value} key={c.value}>

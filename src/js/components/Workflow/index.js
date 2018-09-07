@@ -15,13 +15,15 @@ import WorkflowList from "./workflow-list";
 import {
   workflowActions,
   workflowFiltersActions,
-  configActions
+  configActions,
+  logout
 } from "../../actions";
 import FilterSidebar from "./filter";
 import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
 import StatusGraph from "./status-graph";
+import { veryfiyClient } from "../../utils/verification";
 
 class Workflow extends Component {
   constructor(props) {
@@ -38,6 +40,10 @@ class Workflow extends Component {
     //this.reloadWorkflowList();
     if (!this.props.config.configuration || this.props.config.error) {
       this.props.dispatch(configActions.getConfig());
+    }
+
+    if (!veryfiyClient(this.props.authentication.user.csrf)) {
+      this.props.dispatch(logout());
     }
 
     if (this.props.authentication.user) {

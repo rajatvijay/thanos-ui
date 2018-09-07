@@ -36,8 +36,11 @@ function login(username, password) {
     .then(user => {
       // login successful if there's a jwt token in the response
       if (user) {
+        let userData = user;
+        userData.client = client;
+        userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", JSON.stringify(userData));
       }
 
       return user;
