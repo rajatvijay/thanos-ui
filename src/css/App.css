@@ -1464,6 +1464,9 @@ template {
 .ant-form.step-form .ant-select-enabled .ant-select-selection:hover {
   border-color: #6178ea;
 }
+.ant-form.step-form .url-field {
+  height: auto;
+}
 .ant-form.step-form .ant-input-disabled,
 .ant-form.step-form .ant-select-disabled {
   color: rgba(0, 0, 0, 0.55);

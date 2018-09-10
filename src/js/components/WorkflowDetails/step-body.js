@@ -73,7 +73,7 @@ class StepBody extends Component {
           style={{ position: "relative", top: "-62px", right: "-25px" }}
           className="ant-btn-sm"
         >
-          Pervious versions <Icon type="down" />{" "}
+          Previous versions <Icon type="down" />{" "}
         </Button>
       </Dropdown>
     );

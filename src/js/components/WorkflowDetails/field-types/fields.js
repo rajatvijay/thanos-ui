@@ -371,7 +371,7 @@ class URL2 extends React.Component {
                   style={{ color: "rgba(0, 0, 0, 0.25)" }}
                 />
               </span>
-              <div className="ant-input ant-input-disabled">
+              <div className="ant-input ant-input-disabled url-field">
                 <a
                   href={
                     props.field.answers[0]
@@ -387,6 +387,7 @@ class URL2 extends React.Component {
             </span>
           </span>
         )}
+
         {fieldFlagDropdown(this, props)}
         {addCommentBtn(this, props)}
       </FormItem>
