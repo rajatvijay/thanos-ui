@@ -112,7 +112,16 @@ class Comments extends Component {
             ? { color: cfo.extra.color }
             : {};
           return (
-            <Menu.Item key={cfo.value} style={text_color_css}>
+            <Menu.Item key={cfo.value}>
+              <i
+                className="material-icons t-18 "
+                style={{
+                  verticalAlign: "text-bottom",
+                  color: text_color_css.color
+                }}
+              >
+                fiber_manual_record
+              </i>{" "}
               {cfo.label}
             </Menu.Item>
           );
@@ -141,7 +150,7 @@ class Comments extends Component {
         <div className="comment-details" style={{ width: "400px" }}>
           <div
             className="sidebar-head"
-            style={{ background: "#18eada", color: "#000" }}
+            //style={{ background: "#18eada", color: "#000" }}
           >
             <span className="sidebar-title">Comments</span>
             <Icon
@@ -157,7 +166,7 @@ class Comments extends Component {
               }
               return (
                 <div>
-                  {c.target.field_details ? (
+                  {c.target.field_details && comments.results ? (
                     <div
                       style={{
                         position: "absolute",
@@ -166,8 +175,13 @@ class Comments extends Component {
                       }}
                     >
                       <Dropdown overlay={flag_dropdown}>
-                        <a className="ant-dropdown-link" href="#">
-                          <Icon type="flag" theme="twoTone" />{" "}
+                        <a
+                          className="ant-dropdown-link text-nounderline text-secondary"
+                          href="#"
+                        >
+                          <i className="material-icons text-middle t-16">
+                            flag
+                          </i>{" "}
                           <Icon type="down" />
                         </a>
                       </Dropdown>

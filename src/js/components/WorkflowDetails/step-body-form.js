@@ -368,9 +368,9 @@ class StepBodyForm extends Component {
 
                 return (
                   <Row gutter={16}>
-                    {_.map(row, function(col) {
+                    {_.map(row, function(col, index) {
                       return (
-                        <Col span={12}>
+                        <Col span={12} key={"col-1-" + index}>
                           {col} {v ? that.getVersionField(col.key) : ""}{" "}
                         </Col>
                       );
@@ -382,9 +382,9 @@ class StepBodyForm extends Component {
                 if (row.length === 2) {
                   return (
                     <Row gutter={16}>
-                      {_.map(row, function(col) {
+                      {_.map(row, function(col, index) {
                         return (
-                          <Col span={12}>
+                          <Col span={12} key={"col-" + index}>
                             {col} {v ? that.getVersionField(col.key) : null}
                           </Col>
                         );
@@ -400,7 +400,7 @@ class StepBodyForm extends Component {
                   <div>
                     {_.map(row, function(r, index) {
                       return (
-                        <Row gutter={16}>
+                        <Row gutter={16} key={index}>
                           <Col span={index === 0 ? "12" : "24"}>
                             {r} {v ? that.getVersionField(r.key) : null}
                           </Col>
@@ -413,7 +413,7 @@ class StepBodyForm extends Component {
                 return bow;
               } else {
                 return (
-                  <Row gutter={16}>
+                  <Row gutter={16} key={index}>
                     <Col span="24">
                       {field} {v ? that.getVersionField(field.key) : null}
                     </Col>

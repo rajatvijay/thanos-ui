@@ -130,16 +130,18 @@ class StatusGraph extends Component {
             </li>
           ))}
           <br />
-          <li
-            key="close"
-            className="chart-legend-list-item   display-inline-block recharts-legend-item"
-            onClick={this.removeFilter}
-          >
-            <i className="material-icons t-14 text-middle text-red pd-right-sm">
-              cancel
-            </i>
-            <b>Clear filter</b>
-          </li>
+          {!_.isEmpty(payload) ? (
+            <li
+              key="close"
+              className="chart-legend-list-item   display-inline-block recharts-legend-item"
+              onClick={this.removeFilter}
+            >
+              <i className="material-icons t-14 text-middle text-red pd-right-sm">
+                cancel
+              </i>
+              <b>Clear filter</b>
+            </li>
+          ) : null}
         </ul>
       );
     };

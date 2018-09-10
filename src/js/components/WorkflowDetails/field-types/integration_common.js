@@ -49,9 +49,9 @@ function comment_answer_body(c) {
     }
   } else {
     return (
-      <div className="ant-form-item-label" style={{ marginTop: "5px" }}>
-        <div style={{ fontSize: "14px", textAlign: "left" }}>
-          {c.target.field_details.name}
+      <div className="ant-row ant-form-item ant-form-item-with-help from-label mr-top">
+        <div className="ant-form-item-label">
+          <label className="">{c.target.field_details.name}</label>
         </div>
         <div className="ant-form-item-control-wrapper">
           <div className="ant-form-item-control ">

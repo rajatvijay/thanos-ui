@@ -1,3 +1,5 @@
+@import url("../utilities/variables.less");
+
 .add_comment_btn {
   float: right;
   font-size: 12px;
@@ -12,8 +14,8 @@
 
 .comment_step_bar {
   width: 100%;
-  color: #000000;
-  background: #e6fffd;
-  border: 1px solid #8bded8;
+  color: @color-text;
+  background: lighten(@color-secondary, 30%);
+  border: 1px solid @color-secondary;
   font-size: 13px;
 }
