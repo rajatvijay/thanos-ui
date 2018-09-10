@@ -1420,6 +1420,14 @@ template {
   background: #f2f5fa;
   color: #343b4c;
 }
+.workflow-details-container
+  .ant-layout-sider
+  .ant-menu-submenu
+  > .ant-menu:not(.ant-menu-horizontal)
+  .ant-menu-item-selected
+  .print-header {
+  display: none;
+}
 .aux-step-sidebar .ant-menu .ant-menu-item:-active {
   color: #343b4c;
 }
