@@ -359,7 +359,6 @@ const GetQuickData = props => {
                   <span className={" text-normal  text-base"}>
                     {lcItem.value}
                   </span>
-
                   {props.column ? null : <span className="dash"> </span>}
                 </span>
               );
