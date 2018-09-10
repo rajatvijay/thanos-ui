@@ -322,11 +322,6 @@ class WorkflowDetails extends Component {
                 toggleSidebar={this.callBackCollapser}
                 changeFlag={this.changeFlag}
                 getIntegrationComments={this.getIntegrationComments}
-                workflowHead={
-                  this.props.workflowDetailsHeader.workflowDetailsHeader
-                    ? this.props.workflowDetailsHeader.workflowDetailsHeader
-                    : "loading"
-                }
               />
             </div>
           </div>
@@ -363,7 +358,7 @@ class WorkflowDetails extends Component {
 
 function mapStateToProps(state) {
   const {
-    workflowDetails,
+   workflowDetails,
     workflowDetailsHeader,
     workflowFilterType,
     workflowKind,
@@ -372,6 +367,7 @@ function mapStateToProps(state) {
     hasStepinfo,
     users,
     config
+
   } = state;
 
   return {
