@@ -108,7 +108,14 @@ class Comments extends Component {
     let flag_dropdown = (
       <Menu onClick={that.selectFlag}>
         {_.map(c.target.comment_flag_options, function(cfo) {
-          return <Menu.Item key={cfo.value}>{cfo.label}</Menu.Item>;
+          let text_color_css = cfo.extra.color
+            ? { color: cfo.extra.color }
+            : {};
+          return (
+            <Menu.Item key={cfo.value} style={text_color_css}>
+              {cfo.label}
+            </Menu.Item>
+          );
         })}
       </Menu>
     );
