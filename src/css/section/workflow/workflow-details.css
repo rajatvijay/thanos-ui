@@ -1,28 +1,23 @@
 .Avenir-light {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-normal {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .Avenir-medium {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-heavy {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 h1,
 h2,
 h3,
 h4,
 h5 {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 /*text colors*/
 .text-primary {
@@ -76,22 +71,18 @@ h5 {
 }
 /*Text weight*/
 .text-bold {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .text-medium {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .text-normal {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .text-thin {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 /*Text size*/
 .t-12 {
@@ -310,11 +301,7 @@ h5 {
 .disabled {
   cursor: not-allowed;
 }
-.workflow-details-container
-  .ant-layout-sider
-  .ant-menu-submenu
-  > .ant-menu:not(.ant-menu-horizontal)
-  .ant-menu-item-selected {
+.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background: #f2f5fa;
   color: #343b4c;
 }
@@ -343,8 +330,7 @@ h5 {
   margin-bottom: 24px;
   font-size: 16px;
   font-weight: bold;
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #505050;
 }
 .ant-form.step-form .step-form-break {
@@ -388,9 +374,7 @@ h5 {
   background-color: #6178ea;
 }
 .ant-form.step-form .ant-input:not(.ant-input-disabled):hover,
-.ant-form.step-form
-  .ant-input-affix-wrapper:hover
-  .ant-input:not(.ant-input-disabled),
+.ant-form.step-form .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
 .ant-form.step-form .ant-radio-wrapper:hover .ant-radio .ant-radio-inner,
 .ant-form.step-form .ant-radio:hover .ant-radio-inner,
 .ant-form.step-form .ant-radio-focused .ant-radio-inner,
@@ -428,7 +412,7 @@ h5 {
 }
 .ant-form.step-form .dropped-files ul {
   list-style: none;
-  padding: 20px 0;
+  padding: 20px 0 ;
 }
 .ant-form.step-form .dropped-files li a {
   color: #6178ea;
@@ -464,8 +448,7 @@ h5 {
   position: relative;
 }
 .dnb-rdc-wrapper .match-value > span {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   display: block;
   margin-bottom: 10px;
 }
