@@ -82,7 +82,6 @@ class WorkflowFilter extends Component {
   }
 
   componentDidMount = () => {
-
     switch (this.props.placeholder) {
       case "Business":
         this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
