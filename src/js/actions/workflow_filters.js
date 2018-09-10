@@ -31,9 +31,6 @@ function getFilters(payload) {
   //append to exixting filters
 
   return dispatch => {
-    console.log("payload------>>>>>>");
-    console.log(payload);
-
     dispatch({
       type: workflowFiltersConstants.GET_REQUEST,
       workflowFilter: payload

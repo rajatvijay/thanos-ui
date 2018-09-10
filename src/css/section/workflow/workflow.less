@@ -23,8 +23,16 @@
     border-bottom: 1px solid @color-text;
     margin: 20px 78px 30px;
   }
-  .workflow-count {
+  // .workflow-count {
+  //   margin: 0 78px;
+  // }
+  .list-view-header {
     margin: 0 78px;
+    .list-toggle-btn {
+      .ant-switch {
+        background-color: @color-secondary;
+      }
+    }
   }
 }
 
@@ -253,6 +261,24 @@
           }
         }
       }
+    }
+
+    .step-ui {
+      column-count: 3;
+      //column-gap: 40px;
+      column-rule-style: solid;
+      column-rule-width: 1px;
+      column-rule-color: #d9d9d9;
+      margin-bottom: 20px;
+    }
+
+    .step-item {
+      display: block;
+      // padding: 10px;
+    }
+
+    .step-ui .title-c {
+      max-width: 100%;
     }
   }
 }

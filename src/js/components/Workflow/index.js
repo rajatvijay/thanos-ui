@@ -9,7 +9,8 @@ import {
   Dropdown,
   Menu,
   Tooltip,
-  Carousel
+  Carousel,
+  Switch
 } from "antd";
 import WorkflowList from "./workflow-list";
 import {
@@ -32,7 +33,8 @@ class Workflow extends Component {
       sidebar: false,
       workflowId: null,
       showWaitingFitler: false,
-      isUserAuthenticated: false
+      isUserAuthenticated: false,
+      statusView: true
     };
   }
 
@@ -183,6 +185,16 @@ class Workflow extends Component {
     return pass;
   };
 
+  toggleListView = status => {
+    this.setState({ statusView: status });
+
+    if (!status) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   render = () => {
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
@@ -269,9 +281,20 @@ class Workflow extends Component {
           </div>
 
           {this.props.workflow.loading ? null : (
-            <div className="workflow-count">
-              {this.props.workflow.count} Workflows
-            </div>
+            <Row className="list-view-header">
+              <Col span="12">
+                <div className="workflow-count">
+                  {this.props.workflow.count} Workflows
+                </div>
+              </Col>
+              <Col span="12">
+                <div className="text-right list-toggle-btn">
+                  <span className="pd-right t-14">Status</span>
+                  <Switch defaultChecked onChange={this.toggleListView} />
+                  <span className="pd-left  t-14">Quick overview</span>
+                </div>
+              </Col>
+            </Row>
           )}
 
           {this.props.config.loading ||
@@ -298,7 +321,11 @@ class Workflow extends Component {
             </div>
           ) : (
             <div className="clearfix">
-              <WorkflowList profile={this.props.match} {...this.props} />
+              <WorkflowList
+                profile={this.props.match}
+                {...this.props}
+                statusView={this.state.statusView}
+              />
             </div>
           )}
         </Layout>

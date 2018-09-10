@@ -66,6 +66,7 @@ class WorkflowList extends Component {
             dispatch={that.props.dispatch}
             workflowFilterType={that.props.workflowFilterType}
             onStatusChange={that.onStatusChange}
+            statusView={that.props.statusView}
           />
         );
       });
@@ -201,6 +202,7 @@ class WorkflowItem extends React.Component {
                   kind={this.props.kinds}
                   onStatusChange={this.props.onStatusChange}
                   dispatch={this.props.dispatch}
+                  statusView={this.props.statusView}
                 />
               </div>
             }
@@ -218,6 +220,7 @@ class WorkflowItem extends React.Component {
                 workflow={this.props.workflow}
                 pData={this.props.pData}
                 ondata={this.ondata}
+                statusView={this.props.statusView}
               />
             </div>
           </Collapsible>
@@ -253,6 +256,7 @@ class WorkflowItem extends React.Component {
                         kinds={that.props.kinds}
                         dispatch={that.props.dispatch}
                         workflowFilterType={that.props.workflowFilterType}
+                        statusView={this.props.statusView}
                       />
                     );
                   })}

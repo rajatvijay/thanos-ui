@@ -52,14 +52,10 @@ function normalizeData(data) {
   let arr = [];
 
   _.map(data, function(item) {
-    console.log(item);
     let i = item;
     i.value = item.id;
     arr.push(i);
   });
-
-  console.log("arr------");
-  console.log(arr);
   return arr;
 }
 
