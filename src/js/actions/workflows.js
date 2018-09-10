@@ -5,7 +5,8 @@ export const workflowActions = {
   getAll,
   getById,
   delete: _delete,
-  searchWorkflow
+  searchWorkflow,
+  getChildWorkflow
 };
 
 function getAll(filter) {
@@ -100,5 +101,39 @@ function searchWorkflow(query) {
   }
   function failure(error) {
     return { type: workflowConstants.SEARCH_FAILURE, error };
+  }
+}
+
+function getChildWorkflow(parent) {
+  console.log(parent);
+
+  return dispatch => {
+    dispatch(request(parent));
+
+    workflowService
+      .getChildWorkflow(parent)
+      .then(
+        childWorkflow => dispatch(success(childWorkflow)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request(parent) {
+    let response = { [parent]: { loading: true } };
+
+    return { type: workflowConstants.GET_CHILD_REQUEST, response };
+  }
+
+  function success(childWorkflow) {
+    let response = {
+      [parent]: { loading: false, children: childWorkflow.results }
+    };
+
+    return { type: workflowConstants.GET_CHILD_SUCCESS, response };
+  }
+
+  function failure(error) {
+    let response = { [parent]: { loading: false, error: error } };
+    return { type: workflowConstants.GET_CHILD_FAILURE, response };
   }
 }

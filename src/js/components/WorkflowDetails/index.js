@@ -241,6 +241,12 @@ class WorkflowDetails extends Component {
     );
   };
 
+  addComment = payload => {
+    this.state.adding_comment = true;
+    this.state.object_id = payload.object_id;
+    this.props.dispatch(workflowStepActions.addComment(payload));
+  };
+
   getIntegrationComments = (uid, field_id) => {
     this.state.loading_sidebar = true;
     let payload = {
@@ -314,6 +320,7 @@ class WorkflowDetails extends Component {
             <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
               <StepBody
                 toggleSidebar={this.callBackCollapser}
+                changeFlag={this.changeFlag}
                 getIntegrationComments={this.getIntegrationComments}
                 workflowHead={
                   this.props.workflowDetailsHeader.workflowDetailsHeader

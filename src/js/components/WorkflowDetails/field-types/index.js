@@ -119,6 +119,10 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "google_search":
       return GoogleSearch(props);
+    case "translation":
+      return DnBCommon(props);
+    case "transliteration":
+      return DnBCommon(props);
 
     default:
       return Text(props);

@@ -345,6 +345,7 @@ class StepBodyForm extends Component {
               completed: that.props.stepData.completed_at ? true : false,
               is_locked: that.props.stepData.is_locked,
               addComment: that.props.toggleSidebar,
+              changeFlag: that.props.changeFlag,
               getIntegrationComments: that.props.getIntegrationComments,
               dispatch: that.props.dispatch
             };

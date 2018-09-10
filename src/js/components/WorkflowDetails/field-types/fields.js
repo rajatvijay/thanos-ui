@@ -42,6 +42,7 @@ const {
   feedValue,
   addComment,
   addCommentBtn,
+  fieldFlagDropdown,
   getLink,
   getStyle
 } = commonFunctions;
@@ -88,6 +89,7 @@ export const Text = props => {
         style={getStyle(props)}
       />
 
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -137,6 +139,7 @@ export const Bool = props => {
           No
         </Radio>
       </RadioGroup>
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -173,6 +176,7 @@ export const Number = props => {
         onChange={onFieldChange.bind(this, props)}
         onBlur={e => props.onFieldChange(e, props)}
       />
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -210,6 +214,7 @@ export const Date = props => {
         defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"MM-DD-YYYY"}
       />
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -283,6 +288,7 @@ class Email2 extends React.Component {
           {...feedValue(props)}
         />
 
+        {fieldFlagDropdown(this, props)}
         {addCommentBtn(this, props)}
       </FormItem>
     );
@@ -356,6 +362,7 @@ class URL2 extends React.Component {
           {...feedValue(props)}
         />
 
+        {fieldFlagDropdown(this, props)}
         {addCommentBtn(this, props)}
       </FormItem>
     );
@@ -399,6 +406,7 @@ export const Checkbox = props => {
         }
         {...feedValue(props)}
       />
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -450,6 +458,7 @@ export const Select = props => {
           );
         })}
       </AntSelect>
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -485,6 +494,7 @@ export const Phone = props => {
         onBlur={e => props.onFieldChange(e, props)}
         //onBlur={handleInputBlur}
       />
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -518,6 +528,7 @@ export const List = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       list
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
@@ -694,6 +705,7 @@ class FileUpload extends Component {
             );
           })*/}
         </div>
+        {fieldFlagDropdown(this, this.props)}
         {addCommentBtn(this, this.props)}
       </FormItem>
     );
@@ -758,6 +770,7 @@ class AttachmentDownload extends Component {
             Download file
           </Button>
         </FormItem>
+        {fieldFlagDropdown(this, this.props)}
         {addCommentBtn(this, this.props)}
       </div>
     );
@@ -792,6 +805,7 @@ export const CascaderField = props => {
         onChange={onFieldChangeArray.bind(this, props)}
         options={props.field.definition.extra}
       />
+      {fieldFlagDropdown(this, props)}
       {addCommentBtn(this, props)}
     </FormItem>
   );
