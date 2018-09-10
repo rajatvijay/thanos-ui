@@ -341,7 +341,6 @@ class URL2 extends React.Component {
         hasFeedback
         {...this.fielderror(props)}
       >
-
         {!props.completed ? (
           <Input
             disabled={
