@@ -10,7 +10,7 @@ import {
   Menu,
   Tooltip,
   Carousel,
-  Radio
+  Switch
 } from "antd";
 import WorkflowList from "./workflow-list";
 import {
@@ -26,8 +26,6 @@ import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
 import StatusGraph from "./status-graph";
 import { veryfiyClient } from "../../utils/verification";
-
-const RadioGroup = Radio.Group;
 
 class Workflow extends Component {
   constructor(props) {
