@@ -248,10 +248,29 @@ class WorkflowItem extends React.Component {
         {/*show children here */}
         {hasChildren && this.state.showRelatedWorkflow ? (
           <div className="child-workflow-wrapper mr-top">
-            <ChildWorkflow
-              {...this.props}
-              getGroupedData={this.getGroupedData}
-            />
+            {_.map(this.getGroupedData(this.props.workflow.children), function(
+              childGroup
+            ) {
+              return (
+                <div className="mr-bottom">
+                  {_.map(childGroup, function(item, index) {
+                    let proccessedData = getProcessedData(item.step_groups);
+                    return (
+                      <WorkflowItem
+                        isChild={true}
+                        pData={proccessedData}
+                        workflow={item}
+                        key={index}
+                        kinds={that.props.kinds}
+                        dispatch={that.props.dispatch}
+                        workflowFilterType={that.props.workflowFilterType}
+                        statusView={that.props.statusView}
+                      />
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
         ) : null}
 
