@@ -152,12 +152,15 @@ class StepBodyForm extends Component {
         <Alert
           message={
             <div className="">
-              <span
-                className="float-right text-anchor text-underline "
-                onClick={this.onUndoStep.bind(this, step)}
-              >
-                Undo completion
-              </span>
+              {_.includes(this.props.permission, "Can undo a step") ? (
+                <span
+                  className="float-right text-anchor text-underline "
+                  onClick={this.onUndoStep.bind(this, step)}
+                >
+                  Undo completion
+                </span>
+              ) : null}
+
               {/*
               <span className="float-right pd-right-sm pd-left-sm">|</span>
               <span
@@ -347,7 +350,8 @@ class StepBodyForm extends Component {
               addComment: that.props.toggleSidebar,
               changeFlag: that.props.changeFlag,
               getIntegrationComments: that.props.getIntegrationComments,
-              dispatch: that.props.dispatch
+              dispatch: that.props.dispatch,
+              permission: that.props.permission
             };
 
             // console.log('param---------')
@@ -432,7 +436,8 @@ class StepBodyForm extends Component {
           <Col span="18">{this.getStepStatus(this.props.stepData)}</Col>
           <Col span="6" className="text-right">
             {this.props.stepData.completed_at ||
-            this.props.stepData.is_locked ? null : (
+            this.props.stepData.is_locked ||
+            !_.includes(this.props.permission, "Can submit a step") ? null : (
               <FormItem>
                 <Button type="primary" htmlType="submit">
                   Submit

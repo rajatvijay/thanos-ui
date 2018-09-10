@@ -252,6 +252,7 @@ class StepBody extends Component {
               version={this.props.stepVersionFields}
               showVersion={this.state.showVersion}
               versionToggle={this.versionToggle}
+              permission={this.props.config.permissions}
             />
           </div>
         ) : (

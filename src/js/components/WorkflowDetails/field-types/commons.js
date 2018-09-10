@@ -30,7 +30,8 @@ export const commonFunctions = {
   getLink,
   getStyle,
   getIntegrationSearchButton,
-  fieldFlagDropdown
+  fieldFlagDropdown,
+  isDisabled
 };
 
 //Utility func
@@ -265,4 +266,18 @@ function getIntegrationSearchButton(props) {
       </Col>
     </Row>
   );
+}
+
+function isDisabled(props) {
+  let disabled =
+    props.completed ||
+    props.is_locked ||
+    props.field.definition.disabled ||
+    !_.includes(props.permission, "Can add response") ||
+    !_.includes(props.permission, "Can change response") ||
+    !_.includes(props.permission, "Can delete response")
+      ? true
+      : false;
+
+  return disabled;
 }

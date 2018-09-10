@@ -5,6 +5,7 @@ import _ from "lodash";
 import { countries } from "./countries.js";
 import { dunsFieldActions } from "../../../actions";
 import { commonFunctions } from "./commons";
+import FinancialData from "./FinancialData";
 
 const {
   getLabel,
@@ -42,7 +43,7 @@ class DnBSearch extends Component {
 
   render = () => {
     let { field } = this.props;
-
+    let financial = false;
     const props = {
       field: field,
       queryChange: this.queryChange,
@@ -78,10 +79,18 @@ class DnBSearch extends Component {
       }
     }
 
+    if (
+      _.size(props.field.integration_json) &&
+      this.props.field.definition.field_type === "dnb_financials"
+    ) {
+      financial = true;
+    }
+
     return (
       <div>
         {getFields(props)}
         {final_html}
+        {financial ? <FinancialData {...props} /> : null}
         <br />
       </div>
     );

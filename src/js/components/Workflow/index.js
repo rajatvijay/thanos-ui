@@ -56,12 +56,6 @@ class Workflow extends Component {
   componentDidMount = () => {
     //this.reloadWorkflowList();
 
-    if (this.props.authentication.user) {
-      if (this.isUserAuthenticated()) {
-        this.setState({ isUserAuthenticated: true });
-      }
-    }
-
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
@@ -171,32 +165,6 @@ class Workflow extends Component {
     console.log("lodad");
   };
 
-  isUserAuthenticated = () => {
-    let pass = false;
-    let currentUser = this.props.authentication.user.id;
-
-    switch (currentUser) {
-      case 11:
-        pass = true;
-        break;
-      case 10:
-        pass = true;
-        break;
-      case 13:
-        pass = true;
-        break;
-      case 2:
-        pass = true;
-        break;
-      case 228:
-        pass = true;
-        break;
-      default:
-        pass = false;
-    }
-    return pass;
-  };
-
   toggleListView = status => {
     this.setState({ statusView: status });
   };
@@ -232,7 +200,10 @@ class Workflow extends Component {
                     </span>
                   </Col>
                   <Col span="12" className="text-right export-section">
-                    {this.state.isUserAuthenticated ? (
+                    {_.includes(
+                      this.props.config.permissions,
+                      "Can export workflow data"
+                    ) ? (
                       <Tooltip title={"Export workflow data"}>
                         <Dropdown
                           overlay={this.getExportList()}
@@ -270,7 +241,10 @@ class Workflow extends Component {
                     </span>
                   </Col>
                   <Col span="12" className="text-right export-section">
-                    {this.state.isUserAuthenticated ? (
+                    {_.includes(
+                      this.props.config.permissions,
+                      "Can export workflow data"
+                    ) ? (
                       <Tooltip title={"Export workflow data"}>
                         <Dropdown
                           overlay={this.getExportList()}

@@ -44,7 +44,8 @@ const {
   addCommentBtn,
   fieldFlagDropdown,
   getLink,
-  getStyle
+  getStyle,
+  isDisabled
 } = commonFunctions;
 
 //Field Type Text
@@ -70,9 +71,7 @@ export const Text = props => {
       {...field_error(props)}
     >
       <TextArea
-        disabled={
-          props.completed || props.is_locked || props.field.definition.disabled
-        }
+        disabled={isDisabled(props)}
         //type="textarea"
         row={3}
         placeholder={props.field.placeholder}
@@ -118,24 +117,10 @@ export const Bool = props => {
         onChange={e => props.onFieldChange(e, props)}
         defaultValue={defVal ? defVal : null}
       >
-        <Radio
-          value={"True"}
-          disabled={
-            props.completed ||
-            props.is_locked ||
-            props.field.definition.disabled
-          }
-        >
+        <Radio value={"True"} disabled={isDisabled(props)}>
           Yes
         </Radio>
-        <Radio
-          disabled={
-            props.completed ||
-            props.is_locked ||
-            props.field.definition.disabled
-          }
-          value={"False"}
-        >
+        <Radio disabled={isDisabled(props)} value={"False"}>
           No
         </Radio>
       </RadioGroup>
@@ -158,9 +143,7 @@ export const Number = props => {
       {...field_error(props)}
     >
       <InputNumber
-        disabled={
-          props.completed || props.is_locked || props.field.definition.disabled
-        }
+        disabled={isDisabled(props)}
         min={1}
         type="number"
         style={{ width: "100%" }}
@@ -205,9 +188,7 @@ export const Date = props => {
       {...field_error(props)}
     >
       <DatePicker
-        disabled={
-          props.completed || props.is_locked || props.field.definition.disabled
-        }
+        disabled={isDisabled(props)}
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
@@ -268,11 +249,7 @@ class Email2 extends React.Component {
         {...this.fielderror()}
       >
         <Input
-          disabled={
-            props.completed ||
-            props.is_locked ||
-            props.field.definition.disabled
-          }
+          disabled={isDisabled(props)}
           placeholder={props.field.placeholder}
           prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
           type="email"
@@ -343,11 +320,7 @@ class URL2 extends React.Component {
       >
         {!props.completed ? (
           <Input
-            disabled={
-              props.completed ||
-              props.is_locked ||
-              props.field.definition.disabled
-            }
+            disabled={isDisabled(props)}
             placeholder={props.field.placeholder}
             prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
             type="url"
@@ -415,9 +388,7 @@ export const Checkbox = props => {
       {...field_error(props)}
     >
       <CheckboxGroup
-        disabled={
-          props.completed || props.is_locked || props.field.definition.disabled
-        }
+        disabled={isDisabled(props)}
         style={{ width: "100%" }}
         options={
           !_.isEmpty(props.field.definition.extra)
@@ -463,9 +434,7 @@ export const Select = props => {
         allowClear
         mode={single ? "default" : "multiple"}
         style={getStyle(props)}
-        disabled={
-          props.completed || props.is_locked || props.field.definition.disabled
-        }
+        disabled={isDisabled(props)}
         defaultValue={
           props.field.answers[0]
             ? single
@@ -504,9 +473,7 @@ export const Phone = props => {
       {...field_error(props)}
     >
       <ReactTelInput
-        disabled={
-          props.completed || props.is_locked || props.field.definition.disabled
-        }
+        disabled={isDisabled(props)}
         value={
           props.field.answers[0]
             ? props.field.answers[0].answer
@@ -643,7 +610,7 @@ class FileUpload extends Component {
           rejectClassName="file-upload-field-reject"
           onDrop={this.onUpload}
           multiple={false}
-          disabled={this.state.loading || this.props.completed}
+          disabled={this.state.loading || isDisabled(this.props)}
         >
           <div className="drop-area-text">
             {!this.state.loading ? (
@@ -820,9 +787,7 @@ export const CascaderField = props => {
       {...field_error(props)}
     >
       <Cascader
-        disabled={
-          props.completed || props.is_locked || props.field.definition.disabled
-        }
+        disabled={isDisabled(props)}
         defaultValue={
           props.field.answers[0]
             ? stringToArray(props.field.answers[0])
