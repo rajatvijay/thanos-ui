@@ -354,11 +354,13 @@ const GetQuickData = props => {
                 <span key={index} className="step-item">
                   <span className={"title-c text-normal text-light pd-right"}>
                     {lcItem.label}:
-                    <span className={" text-normal pd-left text-base"}>
-                      {lcItem.value}
-                    </span>
                   </span>
-                  <span className="dash"> </span>
+                  {props.column ? <br /> : null}
+                  <span className={" text-normal  text-base"}>
+                    {lcItem.value}
+                  </span>
+
+                  {props.column ? null : <span className="dash"> </span>}
                 </span>
               );
             }
@@ -417,7 +419,7 @@ export const WorkflowHeader = props => {
 
         <HeaderTitle {...props} />
 
-        {!props.statusView ? (
+        {!props.statusView && !props.detailsPage ? (
           <Col span={12}>
             <GetQuickData {...props} />
           </Col>
@@ -446,9 +448,11 @@ export const WorkflowBody = props => {
       <Divider />
 
       {!props.statusView ? (
-        <Col span={24}>
-          <GetQuickData {...props} column={true} />
-        </Col>
+        <Row align="top">
+          <Col span={24}>
+            <GetQuickData {...props} column={true} />
+          </Col>
+        </Row>
       ) : (
         <StepGroupList {...props} />
       )}

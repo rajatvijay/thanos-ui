@@ -41,7 +41,6 @@ class Workflow extends Component {
 
   componentDidMount = () => {
     //this.reloadWorkflowList();
-
     if (!this.props.users.me) {
       this.checkAuth();
     }
@@ -195,12 +194,10 @@ class Workflow extends Component {
 
   toggleListView = status => {
     this.setState({ statusView: status });
+  };
 
-    if (!status) {
-      return true;
-    } else {
-      return false;
-    }
+  checkAuth = () => {
+    this.props.dispatch(checkAuth());
   };
 
   checkAuth = () => {
@@ -301,9 +298,9 @@ class Workflow extends Component {
               </Col>
               <Col span="12">
                 <div className="text-right list-toggle-btn">
-                  <span className="pd-right t-14">Status</span>
+                  <span className="pd-right t-14">Workflow view</span>
                   <Switch defaultChecked onChange={this.toggleListView} />
-                  <span className="pd-left  t-14">Quick overview</span>
+                  <span className="pd-left  t-14"> Details view</span>
                 </div>
               </Col>
             </Row>
@@ -353,6 +350,7 @@ function mapStateToProps(state) {
     workflow,
     authentication,
     workflowKind,
+    workflowGroupCount,
     users
   } = state;
   return {
@@ -361,6 +359,7 @@ function mapStateToProps(state) {
     workflowFilters,
     workflowKind,
     authentication,
+    workflowGroupCount,
     users
   };
 }

@@ -1202,6 +1202,9 @@ template {
 .workflow-container .list-view-header {
   margin: 0 78px;
 }
+.workflow-container .list-view-header .list-toggle-btn .ant-switch {
+  background-color: #6178ea;
+}
 .workflow-list .grouping-head {
   font-size: 14px;
   font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
@@ -1411,9 +1414,15 @@ template {
   text-decoration: none;
   color: #343b4c;
 }
+.lc-card .lc-card-body .step-ui {
+  column-count: 3;
+  column-rule-style: solid;
+  column-rule-width: 1px;
+  column-rule-color: #d9d9d9;
+  margin-bottom: 20px;
+}
 .lc-card .lc-card-body .step-item {
   display: block;
-  padding: 10px;
 }
 .lc-card .lc-card-body .step-ui .title-c {
   max-width: 100%;
@@ -1483,7 +1492,7 @@ template {
 .ant-form.step-form .react-tel-input.disabled input {
   background-color: #f5f5f5;
   border-color: #e6d8d8;
-  color: rgba(0, 0, 0, 0.35);
+  color: rgba(0, 0, 0, 0.4);
 }
 .ant-form.step-form .react-tel-input.disabled input:hover,
 .ant-form.step-form .react-tel-input.disabled input:focus {
@@ -1508,6 +1517,10 @@ template {
 .ant-form.step-form .ant-select-enabled .ant-select-selection:hover {
   border-color: #6178ea;
 }
+.ant-form.step-form .ant-input-disabled,
+.ant-form.step-form .ant-select-disabled {
+  color: rgba(0, 0, 0, 0.4);
+}
 .ant-form.step-form .file-upload-field {
   width: 100%;
   border: 2px dashed #a0a0a0;
@@ -1519,7 +1532,7 @@ template {
   background-color: #f5f5f5;
   border-color: #e6d8d8;
   cursor: not-allowed;
-  color: rgba(0, 0, 0, 0.35);
+  color: rgba(0, 0, 0, 0.4);
 }
 .ant-form.step-form .file-upload-field .upload-drag-icon {
   padding: 20px 20px 0 20px;

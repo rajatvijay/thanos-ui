@@ -15,7 +15,15 @@ const getFields = props => {
     dnb_risk_score: "Get Risk scores",
     dnb_data_reader: "Get Data",
     salesforce: "Post Salesforce data",
-    dnb_livingstone: "DnB Livingstone"
+    dnb_livingstone: "DnB Livingstone",
+    dnb_directors: "DnB Directors",
+    iban_search: "Validate IBAN",
+    eu_vat_check: "Validate VAT",
+    us_tin_check: "Validate TIN",
+    charity_check: "Get Charity Information",
+    dnb_livingstone: "DnB Livingstone",
+    iban_search: "Validate IBAN",
+    eu_vat_check: "Validate VAT"
   };
 
   return (
