@@ -11,6 +11,9 @@ const { getProcessedData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
 
 const StepSidebar = props => {
+  console.clear();
+  console.log("props........");
+  console.log(props);
   return (
     <Sider
       width={250}

@@ -45,7 +45,6 @@ export const login = (username, password) => async dispatch => {
 
     dispatch({ type: userConstants.LOGIN_FAILURE, error });
     dispatch({ type: userConstants.GETME_FAILURE, error });
-    // dispatch(alertActions.error(error));
   }
 };
 
@@ -111,15 +110,14 @@ export const checkAuth = () => async dispatch => {
       user: response
     });
 
-    dispatch({
-      type: userConstants.LOGIN_SUCCESS,
-      user: response
-    });
-
-    history.push("/");
+    if (
+      window.location.pathname === "/login/magic" ||
+      window.location.pathname === "/login"
+    ) {
+      history.push("/");
+    }
   } catch (error) {
     dispatch({ type: userConstants.GETME_FAILURE, error });
-    // dispatch(alertActions.error(error));
   }
 };
 

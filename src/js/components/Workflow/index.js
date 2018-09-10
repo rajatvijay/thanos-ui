@@ -37,10 +37,6 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true
     };
-  }
-
-  componentDidMount = () => {
-    //this.reloadWorkflowList();
     if (!this.props.users.me) {
       this.checkAuth();
     }
@@ -49,11 +45,15 @@ class Workflow extends Component {
       this.props.dispatch(configActions.getConfig());
     }
 
-    if (this.props.users.me.error) {
+    if (!this.props.users.me || this.props.users.me.error) {
       if (!veryfiyClient(this.props.authentication.user.csrf)) {
         this.props.dispatch(logout());
       }
     }
+  }
+
+  componentDidMount = () => {
+    //this.reloadWorkflowList();
 
     if (this.props.authentication.user) {
       if (this.isUserAuthenticated()) {
