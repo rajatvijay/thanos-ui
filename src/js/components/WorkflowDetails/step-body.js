@@ -10,7 +10,8 @@ class StepBody extends Component {
     super(props);
     this.state = {
       stepCompletedBy: null,
-      stepApprovedBy: null
+      stepApprovedBy: null,
+      printing: false
     };
   }
 
@@ -78,6 +79,21 @@ class StepBody extends Component {
     );
   };
 
+  printDiv = () => {
+    var that = this;
+    this.setState({ printing: true });
+
+    setTimeout(function() {
+      var printContents = document.getElementById("StepBody").innerHTML;
+      var originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents;
+      window.print();
+      that.setState({ printing: false });
+      document.body.innerHTML = originalContents;
+      //document.location.reload();
+    }, 500);
+  };
+
   render = () => {
     const loading =
       this.props.currentStepFields.loading ||
@@ -120,7 +136,18 @@ class StepBody extends Component {
       }
 
       var step_comment_btn = (
-        <div className="text-right">
+        <div
+          className={
+            "text-right " + (this.state.printing ? "hide-print" : null)
+          }
+        >
+          <span
+            onClick={this.printDiv}
+            className=" ant-btn ant-btn-sm "
+            style={{ position: "relative", top: "-62px", right: "-18px" }}
+          >
+            Print <i className="material-icons t-14 text-middle">print</i>
+          </span>
           {this.versionDropDown()}
           <span className="display-inline-block pd-right-sm"> </span>
           <span
@@ -136,6 +163,49 @@ class StepBody extends Component {
 
     return (
       <div className="pd-ard-lg">
+        {this.state.printing ? (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+                @page {
+                  margin-top: 20px ;
+                }
+                .printOnly .hide-print {
+                  display: none;
+                }
+                .printOnly .print-header {
+                  display: block !important;
+                  margin: 48px 48px;
+                }
+                .printOnly .logo {
+                  max-width: 150px;
+                }
+                .printOnly #StepBody .pd-ard-lg {
+                  padding: 0px !important;
+                }
+                .printOnly #StepBody .add_comment_btn {
+                  display:none;
+                }
+                .hide-print {
+                  display: none !important;
+                }
+              `
+            }}
+          />
+        ) : (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+                .printOnly .print-header {
+                  display:none;
+                } 
+                .hide-print {
+                  display: block;
+                }
+              `
+            }}
+          />
+        )}
         {locked_tag}
         {locked_tag ? <br /> : null}
         {!loading ? step_comment_btn : null}

@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Tooltip } from "antd";
+import { Layout, Icon, Tooltip, Divider } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import StepBody from "./step-body.js";
 import { baseUrl, authHeader } from "../../_helpers";
+import Moment from "react-moment";
 import {
   workflowDetailsActions,
   workflowActions,
   workflowFiltersActions,
   workflowStepActions,
-  logout
+  logout,
+  checkAuth
 } from "../../actions";
 import { WorkflowHeader } from "../Workflow/workflow-item";
 import Comments from "./comments";
@@ -30,7 +32,8 @@ class WorkflowDetails extends Component {
     this.state = {
       workflowId: null,
       selectedStep: null,
-      selectedGroup: null
+      selectedGroup: null,
+      printing: false
     };
     let params = props.location.search;
     let qs = this.queryStringToObject(params);
@@ -144,6 +147,10 @@ class WorkflowDetails extends Component {
   };
 
   componentDidMount = () => {
+    if (!this.props.users.me) {
+      this.checkAuth();
+    }
+
     if (!veryfiyClient(this.props.authentication.user.csrf)) {
       this.props.dispatch(logout());
     }
@@ -156,6 +163,10 @@ class WorkflowDetails extends Component {
     this.getHeaderData();
     this.props.dispatch(workflowFiltersActions.getStatusData());
     window.scrollTo(0, 0);
+  };
+
+  checkAuth = () => {
+    this.props.dispatch(checkAuth());
   };
 
   //Quesry string  to object
@@ -238,12 +249,6 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateFlag(payload));
   };
 
-  addComment = payload => {
-    this.state.adding_comment = true;
-    this.state.object_id = payload.object_id;
-    this.props.dispatch(workflowStepActions.addComment(payload));
-  };
-
   render() {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
@@ -298,12 +303,34 @@ class WorkflowDetails extends Component {
             paddingTop: "30px"
           }}
         >
-          <div className="mr-ard-lg  shadow-1 bg-white">
-            <StepBody
-              toggleSidebar={this.callBackCollapser}
-              getIntegrationComments={this.getIntegrationComments}
-            />
+          <div className="printOnly ">
+            <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
+              <div className="print-header ">
+                <img
+                  alt={this.props.config.name}
+                  src={this.props.config.logo}
+                  className="logo"
+                />
+                <br />
+                <br />
+                <h3>
+                  {this.props.workflowDetailsHeader.workflowDetailsHeader
+                    ? this.props.workflowDetailsHeader.workflowDetailsHeader
+                        .name
+                    : " "}
+                </h3>
+                <p>
+                  Printed on: <Moment format="MM/DD/YYYY">{Date.now()}</Moment>
+                </p>
+                <Divider />
+              </div>
+              <StepBody
+                toggleSidebar={this.callBackCollapser}
+                getIntegrationComments={this.getIntegrationComments}
+              />
+            </div>
           </div>
+
           <div className="text-right pd-ard mr-ard-md">
             <Tooltip title="Scroll to top" placement="topRight">
               <span
@@ -342,7 +369,9 @@ function mapStateToProps(state) {
     workflowKind,
     workflowComments,
     authentication,
-    hasStepinfo
+    hasStepinfo,
+    users,
+    config
   } = state;
   return {
     workflowDetails,
@@ -351,7 +380,9 @@ function mapStateToProps(state) {
     workflowKind,
     workflowComments,
     authentication,
-    hasStepinfo
+    hasStepinfo,
+    users,
+    config
   };
 }
 

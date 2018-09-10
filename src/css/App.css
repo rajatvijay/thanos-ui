@@ -53,6 +53,7 @@
  * © 2018 MyFonts Inc
 */
 /* @import must be at top of file, otherwise CSS will not work */
+@import url("utilities/print.css");
 @font-face {
   font-family: "AvenirLTPro-Light";
   src: url("fonts/370AEC_0_0.eot");
@@ -1383,6 +1384,14 @@ template {
 .workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background: #f2f5fa;
   color: #343b4c;
+}
+.workflow-details-container
+  .ant-layout-sider
+  .ant-menu-submenu
+  > .ant-menu:not(.ant-menu-horizontal)
+  .ant-menu-item-selected
+  .print-header {
+  display: none;
 }
 .aux-step-sidebar .ant-menu .ant-menu-item:-active {
   color: #343b4c;

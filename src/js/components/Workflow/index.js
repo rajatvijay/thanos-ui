@@ -49,7 +49,7 @@ class Workflow extends Component {
       this.props.dispatch(configActions.getConfig());
     }
 
-    if (!this.props.users.me || this.props.users.me.error) {
+    if (this.props.users.me.error) {
       if (!veryfiyClient(this.props.authentication.user.csrf)) {
         this.props.dispatch(logout());
       }
@@ -59,6 +59,10 @@ class Workflow extends Component {
       if (this.isUserAuthenticated()) {
         this.setState({ isUserAuthenticated: true });
       }
+    }
+
+    if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+      this.setState({ defKind: true });
     }
   };
 

@@ -33,6 +33,7 @@ class WorkflowFilterTop extends Component {
   componentDidMount = () => {
     //this.fetchCountData();
     let tag = this.props.workflowFilters.kind.meta.tag;
+
     this.props.dispatch(workflowKindActions.getCount(tag));
 
     this.props.dispatch(workflowKindActions.getStatusCount(tag));

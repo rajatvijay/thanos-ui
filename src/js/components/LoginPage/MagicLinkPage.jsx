@@ -11,10 +11,6 @@ class MagicLoginPage extends React.Component {
     super(props);
   }
 
-  componentDidMount = () => {
-    //this.props.dispatch(logout());
-  };
-
   render = () => {
     if (localStorage.getItem("user")) {
       return <Redirect to={"/workflows/instances/"} />;
