@@ -9,10 +9,12 @@ import {
   workflowDetailsActions,
   workflowActions,
   workflowFiltersActions,
-  workflowStepActions
+  workflowStepActions,
+  logout
 } from "../../actions";
 import { WorkflowHeader } from "../Workflow/workflow-item";
 import Comments from "./comments";
+import { veryfiyClient } from "../../utils/verification";
 
 const requestOptions = {
   method: "GET",
@@ -92,7 +94,6 @@ class WorkflowDetails extends Component {
     }
   };
 
-
   //componentDidUpdate = prevProps => {
   componentWillReceiveProps = nextProps => {
     if (nextProps.workflowDetails.loading === false) {
@@ -130,6 +131,10 @@ class WorkflowDetails extends Component {
   };
 
   componentDidMount = () => {
+    if (!veryfiyClient(this.props.authentication.user.csrf)) {
+      this.props.dispatch(logout());
+    }
+
     var that = this;
     var id = parseInt(that.props.match.params.id, 10);
 
@@ -303,14 +308,16 @@ function mapStateToProps(state) {
     workflowDetailsHeader,
     workflowFilterType,
     workflowKind,
-    workflowComments
+    workflowComments,
+    authentication
   } = state;
   return {
     workflowDetails,
     workflowDetailsHeader,
     workflowFilterType,
     workflowKind,
-    workflowComments
+    workflowComments,
+    authentication
   };
 }
 
