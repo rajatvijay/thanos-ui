@@ -360,7 +360,6 @@ class URL2 extends React.Component {
             </span>
           </span>
         )}
-
         {fieldFlagDropdown(this, props)}
         {addCommentBtn(this, props)}
       </FormItem>
