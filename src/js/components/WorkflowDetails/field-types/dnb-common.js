@@ -21,6 +21,8 @@ const getFields = props => {
     eu_vat_check: "Validate VAT",
     us_tin_check: "Validate TIN",
     charity_check: "Get Charity Information",
+    whois_search: "Get WhoIS data",
+    clearbit_search: "Get Clearbit data"
   };
 
   return (
