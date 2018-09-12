@@ -104,6 +104,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "clearbit_search":
       return DnBCommon(props);
+    case "csv_search":
+      return DnBCommon(props);
     case "ln_search":
       return LexisNexis(props);
     case "salesforce":

@@ -22,18 +22,32 @@ const getFields = props => {
     us_tin_check: "Validate TIN",
     charity_check: "Get Charity Information",
     whois_search: "Get WhoIS data",
-    clearbit_search: "Get Clearbit data"
+    clearbit_search: "Get Clearbit data",
+    csv_search: "Search CSV"
   };
+
+  let button_name = type_button_map[props.field.definition.field_type];
+  _.map(props.field.search_param_data, function(c) {
+    if (c.button_text) {
+      button_name = c.button_text;
+      return false;
+    }
+  });
 
   return (
     <Row gutter={16} style={{ marginBottom: "50px" }}>
-      <Col span={4}>
-        <Button type="primary" className="btn-block" onClick={props.onSearch}>
-          {type_button_map[props.field.definition.field_type]}
+      <Col>
+        <Button
+          type="primary"
+          className="btn-block float-left"
+          onClick={props.onSearch}
+          style={{ width: "auto", marginRight: "20px" }}
+        >
+          {button_name}
         </Button>
       </Col>
 
-      <Col span={12} style={{ marginTop: "5px" }}>
+      <Col style={{ marginTop: "5px" }}>
         {_.map(props.field.search_param_data, function(item) {
           if (_.size(item.answer) && item.answer.answer)
             return (
