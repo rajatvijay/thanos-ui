@@ -53,10 +53,23 @@ function comment_answer_body(c) {
         <div style={{ fontSize: "14px", textAlign: "left" }}>
           {c.target.field_details.name}
         </div>
-        <div style={{ textAlign: "left", fontSize: "13px" }}>
-          {_.size(c.target.field_details.answer)
-            ? c.target.field_details.answer[0].answer
-            : "-"}
+        <div className="ant-form-item-control-wrapper">
+          <div className="ant-form-item-control ">
+            <span className="ant-form-item-children">
+              <span
+                className="ant-input ant-input-disabled"
+                style={
+                  c.target.selected_flag[c.target.id]
+                    ? c.target.selected_flag[c.target.id].flag_detail.extra
+                    : null
+                }
+              >
+                {_.size(c.target.field_details.answer)
+                  ? c.target.field_details.answer[0].answer
+                  : "-"}
+              </span>
+            </span>
+          </div>
         </div>
       </div>
     );
