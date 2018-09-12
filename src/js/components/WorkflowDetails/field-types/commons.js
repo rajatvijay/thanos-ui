@@ -1,4 +1,17 @@
 import React, { Component } from "react";
+import {
+  Form,
+  Input,
+  Button,
+  Row,
+  Col,
+  Table,
+  Icon,
+  Divider,
+  Select,
+  Tabs,
+  Tag
+} from "antd";
 import _ from "lodash";
 
 export const commonFunctions = {
@@ -13,7 +26,8 @@ export const commonFunctions = {
   addComment,
   addCommentBtn,
   getLink,
-  getStyle
+  getStyle,
+  getIntegrationSearchButton
 };
 
 //Utility func
@@ -135,4 +149,65 @@ function getStyle(props, extra) {
     css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
   }
   return css;
+}
+
+function getIntegrationSearchButton(props) {
+  // need to figure out how to change the name on search button
+
+  let type_button_map = {
+    dnb_company_profile: "Get Company profile",
+    dnb_risk_score: "Get Risk scores",
+    dnb_data_reader: "Get Data",
+    salesforce: "Post Salesforce data",
+    dnb_directors: "DnB Directors",
+    iban_search: "Validate IBAN",
+    eu_vat_check: "Validate VAT",
+    us_tin_check: "Validate TIN",
+    charity_check: "Get Charity Information",
+    whois_search: "Get WhoIS data",
+    clearbit_search: "Get Clearbit data",
+    csv_search: "Search CSV",
+    ln_search: "Search LexisNexis",
+    dnb_livingstone: "Screen for Sanctions & Watchlists",
+    dnb_ubo: "Get UBOs",
+    dnb_directors: "Get List of Directors",
+    dnb_duns_search: "Search D-U-N-S",
+    dnb_duns_search_direct_plus: "Search D-U-N-S Direct+",
+    google_search: "Google Search"
+  };
+
+  let button_name = type_button_map[props.field.definition.field_type];
+  _.map(props.field.search_param_data, function(c) {
+    if (c.button_text) {
+      button_name = c.button_text;
+      return false;
+    }
+  });
+
+  return (
+    <Row gutter={16} style={{ marginBottom: "50px" }}>
+      <Col>
+        <Button
+          type="primary"
+          className="btn-block float-left"
+          onClick={props.onSearch}
+          style={{ width: "auto", marginRight: "20px" }}
+        >
+          {button_name}
+        </Button>
+      </Col>
+
+      <Col style={{ marginTop: "5px" }}>
+        {_.map(props.field.search_param_data, function(item) {
+          if (_.size(item.answer) && item.answer.answer)
+            return (
+              <div className="float-left" style={{ marginRight: "15px" }}>
+                <span>{item.answer.field__definition__body}</span>:{" "}
+                <span>{item.answer.answer}</span>,
+              </div>
+            );
+        })}
+      </Col>
+    </Row>
+  );
 }

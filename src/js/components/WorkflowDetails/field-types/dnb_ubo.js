@@ -33,33 +33,13 @@ const {
   field_error,
   getRequired,
   feedValue,
-  addCommentBtn
+  addCommentBtn,
+  getIntegrationSearchButton
 } = commonFunctions;
 
 //Field Type DUNS SEARCH
-
 const getFields = props => {
-  return (
-    <Row gutter={16} style={{ marginBottom: "50px" }}>
-      <Col span={4}>
-        <Button type="primary" className="btn-block" onClick={props.onSearch}>
-          Get UBOs
-        </Button>
-      </Col>
-
-      <Col span={12} style={{ marginTop: "5px" }}>
-        {_.map(props.field.search_param_data, function(item) {
-          if (_.size(item.answer) && item.answer.answer)
-            return (
-              <div className="float-left" style={{ marginRight: "15px" }}>
-                <span>{item.answer.field__definition__body}</span>:{" "}
-                <span>{item.answer.answer}</span>,
-              </div>
-            );
-        })}
-      </Col>
-    </Row>
-  );
+  return getIntegrationSearchButton(props);
 };
 
 //duns field
