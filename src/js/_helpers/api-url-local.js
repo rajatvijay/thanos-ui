@@ -18,6 +18,6 @@ const subDomainUrl = site => {
   return domain;
 };
 
-export const baseUrl = "http://vetted.local:3000/api/v1/"; //getSite();
+export const baseUrl = getSite();
 
-export const baseUrl2 = "http://vetted.local:3000/api/v1/"; //subDomainUrl();
+export const baseUrl2 = subDomainUrl();
