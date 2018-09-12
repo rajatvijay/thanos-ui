@@ -144,6 +144,8 @@ const GetTable = props => {
   }
 
   if (
+    !props.jsonData.OrderProductResponse.OrderProductResponseDetail.Product
+      .Organization.PrincipalsAndManagement ||
     !_.size(
       props.jsonData.OrderProductResponse.OrderProductResponseDetail.Product
         .Organization.PrincipalsAndManagement.CurrentPrincipal
