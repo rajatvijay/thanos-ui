@@ -12,7 +12,7 @@ import {
   workflowGroupCount,
   workflowKindStatus
 } from "./workflow_kind";
-import { workflowDetails } from "./workflow_details";
+import { workflowDetails, hasStepinfo } from "./workflow_details";
 import { workflowDetailsHeader } from "./workflow_details_header";
 import { workflowFilters, workflowFilterType } from "./workflow_filters";
 import { currentStepFields } from "./workflow_step";
@@ -32,6 +32,7 @@ const rootReducer = combineReducers({
   workflowGroupCount,
   workflowKindStatus,
   workflowDetails,
+  hasStepinfo,
   workflowCreate,
   currentStepFields,
   workflowFilters,

@@ -1,5 +1,11 @@
 import { workflowDetailsConstants } from "../constants";
 
+const initialState = {
+  loading: false,
+  workflowDetails: {},
+  error: null
+};
+
 export function workflowDetails(state = {}, action) {
   switch (action.type) {
     //Workflow detials
@@ -29,6 +35,25 @@ export function workflowDetails(state = {}, action) {
     case workflowDetailsConstants.GET_STEPGROUPS_FAILURE:
       return {
         error: action.error
+      };
+
+    default:
+      return state;
+  }
+}
+
+export function hasStepinfo(state = { stepInfo: false }, action) {
+  switch (action.type) {
+    //
+    case workflowDetailsConstants.SET_STEP_ID:
+      return {
+        ...state,
+        stepInfo: action.payload
+      };
+
+    case workflowDetailsConstants.REMOVE_STEP_ID:
+      return {
+        stepInfo: false
       };
 
     default:

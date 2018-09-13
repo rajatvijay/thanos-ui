@@ -43,54 +43,67 @@ class WorkflowDetails extends Component {
     if (qs.object_id && qs.type) {
       props.dispatch(workflowDetailsActions.getComment(qs.object_id, qs.type));
     }
+
+    if (!_.isEmpty(qs)) {
+      props.dispatch(workflowDetailsActions.setCurrentStepId(qs));
+    }
   }
 
   currentActiveStep = wfd => {
-    let activeStepGroup = null;
-    let activeStep = null;
+    if (this.props.hasStepinfo.stepInfo) {
+      let stepinfo = this.props.hasStepinfo.stepInfo;
+      this.props.dispatch(workflowDetailsActions.removeCurrentStepId());
+      return {
+        activeStepGroup: stepinfo.group,
+        activeStep: stepinfo.step
+      };
+    } else {
+      let activeStepGroup = null;
+      let activeStep = null;
 
-    _.forEach(wfd.stepGroups.results, function(step_group) {
-      if (step_group.is_complete || _.isEmpty(step_group.steps)) {
-        return;
-      }
-      activeStepGroup = step_group;
-      _.forEach(step_group.steps, function(step) {
-        if (!step.completed_at && !step.is_locked) {
-          activeStep = step;
+      _.forEach(wfd.stepGroups.results, function(step_group) {
+        if (step_group.is_complete || _.isEmpty(step_group.steps)) {
+          return;
+        }
+        activeStepGroup = step_group;
+        _.forEach(step_group.steps, function(step) {
+          if (!step.completed_at && !step.is_locked) {
+            activeStep = step;
+            return false;
+          }
+        });
+        if (activeStep) {
           return false;
         }
       });
-      if (activeStep) {
-        return false;
+
+      // this conditions is satisfied only when all step groups are completed
+      if (!activeStepGroup) {
+        let last_sg_index = wfd.stepGroups.results.length - 1;
+        activeStepGroup = wfd.stepGroups.results[last_sg_index];
+        let last_step_index = activeStepGroup.steps.length - 1;
+        activeStep = activeStepGroup.steps[last_step_index];
       }
-    });
 
-    // this conditions is satisfied only when all step groups are completed
-    if (!activeStepGroup) {
-      let last_sg_index = wfd.stepGroups.results.length - 1;
-      activeStepGroup = wfd.stepGroups.results[last_sg_index];
-      let last_step_index = activeStepGroup.steps.length - 1;
-      activeStep = activeStepGroup.steps[last_step_index];
-    }
+      // this condition will occur when step is available but steps inside are not available for edit (i.e. locked/completed)
+      if (activeStepGroup && !activeStep) {
+        let last_step_index = activeStepGroup.steps.length - 1;
+        activeStep = activeStepGroup.steps[last_step_index];
+      }
 
-    // this condition will occur when step is available but steps inside are not available for edit (i.e. locked/completed)
-    if (activeStepGroup && !activeStep) {
-      let last_step_index = activeStepGroup.steps.length - 1;
-      activeStep = activeStepGroup.steps[last_step_index];
-    }
-
-    if (activeStep) {
-      return {
-        activeStepGroup: activeStepGroup,
-        activeStep: activeStep
-      };
-    } else {
-      let actStepGrp = wfd.stepGroups.results[0];
-      let actStep = wfd.stepGroups.results[0].steps[0];
-      return {
-        activeStepGroup: actStepGrp,
-        activeStep: actStep
-      };
+      if (activeStep) {
+        return {
+          activeStepGroup: activeStepGroup,
+          activeStep: activeStep
+        };
+      } else {
+        let actStepGrp = wfd.stepGroups.results[0];
+        let actStep = wfd.stepGroups.results[0].steps[0];
+        return {
+          activeStepGroup: actStepGrp,
+          activeStep: actStep
+        };
+      }
     }
   };
 
@@ -328,7 +341,8 @@ function mapStateToProps(state) {
     workflowFilterType,
     workflowKind,
     workflowComments,
-    authentication
+    authentication,
+    hasStepinfo
   } = state;
   return {
     workflowDetails,
@@ -336,7 +350,8 @@ function mapStateToProps(state) {
     workflowFilterType,
     workflowKind,
     workflowComments,
-    authentication
+    authentication,
+    hasStepinfo
   };
 }
 

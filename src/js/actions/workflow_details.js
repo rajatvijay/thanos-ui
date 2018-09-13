@@ -24,7 +24,9 @@ export const workflowDetailsActions = {
   getStepGroup,
   getStepFields,
   getComment,
-  getStepVersionFields
+  getStepVersionFields,
+  setCurrentStepId,
+  removeCurrentStepId
 };
 
 //Get workflow details
@@ -177,4 +179,14 @@ function getStepVersionFields(step) {
   function failure(error) {
     return { type: stepVersionConstants.GET_VERSION_FAILURE, error };
   }
+}
+
+//url has step info
+function setCurrentStepId(payload) {
+  return { type: workflowDetailsConstants.SET_STEP_ID, payload };
+}
+
+//url has step info
+function removeCurrentStepId() {
+  return { type: workflowDetailsConstants.REMOVE_STEP_ID };
 }
