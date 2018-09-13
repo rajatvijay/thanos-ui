@@ -187,6 +187,18 @@ function dnb_ubo_html(record) {
               {addr_arr.join(", ") || "-"}
             </td>
           </tr>
+          <tr>
+            <td>
+              Beneficial Ownership Percentage:&nbsp;
+              {record.BeneficialOwnershipPercentage || "-"}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Direct Ownership Percentage:&nbsp;
+              {record.DirectOwnershipPercentage || "-"}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
