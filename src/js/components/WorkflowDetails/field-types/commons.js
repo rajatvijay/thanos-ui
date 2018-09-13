@@ -41,12 +41,15 @@ function arrayToString(arr) {
 
 function stringToArray(string) {
   let arr = [];
-
   if (string) {
     if (string.answer.isArray) {
       arr = string.answer[0].split("~");
     } else {
-      arr = string.answer.split("~");
+      if (string.answer == "") {
+        arr = [];
+      } else {
+        arr = string.answer.split("~");
+      }
     }
     return arr;
   } else {
