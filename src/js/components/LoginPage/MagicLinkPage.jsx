@@ -4,6 +4,7 @@ import LoginLinkForm from "./magic-form";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
+import { logout } from "../../actions";
 
 class MagicLoginPage extends React.Component {
   constructor(props) {
@@ -11,8 +12,7 @@ class MagicLoginPage extends React.Component {
   }
 
   componentDidMount = () => {
-    // if (!localStorage.getItem("user")) {
-    // }
+    //this.props.dispatch(logout());
   };
 
   render = () => {

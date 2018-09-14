@@ -32,12 +32,19 @@ export const login = (username, password) => async dispatch => {
       type: userConstants.LOGIN_SUCCESS,
       user: response
     });
+
+    dispatch({
+      type: userConstants.GETME_SUCCESS,
+      user: response
+    });
+
     history.push("/");
   } catch (error) {
     console.log("error login");
     console.log(error);
 
     dispatch({ type: userConstants.LOGIN_FAILURE, error });
+    dispatch({ type: userConstants.GETME_FAILURE, error });
     // dispatch(alertActions.error(error));
   }
 };
@@ -95,6 +102,11 @@ export const checkAuth = () => async dispatch => {
     const response = await userService.checkAuth();
 
     dispatch({
+      type: userConstants.LOGIN_SUCCESS,
+      user: response
+    });
+
+    dispatch({
       type: userConstants.GETME_SUCCESS,
       user: response
     });
@@ -107,6 +119,8 @@ export const checkAuth = () => async dispatch => {
     history.push("/");
   } catch (error) {
     dispatch({ type: userConstants.GETME_FAILURE, error });
+    dispatch({ type: userConstants.LOGIN_FAILURE, error });
+
     // dispatch(alertActions.error(error));
   }
 };
