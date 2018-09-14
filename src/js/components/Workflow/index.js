@@ -37,7 +37,7 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true
     };
-
+    
     if (!this.props.users.me) {
       this.checkAuth();
     }
@@ -168,6 +168,10 @@ class Workflow extends Component {
 
   toggleListView = status => {
     this.setState({ statusView: status });
+  };
+
+  checkAuth = () => {
+    this.props.dispatch(checkAuth());
   };
 
   checkAuth = () => {
