@@ -17,7 +17,8 @@ import {
   workflowActions,
   workflowFiltersActions,
   configActions,
-  logout
+  logout,
+  checkAuth
 } from "../../actions";
 import FilterSidebar from "./filter";
 import { baseUrl2, authHeader } from "../../_helpers";
@@ -40,12 +41,19 @@ class Workflow extends Component {
 
   componentDidMount = () => {
     //this.reloadWorkflowList();
+
+    if (!this.props.users.me) {
+      this.checkAuth();
+    }
+
     if (!this.props.config.configuration || this.props.config.error) {
       this.props.dispatch(configActions.getConfig());
     }
 
-    if (!veryfiyClient(this.props.authentication.user.csrf)) {
-      this.props.dispatch(logout());
+    if (!this.props.users.me || this.props.users.me.error) {
+      if (!veryfiyClient(this.props.authentication.user.csrf)) {
+        this.props.dispatch(logout());
+      }
     }
 
     if (this.props.authentication.user) {
@@ -195,6 +203,10 @@ class Workflow extends Component {
     }
   };
 
+  checkAuth = () => {
+    this.props.dispatch(checkAuth());
+  };
+
   render = () => {
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
@@ -340,14 +352,16 @@ function mapStateToProps(state) {
     workflowFilters,
     workflow,
     authentication,
-    workflowKind
+    workflowKind,
+    users
   } = state;
   return {
     config,
     workflow,
     workflowFilters,
     workflowKind,
-    authentication
+    authentication,
+    users
   };
 }
 

@@ -156,8 +156,8 @@ class LoginLinkForm extends React.Component {
               </div>
               <Divider />
               <div>
-                <a href="#" onClick={this.refresh}>
-                  Go to login page{" "}
+                <a href="/" onClick={this.refresh}>
+                  Go to login page
                 </a>
               </div>
             </div>
