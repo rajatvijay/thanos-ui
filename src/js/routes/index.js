@@ -38,6 +38,7 @@ class MainRoutes extends React.Component {
   componentDidMount = () => {
     //if (!localStorage.getItem("user")) {
     this.props.dispatch(checkAuth());
+
     this.props.dispatch(configActions.getConfig());
     //}
   };
