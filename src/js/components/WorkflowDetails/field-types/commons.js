@@ -114,13 +114,12 @@ function getLink(text) {
   var urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.()~#?&//=]*)/gi;
 
   return text.replace(urlRegex, function(url) {
-    if (!_.includes(url, "http")) {
-      url = "http://" + url;
-    }
-
     if (_.includes(url, "@")) {
       return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
     } else {
+      if (!_.includes(url, "http")) {
+        url = "http://" + url;
+      }
       return '<a href="' + url + '" target="_blank">' + url + "</a>";
     }
   });
