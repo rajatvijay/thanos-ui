@@ -28,6 +28,7 @@ import validator from "validator";
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const Option = AntSelect.Option;
+const { TextArea } = Input;
 
 //Common utility fucntions bundled in one file commons.js//
 const {
@@ -61,11 +62,12 @@ export const Text = props => {
       //validateStatus={props.field.answers.length !== 0 ? "success" : null}
       {...field_error(props)}
     >
-      <Input
+      <TextArea
         disabled={
           props.completed || props.is_locked || props.field.definition.disabled
         }
-        type="text"
+        //type="textarea"
+        row={3}
         placeholder={props.field.placeholder}
         defaultValue={
           props.field.answers[0]
