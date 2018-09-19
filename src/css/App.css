@@ -974,7 +974,6 @@ template {
   background: #6178ea;
   border-color: #6178ea;
 }
-
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
   background-color: #6178ea;
