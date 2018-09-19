@@ -114,17 +114,10 @@ export function users(state = initialState, action) {
         me: { loading: true }
       };
     case userConstants.GETME_SUCCESS:
-      if (action.user.ok) {
-        return {
-          ...state,
-          me: { loading: false, ...action.users }
-        };
-      } else {
-        return {
-          ...state,
-          me: { loading: false, error: action.error }
-        };
-      }
+      return {
+        ...state,
+        me: { loading: false, ...action.users }
+      };
     case userConstants.GETME_FAILURE:
       return {
         ...state,

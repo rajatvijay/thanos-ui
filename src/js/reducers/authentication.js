@@ -8,7 +8,7 @@ export function authentication(state = initialState, action) {
     case userConstants.LOGIN_REQUEST:
       return {
         loggingIn: true,
-        user: action.user,
+        user: { ...action.user, csrf: null },
         error: null
       };
     case userConstants.LOGIN_SUCCESS:

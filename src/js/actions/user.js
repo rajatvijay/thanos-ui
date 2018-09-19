@@ -99,6 +99,11 @@ export const checkAuth = () => async dispatch => {
       user: response
     });
 
+    dispatch({
+      type: userConstants.LOGIN_SUCCESS,
+      user: response
+    });
+
     history.push("/");
   } catch (error) {
     dispatch({ type: userConstants.GETME_FAILURE, error });
