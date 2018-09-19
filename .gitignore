@@ -25,18 +25,6 @@ krypton-ui.sublime-project
 krypton-ui.sublime-workspace
 
 #extra css files not to be tracked anymore as we are using less
-/src/*.css
-/src/*.map
-!App.css
-
-/src/js/_helpers/api-url-local.js
-
-src/css/*/*.css
-src/css/*/*.map
-
-src/css/*/*/*.css
-src/css/*/*/*.map
-
 *.css
 *.css.map
 !App.css

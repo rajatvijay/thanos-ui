@@ -256,7 +256,7 @@ class WorkflowItem extends React.Component {
                         kinds={that.props.kinds}
                         dispatch={that.props.dispatch}
                         workflowFilterType={that.props.workflowFilterType}
-                        statusView={this.props.statusView}
+                        statusView={that.props.statusView}
                       />
                     );
                   })}
