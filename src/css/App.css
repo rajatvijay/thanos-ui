@@ -671,7 +671,7 @@ template {
   box-shadow: -30px 0 38px 0 rgba(0, 0, 0, 0.07);
 }
 .sidebar-head {
-  background: #17ead9;
+  background: #6178ea;
   padding: 14px;
   color: #fff;
   font-size: 14px;
@@ -962,9 +962,9 @@ template {
 }
 .comment_step_bar {
   width: 100%;
-  color: #000000;
-  background: #e6fffd;
-  border: 1px solid #8bded8;
+  color: #343b4c;
+  background: #e8ebfc;
+  border: 1px solid #6178ea;
   font-size: 13px;
 }
 .card-wrapper {

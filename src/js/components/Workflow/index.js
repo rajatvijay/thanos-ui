@@ -294,9 +294,9 @@ class Workflow extends Component {
               </Col>
               <Col span="12">
                 <div className="text-right list-toggle-btn">
-                  <span className="pd-right t-14">Workflow view</span>
+                  <span className="pd-right t-14">Details view</span>
                   <Switch defaultChecked onChange={this.toggleListView} />
-                  <span className="pd-left  t-14"> Details view</span>
+                  <span className="pd-left  t-14">Workflow view</span>
                 </div>
               </Col>
             </Row>
