@@ -4,62 +4,22 @@ import { Button, Row, Col, Icon, Divider, Select } from "antd";
 import _ from "lodash";
 import { countries } from "./countries.js";
 import { dunsFieldActions } from "../../../actions";
+import { commonFunctions } from "./commons";
+
+const {
+  getLabel,
+  field_error,
+  getRequired,
+  feedValue,
+  addCommentBtn,
+  getIntegrationSearchButton
+} = commonFunctions;
 
 //Field Type DUNS SEARCH
 
+//Field Type DUNS SEARCH
 const getFields = props => {
-  // need to figure out how to change the name on search button
-
-  let type_button_map = {
-    dnb_company_profile: "Get Company profile",
-    dnb_risk_score: "Get Risk scores",
-    dnb_data_reader: "Get Data",
-    salesforce: "Post Salesforce data",
-    dnb_livingstone: "DnB Livingstone",
-    dnb_directors: "DnB Directors",
-    iban_search: "Validate IBAN",
-    eu_vat_check: "Validate VAT",
-    us_tin_check: "Validate TIN",
-    charity_check: "Get Charity Information",
-    whois_search: "Get WhoIS data",
-    clearbit_search: "Get Clearbit data",
-    csv_search: "Search CSV"
-  };
-
-  let button_name = type_button_map[props.field.definition.field_type];
-  _.map(props.field.search_param_data, function(c) {
-    if (c.button_text) {
-      button_name = c.button_text;
-      return false;
-    }
-  });
-
-  return (
-    <Row gutter={16} style={{ marginBottom: "50px" }}>
-      <Col>
-        <Button
-          type="primary"
-          className="btn-block float-left"
-          onClick={props.onSearch}
-          style={{ width: "auto", marginRight: "20px" }}
-        >
-          {button_name}
-        </Button>
-      </Col>
-
-      <Col style={{ marginTop: "5px" }}>
-        {_.map(props.field.search_param_data, function(item) {
-          if (_.size(item.answer) && item.answer.answer)
-            return (
-              <div className="float-left" style={{ marginRight: "15px" }}>
-                <span>{item.answer.field__definition__body}</span>:{" "}
-                <span>{item.answer.answer}</span>,
-              </div>
-            );
-        })}
-      </Col>
-    </Row>
-  );
+  return getIntegrationSearchButton(props);
 };
 
 //duns field

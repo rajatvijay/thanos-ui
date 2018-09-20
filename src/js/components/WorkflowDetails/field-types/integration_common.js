@@ -3,6 +3,7 @@ import _ from "lodash";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
+  dnb_rdc_html,
   dnb_directors_html,
   dnb_livingston_html,
   lexisnexis_html,
@@ -342,6 +343,73 @@ function dnb_livingston_html(record) {
           </tr>
         </tbody>
       </table>
+    </div>
+  );
+}
+
+function dnb_rdc_html(record) {
+  let alias_html = null;
+  if (_.size(record.Alias)) {
+    alias_html = (
+      <div>
+        {" "}
+        {_.map(record.Alias, function(al) {
+          return (
+            <div>
+              &nbsp;&nbsp;{al.AliasType} {al.AliasName}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div>
+        <b>Name</b>: {record.EntityName}
+      </div>
+      <div>
+        <b>Risk Score</b>: {record.RiskScore}
+      </div>
+      <div>
+        <b>Entity Type</b>: {record.EntityTypeText}
+      </div>
+      <div>
+        <b>Link</b>: {record.EntityURL}
+      </div>
+      <div>
+        <b>Alert Entity ID</b>: {record.AlertEntityID}
+      </div>
+      <div>
+        <b>Alert Entity System ID</b>: {record.AlertEntitySystemID}
+      </div>
+      <div>
+        <b>Risk class (CVIP)</b>: {record.CVIP}
+      </div>
+
+      {_.size(record.ReferenceDetail) || false ? (
+        <div>
+          <b>Reference Detail</b>:<br />
+          <div>&nbsp;&nbsp;{record.ReferenceDetail.SourceName}</div>
+          <div>&nbsp;&nbsp;{record.ReferenceDetail.PublicationDate}</div>
+          <div>
+            &nbsp;&nbsp;<a
+              href={record.ReferenceDetail.WebPageURL}
+              target="_blank"
+            >
+              {record.ReferenceDetail.WebPageURL}
+            </a>
+          </div>
+        </div>
+      ) : null}
+
+      {alias_html ? (
+        <div>
+          <b>Alias</b>:<br />
+          {alias_html}
+        </div>
+      ) : null}
     </div>
   );
 }
