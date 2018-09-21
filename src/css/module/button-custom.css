@@ -1,23 +1,28 @@
 .Avenir-light {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-normal {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .Avenir-medium {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-heavy {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 h1,
 h2,
 h3,
 h4,
 h5 {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .ant-btn {
   border-radius: 2px;
@@ -115,7 +120,11 @@ h5 {
   /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to right, #17ead9 0%, #6078ea 100%);
   /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#17ead9", endColorstr="#6078ea", GradientType=1);
+  filter: progid:DXImageTransform.Microsoft.gradient(
+      startColorstr="#17ead9",
+      endColorstr="#6078ea",
+      GradientType=1
+    );
   /* IE6-9 */
   border: none;
 }
@@ -151,7 +160,9 @@ h5 {
   box-shadow: none;
 }
 .ant-progress-circle.ant-progress-status-success .ant-progress-text,
-.ant-progress-circle.ant-progress-status-success .ant-progress-text .material-icons {
+.ant-progress-circle.ant-progress-status-success
+  .ant-progress-text
+  .material-icons {
   color: #6178ea;
 }
 .ant-progress-status-success .ant-progress-circle-path {
@@ -208,7 +219,8 @@ h5 {
   background-color: #eee;
 }
 .ant-input {
-  font-family: Avenir, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: Avenir, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .ant-pagination-item-active,
 .ant-pagination-item-active:focus,
@@ -248,7 +260,8 @@ h5 {
 .ant-switch-checked {
   background: #6178ea;
 }
-.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+.ant-radio-group-solid
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
   background: #6178ea;
   border-color: #6178ea;
 }
