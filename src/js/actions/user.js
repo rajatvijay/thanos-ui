@@ -119,8 +119,6 @@ export const checkAuth = () => async dispatch => {
     history.push("/");
   } catch (error) {
     dispatch({ type: userConstants.GETME_FAILURE, error });
-    dispatch({ type: userConstants.LOGIN_FAILURE, error });
-
     // dispatch(alertActions.error(error));
   }
 };
