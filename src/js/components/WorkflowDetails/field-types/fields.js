@@ -51,7 +51,9 @@ export const Text = props => {
   return (
     <FormItem
       label={getLabel(props)}
-      className="from-label"
+      className={
+        "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
+      }
       style={{ display: "block" }}
       key={props.field.id}
       message=""

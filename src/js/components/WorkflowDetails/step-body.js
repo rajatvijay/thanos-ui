@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Icon, Menu, Dropdown, Button } from "antd";
+import { Icon, Menu, Dropdown, Button, Divider } from "antd";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
 import { workflowDetailsActions } from "../../actions";
 import _ from "lodash";
+import Moment from "react-moment";
 
 class StepBody extends Component {
   constructor(props) {
@@ -85,12 +86,23 @@ class StepBody extends Component {
 
     setTimeout(function() {
       var printContents = document.getElementById("StepBody").innerHTML;
-      var originalContents = document.body.innerHTML;
-      document.body.innerHTML = printContents;
-      window.print();
+      var docHead = document.querySelector("head").innerHTML;
+      var body =
+        "<!DOCTYPE html><html><head>" +
+        docHead +
+        "</head><body>" +
+        printContents +
+        "</body></html>";
+      var myWindow = window.open();
+      myWindow.document.write(body);
+      myWindow.document.close();
+      myWindow.focus();
+
+      setTimeout(function() {
+        myWindow.print();
+        myWindow.close();
+      }, 1000);
       that.setState({ printing: false });
-      document.body.innerHTML = originalContents;
-      //document.location.reload();
     }, 500);
   };
 
@@ -138,7 +150,8 @@ class StepBody extends Component {
       var step_comment_btn = (
         <div
           className={
-            "text-right " + (this.state.printing ? "hide-print" : null)
+            "text-right right-actions " +
+            (this.state.printing ? "hide-print" : null)
           }
         >
           <span
@@ -214,13 +227,34 @@ class StepBody extends Component {
             <Icon type={"loading"} />
           </div>
         ) : stepData ? (
-          <StepBodyForm
-            stepData={stepData}
-            {...this.props}
-            version={this.props.stepVersionFields}
-            showVersion={this.state.showVersion}
-            versionToggle={this.versionToggle}
-          />
+          <div
+            className={
+              this.state.printing ? "step-printing" : "step-not-printing"
+            }
+          >
+            <div className="print-header ">
+              <img
+                alt={this.props.config.name}
+                src={this.props.config.logo}
+                className="logo"
+              />
+              <br />
+              <br />
+              <h3>{this.props.workflowHead.name}</h3>
+              <h4>Step: {stepData.name}</h4>
+              <p>
+                Printed on: <Moment format="MM/DD/YYYY">{Date.now()}</Moment>
+              </p>
+              <Divider />
+            </div>
+            <StepBodyForm
+              stepData={stepData}
+              {...this.props}
+              version={this.props.stepVersionFields}
+              showVersion={this.state.showVersion}
+              versionToggle={this.versionToggle}
+            />
+          </div>
         ) : (
           <div className="text-center mr-top-lg">
             <Icon type={"loading"} />
@@ -232,11 +266,17 @@ class StepBody extends Component {
 }
 
 function mapStateToProps(state) {
-  const { currentStepFields, workflowDetails, stepVersionFields } = state;
+  const {
+    currentStepFields,
+    workflowDetails,
+    stepVersionFields,
+    config
+  } = state;
   return {
     currentStepFields,
     workflowDetails,
-    stepVersionFields
+    stepVersionFields,
+    config
   };
 }
 

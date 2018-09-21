@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Tooltip, Divider } from "antd";
+import { Layout, Icon, Tooltip } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import StepBody from "./step-body.js";
 import { baseUrl, authHeader } from "../../_helpers";
-import Moment from "react-moment";
 import {
   workflowDetailsActions,
   workflowActions,
@@ -305,28 +304,14 @@ class WorkflowDetails extends Component {
         >
           <div className="printOnly ">
             <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
-              <div className="print-header ">
-                <img
-                  alt={this.props.config.name}
-                  src={this.props.config.logo}
-                  className="logo"
-                />
-                <br />
-                <br />
-                <h3>
-                  {this.props.workflowDetailsHeader.workflowDetailsHeader
-                    ? this.props.workflowDetailsHeader.workflowDetailsHeader
-                        .name
-                    : " "}
-                </h3>
-                <p>
-                  Printed on: <Moment format="MM/DD/YYYY">{Date.now()}</Moment>
-                </p>
-                <Divider />
-              </div>
               <StepBody
                 toggleSidebar={this.callBackCollapser}
                 getIntegrationComments={this.getIntegrationComments}
+                workflowHead={
+                  this.props.workflowDetailsHeader.workflowDetailsHeader
+                    ? this.props.workflowDetailsHeader.workflowDetailsHeader
+                    : "loading"
+                }
               />
             </div>
           </div>
@@ -370,8 +355,7 @@ function mapStateToProps(state) {
     workflowComments,
     authentication,
     hasStepinfo,
-    users,
-    config
+    users
   } = state;
   return {
     workflowDetails,
@@ -381,8 +365,7 @@ function mapStateToProps(state) {
     workflowComments,
     authentication,
     hasStepinfo,
-    users,
-    config
+    users
   };
 }
 
