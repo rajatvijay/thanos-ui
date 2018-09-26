@@ -82,7 +82,6 @@ class WorkflowFilter extends Component {
   }
 
   componentDidMount = () => {
-    console.log("worflow filter called");
 
     switch (this.props.placeholder) {
       case "Business":

@@ -365,7 +365,7 @@ function mapStateToProps(state) {
     hasStepinfo,
     users,
     config
-  } = state;
+
   return {
     workflowDetails,
     workflowDetailsHeader,
