@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
+import { Row, Col } from "antd";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -347,18 +348,26 @@ function dnb_livingston_html(record) {
   );
 }
 
+function InfoRow(props) {
+  return (
+    <Row className=" mr-bottom" type="flex" justify="space-between">
+      <Col span={8} className="text-muted">
+        {props.label}:
+      </Col>
+      <Col span={16} className="text-bold ">
+        {props.value ? props.value : "--"}
+      </Col>
+    </Row>
+  );
+}
+
 function dnb_rdc_html(record) {
   let alias_html = null;
   if (_.size(record.Alias)) {
     alias_html = (
-      <div>
-        {" "}
+      <div className="text-left">
         {_.map(record.Alias, function(al) {
-          return (
-            <div>
-              &nbsp;&nbsp;{al.AliasType} {al.AliasName}
-            </div>
-          );
+          return <InfoRow label={al.AliasType} value={al.AliasName} />;
         })}
       </div>
     );
@@ -366,50 +375,48 @@ function dnb_rdc_html(record) {
 
   return (
     <div>
-      <div>
-        <b>Name</b>: {record.EntityName}
-      </div>
-      <div>
-        <b>Risk Score</b>: {record.RiskScore}
-      </div>
-      <div>
-        <b>Entity Type</b>: {record.EntityTypeText}
-      </div>
-      <div>
-        <b>Link</b>: {record.EntityURL}
-      </div>
-      <div>
-        <b>Alert Entity ID</b>: {record.AlertEntityID}
-      </div>
-      <div>
-        <b>Alert Entity System ID</b>: {record.AlertEntitySystemID}
-      </div>
-      <div>
-        <b>Risk class (CVIP)</b>: {record.CVIP}
-      </div>
+      <Row type="flex" justify="space-between">
+        <Col span={11}>
+          <InfoRow label="Name" value={record.EntityName} />
+          <InfoRow label="Risk Score" value={record.RiskScore} />
+          <InfoRow label="Entity Type" value={record.EntityTypeText} />
+        </Col>
 
-      {_.size(record.ReferenceDetail) || false ? (
-        <div>
-          <b>Reference Detail</b>:<br />
-          <div>&nbsp;&nbsp;{record.ReferenceDetail.SourceName}</div>
-          <div>&nbsp;&nbsp;{record.ReferenceDetail.PublicationDate}</div>
-          <div>
-            &nbsp;&nbsp;<a
-              href={record.ReferenceDetail.WebPageURL}
-              target="_blank"
-            >
-              {record.ReferenceDetail.WebPageURL}
-            </a>
-          </div>
-        </div>
-      ) : null}
+        <Col span={11} offset={2}>
+          <InfoRow label="Alert Entity ID" value={record.AlertEntityID} />
+          <InfoRow
+            label="Alert Entity System ID"
+            value={record.AlertEntitySystemID}
+          />
+          <InfoRow label="Risk class (CVIP)" value={record.CVIP} />
+        </Col>
+      </Row>
 
-      {alias_html ? (
-        <div>
-          <b>Alias</b>:<br />
-          {alias_html}
-        </div>
-      ) : null}
+      <Row type="flex" justify="space-between">
+        <Col span={11}>
+          <InfoRow
+            label="Reference Detail"
+            value={
+              _.size(record.ReferenceDetail) || false ? (
+                <div>
+                  <div>{record.ReferenceDetail.SourceName}</div>
+                  <div>{record.ReferenceDetail.PublicationDate}</div>
+                  <div>
+                    <a href={record.ReferenceDetail.WebPageURL} target="_blank">
+                      {record.ReferenceDetail.WebPageURL}
+                    </a>
+                  </div>
+                </div>
+              ) : null
+            }
+          />
+        </Col>
+
+        <Col span={11} offset={2}>
+          <div className="mr-bottom">Alias </div>
+          {alias_html ? alias_html : null}
+        </Col>
+      </Row>
     </div>
   );
 }

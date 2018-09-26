@@ -27,33 +27,18 @@ import ExportList from "../components/ExportPage";
 import "antd/dist/antd.css";
 
 function mapStateToProps(state) {
-  const { alert, config, users } = state;
+  const { config, users } = state;
   return {
     users,
-    alert,
     config
   };
 }
 
 class MainRoutes extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const { dispatch } = this.props;
-    history.listen((location, action) => {
-      // clear alert on location change
-      dispatch(alertActions.clear());
-    });
-
-    dispatch(configActions.getConfig());
-
-    //get active user if user not avaiable
-    //for redirection from magic link
-  }
-
   componentDidMount = () => {
     //if (!localStorage.getItem("user")) {
     this.props.dispatch(checkAuth());
+    this.props.dispatch(configActions.getConfig());
     //}
   };
 
@@ -67,12 +52,6 @@ class MainRoutes extends React.Component {
     const { alert } = this.props;
     return (
       <div className="main-container">
-        {/*<div className="error" style={{ position: "relative", zIndex: 111 }}>
-                {alert && alert.message ? (
-                <div className={`alert ${alert.type}`}>{alert.message}</div>
-              ) : null}
-            </div>*/}
-
         <Router history={history}>
           {this.props.users.me && this.props.users.me.loading ? (
             <div className="text-center mr-top-lg">loading...</div>

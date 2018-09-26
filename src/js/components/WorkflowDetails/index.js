@@ -121,7 +121,6 @@ class WorkflowDetails extends Component {
       let wf_id = parseInt(this.props.match.params.id, 10);
       let stepGroup_id = null;
       let step_id = null;
-
       let active_step_data = this.currentActiveStep(wfd);
 
       stepGroup_id = active_step_data["activeStepGroup"].id;
@@ -366,7 +365,7 @@ function mapStateToProps(state) {
     hasStepinfo,
     users,
     config
-  } = state;
+
   return {
     workflowDetails,
     workflowDetailsHeader,

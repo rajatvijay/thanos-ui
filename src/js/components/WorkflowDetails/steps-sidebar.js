@@ -32,11 +32,6 @@ const StepSidebar = props => {
 };
 
 class StepSidebarMenu extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   //const state = {}
-  // }
-
   componentDidMount() {}
 
   onStepSelected(e) {

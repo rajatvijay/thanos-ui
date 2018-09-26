@@ -16,6 +16,5 @@ export const createWorkflow = payload => async dispatch => {
   } catch (error) {
     console.log(error);
     dispatch({ type: workflowCreateConstants.CREATE_FAILURE, error });
-    // dispatch(alertActions.error(error));
   }
 };

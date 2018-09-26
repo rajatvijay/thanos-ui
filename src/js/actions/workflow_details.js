@@ -7,7 +7,6 @@ import {
 } from "../constants";
 import { workflowDetailsService } from "../services";
 import _ from "lodash";
-//import { alertActions } from "./";
 //import { history } from "../_helpers";
 import { notification, message } from "antd";
 

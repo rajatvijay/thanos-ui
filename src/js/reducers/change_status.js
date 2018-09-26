@@ -14,6 +14,7 @@ export function changeStatus(state = {}, action) {
     case changeStatusConstants.CHANGE_FAILURE:
       return {
         loading: false,
+        status_counts: [],
         loadingStatus: "failed",
         error: action.error
       };

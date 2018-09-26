@@ -4,7 +4,6 @@ import {
   logout as UserLogout,
   sendEmailAuthToken as userSendEmailAuthToken
 } from "../services/user";
-import { alertActions } from "./";
 import { history } from "../_helpers";
 import { notification } from "antd";
 
@@ -91,7 +90,6 @@ export const sendEmailAuthToken = email => async dispatch => {
     }
   } catch (error) {
     dispatch({ type: userConstants.LOGIN_LINK_FAILURE, error });
-    // dispatch(alertActions.error(error));
   }
 };
 
@@ -129,11 +127,9 @@ function register(user) {
       user => {
         dispatch(success());
         history.push("/login");
-        dispatch(alertActions.success("Registration successful"));
       },
       error => {
         dispatch(failure(error));
-        dispatch(alertActions.error(error));
       }
     );
   };

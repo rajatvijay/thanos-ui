@@ -31,15 +31,21 @@ class WorkflowFilterTop extends Component {
   };
 
   componentDidMount = () => {
-    //this.fetchCountData();
     let tag = this.props.workflowFilters.kind.meta.tag;
 
-    this.props.dispatch(workflowKindActions.getCount(tag));
+    if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+      this.props.dispatch(workflowKindActions.getCount(tag));
+      this.props.dispatch(workflowKindActions.getStatusCount(tag));
+    }
+  };
 
-    this.props.dispatch(workflowKindActions.getStatusCount(tag));
+  componeneDidUpdate = prevProps => {
+    let tag = this.props.workflowFilters.kind.meta.tag;
 
-    // if(this.props.workflowFilters.kind.meta){
-    // }
+    if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind) {
+      this.props.dispatch(workflowKindActions.getCount(tag));
+      this.props.dispatch(workflowKindActions.getStatusCount(tag));
+    }
   };
 
   render() {
