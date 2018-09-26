@@ -4,7 +4,6 @@ import { authentication } from "./authentication";
 import { registration } from "./registration";
 import { users } from "./users";
 import { config } from "./config";
-import { alert } from "./alert";
 import { workflow } from "./workflow_list";
 import { workflowCreate } from "./workflow_create";
 import {
@@ -26,7 +25,6 @@ const rootReducer = combineReducers({
   registration,
   users,
   config,
-  alert,
   workflow,
   workflowKind,
   workflowGroupCount,

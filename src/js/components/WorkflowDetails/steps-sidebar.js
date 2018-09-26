@@ -11,9 +11,6 @@ const { getProcessedData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
 
 const StepSidebar = props => {
-  console.clear();
-  console.log("props........");
-  console.log(props);
   return (
     <Sider
       width={250}
@@ -32,11 +29,6 @@ const StepSidebar = props => {
 };
 
 class StepSidebarMenu extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   //const state = {}
-  // }
-
   componentDidMount() {}
 
   onStepSelected(e) {
