@@ -256,7 +256,7 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateFlag(payload));
   };
 
-  render() {
+  render = () => {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
     return (
@@ -351,7 +351,7 @@ class WorkflowDetails extends Component {
         ) : null}
       </Layout>
     );
-  }
+  };
 }
 
 function mapStateToProps(state) {
@@ -365,6 +365,7 @@ function mapStateToProps(state) {
     hasStepinfo,
     users,
     config
+  } = state;
 
   return {
     workflowDetails,
