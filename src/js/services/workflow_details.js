@@ -122,7 +122,7 @@ function getStepVersionFields(step) {
       step.groupId +
       "/steps/" +
       step.stepId +
-      "/?version=" +
+      "/?version="+
       step.versionId,
     requestOptions
   ).then(handleResponse);

@@ -34,7 +34,6 @@ class StepBody extends Component {
 
   onVersionChange = e => {
     this.versionToggle();
-
     let stepTrack = {
       workflowId: this.props.currentStepFields.currentStepFields.workflow,
       groupId: this.props.currentStepFields.currentStepFields.step_group,
@@ -74,7 +73,7 @@ class StepBody extends Component {
           style={{ position: "relative", top: "-62px", right: "-25px" }}
           className="ant-btn-sm"
         >
-          Previous versions <Icon type="down" />{" "}
+          Pervious versions <Icon type="down" />{" "}
         </Button>
       </Dropdown>
     );
@@ -150,8 +149,7 @@ class StepBody extends Component {
       var step_comment_btn = (
         <div
           className={
-            "text-right right-actions " +
-            (this.state.printing ? "hide-print" : null)
+            "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
           <span
