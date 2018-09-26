@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Tooltip } from "antd";
+import { Layout, Icon, Tooltip, Divider } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import StepBody from "./step-body.js";
 import { baseUrl, authHeader } from "../../_helpers";
+import Moment from "react-moment";
 import {
   workflowDetailsActions,
   workflowActions,
@@ -111,12 +112,19 @@ class WorkflowDetails extends Component {
 
   //componentDidUpdate = prevProps => {
   componentWillReceiveProps = nextProps => {
-    if (nextProps.workflowDetails.loading === false) {
+    if (
+      nextProps.workflowDetails.loading === false &&
+      this.props.workflowDetails.workflowDetails !==
+        nextProps.workflowDetails.workflowDetails
+    ) {
       let wfd = nextProps.workflowDetails.workflowDetails;
       let wf_id = parseInt(this.props.match.params.id, 10);
+      let stepGroup_id = null;
+      let step_id = null;
       let active_step_data = this.currentActiveStep(wfd);
-      let stepGroup_id = active_step_data["activeStepGroup"].id;
-      let step_id = active_step_data["activeStep"].id;
+
+      stepGroup_id = active_step_data["activeStepGroup"].id;
+      step_id = active_step_data["activeStep"].id;
 
       let stepTrack = {
         workflowId: wf_id,
@@ -355,7 +363,8 @@ function mapStateToProps(state) {
     workflowComments,
     authentication,
     hasStepinfo,
-    users
+    users,
+    config
   } = state;
   return {
     workflowDetails,
@@ -365,7 +374,8 @@ function mapStateToProps(state) {
     workflowComments,
     authentication,
     hasStepinfo,
-    users
+    users,
+    config
   };
 }
 

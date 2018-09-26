@@ -48,6 +48,10 @@ const {
 
 //Field Type Text
 export const Text = props => {
+  let css = {};
+  if (props.field.selected_flag[props.field.id]) {
+    css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
+  }
   return (
     <FormItem
       label={getLabel(props)}

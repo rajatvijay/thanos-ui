@@ -70,7 +70,7 @@ export function workflowKindStatus(state = {}, action) {
     case workflowKindConstants.GET_STATUS_FAILURE:
       return {
         loading: false,
-        //status_counts:[],
+        status_counts: [],
         loadingStatus: "failed",
         error: action.error
       };

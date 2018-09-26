@@ -81,6 +81,22 @@ class WorkflowFilter extends Component {
     };
   }
 
+  componentDidMount = () => {
+    console.log("worflow filter called");
+
+    switch (this.props.placeholder) {
+      case "Business":
+        this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
+        break;
+      case "region":
+        this.props.dispatch(workflowFiltersActions.getRegionData());
+        break;
+      case "status":
+        this.props.dispatch(workflowFiltersActions.getStatusData());
+        break;
+    }
+  };
+
   //SELECT TYPE FILTER DISPATCHED HERE
   handleChange = value => {
     this.setState({ value });
@@ -197,7 +213,7 @@ class WorkflowFilter extends Component {
 
 //WORKFLOW KIND FILTER COMPONENT
 class WorkflowKindFilter extends Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       selected: null,
@@ -206,6 +222,8 @@ class WorkflowKindFilter extends Component {
   }
 
   componentDidUpdate = pervProps => {
+    console.log("worflowkind filter called");
+
     if (
       this.props.workflowKind.workflowKind &&
       this.props.workflowFilters.kind.filterValue[0] &&
@@ -295,7 +313,10 @@ class WorkflowKindFilter extends Component {
 }
 
 class FilterSidebar extends Component {
-  state = { showAdvFilters: false };
+  constructor() {
+    super();
+    this.state = { showAdvFilters: false };
+  }
 
   componentWillReceiveProps = nextProps => {
     if (this.props.workflowFilters !== nextProps.workflowFilters) {
@@ -307,10 +328,6 @@ class FilterSidebar extends Component {
     if (!this.props.workflowKind.workflowKind) {
       this.loadWorkflowKind();
     }
-
-    this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
-    this.props.dispatch(workflowFiltersActions.getRegionData());
-    this.props.dispatch(workflowFiltersActions.getStatusData());
   };
 
   loadWorkflowKind = () => {
@@ -334,20 +351,6 @@ class FilterSidebar extends Component {
   render = () => {
     let that = this,
       filterList = filterTypeSelect;
-
-    // if (
-    //   !this.props.workflowFilterType.loading &&
-    //   this.props.workflowFilterType.statusType
-    // ) {
-    //   let sFilter = this.props.workflowFilterType.statusType;
-    //   let statusFilter = {
-    //     filterType: "Status",
-    //     results: sFilter
-    //   };
-    //   if (filterList.length === 2) {
-    //     filterList.unshift(statusFilter);
-    //   }
-    // }
 
     const { workflowKind } = this.props.workflowKind;
 
@@ -375,6 +378,7 @@ class FilterSidebar extends Component {
     const menu = (
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKind, function(item, index) {
+          //////////---------------HACK---------------////////////
           //Hide users workflow kind from create button. Temporary
 
           if (item.tag === "users") {
@@ -443,7 +447,11 @@ class FilterSidebar extends Component {
 
           <div className="filter-section section-kind">
             <h5 className="aux-item aux-lead">Filter workflow type</h5>
-            <WorkflowKindFilter {...this.props} />
+            <WorkflowKindFilter
+              workflowKind={this.props.workflowKind}
+              workflowFilters={this.props.workflowFilters}
+              dispatch={this.props.dispatch}
+            />
           </div>
 
           <div className="filter-divider" />
@@ -515,9 +523,8 @@ class FilterSidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowFilterType, workflowFilters, config } = state;
+  const { workflowKind, workflowFilterType, workflowFilters } = state;
   return {
-    config,
     workflowKind,
     workflowFilterType,
     workflowFilters

@@ -5,7 +5,6 @@ export const workflowFiltersActions = {
   setFilters,
   getFilters,
   removeFilters,
-  // getKindData,
   getStatusData,
   getBusinessUnitData,
   getRegionData
@@ -51,30 +50,6 @@ function removeFilters(payload) {
     });
   };
 }
-
-//Workflow filter type (kind) data
-// function getKindData() {
-//     return dispatch => {
-//     dispatch(request());
-
-//     workflowFilterService
-//       .getAll()
-//       .then(
-//         workflowFilterKind => dispatch(success(workflowFilterKind)),
-//         error => dispatch(failure(error))
-//       );
-//   };
-
-//   function request() {
-//     return { type: workflowFilterConstants.GET_KIND_REQUEST };
-//   }
-//   function success(workflowFilterKind) {
-//     return { type: workflowFilterConstants.GET_KIND_SUCCESS, workflowFilterKind };
-//   }
-//   function failure(error) {
-//     return { type: workflowFilterConstants.GET_KIND_FAILURE, error };
-//   }
-// }
 
 //Workflow filter type (status) data
 function getStatusData() {
