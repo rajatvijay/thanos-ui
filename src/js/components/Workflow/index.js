@@ -37,7 +37,7 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true
     };
-    
+
     if (!this.props.users.me) {
       this.checkAuth();
     }
@@ -46,7 +46,7 @@ class Workflow extends Component {
       this.props.dispatch(configActions.getConfig());
     }
 
-    if (this.props.users.me.error) {
+    if (this.props.users.me && this.props.users.me.error) {
       if (!veryfiyClient(this.props.authentication.user.csrf)) {
         this.props.dispatch(logout());
       }
