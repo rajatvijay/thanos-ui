@@ -341,27 +341,53 @@ class URL2 extends React.Component {
         hasFeedback
         {...this.fielderror(props)}
       >
-        <Input
-          disabled={
-            props.completed ||
-            props.is_locked ||
-            props.field.definition.disabled
-          }
-          placeholder={props.field.placeholder}
-          prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
-          type="url"
-          autoComplete="new-password"
-          message="The input is not valid email"
-          onChange={e => this.onChangeValidate(e)}
-          defaultValue={
-            props.field.answers[0]
-              ? props.field.answers[0].answer
-              : props.field.definition.defaultValue
-          }
-          onBlur={e => this.onChangeValidate(e)}
-          {...feedValue(props)}
-        />
 
+        {!props.completed ? (
+          <Input
+            disabled={
+              props.completed ||
+              props.is_locked ||
+              props.field.definition.disabled
+            }
+            placeholder={props.field.placeholder}
+            prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
+            type="url"
+            autoComplete="new-password"
+            message="The input is not valid email"
+            onChange={e => this.onChangeValidate(e)}
+            defaultValue={
+              props.field.answers[0]
+                ? props.field.answers[0].answer
+                : props.field.definition.defaultValue
+            }
+            onBlur={e => this.onChangeValidate(e)}
+            {...feedValue(props)}
+          />
+        ) : (
+          <span>
+            <span className="ant-input-affix-wrapper">
+              <span className="ant-input-prefix">
+                <i
+                  className="anticon anticon-global"
+                  style={{ color: "rgba(0, 0, 0, 0.25)" }}
+                />
+              </span>
+              <div className="ant-input ant-input-disabled">
+                <a
+                  href={
+                    props.field.answers[0]
+                      ? props.field.answers[0].answer
+                      : props.field.definition.defaultValue
+                  }
+                >
+                  {props.field.answers[0]
+                    ? props.field.answers[0].answer
+                    : props.field.definition.defaultValue}
+                </a>
+              </div>
+            </span>
+          </span>
+        )}
         {fieldFlagDropdown(this, props)}
         {addCommentBtn(this, props)}
       </FormItem>
