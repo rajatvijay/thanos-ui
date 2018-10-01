@@ -25,7 +25,11 @@ function isLockedStepEnable(s, visible_steps) {
       dependent_step_visibility_count++;
     }
   });
-  if (s.dependent_steps.length != dependent_step_visibility_count) {
+
+  if (
+    s.dependent_steps &&
+    s.dependent_steps.length != dependent_step_visibility_count
+  ) {
     return false;
   }
   return true;

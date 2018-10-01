@@ -5,7 +5,8 @@ import { store } from "../_helpers";
 export const workflowService = {
   getAll,
   getById,
-  searchWorkflow
+  searchWorkflow,
+  getChildWorkflow
 };
 
 //FETCH THE LIST OF WORLFOWS FOR WORKFLOW LIST PAGE
@@ -23,7 +24,7 @@ function getAll(filter) {
 
   let filters = store.getState().workflowFilters,
     filterParams = getFilterParams(filters),
-    url = baseUrl + "workflows/";
+    url = baseUrl + "workflows-list/";
 
   url += filterParams;
 
@@ -31,6 +32,19 @@ function getAll(filter) {
     const params = pageUrl(filter);
     url += params;
   }
+  return fetch(url, requestOptions).then(handleResponse);
+}
+
+//GET CHILD WORKFLOW
+function getChildWorkflow(parent) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  let url = baseUrl + "workflows-list/?parent_workflow_id=" + parent;
+
   return fetch(url, requestOptions).then(handleResponse);
 }
 

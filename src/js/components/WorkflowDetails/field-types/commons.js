@@ -10,7 +10,9 @@ import {
   Divider,
   Select,
   Tabs,
-  Tag
+  Tag,
+  Menu,
+  Dropdown
 } from "antd";
 import _ from "lodash";
 
@@ -27,7 +29,8 @@ export const commonFunctions = {
   addCommentBtn,
   getLink,
   getStyle,
-  getIntegrationSearchButton
+  getIntegrationSearchButton,
+  fieldFlagDropdown
 };
 
 //Utility func
@@ -124,6 +127,53 @@ function addCommentBtn(e, props) {
   );
 }
 
+function selectFlag(props, flag) {
+  let payload = {
+    workflow: props.workflowId,
+    field: props.field.id,
+    flag: parseInt(flag.key)
+  };
+  console.log(payload);
+  props.changeFlag(payload);
+}
+
+function fieldFlagDropdown(e, props) {
+  let flag_dropdown = (
+    <Menu onClick={selectFlag.bind(e, props)}>
+      {_.map(props.field.comment_flag_options, function(cfo) {
+        let text_color_css = cfo.extra.color ? { color: cfo.extra.color } : {};
+        return (
+          <Menu.Item key={cfo.value}>
+            <i
+              className="material-icons t-18 "
+              style={{
+                verticalAlign: "text-bottom",
+                color: text_color_css.color
+              }}
+            >
+              fiber_manual_record
+            </i>{" "}
+            {cfo.label}
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
+  return (
+    <div style={{ float: "right", marginLeft: "10px", marginTop: "1px" }}>
+      <Dropdown overlay={flag_dropdown}>
+        <a
+          className="ant-dropdown-link text-nounderline text-secondary"
+          href="#"
+        >
+          <i className="material-icons text-middle t-16">flag</i>{" "}
+          <Icon type="down" />
+        </a>
+      </Dropdown>
+    </div>
+  );
+}
+
 //create link from text
 function getLink(text) {
   var urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.()~#?&//=]*)/gi;
@@ -176,7 +226,9 @@ function getIntegrationSearchButton(props) {
     google_search: "Google Search",
     dnb_rdc: "Get DNB Screening",
     dnb_financials: "Get Financial Statements",
-    dnb_litigation: "Get Bankcryptcy Statements"
+    dnb_litigation: "Get Bankcryptcy Statements",
+    translation: "Translate",
+    transliteration: "Transliterate"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];

@@ -125,9 +125,7 @@ class Workflow extends Component {
           meta: defKind
         })
       );
-      console.log("list with kind", defKind);
     } else {
-      console.log("reload list");
       this.reloadWorkflowList();
     }
   };

@@ -67,6 +67,7 @@ class WorkflowList extends Component {
             workflowFilterType={that.props.workflowFilterType}
             onStatusChange={that.onStatusChange}
             statusView={that.props.statusView}
+            workflowChildren={that.props.workflowChildren}
           />
         );
       });
@@ -94,6 +95,7 @@ class WorkflowList extends Component {
               <div className="workflow-list">{ListCompletes}</div>
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
+                  pageSize={data.workflow.length}
                   defaultCurrent={page ? page : 1}
                   total={data.count}
                   onChange={this.handlePageChange.bind(this)}
@@ -122,7 +124,8 @@ class WorkflowItem extends React.Component {
   state = {
     relatedWorkflow: null,
     showRelatedWorkflow: false,
-    opened: false
+    opened: false,
+    loadingRelatedWorkflow: false
   };
 
   componentDidMount = () => {
@@ -164,6 +167,10 @@ class WorkflowItem extends React.Component {
 
   expandChildWorkflow = () => {
     this.setState({ showRelatedWorkflow: !this.state.showRelatedWorkflow });
+
+    this.props.dispatch(
+      workflowActions.getChildWorkflow(this.props.workflow.id)
+    );
   };
 
   onOpen = () => {
@@ -185,7 +192,7 @@ class WorkflowItem extends React.Component {
     let that = this;
 
     const { statusType } = this.props.workflowFilterType;
-    const hasChildren = !_.isEmpty(this.props.workflow.children);
+    const hasChildren = this.props.workflow.children_count !== 0;
     const isChild = this.props.workflow.parent === null ? true : false;
 
     return (
@@ -238,31 +245,13 @@ class WorkflowItem extends React.Component {
           ) : null}
         </div>
 
+        {/*show children here */}
         {hasChildren && this.state.showRelatedWorkflow ? (
           <div className="child-workflow-wrapper mr-top">
-            {_.map(this.getGroupedData(this.props.workflow.children), function(
-              childGroup
-            ) {
-              return (
-                <div className="mr-bottom">
-                  {_.map(childGroup, function(item, index) {
-                    let proccessedData = getProcessedData(item.step_groups);
-                    return (
-                      <WorkflowItem
-                        isChild={true}
-                        pData={proccessedData}
-                        workflow={item}
-                        key={index}
-                        kinds={that.props.kinds}
-                        dispatch={that.props.dispatch}
-                        workflowFilterType={that.props.workflowFilterType}
-                        statusView={that.props.statusView}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            })}
+            <ChildWorkflow
+              {...this.props}
+              getGroupedData={this.getGroupedData}
+            />
           </div>
         ) : null}
 
@@ -292,12 +281,51 @@ class WorkflowItem extends React.Component {
   };
 }
 
+const GetChildWorkflow = props => {
+  let childList = null;
+  let workflowId = props.workflow.id;
+
+  if (props.workflowChildren[workflowId].loading) {
+    childList = <div className="text-center mr-bottom">loading...</div>;
+  } else {
+    childList = _.map(
+      props.getGroupedData(props.workflowChildren[workflowId].children),
+      function(childGroup) {
+        return (
+          <div className="mr-bottom">
+            {_.map(childGroup, function(item, index) {
+              let proccessedData = getProcessedData(item.step_groups);
+              return (
+                <WorkflowItem
+                  isChild={true}
+                  pData={proccessedData}
+                  workflow={item}
+                  key={index}
+                  kinds={props.kinds}
+                  dispatch={props.dispatch}
+                  workflowFilterType={props.workflowFilterType}
+                  statusView={props.statusView}
+                />
+              );
+            })}
+          </div>
+        );
+      }
+    );
+  }
+
+  return childList;
+};
+
 function mapPropsToState(state) {
-  const { workflowKind, workflowFilterType } = state;
+  const { workflowKind, workflowFilterType, workflowChildren } = state;
   return {
     workflowKind,
-    workflowFilterType
+    workflowFilterType,
+    workflowChildren
   };
 }
+
+const ChildWorkflow = connect(mapPropsToState)(GetChildWorkflow);
 
 export default connect(mapPropsToState)(WorkflowList);

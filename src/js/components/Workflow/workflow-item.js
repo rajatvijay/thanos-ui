@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
+import moment from "moment";
 import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import {
@@ -338,29 +339,36 @@ const getIcon = (id, kinds) => {
   }
 };
 
+const CheckData = props => {
+  if (moment(props.data, moment.ISO_8601).isValid()) {
+    return <Moment format="MM/DD/YYYY">{props.data}</Moment>;
+  } else {
+    return props.data;
+  }
+};
+
 const GetQuickData = props => {
   return (
-      <div className="group-overview">
-        <div className="overflow-wrapper">
-          <div className="step-ui">
-            {_.map(props.workflow.lc_data, function(lcItem, index) {
-              return (
-                <span key={index} className="step-item">
-
-                  <span className={"title-c text-normal text-light pd-right"}>
-                    {lcItem.label}:
-                  </span>
-                  {props.column ? <br /> : null}
-                  <span className={" text-normal  text-base"}>
-                    {lcItem.value}
-                  </span>
-                  {props.column ? null : <span className="dash"> </span>}
+    <div className="group-overview">
+      <div className="overflow-wrapper">
+        <div className="step-ui">
+          {_.map(props.workflow.lc_data, function(lcItem, index) {
+            return (
+              <span key={index} className="step-item">
+                <span className={"title-c text-normal text-light pd-right"}>
+                  {lcItem.label}:
                 </span>
-              );
-            })}
-          </div>
+                {props.column ? <br /> : null}
+                <span className={" text-normal  text-base"}>
+                  <CheckData data={lcItem.value} />
+                </span>
+                {props.column ? null : <span className="dash"> </span>}
+              </span>
+            );
+          })}
         </div>
       </div>
+    </div>
   );
 };
 
@@ -599,9 +607,9 @@ const StepItem = props => {
     icon_cls = "check_circle_outline";
   } else if (props.stepData.is_locked) {
     icon_cls = "lock";
-    if (!isLockedStepEnable(props.stepData, props.visible_steps)) {
-      return null;
-    }
+    // if (!isLockedStepEnable(props.stepData, props.visible_steps)) {
+    //   return null;
+    // }
   } else if (overdue) {
     icon_cls = "alarm";
   }

@@ -1,7 +1,7 @@
 import { workflowConstants } from "../constants";
 const initialState = {
   loading: false,
-  workflow: [],
+  workflow: {},
   count: 0
 };
 
@@ -93,6 +93,35 @@ export function workflow(state = {}, action) {
         loadingStatus: "failed",
         error: action.error
       };
+    default:
+      return state;
+  }
+}
+
+const initialStateChildWorkflow = {
+  //loading: false,
+};
+
+export function workflowChildren(state = {}, action) {
+  switch (action.type) {
+    //GET ALL THE WORKFLOWS
+    case workflowConstants.GET_CHILD_REQUEST:
+      return {
+        ...state,
+        ...action.response
+      };
+    case workflowConstants.GET_CHILD_SUCCESS:
+      return {
+        ...state,
+        ...action.response
+      };
+    case workflowConstants.GET_CHILD_FAILURE:
+      console.log("failed to load ");
+      return {
+        ...state,
+        ...action.response
+      };
+
     default:
       return state;
   }

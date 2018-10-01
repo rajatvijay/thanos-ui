@@ -62,10 +62,7 @@ class DnbRDC extends Component {
   };
 
   getComment = (e, data) => {
-    this.props.getIntegrationComments(
-      data.AlertEntitySystemID,
-      this.props.field.id
-    );
+    this.props.getIntegrationComments(data.AlertEntityID, this.props.field.id);
   };
 
   render = () => {
@@ -159,8 +156,8 @@ const GetTable = props => {
       title: "Comments",
       key: "ubo_index",
       render: record => {
-        let flag_data = _.size(props.flag_dict[record.AlertEntitySystemID])
-          ? props.flag_dict[record.AlertEntitySystemID]
+        let flag_data = _.size(props.flag_dict[record.AlertEntityID])
+          ? props.flag_dict[record.AlertEntityID]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
         let css = flag_data.extra || {};
@@ -171,8 +168,8 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.AlertEntitySystemID]
-                ? props.commentCount[record.AlertEntitySystemID] + " comment(s)"
+              {props.commentCount[record.AlertEntityID]
+                ? props.commentCount[record.AlertEntityID] + " comment(s)"
                 : "Add comment"}
             </span>
             <br />

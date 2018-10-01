@@ -221,8 +221,6 @@ class WorkflowKindFilter extends Component {
   }
 
   componentDidUpdate = pervProps => {
-    console.log("worflowkind filter called");
-
     if (
       this.props.workflowKind.workflowKind &&
       this.props.workflowFilters.kind.filterValue[0] &&

@@ -4,7 +4,7 @@ import { authentication } from "./authentication";
 import { registration } from "./registration";
 import { users } from "./users";
 import { config } from "./config";
-import { workflow } from "./workflow_list";
+import { workflow, workflowChildren } from "./workflow_list";
 import { workflowCreate } from "./workflow_create";
 import {
   workflowKind,
@@ -22,23 +22,24 @@ import { stepVersionFields } from "./step_version";
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
   authentication,
-  registration,
-  users,
+  changeStatus,
   config,
-  workflow,
-  workflowKind,
-  workflowGroupCount,
-  workflowKindStatus,
-  workflowDetails,
-  hasStepinfo,
-  workflowCreate,
   currentStepFields,
+  hasStepinfo,
+  registration,
+  stepVersionFields,
+  users,
+  workflow,
+  workflowChildren,
+  workflowComments,
+  workflowCreate,
+  workflowDetails,
+  workflowDetailsHeader,
   workflowFilters,
   workflowFilterType,
-  changeStatus,
-  workflowComments,
-  workflowDetailsHeader,
-  stepVersionFields
+  workflowGroupCount,
+  workflowKind,
+  workflowKindStatus
 });
 
 export default rootReducer;
