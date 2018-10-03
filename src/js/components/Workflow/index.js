@@ -55,7 +55,6 @@ class Workflow extends Component {
 
   componentDidMount = () => {
     //this.reloadWorkflowList();
-
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
@@ -164,7 +163,6 @@ class Workflow extends Component {
   loadExportList = () => {
     console.log("lodad");
   };
-
 
   toggleListView = status => {
     this.setState({ statusView: status });
