@@ -158,6 +158,7 @@ const GetTable = props => {
           </span>
         );
       }
+    }
   ];
 
   return <Table dataSource={data} pagination={false} columns={columns} />;
