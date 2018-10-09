@@ -1,4 +1,4 @@
-fimport { workflowFiltersConstants } from "../constants";
+import { workflowFiltersConstants } from "../constants";
 import _ from "lodash";
 
 const initialState = {

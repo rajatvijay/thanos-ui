@@ -368,6 +368,7 @@ const GetQuickData = props => {
           })}
         </div>
       </div>
+    </div>
   );
 };
 

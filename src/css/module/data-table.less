@@ -1,0 +1,44 @@
+@import url("../utilities/variables.less");
+@import url("../utilities/helper.less");
+
+.data-table {
+  margin-bottom: 80px;
+  color: #505050;
+  font-size: 14px;
+  border-collapse: separate;
+  border-spacing: 3px 0;
+
+  .ant-row {
+    .ant-col-12,
+    .ant-col-24 {
+      padding: 12px;
+      &:first-child {
+        border-right: 2px solid #fff;
+      }
+    }
+  }
+  &.table-striped .ant-row:nth-child(odd) {
+    .ant-col-12,
+    .ant-col-24 {
+      background: #f2f5fa;
+    }
+  }
+  &:last-child {
+    margin-bottom: 20px;
+  }
+  .dt-label {
+    font-size: 18px;
+    .text-medium();
+  }
+  .dt-value {
+    &.na {
+      color: #a0a0a0;
+    }
+  }
+  .pull-right {
+    float: right;
+    &.dt-value {
+      .text-medium();
+    }
+  }
+}
