@@ -497,6 +497,9 @@ export const Phone = props => {
 export const Paragraph = props => {
   return (
     <h2 key={props.field.id} className="step-form-paragraph">
+      {props.field.definition.extra.icon ? (
+        <i className="material-icons"> {props.field.definition.extra.icon} </i>
+      ) : null}
       <span
         dangerouslySetInnerHTML={{
           __html: getLink(props.field.definition.body)

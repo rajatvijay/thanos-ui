@@ -29,6 +29,7 @@ import { LexisNexis } from "./ln_field";
 import { BusinessUnit } from "./business-unit";
 import { Region } from "./region";
 import { GoogleSearch } from "./google-search";
+import { SerpSearch } from "./serpapi-search";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -119,6 +120,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "google_search":
       return GoogleSearch(props);
+    case "serp_google_search":
+      return SerpSearch(props);
     case "translation":
       return DnBCommon(props);
     case "transliteration":
