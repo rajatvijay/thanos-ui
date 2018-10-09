@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Tag } from "antd";
 import _ from "lodash";
 import { Row, Col } from "antd";
 
@@ -9,6 +10,7 @@ export const integrationCommonFunctions = {
   dnb_livingston_html,
   lexisnexis_html,
   google_search_html,
+  serp_search_html,
   comment_answer_body
 };
 
@@ -132,6 +134,30 @@ function lexisnexis_html(record) {
   );
 }
 
+function serp_search_html(record) {
+  return (
+    <div>
+      <div>
+        <b>{record.title}</b>
+      </div>
+      <div>
+        <b>{record.snippet}</b>
+      </div>
+      <div>
+        <a href={record.link} target="_blank">
+          {record.displayed_link}
+        </a>
+      </div>
+      {_.size(record.sentiment_analysis) ? (
+        <div>
+          Sentiments:{" "}
+          <Tag className="">{record.sentiment_analysis.Sentiment}</Tag>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function google_search_html(record) {
   return (
     <div>
@@ -231,7 +257,8 @@ function dnb_directors_html(record) {
   return (
     <div>
       <div>
-        <b>Name</b>: {record.PrincipalName.FullName.$}
+        <b>Name</b>:{" "}
+        {record.PrincipalName ? record.PrincipalName.FullName.$ : "-"}
       </div>
       {record.MostSeniorPrincipalIndicator ? (
         <div>
@@ -379,6 +406,14 @@ function dnb_rdc_html(record) {
         <Col span={11}>
           <InfoRow label="Name" value={record.EntityName} />
           <InfoRow label="Risk Score" value={record.RiskScore} />
+          <InfoRow
+            label="Name Match Score (%)"
+            value={
+              record.rosette_name_match_score
+                ? parseInt(record.rosette_name_match_score.score * 100)
+                : "-"
+            }
+          />
           <InfoRow label="Entity Type" value={record.EntityTypeText} />
         </Col>
 
