@@ -95,7 +95,7 @@ class WorkflowList extends Component {
               <div className="workflow-list">{ListCompletes}</div>
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
-                  pageSize={data.workflow.length}
+                  pageSize={20}
                   defaultCurrent={page ? page : 1}
                   total={data.count}
                   onChange={this.handlePageChange.bind(this)}
