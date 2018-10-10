@@ -754,7 +754,8 @@ template {
 }
 .data-table .dt-label {
   font-size: 18px;
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .data-table .dt-value.na {
   color: #a0a0a0;
@@ -763,7 +764,8 @@ template {
   float: right;
 }
 .data-table .pull-right.dt-value {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .ant-btn {
   border-radius: 2px;
@@ -1504,6 +1506,10 @@ template {
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #505050;
 }
+.ant-form.step-form .step-form-paragraph .material-icons {
+  vertical-align: text-bottom;
+  line-height: 18px;
+}
 .ant-form.step-form .step-form-break {
   height: 1px;
   margin-bottom: 34px;
@@ -1629,7 +1635,9 @@ template {
   display: block;
   margin-bottom: 10px;
 }
-.financial-statement-collapse.ant-collapse .ant-collapse-item .ant-collapse-header {
+.financial-statement-collapse.ant-collapse
+  .ant-collapse-item
+  .ant-collapse-header {
   background: #f5f5f5;
 }
 .waiting-filter-warpper {
