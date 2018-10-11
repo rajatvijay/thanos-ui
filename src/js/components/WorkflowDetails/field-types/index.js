@@ -30,6 +30,7 @@ import { BusinessUnit } from "./business-unit";
 import { Region } from "./region";
 import { GoogleSearch } from "./google-search";
 import { SerpSearch } from "./serpapi-search";
+import { UBOGraph } from "./dnb_ubo_graph";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -88,6 +89,9 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "dnb_ubo":
       return UBO(props);
+    case "dnb_ubo_graph":
+      return UBOGraph(props);
+
     case "dnb_directors":
       return Directors(props);
     case "dnb_rdc":

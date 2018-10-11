@@ -1640,6 +1640,13 @@ template {
   .ant-collapse-header {
   background: #f5f5f5;
 }
+#GraphContainer {
+  margin-bottom: 24px;
+  background-color: #fff;
+  border: 1px solid #d7e0e4;
+  height: 600px;
+  position: relative;
+}
 .waiting-filter-warpper {
   overflow: hidden;
 }
