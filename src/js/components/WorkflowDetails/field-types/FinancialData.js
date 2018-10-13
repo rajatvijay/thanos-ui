@@ -5,10 +5,13 @@ import NumberFormat from "../../../_helpers/NumberFormat";
 
 const Panel = Collapse.Panel;
 const FinancialData = props => {
-  var fs_list =
-    props.field.integration_json["OrderProductResponse"][
-      "OrderProductResponseDetail"
-    ]["Product"]["Organization"]["Financial"]["FinancialStatement"];
+  var fs_list = props.field.integration_json["OrderProductResponse"][
+    "OrderProductResponseDetail"
+  ]["Product"]["Organization"]["Financial"]
+    ? props.field.integration_json["OrderProductResponse"][
+        "OrderProductResponseDetail"
+      ]["Product"]["Organization"]["Financial"]["FinancialStatement"]
+    : null;
 
   const customPanelStyle = {
     borderRadius: 4,
@@ -105,192 +108,204 @@ const FinancialData = props => {
 
   return (
     <div>
-      <Collapse
-        defaultActiveKey={["panel-0"]}
-        bordered={false}
-        className="financial-statement-collapse"
-      >
-        {_.map(fs_list, function(b, index) {
-          var shd = b.StatementHeaderDetails || {};
-          var bs = b.BalanceSheet || {};
-          var bs_assets = _.size(bs) ? bs.Assets || {} : {};
-          var lb = _.size(bs) ? bs.Liabilities : {};
-          var pnl = b.ProfitAndLossStatement || {};
-          var fr = b.FinancialRatios || {};
-          return (
-            <Panel
-              header={
-                "Financial Statement for " +
-                (shd.FinancialStatementToDate
-                  ? shd.FinancialStatementToDate["$"]
-                  : "-")
-              }
-              key={"panel-" + index}
-              style={customPanelStyle}
-            >
-              <div key={b.custom_hash}>
-                <div className="table table-striped data-table">
-                  <RowHead label="Statement Details" />
+      {_.size(fs_list) ? (
+        <Collapse
+          defaultActiveKey={["panel-0"]}
+          bordered={false}
+          className="financial-statement-collapse"
+        >
+          {_.map(fs_list, function(b, index) {
+            var shd = b.StatementHeaderDetails || {};
+            var bs = b.BalanceSheet || {};
+            var bs_assets = _.size(bs) ? bs.Assets || {} : {};
+            var lb = _.size(bs) ? bs.Liabilities : {};
+            var pnl = b.ProfitAndLossStatement || {};
+            var fr = b.FinancialRatios || {};
+            return (
+              <Panel
+                header={
+                  "Financial Statement for " +
+                  (shd.FinancialStatementToDate
+                    ? shd.FinancialStatementToDate["$"]
+                    : "-")
+                }
+                key={"panel-" + index}
+                style={customPanelStyle}
+              >
+                <div key={b.custom_hash}>
+                  <div className="table table-striped data-table">
+                    <RowHead label="Statement Details" />
 
-                  <Row gutter={24}>
-                    <Column
-                      label={"Financial Statement To Date"}
-                      value={shd.FinancialStatementToDate["$"]}
-                      column={12}
-                    />
-                    <Column
-                      label={"Unit Of Size Text"}
-                      value={shd.UnitOfSizeText ? shd.UnitOfSizeText["$"] : "-"}
-                      column={12}
-                    />
-                  </Row>
+                    <Row gutter={24}>
+                      <Column
+                        label={"Financial Statement To Date"}
+                        value={shd.FinancialStatementToDate["$"]}
+                        column={12}
+                      />
+                      <Column
+                        label={"Unit Of Size Text"}
+                        value={
+                          shd.UnitOfSizeText ? shd.UnitOfSizeText["$"] : "-"
+                        }
+                        column={12}
+                      />
+                    </Row>
 
-                  <Row gutter={24}>
-                    <Column
-                      label={"Currency Code"}
-                      value={shd.CurrencyISOAlpha3Code || "-"}
-                      column={12}
-                    />
-                    <Column
-                      label={"Financial Period Duration"}
-                      value={shd.FinancialPeriodDuration || "-"}
-                      column={12}
-                    />
-                  </Row>
+                    <Row gutter={24}>
+                      <Column
+                        label={"Currency Code"}
+                        value={shd.CurrencyISOAlpha3Code || "-"}
+                        column={12}
+                      />
+                      <Column
+                        label={"Financial Period Duration"}
+                        value={shd.FinancialPeriodDuration || "-"}
+                        column={12}
+                      />
+                    </Row>
 
-                  <div>
-                    {_.size(bs_assets) ? (
+                    <div>
+                      {_.size(bs_assets) ? (
+                        <RowHead
+                          label="Balance Sheet Assets"
+                          className="mr-top-lg mr-bottom-lg"
+                        />
+                      ) : null}
+
+                      {_.size(bs_assets) ? (
+                        <Row gutter={24}>
+                          <Column
+                            label={"Total Current Assets Amount"}
+                            value={
+                              bs_assets.TotalCurrentAssetsAmount ? (
+                                <NumberFormat
+                                  value={
+                                    bs_assets.TotalCurrentAssetsAmount["$"]
+                                  }
+                                />
+                              ) : (
+                                "-"
+                              )
+                            }
+                            column={24}
+                          />
+                        </Row>
+                      ) : null}
+                    </div>
+
+                    {_.size(bs_assets) &&
+                    _.size(
+                      bs_assets.LongTermAssets &&
+                        bs_assets.LongTermAssets.StatementItem
+                    ) ? (
+                      <FinSection
+                        list={bs_assets.LongTermAssets.StatementItem}
+                        header="Long Term Assets Statements"
+                      />
+                    ) : null}
+
+                    <Row gutter={24}>
+                      <Column
+                        label={"Total Assets Amount"}
+                        value={
+                          bs.TotalAssetsAmount ? (
+                            <NumberFormat value={bs.TotalAssetsAmount["$"]} />
+                          ) : (
+                            "-"
+                          )
+                        }
+                        column={12}
+                      />
+
+                      <Column
+                        label={"Total Current Liabilities Amount"}
+                        value={
+                          lb.TotalCurrentLiabilitiesAmount ? (
+                            <NumberFormat
+                              value={lb.TotalCurrentLiabilitiesAmount["$"]}
+                            />
+                          ) : (
+                            "-"
+                          )
+                        }
+                        column={12}
+                      />
+                    </Row>
+
+                    <Row gutter={24}>
+                      <Column
+                        label={"Total Equity Amount"}
+                        value={
+                          lb.TotalEquityAmount ? (
+                            <NumberFormat value={lb.TotalEquityAmount["$"]} />
+                          ) : (
+                            "-"
+                          )
+                        }
+                        column={24}
+                      />
+                    </Row>
+
+                    {_.size(lb.Equity && lb.Equity.StatementItem) ? (
+                      <FinSection
+                        list={lb.Equity.StatementItem}
+                        header="Equity"
+                      />
+                    ) : null}
+
+                    {_.size(pnl.StatementItem) ? (
+                      <FinSection
+                        list={pnl.StatementItem}
+                        header="Profit And Loss Statement"
+                      />
+                    ) : null}
+
+                    {_.size(fr) && _.size(fr.FinancialRatioCategory) ? (
                       <RowHead
-                        label="Balance Sheet Assets"
+                        label="Financial Ratios"
                         className="mr-top-lg mr-bottom-lg"
                       />
                     ) : null}
 
-                    {_.size(bs_assets) ? (
-                      <Row gutter={24}>
-                        <Column
-                          label={"Total Current Assets Amount"}
-                          value={
-                            bs_assets.TotalCurrentAssetsAmount ? (
-                              <NumberFormat
-                                value={bs_assets.TotalCurrentAssetsAmount["$"]}
-                              />
-                            ) : (
-                              "-"
-                            )
+                    {_.size(fr) && _.size(fr.FinancialRatioCategory)
+                      ? _.map(fr.FinancialRatioCategory, function(frc) {
+                          var fri = frc.FinancialRatioItem || [];
+                          if (!_.size(fri)) {
+                            return <span />;
                           }
-                          column={24}
-                        />
-                      </Row>
-                    ) : null}
+                          fri = fri[0];
+                          return (
+                            <Row gutter={24}>
+                              <Column
+                                label={
+                                  fri.ItemDescriptionText
+                                    ? fri.ItemDescriptionText["$"]
+                                    : "-"
+                                }
+                                value={
+                                  fri.ItemAmount ? fri.ItemAmount["$"] : "-"
+                                }
+                                column={12}
+                              />
+                            </Row>
+                          );
+                        })
+                      : null}
+
+                    <br />
+                    <Divider>END</Divider>
+                    <br />
                   </div>
-
-                  {_.size(bs_assets) &&
-                  _.size(
-                    bs_assets.LongTermAssets &&
-                      bs_assets.LongTermAssets.StatementItem
-                  ) ? (
-                    <FinSection
-                      list={bs_assets.LongTermAssets.StatementItem}
-                      header="Long Term Assets Statements"
-                    />
-                  ) : null}
-
-                  <Row gutter={24}>
-                    <Column
-                      label={"Total Assets Amount"}
-                      value={
-                        bs.TotalAssetsAmount ? (
-                          <NumberFormat value={bs.TotalAssetsAmount["$"]} />
-                        ) : (
-                          "-"
-                        )
-                      }
-                      column={12}
-                    />
-
-                    <Column
-                      label={"Total Current Liabilities Amount"}
-                      value={
-                        lb.TotalCurrentLiabilitiesAmount ? (
-                          <NumberFormat
-                            value={lb.TotalCurrentLiabilitiesAmount["$"]}
-                          />
-                        ) : (
-                          "-"
-                        )
-                      }
-                      column={12}
-                    />
-                  </Row>
-
-                  <Row gutter={24}>
-                    <Column
-                      label={"Total Equity Amount"}
-                      value={
-                        lb.TotalEquityAmount ? (
-                          <NumberFormat value={lb.TotalEquityAmount["$"]} />
-                        ) : (
-                          "-"
-                        )
-                      }
-                      column={24}
-                    />
-                  </Row>
-
-                  {_.size(lb.Equity && lb.Equity.StatementItem) ? (
-                    <FinSection
-                      list={lb.Equity.StatementItem}
-                      header="Equity"
-                    />
-                  ) : null}
-
-                  {_.size(pnl.StatementItem) ? (
-                    <FinSection
-                      list={pnl.StatementItem}
-                      header="Profit And Loss Statement"
-                    />
-                  ) : null}
-
-                  {_.size(fr) && _.size(fr.FinancialRatioCategory) ? (
-                    <RowHead
-                      label="Financial Ratios"
-                      className="mr-top-lg mr-bottom-lg"
-                    />
-                  ) : null}
-
-                  {_.size(fr) && _.size(fr.FinancialRatioCategory)
-                    ? _.map(fr.FinancialRatioCategory, function(frc) {
-                        var fri = frc.FinancialRatioItem || [];
-                        if (!_.size(fri)) {
-                          return <span />;
-                        }
-                        fri = fri[0];
-                        return (
-                          <Row gutter={24}>
-                            <Column
-                              label={
-                                fri.ItemDescriptionText
-                                  ? fri.ItemDescriptionText["$"]
-                                  : "-"
-                              }
-                              value={fri.ItemAmount ? fri.ItemAmount["$"] : "-"}
-                              column={12}
-                            />
-                          </Row>
-                        );
-                      })
-                    : null}
-
-                  <br />
-                  <Divider>END</Divider>
-                  <br />
                 </div>
-              </div>
-            </Panel>
-          );
-        })}
-      </Collapse>
+              </Panel>
+            );
+          })}
+        </Collapse>
+      ) : (
+        <div className="text-center mr-ard-lg t-18 text-medium text-grey">
+          Financial data not available
+        </div>
+      )}
     </div>
   );
 };
