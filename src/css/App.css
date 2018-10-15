@@ -1509,6 +1509,8 @@ template {
 .ant-form.step-form .step-form-paragraph .material-icons {
   vertical-align: text-bottom;
   line-height: 18px;
+  font-size: 18px;
+  padding-right: 10px;
 }
 .ant-form.step-form .step-form-break {
   height: 1px;
@@ -1565,6 +1567,9 @@ template {
 }
 .ant-form.step-form .url-field {
   height: auto;
+  min-height: 30px;
+  display: inline-flex;
+  width: 100%;
 }
 .ant-form.step-form .ant-input-disabled,
 .ant-form.step-form .ant-select-disabled {

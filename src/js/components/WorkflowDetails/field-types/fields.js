@@ -498,7 +498,12 @@ export const Paragraph = props => {
   return (
     <h2 key={props.field.id} className="step-form-paragraph">
       {props.field.definition.extra.icon ? (
-        <i className="material-icons"> {props.field.definition.extra.icon} </i>
+        <i
+          className="material-icons"
+          style={{ color: props.field.definition.extra.iconColor }}
+        >
+          {props.field.definition.extra.icon}{" "}
+        </i>
       ) : null}
       <span
         dangerouslySetInnerHTML={{
