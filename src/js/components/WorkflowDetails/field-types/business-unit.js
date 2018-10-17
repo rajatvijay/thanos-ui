@@ -55,7 +55,8 @@ class BU extends Component {
             loading: false
           });
         } else {
-          this.setState({ data: body.results, loading: false });
+          let data = _.orderBy(body.results, ["label"], ["asc"]);
+          this.setState({ data: data, loading: false });
         }
       });
   };

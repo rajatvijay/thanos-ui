@@ -133,7 +133,11 @@ class WorkflowFilter extends Component {
   render() {
     const { value } = this.state;
     const regionData = this.props.workflowFilterType.regionType;
-    const businessData = this.props.workflowFilterType.businessType;
+    const bd = this.props.workflowFilterType.businessType;
+    const businessData = {
+      loading: bd.loading,
+      results: _.orderBy(bd.results, ["label"], ["asc"])
+    };
     const statusData = !this.props.workflowFilterType.statusType.error
       ? this.props.workflowFilterType.statusType
       : [{ value: "empty", label: "empty" }];
@@ -350,7 +354,7 @@ class FilterSidebar extends Component {
 
   render = () => {
     let that = this,
-    filterList = filterTypeSelect;
+      filterList = filterTypeSelect;
 
     const { workflowKind } = this.props.workflowKind;
 
