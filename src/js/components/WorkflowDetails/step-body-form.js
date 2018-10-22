@@ -354,9 +354,6 @@ class StepBodyForm extends Component {
               permission: that.props.permission
             };
 
-            // console.log('param---------')
-            // console.log(param)
-
             let field = getFieldType(param);
 
             ///row size method
