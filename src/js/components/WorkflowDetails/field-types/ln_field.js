@@ -521,7 +521,7 @@ const GetTabsFilter = props => {
         .ResultRecord.Watchlist.Matches.WLMatch;
   } catch (err) {
     console.log("LN error ---->", props.jsonData);
-    return <div className="text-center text-red">Something went wrong!</div>;
+    return <div className="text-center text-red">No matches foun!</div>;
   }
 
   if (!Array.isArray(data)) {
