@@ -6,6 +6,7 @@ import { countries } from "./countries.js";
 import { dunsFieldActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import FinancialData from "./FinancialData";
+import LitigationData from "./LitigationData";
 
 const {
   getLabel,
@@ -43,7 +44,7 @@ class DnBSearch extends Component {
 
   render = () => {
     let { field } = this.props;
-    let financial = false;
+    let integration = null;
     const props = {
       field: field,
       queryChange: this.queryChange,
@@ -79,18 +80,19 @@ class DnBSearch extends Component {
       }
     }
 
-    if (
-      _.size(props.field.integration_json) &&
-      this.props.field.definition.field_type === "dnb_financials"
-    ) {
-      financial = true;
+    if (_.size(props.field.integration_json)) {
+      integration = this.props.field.definition.field_type;
     }
 
     return (
       <div>
         {getFields(props)}
         {final_html}
-        {financial ? <FinancialData {...props} /> : null}
+        {integration === "dnb_financials" ? <FinancialData {...props} /> : null}
+        {integration === "dnb_litigation" ? (
+          <LitigationData {...props} />
+        ) : null}
+
         <br />
       </div>
     );
