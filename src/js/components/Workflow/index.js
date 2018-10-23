@@ -9,7 +9,6 @@ import {
   Dropdown,
   Menu,
   Tooltip,
-  Carousel,
   Switch
 } from "antd";
 import WorkflowList from "./workflow-list";
@@ -24,7 +23,6 @@ import FilterSidebar from "./filter";
 import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
-import StatusGraph from "./status-graph";
 import { veryfiyClient } from "../../utils/verification";
 
 class Workflow extends Component {
@@ -182,85 +180,51 @@ class Workflow extends Component {
           hasSider={false}
         >
           <div className="section-top ">
-            <Carousel>
-              <div>
-                <Row>
-                  <Col span="12" className="waiting-section">
-                    <span
-                      className="waiting-filter-trigger text-anchor"
-                      onClick={this.toggleWaitingFilter}
-                    >
-                      Waiting on{" "}
-                      <i className="material-icons">
-                        {this.state.showWaitingFitler
-                          ? "keyboard_arrow_down"
-                          : "keyboard_arrow_up"}
-                      </i>
-                    </span>
-                  </Col>
-                  <Col span="12" className="text-right export-section">
-                    {_.includes(
-                      this.props.config.permissions,
-                      "Can export workflow data"
-                    ) ? (
-                      <Tooltip title={"Export workflow data"}>
-                        <Dropdown
-                          overlay={this.getExportList()}
-                          trigger="click"
-                          onClick={this.loadExportList}
-                        >
-                          <span className="pd-ard-sm text-light text-anchor">
-                            <i className="material-icons">save_alt</i>
-                          </span>
-                        </Dropdown>
-                      </Tooltip>
-                    ) : null}
-                  </Col>
-                </Row>
-                <div
-                  className={
-                    "waiting-filter-warpper animated " +
-                    (this.state.showWaitingFitler ? " grow " : " shrink")
-                  }
-                >
-                  {this.state.defKind ? (
-                    <WorkflowFilterTop {...this.props} />
+            <div>
+              <Row>
+                <Col span="12" className="waiting-section">
+                  <span
+                    className="waiting-filter-trigger text-anchor"
+                    onClick={this.toggleWaitingFilter}
+                  >
+                    Waiting on{" "}
+                    <i className="material-icons">
+                      {this.state.showWaitingFitler
+                        ? "keyboard_arrow_down"
+                        : "keyboard_arrow_up"}
+                    </i>
+                  </span>
+                </Col>
+                <Col span="12" className="text-right export-section">
+                  {_.includes(
+                    this.props.config.permissions,
+                    "Can export workflow data"
+                  ) ? (
+                    <Tooltip title={"Export workflow data"}>
+                      <Dropdown
+                        overlay={this.getExportList()}
+                        trigger="click"
+                        onClick={this.loadExportList}
+                      >
+                        <span className="pd-ard-sm text-light text-anchor">
+                          <i className="material-icons">save_alt</i>
+                        </span>
+                      </Dropdown>
+                    </Tooltip>
                   ) : null}
-                </div>
+                </Col>
+              </Row>
+              <div
+                className={
+                  "waiting-filter-warpper animated " +
+                  (this.state.showWaitingFitler ? " grow " : " shrink")
+                }
+              >
+                {this.state.defKind ? (
+                  <WorkflowFilterTop {...this.props} />
+                ) : null}
               </div>
-
-              <div>
-                <Row>
-                  <Col span="12" className="waiting-section">
-                    <span
-                      className="waiting-filter-trigger text-anchor"
-                      onClick={this.toggleWaitingFilter}
-                    >
-                      Statuses{" "}
-                    </span>
-                  </Col>
-                  <Col span="12" className="text-right export-section">
-                    {_.includes(
-                      this.props.config.permissions,
-                      "Can export workflow data"
-                    ) ? (
-                      <Tooltip title={"Export workflow data"}>
-                        <Dropdown
-                          overlay={this.getExportList()}
-                          trigger="click"
-                          onClick={this.loadExportList}
-                        >
-                          <span className="pd-ard-sm text-light text-anchor">
-                            <i className="material-icons">save_alt</i>
-                          </span>
-                        </Dropdown>
-                      </Tooltip>
-                    ) : null}
-                  </Col>
-                </Row>
-                <StatusGraph />
-              </div>
-            </Carousel>
+            </div>
           </div>
 
           {this.props.workflow.loading ? null : (
