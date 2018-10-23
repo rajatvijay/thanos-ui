@@ -269,9 +269,8 @@ function getIntegrationSearchButton(props) {
 }
 
 function isDisabled(props) {
-  let editable = props.currentStepFields.currentStepFields.is_editable
-    ? props.currentStepFields.currentStepFields.is_editable
-    : true;
+  let editable = props.currentStepFields.currentStepFields.is_editable;
+
   let disabled =
     props.completed ||
     props.is_locked ||
