@@ -139,6 +139,28 @@ class StepBodyForm extends Component {
     this.props.dispatch(workflowStepActions.undoStep(step));
   };
 
+  getComletedBy = step => {
+    let completed_by = null;
+    if (step.completed_by.first_name !== "") {
+      completed_by = step.completed_by.first_name;
+    } else if (step.completed_by.email !== "") {
+      completed_by = step.completed_by.email;
+    } else {
+      completed_by = "...";
+    }
+
+    return (
+      <span>
+        Completed by{" "}
+        <span className="text-medium ">
+          {console.log(step)}
+          {completed_by}
+        </span>{" "}
+        <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
+      </span>
+    );
+  };
+
   //Calculate step completions and approval
   getStepStatus = stepData => {
     const step = stepData;
@@ -170,19 +192,7 @@ class StepBodyForm extends Component {
                               {step.approved_at ? "Undo approval" : "Approve step"}
                             </span>*/}
 
-              {step.completed_at ? (
-                <span>
-                  Completed by{" "}
-                  <span className="text-medium ">
-                    {step.completed_by
-                      ? step.completed_by.first_name
-                      : step.completed_by.email
-                        ? step.completed_by.email
-                        : "..."}
-                  </span>{" "}
-                  <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
-                </span>
-              ) : null}
+              {step.completed_at ? this.getComletedBy(step) : null}
 
               {/*
               {step.approved_at ? (
