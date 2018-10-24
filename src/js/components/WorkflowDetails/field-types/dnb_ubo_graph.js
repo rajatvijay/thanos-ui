@@ -128,6 +128,22 @@ class DnbUBOGraph extends Component {
     this.props.getIntegrationComments(data.MemberID, this.props.field.id);
   };
 
+  renderGraph = field => {
+    if (
+      _.size(field.integration_json) &&
+      field.integration_json.OrderProductResponse.OrderProductResponseDetail
+    ) {
+      return <div id="GraphContainer" />;
+    } else {
+      return (
+        <div className="pd-ard t-16 mr-bottom-lg">
+          No matching results<br />
+          <br />
+        </div>
+      );
+    }
+  };
+
   render = () => {
     let { field } = this.props;
 
@@ -149,11 +165,7 @@ class DnbUBOGraph extends Component {
       _.size(field.integration_json) &&
       !field.integration_json.selected_match
     ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? <div id="GraphContainer" /> : null}
-        </div>
-      );
+      final_html = <div>{this.renderGraph(field)}</div>;
     }
 
     return (
