@@ -235,7 +235,11 @@ class Comments extends Component {
                               padding: "2px 0px 3px"
                             }}
                           >
-                            <b>{msg.posted_by.first_name}</b>
+                            <b>
+                              {msg.posted_by.first_name !== ""
+                                ? msg.posted_by.first_name
+                                : msg.posted_by.email}
+                            </b>
                             <span
                               style={{ fontSize: "11px", marginLeft: "6px" }}
                             >
