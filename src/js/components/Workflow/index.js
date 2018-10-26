@@ -9,6 +9,7 @@ import {
   Dropdown,
   Menu,
   Tooltip,
+  Drawer,
   Switch
 } from "antd";
 import WorkflowList from "./workflow-list";
@@ -24,6 +25,7 @@ import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
+import MetaGraph from "./MetaGraph";
 
 class Workflow extends Component {
   constructor(props) {
@@ -33,7 +35,8 @@ class Workflow extends Component {
       workflowId: null,
       showWaitingFitler: false,
       isUserAuthenticated: false,
-      statusView: true
+      statusView: true,
+      visible: false
     };
 
     if (!this.props.users.me) {
@@ -170,6 +173,18 @@ class Workflow extends Component {
     this.props.dispatch(checkAuth());
   };
 
+  showDrawer = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      visible: false
+    });
+  };
+
   render = () => {
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
@@ -196,6 +211,14 @@ class Workflow extends Component {
                   </span>
                 </Col>
                 <Col span="12" className="text-right export-section">
+                  <Tooltip title={"Insight"}>
+                    <span className="pd-ard-sm" onClick={this.showDrawer}>
+                      <i className="material-icons text-light text-anchor t-18 ">
+                        trending_up
+                      </i>
+                    </span>
+                  </Tooltip>
+
                   {_.includes(
                     this.props.config.permissions,
                     "Can export workflow data"
@@ -275,6 +298,16 @@ class Workflow extends Component {
               />
             </div>
           )}
+          <Drawer
+            width={400}
+            title="Insight"
+            placement="right"
+            closable={false}
+            onClose={this.onClose}
+            visible={this.state.visible}
+          >
+            <MetaGraph />
+          </Drawer>
         </Layout>
       </Layout>
     );
