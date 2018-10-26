@@ -165,6 +165,11 @@ class StepBodyForm extends Component {
   getStepStatus = stepData => {
     const step = stepData;
 
+    let editable = true;
+    if (step.hasOwnProperty("is_editable")) {
+      let editable = step.is_editable;
+    }
+
     if (step.completed_at || step.approved_at) {
       //this.getUserById(step.completed_by, 'completed');
 
@@ -174,7 +179,8 @@ class StepBodyForm extends Component {
         <Alert
           message={
             <div className="">
-              {_.includes(this.props.permission, "Can undo a step") ? (
+              {_.includes(this.props.permission, "Can undo a step") &&
+              editable ? (
                 <span
                   className="float-right text-anchor text-underline "
                   onClick={this.onUndoStep.bind(this, step)}
@@ -293,6 +299,14 @@ class StepBodyForm extends Component {
     let v =
       !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
       this.props.showVersion;
+
+    let csf = currentStepFields.currentStepFields
+      ? currentStepFields.currentStepFields
+      : null;
+    let editable = true;
+    if (csf.hasOwnProperty("is_editable")) {
+      let editable = this.props.currentStepFields.currentStepFields.is_editable;
+    }
 
     return (
       <Form
@@ -444,7 +458,8 @@ class StepBodyForm extends Component {
           <Col span="6" className="text-right">
             {this.props.stepData.completed_at ||
             this.props.stepData.is_locked ||
-            !_.includes(this.props.permission, "Can submit a step") ? null : (
+            !_.includes(this.props.permission, "Can submit a step") ||
+            !editable ? null : (
               <FormItem>
                 <Button type="primary" htmlType="submit">
                   Submit
