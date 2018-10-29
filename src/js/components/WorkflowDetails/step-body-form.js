@@ -88,8 +88,6 @@ class StepBodyForm extends Component {
   //////////////////////////////////////
   //Dispatch field update /save actions/
   callDispatch = (data, method, payload) => {
-    console.log(payload.field.definition.field_type);
-
     let saveNowType = [
       "dnb_duns_search",
       "bool",
@@ -151,11 +149,7 @@ class StepBodyForm extends Component {
 
     return (
       <span>
-        Completed by{" "}
-        <span className="text-medium ">
-          {console.log(step)}
-          {completed_by}
-        </span>{" "}
+        Completed by <span className="text-medium ">{completed_by}</span>{" "}
         <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
       </span>
     );
@@ -164,11 +158,7 @@ class StepBodyForm extends Component {
   //Calculate step completions and approval
   getStepStatus = stepData => {
     const step = stepData;
-
-    let editable = true;
-    if (step.hasOwnProperty("is_editable")) {
-      let editable = step.is_editable;
-    }
+    let editable = step.is_editable;
 
     if (step.completed_at || step.approved_at) {
       //this.getUserById(step.completed_by, 'completed');
@@ -299,14 +289,7 @@ class StepBodyForm extends Component {
     let v =
       !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
       this.props.showVersion;
-
-    let csf = currentStepFields.currentStepFields
-      ? currentStepFields.currentStepFields
-      : null;
-    let editable = true;
-    if (csf.hasOwnProperty("is_editable")) {
-      let editable = this.props.currentStepFields.currentStepFields.is_editable;
-    }
+    let editable = this.props.currentStepFields.currentStepFields.is_editable;
 
     return (
       <Form
