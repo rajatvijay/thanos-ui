@@ -169,8 +169,7 @@ class StepBodyForm extends Component {
         <Alert
           message={
             <div className="">
-              {_.includes(this.props.permission, "Can undo a step") &&
-              editable ? (
+              {_.includes(this.props.permission, "Can undo a step") ? (
                 <span
                   className="float-right text-anchor text-underline "
                   onClick={this.onUndoStep.bind(this, step)}
@@ -441,8 +440,7 @@ class StepBodyForm extends Component {
           <Col span="6" className="text-right">
             {this.props.stepData.completed_at ||
             this.props.stepData.is_locked ||
-            !_.includes(this.props.permission, "Can submit a step") ||
-            !editable ? null : (
+            !_.includes(this.props.permission, "Can submit a step") ? null : (
               <FormItem>
                 <Button type="primary" htmlType="submit">
                   Submit
