@@ -12,7 +12,8 @@ import {
   Tabs,
   Tag,
   Menu,
-  Dropdown
+  Dropdown,
+  Tooltip
 } from "antd";
 import _ from "lodash";
 
@@ -35,8 +36,18 @@ export const commonFunctions = {
 };
 
 //Utility func
-function getLabel(props) {
-  return props.field.definition.body;
+function getLabel(props, that) {
+  let label = (
+    <span className="label-with-action">
+      <span className="float-right">
+        {addCommentBtn(that, props)}
+        {fieldFlagDropdown(that, props)}
+      </span>
+
+      {props.field.definition.body}
+    </span>
+  );
+  return label;
 }
 
 function onFieldChange(props, value, value2) {
@@ -115,7 +126,7 @@ function addComment(props) {
 }
 
 function addCommentBtn(e, props) {
-  let comment_btn_text = "Add comment";
+  let comment_btn_text = "Comment /question";
   if (props.field.comment_count == 1) {
     comment_btn_text = "1 comment";
   } else if (props.field.comment_count > 1) {
@@ -123,7 +134,17 @@ function addCommentBtn(e, props) {
   }
   return (
     <div className="add_comment_btn" onClick={addComment.bind(e, props)}>
-      <span>{comment_btn_text}</span>
+      <Tooltip placement="topRight" title={comment_btn_text}>
+        <span>
+          {" "}
+          {props.field.comment_count > 0 ? (
+            <span className="pd-right-md">{props.field.comment_count}</span>
+          ) : null}{" "}
+          <i className="material-icons  t-18 text-secondary">
+            chat_bubble_outline
+          </i>
+        </span>
+      </Tooltip>
     </div>
   );
 }
@@ -161,13 +182,20 @@ function fieldFlagDropdown(e, props) {
     </Menu>
   );
   return (
-    <div style={{ float: "right", marginLeft: "10px", marginTop: "1px" }}>
+    <div
+      style={{
+        float: "right",
+        marginLeft: "10px",
+        marginTop: "1px",
+        marginRight: "10px"
+      }}
+    >
       <Dropdown overlay={flag_dropdown}>
         <a
           className="ant-dropdown-link text-nounderline text-secondary"
           href="#"
         >
-          <i className="material-icons text-middle t-16">flag</i>{" "}
+          <i className="material-icons text-middle t-18">outlined_flag</i>{" "}
           <Icon type="down" />
         </a>
       </Dropdown>

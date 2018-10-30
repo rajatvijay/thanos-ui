@@ -40,9 +40,6 @@ const {
   field_error,
   getRequired,
   feedValue,
-  addComment,
-  addCommentBtn,
-  fieldFlagDropdown,
   getLink,
   getStyle,
   isDisabled
@@ -54,9 +51,12 @@ export const Text = props => {
   if (props.field.selected_flag[props.field.id]) {
     css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
   }
+
+  let that = this;
+
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className={
         "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
       }
@@ -87,9 +87,6 @@ export const Text = props => {
         onBlur={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       />
-
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -102,9 +99,10 @@ export const Bool = props => {
       ? props.field.definition.defaultValue
       : null;
 
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -124,17 +122,16 @@ export const Bool = props => {
           No
         </Radio>
       </RadioGroup>
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
 
 //Field Type Number
 export const Number = props => {
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -159,8 +156,6 @@ export const Number = props => {
         onChange={onFieldChange.bind(this, props)}
         onBlur={e => props.onFieldChange(e, props)}
       />
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -176,10 +171,10 @@ export const Date = props => {
   if (defaultDate) {
     defaultAnswer2 = moment(defaultAnswer).format("YYYY/MM/DD");
   }
-
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -195,8 +190,6 @@ export const Date = props => {
         defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"MM-DD-YYYY"}
       />
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -234,9 +227,10 @@ class Email2 extends React.Component {
 
   render = () => {
     const props = this.props;
+    let that = this;
     return (
       <FormItem
-        label={getLabel(props)}
+        label={getLabel(props, that)}
         className="from-label"
         style={{ display: "block" }}
         key={props.field.id}
@@ -264,9 +258,6 @@ class Email2 extends React.Component {
           onBlur={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
-
-        {fieldFlagDropdown(this, props)}
-        {addCommentBtn(this, props)}
       </FormItem>
     );
   };
@@ -308,9 +299,10 @@ class URL2 extends React.Component {
 
   render = () => {
     const props = this.props;
+    let that = this;
     return (
       <FormItem
-        label={getLabel(props)}
+        label={getLabel(props, that)}
         className="from-label"
         style={{ display: "block" }}
         key={props.field.id}
@@ -360,9 +352,6 @@ class URL2 extends React.Component {
             </span>
           </span>
         )}
-
-        {fieldFlagDropdown(this, props)}
-        {addCommentBtn(this, props)}
       </FormItem>
     );
   };
@@ -376,10 +365,10 @@ export const URL = props => {
 const CheckboxGroup = AntCheckbox.Group;
 export const Checkbox = props => {
   let defVal = [{ label: "Yes", value: "true" }];
-
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -403,8 +392,6 @@ export const Checkbox = props => {
         }
         {...feedValue(props)}
       />
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -418,10 +405,10 @@ export const Select = props => {
   if (!single) {
     save = onFieldChangeArray.bind(this, props);
   }
-
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -453,17 +440,16 @@ export const Select = props => {
           );
         })}
       </AntSelect>
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
 
 //Field Type Phone Number
 export const Phone = props => {
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -487,8 +473,6 @@ export const Phone = props => {
         onBlur={e => props.onFieldChange(e, props)}
         //onBlur={handleInputBlur}
       />
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -516,9 +500,10 @@ export const Paragraph = props => {
 
 //Field Type List option select
 export const List = props => {
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -529,8 +514,6 @@ export const List = props => {
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
     >
       list
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };
@@ -597,7 +580,7 @@ class FileUpload extends Component {
 
     return (
       <FormItem
-        label={getLabel(this.props)}
+        label={getLabel(this.props, that)}
         className="from-label"
         style={{ display: "block" }}
         key={field.id}
@@ -706,8 +689,6 @@ class FileUpload extends Component {
             );
           })*/}
         </div>
-        {fieldFlagDropdown(this, this.props)}
-        {addCommentBtn(this, this.props)}
       </FormItem>
     );
   };
@@ -751,10 +732,11 @@ class AttachmentDownload extends Component {
   };
 
   render = () => {
+    let that = this;
     return (
       <div>
         <FormItem
-          label={getLabel(this.props)}
+          label={getLabel(this.props, that)}
           className="from-label attachment-field"
           style={{ display: "block" }}
           key={this.props.field.id}
@@ -771,8 +753,6 @@ class AttachmentDownload extends Component {
             Download file
           </Button>
         </FormItem>
-        {fieldFlagDropdown(this, this.props)}
-        {addCommentBtn(this, this.props)}
       </div>
     );
   };
@@ -784,9 +764,10 @@ export const Attachment = props => {
 
 //Field Type Cascader
 export const CascaderField = props => {
+  let that = this;
   return (
     <FormItem
-      label={getLabel(props)}
+      label={getLabel(props, that)}
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
@@ -804,8 +785,6 @@ export const CascaderField = props => {
         onChange={onFieldChangeArray.bind(this, props)}
         options={props.field.definition.extra}
       />
-      {fieldFlagDropdown(this, props)}
-      {addCommentBtn(this, props)}
     </FormItem>
   );
 };

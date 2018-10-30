@@ -1490,7 +1490,25 @@ template {
   overflow-x: visible !important;
 }
 .ant-form.step-form .ant-form-item-label label {
+  display: block;
   color: #343b4c;
+}
+.ant-form.step-form .ant-form-item-required:before {
+  display: none;
+  content: "";
+}
+.ant-form.step-form .label-with-action {
+  display: inline-block;
+  width: 100%;
+}
+.ant-form.step-form .ant-form-item-required .label-with-action:before {
+  display: inline-block;
+  margin-right: 4px;
+  content: "*";
+  font-family: SimSun;
+  line-height: 1;
+  font-size: 14px;
+  color: #f5222d;
 }
 .ant-form.step-form .ant-form-item-label label {
   white-space: normal;
