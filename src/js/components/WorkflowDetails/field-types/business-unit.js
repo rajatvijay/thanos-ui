@@ -18,8 +18,6 @@ const {
   field_error,
   getRequired,
   feedValue,
-  addComment,
-  addCommentBtn,
   getLink
 } = commonFunctions;
 
@@ -70,10 +68,11 @@ class BU extends Component {
     // if (!single) {
     //     save = onFieldChangeArray.bind(this, props);
     // }
+    let that = this;
 
     return (
       <FormItem
-        label={getLabel(props)}
+        label={getLabel(props, that)}
         className="from-label"
         style={{ display: "block" }}
         key={props.field.id}
@@ -107,7 +106,6 @@ class BU extends Component {
             );
           })}
         </AntSelect>
-        {addCommentBtn(this, props)}
       </FormItem>
     );
   };

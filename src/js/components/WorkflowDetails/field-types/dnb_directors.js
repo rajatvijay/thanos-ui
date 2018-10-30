@@ -28,14 +28,7 @@ const { Column, ColumnGroup } = Table;
 
 //const dunsResponse = JSON.parse(dunsData);
 
-const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
-  getIntegrationSearchButton
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {

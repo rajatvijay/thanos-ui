@@ -37,17 +37,21 @@ export const commonFunctions = {
 
 //Utility func
 function getLabel(props, that) {
-  let label = (
-    <span className="label-with-action">
-      <span className="float-right">
-        {addCommentBtn(that, props)}
-        {fieldFlagDropdown(that, props)}
-      </span>
+  if (that) {
+    let label = (
+      <span className="label-with-action">
+        <span className="float-right">
+          {addCommentBtn(that, props)}
+          {fieldFlagDropdown(that, props)}
+        </span>
 
-      {props.field.definition.body}
-    </span>
-  );
-  return label;
+        {props.field.definition.body}
+      </span>
+    );
+    return label;
+  } else {
+    return props.field.definition.body;
+  }
 }
 
 function onFieldChange(props, value, value2) {

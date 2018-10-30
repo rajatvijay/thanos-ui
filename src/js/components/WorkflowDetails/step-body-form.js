@@ -149,7 +149,7 @@ class StepBodyForm extends Component {
 
     return (
       <span>
-        Completed by <span className="text-medium ">{completed_by}</span>{" "}
+        Completed by <span className="text-medium ">{completed_by}</span> on{" "}
         <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
       </span>
     );
