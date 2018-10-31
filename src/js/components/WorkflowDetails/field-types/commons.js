@@ -130,7 +130,7 @@ function addComment(props) {
 }
 
 function addCommentBtn(e, props) {
-  let comment_btn_text = "Comment /question";
+  let comment_btn_text = "Add Comments/Questions";
   if (props.field.comment_count == 1) {
     comment_btn_text = "1 comment";
   } else if (props.field.comment_count > 1) {
