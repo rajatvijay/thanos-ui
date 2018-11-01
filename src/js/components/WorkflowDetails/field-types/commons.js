@@ -261,7 +261,11 @@ function getIntegrationSearchButton(props) {
     dnb_financials: "Get Financial Statements",
     dnb_litigation: "Get Bankcryptcy Statements",
     translation: "Translate",
-    transliteration: "Transliterate"
+    transliteration: "Transliterate",
+    thomson_reuters_group: "Get TR group",
+    thomson_reuters_case: "Create TR case",
+    thomson_reuters_screen: "Screen TR case",
+    thomson_reuters_screenresult: "Get TR Screening results"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];

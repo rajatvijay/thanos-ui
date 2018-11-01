@@ -31,6 +31,7 @@ import { Region } from "./region";
 import { GoogleSearch } from "./google-search";
 import { SerpSearch } from "./serpapi-search";
 import { UBOGraph } from "./dnb_ubo_graph";
+import { TRResults } from "./tr_results";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -130,6 +131,14 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "transliteration":
       return DnBCommon(props);
+    case "thomson_reuters_group":
+      return DnBCommon(props);
+    case "thomson_reuters_case":
+      return DnBCommon(props);
+    case "thomson_reuters_screen":
+      return DnBCommon(props);
+    case "thomson_reuters_screenresult":
+      return TRResults(props);
 
     default:
       return Text(props);

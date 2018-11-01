@@ -6,6 +6,7 @@ import { Row, Col } from "antd";
 export const integrationCommonFunctions = {
   dnb_ubo_html,
   dnb_rdc_html,
+  tr_results_html,
   dnb_directors_html,
   dnb_livingston_html,
   lexisnexis_html,
@@ -48,6 +49,12 @@ function comment_answer_body(c) {
       return (
         <div style={{ marginTop: "10px", fontSize: "14px" }}>
           {lexisnexis_html(c.target.row_json)}
+        </div>
+      );
+    } else if (c.target.field_details.type == "thomson_reuters_screenresult") {
+      return (
+        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+          {tr_results_html(c.target.row_json)}
         </div>
       );
     }
@@ -385,6 +392,59 @@ function InfoRow(props) {
         {props.value ? props.value : "--"}
       </Col>
     </Row>
+  );
+}
+
+function tr_results_html(record) {
+  return (
+    <div>
+      <div>
+        {" "}
+        <b>Matched Term:</b> {record.matchedTerm}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Match Strength:</b> {record.matchStrength}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Matched Name Type:</b> {record.matchedNameType}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Category:</b>{" "}
+        {_.size(record.categories) ? record.categories[0] : "-"}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Created on:</b>{" "}
+        {record.creationDate
+          ? new Date(record.creationDate).toUTCString()
+          : "-"}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Modified on:</b>{" "}
+        {record.modificationDate
+          ? new Date(record.modificationDate).toUTCString()
+          : "-"}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Reference Id:</b> {record.referenceId}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Sources:</b> {_.size(record.sources) ? record.sources[0] : "-"}{" "}
+      </div>
+      <div>
+        {" "}
+        <b>Result Id:</b> {record.resultId}{" "}
+      </div>
+      <div>
+        <div />
+      </div>
+    </div>
   );
 }
 
