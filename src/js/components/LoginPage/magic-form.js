@@ -89,7 +89,7 @@ class LoginLinkForm extends React.Component {
         {!this.props.emailAuth.submitted ? (
           <div>
             <div className="text-center mr-bottom t-18 text-base">
-              Enter your email to recieve one-time sign in link
+              Enter your email to receive one-time sign in link
             </div>
             <Form
               layout="vertical"
