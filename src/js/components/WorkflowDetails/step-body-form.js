@@ -158,9 +158,9 @@ class StepBodyForm extends Component {
   //Calculate step completions and approval
   getStepStatus = stepData => {
     const step = stepData;
-    let editable = step.is_editable;
+    let editable = step.is_editable !== undefined ? step.is_editable : true;
 
-    if (step.completed_at || step.approved_at) {
+    if ((step.completed_at || step.approved_at) && editable) {
       //this.getUserById(step.completed_by, 'completed');
 
       //if(step.approved_at ){this.getUserById(step.approved_by, 'approved')};
@@ -288,7 +288,10 @@ class StepBodyForm extends Component {
     let v =
       !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
       this.props.showVersion;
-    let editable = this.props.currentStepFields.currentStepFields.is_editable;
+    let editable =
+      this.props.currentStepFields.currentStepFields.is_editable !== undefined
+        ? this.props.currentStepFields.currentStepFields.is_editable
+        : true;
 
     return (
       <Form
@@ -440,7 +443,8 @@ class StepBodyForm extends Component {
           <Col span="6" className="text-right">
             {this.props.stepData.completed_at ||
             this.props.stepData.is_locked ||
-            !_.includes(this.props.permission, "Can submit a step") ? null : (
+            !_.includes(this.props.permission, "Can submit a step") ||
+            !editable ? null : (
               <FormItem>
                 <Button type="primary" htmlType="submit">
                   Submit
