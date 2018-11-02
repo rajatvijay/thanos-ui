@@ -429,7 +429,7 @@ const GetTable = props => {
               </span>
             );
           } else {
-            return <span>{text.Country.$}</span>;
+            return <span>{text.Country ? text.Country.$ : "--"}</span>;
           }
         } else {
           return <span className="text-grey-light">N/A</span>;
@@ -553,14 +553,16 @@ const GetTabsFilter = props => {
     ];
 
     _.map(data, function(i) {
-      let fName = i.EntityDetails.ReasonListed.$.split(":")[0];
-      fName = fName.toLowerCase();
-      _.map(fList, function(f, index) {
-        if (fName === f.value) {
-          fList[index].count++;
-          fList[index].data.push(i);
-        }
-      });
+      if (i.EntityDetails.ReasonListed !== undefined) {
+        let fName = i.EntityDetails.ReasonListed.$.split(":")[0];
+        fName = fName.toLowerCase();
+        _.map(fList, function(f, index) {
+          if (fName === f.value) {
+            fList[index].count++;
+            fList[index].data.push(i);
+          }
+        });
+      }
     });
 
     return fList;
