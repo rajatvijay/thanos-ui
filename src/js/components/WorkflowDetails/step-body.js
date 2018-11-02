@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Menu, Dropdown, Button, Divider } from "antd";
+import { Icon, Menu, Dropdown, Button, Divider, Tooltip } from "antd";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
 import { workflowDetailsActions } from "../../actions";
@@ -69,12 +69,14 @@ class StepBody extends Component {
 
     return (
       <Dropdown overlay={versionList}>
-        <Button
-          style={{ position: "relative", top: "-62px", right: "-25px" }}
-          className="ant-btn-sm"
-        >
-          Previous versions <Icon type="down" />{" "}
-        </Button>
+        <Tooltip title="Previous version">
+          <span
+            style={{ position: "relative", top: "-58px", right: "-25px" }}
+            className="text-anchor pd-ard-sm"
+          >
+            <i className="material-icons  t-16">restore</i>
+          </span>
+        </Tooltip>
       </Dropdown>
     );
   };
@@ -139,7 +141,7 @@ class StepBody extends Component {
     var step_comment_btn = null;
 
     if (_.size(stepData)) {
-      let comment_btn_text = "Add comment";
+      let comment_btn_text = "Add comment/question";
       if (stepData.comment_count == 1) {
         comment_btn_text = "1 comment";
       } else if (stepData.comment_count > 1) {
@@ -152,13 +154,15 @@ class StepBody extends Component {
             "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
-          <span
-            onClick={this.printDiv}
-            className=" ant-btn ant-btn-sm "
-            style={{ position: "relative", top: "-62px", right: "-18px" }}
-          >
-            Print <i className="material-icons t-14 text-middle">print</i>
-          </span>
+          <Tooltip title="Print step">
+            <span
+              className="text-anchor pd-ard-sm"
+              onClick={this.printDiv}
+              style={{ position: "relative", top: "-62px", right: "-18px" }}
+            >
+              <i className="material-icons t-16 text-middle">print</i>
+            </span>
+          </Tooltip>
 
           {this.versionDropDown()}
           <span className="display-inline-block pd-right-sm"> </span>

@@ -152,7 +152,7 @@ class Comments extends Component {
             className="sidebar-head"
             //style={{ background: "#18eada", color: "#000" }}
           >
-            <span className="sidebar-title">Comments</span>
+            <span className="sidebar-title">Add comment/question</span>
             <Icon
               type="close"
               onClick={this.toggle}
@@ -212,9 +212,7 @@ class Comments extends Component {
                           color: "#575757"
                         }}
                       >
-                        {c.messages.length
-                          ? c.messages.length + " Comment/s"
-                          : "Comments"}{" "}
+                        Add comment/question
                       </span>
                     </div>
                   ) : null}
@@ -268,7 +266,7 @@ class Comments extends Component {
                         <Mention
                           style={{ width: "100%", height: 60 }}
                           suggestions={c.mentions}
-                          placeholder="Enter comment"
+                          placeholder="Enter comment or question"
                           multiLines
                           onChange={that.onChange}
                           value={that.state.message}
