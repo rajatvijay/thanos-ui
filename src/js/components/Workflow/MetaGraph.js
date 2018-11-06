@@ -56,7 +56,7 @@ class MetaGraph extends Component {
         <iframe
           src={this.state.data.data.iframe_url}
           frameborder="0"
-          width="360"
+          width="560"
           height="85%"
           allowtransparency
         />

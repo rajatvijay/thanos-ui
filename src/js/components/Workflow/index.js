@@ -299,7 +299,7 @@ class Workflow extends Component {
             </div>
           )}
           <Drawer
-            width={400}
+            width={600}
             title="Insight"
             placement="right"
             closable={false}
