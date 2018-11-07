@@ -35,11 +35,24 @@ function mapStateToProps(state) {
 }
 
 class MainRoutes extends React.Component {
+  constructor(props) {
+    super();
+    this.state = { showBlank: true };
+  }
+
   componentDidMount = () => {
     //if (!localStorage.getItem("user")) {
-    this.props.dispatch(checkAuth());
 
-    this.props.dispatch(configActions.getConfig());
+    let host = document.location.hostname.split(".");
+
+    if (host[0] === "certa" || host[0] === "slackcart") {
+      window.location = "https://www.thevetted.com";
+    } else {
+      this.setState({ showBlank: false });
+      this.props.dispatch(checkAuth());
+      this.props.dispatch(configActions.getConfig());
+    }
+
     //}
   };
 
@@ -51,43 +64,47 @@ class MainRoutes extends React.Component {
 
   render() {
     const { alert } = this.props;
-    return (
-      <div className="main-container">
-        <Router history={history}>
-          {this.props.users.me && this.props.users.me.loading ? (
-            <div className="text-center mr-top-lg">loading...</div>
-          ) : (
-            <div>
-              {localStorage.getItem("user") ||
-              !history.location.pathname === "/login/magic/" ? (
-                <Navbar />
-              ) : null}
+    if (this.state.showBlank) {
+      return <div />;
+    } else {
+      return (
+        <div className="main-container">
+          <Router history={history}>
+            {this.props.users.me && this.props.users.me.loading ? (
+              <div className="text-center mr-top-lg">loading...</div>
+            ) : (
+              <div>
+                {localStorage.getItem("user") ||
+                !history.location.pathname === "/login/magic/" ? (
+                  <Navbar />
+                ) : null}
 
-              <Switch>
-                <Route path="/login" exact component={LoginPage} />
-                <Route path="/login/magic" exact component={MagicLoginPage} />
+                <Switch>
+                  <Route path="/login" exact component={LoginPage} />
+                  <Route path="/login/magic" exact component={MagicLoginPage} />
 
-                <Redirect from="/" exact to="/workflows/instances/" />
+                  <Redirect from="/" exact to="/workflows/instances/" />
 
-                <PrivateRoute
-                  path="/workflows/instances/"
-                  exact
-                  component={Workflow}
-                />
-                <PrivateRoute
-                  path="/workflows/instances/:id?"
-                  component={WorkflowDetails}
-                />
-                <PrivateRoute path="/users/:id?" component={Users} />
-                {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
+                  <PrivateRoute
+                    path="/workflows/instances/"
+                    exact
+                    component={Workflow}
+                  />
+                  <PrivateRoute
+                    path="/workflows/instances/:id?"
+                    component={WorkflowDetails}
+                  />
+                  <PrivateRoute path="/users/:id?" component={Users} />
+                  {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
 
-                <Route path="/" component={GenericNotFound} />
-              </Switch>
-            </div>
-          )}
-        </Router>
-      </div>
-    );
+                  <Route path="/" component={GenericNotFound} />
+                </Switch>
+              </div>
+            )}
+          </Router>
+        </div>
+      );
+    }
   }
 }
 
