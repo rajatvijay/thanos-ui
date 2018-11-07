@@ -21,6 +21,7 @@ class MetaGraph extends Component {
   };
 
   getFilterData = () => {
+    let that = this;
     this.setState({ loading: true });
     const requestOptions = {
       method: "GET",
@@ -29,6 +30,16 @@ class MetaGraph extends Component {
     };
 
     fetch(baseUrl + "dashboard/embed-url/", requestOptions)
+      .then(function(response) {
+        if (!response.ok) {
+          this.setState({
+            error: response.statusText,
+            loading: false
+          });
+          throw Error(response.statusText);
+        }
+        return response;
+      })
       .then(response => response.json())
       .then(data => {
         if (_.isEmpty(data)) {
@@ -39,6 +50,13 @@ class MetaGraph extends Component {
         } else {
           this.setState({ data: data, loading: false });
         }
+      })
+      .catch(function(error) {
+        that.setState({
+          error: error,
+          loading: false
+        });
+        console.log(error);
       });
   };
 
