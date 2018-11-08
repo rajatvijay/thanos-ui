@@ -265,7 +265,8 @@ function getIntegrationSearchButton(props) {
     thomson_reuters_group: "Get TR group",
     thomson_reuters_case: "Create TR case",
     thomson_reuters_screen: "Screen TR case",
-    thomson_reuters_screenresult: "Get TR Screening results"
+    thomson_reuters_screenresult: "Get TR Screening results",
+    thomson_reuters_wcprofile: "Get TR World Check profile"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
