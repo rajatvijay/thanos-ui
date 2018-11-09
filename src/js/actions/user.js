@@ -23,10 +23,10 @@ const openNotificationWithIcon = data => {
   });
 };
 
-export const login = (username, password) => async dispatch => {
+export const login = (username, password, token) => async dispatch => {
   dispatch({ type: userConstants.LOGIN_REQUEST, username });
   try {
-    const response = await userService.login(username, password);
+    const response = await userService.login(username, password, token);
     dispatch({
       type: userConstants.LOGIN_SUCCESS,
       user: response
