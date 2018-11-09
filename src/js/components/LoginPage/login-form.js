@@ -16,6 +16,7 @@ class LoginForm extends React.Component {
     this.state = {
       username: "",
       password: "",
+      token: "",
       submitted: false,
       data: {},
       loading: false,
@@ -36,9 +37,10 @@ class LoginForm extends React.Component {
 
     this.setState({ submitted: true });
     const { username, password } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, token } = this.props;
+    console.log(token);
     if (username && password) {
-      dispatch(login(username, password));
+      dispatch(login(username, password, token));
     }
   }
 
@@ -128,6 +130,7 @@ class LoginForm extends React.Component {
             </Button>
             {/*<Link to="/register"> Sign up</Link>*/}
           </FormItem>
+
           {this.props.error ? (
             <Alert
               message="Username and password does not match"

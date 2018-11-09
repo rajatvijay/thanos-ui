@@ -15,7 +15,7 @@ let domain = window.location.hostname;
 domain = domain.split(".");
 let client = domain[0];
 
-function login(username, password) {
+function login(username, password, token) {
   const requestOptions = {
     method: "POST",
     headers: {
@@ -23,7 +23,7 @@ function login(username, password) {
       "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
     },
     credentials: "include",
-    body: JSON.stringify({ email: username, password: password })
+    body: JSON.stringify({ email: username, password: password, token: token })
   };
 
   return fetch(baseUrl + "users/login/", requestOptions)
