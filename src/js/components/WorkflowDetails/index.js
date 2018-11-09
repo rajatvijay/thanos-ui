@@ -35,7 +35,16 @@ class WorkflowDetails extends Component {
       selectedGroup: null,
       printing: false
     };
-    let params = props.location.search;
+
+    this.preConstruct();
+  }
+
+  componentWillMount = () => {
+    //this.preConstruct()
+  };
+
+  preConstruct = () => {
+    let params = this.props.location.search;
     let qs = this.queryStringToObject(params);
     this.props.location.search = "";
     if (!_.isEmpty(qs)) {
@@ -44,13 +53,15 @@ class WorkflowDetails extends Component {
       this.state.from_params = true;
     }
     if (qs.object_id && qs.type) {
-      props.dispatch(workflowDetailsActions.getComment(qs.object_id, qs.type));
+      this.props.dispatch(
+        workflowDetailsActions.getComment(qs.object_id, qs.type)
+      );
     }
 
     if (!_.isEmpty(qs)) {
-      props.dispatch(workflowDetailsActions.setCurrentStepId(qs));
+      this.props.dispatch(workflowDetailsActions.setCurrentStepId(qs));
     }
-  }
+  };
 
   currentActiveStep = wfd => {
     if (this.props.hasStepinfo.stepInfo) {
@@ -151,9 +162,19 @@ class WorkflowDetails extends Component {
         this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
       }
     }
+
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.preConstruct();
+      this.forceUpdate();
+      this.getInitialData();
+    }
   };
 
   componentDidMount = () => {
+    this.getInitialData();
+  };
+
+  getInitialData = () => {
     if (!this.props.users.me) {
       this.checkAuth();
     }
