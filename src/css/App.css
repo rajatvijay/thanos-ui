@@ -1940,6 +1940,9 @@ body {
 .ant-layout {
   background-color: #f6f7f9;
 }
+.grecaptcha-badge {
+  visibility: hidden;
+}
 .animated {
   -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
