@@ -16,7 +16,6 @@ import {
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { ChildWorkflow } from "../../Workflow/workflow-list";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
