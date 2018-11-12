@@ -88,7 +88,12 @@ class LoginForm extends React.Component {
 
     return (
       <div className="login-form-box">
-        <Form layout="vertical" onSubmit={this.onSubmit} className="login-form">
+        <Form
+          layout="vertical"
+          onSubmit={this.onSubmit}
+          className="login-form"
+          autoComplete="off"
+        >
           <FormItem
             validateStatus={errors.username && "error"}
             hasFeedback

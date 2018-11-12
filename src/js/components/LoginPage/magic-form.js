@@ -95,6 +95,7 @@ class LoginLinkForm extends React.Component {
               layout="vertical"
               onSubmit={this.onSubmit}
               className="login-form"
+              autoComplete="off"
             >
               <FormItem
                 validateStatus={errors.message && "error"}
@@ -145,15 +146,12 @@ class LoginLinkForm extends React.Component {
               <br />
               <p className="t-14">
                 <span className="text-grey-dark">
-                  We have sent you an email.<br />
+                  An email will be sent to you if your email exists.<br />
                   Please check your inbox<br />
                   <br />
                 </span>
               </p>
-              <div className="t-12">
-                NOTE: The link is single for single use only and expires in 24
-                hours.
-              </div>
+              <div className="t-12">NOTE: The link expires in 24 hours.</div>
               <Divider />
               <div>
                 <a href="/" onClick={this.refresh}>
