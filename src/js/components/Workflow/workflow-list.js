@@ -291,7 +291,7 @@ const GetChildWorkflow = props => {
   if (props.loading) {
     childList = <div className="text-center mr-bottom">loading...</div>;
   } else {
-     childList = _.map(
+    childList = _.map(
       props.getGroupedData(props.workflowChildren[workflowId].children),
       function(childGroup) {
         return (
