@@ -11,11 +11,11 @@ import {
   Icon,
   Divider,
   Select,
-  Tag
+  Tag,
+  Switch
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { ChildWorkflow } from "../../Workflow/workflow-list";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -37,7 +37,8 @@ class ChildWorkflowField2 extends Component {
     super();
     this.state = {
       field: null,
-      country: null
+      country: null,
+      statusView: false
     };
   }
 
@@ -79,6 +80,10 @@ class ChildWorkflowField2 extends Component {
     return grouped;
   };
 
+  toggleListView = status => {
+    this.setState({ statusView: status });
+  };
+
   render = () => {
     let props = this.props;
     let { field } = props;
@@ -86,7 +91,7 @@ class ChildWorkflowField2 extends Component {
 
     return (
       <FormItem
-        label={getLabel(props, that)}
+        label={""}
         className={
           "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
         }
@@ -94,10 +99,8 @@ class ChildWorkflowField2 extends Component {
         key={props.field.id}
         message=""
         required={getRequired(props)}
-        //help={props.field.definition.help_text}
         hasFeedback
         autoComplete="new-password"
-        //validateStatus={props.field.answers.length !== 0 ? "success" : null}
         {...field_error(props)}
       >
         {this.state.fetching ? (
@@ -106,30 +109,39 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div className="workflow-list">
+            <div className="list-view-header">
+              <div className="text-right list-toggle-btn">
+                <span className="pd-right t-14">Details view</span>
+                <Switch onChange={this.toggleListView} />
+                <span className="pd-left  t-14">Workflow view</span>
+              </div>
+            </div>
+            <br />
             <div className="paper">
-              {_.map(this.state.childWorkflow, function(workflow) {
-                return (
-                  <div class="workflow-list-item ">
-                    <div class="collapse-wrapper">
-                      <div class="Collapsible">
-                        <span class="Collapsible__trigger is-closed">
-                          <div class="ant-collapse-item ant-collapse-no-arrow lc-card">
-                            <WorkflowHeader
-                              workflow={workflow}
-                              link={true}
-                              //statusType={statusType}
-                              kind={""}
-                              //onStatusChange={this.props.onStatusChange}
-                              //dispatch={this.props.dispatch}
-                              statusView={true}
-                            />
-                          </div>
-                        </span>
+              {_.size(this.state.childWorkflow) ? (
+                _.map(this.state.childWorkflow, function(workflow) {
+                  return (
+                    <div class="workflow-list-item ">
+                      <div class="collapse-wrapper">
+                        <div class="Collapsible">
+                          <span class="Collapsible__trigger is-closed">
+                            <div class="ant-collapse-item ant-collapse-no-arrow lc-card">
+                              <WorkflowHeader
+                                workflow={workflow}
+                                link={true}
+                                kind={""}
+                                statusView={that.state.statusView}
+                              />
+                            </div>
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <div>No related workflows</div>
+              )}
             </div>
           </div>
         )}
