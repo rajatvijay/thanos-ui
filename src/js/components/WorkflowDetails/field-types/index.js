@@ -32,7 +32,6 @@ import { GoogleSearch } from "./google-search";
 import { SerpSearch } from "./serpapi-search";
 import { UBOGraph } from "./dnb_ubo_graph";
 import { TRResults } from "./tr_results";
-import { ChildWorkflowField } from "./ChildWorkflow";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -142,8 +141,6 @@ export const getFieldType = props => {
       return TRResults(props);
     case "thomson_reuters_wcprofile":
       return DnBCommon(props);
-    case "child_workflow":
-      return ChildWorkflowField(props);
 
     default:
       return Text(props);
