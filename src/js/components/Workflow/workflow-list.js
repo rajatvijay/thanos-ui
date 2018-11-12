@@ -283,32 +283,37 @@ class WorkflowItem extends React.Component {
 
 const GetChildWorkflow = props => {
   let childList = null;
-  let workflowId = props.workflowId;
+  let workflowId = props.workflow.id;
 
-  if (!_.size(props.childWorkflow)) {
+  if (props.workflowChildren[workflowId].loading) {
     return null;
   }
   if (props.loading) {
     childList = <div className="text-center mr-bottom">loading...</div>;
   } else {
-    childList = (
-      <div className="mr-bottom">
-        {_.map(props.childWorkflow, function(item, index) {
-          console.log();
-          return (
-            <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
-              <WorkflowHeader
-                workflow={item}
-                //statusType={statusType}
-                kind="" //{this.props.kinds}
-                //onStatusChange={this.props.onStatusChange}
-                //dispatch={this.props.dispatch}
-                statusView={true} //{this.props.statusView}
-              />
-            </div>
-          );
-        })}
-      </div>
+    childList = _.map(
+      props.getGroupedData(props.workflowChildren[workflowId].children),
+      function(childGroup) {
+        return (
+          <div className="mr-bottom">
+            {_.map(childGroup, function(item, index) {
+              let proccessedData = getProcessedData(item.step_groups);
+              return (
+                <WorkflowItem
+                  isChild={true}
+                  pData={proccessedData}
+                  workflow={item}
+                  key={index}
+                  kinds={props.kinds}
+                  dispatch={props.dispatch}
+                  workflowFilterType={props.workflowFilterType}
+                  statusView={props.statusView}
+                />
+              );
+            })}
+          </div>
+        );
+      }
     );
   }
 
@@ -324,8 +329,6 @@ function mapPropsToState(state) {
   };
 }
 
-export const WorkflowItem2 = WorkflowItem;
-
-export const ChildWorkflow = connect(mapPropsToState)(GetChildWorkflow);
+const ChildWorkflow = connect(mapPropsToState)(GetChildWorkflow);
 
 export default connect(mapPropsToState)(WorkflowList);
