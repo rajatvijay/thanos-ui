@@ -92,7 +92,7 @@ class ChildWorkflowField2 extends Component {
 
     return (
       <FormItem
-        label={this.props.field.definition.body}
+        label={""}
         className={
           "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
         }
