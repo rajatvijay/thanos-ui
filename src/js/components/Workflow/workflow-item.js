@@ -53,6 +53,7 @@ const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   return (
     <Col span={5} className="text-left">
+
       {props.link ? (
         <a
           href={"/workflows/instances/" + props.workflow.id + "/"}
@@ -70,14 +71,15 @@ const HeaderTitle = props => {
           to={"/workflows/instances/" + props.workflow.id + "/"}
           className="text-nounderline"
         >
-          <span
+         <span
             className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
             title={props.workflow.name}
           >
             {props.workflow.name}
           </span>
-        </Link>
-      )}
+      </Link>
+      )
+    }
     </Col>
   );
 };

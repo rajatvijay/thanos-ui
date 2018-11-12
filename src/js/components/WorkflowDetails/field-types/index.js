@@ -143,7 +143,8 @@ export const getFieldType = props => {
     case "thomson_reuters_wcprofile":
       return DnBCommon(props);
     case "child_workflow":
-      return ChildWorkflowField(props);
+      return Date(ChildWorkflowField);
+
 
     default:
       return Text(props);
