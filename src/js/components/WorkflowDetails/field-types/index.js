@@ -137,8 +137,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "thomson_reuters_screen":
       return DnBCommon(props);
-    case "DnBCommon":
-      return TRResults(props);
+    case "thomson_reuters_screenresult":
+      return DnBCommon(props);
     case "thomson_reuters_wcprofile":
       return DnBCommon(props);
 
