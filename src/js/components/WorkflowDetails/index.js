@@ -12,6 +12,7 @@ import {
   workflowFiltersActions,
   workflowStepActions,
   logout,
+  configActions,
   checkAuth
 } from "../../actions";
 import { WorkflowHeader } from "../Workflow/workflow-item";
@@ -60,6 +61,14 @@ class WorkflowDetails extends Component {
 
     if (!_.isEmpty(qs)) {
       this.props.dispatch(workflowDetailsActions.setCurrentStepId(qs));
+    }
+
+    if (
+      !this.props.config.configuration ||
+      this.props.config.error ||
+      !_.size(this.props.config.permission)
+    ) {
+      this.props.dispatch(configActions.getConfig());
     }
   };
 
