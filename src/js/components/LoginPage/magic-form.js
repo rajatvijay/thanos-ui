@@ -2,16 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider } from "antd";
 import validator from "validator";
+import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
 
 const FormItem = Form.Item;
 
-class LoginLinkForm extends React.Component {
+class MagicLoginLinkForm extends React.Component {
   constructor(props) {
     super(props);
 
     // reset login status
-
     this.state = {
       email: "",
       submitted: false,
@@ -24,6 +24,8 @@ class LoginLinkForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount = () => {};
+
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -33,10 +35,10 @@ class LoginLinkForm extends React.Component {
     e.preventDefault();
     this.setState({ submitted: true });
     const { email } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, nextUrl } = this.props;
 
     if (email) {
-      dispatch(sendEmailAuthToken(email));
+      dispatch(sendEmailAuthToken(email, nextUrl));
     }
   }
 
@@ -166,4 +168,4 @@ class LoginLinkForm extends React.Component {
   }
 }
 
-export default LoginLinkForm;
+export default MagicLoginLinkForm;

@@ -24,6 +24,25 @@ export function authentication(state = initialState, action) {
         error: action.error
       };
 
+    case userConstants.TOKEN_LOGIN_REQUEST:
+      return {
+        loggingIn: true,
+        user: { ...action.user, csrf: null },
+        error: null
+      };
+    case userConstants.TOKEN_LOGIN_SUCCESS:
+      return {
+        loggedIn: true,
+        user: action.user,
+        error: null
+      };
+    case userConstants.TOKEN_LOGIN_FAILURE:
+      return {
+        loggingIn: false,
+        user: null,
+        error: action.error
+      };
+
     case userConstants.LOGOUT:
       return {};
     default:

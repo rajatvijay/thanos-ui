@@ -22,6 +22,7 @@ import { RegisterPage } from "../components/RegisterPage";
 import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
 import WorkflowDetails from "../components/WorkflowDetails";
+import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import Users from "../components/Users";
 import ExportList from "../components/ExportPage";
 import "antd/dist/antd.css";
@@ -82,6 +83,10 @@ class MainRoutes extends React.Component {
                 <Switch>
                   <Route path="/login" exact component={LoginPage} />
                   <Route path="/login/magic" exact component={MagicLoginPage} />
+                  <Route
+                    path="/login/magicprocess"
+                    component={MagicLinkProcess}
+                  />
 
                   <Redirect from="/" exact to="/workflows/instances/" />
 
