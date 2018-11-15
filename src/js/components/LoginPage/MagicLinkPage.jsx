@@ -1,19 +1,29 @@
 import React from "react";
 import { connect } from "react-redux";
-import LoginLinkForm from "./magic-form";
+import MagicLoginLinkForm from "./magic-form";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
 import { logout } from "../../actions";
+import _ from "lodash";
+import queryString from "query-string";
 
 class MagicLoginPage extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      nextUrl: ""
+    };
   }
 
   render = () => {
     if (localStorage.getItem("user")) {
-      return <Redirect to={"/workflows/instances/"} />;
+      let parsed = queryString.parse(this.props.location.search);
+      if (parsed.next) {
+        return <Redirect to={parsed.next} />;
+      } else {
+        return <Redirect to={"/workflows/instances/"} />;
+      }
     }
 
     return (
@@ -26,7 +36,10 @@ class MagicLoginPage extends React.Component {
                   <Icon type="loading" />
                 </div>
               ) : (
-                <LoginLinkForm {...this.props} />
+                <MagicLoginLinkForm
+                  {...this.props}
+                  nextUrl={this.state.nextUrl}
+                />
               )}
             </div>
           </div>

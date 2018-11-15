@@ -47,6 +47,28 @@ export const login = (username, password, token) => async dispatch => {
   }
 };
 
+export const tokenLogin = (token, next) => async dispatch => {
+  dispatch({ type: userConstants.TOKEN_LOGIN_REQUEST, token });
+  try {
+    const response = await userService.tokenLogin(token, next);
+    dispatch({
+      type: userConstants.TOKEN_LOGIN_SUCCESS,
+      user: response
+    });
+
+    dispatch({
+      type: userConstants.GETME_SUCCESS,
+      user: response
+    });
+  } catch (error) {
+    console.log("error login");
+    console.log(error);
+
+    dispatch({ type: userConstants.TOKEN_LOGIN_FAILURE, error });
+    dispatch({ type: userConstants.GETME_FAILURE, error });
+  }
+};
+
 function removeCookies() {
   var res = document.cookie;
   var multiple = res.split(";");
@@ -69,10 +91,10 @@ export const logout = () => async dispatch => {
   }
 };
 
-export const sendEmailAuthToken = email => async dispatch => {
-  dispatch({ type: userConstants.LOGIN_LINK_REQUEST, email });
+export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
+  dispatch({ type: userConstants.LOGIN_LINK_REQUEST, email, nextUrl });
   try {
-    const response = await userSendEmailAuthToken(email);
+    const response = await userSendEmailAuthToken(email, nextUrl);
 
     dispatch({
       type: userConstants.LOGIN_LINK_SUCCESS,

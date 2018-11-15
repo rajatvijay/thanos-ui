@@ -2,6 +2,7 @@ import { authHeader, baseUrl, baseUrl2 } from "../_helpers";
 
 export const userService = {
   login,
+  tokenLogin,
   register,
   getAll,
   getById,
@@ -47,6 +48,40 @@ function login(username, password, token) {
     });
 }
 
+function tokenLogin(token, next) {
+  console.log("tokend loigin service");
+
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "same-origin",
+    credentials: "include"
+  };
+
+  return fetch(
+    baseUrl + "users/process_token?token=" + token + "&next=" + next,
+    requestOptions
+  )
+    .then(response => {
+      if (!response.ok) {
+        return Promise.reject(response.statusText);
+      }
+      return response.json();
+    })
+    .then(user => {
+      // login successful if there's a jwt token in the response
+      if (user) {
+        let userData = user;
+        userData.client = client;
+        userData.csrf = document.cookie;
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+
+      return user;
+    });
+}
+
 export const logout = async () => {
   localStorage.removeItem("user");
   const requestOptions = {
@@ -63,12 +98,12 @@ export const logout = async () => {
   }
 };
 
-export const sendEmailAuthToken = async email => {
+export const sendEmailAuthToken = async (email, next) => {
   const requestOptions = {
     method: "POST",
     headers: authHeader.post(),
     credentials: "include",
-    body: JSON.stringify({ email })
+    body: JSON.stringify({ email, next })
   };
   try {
     const response = await fetch(
@@ -109,29 +144,6 @@ function checkAuth() {
       return user;
     });
 }
-
-// function logout() {
-//   // remove user from local storage to log user out
-
-//   const response =  await fetch("", requestOptions)
-//       .then(response => {
-//         if (!response.ok) {
-//           return Promise.reject(response.statusText);
-//         }
-
-//         return response.json();
-//       })
-//       .then(user => {
-//         // login successful if there's a jwt token in the response
-//         if (user) {
-//           // store user details and jwt token in local storage to keep user logged in between page refreshes
-//           localStorage.setItem("user", JSON.stringify(user));
-//         }
-
-//         return user;
-//       })
-//   );
-// }
 
 function getAll() {
   const requestOptions = {
