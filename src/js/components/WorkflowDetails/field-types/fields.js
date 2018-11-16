@@ -816,8 +816,7 @@ export const RadioField = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
-        onChange={onFieldChange.bind(this, props)}
-        //onChange={save}
+        onChange={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       >
         {_.map(props.field.definition.extra, function(item, index) {
