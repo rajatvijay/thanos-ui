@@ -792,3 +792,42 @@ export const CascaderField = props => {
     </FormItem>
   );
 };
+
+//Field Type Select
+export const RadioField = props => {
+  let save = onFieldChange.bind(this, props);
+
+  let that = this;
+  return (
+    <FormItem
+      label={getLabel(props, that)}
+      className="from-label"
+      style={{ display: "block" }}
+      key={props.field.id}
+      message=""
+      required={getRequired(props)}
+      hasFeedback
+      {...field_error(props)}
+    >
+      <RadioGroup
+        disabled={isDisabled(props)}
+        defaultValue={
+          props.field.answers[0]
+            ? props.field.answers[0].answer
+            : props.field.definition.defaultValue
+        }
+        onChange={onFieldChange.bind(this, props)}
+        //onChange={save}
+        style={getStyle(props)}
+      >
+        {_.map(props.field.definition.extra, function(item, index) {
+          return (
+            <Radio key={index} value={item.value}>
+              {item.label}
+            </Radio>
+          );
+        })}
+      </RadioGroup>
+    </FormItem>
+  );
+};

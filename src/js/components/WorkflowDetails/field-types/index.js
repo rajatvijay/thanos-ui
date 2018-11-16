@@ -14,7 +14,8 @@ import {
   Divider,
   URL,
   Attachment,
-  File
+  File,
+  RadioField
   //Duns
 } from "./fields";
 
@@ -66,7 +67,7 @@ export const getFieldType = props => {
     case "divider":
       return Divider(props);
     case "single_select":
-      return Select(props);
+      return RadioField(props);
     case "multi_select":
       return Select(props);
     case "cascader":
@@ -79,6 +80,8 @@ export const getFieldType = props => {
       return BusinessUnit(props);
     case "region":
       return Region(props);
+    // case "radio":
+    //   return RadioField(props);
 
     // Integrations
     case "dnb_duns_search":
