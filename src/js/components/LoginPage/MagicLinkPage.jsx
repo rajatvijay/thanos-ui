@@ -16,6 +16,18 @@ class MagicLoginPage extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    this.processUrl();
+  };
+
+  processUrl = () => {
+    const parsed = queryString.parse(this.props.location.search);
+
+    if (parsed.next) {
+      this.setState({ nextUrl: parsed.next });
+    }
+  };
+
   render = () => {
     if (localStorage.getItem("user")) {
       let parsed = queryString.parse(this.props.location.search);
