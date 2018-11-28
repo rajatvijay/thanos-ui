@@ -446,7 +446,7 @@ class StepBodyForm extends Component {
             !_.includes(this.props.permission, "Can submit a step") ||
             !editable ? null : (
               <FormItem>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" className="no-print" htmlType="submit">
                   Submit
                 </Button>
               </FormItem>
