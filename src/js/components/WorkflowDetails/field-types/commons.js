@@ -335,9 +335,12 @@ function getAnsweredBy(props) {
     let answer = props.field.answers[0];
     let ans = (
       <span>
-        Answered by {answer.submitted_by}{" "}
-        {answer.submitted_by_email ? "(" + answer.submitted_by_email + ")" : ""}{" "}
-        on{" "}
+        Answered by{" "}
+        {answer.submitted_by.first_name +
+          " " +
+          answer.submitted_by.last_name +
+          " "}
+        ( {answer.submitted_by.email}) on{" "}
         <Moment format="MM/DD/YYYY">
           {props.field.answers[0].submitted_at}
         </Moment>
