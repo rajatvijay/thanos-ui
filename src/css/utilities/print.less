@@ -1,10 +1,22 @@
 @media print {
-   .no-print {
+  .no-print {
     display: none;
   }
-  @page { margin: 0; }
-  body { margin: 1.6cm; }
+  @page {
+    margin: 0;
+  }
+  body {
+    margin: 1.6cm;
+  }
 
+  .step-form .ant-row,
+  .ant-form-item,
+  .page-break {
+    page-break-before: auto;
+  }
+  .break-avoid {
+    page-break-inside: avoid;
+  }
 }
 
 // @page {

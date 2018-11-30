@@ -42,7 +42,8 @@ const {
   feedValue,
   getLink,
   getStyle,
-  isDisabled
+  isDisabled,
+  getAnsweredBy
 } = commonFunctions;
 
 //Field Type Text
@@ -87,6 +88,7 @@ export const Text = props => {
         onBlur={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       />
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -122,6 +124,7 @@ export const Bool = props => {
           No
         </Radio>
       </RadioGroup>
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -156,6 +159,7 @@ export const Number = props => {
         onChange={onFieldChange.bind(this, props)}
         onBlur={e => props.onFieldChange(e, props)}
       />
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -190,6 +194,7 @@ export const Date = props => {
         defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"MM-DD-YYYY"}
       />
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -258,6 +263,7 @@ class Email2 extends React.Component {
           onBlur={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
+        {getAnsweredBy(props)}
       </FormItem>
     );
   };
@@ -352,6 +358,7 @@ class URL2 extends React.Component {
             </span>
           </span>
         )}
+        {getAnsweredBy(props)}
       </FormItem>
     );
   };
@@ -392,6 +399,7 @@ export const Checkbox = props => {
         }
         {...feedValue(props)}
       />
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -444,6 +452,7 @@ export const Select = props => {
           );
         })}
       </AntSelect>
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -477,6 +486,7 @@ export const Phone = props => {
         onBlur={e => props.onFieldChange(e, props)}
         //onBlur={handleInputBlur}
       />
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -693,6 +703,7 @@ class FileUpload extends Component {
             );
           })*/}
         </div>
+        {getAnsweredBy(this.props)}
       </FormItem>
     );
   };
@@ -789,6 +800,7 @@ export const CascaderField = props => {
         onChange={onFieldChangeArray.bind(this, props)}
         options={props.field.definition.extra}
       />
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
@@ -827,6 +839,7 @@ export const RadioField = props => {
           );
         })}
       </RadioGroup>
+      {getAnsweredBy(props)}
     </FormItem>
   );
 };
