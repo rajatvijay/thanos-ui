@@ -183,9 +183,7 @@ class StepBody extends Component {
           <style
             dangerouslySetInnerHTML={{
               __html: `
-                @page {
-                  margin-top: 20px ;
-                }
+                
                 .printOnly .hide-print {
                   display: none;
                 }

@@ -16,6 +16,7 @@ import {
   Tooltip
 } from "antd";
 import _ from "lodash";
+import Moment from "react-moment";
 
 export const commonFunctions = {
   getLabel,
@@ -32,7 +33,8 @@ export const commonFunctions = {
   getStyle,
   getIntegrationSearchButton,
   fieldFlagDropdown,
-  isDisabled
+  isDisabled,
+  getAnsweredBy
 };
 
 //Utility func
@@ -325,5 +327,28 @@ function isDisabled(props) {
     return true;
   } else {
     return disabled;
+  }
+}
+
+function getAnsweredBy(props) {
+  if (props.field.answers[0]) {
+    let answer = props.field.answers[0];
+    let ans = (
+      <span>
+        Answered by {answer.submitted_by}{" "}
+        {answer.submitted_by_email ? "(" + answer.submitted_by_email + ")" : ""}{" "}
+        on{" "}
+        <Moment format="MM/DD/YYYY">
+          {props.field.answers[0].submitted_at}
+        </Moment>
+      </span>
+    );
+    return (
+      <Tooltip placement="topLeft" title={ans}>
+        <span className="floater">&nbsp;</span>
+      </Tooltip>
+    );
+  } else {
+    return;
   }
 }
