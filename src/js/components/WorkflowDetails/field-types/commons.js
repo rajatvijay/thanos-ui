@@ -331,7 +331,7 @@ function isDisabled(props) {
 }
 
 function getAnsweredBy(props) {
-  if (props.field.answers[0]) {
+  if (props.field.answers[0] && props.field.answers[0].submitted_by) {
     let answer = props.field.answers[0];
     let ans = (
       <span>

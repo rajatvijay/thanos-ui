@@ -13,9 +13,11 @@ import {
   Button,
   Cascader,
   Row,
-  Col
+  Col,
+  Tooltip
 } from "antd";
 import _ from "lodash";
+import Moment from "react-moment";
 import moment from "moment";
 import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
@@ -42,9 +44,35 @@ const {
   feedValue,
   getLink,
   getStyle,
-  isDisabled,
-  getAnsweredBy
+  isDisabled
+  //getAnsweredBy
 } = commonFunctions;
+
+const GetAnsweredBy = props => {
+  if (props.field.answers[0] && props.field.answers[0].submitted_by) {
+    let answer = props.field.answers[0];
+    let ans = (
+      <span>
+        Answered by{" "}
+        {answer.submitted_by.first_name +
+          " " +
+          answer.submitted_by.last_name +
+          " "}
+        ( {answer.submitted_by.email}) on{" "}
+        <Moment format="MM/DD/YYYY">
+          {props.field.answers[0].submitted_at}
+        </Moment>
+      </span>
+    );
+    return (
+      <Tooltip placement="topLeft" title={ans}>
+        <span className="floater">&nbsp;</span>
+      </Tooltip>
+    );
+  } else {
+    return <span />;
+  }
+};
 
 //Field Type Text
 export const Text = props => {
@@ -88,7 +116,7 @@ export const Text = props => {
         onBlur={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       />
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -124,7 +152,7 @@ export const Bool = props => {
           No
         </Radio>
       </RadioGroup>
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -159,7 +187,7 @@ export const Number = props => {
         onChange={onFieldChange.bind(this, props)}
         onBlur={e => props.onFieldChange(e, props)}
       />
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -194,7 +222,7 @@ export const Date = props => {
         defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"MM-DD-YYYY"}
       />
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -263,7 +291,7 @@ class Email2 extends React.Component {
           onBlur={e => this.onChangeValidate(e)}
           {...feedValue(props)}
         />
-        {getAnsweredBy(props)}
+        <GetAnsweredBy {...props} />
       </FormItem>
     );
   };
@@ -358,7 +386,7 @@ class URL2 extends React.Component {
             </span>
           </span>
         )}
-        {getAnsweredBy(props)}
+        <GetAnsweredBy {...props} />
       </FormItem>
     );
   };
@@ -399,7 +427,7 @@ export const Checkbox = props => {
         }
         {...feedValue(props)}
       />
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -452,7 +480,7 @@ export const Select = props => {
           );
         })}
       </AntSelect>
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -486,7 +514,7 @@ export const Phone = props => {
         onBlur={e => props.onFieldChange(e, props)}
         //onBlur={handleInputBlur}
       />
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -703,7 +731,7 @@ class FileUpload extends Component {
             );
           })*/}
         </div>
-        {getAnsweredBy(this.props)}
+        <GetAnsweredBy {...this.props} />
       </FormItem>
     );
   };
@@ -800,7 +828,7 @@ export const CascaderField = props => {
         onChange={onFieldChangeArray.bind(this, props)}
         options={props.field.definition.extra}
       />
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
@@ -839,7 +867,7 @@ export const RadioField = props => {
           );
         })}
       </RadioGroup>
-      {getAnsweredBy(props)}
+      <GetAnsweredBy {...props} />
     </FormItem>
   );
 };
