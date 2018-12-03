@@ -4,6 +4,7 @@ import { Form, Button, Input, Icon, Divider } from "antd";
 import validator from "validator";
 import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
+import { connect } from "react-redux";
 
 const FormItem = Form.Item;
 
@@ -85,7 +86,6 @@ class MagicLoginLinkForm extends React.Component {
 
   render() {
     const { data, errors } = this.state;
-
     return (
       <div className="login-form-box">
         {!this.props.emailAuth.submitted ? (
@@ -137,6 +137,17 @@ class MagicLoginLinkForm extends React.Component {
                 </i>
               </Link>
             </div>
+            {this.props.config.saml_url && (
+              <div>
+                <Divider>or</Divider>
+                <Link to={this.props.config.saml_url}>
+                  Login via your {this.props.config.name} username and password
+                  <i className="material-icons t-14 text-middle pd-left-sm">
+                    arrow_forward
+                  </i>
+                </Link>
+              </div>
+            )}
           </div>
         ) : (
           <div className="magic--submitted text-center">
@@ -168,4 +179,11 @@ class MagicLoginLinkForm extends React.Component {
   }
 }
 
-export default MagicLoginLinkForm;
+function mapStateToProps(state) {
+  const { config } = state;
+  return {
+    config
+  };
+}
+
+export default connect(mapStateToProps)(MagicLoginLinkForm);

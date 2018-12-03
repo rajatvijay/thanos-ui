@@ -1,31 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import MagicLinkRedirect from "./MagicLinkRedirect";
 
 export const GenericNotFound = () => {
   let param = document.location.search.split("=")[1];
   if (param === "magic-link") {
-    return (
-      <div className="text-center">
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <p className="t-22">
-          Sorry! You seem to have reached a link that no longer works. <br />
-          Please{" "}
-          <Link to="/login/magic">
-            {" "}
-            <b>Click here</b>
-          </Link>{" "}
-          to go to login page and generate a new link.
-        </p>
-      </div>
-    );
+    return <MagicLinkRedirect />;
   } else {
     return (
       <div className="text-center">
