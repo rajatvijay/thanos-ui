@@ -167,6 +167,7 @@ class StepBodyForm extends Component {
 
       return (
         <Alert
+          className="page-break"
           message={
             <div className="">
               {_.includes(this.props.permission, "Can undo a step") ? (
@@ -213,7 +214,7 @@ class StepBodyForm extends Component {
     } else if (step.updated_at) {
       return (
         <Alert
-          className="animated-long"
+          className="animated-long page-break"
           message={
             <div className="">
               Last updated <Moment fromNow>{step.updated_at}</Moment>{" "}
@@ -438,21 +439,25 @@ class StepBodyForm extends Component {
         )}
 
         <Divider />
-        <Row>
-          <Col span="18">{this.getStepStatus(this.props.stepData)}</Col>
-          <Col span="6" className="text-right">
-            {this.props.stepData.completed_at ||
-            this.props.stepData.is_locked ||
-            !_.includes(this.props.permission, "Can submit a step") ||
-            !editable ? null : (
-              <FormItem>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
-              </FormItem>
-            )}
-          </Col>
-        </Row>
+        <div className="break-avoid">
+          <Row>
+            <Col span="18 ant-row  ">
+              {this.getStepStatus(this.props.stepData)}
+            </Col>
+            <Col span="6 ant-row " className="text-right">
+              {this.props.stepData.completed_at ||
+              this.props.stepData.is_locked ||
+              !_.includes(this.props.permission, "Can submit a step") ||
+              !editable ? null : (
+                <FormItem>
+                  <Button type="primary" className="no-print" htmlType="submit">
+                    Submit
+                  </Button>
+                </FormItem>
+              )}
+            </Col>
+          </Row>
+        </div>
       </Form>
     );
   };

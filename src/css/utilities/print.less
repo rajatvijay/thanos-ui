@@ -1,9 +1,28 @@
 @media print {
+  .no-print {
+    display: none;
+  }
+  @page {
+    margin: 0;
+  }
+  body {
+    margin: 1.6cm;
+  }
+
+  .step-form .ant-row,
+  .ant-form-item,
+  .page-break {
+    page-break-before: auto;
+  }
+  .break-avoid {
+    page-break-inside: avoid;
+  }
 }
 
-@page {
-  margin-top: 20px;
-}
+// @page {
+//   margin-top: 20px;
+
+// }
 
 .printOnly {
   .hide-print {

@@ -108,6 +108,15 @@
         margin-bottom: 0;
       }
     }
+    .floater {
+      position: absolute;
+      right: 4px;
+      bottom: -2px;
+      display: inline-block;
+      z-index: 1;
+      width: 20px;
+      height: 20px;
+    }
   }
 
   //phone input style 
@@ -298,3 +307,16 @@
   position: relative;
   //left: 200px; // Adjust accordingly to your layout
 }
+
+
+@media print {
+  .step-form .ant-row,
+  .ant-form-item, 
+  .page-break { 
+    page-break-before: auto; 
+  }
+  .break-avoid{
+    page-break-inside: avoid;
+  }
+}
+
