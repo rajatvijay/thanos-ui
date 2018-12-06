@@ -137,11 +137,7 @@ class LoginForm extends React.Component {
           </FormItem>
 
           {this.props.error ? (
-            <Alert
-              message="Username and password does not match"
-              type="error"
-              showIcon
-            />
+            <Alert message={this.props.error} type="error" showIcon />
           ) : null}
 
           <Divider>or</Divider>
