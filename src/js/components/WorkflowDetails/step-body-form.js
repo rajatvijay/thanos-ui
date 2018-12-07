@@ -212,7 +212,8 @@ class StepBodyForm extends Component {
         />
       );
     } else if (step.updated_at) {
-      return (
+      {
+        /**  return (
         <Alert
           className="animated-long page-break"
           message={
@@ -223,7 +224,8 @@ class StepBodyForm extends Component {
           type="info"
           showIcon
         />
-      );
+      )**/
+      }
     } else {
       return <span />;
     }

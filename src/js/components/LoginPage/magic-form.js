@@ -141,7 +141,7 @@ class MagicLoginLinkForm extends React.Component {
             ) : (
               <div>
                 <Divider>or</Divider>
-                <a href="/api/v1/saml/login/">
+                <a href={this.props.config.saml_url}>
                   Login via your {this.props.config.name} username and password
                   <i className="material-icons t-14 text-middle pd-left-sm">
                     arrow_forward
