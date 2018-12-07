@@ -468,7 +468,10 @@ export const Select = props => {
         onChange={save}
         showSearch={true}
         filterOption={(input: any, option: any) =>
-          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          option.props.children
+            .toString()
+            .toLowerCase()
+            .indexOf(input.toLowerCase()) >= 0
         }
         //filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
