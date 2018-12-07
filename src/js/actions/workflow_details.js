@@ -139,7 +139,8 @@ function getComment(object_id, content_type, addtn) {
     if (!_.size(data.results)) {
       openNotificationWithIcon({
         type: "error",
-        message: "No messages found!"
+        message:
+          "Sorry, you don't have access to this feature. Kindly contact your administrator"
       });
     }
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
