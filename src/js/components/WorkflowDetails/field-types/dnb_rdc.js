@@ -259,7 +259,11 @@ const buildDetails = obj => {
           <Column
             column={12}
             label="Rosette name match score:"
-            value={obj.rosette_name_match_score.score}
+            value={
+              obj.rosette_name_match_score
+                ? obj.rosette_name_match_score.score
+                : "-"
+            }
           />
           <Column
             column={24}
