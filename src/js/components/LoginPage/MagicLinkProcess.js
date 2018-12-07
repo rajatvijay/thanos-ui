@@ -49,11 +49,9 @@ class MagicLinkProcess extends React.Component {
         return <Redirect to={"/workflows/instances/"} />;
       }
     }
-
     if (this.props.error) {
       return <MagicLinkRedirect />;
     }
-
     return (
       <div className="login login-container container-fluid" id="login">
         <div className="login-overlay">
