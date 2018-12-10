@@ -534,6 +534,10 @@ export const Paragraph = props => {
           {props.field.definition.extra.icon}{" "}
         </i>
       ) : null}
+
+      {props.field.definition.extra.logo ? (
+        <img src={props.field.definition.extra.logo} className="para-logo" />
+      ) : null}
       <span
         dangerouslySetInnerHTML={{
           __html: getLink(props.field.definition.body)
