@@ -139,7 +139,8 @@ function getComment(object_id, content_type, addtn) {
     if (!_.size(data.results)) {
       openNotificationWithIcon({
         type: "error",
-        message: "No messages found!"
+        message:
+          "This feature is disabled. Please contact the site administrator"
       });
     }
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };

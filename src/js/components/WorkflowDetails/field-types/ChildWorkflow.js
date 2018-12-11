@@ -150,7 +150,7 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div>
-            <Col span="6" className="text-right text-light small">
+            <Col span="18" className="text-right text-light small">
               <Dropdown
                 overlay={childWorkflowMenu}
                 className="child-workflow-dropdown"
@@ -174,7 +174,6 @@ class ChildWorkflowField2 extends Component {
             <div className="paper">
               {_.size(this.state.childWorkflow) ? (
                 _.map(this.state.childWorkflow, function(workflow) {
-                  console.log(workflow, "workflow bench");
                   return (
                     <div class="workflow-list-item ">
                       <div class="collapse-wrapper">
