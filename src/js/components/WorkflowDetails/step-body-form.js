@@ -148,7 +148,10 @@ class StepBodyForm extends Component {
     }
 
     return (
-      <span>
+      <span className="text-secondary pd-right-sm ">
+        <i className="material-icons pd-right-sm t-20 text-bottom">
+          check_circle_outline
+        </i>
         Completed by <span className="text-medium ">{completed_by}</span> on{" "}
         <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
       </span>
@@ -166,31 +169,32 @@ class StepBodyForm extends Component {
       //if(step.approved_at ){this.getUserById(step.approved_by, 'approved')};
 
       return (
-        <Alert
-          className="page-break"
-          message={
-            <div className="">
-              {_.includes(this.props.permission, "Can undo a step") ? (
-                <span
-                  className="float-right text-anchor text-underline "
-                  onClick={this.onUndoStep.bind(this, step)}
-                >
-                  Undo completion
-                </span>
-              ) : null}
+        <div className=" step-status-box pd-top-sm">
+          {step.completed_at ? this.getComletedBy(step) : null}
 
-              {/*
+          {_.includes(this.props.permission, "Can undo a step") ? (
+            <span>
+              <Divider type="vertical" />
+              <span
+                className="text-anchor text-secondary text-underline pd-left-sm"
+                onClick={this.onUndoStep.bind(this, step)}
+              >
+                Undo completion
+              </span>
+            </span>
+          ) : null}
+
+          {/*
               <span className="float-right pd-right-sm pd-left-sm">|</span>
               <span
-                              className="float-right text-anchor text-underline text-primary"
-                              onClick={this.onApproveStep.bind(this, step)}
-                            >
-                              {step.approved_at ? "Undo approval" : "Approve step"}
-                            </span>*/}
+                  className="float-right text-anchor text-underline text-primary"
+                  onClick={this.onApproveStep.bind(this, step)}
+                >
+                  {step.approved_at ? "Undo approval" : "Approve step"}
+                </span>
+              */}
 
-              {step.completed_at ? this.getComletedBy(step) : null}
-
-              {/*
+          {/*
               {step.approved_at ? (
                 <span>
                   {" "}
@@ -205,11 +209,7 @@ class StepBodyForm extends Component {
                 </span>
               ) : null}
                   */}
-            </div>
-          }
-          type="success"
-          showIcon
-        />
+        </div>
       );
     } else if (step.updated_at) {
       {
@@ -443,20 +443,24 @@ class StepBodyForm extends Component {
         <Divider />
         <div className="break-avoid">
           <Row>
-            <Col span="18 ant-row  ">
-              {this.getStepStatus(this.props.stepData)}
-            </Col>
-            <Col span="6 ant-row " className="text-right">
-              {this.props.stepData.completed_at ||
-              this.props.stepData.is_locked ||
-              !_.includes(this.props.permission, "Can submit a step") ||
-              !editable ? null : (
-                <FormItem>
+            <Col span="6 ant-row  ">
+              <FormItem>
+                {this.props.stepData.completed_at ||
+                this.props.stepData.is_locked ||
+                !_.includes(this.props.permission, "Can submit a step") ||
+                !editable ? (
+                  <Button type="primary " className="no-print  disabled">
+                    Submit
+                  </Button>
+                ) : (
                   <Button type="primary" className="no-print" htmlType="submit">
                     Submit
                   </Button>
-                </FormItem>
-              )}
+                )}
+              </FormItem>
+            </Col>
+            <Col span="18 ant-row " className="text-right">
+              {this.getStepStatus(this.props.stepData)}
             </Col>
           </Row>
         </div>
