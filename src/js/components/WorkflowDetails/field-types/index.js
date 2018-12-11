@@ -145,6 +145,12 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "thomson_reuters_wcprofile":
       return DnBCommon(props);
+    case "thomson_reuters_screen_sync":
+      return DnBCommon(props);
+    case "thomson_reuters_casesystemid":
+      return DnBCommon(props);
+    case "thomson_reuters_resolve_result":
+      return DnBCommon(props);
     case "child_workflow":
       return ChildWorkflowField(props);
 
