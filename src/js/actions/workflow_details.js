@@ -140,7 +140,7 @@ function getComment(object_id, content_type, addtn) {
       openNotificationWithIcon({
         type: "error",
         message:
-          "Sorry, you don't have access to this feature. Kindly contact your administrator"
+          "This feature is disabled. Please contact the site administrator"
       });
     }
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
