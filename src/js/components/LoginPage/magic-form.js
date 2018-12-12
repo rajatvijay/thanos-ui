@@ -160,12 +160,12 @@ class MagicLoginLinkForm extends React.Component {
               <br />
               <p className="t-14">
                 <span className="text-grey-dark">
-                  An email will be sent to you if your email exists.<br />
-                  Please check your inbox<br />
+                  Your contact information should be on file in order for you to
+                  complete this request.<br />
                   <br />
                 </span>
               </p>
-              <div className="t-12">NOTE: The link expires in 24 hours.</div>
+              <div className="t-12">NOTE: Link expires in 24 hours.</div>
               <Divider />
               <div>
                 <a href="/" onClick={this.refresh}>
