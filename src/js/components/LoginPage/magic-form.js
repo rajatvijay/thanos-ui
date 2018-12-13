@@ -160,7 +160,7 @@ class MagicLoginLinkForm extends React.Component {
               <br />
               <p className="t-14">
                 <span className="text-grey-dark">
-                  Your contact information should be on file in order for you to
+                  Your contact information must be on file in order for you to
                   complete this request.<br />
                   <br />
                 </span>
