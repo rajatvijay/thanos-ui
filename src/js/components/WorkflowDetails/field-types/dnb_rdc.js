@@ -11,6 +11,7 @@ import {
   Divider,
   Select,
   Tag,
+  Tooltip,
   Collapse
 } from "antd";
 import _ from "lodash";
@@ -247,6 +248,66 @@ const buildDetails = obj => {
     overflow: "hidden"
   };
 
+  const getAbbr = (code, subCode) => {
+    let abbrList = [
+      { label: "ACC", value: "Accuse" },
+      { label: "ALL", value: "Allege" },
+      { label: "CSP", value: "Conspire" },
+      { label: "PRB", value: "Probe" },
+      { label: "SPT", value: "Suspected" },
+      { label: "ARN", value: "Arraign" },
+      { label: "ART", value: "Arrest" },
+      { label: "ADT", value: "Audit" },
+      { label: "CHG", value: "Charged" },
+      { label: "CMP", value: "Complaint Filed" },
+      { label: "IND", value: "Indict, Indictment" },
+      { label: "LIN", value: "Lien" },
+      { label: "SEZ", value: "Seizure" },
+      { label: "WTD", value: "Wanted" },
+      { label: "APL", value: "Appeal" },
+      { label: "CNF", value: "Confession" },
+      { label: "PLE", value: "Plea" },
+      { label: "SET", value: "Settlement or Suit" },
+      { label: "TRL", value: "Trial" },
+      { label: "ACQ", value: "Acquit, Not Guilty" },
+      { label: "ACT", value: "Disciplinary, Regulatory Action" },
+      { label: "ARB", value: "Arbitration" },
+      { label: "ASC", value: "Associated,  Seen with " },
+      { label: "CEN", value: "Censure" },
+      { label: "CVT", value: "Convict, Conviction" },
+      { label: "DEP", value: "Deported" },
+      { label: "DMS", value: "Dismissed" },
+      { label: "EXP", value: "Expelled" },
+      { label: "FIL", value: "Fine < $10,000" },
+      { label: "FIM", value: "Fine > $10,000" },
+      { label: "GOV", value: "Government Official" },
+      { label: "RVK", value: "Revoked Registration" },
+      { label: "SAN", value: "Sanction" },
+      { label: "SJT", value: "Served Jail Time" },
+      { label: "SPD", value: "Suspended" }
+    ];
+
+    let tootliptext1 = _.find(abbrList, function(o) {
+      return o.label === code;
+    });
+    let tootliptext2 = _.find(abbrList, function(o) {
+      return o.label === subCode;
+    });
+
+    return (
+      <span>
+        <Tooltip
+          title={
+            (tootliptext1 ? tootliptext1.value + " / " : "") +
+            (tootliptext2 ? tootliptext2.value : "")
+          }
+        >
+          <span>{code + " / " + subCode}</span>
+        </Tooltip>
+      </span>
+    );
+  };
+
   return (
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
@@ -466,11 +527,7 @@ const buildDetails = obj => {
                     label="Event Text:"
                     value={refItem.EventText || "-"}
                   />
-                  <Column
-                    column={12}
-                    label="Event SubType Text:"
-                    value={refItem.EventSubTypeText || "-"}
-                  />
+
                   <Column
                     column={12}
                     label="Event Date:"
@@ -481,11 +538,22 @@ const buildDetails = obj => {
                     label="Event Type Text:"
                     value={refItem.EventTypeText || "-"}
                   />
+
                   <Column
                     column={12}
                     label="Event Type Code:"
-                    value={refItem.EventTypeCode || "-"}
+                    value={getAbbr(
+                      refItem.EventTypeCode,
+                      refItem.EventSubTypeCode
+                    )}
                   />
+
+                  <Column
+                    column={12}
+                    label="Event SubType Text:"
+                    value={refItem.EventSubTypeText || "-"}
+                  />
+
                   <Column
                     column={12}
                     label="Postal Code:"
