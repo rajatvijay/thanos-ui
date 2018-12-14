@@ -53,7 +53,6 @@ const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   return (
     <Col span={5} className="text-left">
-
       {props.link ? (
         <a
           href={"/workflows/instances/" + props.workflow.id + "/"}
@@ -71,15 +70,14 @@ const HeaderTitle = props => {
           to={"/workflows/instances/" + props.workflow.id + "/"}
           className="text-nounderline"
         >
-         <span
+          <span
             className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
             title={props.workflow.name}
           >
             {props.workflow.name}
           </span>
-      </Link>
-      )
-    }
+        </Link>
+      )}
     </Col>
   );
 };
@@ -483,10 +481,18 @@ class MetaRow extends React.Component {
     const relatedKind = props.relatedKind;
 
     const menuItems = () => {
+      let workflowKindFiltered = [];
+
+      _.map(props.relatedKind, function(item) {
+        if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+          workflowKindFiltered.push(item);
+        }
+      });
+
       return (
         <Menu onClick={props.onChildSelect}>
-          {!_.isEmpty(relatedKind) ? (
-            _.map(props.relatedKind, function(item, index) {
+          {!_.isEmpty(workflowKindFiltered) ? (
+            _.map(workflowKindFiltered, function(item, index) {
               return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
             })
           ) : (
@@ -574,7 +580,7 @@ const StepGroupList = props => {
             <li className="groupaz" key={"group-" + index}>
               <div
                 className={
-                  "lc-step grp-class step-group-status  " +
+                  "lc-step grp-class step-group-status text-ellipsis  " +
                   group.definition.status
                 }
               >
