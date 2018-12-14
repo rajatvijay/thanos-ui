@@ -41,9 +41,7 @@ class MainRoutes extends React.Component {
     let browserMessage, ieDetected;
     // Internet Explorer 6-11
     const isIE = /*@cc_on!@*/ false || !!document.documentMode;
-    // Edge 20+
-    const isEdge = !isIE && !!window.StyleMedia;
-    if (isIE || isEdge) {
+    if (isIE) {
       browserMessage =
         "So sorry, but this website does not work on Internet Explorer yet. Please copy the URL and try open it in either Chrome, Firefox, Safari, Opera.";
       ieDetected = true;
