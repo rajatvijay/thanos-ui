@@ -17,7 +17,7 @@ const openNotificationWithIcon = data => {
     message: data.message,
     description: data.body,
     placement: "bottomLeft",
-    duration: 7
+    duration: data.duration || 4.5
   });
 };
 
@@ -323,7 +323,8 @@ function addComment(payload) {
   function success(data) {
     openNotificationWithIcon({
       type: "success",
-      message: "Comment added"
+      message: "Comment added",
+      duration: 7
     });
 
     return { type: workflowCommentsConstants.ADD_COMMENTS_SUCCESS, data };
@@ -332,7 +333,8 @@ function addComment(payload) {
   function failure(error) {
     openNotificationWithIcon({
       type: "error",
-      message: "Failed to revert completion"
+      message: "Failed to revert completion",
+      duration: 7
     });
     return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };
   }
@@ -369,7 +371,8 @@ function updateFlag(payload) {
   function success(data) {
     openNotificationWithIcon({
       type: "success",
-      message: "Flag updated!"
+      message: "Flag updated!",
+      duration: 7
     });
 
     return { type: workflowCommentsConstants.ADD_COMMENTS_SUCCESS, data };
@@ -378,7 +381,8 @@ function updateFlag(payload) {
   function failure(error) {
     openNotificationWithIcon({
       type: "error",
-      message: "Failed to update"
+      message: "Failed to update",
+      duration: 7
     });
     return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };
   }
