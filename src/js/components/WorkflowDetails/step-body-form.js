@@ -152,7 +152,7 @@ class StepBodyForm extends Component {
         <i className="material-icons pd-right-sm t-20 text-bottom">
           check_circle_outline
         </i>
-        Completed by <span className="text-medium ">{completed_by}</span> on{" "}
+        Submitted by <span className="text-medium ">{completed_by}</span> on{" "}
         <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
       </span>
     );
@@ -179,7 +179,7 @@ class StepBodyForm extends Component {
                 className="text-anchor text-secondary text-underline pd-left-sm"
                 onClick={this.onUndoStep.bind(this, step)}
               >
-                Undo completion
+                Undo submission
               </span>
             </span>
           ) : null}
@@ -265,7 +265,7 @@ class StepBodyForm extends Component {
             <Tooltip
               placement="topRight"
               title={
-                "completed by " +
+                "Submitted by " +
                 this.props.stepVersionFields.stepVersionFields.completed_by
                   .email
               }

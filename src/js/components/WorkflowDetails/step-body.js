@@ -55,7 +55,9 @@ class StepBody extends Component {
           _.map(
             this.props.currentStepFields.currentStepFields.versions,
             function(i) {
-              return <Menu.Item key={i.value}> {i.label}</Menu.Item>;
+              let str = i.label;
+              let strMod = str.replace(/Created/g, "Submitted");
+              return <Menu.Item key={i.value}> {strMod}</Menu.Item>;
             }
           )
         ) : (
