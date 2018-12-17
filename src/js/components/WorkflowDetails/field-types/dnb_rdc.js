@@ -284,7 +284,94 @@ const buildDetails = obj => {
       { label: "RVK", value: "Revoked Registration" },
       { label: "SAN", value: "Sanction" },
       { label: "SJT", value: "Served Jail Time" },
-      { label: "SPD", value: "Suspended" }
+      { label: "SPD", value: "Suspended" },
+      {
+        label: "BRB",
+        value: "Bribery, Graft, Kickbacks, Political Corruption"
+      },
+      {
+        label: "BUS",
+        value: "Business Crimes (Antitrust, Bankruptcy, Price Fixing)"
+      },
+      { label: "DEN", value: "Denied Entity" },
+      { label: "FOF", value: "Former OFAC List" },
+      { label: "FRD", value: "Fraud, Scams, Swindles" },
+      { label: "MLA", value: "Money Laundering" },
+      {
+        label: "ORG",
+        value: "Organized Crime, Criminal Association, Racketeering"
+      },
+      { label: "PEP", value: "Person Political" },
+      { label: "REG", value: "Regulatory Action" },
+      {
+        label: "SEC",
+        value: "SEC Violations (Insider Trading, Securities Fraud)"
+      },
+      { label: "TER", value: "Terrorist Related" },
+      { label: "WLT", value: "Watch List" },
+      { label: "CFT", value: "Counterfeiting, Forgery" },
+      { label: "CYB", value: "Computer Related, Cyber Crime" },
+      { label: "DTF", value: "Trafficking or Distribution of Drug" },
+      { label: "FUG", value: "Fugitive, Escape" },
+      { label: "GAM", value: "Illegal Gambling" },
+      { label: "HUM", value: "Human Rights, Genocide, War Crimes" },
+      { label: "IMP", value: "Identity Theft, Impersonation" },
+      { label: "KID", value: "Kidnapping, Abduction, Held Against Will" },
+      { label: "LNS", value: "Loan Sharking, Usury, Predatory Lending" },
+      { label: "MOR", value: "Mortgage Related" },
+      { label: "MSB", value: "Money Services Business" },
+      {
+        label: "MUR",
+        value: "Murder, Manslaughter (Committed, Planned or Attempted)"
+      },
+      { label: "OBS", value: "Obscenity Related, Child Pornography" },
+      {
+        label: "PRJ",
+        value:
+          "Perjury, Obstruction of Justice, False Filings, False Statements"
+      },
+      { label: "RES", value: "Real Estate Actions" },
+      {
+        label: "SEX",
+        value: "Sex Offenses (Rape, Sodomy, Sexual Abuse, Pedophilia)"
+      },
+      {
+        label: "SMG",
+        value: "Smuggling (Does not include Drugs, Money, People or Guns"
+      },
+      { label: "SPY", value: "Spying (Treason, Espionage)" },
+      { label: "TAX", value: "Tax Related Offenses" },
+      {
+        label: "TFT",
+        value: "Theft (Larceny, Misappropriation, Embezzlement, Extortion)"
+      },
+      { label: "TRF", value: "People Trafficking, Organ Trafficking" },
+      { label: "ARS", value: "Arson" },
+      { label: "AST", value: "Assault, Battery" },
+      { label: "BUR", value: "Burglary" },
+      { label: "CON", value: "Conspiracy (no specific crime named)" },
+      { label: "DPS", value: "Possession of Drugs or Drug Paraphernalia" },
+      { label: "FOR", value: "Forfeiture" },
+      {
+        label: "IGN",
+        value: "Possession or Sale of Guns, Weapons and Explosives"
+      },
+      { label: "PSP", value: "Possession of Stolen Property" },
+      { label: "ROB", value: "Robbery (Stealing by Threat, Use of Force)" },
+      { label: "ABU", value: "Abuse (Domestic, Elder, Child)" },
+      {
+        label: "CPR",
+        value:
+          "Copyright Infringement (Intellectual Property, Electronic Piracy"
+      },
+      {
+        label: "ENV",
+        value:
+          "Environmental Crimes (Poaching, Illegal Logging, Animal Cruelty)"
+      },
+      { label: "IPR", value: "Illegal Prostitution" },
+      { label: "MIS", value: "Misconduct" },
+      { label: "NSC", value: "Nonspecific Crimes" }
     ];
 
     let tootliptext1 = _.find(abbrList, function(o) {
@@ -480,45 +567,64 @@ const buildDetails = obj => {
                 <Row gutter={16} className="mr-bottom-lg">
                   {refItem.ReferenceDetail ? (
                     <div>
-                      <Column
-                        column={12}
-                        label="Source Name:"
-                        value={refItem.ReferenceDetail.SourceName || "-"}
-                      />
-                      <Column
-                        column={12}
-                        label="Headline:"
-                        value={refItem.ReferenceDetail.Headline || "-"}
-                      />
-                      <Column
-                        column={12}
-                        label="Web page:"
-                        value={
-                          (
-                            <a
-                              href={refItem.ReferenceDetail.WebPageURL}
-                              target="_blank"
-                            >
-                              {refItem.WebPageURL}
-                            </a>
-                          ) || "-"
-                        }
-                      />
-                      <Column
-                        column={12}
-                        label="Source type:"
-                        value={refItem.ReferenceDetail.SourceTypeText || "-"}
-                      />
-                      <Column
-                        column={12}
-                        label="Publisher Name:"
-                        value={refItem.ReferenceDetail.PublisherName || "-"}
-                      />
-                      <Column
-                        column={12}
-                        label="Publication:"
-                        value={refItem.ReferenceDetail.PublicationSource || "-"}
-                      />
+                      {refItem.ReferenceDetail.SourceName ? (
+                        <Column
+                          column={12}
+                          label="Source Name:"
+                          value={refItem.ReferenceDetail.SourceName}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.Headline ? (
+                        <Column
+                          column={12}
+                          label="Headline:"
+                          value={refItem.ReferenceDetail.Headline || "-"}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.WebPageURL ? (
+                        <Column
+                          column={12}
+                          label="Web page:"
+                          value={
+                            (
+                              <a
+                                href={refItem.ReferenceDetail.WebPageURL}
+                                target="_blank"
+                              >
+                                {refItem.ReferenceDetail.WebPageURL}
+                              </a>
+                            ) || "-"
+                          }
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.SourceTypeText ? (
+                        <Column
+                          column={12}
+                          label="Source type:"
+                          value={refItem.ReferenceDetail.SourceTypeText || "-"}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.PublisherName ? (
+                        <Column
+                          column={12}
+                          label="Publisher Name:"
+                          value={refItem.ReferenceDetail.PublisherName || "-"}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.PublicationSource ? (
+                        <Column
+                          column={12}
+                          label="Publication:"
+                          value={
+                            refItem.ReferenceDetail.PublicationSource || "-"
+                          }
+                        />
+                      ) : null}
                     </div>
                   ) : null}
 
