@@ -14,8 +14,7 @@ const openNotificationWithIcon = data => {
   notification[data.type]({
     message: data.message,
     description: data.body,
-    placement: "bottomLeft",
-    duration: 7
+    placement: "bottomLeft"
   });
 };
 
