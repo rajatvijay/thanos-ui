@@ -261,17 +261,26 @@ class StepBodyForm extends Component {
     return (
       <div className="version-item">
         <span className="float-right">
-          <Tooltip
-            placement="topRight"
-            title={
-              "completed by " +
-              this.props.stepVersionFields.stepVersionFields.completed_by.email
-            }
-          >
-            <i className="material-icons t-14 text-middle text-light">
-              history
-            </i>
-          </Tooltip>
+          {this.props.stepVersionFields.stepVersionFields.completed_by ? (
+            <Tooltip
+              placement="topRight"
+              title={
+                "completed by " +
+                this.props.stepVersionFields.stepVersionFields.completed_by
+                  .email
+              }
+            >
+              <i className="material-icons t-14 text-middle text-light">
+                history
+              </i>
+            </Tooltip>
+          ) : (
+            <span>
+              <i className="material-icons t-14 text-middle text-light">
+                history
+              </i>
+            </span>
+          )}
         </span>
         <div className="text-medium mr-bottom-sm">
           {fieldReturn ? fieldReturn.definition.body : ""}
@@ -330,11 +339,15 @@ class StepBodyForm extends Component {
                     }
                   </b>
                 </Moment>{" "}
-                by {"  "}
-                {
-                  this.props.stepVersionFields.stepVersionFields.completed_by
-                    .email
-                }
+                {this.props.stepVersionFields.stepVersionFields.completed_by ? (
+                  <span>
+                    by {"  "}
+                    {
+                      this.props.stepVersionFields.stepVersionFields
+                        .completed_by.email
+                    }
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>
