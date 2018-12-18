@@ -358,6 +358,14 @@ class FilterSidebar extends Component {
 
     const { workflowKind } = this.props.workflowKind;
 
+    let workflowKindFiltered = [];
+
+    _.map(workflowKind, function(item) {
+      if (!item.is_related_kind && _.includes(item.features, "add_workflow")) {
+        workflowKindFiltered.push(item);
+      }
+    });
+
     //workflow Kind list
 
     //kind temp hide list
@@ -381,9 +389,11 @@ class FilterSidebar extends Component {
 
     const menu = (
       <Menu className="kind-menu" theme="Light">
-        {_.map(workflowKind, function(item, index) {
+        {_.map(workflowKindFiltered, function(item, index) {
           //////////---------------HACK---------------////////////
           //Hide users workflow kind from create button. Temporary
+
+          let showitem = false;
 
           if (item.tag === "users") {
             return;
@@ -431,23 +441,27 @@ class FilterSidebar extends Component {
         className="aux-nav aux-nav-filter bg-white"
       >
         <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
-          <div className="create-btn">
-            <Dropdown
-              overlay={menu}
-              placement="bottomRight"
-              className="create-workflow-dropdown"
-            >
-              <Button
-                type="primary"
-                size="large"
-                loading={this.props.workflowKind.loading}
-                className="shadow-2 btn-block btn-create"
-              >
-                Create new <Icon type="down" />
-              </Button>
-            </Dropdown>
-          </div>
-          <div className="filter-divider" />
+          {_.size(workflowKindFiltered) ? (
+            <div>
+              <div className="create-btn">
+                <Dropdown
+                  overlay={menu}
+                  placement="bottomRight"
+                  className="create-workflow-dropdown"
+                >
+                  <Button
+                    type="primary"
+                    size="large"
+                    loading={this.props.workflowKind.loading}
+                    className="shadow-2 btn-block btn-create"
+                  >
+                    Create new <Icon type="down" />
+                  </Button>
+                </Dropdown>
+              </div>
+              <div className="filter-divider" />
+            </div>
+          ) : null}
 
           <div className="filter-section section-kind">
             <h5 className="aux-item aux-lead">Filter workflow type</h5>
