@@ -83,6 +83,11 @@ export const Text = props => {
 
   let that = this;
 
+  let rows =
+    props.field.definition.meta && props.field.definition.meta.height
+      ? props.field.definition.meta.height
+      : 1;
+
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -102,7 +107,7 @@ export const Text = props => {
       <TextArea
         disabled={isDisabled(props)}
         //type="textarea"
-        row={3}
+        autosize={{ minRows: rows }}
         placeholder={props.field.placeholder}
         defaultValue={
           props.field.answers[0]

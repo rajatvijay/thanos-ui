@@ -92,8 +92,8 @@ class ChildWorkflowField2 extends Component {
   };
 
   getRelatedTypes = childWorkflow => {
+    let that = this;
     return _.map(childWorkflow, function(workflow) {
-      let that = this;
       let rt = [];
       if (workflow.definition.related_types.length !== 0) {
         _.map(workflow.definition.related_types, function(rtc) {
