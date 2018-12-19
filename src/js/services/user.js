@@ -26,11 +26,12 @@ function login(username, password, token) {
     credentials: "include",
     body: JSON.stringify({ email: username, password: password, token: token })
   };
-
   return fetch(baseUrl + "users/login/", requestOptions)
     .then(response => {
       if (!response.ok) {
-        return Promise.reject(response.statusText);
+        return response.json().then(error => {
+          return Promise.reject(error);
+        });
       }
       return response.json();
     })

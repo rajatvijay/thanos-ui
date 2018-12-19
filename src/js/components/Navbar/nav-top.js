@@ -67,7 +67,7 @@ class NavTop extends Component {
                   </a>
                 </span>
 
-                {document.location.pathname === "/workflows/instances/" ? (
+                {document.location.pathname.match("/workflows/instances/") ? (
                   <div className={"search-box "}>
                     <Search
                       placeholder="Search"
