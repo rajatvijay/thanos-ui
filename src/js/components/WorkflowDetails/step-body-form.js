@@ -152,7 +152,7 @@ class StepBodyForm extends Component {
         <i className="material-icons pd-right-sm t-20 text-bottom">
           check_circle_outline
         </i>
-        Completed by <span className="text-medium ">{completed_by}</span> on{" "}
+        Submitted by <span className="text-medium ">{completed_by}</span> on{" "}
         <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
       </span>
     );
@@ -179,7 +179,7 @@ class StepBodyForm extends Component {
                 className="text-anchor text-secondary text-underline pd-left-sm"
                 onClick={this.onUndoStep.bind(this, step)}
               >
-                Undo completion
+                Undo submission
               </span>
             </span>
           ) : null}
@@ -261,17 +261,26 @@ class StepBodyForm extends Component {
     return (
       <div className="version-item">
         <span className="float-right">
-          <Tooltip
-            placement="topRight"
-            title={
-              "completed by " +
-              this.props.stepVersionFields.stepVersionFields.completed_by.email
-            }
-          >
-            <i className="material-icons t-14 text-middle text-light">
-              history
-            </i>
-          </Tooltip>
+          {this.props.stepVersionFields.stepVersionFields.completed_by ? (
+            <Tooltip
+              placement="topRight"
+              title={
+                "Submitted by " +
+                this.props.stepVersionFields.stepVersionFields.completed_by
+                  .email
+              }
+            >
+              <i className="material-icons t-14 text-middle text-light">
+                history
+              </i>
+            </Tooltip>
+          ) : (
+            <span>
+              <i className="material-icons t-14 text-middle text-light">
+                history
+              </i>
+            </span>
+          )}
         </span>
         <div className="text-medium mr-bottom-sm">
           {fieldReturn ? fieldReturn.definition.body : ""}
@@ -330,11 +339,15 @@ class StepBodyForm extends Component {
                     }
                   </b>
                 </Moment>{" "}
-                by {"  "}
-                {
-                  this.props.stepVersionFields.stepVersionFields.completed_by
-                    .email
-                }
+                {this.props.stepVersionFields.stepVersionFields.completed_by ? (
+                  <span>
+                    by {"  "}
+                    {
+                      this.props.stepVersionFields.stepVersionFields
+                        .completed_by.email
+                    }
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>

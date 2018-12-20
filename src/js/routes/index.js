@@ -38,7 +38,22 @@ function mapStateToProps(state) {
 class MainRoutes extends React.Component {
   constructor(props) {
     super();
-    this.state = { showBlank: true };
+    let browserMessage, ieDetected;
+    // Internet Explorer 6-11
+    const isIE = /*@cc_on!@*/ false || !!document.documentMode;
+    if (isIE) {
+      browserMessage =
+        "So sorry, but this website does not work on Internet Explorer yet. Please copy the URL and try open it in either Chrome, Firefox, Safari, Opera.";
+      ieDetected = true;
+    } else {
+      browserMessage = "";
+      ieDetected = false;
+    }
+    this.state = {
+      showBlank: true,
+      browserMessage,
+      ieDetected
+    };
   }
 
   componentDidMount = () => {
@@ -53,7 +68,6 @@ class MainRoutes extends React.Component {
       this.props.dispatch(checkAuth());
       this.props.dispatch(configActions.getConfig());
     }
-
     //}
   };
 
@@ -70,43 +84,53 @@ class MainRoutes extends React.Component {
     } else {
       return (
         <div className="main-container">
-          <Router history={history}>
-            {this.props.users.me && this.props.users.me.loading ? (
-              <div className="text-center mr-top-lg">loading...</div>
-            ) : (
-              <div>
-                {localStorage.getItem("user") ||
-                !history.location.pathname === "/login/magic/" ? (
-                  <Navbar />
-                ) : null}
+          {this.state.ieDetected ? (
+            <div className="text-center mr-top-lg t-22">
+              {this.state.browserMessage}
+            </div>
+          ) : (
+            <Router history={history}>
+              {this.props.users.me && this.props.users.me.loading ? (
+                <div className="text-center mr-top-lg">loading...</div>
+              ) : (
+                <div>
+                  {localStorage.getItem("user") ||
+                  !history.location.pathname === "/login/magic/" ? (
+                    <Navbar />
+                  ) : null}
 
-                <Switch>
-                  <Route path="/login" exact component={LoginPage} />
-                  <Route path="/login/magic" exact component={MagicLoginPage} />
-                  <Route
-                    path="/login/magicprocess"
-                    component={MagicLinkProcess}
-                  />
+                  <Switch>
+                    <Route path="/login" exact component={LoginPage} />
+                    <Route
+                      path="/login/magic"
+                      exact
+                      component={MagicLoginPage}
+                    />
+                    <Route
+                      path="/login/magicprocess"
+                      component={MagicLinkProcess}
+                    />
 
-                  <Redirect from="/" exact to="/workflows/instances/" />
+                    <Redirect from="/" exact to="/workflows/instances/" />
 
-                  <PrivateRoute
-                    path="/workflows/instances/"
-                    exact
-                    component={Workflow}
-                  />
-                  <PrivateRoute
-                    path="/workflows/instances/:id?"
-                    component={WorkflowDetails}
-                  />
-                  <PrivateRoute path="/users/:id?" component={Users} />
-                  {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
+                    <PrivateRoute
+                      path="/workflows/instances/"
+                      exact
+                      component={Workflow}
+                    />
+                    <PrivateRoute
+                      path="/workflows/instances/:id?"
+                      component={WorkflowDetails}
+                    />
+                    <PrivateRoute path="/users/:id?" component={Users} />
+                    {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
 
-                  <Route path="/" component={GenericNotFound} />
-                </Switch>
-              </div>
-            )}
-          </Router>
+                    <Route path="/" component={GenericNotFound} />
+                  </Switch>
+                </div>
+              )}
+            </Router>
+          )}
         </div>
       );
     }
