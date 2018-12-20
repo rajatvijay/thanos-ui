@@ -316,7 +316,7 @@ class StepBodyForm extends Component {
       [{ orderBy: Number }],
       ["asc"]
     );
-    //let wf_id = that.props.workflowDetails.workflowDetails.stepGroups.results[0].workflow;
+
     let groupedField = [];
 
     _.map(orderedStep, function(step) {
@@ -330,11 +330,6 @@ class StepBodyForm extends Component {
     });
 
     const RenderSteps = (fields, wfid) => {
-      //let that = this;
-
-      console.log(fields);
-      console.log(that.props);
-
       let renderedSteps = _.map(fields.fields, function(f, index) {
         let param = {
           field: f,
@@ -475,113 +470,23 @@ class StepBodyForm extends Component {
           </div>
         ) : null}
 
-        <Tabs defaultActiveKey="group_0" onChange={this.callback}>
-          {_.map(groupedField, function(group, index) {
-            let wf_id =
-              that.props.workflowDetails.workflowDetails.stepGroups.results[0]
-                .workflow;
-            return (
-              <TabPane tab={group.label} key={"group_" + index}>
-                <RenderSteps fields={group.steps} wfid={wf_id} />
-              </TabPane>
-            );
-          })}
-        </Tabs>
-
-        {/*_.map( orderedStep, function(f, index) {
-          let wf_id = that.props.workflowDetails.workflowDetails.stepGroups.results[0].workflow;
-          let param = {
-            field: f,
-            currentStepFields: currentStepFields,
-            error: errors,
-            onFieldChange: that.onFieldChange,
-            workflowId: wf_id,
-            formProps: that.props.form,
-            completed: that.props.stepData.completed_at ? true : false,
-            is_locked: that.props.stepData.is_locked,
-            addComment: that.props.toggleSidebar,
-            changeFlag: that.props.changeFlag,
-            getIntegrationComments: that.props.getIntegrationComments,
-            dispatch: that.props.dispatch,
-            permission: that.props.permission
-          };
-
-          let field = getFieldType(param);
-
-          ///row size method
-          //todo: clean up this mess
-          if (row.length === 2) {
-            row = [];
-          }
-
-          if (f.definition.size === 3) {
-            //If size is 50%
-
-            if (index === that.props.stepData.data_fields.length - 1) {
-              row.push(field);
-
+        {_.size(groupedField) ? (
+          <Tabs defaultActiveKey="group_0" onChange={this.callback}>
+            {_.map(groupedField, function(group, index) {
+              let wf_id = that.props.stepData.workflow;
               return (
-                <Row gutter={16}>
-                  {_.map(row, function(col, index) {
-                    return (
-                      <Col span={12} key={"col-1-" + index}>
-                        {col} {v ? that.getVersionField(col.key) : ""}{" "}
-                      </Col>
-                    );
-                  })}
-                </Row>
+                <TabPane tab={group.label} key={"group_" + index}>
+                  <RenderSteps fields={group.steps} wfid={wf_id} />
+                </TabPane>
               );
-            } else {
-              row.push(field);
-              if (row.length === 2) {
-                return (
-                  <Row gutter={16}>
-                    {_.map(row, function(col, index) {
-                      return (
-                        <Col span={12} key={"col-" + index}>
-                          {col} {v ? that.getVersionField(col.key) : null}
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                );
-              }
-            }
-          } else if (f.definition.size === 1) {
-            if (!_.isEmpty(row)) {
-              row.push(field);
-              let bow = (
-                <div>
-                  {_.map(row, function(r, index) {
-                    return (
-                      <Row gutter={16} key={index}>
-                        <Col span={index === 0 ? "12" : "24"}>
-                          {r} {v ? that.getVersionField(r.key) : null}
-                        </Col>
-                      </Row>
-                    );
-                  })}
-                </div>
-              );
-              row = [];
-              return bow;
-            } else {
-              return (
-                <Row gutter={16} key={index}>
-                  <Col span="24">
-                    {field} {v ? that.getVersionField(field.key) : null}
-                  </Col>
-                </Row>
-              );
-            }
-          }
-          //return field;
-          //ends
-          }
-          )
-        */}
-
-        {/*<RenderSteps fields={orderedStep}/>*/}
+            })}
+          </Tabs>
+        ) : (
+          <RenderSteps
+            fields={orderedStep}
+            wfid={that.props.stepData.workflow}
+          />
+        )}
 
         <Divider />
         <div className="break-avoid">
