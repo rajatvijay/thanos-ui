@@ -40,7 +40,6 @@ class StepBodyForm extends Component {
   //ON Field Change save or update data//
   //////////////////////////////////////
   onFieldChange = (e, payload, calculated) => {
-    debugger;
     //sanitize this function later
     /*if (
       _.size(payload.field.answers) &&
@@ -101,7 +100,6 @@ class StepBodyForm extends Component {
       "cascader"
     ];
     if (saveNowType.includes(payload.field.definition.field_type)) {
-      debugger;
       this.props.dispatch(workflowStepActions.saveField(data));
     } else {
       this.dispatchDebounced(data, method);
