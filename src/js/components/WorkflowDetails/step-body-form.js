@@ -322,8 +322,8 @@ class StepBodyForm extends Component {
     _.map(orderedStep, function(step) {
       if (
         step.definition.field_type === "paragraph" &&
-        _.size(step.definition.extras) &&
-        step.definition.extras.section
+        _.size(step.definition.extra) &&
+        step.definition.extra.section
       ) {
         let groupItem = { label: step.definition.body, steps: [step] };
         groupedField.push(groupItem);
