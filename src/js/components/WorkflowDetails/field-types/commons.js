@@ -260,7 +260,6 @@ function getIntegrationSearchButton(props) {
     dnb_duns_search_direct_plus: "Search D-U-N-S Direct+",
     google_search: "Google Search",
     dnb_rdc: "Get DNB Screening",
-    dnb_rdc_alerts: "Get DNB RDC alerts",
     dnb_financials: "Get Financial Statements",
     dnb_litigation: "Get Bankcryptcy Statements",
     translation: "Translate",
