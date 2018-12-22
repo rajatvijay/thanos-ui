@@ -11,8 +11,7 @@ const TabPane = Tabs.TabPane;
 
 class StepBodyForm extends Component {
   state = {
-    version: false,
-    hasStepData: false
+    version: false
   };
 
   getWorkflowId = () => {
@@ -31,16 +30,6 @@ class StepBodyForm extends Component {
       }
     }
   };
-
-  // componentWillUpdate = next => {
-
-  //   if(_.size(prev.stepData !== this.props.stepData)){
-  //     console.log('sdsdfjslkjd')
-  //     console.log(this.props)
-  //     this.setState({hasStepData:true})
-  //   }
-
-  // };
 
   versionToggle = () => {
     this.setState({ showVersion: !this.state.showVersion });
