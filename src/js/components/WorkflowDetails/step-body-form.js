@@ -14,6 +14,13 @@ class StepBodyForm extends Component {
     version: false
   };
 
+  getWorkflowId = () => {
+    let path = document.location.pathname;
+    let pathLast = path.split("/")[3];
+    let workflowID = pathLast.split("?")[0];
+    return workflowID;
+  };
+
   componentDidUpdate = prev => {
     if (
       this.props.stepVersionFields.loading !== prev.stepVersionFields.loading
@@ -293,10 +300,6 @@ class StepBodyForm extends Component {
     );
   };
 
-  callback = key => {
-    console.log(key);
-  };
-
   render = () => {
     let that = this;
     let row = [];
@@ -333,14 +336,16 @@ class StepBodyForm extends Component {
       }
     });
 
-    const RenderSteps = (fields, wfid) => {
+    const RenderSteps = fields => {
+      let that = this;
+
       let renderedSteps = _.map(fields.fields, function(f, index) {
         let param = {
           field: f,
           currentStepFields: currentStepFields,
           error: errors,
           onFieldChange: that.onFieldChange,
-          workflowId: wfid,
+          workflowId: that.getWorkflowId(),
           formProps: that.props.form,
           completed: that.props.stepData.completed_at ? true : false,
           is_locked: that.props.stepData.is_locked,
@@ -477,19 +482,15 @@ class StepBodyForm extends Component {
         {_.size(groupedField) ? (
           <Tabs defaultActiveKey="group_0" onChange={this.callback}>
             {_.map(groupedField, function(group, index) {
-              let wf_id = that.props.stepData.workflow;
               return (
                 <TabPane tab={group.label} key={"group_" + index}>
-                  <RenderSteps fields={group.steps} wfid={wf_id} />
+                  <RenderSteps fields={group.steps} />
                 </TabPane>
               );
             })}
           </Tabs>
         ) : (
-          <RenderSteps
-            fields={orderedStep}
-            wfid={that.props.stepData.workflow}
-          />
+          <RenderSteps fields={orderedStep} />
         )}
 
         <Divider />
