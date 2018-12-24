@@ -104,6 +104,8 @@ export const getFieldType = props => {
       return RDC(props);
     case "dnb_rdc_alerts":
       return RDCAlerts(props);
+    case "dnb_cmp_ent_vw":
+      return DnBCommon(props);
     case "dnb_livingstone":
       return Livingstone(props);
     case "dnb_data_reader":
