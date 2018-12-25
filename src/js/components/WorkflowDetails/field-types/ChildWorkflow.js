@@ -114,15 +114,23 @@ class ChildWorkflowField2 extends Component {
     let that = this;
 
     const menuItems = () => {
+      let workflowKindFiltered = [];
       const relatedKind = this.state.relatedWorkflow;
+
+      _.map(relatedKind, function(item) {
+        if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+          workflowKindFiltered.push(item);
+        }
+      });
+
       return (
         <Menu onClick={props.onChildSelect}>
-          {!_.isEmpty(relatedKind) ? (
-            _.map(props.relatedKind, function(item, index) {
+          {!_.isEmpty(workflowKindFiltered) ? (
+            _.map(workflowKindFiltered, function(item, index) {
               return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
             })
           ) : (
-            <Menu.Item disabled>No related workflow</Menu.Item>
+            <Menu.Item disabled>No related workflow kind</Menu.Item>
           )}
         </Menu>
       );
