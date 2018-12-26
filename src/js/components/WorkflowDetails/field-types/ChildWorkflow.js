@@ -56,6 +56,7 @@ class ChildWorkflowField2 extends Component {
       this.state.kindChecked === false
     ) {
       this.props.dispatch(workflowKindActions.getAll());
+      this.setState({kindChecked=true})
     }
   };
 
