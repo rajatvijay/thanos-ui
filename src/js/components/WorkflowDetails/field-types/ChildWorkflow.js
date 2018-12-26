@@ -19,7 +19,7 @@ import {
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { workflowKindActions } from "../../../actions";
+import { workflowKindActions, createWorkflow } from "../../../actions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -81,8 +81,8 @@ class ChildWorkflowField2 extends Component {
       .then(body => {
         this.setState({
           childWorkflow: body.results,
-          fetching: false
-          //relatedWorkflow: this.getRelatedTypes(body.results)
+          fetching: false,
+          relatedWorkflow: this.getRelatedTypes(body.results)
         });
       });
   };
@@ -96,6 +96,17 @@ class ChildWorkflowField2 extends Component {
 
   toggleListView = status => {
     this.setState({ statusView: status });
+  };
+
+  onChildSelect = e => {
+    let payload = {
+      status: 1,
+      kind: e.key,
+      name: "Draft",
+      parent: this.props.workflowId
+    };
+
+    this.props.dispatch(createWorkflow(payload));
   };
 
   getRelatedTypes = () => {
@@ -118,38 +129,40 @@ class ChildWorkflowField2 extends Component {
     return rt;
   };
 
+  getKindMenu = () => {
+    let workflowKindFiltered = [];
+    const relatedKind = this.state.relatedWorkflow;
+
+    _.map(relatedKind, function(item) {
+      if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+        workflowKindFiltered.push(item);
+      }
+    });
+
+    let menu = (
+      <Menu onClick={this.onChildSelect}>
+        {!_.isEmpty(workflowKindFiltered) ? (
+          _.map(workflowKindFiltered, function(item, index) {
+            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          })
+        ) : (
+          <Menu.Item disabled>No related workflow kind</Menu.Item>
+        )}
+      </Menu>
+    );
+
+    return menu;
+  };
+
   render = () => {
     let props = this.props;
     let { field } = props;
     let that = this;
 
-    const menuItems = () => {
-      let workflowKindFiltered = [];
-      const relatedKind = this.state.relatedWorkflow;
+    console.log("this.props");
+    console.log(this.props);
 
-      _.map(relatedKind, function(item) {
-        if (item.is_related_kind) {
-          workflowKindFiltered.push(item);
-        }
-      });
-
-      return (
-        <Menu onClick={props.onChildSelect}>
-          {this.props.workflowKind.loading ? (
-            <Menu.Item> loading... </Menu.Item>
-          ) : null}
-          {!_.isEmpty(workflowKindFiltered) ? (
-            _.map(workflowKindFiltered, function(item, index) {
-              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-            })
-          ) : (
-            <Menu.Item disabled>No related workflow kind</Menu.Item>
-          )}
-        </Menu>
-      );
-    };
-
-    const childWorkflowMenu = menuItems(props);
+    //const childWorkflowMenu = this.getKindMenu();
 
     return (
       <FormItem
@@ -172,18 +185,21 @@ class ChildWorkflowField2 extends Component {
         ) : (
           <div>
             <Col span="18" className="text-right text-light small">
-              <Dropdown
-                overlay={childWorkflowMenu}
-                className="child-workflow-dropdown"
-                placement="bottomRight"
-              >
-                <Button
-                  type="primary"
-                  loading={this.props.workflowKind.loading ? true : false}
+              {this.state.relatedWorkflow ? (
+                <Dropdown
+                  overlay={this.getKindMenu()}
+                  className="child-workflow-dropdown"
+                  placement="bottomRight"
                 >
-                  Add <i className="material-icons t-14">keyboard_arrow_down</i>
-                </Button>
-              </Dropdown>
+                  <Button
+                    type="primary"
+                    loading={this.props.workflowKind.loading ? true : false}
+                  >
+                    Add{" "}
+                    <i className="material-icons t-14">keyboard_arrow_down</i>
+                  </Button>
+                </Dropdown>
+              ) : null}
             </Col>
             <div className="workflow-list">
               <div className="list-view-header">
