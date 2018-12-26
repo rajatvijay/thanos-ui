@@ -129,7 +129,7 @@ class Workflow extends Component {
   };
 
   redirectLoginPage = () => {
-    return document.location.reload();
+    this.props.dispatch(logout());
   };
 
   getExportList = () => {
