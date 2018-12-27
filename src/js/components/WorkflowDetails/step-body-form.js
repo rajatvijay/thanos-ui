@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { Form, Divider, Row, Col, Alert, Button, Tooltip } from "antd";
+import { Form, Divider, Row, Col, Alert, Button, Tooltip, Tabs } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
 import { getFieldType } from "./field-types";
 
 const FormItem = Form.Item;
+const TabPane = Tabs.TabPane;
 
 class StepBodyForm extends Component {
   state = {
@@ -396,7 +397,6 @@ class StepBodyForm extends Component {
             </div>
           </div>
         ) : null}
-
 
         {_.size(groupedField) ? (
           <Tabs defaultActiveKey="group_0" onChange={this.callback}>
