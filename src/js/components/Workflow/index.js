@@ -78,9 +78,9 @@ class Workflow extends Component {
     }
 
     /*//////////////////////////////////////////////////
-      When filter is change workflow is reloaded/fetched and by 
+      When filter is change workflow is reloaded/fetched and by
       default we set workflow kind filter that makes an extra call
-      for workflow fetch so  by removing this call we reduced the 
+      for workflow fetch so  by removing this call we reduced the
       extra call for workflow fetch thus reducing time to load
     */ ////////////////////////////////////////////////////
 
@@ -126,6 +126,10 @@ class Workflow extends Component {
 
   reloadWorkflowList = () => {
     this.props.dispatch(workflowActions.getAll());
+  };
+
+  redirectLoginPage = () => {
+    this.props.dispatch(logout());
   };
 
   getExportList = () => {
@@ -250,7 +254,8 @@ class Workflow extends Component {
             </div>
           </div>
 
-          {this.props.workflow.loading ? null : (
+          {this.props.workflow.loading ? null : this.props.workflow
+            .loadingStatus === "failed" ? null : (
             <Row className="list-view-header">
               <Col span="12">
                 <div className="workflow-count">
@@ -284,9 +289,17 @@ class Workflow extends Component {
           ) : this.props.workflow.loadingStatus === "failed" ? (
             <div className="mr-top-lg text-center text-bold text-metal">
               Unable to load workflow list.{" "}
-              <div className="text-anchor " onClick={this.reloadWorkflowList}>
-                Click here to reload{" "}
-                <i className="material-icons text-middle">refresh</i>
+              {/**<div className="text-anchor ">
+                 Click here to reload{" "}
+                 <i className="material-icons text-middle">refresh</i>
+               </div>**/}
+              <div
+                className="mr-top-lg text-center text-bold"
+                style={{ color: "red" }}
+                onClick={this.redirectLoginPage}
+              >
+                You have been logged out. Please Login again to continue
+                <div className="text-anchor ">Click here to Login</div>
               </div>
             </div>
           ) : (

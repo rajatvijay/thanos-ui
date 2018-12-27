@@ -19,6 +19,7 @@ import {
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
+import { workflowKindActions, createWorkflow } from "../../../actions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -41,13 +42,22 @@ class ChildWorkflowField2 extends Component {
     this.state = {
       field: null,
       country: null,
-      statusView: false
+      statusView: false,
+      kindChecked: false
     };
   }
 
   componentDidMount = () => {
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
     this.getChildWorkflow();
+
+    if (
+      !_.size(this.props.workflowKind.workflowKind) &&
+      this.state.kindChecked === false
+    ) {
+      this.props.dispatch(workflowKindActions.getAll());
+      this.setState({ kindChecked: true });
+    }
   };
 
   getChildWorkflow = () => {
@@ -61,11 +71,8 @@ class ChildWorkflowField2 extends Component {
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
 
     let url =
-      baseUrl +
-      "workflows-list/?parent_workflow_id=" +
-      parent_id +
-      "&kind=" +
-      kind;
+      baseUrl + "workflows-list/?parent_workflow_id=" + parent_id + "&kind=2";
+    +kind;
 
     this.setState({ fetching: true });
 
@@ -91,21 +98,60 @@ class ChildWorkflowField2 extends Component {
     this.setState({ statusView: status });
   };
 
-  getRelatedTypes = childWorkflow => {
+  onChildSelect = e => {
+    let payload = {
+      status: 1,
+      kind: e.key,
+      name: "Draft",
+      parent: this.props.workflowId
+    };
+
+    this.props.dispatch(createWorkflow(payload));
+  };
+
+  getRelatedTypes = () => {
+    let related = this.props.workflowDetailsHeader.workflowDetailsHeader
+      .definition.related_types;
+
     let that = this;
-    return _.map(childWorkflow, function(workflow) {
-      let rt = [];
-      if (workflow.definition.related_types.length !== 0) {
-        _.map(workflow.definition.related_types, function(rtc) {
-          _.filter(that.props.workflowKind.workflowKind, function(kind) {
-            if (kind.tag === rtc) {
-              rt.push(kind);
-            }
-          });
+
+    let rt = [];
+    if (related.length !== 0) {
+      _.map(related, function(rtc) {
+        _.filter(that.props.workflowKind.workflowKind, function(kind) {
+          if (kind.tag === rtc) {
+            rt.push(kind);
+          }
         });
+      });
+    }
+
+    return rt;
+  };
+
+  getKindMenu = () => {
+    let workflowKindFiltered = [];
+    const relatedKind = this.state.relatedWorkflow;
+
+    _.map(relatedKind, function(item) {
+      if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+        workflowKindFiltered.push(item);
       }
-      return rt;
     });
+
+    let menu = (
+      <Menu onClick={this.onChildSelect}>
+        {!_.isEmpty(workflowKindFiltered) ? (
+          _.map(workflowKindFiltered, function(item, index) {
+            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          })
+        ) : (
+          <Menu.Item disabled>No related workflow kind</Menu.Item>
+        )}
+      </Menu>
+    );
+
+    return menu;
   };
 
   render = () => {
@@ -113,22 +159,10 @@ class ChildWorkflowField2 extends Component {
     let { field } = props;
     let that = this;
 
-    const menuItems = () => {
-      const relatedKind = this.state.relatedWorkflow;
-      return (
-        <Menu onClick={props.onChildSelect}>
-          {!_.isEmpty(relatedKind) ? (
-            _.map(props.relatedKind, function(item, index) {
-              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-            })
-          ) : (
-            <Menu.Item disabled>No related workflow</Menu.Item>
-          )}
-        </Menu>
-      );
-    };
+    console.log("this.props");
+    console.log(this.props);
 
-    const childWorkflowMenu = menuItems(props);
+    //const childWorkflowMenu = this.getKindMenu();
 
     return (
       <FormItem
@@ -151,15 +185,21 @@ class ChildWorkflowField2 extends Component {
         ) : (
           <div>
             <Col span="18" className="text-right text-light small">
-              <Dropdown
-                overlay={childWorkflowMenu}
-                className="child-workflow-dropdown"
-                placement="bottomRight"
-              >
-                <a className="ant-dropdown-link ant-btn secondary-btn" href="#">
-                  Add <i className="material-icons t-14">keyboard_arrow_down</i>
-                </a>
-              </Dropdown>
+              {this.state.relatedWorkflow ? (
+                <Dropdown
+                  overlay={this.getKindMenu()}
+                  className="child-workflow-dropdown"
+                  placement="bottomRight"
+                >
+                  <Button
+                    type="primary"
+                    loading={this.props.workflowKind.loading ? true : false}
+                  >
+                    Add{" "}
+                    <i className="material-icons t-14">keyboard_arrow_down</i>
+                  </Button>
+                </Dropdown>
+              ) : null}
             </Col>
             <div className="workflow-list">
               <div className="list-view-header">
@@ -204,8 +244,14 @@ class ChildWorkflowField2 extends Component {
   };
 }
 function mapPropsToState(state) {
-  const { workflowKind, workflowFilterType, workflowChildren } = state;
+  const {
+    workflowDetailsHeader,
+    workflowKind,
+    workflowFilterType,
+    workflowChildren
+  } = state;
   return {
+    workflowDetailsHeader,
     workflowKind,
     workflowFilterType,
     workflowChildren
