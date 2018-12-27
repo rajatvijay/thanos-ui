@@ -76,6 +76,14 @@ class MainRoutes extends React.Component {
 
   //   }
   // }
+  componentDidUpdate(prevProps) {
+    if (this.props.config.name !== prevProps.config.name) {
+      document.title = this.props.config.name || "Vetted";
+    }
+  }
+  componentWillReceiveProps(nextProps) {
+    document.title = this.props.config.name || "Vetted";
+  }
 
   render() {
     const { alert } = this.props;
