@@ -22,6 +22,7 @@ import {
 import { Duns } from "./duns-search";
 import { UBO } from "./dnb_ubo";
 import { RDC } from "./dnb_rdc";
+import { RDCAlerts } from "./dnb_rdc";
 import { Directors } from "./dnb_directors";
 import { Livingstone } from "./dnb_livingstone";
 import { DunsDirectPlus } from "./duns_direct_plus";
