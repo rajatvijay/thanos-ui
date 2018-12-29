@@ -71,8 +71,11 @@ class ChildWorkflowField2 extends Component {
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
 
     let url =
-      baseUrl + "workflows-list/?parent_workflow_id=" + parent_id + "&kind=2";
-    +kind;
+      baseUrl +
+      "workflows-list/?parent_workflow_id=" +
+      parent_id +
+      "&kind=" +
+      kind;
 
     this.setState({ fetching: true });
 
