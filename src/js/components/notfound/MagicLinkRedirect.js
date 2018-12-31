@@ -14,14 +14,14 @@ const MagicLinkRedirect = props => {
       <br />
       <br />
       <p className="t-22">
-        Sorry! You seem to have reached a link that no longer works. <br />
-        Please{" "}
+        We’re sorry, this link has expired.<br />
         <Link to="/login/magic">
           {" "}
           <b>Click here</b>
         </Link>{" "}
         to go to login page and generate a new link.
       </p>
+      <b>Note: Link expires in 24 hours</b>
     </div>
   );
 };

@@ -28,15 +28,13 @@ class MagicLoginLinkForm extends React.Component {
   componentDidMount = () => {};
 
   componentDidUpdate(prevProps) {
-    console.log(this.props.config.users);
     if (this.props.config.name !== prevProps.config.name) {
-      document.title = this.props.config.name || "Vetted";
+      document.title = _.upperFirst(this.props.config.name) || "Vetted";
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(this.props.config.name);
-    document.title = this.props.config.name || "Vetted";
+    document.title = _.upperFirst(this.props.config.name) || "Vetted";
   }
 
   handleChange(e) {
