@@ -71,7 +71,7 @@ class StepBodyForm extends Component {
     } else if (calculated) {
       let method = "save";
       let data = {
-        answer: e || "",
+        answer: e,
         field: payload.field.id,
         workflow: payload.workflowId
       };
@@ -308,7 +308,6 @@ class StepBodyForm extends Component {
     let v =
       !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
       this.props.showVersion;
-
     let editable =
       this.props.currentStepFields.currentStepFields.is_editable !== undefined
         ? this.props.currentStepFields.currentStepFields.is_editable

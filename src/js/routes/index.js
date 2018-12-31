@@ -43,7 +43,7 @@ class MainRoutes extends React.Component {
     const isIE = /*@cc_on!@*/ false || !!document.documentMode;
     if (isIE) {
       browserMessage =
-        "So sorry, but this website does not work on Internet Explorer yet.";
+        "So sorry, but this website does not work on Internet Explorer yet. Please copy the URL and try open it in either Chrome, Firefox, Safari, Opera.";
       ieDetected = true;
     } else {
       browserMessage = "";
@@ -93,10 +93,8 @@ class MainRoutes extends React.Component {
       return (
         <div className="main-container">
           {this.state.ieDetected ? (
-            <div className="text-center" style={{ "margin-top": "250px" }}>
-              {this.state.browserMessage} <br />
-              Please copy the original URL link and open it in Chrome, Firefox,
-              Safari or Opera.
+            <div className="text-center mr-top-lg t-22">
+              {this.state.browserMessage}
             </div>
           ) : (
             <Router history={history}>
