@@ -4,7 +4,7 @@ import { Layout, Icon, Tooltip, Divider } from "antd";
 import StepSidebar from "./steps-sidebar";
 import _ from "lodash";
 import StepBody from "./step-body.js";
-import { baseUrl, authHeader } from "../../_helpers";
+import { baseUrl, authHeader, history } from "../../_helpers";
 import Moment from "react-moment";
 import {
   workflowDetailsActions,
@@ -181,6 +181,13 @@ class WorkflowDetails extends Component {
 
   componentDidMount = () => {
     this.getInitialData();
+  };
+
+  componentDidUpdate = prevProps => {
+    if (this.props.location !== prevProps.location) {
+      this.preConstruct();
+      this.getInitialData();
+    }
   };
 
   getInitialData = () => {
