@@ -90,8 +90,15 @@ class StepBody extends Component {
     setTimeout(function() {
       var printContents = document.getElementById("StepBody").innerHTML;
       var docHead = document.querySelector("head").innerHTML;
+
+      console.log("doc.head--");
+      console.log(docHead);
+
       var body =
         "<!DOCTYPE html><html><head>" +
+        "<title>" +
+        that.props.currentStepFields.currentStepFields.definition.name +
+        "</title>" +
         docHead +
         "</head><body>" +
         printContents +
@@ -178,6 +185,9 @@ class StepBody extends Component {
         </div>
       );
     }
+
+    console.log("this.props-----l--------");
+    console.log(this.props);
 
     return (
       <div className="pd-ard-lg">
