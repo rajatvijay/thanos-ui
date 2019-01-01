@@ -91,9 +91,6 @@ class StepBody extends Component {
       var printContents = document.getElementById("StepBody").innerHTML;
       var docHead = document.querySelector("head").innerHTML;
 
-      console.log("doc.head--");
-      console.log(docHead);
-
       var body =
         "<!DOCTYPE html><html><head>" +
         "<title>" +
@@ -185,9 +182,6 @@ class StepBody extends Component {
         </div>
       );
     }
-
-    console.log("this.props-----l--------");
-    console.log(this.props);
 
     return (
       <div className="pd-ard-lg">
