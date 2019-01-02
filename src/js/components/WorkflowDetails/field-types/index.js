@@ -22,7 +22,7 @@ import {
 import { Duns } from "./duns-search";
 import { UBO } from "./dnb_ubo";
 import { RDC } from "./dnb_rdc";
-//import { RDCAlerts } from "./dnb_rdc";
+import { RDCAlerts } from "./rdc_alerts";
 import { Directors } from "./dnb_directors";
 import { Livingstone } from "./dnb_livingstone";
 import { DunsDirectPlus } from "./duns_direct_plus";
@@ -102,8 +102,8 @@ export const getFieldType = props => {
       return Directors(props);
     case "dnb_rdc":
       return RDC(props);
-    // case "dnb_rdc_alerts":
-    //   return RDCAlerts(props);
+    case "dnb_rdc_alerts":
+      return RDCAlerts(props);
     case "dnb_cmp_ent_vw":
       return DnBCommon(props);
     case "dnb_livingstone":
