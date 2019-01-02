@@ -17,13 +17,13 @@
 
 .aux-nav-filter {
   .create-btn {
-    margin: 40px 45px 30px;
-    border-bottom: 2px solid #f4f5f7;
+    margin: 30px;
   }
 
   .filter-divider {
-    margin: 30px 45px 23px;
-    border-bottom: solid 3px rgba(82, 95, 127, 0.05);
+    margin: 30px 0px 23px;
+    // border-bottom: solid 3px rgba(82, 95, 127, 0.05);
+    border-bottom: solid 1px #8c9ab8;
   }
 
   .filter-section {
@@ -31,8 +31,16 @@
     .ant-menu-item {
       line-height: 26px;
       height: 26px;
-      padding-left: 45px;
-      padding-right: 45px;
+      padding-left: 15px;
+      padding-right: 15px;
+      border-radius: 3px;
+      color: @color-grey-light;
+      &.ant-menu-item-selected {
+        background: #fdfdfd;
+      }
+      &:after {
+        border: 0;
+      }
     }
   }
   .aux-lead-secondary {
@@ -46,10 +54,14 @@
   .aux-lead {
     text-transform: capitalize;
     padding-right: 30px;
-    padding-left: 45px;
+    padding-left: 30px;
     &.filter-title {
       font-size: 14px;
       .Avenir-normal();
+      label,
+      span {
+        .Avenir-medium();
+      }
     }
   }
 }
@@ -103,72 +115,41 @@
   }
 }
 
+//Workflow alert filter style
 .filter-top {
   position: relative;
   overflow-x: hidden;
-  margin: 20px 0px;
+  margin: 0px;
   background-color: transparent;
   //padding-bottom: 40px;
   //border-radius: 4px;
 
-  .ant-badge-multiple-words {
-    padding: 0 4px;
-  }
-  .filter-top-list {
-    width: 100%;
-    padding: 0;
-    list-style: none;
-    .filter-top-list-item {
-      cursor: pointer;
-      padding: 16px;
-      display: inline-block;
-      height: 80px;
-      text-align: center;
-      vertical-align: middle;
-      min-width: 150px;
-      max-width: 200px;
-      background: @color-white;
-      border: 1px solid @color-grey-light;
-      color: @color-grey;
-      transition: all 0.3s ease-in-out;
-      /*line-height: 60px;*/
-      &:hover {
-        background: #f6f6f6;
-      }
-      &:active,
-      &.active {
-        background: @color-metal;
-        color: @color-white;
-      }
-    }
-  }
-
   .filter-top-horizontal {
     background-color: transparent;
-    .ant-menu-item {
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
-      background-color: @color-white;
-      color: @color-text;
-      border: 1px solid @color-white;
-      border-bottom: 3px solid @color-white;
-      height: 100px;
-      font-family: Avenir, Roboto, "Helvetica Neue", Arial, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-      &:hover,
-      &.ant-menu-item-selected {
-        box-shadow: none;
-        background-color: #f6f7f9;
-        border: 1px solid #eaeaea;
-        border-bottom: 3px solid @color-secondary;
-      }
-      .group {
-        margin-bottom: 10px;
-        display: inline-block;
-      }
-      .ant-badge-count {
-        .Avenir-heavy();
-      }
-    }
+    // .ant-menu-item {
+    //   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+    //   background-color: @color-white;
+    //   color: @color-text;
+    //   border: 1px solid @color-white;
+    //   border-bottom: 3px solid @color-white;
+    //   height: 100px;
+    //   font-family: Avenir, Roboto, "Helvetica Neue", Arial, sans-serif,
+    //     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    //   &:hover,
+    //   &.ant-menu-item-selected {
+    //     box-shadow: none;
+    //     background-color: #f6f7f9;
+    //     border: 1px solid #eaeaea;
+    //     border-bottom: 3px solid @color-secondary;
+    //   }
+    //   .group {
+    //     margin-bottom: 10px;
+    //     display: inline-block;
+    //   }
+    //   .ant-badge-count {
+    //     .Avenir-heavy();
+    //   }
+    // }
     .workflow-group-count {
       font-family: Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",

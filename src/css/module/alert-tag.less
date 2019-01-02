@@ -1,0 +1,22 @@
+@import url("../utilities/variables.less");
+
+.alert-tag-list {
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.alert-tag-item {
+  &.ant-tag {
+    border-radius: 15px;
+    padding: 0 16px;
+  }
+  &.alert-primary {
+    border-color: @color-secondary;
+    color: @color-secondary;
+    &.alert-tag-item-active {
+      background-color: @color-secondary;
+      color: @color-white;
+    }
+  }
+}

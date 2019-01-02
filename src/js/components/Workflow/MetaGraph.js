@@ -12,7 +12,8 @@ class MetaGraph extends Component {
     super();
     this.state = {
       loading: false,
-      data: null
+      data: null,
+      error: null
     };
   }
 
@@ -22,6 +23,7 @@ class MetaGraph extends Component {
 
   getFilterData = () => {
     let that = this;
+
     this.setState({ loading: true });
     const requestOptions = {
       method: "GET",
@@ -52,11 +54,11 @@ class MetaGraph extends Component {
         }
       })
       .catch(function(error) {
+        console.log(error);
         that.setState({
           error: error,
           loading: false
         });
-        console.log(error);
       });
   };
 
