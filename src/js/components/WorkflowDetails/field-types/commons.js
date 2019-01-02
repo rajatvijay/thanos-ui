@@ -45,6 +45,23 @@ function getLabel(props, that) {
         <span className="float-right">
           {addCommentBtn(that, props)}
           {fieldFlagDropdown(that, props)}
+
+          {_.size(props.field.alerts)
+            ? _.map(props.field.alerts, function(item) {
+                return (
+                  <Tag
+                    key={item.alert.id}
+                    className={
+                      "alert-tag-item " + item.alert.category.color_label ||
+                      "alert-primary"
+                    }
+                    color={item.alert.category.color_label || null}
+                  >
+                    {item.alert.category.name}
+                  </Tag>
+                );
+              })
+            : null}
         </span>
 
         {props.field.definition.body}
@@ -150,10 +167,22 @@ function addCommentBtn(e, props) {
         <span>
           {" "}
           {props.field.comment_count > 0 ? (
-            <span className="pd-right-md">{props.field.comment_count}</span>
+            <span
+              className="display-inline-block text-secondary"
+              style={{ position: "relative", top: "-4px" }}
+            >
+              {props.field.comment_count}
+            </span>
           ) : null}{" "}
-          <i className="material-icons  t-18 text-secondary">
-            chat_bubble_outline
+          <i
+            className={
+              "material-icons  t-18 " +
+              (props.field.comment_count > 0 ? "text-secondary" : "text-metal")
+            }
+          >
+            {props.field.comment_count > 0
+              ? "chat_bubble"
+              : "chat_bubble_outline"}
           </i>
         </span>
       </Tooltip>
@@ -203,10 +232,7 @@ function fieldFlagDropdown(e, props) {
       }}
     >
       <Dropdown overlay={flag_dropdown}>
-        <a
-          className="ant-dropdown-link text-nounderline text-secondary"
-          href="#"
-        >
+        <a className="ant-dropdown-link text-nounderline text-metal" href="#">
           <i className="material-icons text-middle t-18">outlined_flag</i>{" "}
           <Icon type="down" />
         </a>

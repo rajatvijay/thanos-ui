@@ -203,10 +203,10 @@ export const Date = props => {
     ? props.field.answers[0].answer
     : props.field.definition.defaultValue;
 
-  let defaultDate = moment(defaultAnswer, "YYYY-MM-DD").isValid();
-  let defaultAnswer2 = moment().format("YYYY/MM/DD");
+  let defaultDate = moment.utc(defaultAnswer, "YYYY-MM-DD").isValid();
+  let defaultAnswer2 = moment.utc().format("YYYY/MM/DD");
   if (defaultDate) {
-    defaultAnswer2 = moment(defaultAnswer).format("YYYY/MM/DD");
+    defaultAnswer2 = moment.utc(defaultAnswer).format("YYYY/MM/DD");
   }
   let that = this;
   return (
@@ -224,7 +224,9 @@ export const Date = props => {
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
-        defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
+        defaultValue={
+          defaultDate ? moment.utc(defaultAnswer2, "YYYY/MM/DD") : null
+        }
         format={"MM-DD-YYYY"}
       />
       <GetAnsweredBy {...props} />

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { Layout, Menu, Icon, Affix } from "antd";
+import { Layout, Menu, Icon, Affix, Badge, Tooltip } from "antd";
 import { calculatedData } from "../Workflow/calculated-data";
 import { utils } from "../Workflow/utils";
 import { history } from "../../_helpers";
@@ -13,8 +13,13 @@ const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
 const StepSidebar = props => {
   return (
     <Sider
-      width={250}
-      style={{ overflow: "auto", height: "100%", position: "absolute" }}
+      width={320}
+      style={{
+        overflow: "auto",
+        height: "100%",
+        position: "absolute",
+        background: "#fcfdff"
+      }}
       className="aux-nav aux-nav-menu aux-step-sidebar"
     >
       {props.loading || props.step2 === null ? (
@@ -71,7 +76,7 @@ class StepSidebarMenu extends Component {
           title={
             <span>
               <i className="material-icons t-14 pd-right-sm">
-                {g.completed ? "check_circle_outline" : g.definition.icon}
+                {g.completed ? "check_circle" : "panorama_fish_eye"}
               </i>
               <span>{g.definition.name}</span>
             </span>
@@ -84,10 +89,12 @@ class StepSidebarMenu extends Component {
   }
 
   getSteps(data, group_id, visible_steps) {
+    let that = this;
+
     let steps = _.map(data, function(s, key) {
       let icon_cls = "panorama_fish_eye";
       if (s.completed_at) {
-        icon_cls = "check_circle_outline";
+        icon_cls = "check_circle";
       } else if (s.is_locked) {
         icon_cls = "lock";
         // checking if all dependent_steps are visible, else return null
@@ -95,6 +102,17 @@ class StepSidebarMenu extends Component {
           return null;
         }
       }
+
+      //check alerts for steps
+      let hasAlert = false;
+      if (_.size(that.props.alerts)) {
+        _.forEach(that.props.alerts, function(value) {
+          if (value.step === s.id) {
+            hasAlert = value;
+          }
+        });
+      }
+
       return (
         <Menu.Item
           title={s.name}
@@ -102,11 +120,20 @@ class StepSidebarMenu extends Component {
           className={
             s.completed_at === null
               ? s.overdue ? "text-red overdue" : "text-light"
-              : "text-secondary completed text-medium"
+              : "text-secondary completed text-light"
           }
+          style={{ paddingLeft: "40px" }}
         >
           <i className="material-icons t-14 pd-right-sm">{icon_cls}</i>
           {s.name}
+
+          {_.size(hasAlert) ? (
+            <span className="float-right">
+              <Tooltip title={hasAlert.alert.category.name}>
+                <Badge status="error" />
+              </Tooltip>
+            </span>
+          ) : null}
         </Menu.Item>
       );
     });
