@@ -399,7 +399,6 @@ const buildDetails = obj => {
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
         <Row className="mr-bottom-lg">
-
           <Column column={12} label="Alert Entity ID:" value={obj.entityId} />
           <Column
             column={12}

@@ -90,8 +90,12 @@ class StepBody extends Component {
     setTimeout(function() {
       var printContents = document.getElementById("StepBody").innerHTML;
       var docHead = document.querySelector("head").innerHTML;
+
       var body =
         "<!DOCTYPE html><html><head>" +
+        "<title>" +
+        that.props.currentStepFields.currentStepFields.definition.name +
+        "</title>" +
         docHead +
         "</head><body>" +
         printContents +

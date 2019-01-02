@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
+import _ from "lodash";
 import {
   alertActions,
   configActions,
@@ -78,11 +79,11 @@ class MainRoutes extends React.Component {
   // }
   componentDidUpdate(prevProps) {
     if (this.props.config.name !== prevProps.config.name) {
-      document.title = this.props.config.name || "Vetted";
+      document.title = _.upperFirst(this.props.config.name) || "Vetted";
     }
   }
   componentWillReceiveProps(nextProps) {
-    document.title = this.props.config.name || "Vetted";
+    document.title = _.upperFirst(this.props.config.name) || "Vetted";
   }
 
   render() {
