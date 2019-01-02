@@ -403,19 +403,19 @@ const buildDetails = obj => {
           <Column
             column={12}
             label="Source name:"
-            value={obj.source.sourceName || "-"}
+            value={obj.source ? obj.source.sourceName : "_"}
           />
 
           <Column
             column={12}
             label="Source  date"
-            value={obj.source.entityDt || "-"}
+            value={obj.source ? obj.source.entityDt : "-"}
           />
 
           <Column
             column={12}
             label="Source format"
-            value={obj.source.format || "-"}
+            value={obj.source ? obj.source.format : "-"}
           />
 
           <Column column={12} label="System Id" value={obj.sysId || "-"} />
