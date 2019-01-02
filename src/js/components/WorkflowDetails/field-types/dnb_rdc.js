@@ -399,102 +399,28 @@ const buildDetails = obj => {
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
         <Row className="mr-bottom-lg">
-          <Column column={12} label="Alert Entity ID:" value={obj.entityId} />
           <Column
             column={12}
-            label="Source name:"
-            value={obj.source.sourceName || "-"}
+            label="Alert Entity ID:"
+            value={obj.AlertEntityID}
           />
-
           <Column
             column={12}
-            label="Source  date"
-            value={obj.source.entityDt || "-"}
-          />
-
-          <Column
-            column={12}
-            label="Source format"
-            value={obj.source.format || "-"}
-          />
-
-          <Column column={12} label="System Id" value={obj.sysId || "-"} />
-          <Column
-            column={12}
-            label="URL"
+            label="Rosette name match score:"
             value={
-              <a href={obj.rdcURL} target="_blank">
-                {obj.rdcURL}
-              </a>
+              obj.rosette_name_match_score
+                ? obj.rosette_name_match_score.score
+                : "-"
             }
+          />
+          <Column
+            column={24}
+            label="Alert Entity System ID:"
+            value={obj.AlertEntitySystemID}
           />
         </Row>
 
         <Collapse accordion bordered={false}>
-          <Panel
-            header={<div className="match-title t-16 -text-bold">Event</div>}
-            key="event"
-            style={customPanelStyle}
-          >
-            <Row>
-              {_.map(obj.event, function(refItem) {
-                return (
-                  <Row gutter={16} className="mr-bottom-lg">
-                    {refItem.category ? (
-                      <div>
-                        {refItem.category.categoryCode ? (
-                          <Column
-                            column={12}
-                            label="Category:"
-                            value={
-                              refItem.category.categoryCode +
-                              " / " +
-                              refItem.category.categoryDesc
-                            }
-                          />
-                        ) : null}
-
-                        {refItem.eventDesc ? (
-                          <Column
-                            column={12}
-                            label="Description:"
-                            value={refItem.eventDesc || "-"}
-                          />
-                        ) : null}
-
-                        {refItem.eventDt ? (
-                          <Column
-                            column={12}
-                            label="Event date:"
-                            value={refItem.eventDt || "-"}
-                          />
-                        ) : null}
-
-                        {refItem.subCategory ? (
-                          <Column
-                            column={12}
-                            label="Sub category:"
-                            value={
-                              refItem.subCategory.categoryCode +
-                                " / " +
-                                refItem.subCategory.categoryDesc || "-"
-                            }
-                          />
-                        ) : null}
-                      </div>
-                    ) : null}
-
-                    <br />
-                    <br />
-                  </Row>
-                );
-              })}
-
-              <br />
-              <br />
-            </Row>
-          </Panel>
-
           <Panel
             header={
               <div className="match-title t-16 -text-bold">Addresses</div>
@@ -503,21 +429,27 @@ const buildDetails = obj => {
             style={customPanelStyle}
           >
             <Row>
-              {_.map(obj.postAddr, function(address) {
-                return (
-                  <div>
-                    <Column
-                      column={12}
-                      label="Locator Type:"
-                      value={getAbbr(address.locatorTyp) || "-"}
-                    />
-                    <Column
-                      column={12}
-                      label="Country Code:"
-                      value={address.countryCode.countryCodeValue || "-"}
-                    />
-                  </div>
-                );
+              {_.map(obj.Address, function(address) {
+                let wholeAddress =
+                  address.StreetAddressLine &&
+                  address.StreetAddressLine.LineText
+                    ? address.StreetAddressLine.LineText + ","
+                    : "";
+                wholeAddress =
+                  wholeAddress +
+                  (address.CountryISOAlpha2Code
+                    ? address.CountryISOAlpha2Code + ", "
+                    : "");
+                wholeAddress =
+                  wholeAddress +
+                  (address.TerritoryName ? address.TerritoryName + ", " : "");
+                wholeAddress =
+                  wholeAddress +
+                  (address.PrimaryTownName
+                    ? address.PrimaryTownName + ", "
+                    : "");
+
+                return <Column column={12} value={wholeAddress} />;
               })}
 
               <br />
@@ -627,22 +559,111 @@ const buildDetails = obj => {
             header={
               <div className="match-title t-16 -text-bold">Event details</div>
             }
-            key="attribute"
+            key="3"
             style={customPanelStyle}
           >
-            {_.map(obj.attribute, function(arrtitem) {
+            {_.map(obj.EventDetail, function(refItem) {
               return (
                 <Row gutter={16} className="mr-bottom-lg">
+                  {refItem.ReferenceDetail ? (
+                    <div>
+                      {refItem.ReferenceDetail.SourceName ? (
+                        <Column
+                          column={12}
+                          label="Source Name:"
+                          value={refItem.ReferenceDetail.SourceName}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.Headline ? (
+                        <Column
+                          column={12}
+                          label="Headline:"
+                          value={refItem.ReferenceDetail.Headline || "-"}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.WebPageURL ? (
+                        <Column
+                          column={12}
+                          label="Web page:"
+                          value={
+                            (
+                              <a
+                                href={refItem.ReferenceDetail.WebPageURL}
+                                target="_blank"
+                              >
+                                {refItem.ReferenceDetail.WebPageURL}
+                              </a>
+                            ) || "-"
+                          }
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.SourceTypeText ? (
+                        <Column
+                          column={12}
+                          label="Source type:"
+                          value={refItem.ReferenceDetail.SourceTypeText || "-"}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.PublisherName ? (
+                        <Column
+                          column={12}
+                          label="Publisher Name:"
+                          value={refItem.ReferenceDetail.PublisherName || "-"}
+                        />
+                      ) : null}
+
+                      {refItem.ReferenceDetail.PublicationSource ? (
+                        <Column
+                          column={12}
+                          label="Publication:"
+                          value={
+                            refItem.ReferenceDetail.PublicationSource || "-"
+                          }
+                        />
+                      ) : null}
+                    </div>
+                  ) : null}
+
                   <Column
                     column={12}
-                    label="Attribute Code:"
-                    value={arrtitem.attCode + " / " + arrtitem.attDesc || "-"}
+                    label="Event Text:"
+                    value={refItem.EventText || "-"}
                   />
 
                   <Column
                     column={12}
-                    label="Attribute value:"
-                    value={arrtitem.attVal || "-"}
+                    label="Event Date:"
+                    value={refItem.EventDate || "-"}
+                  />
+                  <Column
+                    column={12}
+                    label="Event Type Text:"
+                    value={refItem.EventTypeText || "-"}
+                  />
+
+                  <Column
+                    column={12}
+                    label="Event Type Code:"
+                    value={getAbbr(
+                      refItem.EventTypeCode,
+                      refItem.EventSubTypeCode
+                    )}
+                  />
+
+                  <Column
+                    column={12}
+                    label="Event SubType Text:"
+                    value={refItem.EventSubTypeText || "-"}
+                  />
+
+                  <Column
+                    column={12}
+                    label="Postal Code:"
+                    value={refItem.PostalCode || "-"}
                   />
 
                   <br />
@@ -657,20 +678,64 @@ const buildDetails = obj => {
             key="4"
             style={customPanelStyle}
           >
-            {_.map(obj.alias, function(aliasItem) {
+            {_.map(obj.Alias, function(aliasItem) {
               return (
                 <Row gutter={16} className="mr-bottom-lg">
                   <Column
                     column={12}
-                    label={aliasItem.aliasTyp + ":"}
-                    value={aliasItem.aliasName || "-"}
+                    label={aliasItem.AliasType + ":"}
+                    value={aliasItem.AliasName || "-"}
                   />
                   <Column
                     column={12}
-                    label={aliasItem.aliasTyp + ":"}
-                    value={aliasItem.aliasName || "-"}
+                    label={aliasItem.AliasType + ":"}
+                    value={aliasItem.AliasName || "-"}
                   />
+                  <br />
+                  <br />
+                </Row>
+              );
+            })}
+          </Panel>
 
+          <Panel
+            header={
+              <div className="match-title t-16 -text-bold">
+                Nonspecific Parameter Detail
+              </div>
+            }
+            key="5"
+            style={customPanelStyle}
+          >
+            {_.map(obj.NonspecificParameterDetail, function(item) {
+              return (
+                <Row gutter={16} className="mr-bottom-lg">
+                  <Column
+                    column={12}
+                    label={item.ParameterIdentificationNumber + ":"}
+                    value={
+                      item.ParameterIdentificationNumber === "URL" ? (
+                        <a href={item.ParameterValue} target="_blank">
+                          {item.ParameterValue}
+                        </a>
+                      ) : (
+                        item.ParameterValue
+                      )
+                    }
+                  />
+                  <Column
+                    column={12}
+                    label={item.ParameterIdentificationNumber + ":"}
+                    value={
+                      item.ParameterIdentificationNumber === "URL" ? (
+                        <a href={item.ParameterValue} target="_blank">
+                          {item.ParameterValue}
+                        </a>
+                      ) : (
+                        item.ParameterValue
+                      )
+                    }
+                  />
                   <br />
                   <br />
                 </Row>
@@ -770,7 +835,7 @@ const GetTable = props => {
       dataSource={data}
       pagination={true}
       columns={columns}
-      rowKey="sysId"
+      rowKey="AlertEntityID"
       expandedRowRender={record => buildDetails(record)}
     />
   );
