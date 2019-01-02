@@ -404,6 +404,7 @@ const buildDetails = obj => {
             label="Alert Entity ID:"
             value={obj.AlertEntityID}
           />
+    
           <Column
             column={12}
             label="Rosette name match score:"
