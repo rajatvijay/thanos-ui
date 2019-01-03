@@ -421,7 +421,7 @@ const buildDetails = obj => {
           />
         </Row>
 
-        <Collapse accordion bordered={false}>
+        <Collapse bordered={false}>
           <Panel
             header={
               <div className="match-title t-16 -text-bold">Addresses</div>
@@ -675,24 +675,19 @@ const buildDetails = obj => {
             key="4"
             style={customPanelStyle}
           >
-            {_.map(obj.Alias, function(aliasItem) {
-              return (
-                <Row gutter={16} className="mr-bottom-lg">
+            <Row gutter={16} className="mr-bottom-lg">
+              {_.map(obj.Alias, function(aliasItem) {
+                return (
                   <Column
                     column={12}
                     label={aliasItem.AliasType + ":"}
                     value={aliasItem.AliasName || "-"}
                   />
-                  <Column
-                    column={12}
-                    label={aliasItem.AliasType + ":"}
-                    value={aliasItem.AliasName || "-"}
-                  />
-                  <br />
-                  <br />
-                </Row>
-              );
-            })}
+                );
+              })}
+              <br />
+              <br />
+            </Row>
           </Panel>
 
           <Panel
@@ -702,9 +697,9 @@ const buildDetails = obj => {
             key="5"
             style={customPanelStyle}
           >
-            {_.map(obj.NonspecificParameterDetail, function(item) {
-              return (
-                <Row gutter={16} className="mr-bottom-lg">
+            <Row gutter={16} className="mr-bottom-lg">
+              {_.map(obj.NonspecificParameterDetail, function(item) {
+                return (
                   <Column
                     column={12}
                     label={item.ParameterIdentificationNumber + ":"}
@@ -718,24 +713,11 @@ const buildDetails = obj => {
                       )
                     }
                   />
-                  <Column
-                    column={12}
-                    label={item.ParameterIdentificationNumber + ":"}
-                    value={
-                      item.ParameterIdentificationNumber === "URL" ? (
-                        <a href={item.ParameterValue} target="_blank">
-                          {item.ParameterValue}
-                        </a>
-                      ) : (
-                        item.ParameterValue
-                      )
-                    }
-                  />
-                  <br />
-                  <br />
-                </Row>
-              );
-            })}
+                );
+              })}
+              <br />
+              <br />
+            </Row>
           </Panel>
         </Collapse>
       </div>
