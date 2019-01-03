@@ -43,7 +43,11 @@ class Workflow extends Component {
       this.checkAuth();
     }
 
-    if (!this.props.config.configuration || this.props.config.error) {
+    if (
+      !this.props.config.configuration ||
+      this.props.config.error ||
+      this.props.config.permissions
+    ) {
       this.props.dispatch(configActions.getConfig());
     }
 
