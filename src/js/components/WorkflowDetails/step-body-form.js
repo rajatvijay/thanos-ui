@@ -71,7 +71,7 @@ class StepBodyForm extends Component {
     } else if (calculated) {
       let method = "save";
       let data = {
-        answer: e,
+        answer: e || "",
         field: payload.field.id,
         workflow: payload.workflowId
       };
