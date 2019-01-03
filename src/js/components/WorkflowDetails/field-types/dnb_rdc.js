@@ -404,7 +404,7 @@ const buildDetails = obj => {
             label="Alert Entity ID:"
             value={obj.AlertEntityID}
           />
-    
+
           <Column
             column={12}
             label="Rosette name match score:"
@@ -459,11 +459,7 @@ const buildDetails = obj => {
           </Panel>
 
           <Panel
-            header={
-              <div className="match-title t-16 -text-bold">
-                Reference Details
-              </div>
-            }
+            header={<div className="match-title t-16 -text-bold">Source</div>}
             key="2"
             style={customPanelStyle}
           >
@@ -701,9 +697,7 @@ const buildDetails = obj => {
 
           <Panel
             header={
-              <div className="match-title t-16 -text-bold">
-                Nonspecific Parameter Detail
-              </div>
+              <div className="match-title t-16 -text-bold">Entity URL</div>
             }
             key="5"
             style={customPanelStyle}
