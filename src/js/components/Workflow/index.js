@@ -293,13 +293,14 @@ class Workflow extends Component {
                  Click here to reload{" "}
                  <i className="material-icons text-middle">refresh</i>
                </div>**/}
-              <div
-                className="mr-top-lg text-center text-bold"
-                style={{ color: "red" }}
-                onClick={this.redirectLoginPage}
-              >
+              <div className="mr-top-lg text-center text-bold text-metal">
                 You have been logged out. Please Login again to continue
-                <div className="text-anchor ">Click here to Login</div>
+                <div
+                  className="text-anchor text-anchor "
+                  onClick={this.redirectLoginPage}
+                >
+                  Click here to Login
+                </div>
               </div>
             </div>
           ) : (
