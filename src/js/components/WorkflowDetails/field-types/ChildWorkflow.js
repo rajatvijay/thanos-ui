@@ -84,8 +84,7 @@ class ChildWorkflowField2 extends Component {
       .then(body => {
         this.setState({
           childWorkflow: body.results,
-          fetching: false,
-          relatedWorkflow: this.getRelatedTypes(body.results)
+          fetching: false
         });
       });
   };
@@ -134,7 +133,7 @@ class ChildWorkflowField2 extends Component {
 
   getKindMenu = () => {
     let workflowKindFiltered = [];
-    const relatedKind = this.state.relatedWorkflow;
+    const relatedKind = this.getRelatedTypes();
 
     _.map(relatedKind, function(item) {
       if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
@@ -157,13 +156,33 @@ class ChildWorkflowField2 extends Component {
     return menu;
   };
 
+  getAddMenu = () => {
+    let menu = (
+      <Dropdown
+        overlay={this.getKindMenu()}
+        className="child-workflow-dropdown"
+        placement="bottomRight"
+      >
+        <Button
+          type="primary"
+          loading={this.props.workflowKind.loading ? true : false}
+        >
+          Add {this.state.fetching ? "loadin..." : ""}
+          <i className="material-icons t-14">keyboard_arrow_down</i>
+        </Button>
+      </Dropdown>
+    );
+
+    return menu;
+  };
+
   render = () => {
     let props = this.props;
     let { field } = props;
     let that = this;
 
-    console.log("this.props");
-    console.log(this.props);
+    // console.log("this.props");
+    // console.log(this.props);
 
     //const childWorkflowMenu = this.getKindMenu();
 
@@ -188,21 +207,7 @@ class ChildWorkflowField2 extends Component {
         ) : (
           <div>
             <Col span="18" className="text-right text-light small">
-              {this.state.relatedWorkflow ? (
-                <Dropdown
-                  overlay={this.getKindMenu()}
-                  className="child-workflow-dropdown"
-                  placement="bottomRight"
-                >
-                  <Button
-                    type="primary"
-                    loading={this.props.workflowKind.loading ? true : false}
-                  >
-                    Add{" "}
-                    <i className="material-icons t-14">keyboard_arrow_down</i>
-                  </Button>
-                </Dropdown>
-              ) : null}
+              {this.getAddMenu()}
             </Col>
             <div className="workflow-list">
               <div className="list-view-header">
