@@ -207,7 +207,9 @@ class ChildWorkflowField2 extends Component {
         ) : (
           <div>
             <Col span="18" className="text-right text-light small">
-              {this.getAddMenu()}
+              {this.props.workflowDetailsHeader.workflowDetailsHeader
+                ? this.getAddMenu()
+                : null}
             </Col>
             <div className="workflow-list">
               <div className="list-view-header">
