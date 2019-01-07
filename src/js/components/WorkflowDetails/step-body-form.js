@@ -608,8 +608,13 @@ class StepBodyForm extends Component {
                     Submit
                   </Button>
                 ) : (
-                  <Button type="primary" className="no-print" htmlType="submit">
-                    Submit
+                  <Button
+                    type="primary"
+                    className="no-print"
+                    htmlType="submit"
+                    disabled={this.props.isSubmitting}
+                  >
+                    {this.props.isSubmitting ? "Submitting" : "Submit"}
                   </Button>
                 )}
               </FormItem>
