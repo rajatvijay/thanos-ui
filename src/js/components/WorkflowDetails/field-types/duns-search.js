@@ -149,6 +149,18 @@ const GetTable = props => {
       dataIndex: "PrimaryAddress[PrimaryTownName]",
       key: "PrimaryAddress[PrimaryTownName]"
     },
+
+    {
+      title: "Tradestyle(s)",
+      dataIndex: "tradeStyleNames[0][name]",
+      key: "tradeStyleNames[0][name]"
+    },
+    {
+      title: "Location Type",
+      dataIndex: "corporateLinkage[familytreeRolesPlayed][0][description]",
+      key: "corporateLinkage[familytreeRolesPlayed][0][description]"
+    },
+
     {
       title: "Status",
       dataIndex: "OperatingStatusText[$]",
