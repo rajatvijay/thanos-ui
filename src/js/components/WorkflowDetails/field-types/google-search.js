@@ -107,11 +107,11 @@ class GoogleSrch extends Component {
 
 const GetTable = props => {
   // for error
-  if (!props.jsonData.items) {
+  if (!props.jsonData.results) {
     return <div className="text-center text-red">No result found!</div>;
   }
 
-  const data = props.jsonData.items;
+  const data = props.jsonData.results;
 
   const columns = [
     {
