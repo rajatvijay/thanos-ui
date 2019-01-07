@@ -722,21 +722,23 @@ const buildDetails = obj => {
           >
             <Row gutter={16} className="mr-bottom-lg">
               {_.map(obj.NonspecificParameterDetail, function(item) {
-                return (
-                  <Column
-                    column={12}
-                    label={item.ParameterIdentificationNumber + ":"}
-                    value={
-                      item.ParameterIdentificationNumber === "URL" ? (
-                        <a href={item.ParameterValue} target="_blank">
-                          {item.ParameterValue}
-                        </a>
-                      ) : (
-                        item.ParameterValue
-                      )
-                    }
-                  />
-                );
+                if (!item.ParameterIdentificationNumber === "RGP") {
+                  return (
+                    <Column
+                      column={12}
+                      label={item.ParameterIdentificationNumber + ":"}
+                      value={
+                        item.ParameterIdentificationNumber === "URL" ? (
+                          <a href={item.ParameterValue} target="_blank">
+                            {item.ParameterValue}
+                          </a>
+                        ) : (
+                          item.ParameterValue
+                        )
+                      }
+                    />
+                  );
+                }
               })}
               <br />
               <br />
