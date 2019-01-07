@@ -195,7 +195,7 @@ class Workflow extends Component {
 
   render = () => {
     let showInsights = false;
-    if (_.includes(this.props.authentication.user.features, "add_workflow")) {
+    if (_.includes(this.props.authentication.user.features, "view_reports")) {
       showInsights = true;
     }
 
