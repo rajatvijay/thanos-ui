@@ -146,7 +146,7 @@ const GetTable = props => {
 
     {
       title: "Tradestyle(s)",
-      dataIndex: "tradeStyleNames",
+      dataIndex: "organization[tradeStyleNames]",
       render: (text, data, index) => {
         if (_.size(data.tradeStyleNames)) {
           let record = data.tradeStyleNames[0];
@@ -155,13 +155,15 @@ const GetTable = props => {
           return <span>-</span>;
         }
       },
-      key: "tradeStyleNames[0][name]"
+      key: "organization[tradeStyleNames][0][name]"
     },
 
     {
       title: "Location Type",
-      dataIndex: "corporateLinkage[familytreeRolesPlayed][0][description]",
-      key: "corporateLinkage[familytreeRolesPlayed][0][description]"
+      dataIndex:
+        "organization[corporateLinkage][familytreeRolesPlayed][0][description]",
+      key:
+        "organization[corporateLinkage][familytreeRolesPlayed][0][description]"
     },
     {
       title: "Address",
