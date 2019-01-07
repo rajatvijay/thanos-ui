@@ -219,13 +219,13 @@ class Workflow extends Component {
                   </span>
                 </Col>
                 <Col span="12" className="text-right export-section">
-                  <Tooltip title={"Insight"}>
-                    <span className="pd-ard-sm" onClick={this.showDrawer}>
-                      <i className="material-icons text-light text-anchor t-18 ">
-                        trending_up
-                      </i>
-                    </span>
-                  </Tooltip>
+                  {/*<Tooltip title={"Insight"}>
+                      <span className="pd-ard-sm" onClick={this.showDrawer}>
+                        <i className="material-icons text-light text-anchor t-18 ">
+                          trending_up
+                        </i>
+                      </span>
+                    </Tooltip>*/}
 
                   {_.includes(
                     this.props.config.permissions,
