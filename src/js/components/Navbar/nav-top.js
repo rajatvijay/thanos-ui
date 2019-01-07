@@ -106,7 +106,11 @@ class NavTop extends Component {
                     title={
                       user ? (
                         <span>
-                          <Avatar>{user.first_name.charAt(0)}</Avatar>{" "}
+                          {user.first_name ? (
+                            <Avatar>{user.first_name.charAt(0)}</Avatar>
+                          ) : (
+                            <Avatar icon="user" />
+                          )}
                           {user.first_name
                             ? " " + user.first_name + " " + user.last_name + " "
                             : " " + user.email + " "}
