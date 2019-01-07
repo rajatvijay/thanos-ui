@@ -341,12 +341,18 @@ class Workflow extends Component {
                 <Row>
                   <Col span={19} />
                   <Col span={5}>
-                    <Tooltip title="sort in ascending or descending order">
+                    <Tooltip
+                      title={
+                        this.state.sortOrderAsc
+                          ? "Low to high risk score"
+                          : "High to low risk score"
+                      }
+                    >
                       <span
                         className="text-secondary text-anchor"
                         onClick={this.changeScoreOrder}
                       >
-                        risk
+                        Risk score
                         <i className="material-icons t-14  text-middle">
                           {this.state.sortOrderAsc
                             ? "keyboard_arrow_down"

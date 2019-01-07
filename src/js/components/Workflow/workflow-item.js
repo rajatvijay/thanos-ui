@@ -460,11 +460,13 @@ export const WorkflowHeader = props => {
         )}
 
         <Col span="1 text-center">
-          {props.workflow.lc_risk_score ? (
+          {props.workflow.sorting_primary_field ? (
             <Badge
-              count={props.workflow.lc_risk_score}
+              count={<span>{props.workflow.sorting_primary_field}</span>}
               style={{
-                backgroundColor: getScoreColor(props.workflow.lc_risk_score)
+                backgroundColor: getScoreColor(
+                  props.workflow.sorting_primary_field
+                )
               }}
             />
           ) : null}{" "}
