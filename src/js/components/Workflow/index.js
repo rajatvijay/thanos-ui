@@ -36,7 +36,8 @@ class Workflow extends Component {
       showWaitingFitler: false,
       isUserAuthenticated: false,
       statusView: true,
-      visible: false
+      visible: false,
+      sortOrderAsc: true
     };
 
     if (!this.props.users.me) {
@@ -193,6 +194,15 @@ class Workflow extends Component {
     });
   };
 
+  changeScoreOrder = order => {
+    let sort = this.state.sortOrderAsc
+      ? "-sorting_primary_field"
+      : "sorting_primary_field";
+    let payload = { filterType: "ordering", filterValue: [sort] };
+    this.setState({ sortOrderAsc: !this.state.sortOrderAsc });
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
   render = () => {
     let showInsights = false;
     if (_.includes(this.props.authentication.user.features, "view_reports")) {
@@ -316,6 +326,40 @@ class Workflow extends Component {
             </div>
           ) : (
             <div className="clearfix">
+              <div
+                className="score-filter"
+                style={{
+                  padding: "10px 78px",
+                  position: "relative",
+                  bottom: "-47px",
+                  left: "-10px"
+                }}
+              >
+                <Row>
+                  <Col span={19} />
+                  <Col span={5}>
+                    <Tooltip
+                      title={
+                        this.state.sortOrderAsc
+                          ? "Low to high risk score"
+                          : "High to low risk score"
+                      }
+                    >
+                      <span
+                        className="text-secondary text-anchor"
+                        onClick={this.changeScoreOrder}
+                      >
+                        Risk
+                        <i className="material-icons t-14  text-middle">
+                          {this.state.sortOrderAsc
+                            ? "keyboard_arrow_down"
+                            : "keyboard_arrow_up"}
+                        </i>
+                      </span>
+                    </Tooltip>
+                  </Col>
+                </Row>
+              </div>
               <WorkflowList
                 profile={this.props.match}
                 {...this.props}
