@@ -349,7 +349,7 @@ class Workflow extends Component {
                         className="text-secondary text-anchor"
                         onClick={this.changeScoreOrder}
                       >
-                        Risk score
+                        Risk
                         <i className="material-icons t-14  text-middle">
                           {this.state.sortOrderAsc
                             ? "keyboard_arrow_down"
