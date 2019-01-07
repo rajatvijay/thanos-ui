@@ -134,6 +134,7 @@ class WorkflowDetails extends Component {
   componentWillReceiveProps = nextProps => {
     if (
       !_.size(nextProps.workflowDetailsHeader.error) &&
+      !_.size(this.props.workflowDetailsHeader.error) &&
       nextProps.workflowDetails.loading === false &&
       this.props.workflowDetails.workflowDetails !==
         nextProps.workflowDetails.workflowDetails
