@@ -460,11 +460,14 @@ export const WorkflowHeader = props => {
         )}
 
         <Col span="1 text-center">
-          {" "}
-          <Badge
-            count={score + props.workflow.lc_risk_score}
-            style={{ backgroundColor: getScoreColor(score) }}
-          />{" "}
+          {props.workflow.lc_risk_score ? (
+            <Badge
+              count={props.workflow.lc_risk_score}
+              style={{
+                backgroundColor: getScoreColor(props.workflow.lc_risk_score)
+              }}
+            />
+          ) : null}{" "}
         </Col>
 
         <HeaderOptions2 {...props} />
