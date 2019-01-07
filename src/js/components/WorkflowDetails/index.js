@@ -133,6 +133,7 @@ class WorkflowDetails extends Component {
   //componentDidUpdate = prevProps => {
   componentWillReceiveProps = nextProps => {
     if (
+      !_.size(nextProps.workflowDetailsHeader.error) &&
       nextProps.workflowDetails.loading === false &&
       this.props.workflowDetails.workflowDetails !==
         nextProps.workflowDetails.workflowDetails
@@ -302,99 +303,141 @@ class WorkflowDetails extends Component {
   render = () => {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
-    return (
-      <Layout className="workflow-details-container inner-container">
-        <div
-          className="workflow-details-top-card vertical-padder-16 side-padder-16 bg-white"
-          style={{
-            position: "relative",
-            zIndex: 1,
-            boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
-          }}
-        >
-          {this.props.workflowDetailsHeader.loading ||
-          !this.props.workflowDetailsHeader.workflowDetailsHeader ? (
-            <div className="text-center">
-              <Icon type="loading" />
-            </div>
-          ) : (
-            <div>
-              <WorkflowHeader
-                detailsPage={true}
-                kind={this.props.workflowKind}
-                workflow={
-                  this.props.workflowDetailsHeader.workflowDetailsHeader
-                }
-                statusType={this.props.workflowFilterType.statusType}
-                showCommentIcon={true}
-                getCommentSidebar={this.callBackCollapser}
-              />
-            </div>
-          )}
-        </div>
 
-        <StepSidebar
-          step2={
-            this.props.workflowDetails.workflowDetails
-              ? this.props.workflowDetails.workflowDetails.stepGroups.results
-              : null
-          }
-          defaultSelectedKeys={this.state.selectedStep}
-          defaultOpenKeys={this.state.selectedGroup}
-          onStepSelected={this.onStepSelected.bind(this)}
-          loading={stepLoading}
-        />
-
-        <Layout
-          style={{
-            marginLeft: 250,
-            background: "#FBFBFF",
-            minHeight: "100vh",
-            paddingTop: "30px"
-          }}
-        >
-          <div className="printOnly ">
-            <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
-              <StepBody
-                toggleSidebar={this.callBackCollapser}
-                changeFlag={this.changeFlag}
-                getIntegrationComments={this.getIntegrationComments}
-                workflowHead={
-                  this.props.workflowDetailsHeader.workflowDetailsHeader
-                    ? this.props.workflowDetailsHeader.workflowDetailsHeader
-                    : "loading"
-                }
-              />
-            </div>
-          </div>
-
-          <div className="text-right pd-ard mr-ard-md">
-            <Tooltip title="Scroll to top" placement="topRight">
-              <span
-                className="text-anchor"
-                onClick={() => {
-                  window.scrollTo(0, 0);
-                }}
-              >
-                <i className="material-icons">arrow_upward</i>
-              </span>
-            </Tooltip>
-          </div>
-        </Layout>
-
-        {comment_data && _.size(comment_data.results) ? (
-          <Comments
-            object_id={this.state.object_id}
-            toggleSidebar={this.callBackCollapser}
-            addComment={this.addComment}
-            gotoStep={this.fetchStepData}
-            selectActiveStep={this.selectActiveStep}
-            changeFlag={this.changeFlag}
-            {...this.props}
+    if (_.size(this.props.workflowDetailsHeader.error)) {
+      return (
+        <Layout className="workflow-details-container inner-container">
+          <div
+            className="workflow-details-top-card vertical-padder-16 side-padder-16 bg-white"
+            style={{
+              position: "relative",
+              zIndex: 1,
+              boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
+            }}
           />
-        ) : null}
-      </Layout>
-    );
+
+          <StepSidebar />
+
+          <Layout
+            style={{
+              marginLeft: 250,
+              background: "#FBFBFF",
+              minHeight: "100vh",
+              paddingTop: "30px"
+            }}
+          >
+            <div className="printOnly ">
+              <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
+                <div className="text-center text-metal mr-ard-lg">
+                  <br />
+                  <br />
+                  {this.props.workflowDetailsHeader.error === "Not Found"
+                    ? "Sorry! We were unable to find the workflow you requested."
+                    : this.props.workflowDetailsHeader.error}
+                  <br />
+                  <br />
+                  <br />
+                </div>
+              </div>
+            </div>
+          </Layout>
+        </Layout>
+      );
+    } else {
+      return (
+        <Layout className="workflow-details-container inner-container">
+          <div
+            className="workflow-details-top-card vertical-padder-16 side-padder-16 bg-white"
+            style={{
+              position: "relative",
+              zIndex: 1,
+              boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
+            }}
+          >
+            {this.props.workflowDetailsHeader.loading ||
+            !this.props.workflowDetailsHeader.workflowDetailsHeader ? (
+              <div className="text-center">
+                <Icon type="loading" />
+              </div>
+            ) : (
+              <div>
+                <WorkflowHeader
+                  detailsPage={true}
+                  kind={this.props.workflowKind}
+                  workflow={
+                    this.props.workflowDetailsHeader.workflowDetailsHeader
+                  }
+                  statusType={this.props.workflowFilterType.statusType}
+                  showCommentIcon={true}
+                  getCommentSidebar={this.callBackCollapser}
+                />
+              </div>
+            )}
+          </div>
+
+          <StepSidebar
+            step2={
+              this.props.workflowDetails.workflowDetails
+                ? this.props.workflowDetails.workflowDetails.stepGroups.results
+                : null
+            }
+            defaultSelectedKeys={this.state.selectedStep}
+            defaultOpenKeys={this.state.selectedGroup}
+            onStepSelected={this.onStepSelected.bind(this)}
+            loading={stepLoading}
+          />
+
+          <Layout
+            style={{
+              marginLeft: 250,
+              background: "#FBFBFF",
+              minHeight: "100vh",
+              paddingTop: "30px"
+            }}
+          >
+            <div className="printOnly ">
+              <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
+                <StepBody
+                  toggleSidebar={this.callBackCollapser}
+                  changeFlag={this.changeFlag}
+                  getIntegrationComments={this.getIntegrationComments}
+                  workflowHead={
+                    this.props.workflowDetailsHeader.workflowDetailsHeader
+                      ? this.props.workflowDetailsHeader.workflowDetailsHeader
+                      : "loading"
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="text-right pd-ard mr-ard-md">
+              <Tooltip title="Scroll to top" placement="topRight">
+                <span
+                  className="text-anchor"
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                  }}
+                >
+                  <i className="material-icons">arrow_upward</i>
+                </span>
+              </Tooltip>
+            </div>
+          </Layout>
+
+          {comment_data && _.size(comment_data.results) ? (
+            <Comments
+              object_id={this.state.object_id}
+              toggleSidebar={this.callBackCollapser}
+              addComment={this.addComment}
+              gotoStep={this.fetchStepData}
+              selectActiveStep={this.selectActiveStep}
+              changeFlag={this.changeFlag}
+              {...this.props}
+            />
+          ) : null}
+        </Layout>
+      );
+    }
   };
 }
 
