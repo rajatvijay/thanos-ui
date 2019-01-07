@@ -143,6 +143,26 @@ const GetTable = props => {
       dataIndex: "organization[primaryName]",
       key: "organization[primaryName]"
     },
+
+    {
+      title: "Tradestyle(s)",
+      dataIndex: "tradeStyleNames",
+      render: (text, data, index) => {
+        if (_.size(data.tradeStyleNames)) {
+          let record = data.tradeStyleNames[0];
+          return <span>{record.name}</span>;
+        } else {
+          return <span>-</span>;
+        }
+      },
+      key: "tradeStyleNames[0][name]"
+    },
+
+    {
+      title: "Location Type",
+      dataIndex: "corporateLinkage[familytreeRolesPlayed][0][description]",
+      key: "corporateLinkage[familytreeRolesPlayed][0][description]"
+    },
     {
       title: "Address",
       dataIndex: "organization[primaryAddress][addressCountry]['name']",
@@ -165,11 +185,11 @@ const GetTable = props => {
       },
       key: "organization[primaryAddress][addressCountry]['name']"
     },
-    {
-      title: "Address",
-      dataIndex: "organization[primaryAddress][addressCountry]['name']",
-      key: "organization[primaryAddress][addressCountry]['name']"
-    },
+    // {
+    //   title: "Address",
+    //   dataIndex: "organization[primaryAddress][addressCountry]['name']",
+    //   key: "organization[primaryAddress][addressCountry]['name']"
+    //},
     {
       title: "Status",
       dataIndex:
