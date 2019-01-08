@@ -263,6 +263,7 @@ function getIntegrationSearchButton(props) {
     dnb_financials: "Get Financial Statements",
     dnb_litigation: "Get Bankcryptcy Statements",
     dnb_cmp_ent_vw: "Get Complaince Entity View",
+    dnb_cmpcvf: "Get CMPCVF",
     translation: "Translate",
     transliteration: "Transliterate",
     thomson_reuters_group: "Get TR group",
