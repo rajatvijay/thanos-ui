@@ -205,7 +205,10 @@ class Workflow extends Component {
 
   render = () => {
     let showInsights = false;
-    if (_.includes(this.props.authentication.user.features, "view_reports")) {
+    if (
+      this.props.authentication &&
+      _.includes(this.props.authentication.user.features, "view_reports")
+    ) {
       showInsights = true;
     }
 
@@ -350,8 +353,8 @@ class Workflow extends Component {
                       <Tooltip
                         title={
                           this.state.sortOrderAsc
-                            ? "Low to high risk score"
-                            : "High to low risk score"
+                            ? "High to low risk score"
+                            : "Low to high risk score"
                         }
                       >
                         <span
@@ -361,8 +364,8 @@ class Workflow extends Component {
                           Risk
                           <i className="material-icons t-14  text-middle">
                             {this.state.sortOrderAsc
-                              ? "keyboard_arrow_down"
-                              : "keyboard_arrow_up"}
+                              ? "keyboard_arrow_up"
+                              : "keyboard_arrow_down"}
                           </i>
                         </span>
                       </Tooltip>
