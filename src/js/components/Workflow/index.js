@@ -212,6 +212,14 @@ class Workflow extends Component {
       showInsights = true;
     }
 
+    let showRisk = false;
+    if (
+      _.size(this.props.workflow.workflow) &&
+      this.props.workflow.workflow[0].sorting_primary_field
+    ) {
+      showRisk = true;
+    }
+
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
         <FilterSidebar />
@@ -341,25 +349,27 @@ class Workflow extends Component {
                 <Row>
                   <Col span={19} />
                   <Col span={5}>
-                    <Tooltip
-                      title={
-                        this.state.sortOrderAsc
-                          ? "Low to high risk score"
-                          : "High to low risk score"
-                      }
-                    >
-                      <span
-                        className="text-secondary text-anchor"
-                        onClick={this.changeScoreOrder}
+                    {showRisk ? (
+                      <Tooltip
+                        title={
+                          this.state.sortOrderAsc
+                            ? "Low to high risk score"
+                            : "High to low risk score"
+                        }
                       >
-                        Risk
-                        <i className="material-icons t-14  text-middle">
-                          {this.state.sortOrderAsc
-                            ? "keyboard_arrow_down"
-                            : "keyboard_arrow_up"}
-                        </i>
-                      </span>
-                    </Tooltip>
+                        <span
+                          className="text-secondary text-anchor"
+                          onClick={this.changeScoreOrder}
+                        >
+                          Risk
+                          <i className="material-icons t-14  text-middle">
+                            {this.state.sortOrderAsc
+                              ? "keyboard_arrow_down"
+                              : "keyboard_arrow_up"}
+                          </i>
+                        </span>
+                      </Tooltip>
+                    ) : null}
                   </Col>
                 </Row>
               </div>
