@@ -37,6 +37,7 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true,
       visible: false,
+      showRisk: false,
       sortOrderAsc: false
     };
 
@@ -212,12 +213,11 @@ class Workflow extends Component {
       showInsights = true;
     }
 
-    let showRisk = false;
     if (
       _.size(this.props.workflow.workflow) &&
       this.props.workflow.workflow[0].sorting_primary_field
     ) {
-      showRisk = true;
+      this.setState({ showRisk: true });
     }
 
     return (
@@ -349,7 +349,7 @@ class Workflow extends Component {
                 <Row>
                   <Col span={19} />
                   <Col span={5}>
-                    {showRisk ? (
+                    {this.state.showRisk ? (
                       <Tooltip
                         title={
                           this.state.sortOrderAsc
