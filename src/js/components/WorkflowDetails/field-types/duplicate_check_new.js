@@ -69,6 +69,17 @@ class DuplicateCheckComp extends Component {
     this.getDuplicateWorkflow();
   };
 
+  componentWillRecieveProps = nextProps => {
+    if (this.props.field.integration_json) {
+      if (
+        this.props.field.integration_json.auto_generated_id !==
+        nextProps.field.integration_json.auto_generated_id
+      ) {
+        this.getDuplicateWorkflow();
+      }
+    }
+  };
+
   getDuplicateWorkflow = () => {
     if (
       !_.size(this.props.field.integration_json) &&
