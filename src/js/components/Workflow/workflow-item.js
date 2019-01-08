@@ -386,12 +386,13 @@ const GetQuickData = props => {
   );
 };
 
-const getScoreColor = value => {
-  if (value >= 4) {
+const getScoreColor = riskValue => {
+  let value = parseInt(riskValue,10)
+  if (value >= 7) {
     return "#3c763d";
-  } else if (value === 3) {
+  } else if (value >= 4 && <=6) {
     return "#eebd47";
-  } else if (value <= 2) {
+  } else if (value <= 3) {
     return "#f16b51";
   } else {
     return "#505050";
@@ -401,8 +402,6 @@ const getScoreColor = value => {
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
-
-  let score = Math.floor(Math.random() * 5) + 1;
 
   return (
     <div className="ant-collapse-header">
