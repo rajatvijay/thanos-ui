@@ -722,7 +722,7 @@ const buildDetails = obj => {
           >
             <Row gutter={16} className="mr-bottom-lg">
               {_.map(obj.NonspecificParameterDetail, function(item) {
-                if (!item.ParameterIdentificationNumber === "RGP") {
+                if (item.ParameterIdentificationNumber !== "RGP") {
                   return (
                     <Column
                       column={12}
