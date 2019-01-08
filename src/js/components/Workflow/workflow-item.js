@@ -403,8 +403,6 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
 
-  let score = Math.floor(Math.random() * 5) + 1;
-
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
