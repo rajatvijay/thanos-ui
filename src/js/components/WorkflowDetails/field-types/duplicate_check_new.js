@@ -69,14 +69,15 @@ class DuplicateCheckComp extends Component {
     this.getDuplicateWorkflow();
   };
 
-  componentWillRecieveProps = nextProps => {
-    if (this.props.field.integration_json) {
-      if (
-        this.props.field.integration_json.auto_generated_id !==
-        nextProps.field.integration_json.auto_generated_id
-      ) {
-        this.getDuplicateWorkflow();
-      }
+  componentWillReceiveProps = nextProps => {
+    let that = this;
+
+    if (
+      this.props.field.integration_json !== nextProps.field.integration_json
+    ) {
+      setTimeout(function() {
+        that.getDuplicateWorkflow();
+      }, 1000);
     }
   };
 
@@ -148,7 +149,7 @@ class DuplicateCheckComp extends Component {
               <Icon type="loading" style={{ fontSize: 24 }} />
             </div>
           ) : (
-            <div>
+            <div className="workflow-list">
               <div className="paper">
                 {_.size(this.state.childWorkflow) ? (
                   _.map(this.state.childWorkflow, function(workflow) {
@@ -190,17 +191,9 @@ class DuplicateCheckComp extends Component {
 }
 
 function mapPropsToState(state) {
-  const {
-    workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
-  } = state;
+  const { currentStepFields } = state;
   return {
-    workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
+    currentStepFields
   };
 }
 
