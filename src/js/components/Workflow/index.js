@@ -37,7 +37,7 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true,
       visible: false,
-      sortOrderAsc: true
+      sortOrderAsc: false
     };
 
     if (!this.props.users.me) {
