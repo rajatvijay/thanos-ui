@@ -387,10 +387,10 @@ const GetQuickData = props => {
 };
 
 const getScoreColor = riskValue => {
-  let value = parseInt(riskValue,10)
+  let value = parseInt(riskValue, 10);
   if (value >= 7) {
     return "#3c763d";
-  } else if (value >= 4 && <=6) {
+  } else if (value >= 4 && value <= 6) {
     return "#eebd47";
   } else if (value <= 3) {
     return "#f16b51";
