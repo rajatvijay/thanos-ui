@@ -514,7 +514,7 @@ export const Phone = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
-        className={props.completed ? "tel-input disabled" : "tel-input"}
+        className={isDisabled(props) ? "tel-input disabled" : "tel-input"}
         //style={{ width: "100%" }}
         defaultCountry="us"
         flagsImagePath={flags}
@@ -666,7 +666,7 @@ class FileUpload extends Component {
           // onDragEnter={this.onDragEnter.bind(this)}
           // onDragLeave={this.onDragLeave.bind(this)}
           className={
-            this.props.completed
+            isDisabled(this.props)
               ? "file-upload-field disabled"
               : "file-upload-field"
           }
