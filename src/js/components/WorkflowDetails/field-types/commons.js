@@ -293,6 +293,7 @@ function getIntegrationSearchButton(props) {
           className="btn-block float-left"
           onClick={props.onSearch}
           style={{ width: "auto", marginRight: "20px" }}
+          disabled={isDisabled(props)}
         >
           {button_name}
         </Button>
