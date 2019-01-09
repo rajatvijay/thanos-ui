@@ -33,7 +33,8 @@ const {
   field_error,
   getRequired,
   feedValue,
-  getLink
+  getLink,
+  isDisabled
 } = commonFunctions;
 
 class ChildWorkflowField2 extends Component {
@@ -162,6 +163,7 @@ class ChildWorkflowField2 extends Component {
         overlay={this.getKindMenu()}
         className="child-workflow-dropdown"
         placement="bottomRight"
+        disabled={isDisabled(this.props)}
       >
         <Button
           type="primary"
@@ -254,17 +256,10 @@ class ChildWorkflowField2 extends Component {
   };
 }
 function mapPropsToState(state) {
-  const {
-    workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
-  } = state;
+  const { workflowDetailsHeader, workflowKind } = state;
   return {
     workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
+    workflowKind
   };
 }
 
