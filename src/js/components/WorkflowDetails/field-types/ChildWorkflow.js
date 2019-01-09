@@ -163,7 +163,7 @@ class ChildWorkflowField2 extends Component {
         overlay={this.getKindMenu()}
         className="child-workflow-dropdown"
         placement="bottomRight"
-        //disabled={isDisabled(this.props)}      
+        //disabled={isDisabled(this.props)}
       >
         <Button
           type="primary"
