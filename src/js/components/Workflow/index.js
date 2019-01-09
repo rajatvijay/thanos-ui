@@ -26,6 +26,7 @@ import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import MetaGraph from "./MetaGraph";
+import { FormattedMessage } from "react-intl";
 
 class Workflow extends Component {
   constructor(props) {
@@ -236,7 +237,7 @@ class Workflow extends Component {
                     className="waiting-filter-trigger text-anchor"
                     onClick={this.toggleWaitingFilter}
                   >
-                    Waiting on{" "}
+                    <FormattedMessage id="workflowsInstances.waitingDropdown" />
                     <i className="material-icons">
                       {this.state.showWaitingFitler
                         ? "keyboard_arrow_down"
@@ -291,14 +292,19 @@ class Workflow extends Component {
             <Row className="list-view-header">
               <Col span="12">
                 <div className="workflow-count">
-                  {this.props.workflow.count} Workflows
+                  {this.props.workflow.count}{" "}
+                  <FormattedMessage id="workflowsInstances.workflowsCount" />
                 </div>
               </Col>
               <Col span="12">
                 <div className="text-right list-toggle-btn">
-                  <span className="pd-right t-14">Details view</span>
+                  <span className="pd-right t-14">
+                    <FormattedMessage id="workflowsInstances.detailsViewToggle" />
+                  </span>
                   <Switch defaultChecked onChange={this.toggleListView} />
-                  <span className="pd-left  t-14">Workflow view</span>
+                  <span className="pd-left  t-14">
+                    <FormattedMessage id="workflowsInstances.workflowViewToggle" />
+                  </span>
                 </div>
               </Col>
             </Row>
@@ -320,18 +326,18 @@ class Workflow extends Component {
             </div>
           ) : this.props.workflow.loadingStatus === "failed" ? (
             <div className="mr-top-lg text-center text-bold text-metal">
-              Unable to load workflow list.{" "}
+              <FormattedMessage id="workflowsInstances.noWorkflowsError" />.{" "}
               {/**<div className="text-anchor ">
                  Click here to reload{" "}
                  <i className="material-icons text-middle">refresh</i>
                </div>**/}
               <div className="mr-top-lg text-center text-bold text-metal">
-                You have been logged out. Please Login again to continue
+                <FormattedMessage id="workflowsInstances.loggedOutError" />
                 <div
                   className="text-anchor text-anchor "
                   onClick={this.redirectLoginPage}
                 >
-                  Click here to Login
+                  <FormattedMessage id="workflowsInstances.clickToLogin" />
                 </div>
               </div>
             </div>
