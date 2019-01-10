@@ -15,6 +15,11 @@ export default {
       createNewWorkflow: "Create new",
       advancedFilter: "Advanced filter",
       selectField: "Select Field"
+    },
+    commonTextInstances: {
+      submitButtonText: "Submit",
+      submittingButtonText: "Submitting",
+      undoSubmissionText: "Undo submission"
     }
   },
   es: {
@@ -32,6 +37,11 @@ export default {
       createNewWorkflow: "espanyol new",
       advancedFilter: "Spanish filter",
       selectField: "blahblah"
+    },
+    commonTextInstances: {
+      submitButtonText: "Submit-es",
+      submittingButtonText: "Submitting-es",
+      undoSubmissionText: "Undo submission -es"
     }
   },
   fr: {
