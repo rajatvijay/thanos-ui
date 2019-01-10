@@ -5,6 +5,7 @@ import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
 import { getFieldType } from "./field-types";
+import { FormattedMessage } from "react-intl";
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -614,7 +615,11 @@ class StepBodyForm extends Component {
                     htmlType="submit"
                     disabled={this.props.isSubmitting}
                   >
-                    {this.props.isSubmitting ? "Submitting" : "Submit"}
+                    {this.props.isSubmitting ? (
+                      <FormattedMessage id="commonTextInstances.submittingButtonText" />
+                    ) : (
+                      "Submit"
+                    )}
                   </Button>
                 )}
               </FormItem>

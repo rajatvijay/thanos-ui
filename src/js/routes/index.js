@@ -27,14 +27,7 @@ import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import Users from "../components/Users";
 import ExportList from "../components/ExportPage";
 import "antd/dist/antd.css";
-import messages from "../components/common/intlMessages";
-import { addLocaleData, IntlProvider, injectIntl } from "react-intl";
-import en from "react-intl/locale-data/en";
-import es from "react-intl/locale-data/es";
-import fr from "react-intl/locale-data/fr";
-import { flattenMessages } from "../components/common/messageUtils";
-
-addLocaleData([...en, ...es, ...fr]);
+import { injectIntl } from "react-intl";
 
 function mapStateToProps(state) {
   const { config, users, languageSelector } = state;
@@ -96,15 +89,6 @@ class MainRoutes extends React.Component {
   }
 
   render() {
-    let locale =
-      this.props.languageSelector.language ||
-      (navigator.languages && navigator.languages[0]) ||
-      navigator.language ||
-      navigator.userLanguage ||
-      "en-US";
-    let messageTranslate = messages[locale] || messages["en-US"];
-
-    console.log(this.props.languageSelector, "route language");
     const { alert } = this.props;
     if (this.state.showBlank) {
       return <div />;
@@ -116,52 +100,47 @@ class MainRoutes extends React.Component {
               {this.state.browserMessage}
             </div>
           ) : (
-            <IntlProvider
-              locale={locale}
-              messages={flattenMessages(messageTranslate)}
-            >
-              <Router history={history}>
-                {this.props.users.me && this.props.users.me.loading ? (
-                  <div className="text-center mr-top-lg">loading...</div>
-                ) : (
-                  <div>
-                    {localStorage.getItem("user") ||
-                    !history.location.pathname === "/login/magic/" ? (
-                      <Navbar />
-                    ) : null}
+            <Router history={history}>
+              {this.props.users.me && this.props.users.me.loading ? (
+                <div className="text-center mr-top-lg">loading...</div>
+              ) : (
+                <div>
+                  {localStorage.getItem("user") ||
+                  !history.location.pathname === "/login/magic/" ? (
+                    <Navbar />
+                  ) : null}
 
-                    <Switch>
-                      <Route path="/login" exact component={LoginPage} />
-                      <Route
-                        path="/login/magic"
-                        exact
-                        component={MagicLoginPage}
-                      />
-                      <Route
-                        path="/login/magicprocess"
-                        component={MagicLinkProcess}
-                      />
+                  <Switch>
+                    <Route path="/login" exact component={LoginPage} />
+                    <Route
+                      path="/login/magic"
+                      exact
+                      component={MagicLoginPage}
+                    />
+                    <Route
+                      path="/login/magicprocess"
+                      component={MagicLinkProcess}
+                    />
 
-                      <Redirect from="/" exact to="/workflows/instances/" />
+                    <Redirect from="/" exact to="/workflows/instances/" />
 
-                      <PrivateRoute
-                        path="/workflows/instances/"
-                        exact
-                        component={Workflow}
-                      />
-                      <PrivateRoute
-                        path="/workflows/instances/:id?"
-                        component={WorkflowDetails}
-                      />
-                      <PrivateRoute path="/users/:id?" component={Users} />
-                      {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
+                    <PrivateRoute
+                      path="/workflows/instances/"
+                      exact
+                      component={Workflow}
+                    />
+                    <PrivateRoute
+                      path="/workflows/instances/:id?"
+                      component={WorkflowDetails}
+                    />
+                    <PrivateRoute path="/users/:id?" component={Users} />
+                    {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
 
-                      <Route path="/" component={GenericNotFound} />
-                    </Switch>
-                  </div>
-                )}
-              </Router>
-            </IntlProvider>
+                    <Route path="/" component={GenericNotFound} />
+                  </Switch>
+                </div>
+              )}
+            </Router>
           )}
         </div>
       );
@@ -169,5 +148,5 @@ class MainRoutes extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(MainRoutes);
+export default injectIntl(connect(mapStateToProps)(MainRoutes));
 //export default { connectedApp as MainRoutes };
