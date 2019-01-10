@@ -11,9 +11,10 @@ import {
   List,
   Avatar,
   Row,
-  Col
+  Col,
+  Select
 } from "antd";
-import { logout, workflowActions } from "../../actions";
+import { logout, workflowActions, languageActions } from "../../actions";
 //import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
@@ -23,6 +24,7 @@ const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const Search = Input.Search;
+const Option = Select.Option;
 
 class NavTop extends Component {
   constructor(props) {
@@ -40,8 +42,12 @@ class NavTop extends Component {
       this.props.dispatch(workflowActions.getAll());
     }
   };
+  handleChange = value => {
+    this.props.dispatch(languageActions.setLanguage(value));
+  };
 
   render = () => {
+    console.log(this.props, "navbar Language");
     let that = this;
     let user = this.props.authentication.user;
 
@@ -84,6 +90,21 @@ class NavTop extends Component {
                 ) : null}
               </Col>
               <Col span={12}>
+                <span>
+                  <Select
+                    defaultValue="English"
+                    style={{
+                      width: 110,
+                      float: "right",
+                      lineHeight: "62px",
+                      paddingTop: "20px"
+                    }}
+                    onChange={this.handleChange}
+                  >
+                    <Option value="en-US">English</Option>
+                    <Option value="es">Spanish</Option>
+                  </Select>
+                </span>
                 <Menu
                   theme="light"
                   mode="horizontal"
@@ -135,11 +156,12 @@ class NavTop extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, authentication, config } = state;
+  const { workflowKind, authentication, config, languageSelector } = state;
   return {
     workflowKind,
     authentication,
-    config
+    config,
+    languageSelector
   };
 }
 

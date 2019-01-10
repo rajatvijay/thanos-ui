@@ -9,6 +9,12 @@ export default {
       loggedOutError:
         "You have been logged out. Please Login again to continue",
       clickToLogin: "Click here to Login"
+    },
+    workflowFiltersTranslated: {
+      filterWorkflowType: "Filter workflow type",
+      createNewWorkflow: "Create new",
+      advancedFilter: "Advanced filter",
+      selectField: "Select Field"
     }
   },
   es: {
@@ -20,6 +26,12 @@ export default {
       noWorkflowsError: "No se puede cargar la lista de flujo de trabajo",
       loggedOutError: "Haga clic aquí para ingresar",
       clickToLogin: "Click here to Login"
+    },
+    workflowFiltersTranslated: {
+      filterWorkflowType: "Espanyol workflow type",
+      createNewWorkflow: "espanyol new",
+      advancedFilter: "Spanish filter",
+      selectField: "blahblah"
     }
   },
   fr: {
