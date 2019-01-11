@@ -77,10 +77,10 @@ function saveField(payload, event_type) {
 
   function failure(error) {
     message.destroy();
-    openNotificationWithIcon({
-      type: "error",
-      message: "Unable to save."
-    });
+    // openNotificationWithIcon({
+    //   type: "error",
+    //   message: "Unable to save."
+    // });
     return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
   }
 }

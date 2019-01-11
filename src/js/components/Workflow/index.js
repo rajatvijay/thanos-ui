@@ -194,6 +194,14 @@ class Workflow extends Component {
   };
 
   render = () => {
+    let showInsights = false;
+    if (
+      this.props.authentication.users &&
+      _.includes(this.props.authentication.users.features, "add_workflow")
+    ) {
+      showInsights = true;
+    }
+
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
         <FilterSidebar />
@@ -219,13 +227,15 @@ class Workflow extends Component {
                   </span>
                 </Col>
                 <Col span="12" className="text-right export-section">
-                  <Tooltip title={"Insight"}>
-                    <span className="pd-ard-sm" onClick={this.showDrawer}>
-                      <i className="material-icons text-light text-anchor t-18 ">
-                        trending_up
-                      </i>
-                    </span>
-                  </Tooltip>
+                  {showInsights ? (
+                    <Tooltip title={"Insight"}>
+                      <span className="pd-ard-sm" onClick={this.showDrawer}>
+                        <i className="material-icons text-light text-anchor t-18 ">
+                          trending_up
+                        </i>
+                      </span>
+                    </Tooltip>
+                  ) : null}
 
                   {_.includes(
                     this.props.config.permissions,

@@ -272,7 +272,8 @@ function getIntegrationSearchButton(props) {
     thomson_reuters_wcprofile: "Get TR World Check profile",
     thomson_reuters_screen_sync: "Get TR Screening results",
     thomson_reuters_casesystemid: "Get TR case system id",
-    thomson_reuters_resolve_result: "Get TR resolve result"
+    thomson_reuters_resolve_result: "Get TR resolve result",
+    duplicate_check: "Get Duplicates"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];

@@ -423,6 +423,26 @@ const buildDetails = obj => {
 
         <Collapse bordered={false}>
           <Panel
+            header={<div className="match-title t-16 -text-bold">Alias</div>}
+            key="4"
+            style={customPanelStyle}
+          >
+            <Row gutter={16} className="mr-bottom-lg">
+              {_.map(obj.Alias, function(aliasItem) {
+                return (
+                  <Column
+                    column={12}
+                    label={aliasItem.AliasType + ":"}
+                    value={aliasItem.AliasName || "-"}
+                  />
+                );
+              })}
+              <br />
+              <br />
+            </Row>
+          </Panel>
+
+          <Panel
             header={
               <div className="match-title t-16 -text-bold">Addresses</div>
             }
@@ -453,6 +473,30 @@ const buildDetails = obj => {
                 return <Column column={12} value={wholeAddress} />;
               })}
 
+              <br />
+              <br />
+            </Row>
+          </Panel>
+
+          <Panel
+            header={
+              <div className="match-title t-16 -text-bold">Riskography</div>
+            }
+            key="6"
+            style={customPanelStyle}
+          >
+            <Row gutter={16} className="mr-bottom-lg">
+              {_.map(obj.NonspecificParameterDetail, function(item) {
+                if (item.ParameterIdentificationNumber === "RGP") {
+                  return (
+                    <Column
+                      column={24}
+                      label={item.ParameterIdentificationNumber + ":"}
+                      value={item.ParameterValue}
+                    />
+                  );
+                }
+              })}
               <br />
               <br />
             </Row>
@@ -562,68 +606,67 @@ const buildDetails = obj => {
             {_.map(obj.EventDetail, function(refItem) {
               return (
                 <Row gutter={16} className="mr-bottom-lg">
-                  {refItem.ReferenceDetail ? (
-                    <div>
-                      {refItem.ReferenceDetail.SourceName ? (
-                        <Column
-                          column={12}
-                          label="Source Name:"
-                          value={refItem.ReferenceDetail.SourceName}
-                        />
-                      ) : null}
+                  {_.size(refItem.ReferenceDetail)
+                    ? _.map(refItem.ReferenceDetail, function(item) {
+                        return (
+                          <div>
+                            {item.SourceName ? (
+                              <Column
+                                column={12}
+                                label="Source Name:"
+                                value={item.SourceName}
+                              />
+                            ) : null}
 
-                      {refItem.ReferenceDetail.Headline ? (
-                        <Column
-                          column={12}
-                          label="Headline:"
-                          value={refItem.ReferenceDetail.Headline || "-"}
-                        />
-                      ) : null}
+                            {item.Headline ? (
+                              <Column
+                                column={12}
+                                label="Headline:"
+                                value={item.Headline || "-"}
+                              />
+                            ) : null}
 
-                      {refItem.ReferenceDetail.WebPageURL ? (
-                        <Column
-                          column={12}
-                          label="Web page:"
-                          value={
-                            (
-                              <a
-                                href={refItem.ReferenceDetail.WebPageURL}
-                                target="_blank"
-                              >
-                                {refItem.ReferenceDetail.WebPageURL}
-                              </a>
-                            ) || "-"
-                          }
-                        />
-                      ) : null}
+                            {item.WebPageURL ? (
+                              <Column
+                                column={12}
+                                label="Web page:"
+                                value={
+                                  (
+                                    <a href={item.WebPageURL} target="_blank">
+                                      {item.WebPageURL}
+                                    </a>
+                                  ) || "-"
+                                }
+                              />
+                            ) : null}
 
-                      {refItem.ReferenceDetail.SourceTypeText ? (
-                        <Column
-                          column={12}
-                          label="Source type:"
-                          value={refItem.ReferenceDetail.SourceTypeText || "-"}
-                        />
-                      ) : null}
+                            {item.SourceTypeText ? (
+                              <Column
+                                column={12}
+                                label="Source type:"
+                                value={item.SourceTypeText || "-"}
+                              />
+                            ) : null}
 
-                      {refItem.ReferenceDetail.PublisherName ? (
-                        <Column
-                          column={12}
-                          label="Publisher Name:"
-                          value={refItem.ReferenceDetail.PublisherName || "-"}
-                        />
-                      ) : null}
+                            {item.PublisherName ? (
+                              <Column
+                                column={12}
+                                label="Publisher Name:"
+                                value={item.PublisherName || "-"}
+                              />
+                            ) : null}
 
-                      {refItem.ReferenceDetail.PublicationSource ? (
-                        <Column
-                          column={12}
-                          label="Publication:"
-                          value={
-                            refItem.ReferenceDetail.PublicationSource || "-"
-                          }
-                        />
-                      ) : null}
-                    </div>
-                  ) : null}
+                            {item.PublicationSource ? (
+                              <Column
+                                column={12}
+                                label="Publication:"
+                                value={item.PublicationSource || "-"}
+                              />
+                            ) : null}
+                          </div>
+                        );
+                      })
+                    : null}
 
                   <Column
                     column={12}
@@ -668,26 +711,6 @@ const buildDetails = obj => {
                 </Row>
               );
             })}
-          </Panel>
-
-          <Panel
-            header={<div className="match-title t-16 -text-bold">Alias</div>}
-            key="4"
-            style={customPanelStyle}
-          >
-            <Row gutter={16} className="mr-bottom-lg">
-              {_.map(obj.Alias, function(aliasItem) {
-                return (
-                  <Column
-                    column={12}
-                    label={aliasItem.AliasType + ":"}
-                    value={aliasItem.AliasName || "-"}
-                  />
-                );
-              })}
-              <br />
-              <br />
-            </Row>
           </Panel>
 
           <Panel

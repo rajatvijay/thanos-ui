@@ -189,7 +189,7 @@ class StepBody extends Component {
           <style
             dangerouslySetInnerHTML={{
               __html: `
-                
+
                 .printOnly .hide-print {
                   display: none;
                 }
@@ -218,7 +218,7 @@ class StepBody extends Component {
               __html: `
                 .printOnly .print-header {
                   display:none;
-                } 
+                }
                 .hide-print {
                   display: block;
                 }
@@ -261,6 +261,7 @@ class StepBody extends Component {
               showVersion={this.state.showVersion}
               versionToggle={this.versionToggle}
               permission={this.props.config.permissions}
+              isSubmitting={this.props.currentStepFields.isSubmitting}
             />
           </div>
         ) : (

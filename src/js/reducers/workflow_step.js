@@ -38,17 +38,20 @@ export function currentStepFields(state = initialState, action) {
     case stepConstants.SUBMIT_REQUEST:
       return {
         ...state,
+        isSubmitting: true,
         loading: true
       };
     case stepConstants.SUBMIT_SUCCESS:
       return {
         ...state,
         loading: false,
+        isSubmitting: false,
         currentStepFields: action.stepData
       };
     case stepConstants.SUBMIT_FAILURE:
       return {
         ...state,
+        isSubmitting: false,
         error: action.error
       };
 
