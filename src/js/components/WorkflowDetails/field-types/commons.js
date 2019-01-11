@@ -263,6 +263,7 @@ function getIntegrationSearchButton(props) {
     dnb_financials: "Get Financial Statements",
     dnb_litigation: "Get Bankcryptcy Statements",
     dnb_cmp_ent_vw: "Get Complaince Entity View",
+    dnb_cmpcvf: "Get CMPCVF",
     translation: "Translate",
     transliteration: "Transliterate",
     thomson_reuters_group: "Get TR group",
@@ -272,7 +273,8 @@ function getIntegrationSearchButton(props) {
     thomson_reuters_wcprofile: "Get TR World Check profile",
     thomson_reuters_screen_sync: "Get TR Screening results",
     thomson_reuters_casesystemid: "Get TR case system id",
-    thomson_reuters_resolve_result: "Get TR resolve result"
+    thomson_reuters_resolve_result: "Get TR resolve result",
+    duplicate_check: "Get Duplicates"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
@@ -291,6 +293,7 @@ function getIntegrationSearchButton(props) {
           className="btn-block float-left"
           onClick={props.onSearch}
           style={{ width: "auto", marginRight: "20px" }}
+          disabled={isDisabled(props)}
         >
           {button_name}
         </Button>

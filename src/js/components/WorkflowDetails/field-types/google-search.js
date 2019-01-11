@@ -65,7 +65,11 @@ class GoogleSrch extends Component {
 
     const props = {
       field: field,
-      onSearch: this.onSearch
+      onSearch: this.onSearch,
+      currentStepFields: this.props.currentStepFields,
+      is_locked: this.props.is_locked,
+      completed: this.props.completed,
+      permission: this.props.permission
     };
 
     let final_html = null;
@@ -107,11 +111,11 @@ class GoogleSrch extends Component {
 
 const GetTable = props => {
   // for error
-  if (!props.jsonData.items) {
+  if (!props.jsonData.results) {
     return <div className="text-center text-red">No result found!</div>;
   }
 
-  const data = props.jsonData.items;
+  const data = props.jsonData.results;
 
   const columns = [
     {

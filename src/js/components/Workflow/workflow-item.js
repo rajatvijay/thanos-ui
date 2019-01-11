@@ -237,7 +237,7 @@ class HeaderOptions2 extends React.Component {
     );
 
     return (
-      <Col span="5" className="text-right">
+      <Col span="4" className="text-right">
         {props.showCommentIcon && false ? (
           <span style={{ position: "relative", right: "25px" }}>
             <Badge count={5}>
@@ -386,6 +386,19 @@ const GetQuickData = props => {
   );
 };
 
+const getScoreColor = riskValue => {
+  let value = parseInt(riskValue, 10);
+  if (value >= 7) {
+    return "#3c763d";
+  } else if (value >= 4 && value <= 6) {
+    return "#eebd47";
+  } else if (value <= 3) {
+    return "#f16b51";
+  } else {
+    return "#505050";
+  }
+};
+
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
@@ -444,6 +457,19 @@ export const WorkflowHeader = props => {
             pdata={proccessedData}
           />
         )}
+
+        <Col span="1 text-center">
+          {props.workflow.sorting_primary_field ? (
+            <Badge
+              count={<span>{props.workflow.sorting_primary_field}</span>}
+              style={{
+                backgroundColor: getScoreColor(
+                  props.workflow.sorting_primary_field
+                )
+              }}
+            />
+          ) : null}{" "}
+        </Col>
 
         <HeaderOptions2 {...props} />
       </Row>

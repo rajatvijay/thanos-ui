@@ -37,7 +37,8 @@ class Workflow extends Component {
       showWaitingFitler: false,
       isUserAuthenticated: false,
       statusView: true,
-      visible: false
+      visible: false,
+      sortOrderAsc: false
     };
 
     if (!this.props.users.me) {
@@ -194,7 +195,32 @@ class Workflow extends Component {
     });
   };
 
+  changeScoreOrder = order => {
+    let sort = this.state.sortOrderAsc
+      ? "-sorting_primary_field"
+      : "sorting_primary_field";
+    let payload = { filterType: "ordering", filterValue: [sort] };
+    this.setState({ sortOrderAsc: !this.state.sortOrderAsc });
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
   render = () => {
+    let showInsights = false;
+    if (
+      this.props.authentication.user &&
+      _.includes(this.props.authentication.user.features, "view_reports")
+    ) {
+      showInsights = true;
+    }
+
+    let showRisk = false;
+    if (
+      _.size(this.props.workflow.workflow) &&
+      this.props.workflow.workflow[0].sorting_primary_field
+    ) {
+      showRisk = true;
+    }
+
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
         <FilterSidebar />
@@ -220,13 +246,15 @@ class Workflow extends Component {
                   </span>
                 </Col>
                 <Col span="12" className="text-right export-section">
-                  <Tooltip title={"Insight"}>
-                    <span className="pd-ard-sm" onClick={this.showDrawer}>
-                      <i className="material-icons text-light text-anchor t-18 ">
-                        trending_up
-                      </i>
-                    </span>
-                  </Tooltip>
+                  {showInsights ? (
+                    <Tooltip title={"Insight"}>
+                      <span className="pd-ard-sm" onClick={this.showDrawer}>
+                        <i className="material-icons text-light text-anchor t-18 ">
+                          trending_up
+                        </i>
+                      </span>
+                    </Tooltip>
+                  ) : null}
 
                   {_.includes(
                     this.props.config.permissions,
@@ -315,6 +343,42 @@ class Workflow extends Component {
             </div>
           ) : (
             <div className="clearfix">
+              <div
+                className="score-filter"
+                style={{
+                  padding: "10px 78px",
+                  position: "relative",
+                  bottom: "-47px",
+                  left: "-10px"
+                }}
+              >
+                <Row>
+                  <Col span={19} />
+                  <Col span={5}>
+                    {showRisk ? (
+                      <Tooltip
+                        title={
+                          this.state.sortOrderAsc
+                            ? "High to low risk score"
+                            : "Low to high risk score"
+                        }
+                      >
+                        <span
+                          className="text-secondary text-anchor"
+                          onClick={this.changeScoreOrder}
+                        >
+                          Risk
+                          <i className="material-icons t-14  text-middle">
+                            {this.state.sortOrderAsc
+                              ? "keyboard_arrow_up"
+                              : "keyboard_arrow_down"}
+                          </i>
+                        </span>
+                      </Tooltip>
+                    ) : null}
+                  </Col>
+                </Row>
+              </div>
               <WorkflowList
                 profile={this.props.match}
                 {...this.props}

@@ -35,6 +35,7 @@ import { SerpSearch } from "./serpapi-search";
 import { UBOGraph } from "./dnb_ubo_graph";
 import { TRResults } from "./tr_results";
 import { ChildWorkflowField } from "./ChildWorkflow";
+import { DuplicateCheck } from "./duplicate_check_new.js";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -106,6 +107,8 @@ export const getFieldType = props => {
       return RDCAlerts(props);
     case "dnb_cmp_ent_vw":
       return DnBCommon(props);
+    case "dnb_cmpcvf":
+      return DnBCommon(props);
     case "dnb_livingstone":
       return Livingstone(props);
     case "dnb_data_reader":
@@ -158,6 +161,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "child_workflow":
       return ChildWorkflowField(props);
+    case "duplicate_check":
+      return DuplicateCheck(props);
 
     default:
       return Text(props);
