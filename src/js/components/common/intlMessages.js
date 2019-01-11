@@ -4,11 +4,7 @@ export default {
       waitingDropdown: "Waiting on",
       detailsViewToggle: "Details view",
       workflowViewToggle: "Workflow view",
-      workflowsCount: "Workflows",
-      noWorkflowsError: "Unable to load workflow list",
-      loggedOutError:
-        "You have been logged out. Please Login again to continue",
-      clickToLogin: "Click here to Login"
+      workflowsCount: "Workflows"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -19,37 +15,25 @@ export default {
     commonTextInstances: {
       submitButtonText: "Submit",
       submittingButtonText: "Submitting",
-      undoSubmissionText: "Undo submission"
+      undoSubmissionText: "Undo submission",
+      clickToLogin: "Click here to Login",
+      reloadText: "reload",
+      loadingText: "loading",
+      addComments: "Add comment/question"
+    },
+    stepBodyFormInstances: {
+      submittedBy: "Submitted by ",
+      versionSubmittedOn: "Version submitted on"
+    },
+    errorMessageInstances: {
+      magicLinkExpired: "We’re sorry, this link has expired.",
+      magicLinkgenerateNew: "to go to login page and generate a new link.",
+      magicLinkExpirationWindow: "Note: Link expires in 24 hours",
+      noWorkflowsError: "Unable to load workflow list",
+      loggedOutError:
+        "You have been logged out. Please Login again to continue",
+      noWorkflowsToShow: "No workflows to show. Try clearing the filters or"
     }
   },
-  es: {
-    workflowsInstances: {
-      waitingDropdown: "Esperando que",
-      detailsViewToggle: "Vista detallada:",
-      workflowViewToggle: "Vista de flujo de trabajo",
-      workflowsCount: "Flujos de trabajo",
-      noWorkflowsError: "No se puede cargar la lista de flujo de trabajo",
-      loggedOutError: "Haga clic aquí para ingresar",
-      clickToLogin: "Click here to Login"
-    },
-    workflowFiltersTranslated: {
-      filterWorkflowType: "Espanyol workflow type",
-      createNewWorkflow: "espanyol new",
-      advancedFilter: "Spanish filter",
-      selectField: "blahblah"
-    },
-    commonTextInstances: {
-      submitButtonText: "Submit-es",
-      submittingButtonText: "Submitting-es",
-      undoSubmissionText: "Undo submission -es"
-    }
-  },
-  fr: {
-    workflowsInstances: {
-      waitingDropdown: "Basculer",
-      detailsViewToggle: "Achetez ce livre à partir de:",
-      workflowViewToggle: "Avis",
-      workflowsCount: "Flujos de trabajo"
-    }
-  }
+  es: {}
 };

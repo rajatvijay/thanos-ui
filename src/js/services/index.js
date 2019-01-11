@@ -8,3 +8,4 @@ export { workflowStepService } from "./workflow_update";
 export { workflowFiltersService } from "./workflow_filters";
 export { changeStatusService } from "./change_status";
 export { dunsFieldService } from "./integration_field_update";
+export { updateSelectedLanguageService } from "./internationalize";

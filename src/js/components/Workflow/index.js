@@ -326,7 +326,7 @@ class Workflow extends Component {
             </div>
           ) : this.props.workflow.loadingStatus === "failed" ? (
             <div className="mr-top-lg text-center text-bold text-metal">
-              <FormattedMessage id="workflowsInstances.noWorkflowsError" />.{" "}
+              <FormattedMessage id="errorMessageInstances.noWorkflowsError" />.{" "}
               {/**<div className="text-anchor ">
                  Click here to reload{" "}
                  <i className="material-icons text-middle">refresh</i>
