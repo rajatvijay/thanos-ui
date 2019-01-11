@@ -7,6 +7,21 @@ export function languageSelector(state = {}, action) {
         type: "SELECT_LANGUAGE",
         language: action.message
       };
+    case languageConstants.CHANGE_LANGUAGE_REQUEST:
+      return {
+        loading: true
+      };
+    case languageConstants.CHANGE_LANGUAGE_SUCCESS:
+      return {
+        loading: false,
+        ...action.response
+      };
+    case languageConstants.CHANGE_LANGUAGE_FAILURE:
+      return {
+        loading: false,
+        loadingStatus: "failed",
+        error: action.error
+      };
     default:
       return state;
   }

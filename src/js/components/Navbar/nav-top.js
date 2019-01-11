@@ -44,6 +44,7 @@ class NavTop extends Component {
   };
   handleChange = value => {
     this.props.dispatch(languageActions.setLanguage(value));
+    this.props.dispatch(languageActions.updateUserLanguage(value));
   };
 
   render = () => {
