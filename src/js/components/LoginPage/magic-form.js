@@ -5,6 +5,8 @@ import validator from "validator";
 import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
 import { connect } from "react-redux";
+import SelectLanguage from "../SelectLanguage/";
+import { FormattedMessage } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -98,10 +100,12 @@ class MagicLoginLinkForm extends React.Component {
     const { data, errors } = this.state;
     return (
       <div className="login-form-box">
+        <SelectLanguage />
+        <Divider />
         {!this.props.emailAuth.submitted ? (
           <div>
             <div className="text-center mr-bottom t-18 text-base">
-              Enter your email to receive one-time sign in link
+              <FormattedMessage id="loginPageInstances.oneTimeLink" />
             </div>
             <Form
               layout="vertical"
@@ -134,7 +138,7 @@ class MagicLoginLinkForm extends React.Component {
                   className="login-form-button"
                   onClick={this.onSubmit}
                 >
-                  Submit
+                  <FormattedMessage id="loginPageInstances.submitText" />
                 </Button>
               </FormItem>
             </Form>
@@ -142,7 +146,7 @@ class MagicLoginLinkForm extends React.Component {
               <div>
                 <Divider>or</Divider>
                 <Link to="/login">
-                  Login using email and password
+                  <FormattedMessage id="loginPageInstances.loginEmailPassword" />
                   <i className="material-icons t-14 text-middle pd-left-sm">
                     arrow_forward
                   </i>
@@ -152,7 +156,9 @@ class MagicLoginLinkForm extends React.Component {
               <div>
                 <Divider>or</Divider>
                 <a href={this.props.config.saml_url}>
-                  Login via your {this.props.config.name} username and password
+                  <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                  {this.props.config.name}
+                  <FormattedMessage id="loginPageInstances.customSAMLloginText2" />
                   <i className="material-icons t-14 text-middle pd-left-sm">
                     arrow_forward
                   </i>
@@ -170,8 +176,8 @@ class MagicLoginLinkForm extends React.Component {
               <br />
               <p className="t-14">
                 <span className="text-grey-dark">
-                  Your contact information must be on file in order for you to
-                  complete this request.<br />
+                  <FormattedMessage id="loginPageInstances.loginErrorMessage" />
+                  <br />
                   <br />
                 </span>
               </p>
@@ -179,7 +185,7 @@ class MagicLoginLinkForm extends React.Component {
               <Divider />
               <div>
                 <a href="/" onClick={this.refresh}>
-                  Go to login page
+                  <FormattedMessage id="loginPageInstances.goToLoginPage" />
                 </a>
               </div>
             </div>

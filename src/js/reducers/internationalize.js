@@ -14,7 +14,7 @@ export function languageSelector(state = {}, action) {
     case languageConstants.CHANGE_LANGUAGE_SUCCESS:
       return {
         loading: false,
-        ...action.response
+        preferredLanguage: action.response.prefered_language
       };
     case languageConstants.CHANGE_LANGUAGE_FAILURE:
       return {

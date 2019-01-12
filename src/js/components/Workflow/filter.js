@@ -244,7 +244,6 @@ class WorkflowKindFilter extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    console.log(this.props.languageSelector, "language");
     // if(!this.props.languageSelector.language){
     //   return nextProps.languageSelector.language !== this.props.languageSelector.language;
     // }

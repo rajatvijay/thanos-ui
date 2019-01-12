@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Alert } from "antd";
 //import validator from "validator";
-import { connect } from "react-redux";
 import { login } from "../../actions";
+import SelectLanguage from "../SelectLanguage/";
+import { FormattedMessage } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -88,6 +89,8 @@ class LoginForm extends React.Component {
 
     return (
       <div className="login-form-box">
+        <SelectLanguage />
+        <Divider />
         <Form
           layout="vertical"
           onSubmit={this.onSubmit}
@@ -131,7 +134,7 @@ class LoginForm extends React.Component {
               className="login-form-button"
             >
               {" "}
-              Login
+              <FormattedMessage id="loginPageInstances.loginText" />
             </Button>
             {/*<Link to="/register"> Sign up</Link>*/}
           </FormItem>
@@ -143,7 +146,8 @@ class LoginForm extends React.Component {
           <Divider>or</Divider>
           <div className="t-16">
             <Link to="/login/magic">
-              Login using email only<i className="material-icons t-14 text-middle pd-left-sm">
+              <FormattedMessage id="loginPageInstances.loginUsingEmailOnly" />
+              <i className="material-icons t-14 text-middle pd-left-sm">
                 arrow_forward
               </i>
             </Link>
