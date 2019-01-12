@@ -8,6 +8,7 @@ const Option = Select.Option;
 class SelectLanguage extends React.Component {
   handleLanguageChange = value => {
     this.props.dispatch(languageActions.updateUserLanguage(value));
+    window.location.reload();
   };
   render() {
     let preferredLanguage = this.props.config.prefered_language || "English";

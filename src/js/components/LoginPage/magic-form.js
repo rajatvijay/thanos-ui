@@ -100,6 +100,7 @@ class MagicLoginLinkForm extends React.Component {
     const { data, errors } = this.state;
     return (
       <div className="login-form-box">
+        <p>Please Select your preferred language:</p>
         <SelectLanguage />
         <Divider />
         {!this.props.emailAuth.submitted ? (
