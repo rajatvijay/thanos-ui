@@ -89,6 +89,7 @@ class LoginForm extends React.Component {
 
     return (
       <div className="login-form-box">
+        <p>Please Select your preferred language:</p>
         <SelectLanguage />
         <Divider />
         <Form
