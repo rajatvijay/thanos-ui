@@ -19,6 +19,7 @@ import { logout, workflowActions, languageActions } from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
+import SelectLanguage from "../SelectLanguage";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -43,7 +44,6 @@ class NavTop extends Component {
     }
   };
   handleChange = value => {
-    this.props.dispatch(languageActions.setLanguage(value));
     this.props.dispatch(languageActions.updateUserLanguage(value));
   };
 
@@ -51,7 +51,6 @@ class NavTop extends Component {
     console.log(this.props, "navbar Language");
     let that = this;
     let user = this.props.authentication.user;
-
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -91,21 +90,7 @@ class NavTop extends Component {
                 ) : null}
               </Col>
               <Col span={12}>
-                <span>
-                  <Select
-                    defaultValue="English"
-                    style={{
-                      width: 110,
-                      float: "right",
-                      lineHeight: "62px",
-                      paddingTop: "20px"
-                    }}
-                    onChange={this.handleChange}
-                  >
-                    <Option value="en-US">English</Option>
-                    <Option value="es">Spanish</Option>
-                  </Select>
-                </span>
+                <SelectLanguage navbar={true} />
                 <Menu
                   theme="light"
                   mode="horizontal"

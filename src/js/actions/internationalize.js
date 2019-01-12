@@ -11,6 +11,7 @@ const updateUserLanguage = payload => async dispatch => {
     const response = await updateSelectedLanguageService.updateSelectedLanguage(
       payload
     );
+    dispatch(setLanguage(payload));
     dispatch({
       type: languageConstants.CHANGE_LANGUAGE_SUCCESS,
       response: response
@@ -18,6 +19,7 @@ const updateUserLanguage = payload => async dispatch => {
   } catch (error) {
     console.log(error);
     dispatch({ type: languageConstants.CHANGE_LANGUAGE_FAILURE, error });
+    dispatch(setLanguage(payload));
   }
 };
 
