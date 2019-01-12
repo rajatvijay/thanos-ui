@@ -2,16 +2,23 @@ import React from "react";
 import { connect } from "react-redux";
 import { Select } from "antd";
 import { languageActions } from "../../actions";
+import _ from "lodash";
+import languages from "../common/intlLanguages";
+import { languageConstants } from "../../constants";
 
 const Option = Select.Option;
 
 class SelectLanguage extends React.Component {
   handleLanguageChange = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
+    if (this.props.authentication.user) {
+      this.props.dispatch(languageActions.updateUserLanguage(value));
+    }
     window.location.reload();
   };
   render() {
-    let preferredLanguage = this.props.config.prefered_language || "English";
+    let user = this.props.authentication.user;
+    let preferredLanguage =
+      (user && user.prefered_language) || languageConstants.DEFAULT_LOCALE;
     return (
       <span>
         <Select
@@ -24,8 +31,15 @@ class SelectLanguage extends React.Component {
           }}
           onChange={this.handleLanguageChange}
         >
-          <Option value="en-US">English</Option>
-          <Option value="es">Espanyol</Option>
+          {_.map(
+            Object.keys(languages.endonyms),
+
+            function(locale, index) {
+              return (
+                <Option value={locale}>{languages.endonyms[locale]}</Option>
+              );
+            }
+          )}
         </Select>
       </span>
     );
@@ -33,9 +47,10 @@ class SelectLanguage extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { config, languageSelector } = state;
+  const { config, authentication, languageSelector } = state;
   return {
     config,
+    authentication,
     languageSelector
   };
 }
