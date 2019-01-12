@@ -1,6 +1,4 @@
 import { authHeader, baseUrl } from "../_helpers";
-import _ from "lodash";
-import { store } from "../_helpers";
 
 function updateSelectedLanguage(payload) {
   const requestOptions = {
@@ -14,7 +12,6 @@ function updateSelectedLanguage(payload) {
   return fetch(url, requestOptions).then(handleResponse);
 }
 
-//COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
 function handleResponse(response) {
   if (!response.ok) {
     return Promise.reject(response.statusText);
