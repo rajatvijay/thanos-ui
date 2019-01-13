@@ -29,6 +29,7 @@ export const workflowStepActions = {
   undoStep,
   addComment,
   updateFlag,
+  updateIntegrationStatus,
   removeAttachment
 };
 
@@ -372,6 +373,54 @@ function updateFlag(payload) {
     openNotificationWithIcon({
       type: "success",
       message: "Flag updated!",
+      duration: 7
+    });
+
+    return { type: workflowCommentsConstants.ADD_COMMENTS_SUCCESS, data };
+  }
+
+  function failure(error) {
+    openNotificationWithIcon({
+      type: "error",
+      message: "Failed to update",
+      duration: 7
+    });
+    return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };
+  }
+}
+
+////////////////////
+//Updating status //
+////////////////////
+function updateIntegrationStatus(payload) {
+  return dispatch => {
+    //dispatch(request(payload));
+
+    workflowStepService.updateIntegrationStatus(payload).then(
+      commentData => {
+        dispatch(success(commentData));
+        if (_.size(commentData.results)) {
+          let stepTrack = {
+            workflowId: commentData.results[0].target.workflow,
+            groupId: commentData.results[0].target.step_group_details.id,
+            stepId: commentData.results[0].target.step_details.id,
+            doNotRefresh: true
+          };
+          dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        }
+      },
+      error => dispatch(failure(error))
+    );
+  };
+
+  function request() {
+    return { type: workflowCommentsConstants.ADD_COMMENTS_REQUEST, payload };
+  }
+
+  function success(data) {
+    openNotificationWithIcon({
+      type: "success",
+      message: "Status updated!",
       duration: 7
     });
 

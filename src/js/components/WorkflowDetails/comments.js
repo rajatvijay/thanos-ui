@@ -87,6 +87,7 @@ class Comments extends Component {
       ? this.props.workflowComments.data
       : {};
     let target = _.size(comments.results) ? comments.results[0].target : {};
+    console.log(target);
     let payload = {
       workflow: target.workflow,
       field: target.field_details.id,
@@ -96,6 +97,27 @@ class Comments extends Component {
       payload["integration_uid"] = target.uid;
     }
     this.props.changeFlag(payload);
+  };
+
+  changeStatus = value => {
+    let comments = this.props.workflowComments
+      ? this.props.workflowComments.data
+      : {};
+    let target = _.size(comments.results) ? comments.results[0].target : {};
+
+    if (!target.field_details.is_integration_type) {
+      return;
+    }
+    let payload = {
+      parent_field_id: target.row_json.parent_field_id,
+      parent_row_uid: target.row_json.parent_row_uid,
+      krypton_status: value,
+      field_id: target.field,
+      row_uid: target.uid
+    };
+
+    console.log(payload);
+    this.props.changeIntegrationStatus(payload);
   };
 
   render() {
@@ -201,6 +223,22 @@ class Comments extends Component {
                   </Tag>
 
                   {integrationCommonFunctions.comment_answer_body(c)}
+
+                  <div style={{ marginTop: "10px" }}>
+                    <div>
+                      <span style={{ color: "#575757", fontSize: "12px" }}>
+                        Status:
+                      </span>
+                    </div>
+                    <Select
+                      placeholder="Select a status"
+                      style={{ width: "100%" }}
+                      onChange={that.changeStatus}
+                    >
+                      <Option value="open">Open</Option>
+                      <Option value="closed">Closed</Option>
+                    </Select>
+                  </div>
 
                   <Divider />
 
