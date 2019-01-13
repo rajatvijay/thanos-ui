@@ -17,19 +17,25 @@ addLocaleData([...en, ...es, ...fr]);
 class App extends React.Component {
   componentDidMount() {
     loadReCaptcha("6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8");
-    let preferredLanguage = this.props.config.prefered_language || "en";
-    this.props.dispatch(languageActions.updateUserLanguage(preferredLanguage));
+    let preferredLanguage = this.props.user
+      ? this.props.user.prefered_language
+      : "en";
+    if (this.props.user) {
+      this.props.dispatch(
+        languageActions.updateUserLanguage(preferredLanguage)
+      );
+    }
   }
 
   render = () => {
-    let locale =
-      this.props.config.prefered_language ||
-      this.props.languageSelector.language ||
-      (navigator.languages && navigator.languages[0]) ||
-      navigator.language ||
-      navigator.userLanguage ||
-      "en-US";
-    let messageTranslate = messages[locale] || messages["en-US"];
+    let locale = this.props.user
+      ? this.props.user.prefered_language
+      : this.props.languageSelector.language ||
+        (navigator.languages && navigator.languages[0]) ||
+        navigator.language ||
+        navigator.userLanguage ||
+        "en";
+    let messageTranslate = messages[locale] || messages["en"];
     return (
       <IntlProvider
         locale={locale}
@@ -41,8 +47,10 @@ class App extends React.Component {
   };
 }
 function mapStateToProps(state) {
-  const { languageSelector, config } = state;
+  const { languageSelector, config, authentication } = state;
+  const { user } = authentication;
   return {
+    user,
     languageSelector,
     config
   };

@@ -10,8 +10,17 @@ class SelectLanguage extends React.Component {
     this.props.dispatch(languageActions.updateUserLanguage(value));
     window.location.reload();
   };
+  handleLanguageChangeLogin = value => {
+    this.props.dispatch(languageActions.updateUserLanguage(value));
+  };
   render() {
-    let preferredLanguage = this.props.config.prefered_language || "English";
+    let preferredLanguage = this.props.user
+      ? this.props.user.prefered_language
+      : this.props.languageSelector.language ||
+        (navigator.languages && navigator.languages[0]) ||
+        navigator.language ||
+        navigator.userLanguage ||
+        "English";
     return (
       <span>
         <Select
@@ -22,9 +31,13 @@ class SelectLanguage extends React.Component {
             float: this.props.navbar ? "right" : "",
             lineHeight: this.props.navbar ? "62px" : ""
           }}
-          onChange={this.handleLanguageChange}
+          onChange={
+            this.props.navbar
+              ? this.handleLanguageChange
+              : this.handleLanguageChangeLogin
+          }
         >
-          <Option value="en-US">English</Option>
+          <Option value="en">English</Option>
           <Option value="es">Espanyol</Option>
         </Select>
       </span>
@@ -33,9 +46,11 @@ class SelectLanguage extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { config, languageSelector } = state;
+  const { config, languageSelector, authentication } = state;
+  const { user } = authentication;
   return {
     config,
+    user,
     languageSelector
   };
 }
