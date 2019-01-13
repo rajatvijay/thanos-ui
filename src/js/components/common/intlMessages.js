@@ -45,7 +45,8 @@ export default {
       customSAMLloginText2: "username and password",
       loginErrorMessage:
         "Your contact information must be on file in order for you to complete this request.",
-      goToLoginPage: "Go to login page"
+      goToLoginPage: "Go to login page",
+      selectPreferedLanguage: " Please select your preferred language"
     }
   },
   es: {

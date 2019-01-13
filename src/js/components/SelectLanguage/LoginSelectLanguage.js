@@ -2,6 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { Select } from "antd";
 import { languageActions } from "../../actions";
+import _ from "lodash";
+import languages from "../common/intlLanguages";
+import { languageConstants } from "../../constants";
 
 const Option = Select.Option;
 
@@ -10,13 +13,11 @@ class LoginSelectLanguage extends React.Component {
     this.props.dispatch(languageActions.setLanguage(value));
   };
   render() {
-    let preferredLanguage = this.props.user
-      ? this.props.user.prefered_language
-      : this.props.languageSelector.language ||
-        (navigator.languages && navigator.languages[0]) ||
-        navigator.language ||
-        navigator.userLanguage ||
-        "English";
+    let preferredLanguage =
+      (navigator.languages && navigator.languages[0]) ||
+      navigator.language ||
+      navigator.userLanguage ||
+      languageConstants.DEFAULT_LOCALE;
     return (
       <span>
         <Select
@@ -27,8 +28,15 @@ class LoginSelectLanguage extends React.Component {
           }}
           onChange={this.handleLanguageChangeLogin}
         >
-          <Option value="en">English</Option>
-          <Option value="es">Espanyol</Option>
+          {_.map(
+            Object.keys(languages.endonyms),
+
+            function(locale, index) {
+              return (
+                <Option value={locale}>{languages.endonyms[locale]}</Option>
+              );
+            }
+          )}
         </Select>
       </span>
     );

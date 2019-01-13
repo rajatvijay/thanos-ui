@@ -6,6 +6,7 @@ import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
 import { connect } from "react-redux";
 import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
+
 import { FormattedMessage } from "react-intl";
 
 const FormItem = Form.Item;
@@ -100,7 +101,7 @@ class MagicLoginLinkForm extends React.Component {
     const { data, errors } = this.state;
     return (
       <div className="login-form-box">
-        <p>Please Select your preferred language:</p>
+        <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />{" "}
         <LoginSelectLanguage />
         <Divider />
         {!this.props.emailAuth.submitted ? (

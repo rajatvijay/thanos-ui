@@ -2,25 +2,28 @@ import React from "react";
 import { connect } from "react-redux";
 import { Select } from "antd";
 import { languageActions } from "../../actions";
+import _ from "lodash";
+import languages from "../common/intlLanguages";
+import { languageConstants } from "../../constants";
 
 const Option = Select.Option;
 
 class SelectLanguage extends React.Component {
   handleLanguageChange = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
+    if (this.props.authentication.user) {
+      this.props.dispatch(languageActions.updateUserLanguage(value));
+    }
     window.location.reload();
   };
-  handleLanguageChangeLogin = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
-  };
   render() {
-    let preferredLanguage = this.props.user
-      ? this.props.user.prefered_language
-      : this.props.languageSelector.language ||
-        (navigator.languages && navigator.languages[0]) ||
-        navigator.language ||
-        navigator.userLanguage ||
-        "English";
+    let user = this.props.authentication.user;
+    let preferredLanguage =
+      (user && user.prefered_language) ||
+      this.props.languageSelector.language ||
+      (navigator.languages && navigator.languages[0]) ||
+      navigator.language ||
+      navigator.userLanguage ||
+      languageConstants.DEFAULT_LOCALE;
     return (
       <span>
         <Select
@@ -33,8 +36,15 @@ class SelectLanguage extends React.Component {
           }}
           onChange={this.handleLanguageChange}
         >
-          <Option value="en">English</Option>
-          <Option value="es">Espanyol</Option>
+          {_.map(
+            Object.keys(languages.endonyms),
+
+            function(locale, index) {
+              return (
+                <Option value={locale}>{languages.endonyms[locale]}</Option>
+              );
+            }
+          )}
         </Select>
       </span>
     );
@@ -42,11 +52,10 @@ class SelectLanguage extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { config, languageSelector, authentication } = state;
-  const { user } = authentication;
+  const { config, authentication, languageSelector } = state;
   return {
     config,
-    user,
+    authentication,
     languageSelector
   };
 }

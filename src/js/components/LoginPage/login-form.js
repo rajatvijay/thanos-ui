@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Alert } from "antd";
 //import validator from "validator";
 import { login } from "../../actions";
+import SelectLanguage from "../SelectLanguage/";
 import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
 import { FormattedMessage } from "react-intl";
 
@@ -89,7 +90,7 @@ class LoginForm extends React.Component {
 
     return (
       <div className="login-form-box">
-        <p>Please Select your preferred language:</p>
+        <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />
         <LoginSelectLanguage />
         <Divider />
         <Form

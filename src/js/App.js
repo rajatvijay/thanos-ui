@@ -6,52 +6,49 @@ import { loadReCaptcha } from "react-recaptcha-v3";
 import { connect } from "react-redux";
 import messages from "./components/common/intlMessages";
 import { addLocaleData, IntlProvider, injectIntl } from "react-intl";
-import en from "react-intl/locale-data/en";
-import es from "react-intl/locale-data/es";
-import fr from "react-intl/locale-data/fr";
 import { flattenMessages } from "./components/common/messageUtils";
-import { languageActions } from "./actions";
-
-addLocaleData([...en, ...es, ...fr]);
+import { languageConstants } from "./constants";
 
 class App extends React.Component {
   componentDidMount() {
     loadReCaptcha("6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8");
-    let preferredLanguage = this.props.user
-      ? this.props.user.prefered_language
-      : "en";
-    if (this.props.user) {
-      this.props.dispatch(
-        languageActions.updateUserLanguage(preferredLanguage)
-      );
-    }
   }
 
   render = () => {
-    let locale = this.props.user
-      ? this.props.user.prefered_language
-      : this.props.languageSelector.language ||
-        (navigator.languages && navigator.languages[0]) ||
-        navigator.language ||
-        navigator.userLanguage ||
-        "en";
-    let messageTranslate = messages[locale] || messages["en"];
+    let user = this.props.authentication.user;
+    let locale =
+      (user && user.prefered_language) ||
+      this.props.languageSelector.language ||
+      (navigator.languages && navigator.languages[0]) ||
+      navigator.language ||
+      navigator.userLanguage ||
+      languageConstants.DEFAULT_LOCALE;
+    addLocaleData(require(`react-intl/locale-data/${locale}`));
+    let messagesDefaultLocale = flattenMessages(
+      messages[languageConstants.DEFAULT_LOCALE]
+    );
+    let messageTranslate = messagesDefaultLocale;
+    console.log(locale);
+    if (messages[locale]) {
+      messageTranslate = Object.assign(
+        {},
+        messagesDefaultLocale,
+        flattenMessages(messages[locale])
+      );
+    }
+    console.log(messageTranslate);
     return (
-      <IntlProvider
-        locale={locale}
-        messages={flattenMessages(messageTranslate)}
-      >
+      <IntlProvider locale={locale} messages={messageTranslate}>
         <Routes />
       </IntlProvider>
     );
   };
 }
 function mapStateToProps(state) {
-  const { languageSelector, config, authentication } = state;
-  const { user } = authentication;
+  const { languageSelector, authentication, config } = state;
   return {
-    user,
     languageSelector,
+    authentication,
     config
   };
 }
