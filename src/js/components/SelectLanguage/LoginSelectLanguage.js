@@ -5,13 +5,9 @@ import { languageActions } from "../../actions";
 
 const Option = Select.Option;
 
-class SelectLanguage extends React.Component {
-  handleLanguageChange = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
-    window.location.reload();
-  };
+class LoginSelectLanguage extends React.Component {
   handleLanguageChangeLogin = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
+    this.props.dispatch(languageActions.setLanguage(value));
   };
   render() {
     let preferredLanguage = this.props.user
@@ -27,11 +23,9 @@ class SelectLanguage extends React.Component {
           defaultValue={preferredLanguage}
           style={{
             width: 110,
-            paddingTop: "20px",
-            float: this.props.navbar ? "right" : "",
-            lineHeight: this.props.navbar ? "62px" : ""
+            paddingTop: "20px"
           }}
-          onChange={this.handleLanguageChange}
+          onChange={this.handleLanguageChangeLogin}
         >
           <Option value="en">English</Option>
           <Option value="es">Espanyol</Option>
@@ -51,4 +45,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SelectLanguage);
+export default connect(mapStateToProps)(LoginSelectLanguage);
