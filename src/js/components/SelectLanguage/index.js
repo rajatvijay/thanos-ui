@@ -32,11 +32,7 @@ class SelectLanguage extends React.Component {
             float: this.props.navbar ? "right" : "",
             lineHeight: this.props.navbar ? "62px" : ""
           }}
-          onChange={
-            this.props.navbar
-              ? this.handleLanguageChange
-              : this.handleLanguageChangeLogin
-          }
+          onChange={this.handleLanguageChange}
         >
           {_.map(
             Object.keys(languages.endonyms),
