@@ -11,6 +11,7 @@ import {
   Divider,
   Select,
   Tag,
+  Tabs,
   Tooltip,
   Collapse
 } from "antd";
@@ -25,6 +26,7 @@ import {
 } from "../../../actions";
 
 const FormItem = Form.Item;
+const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 const { Column, ColumnGroup } = Table;
 const Panel = Collapse.Panel;
@@ -65,7 +67,10 @@ class DnbRDC extends Component {
   };
 
   getComment = (e, data) => {
-    this.props.getIntegrationComments(data.AlertEntityID, this.props.field.id);
+    this.props.getIntegrationComments(
+      data.AlertEntitySystemID,
+      this.props.field.id
+    );
   };
 
   render = () => {
@@ -97,7 +102,7 @@ class DnbRDC extends Component {
         <div>
           {_.size(field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
+              <GetTabsFilter
                 getComment={this.getComment}
                 jsonData={field.integration_json}
                 commentCount={field.integration_comment_count}
@@ -399,6 +404,11 @@ const buildDetails = obj => {
     );
   };
 
+  const event_status = {
+    open: { label: "Open", class: "red" },
+    closed: { label: "Closed", class: "green" }
+  };
+
   return (
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
@@ -406,7 +416,7 @@ const buildDetails = obj => {
           <Column
             column={12}
             label="Alert Entity ID:"
-            value={obj.AlertEntityID}
+            value={obj.AlertEntitySystemID}
           />
 
           <Column
@@ -607,6 +617,18 @@ const buildDetails = obj => {
             key="3"
             style={customPanelStyle}
           >
+            {_.size(obj.custom_counts) ? (
+              <div style={{ margin: "0px 0px 20px 15px" }}>
+                {_.map(obj.custom_counts, function(v, k) {
+                  return (
+                    <Tag>
+                      {k} ({v})
+                    </Tag>
+                  );
+                })}
+              </div>
+            ) : null}
+
             {_.map(obj.EventDetail, function(refItem) {
               return (
                 <Row gutter={16} className="mr-bottom-lg">
@@ -698,6 +720,33 @@ const buildDetails = obj => {
                     )}
                   />
 
+                  {refItem.krypton_category ? (
+                    <Column
+                      column={12}
+                      label="CAR Risk Code:"
+                      value={refItem.krypton_category}
+                    />
+                  ) : null}
+
+                  {refItem.krypton_status ? (
+                    <Column
+                      column={12}
+                      label="Status:"
+                      value={
+                        refItem.krypton_status ? (
+                          <Tag
+                            color={
+                              event_status[refItem.krypton_status]["class"]
+                            }
+                          >
+                            {event_status[refItem.krypton_status]["label"]}
+                          </Tag>
+                        ) : (
+                          "-"
+                        )
+                      }
+                    />
+                  ) : null}
                   <Column
                     column={12}
                     label="Event SubType Text:"
@@ -755,6 +804,68 @@ const buildDetails = obj => {
 };
 
 const GetTable = props => {
+  const data = props.jsonData;
+  const columns = [
+    {
+      title: "Entity name",
+      dataIndex: "EntityName",
+      key: "EntityName"
+    },
+    {
+      title: "Risk class (CVIP)",
+      dataIndex: "CVIP",
+      key: "CVIP"
+    },
+    {
+      title: "Risk score",
+      dataIndex: "RiskScore",
+      key: "RiskScore"
+    },
+    {
+      title: "Type",
+      dataIndex: "EntityTypeText",
+      key: "EntityTypeText"
+    },
+    {
+      title: "Comments",
+      key: "ubo_index",
+      render: record => {
+        let flag_data = _.size(props.flag_dict[record.AlertEntitySystemID])
+          ? props.flag_dict[record.AlertEntitySystemID]
+          : {};
+        flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
+        let css = flag_data.extra || {};
+        let flag_name = flag_data.label || null;
+        return (
+          <span>
+            <span
+              className="text-secondary text-anchor"
+              onClick={e => props.getComment(e, record)}
+            >
+              {props.commentCount[record.AlertEntitySystemID]
+                ? props.commentCount[record.AlertEntitySystemID] + " comment(s)"
+                : "Add comment"}
+            </span>
+            <br />
+            {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
+          </span>
+        );
+      }
+    }
+  ];
+
+  return (
+    <Table
+      dataSource={data}
+      pagination={true}
+      columns={columns}
+      rowKey="AlertEntitySystemID"
+      expandedRowRender={record => buildDetails(record)}
+    />
+  );
+};
+
+const GetTabsFilter = props => {
   // for error
   if (
     props.jsonData.SearchComplianceAlertsResponse.TransactionResult.ResultID !=
@@ -787,63 +898,70 @@ const GetTable = props => {
     props.jsonData.SearchComplianceAlertsResponse
       .SearchComplianceAlertsResponseDetail.AlertDetail[0]["AlertEntity"];
 
-  const columns = [
-    {
-      title: "Entity name",
-      dataIndex: "EntityName",
-      key: "EntityName"
-    },
-    {
-      title: "Risk class (CVIP)",
-      dataIndex: "CVIP",
-      key: "CVIP"
-    },
-    {
-      title: "Risk score",
-      dataIndex: "RiskScore",
-      key: "RiskScore"
-    },
-    {
-      title: "Type",
-      dataIndex: "EntityTypeText",
-      key: "EntityTypeText"
-    },
-    {
-      title: "Comments",
-      key: "ubo_index",
-      render: record => {
-        let flag_data = _.size(props.flag_dict[record.AlertEntityID])
-          ? props.flag_dict[record.AlertEntityID]
-          : {};
-        flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
-        return (
-          <span>
-            <span
-              className="text-secondary text-anchor"
-              onClick={e => props.getComment(e, record)}
-            >
-              {props.commentCount[record.AlertEntityID]
-                ? props.commentCount[record.AlertEntityID] + " comment(s)"
-                : "Add comment"}
-            </span>
-            <br />
-            {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
-          </span>
-        );
+  let category_counts = {};
+  _.map(data, function(e) {
+    _.map(e["custom_counts"], function(v, k) {
+      if (!category_counts[k]) {
+        category_counts[k] = 0;
       }
-    }
-  ];
+      category_counts[k] += v;
+    });
+  });
+
+  let categories = [];
+  if (_.size(category_counts)) {
+    categories = _.map(category_counts, function(v, k) {
+      return { label: k, value: k, data: [], count: 0 };
+    });
+  }
+
+  const getFilterData = data => {
+    let fList = [
+      {
+        label: "All",
+        value: "all",
+        data: data,
+        count: data.length,
+        tabBarStyle: { color: "red" }
+      }
+    ];
+
+    fList = fList.concat(categories);
+
+    _.map(data, function(i) {
+      let categs = i["custom_counts"] || {};
+      _.map(fList, function(f, index) {
+        if (categs[f.label]) {
+          fList[index].count++;
+          fList[index].data.push(i);
+        }
+      });
+    });
+
+    return fList;
+  };
+
+  //const getFilterData
+
+  const callback = key => {
+    console.log(key);
+  };
 
   return (
-    <Table
-      dataSource={data}
-      pagination={true}
-      columns={columns}
-      rowKey="AlertEntityID"
-      expandedRowRender={record => buildDetails(record)}
-    />
+    <Tabs defaultActiveKey="all" onChange={callback}>
+      {_.map(getFilterData(data), function(tab, index) {
+        return (
+          <TabPane tab={tab.label + " (" + tab.count + ")"} key={tab.value}>
+            <GetTable
+              getComment={props.getComment}
+              jsonData={tab.data}
+              commentCount={props.commentCount}
+              flag_dict={props.flag_dict}
+            />
+          </TabPane>
+        );
+      })}
+    </Tabs>
   );
 };
 
