@@ -23,20 +23,38 @@ class App extends React.Component {
       navigator.language ||
       navigator.userLanguage ||
       languageConstants.DEFAULT_LOCALE;
-    addLocaleData(require(`react-intl/locale-data/${locale}`));
+    try {
+      addLocaleData(require(`react-intl/locale-data/${locale}`));
+    } catch (e) {
+      console.log("Missing react support for:", locale);
+      let reactLocale = locale.split("-")[0];
+      addLocaleData(require(`react-intl/locale-data/${reactLocale}`));
+    }
     let messagesDefaultLocale = flattenMessages(
       messages[languageConstants.DEFAULT_LOCALE]
     );
     let messageTranslate = messagesDefaultLocale;
-    console.log(locale);
+    if (!messages[locale]) {
+      console.log("Missing support for:", locale);
+      locale = locale.split("-")[0];
+    }
     if (messages[locale]) {
       messageTranslate = Object.assign(
         {},
         messagesDefaultLocale,
         flattenMessages(messages[locale])
       );
+      let missing = Object.keys(messagesDefaultLocale).reduce(
+        (missing, key) => {
+          messageTranslate[key] || missing.push(key);
+          return missing;
+        },
+        []
+      );
+      missing.length && console.log("Missing translations for:", missing);
+    } else {
+      console.log("Missing support for:", locale);
     }
-    console.log(messageTranslate);
     return (
       <IntlProvider locale={locale} messages={messageTranslate}>
         <Routes />

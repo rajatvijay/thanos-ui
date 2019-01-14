@@ -24,6 +24,9 @@ class SelectLanguage extends React.Component {
       navigator.language ||
       navigator.userLanguage ||
       languageConstants.DEFAULT_LOCALE;
+    if (!languages.endonyms[preferredLanguage]) {
+      preferredLanguage = preferredLanguage.split("-")[0];
+    }
     return (
       <span>
         <Select
