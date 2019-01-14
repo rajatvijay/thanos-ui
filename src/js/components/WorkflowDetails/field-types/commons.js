@@ -140,7 +140,13 @@ function addCommentBtn(e, props) {
   }
   return (
     <div className="add_comment_btn" onClick={addComment.bind(e, props)}>
-      <Tooltip placement="topRight" title={comment_btn_text}>
+      <Tooltip
+        placement="topRight"
+        title={props.intl.formatMessage(
+          { id: "stepBodyFormInstances.commentsButtonText" },
+          { count: props.field.comment_count }
+        )}
+      >
         <span>
           {" "}
           {props.field.comment_count > 0 ? (

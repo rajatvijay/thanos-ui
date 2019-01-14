@@ -5,6 +5,7 @@ import StepBodyForm from "./step-body-form";
 import { workflowDetailsActions } from "../../actions";
 import _ from "lodash";
 import Moment from "react-moment";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 class StepBody extends Component {
   constructor(props) {
@@ -63,7 +64,7 @@ class StepBody extends Component {
         ) : (
           <Menu.Item key={0} disabled>
             {" "}
-            No other version available
+            <FormattedMessage id="stepBodyFormInstances.noOtherVersionAvailable" />
           </Menu.Item>
         )}
       </Menu>
@@ -71,7 +72,11 @@ class StepBody extends Component {
 
     return (
       <Dropdown overlay={versionList}>
-        <Tooltip title="Previous version">
+        <Tooltip
+          title={this.props.intl.formatMessage({
+            id: "stepBodyFormInstances.previousVersion"
+          })}
+        >
           <span
             style={{ position: "relative", top: "-58px", right: "-25px" }}
             className="text-anchor pd-ard-sm"
@@ -147,20 +152,17 @@ class StepBody extends Component {
     var step_comment_btn = null;
 
     if (_.size(stepData)) {
-      let comment_btn_text = "Add comment/question";
-      if (stepData.comment_count == 1) {
-        comment_btn_text = "1 comment";
-      } else if (stepData.comment_count > 1) {
-        comment_btn_text = stepData.comment_count + " comments";
-      }
-
       var step_comment_btn = (
         <div
           className={
             "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
-          <Tooltip title="Print step">
+          <Tooltip
+            title={this.props.intl.formatMessage({
+              id: "stepBodyFormInstances.printStep"
+            })}
+          >
             <span
               className="text-anchor pd-ard-sm"
               onClick={this.printDiv}
@@ -177,7 +179,10 @@ class StepBody extends Component {
             onClick={this.addComment.bind(this, stepData)}
             className="ant-btn ant-btn-sm"
           >
-            {comment_btn_text}
+            <FormattedMessage
+              id="stepBodyFormInstances.commentsButtonText"
+              values={{ count: stepData.comment_count }}
+            />
           </span>
         </div>
       );
@@ -289,4 +294,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(StepBody);
+export default connect(mapStateToProps)(injectIntl(StepBody));
