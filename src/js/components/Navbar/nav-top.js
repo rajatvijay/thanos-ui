@@ -21,6 +21,8 @@ import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
 
+import { FormattedMessage } from "react-intl";
+
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -129,7 +131,9 @@ class NavTop extends Component {
                     }
                     onClick={this.onLogout.bind(this, "key")}
                   >
-                    <Menu.Item key="setting:1">Logout</Menu.Item>
+                    <Menu.Item key="setting:1">
+                      <FormattedMessage id="loginPageInstances.logoutText" />
+                    </Menu.Item>
                   </SubMenu>
                 </Menu>
               </Col>

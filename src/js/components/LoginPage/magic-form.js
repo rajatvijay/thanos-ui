@@ -145,7 +145,9 @@ class MagicLoginLinkForm extends React.Component {
             </Form>
             {!this.props.config.saml_url ? (
               <div>
-                <Divider>or</Divider>
+                <Divider>
+                  <FormattedMessage id="loginPageInstances.orText" />
+                </Divider>
                 <Link to="/login">
                   <FormattedMessage id="loginPageInstances.loginEmailPassword" />
                   <i className="material-icons t-14 text-middle pd-left-sm">
@@ -155,7 +157,9 @@ class MagicLoginLinkForm extends React.Component {
               </div>
             ) : (
               <div>
-                <Divider>or</Divider>
+                <Divider>
+                  <FormattedMessage id="loginPageInstances.orText" />
+                </Divider>
                 <a href={this.props.config.saml_url}>
                   <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
                   {this.props.config.name}
@@ -173,7 +177,9 @@ class MagicLoginLinkForm extends React.Component {
               <i className="material-icons material-icons-24">check_circle</i>
             </div>
             <div>
-              <h2 className="text-grey-dark">Email sent.</h2>
+              <h2 className="text-grey-dark">
+                <FormattedMessage id="commonTextInstances.emailSent" />
+              </h2>
               <br />
               <p className="t-14">
                 <span className="text-grey-dark">
@@ -182,7 +188,9 @@ class MagicLoginLinkForm extends React.Component {
                   <br />
                 </span>
               </p>
-              <div className="t-12">NOTE: Link expires in 24 hours.</div>
+              <div className="t-12">
+                <FormattedMessage id="errorMessageInstances.magicLinkExpirationWindow" />
+              </div>
               <Divider />
               <div>
                 <a href="/" onClick={this.refresh}>

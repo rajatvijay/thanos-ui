@@ -144,7 +144,9 @@ class LoginForm extends React.Component {
             <Alert message={this.props.error} type="error" showIcon />
           ) : null}
 
-          <Divider>or</Divider>
+          <Divider>
+            <FormattedMessage id="loginPageInstances.orText" />
+          </Divider>
           <div className="t-16">
             <Link to="/login/magic">
               <FormattedMessage id="loginPageInstances.loginUsingEmailOnly" />
