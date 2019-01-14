@@ -4,7 +4,9 @@ export default {
       waitingDropdown: "Waiting on",
       detailsViewToggle: "Details view",
       workflowViewToggle: "Workflow view",
-      workflowsCount: "Workflows"
+      workflowsCount: "Workflows",
+      comments: "Comments",
+      viewActivityLog: "View Activity Log"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -20,12 +22,17 @@ export default {
       clickHere: "Click here",
       clickToLogin: "Click here to Login",
       reloadText: "reload",
-      loadingText: "loading",
-      addComments: "Add comment/question"
+      loadingText: "loading"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
-      versionSubmittedOn: "Version submitted on"
+      versionSubmittedOn: "Version submitted on",
+      printStep: "Print step",
+      previousVersion: "Previous version",
+      noOtherVersionAvailable: "No other version available",
+      addComments: "Add comment/question",
+      commentsButtonText:
+        "{count, plural, =0 {Add comment/question} one {{count} comment} other {{count} comments}}"
     },
     errorMessageInstances: {
       magicLinkExpired: "We’re sorry, this link has expired.",
@@ -57,7 +64,9 @@ export default {
       waitingDropdown: "Esperando",
       detailsViewToggle: "Vista de detalles",
       workflowViewToggle: "Vista de flujo de trabajo",
-      workflowsCount: "Flujo de trabajo"
+      workflowsCount: "Flujo de trabajo",
+      comments: "Comentarios",
+      viewActivityLog: "Ver registro de actividad"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
@@ -73,12 +82,17 @@ export default {
       clickHere: "Haga clic aquí",
       clickToLogin: "Haga clic aquí para iniciar sesión",
       reloadText: "recargar",
-      loadingText: "cargando",
-      addComments: "Añadir comentario/pregunta"
+      loadingText: "cargando"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por",
-      versionSubmittedOn: "Versión enviada el"
+      versionSubmittedOn: "Versión enviada el",
+      printStep: "Imprimir paso",
+      previousVersion: "Versión previa",
+      noOtherVersionAvailable: "No hay otra versión disponible",
+      addComments: "Añadir comentario/pregunta",
+      commentsButtonText:
+        "{count, plural, =0 {Añadir comentario/pregunta} one {{count} comentario} other {{count} comentarios}}"
     },
     errorMessageInstances: {
       magicLinkExpired: "Lo sentimos, este enlace ha caducado",
