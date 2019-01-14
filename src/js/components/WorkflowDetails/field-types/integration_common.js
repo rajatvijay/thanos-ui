@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Tag } from "antd";
 import _ from "lodash";
-import { Row, Col } from "antd";
+import { Row, Col, Button, Progress } from "antd";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -165,16 +165,79 @@ function serp_search_html(record) {
   );
 }
 
-function google_search_html(record) {
+function google_search_html(record, search) {
+  const salienceSortedValues =
+    record.entity_data &&
+    record.entity_data.sort((a, b) => {
+      return b.salience - a.salience;
+    });
+  const entity_data_block =
+    record.entity_data &&
+    salienceSortedValues.map(entity => {
+      return (
+        <div style={{ width: "250px", float: "left", paddingBottom: "10px" }}>
+          {entity.entity_type}:
+          <br />
+          <b>
+            {entity.entity_metadata.wikipedia_url &&
+            entity.entity_metadata.wikipedia_url ? (
+              <a href={entity.entity_metadata.wikipedia_url}>
+                {entity.entity_name}
+              </a>
+            ) : (
+              <span>{entity.entity_name}</span>
+            )}
+          </b>
+        </div>
+      );
+    });
   return (
     <div>
-      <b dangerouslySetInnerHTML={{ __html: record.htmlTitle }} />
+      <strong
+        style={{ "font-size": "x-large" }}
+        dangerouslySetInnerHTML={{ __html: record.htmlTitle }}
+      />
       <br />
-      <span dangerouslySetInnerHTML={{ __html: record.htmlSnippet }} />
+      <div
+        style={{ "margin-top": "10px" }}
+        dangerouslySetInnerHTML={{ __html: record.htmlSnippet }}
+      />
       <br />
-      <a href={record.link} target="_blank">
-        {record.formattedUrl}
-      </a>
+      <div style={{ "margin-bottom": "10px" }}>
+        <a href={record.link} target="_blank">
+          {record.formattedUrl}
+        </a>
+      </div>
+      <br />
+      <div style={{ width: "250px", float: "left" }}>
+        Sentiment score:
+        <br />
+        <Progress
+          showInfo={false}
+          size="small"
+          percent={record.sentiment_score}
+          min={-1}
+          max={1}
+        />
+      </div>
+      <div
+        style={{
+          "overflow-x": "scroll",
+          "white-space": "nowrap",
+          display: "inline-block"
+        }}
+      >
+        {entity_data_block}
+        {!record.entity_data && (
+          <div
+            style={{ width: "250px", float: "left", "padding-left": "100px" }}
+          >
+            <Button disabled={false} onClick={() => search()}>
+              Refresh
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

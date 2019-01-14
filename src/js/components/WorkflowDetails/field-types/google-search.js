@@ -62,7 +62,6 @@ class GoogleSrch extends Component {
 
   render = () => {
     let { field } = this.props;
-
     const props = {
       field: field,
       onSearch: this.onSearch,
@@ -94,6 +93,7 @@ class GoogleSrch extends Component {
                 jsonData={field.integration_json}
                 commentCount={field.integration_comment_count}
                 flag_dict={field.selected_flag}
+                onSearch={this.onSearch}
               />
             </div>
           ) : null}
@@ -119,11 +119,14 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "Search results",
+      title: `Found ${data.length} results`,
       dataIndex: "result",
       render: (text, record, index) => {
         //let adrData = record
-        return integrationCommonFunctions.google_search_html(record);
+        return integrationCommonFunctions.google_search_html(
+          record,
+          props.onSearch
+        );
       },
       key: "title"
     },
@@ -144,9 +147,13 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.cacheId]
-                ? props.commentCount[record.cacheId] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.cacheId] ? (
+                props.commentCount[record.cacheId] + " comment(s)"
+              ) : (
+                <i className="material-icons  t-18 text-secondary">
+                  chat_bubble_outline
+                </i>
+              )}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
