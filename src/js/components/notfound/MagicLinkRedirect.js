@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { FormattedMessage } from "react-intl";
+
 const MagicLinkRedirect = props => {
   return (
     <div className="text-center">
@@ -14,14 +16,19 @@ const MagicLinkRedirect = props => {
       <br />
       <br />
       <p className="t-22">
-        We’re sorry, this link has expired.<br />
+        <FormattedMessage id="errorMessageInstances.magicLinkExpired" />
+        <br />
         <Link to="/login/magic">
           {" "}
-          <b>Click here</b>
+          <b>
+            <FormattedMessage id="commonTextInstances.clickHere" />
+          </b>
         </Link>{" "}
-        to go to login page and generate a new link.
+        <FormattedMessage id="errorMessageInstances.magicLinkgenerateNew" />
       </p>
-      <b>Note: Link expires in 24 hours</b>
+      <b>
+        <FormattedMessage id="errorMessageInstances.magicLinkExpirationWindow" />
+      </b>
     </div>
   );
 };

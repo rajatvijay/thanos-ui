@@ -6,6 +6,8 @@ import { logout } from "../../actions";
 import { history } from "../../_helpers";
 import _ from "lodash";
 
+import { FormattedMessage } from "react-intl";
+
 const { Sider } = Layout;
 
 const menuList = [
@@ -102,7 +104,9 @@ class NavLeft extends Component {
                 <div>
                   <Icon type="logout" />
                 </div>
-                <span className="nav-text">Logout</span>
+                <span className="nav-text">
+                  <FormattedMessage id="loginPageInstances.logoutText" />
+                </span>
               </span>
             </Menu.Item>
           </Menu>
