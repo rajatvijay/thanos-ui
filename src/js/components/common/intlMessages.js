@@ -53,13 +53,13 @@ export default {
     workflowsInstances: {
       waitingDropdown: "Esperando",
       detailsViewToggle: "Vista de detalles",
-      workflowViewToggle: "vista de flujo de trabajo",
-      workflowsCount: "Workflows"
+      workflowViewToggle: "Vista de flujo de trabajo",
+      workflowsCount: "Flujo de trabajo"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
       createNewWorkflow: "Crear nuevo",
-      advancedFilter: "filtro avanzado",
+      advancedFilter: "Filtro avanzado",
       selectField: "Seleccionar campo"
     },
     commonTextInstances: {
@@ -72,7 +72,7 @@ export default {
       addComments: "Añadir comentario/pregunta"
     },
     stepBodyFormInstances: {
-      presentadoBy: "Sometido por",
+      submittedBy: "Sometido por",
       versionSubmittedOn: "Versión enviada el"
     },
     errorMessageInstances: {
@@ -99,7 +99,8 @@ export default {
       customSAMLloginText2: "nombre de usuario y contraseña",
       loginErrorMessage:
         "Su información de contacto debe estar archivada para que pueda completar esta solicitud",
-      goToLoginPage: "Ir a la página de inicio de sesión"
+      goToLoginPage: "Ir a la página de inicio de sesión",
+      selectPreferedLanguage: " Por favor seleccione su idioma preferido"
     }
   }
 };
