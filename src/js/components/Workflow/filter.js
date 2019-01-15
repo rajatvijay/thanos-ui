@@ -237,18 +237,6 @@ class WorkflowKindFilter extends Component {
     }
   };
 
-  componentDidMount = () => {
-    // if (!this.props.workflowFilterType.statusType) {
-    //   this.props.dispatch(workflowFiltersActions.getStatusData());
-    // }
-  };
-
-  shouldComponentUpdate(nextProps) {
-    // if(!this.props.languageSelector.language){
-    //   return nextProps.languageSelector.language !== this.props.languageSelector.language;
-    // }
-  }
-
   workflowKindList = workflowKind => {
     let that = this;
 
@@ -260,15 +248,12 @@ class WorkflowKindFilter extends Component {
             (that.state.selected === i.id ||
             that.props.workflowFilters.kind.filterValue[0] === i.id
               ? "ant-menu-item-selected "
-              : "")
+              : "text-light")
           }
           key={i.id}
           kind={i.id}
           onClick={that.onFilterSelected.bind(this, i)}
         >
-          <i className="material-icons icon">
-            {i.icon ? i.icon : "library_books"}
-          </i>
           {i.name}
         </li>
       );
@@ -308,6 +293,7 @@ class WorkflowKindFilter extends Component {
         className="ant-menu ant-menu-light ant-menu-root ant-menu-inline"
         style={{
           width: "100%",
+          padding: "0 14px",
           height: "vh100",
           overflowX: "hidden",
           background: "transparent"
@@ -376,24 +362,6 @@ class FilterSidebar extends Component {
     //workflow Kind list
 
     //kind temp hide list
-
-    const getTagToHide = tag => {
-      let pass = true;
-
-      switch (tag) {
-        case "users":
-          pass = false;
-          break;
-        case "entity-id":
-          pass = false;
-          break;
-        default:
-          pass = false;
-      }
-
-      return pass;
-    };
-
     const menu = (
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKindFiltered, function(item, index) {
@@ -413,7 +381,6 @@ class FilterSidebar extends Component {
                   onClick={that.clicked.bind(this, item.tag)}
                   className="kind-item "
                 >
-                  <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
                   {item.name}
                 </div>
               </Menu.Item>
@@ -443,9 +410,14 @@ class FilterSidebar extends Component {
 
     return (
       <Sider
-        width={250}
-        style={{ overflow: "auto", height: "100vh", position: "fixed" }}
-        className="aux-nav aux-nav-filter bg-white"
+        width={320}
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          background: "#ebf0fa"
+        }}
+        className="aux-nav aux-nav-filter "
       >
         <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
           {_.size(workflowKindFiltered) ? (
@@ -471,18 +443,27 @@ class FilterSidebar extends Component {
             </div>
           ) : null}
 
+          <span className="aux-item aux-lead mr-bottom-lg">
+            <span className="text-secondary t-14 text-medium text-uppercase">
+              Filters
+            </span>
+          </span>
+          <br />
+          <br />
+
           <div className="filter-section section-kind">
-            <h5 className="aux-item aux-lead">
-              <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
-            </h5>
+            <span className="aux-item aux-lead filter-title">
+              <label>
+                <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
+              </label>
+            </span>
+
             <WorkflowKindFilter
               workflowKind={this.props.workflowKind}
               workflowFilters={this.props.workflowFilters}
               dispatch={this.props.dispatch}
             />
           </div>
-
-          <div className="filter-divider" />
 
           <div className="filter-section">
             {_.map(filterTypeSelect, function(f, index) {
@@ -503,17 +484,19 @@ class FilterSidebar extends Component {
           </div>
 
           <div>
-            <h5
-              className="aux-item aux-lead  text-anchor"
+            <span
+              className="aux-item aux-lead  text-anchor filter-title"
               onClick={this.toggleAdvFilters}
             >
-              <FormattedMessage id="workflowFiltersTranslated.advancedFilter" />{" "}
-              <i className="material-icons t-16 text-middle">
-                {this.state.showAdvFilters
-                  ? "keyboard_arrow_up "
-                  : "keyboard_arrow_down  "}
-              </i>
-            </h5>
+              <label>
+                <FormattedMessage id="workflowFiltersTranslated.advancedFilter" />{" "}
+                <i className="material-icons t-16 text-middle">
+                  {this.state.showAdvFilters
+                    ? "keyboard_arrow_up "
+                    : "keyboard_arrow_down  "}
+                </i>
+              </label>
+            </span>
           </div>
 
           <div
@@ -522,9 +505,6 @@ class FilterSidebar extends Component {
             }
           >
             <div className="filter-section">
-              <h5 className="aux-item aux-lead filter-title">
-                <FormattedMessage id="workflowFiltersTranslated.selectField" />
-              </h5>
               <div className="aux-item aux-lead">
                 <WrappedAdvancedFilterForm
                   {...this.props}
