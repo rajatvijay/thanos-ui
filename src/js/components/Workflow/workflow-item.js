@@ -281,7 +281,7 @@ class HeaderOptions2 extends React.Component {
             <i className="material-icons t-18 text-middle pd-right-sm">
               restore
             </i>{" "}
-            View activity log
+            <FormattedMessage id="workflowsInstances.viewActivityLog" />
           </span>
         </Menu.Item>
 
@@ -290,14 +290,14 @@ class HeaderOptions2 extends React.Component {
             <i className="material-icons t-18 text-middle pd-right-sm">
               message
             </i>{" "}
-            message
+            <FormattedMessage id="stepBodyFormInstances.addComments" />
           </span>
         </Menu.Item>
 
         <Menu.Item key={"pint"} onClick={this.printDiv}>
           <span>
             <i className="material-icons t-18 text-middle pd-right-sm">print</i>{" "}
-            print
+            <FormattedMessage id="stepBodyFormInstances.printText" />
           </span>
         </Menu.Item>
       </Menu>

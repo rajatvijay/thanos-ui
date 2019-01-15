@@ -5,6 +5,8 @@ export default {
       detailsViewToggle: "Details view",
       workflowViewToggle: "Workflow view",
       workflowsCount: "Workflows",
+      stepGroupName: "Step-group name",
+      statusText: "Status",
       comments: "Comments",
       viewDetails: "View details",
       exportWorkflowData: "Export workflow data",
@@ -60,10 +62,13 @@ export default {
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
       versionSubmittedOn: "Version submitted on",
-      printStep: "Print step",
+      printText: "Print",
       previousVersion: "Previous version",
       noOtherVersionAvailable: "No other version available",
       addComments: "Add comment/question",
+      commentsQuetions: "Comments/questions",
+      enterComment: "Enter comment or question",
+      postButtonText: "Post",
       commentsButtonText:
         "{count, plural, =0 {Add comment/question} one {{count} comment} other {{count} comments}}"
     },
@@ -99,6 +104,8 @@ export default {
       detailsViewToggle: "Vista de detalles",
       workflowViewToggle: "Vista de flujo de trabajo",
       workflowsCount: "Flujo de trabajo",
+      stepGroupName: "Grupo de pasos",
+      statusText: "Estado",
       comments: "Comentarios",
       viewDetails: "Ver detalles",
       exportWorkflowData: "Exportar datos de flujo de trabajo",
@@ -154,10 +161,13 @@ export default {
     stepBodyFormInstances: {
       submittedBy: "Sometido por",
       versionSubmittedOn: "Versión enviada el",
-      printStep: "Imprimir paso",
+      printText: "Imprimir",
       previousVersion: "Versión previa",
       noOtherVersionAvailable: "No hay otra versión disponible",
       addComments: "Añadir comentario/pregunta",
+      commentsQuetions: "Comentarios/preguntas",
+      enterComment: "Introduzca comentario o pregunta",
+      postButtonText: "Enviar",
       commentsButtonText:
         "{count, plural, =0 {Añadir comentario/pregunta} one {{count} comentario} other {{count} comentarios}}"
     },
