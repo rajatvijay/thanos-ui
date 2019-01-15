@@ -217,6 +217,7 @@ class WorkflowItem extends React.Component {
             transitionTime={200}
             onOpen={this.onOpen}
             onClose={this.onClose}
+            hasChildren={hasChildren}
           >
             <div className="lc-card">
               <WorkflowBody
@@ -244,6 +245,8 @@ class WorkflowItem extends React.Component {
             </span>
           ) : null}
         </div>
+
+        {this.state.opened ? " " : <div className="workflow-divider" />}
 
         {/*show children here */}
         {hasChildren && this.state.showRelatedWorkflow ? (

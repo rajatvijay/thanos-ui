@@ -26,7 +26,7 @@ export default {
       },
       inputValue: "Input value",
       selectOperator: "Select operator",
-      addFilterButtonText: "Add filter",
+      addFilterButtonText: "Add Filter",
       filterLabels: {
         status: "Status",
         Business: "Business Unit",

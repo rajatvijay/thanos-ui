@@ -11,7 +11,7 @@
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #f2f5fa;
+  background: #ecf1fb; //#f2f5fa;
   color: @color-text;
   &.text-green {
     //color: @color-green;
@@ -31,6 +31,23 @@
         color: @color-text
       }
     }
+  }
+  .ant-menu:not(.ant-menu-sub){
+    padding: 0 26px;
+  }
+  .ant-menu-submenu > .ant-menu{
+    background: transparent;
+  }
+  .ant-menu-item {
+    border-radius:3px;
+    margin-bottom: 10px;
+    &:after {
+      border: none;
+    }
+  }
+  .ant-menu-sub.ant-menu-inline > .ant-menu-item{
+    height: 30px;
+    line-height: 30px;
   }
 }
 
@@ -83,10 +100,10 @@
   }
 
   .step-form-paragraph {
-    margin-bottom: 24px;
-    font-size: 16px;
-    font-weight: bold;
-    .Avenir-heavy();
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    .Avenir-medium();
     color: @color-grey-dark;
     .material-icons {
       vertical-align: text-bottom;
@@ -168,8 +185,10 @@
   }
 
   .ant-input-disabled,
-  .ant-select-disabled{
+  .ant-select-disabled,
+  .ant-select-disabled .ant-select-selection{
     color: rgba(0, 0, 0, 0.55);
+    background-color:#f2f5fa; 
   }
 
   .file-upload-field {
@@ -210,6 +229,7 @@
 
   .ant-input-disabled {
     color: rgba(0,0,0,0.55);
+
   }
 
 }
@@ -236,7 +256,7 @@
     .ant-menu-submenu-title .material-icons ,
     .ant-menu-submenu .material-icons,
     .ant-menu-submenu > .ant-menu-item .material-icons{
-      font-size: 20px;
+      font-size: 14px;
       vertical-align: middle;
     }
   }

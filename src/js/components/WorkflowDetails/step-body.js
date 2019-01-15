@@ -88,36 +88,6 @@ class StepBody extends Component {
     );
   };
 
-  printDiv = () => {
-    var that = this;
-    this.setState({ printing: true });
-
-    setTimeout(function() {
-      var printContents = document.getElementById("StepBody").innerHTML;
-      var docHead = document.querySelector("head").innerHTML;
-
-      var body =
-        "<!DOCTYPE html><html><head>" +
-        "<title>" +
-        that.props.currentStepFields.currentStepFields.definition.name +
-        "</title>" +
-        docHead +
-        "</head><body>" +
-        printContents +
-        "</body></html>";
-      var myWindow = window.open();
-      myWindow.document.write(body);
-      myWindow.document.close();
-      myWindow.focus();
-
-      setTimeout(function() {
-        myWindow.print();
-        myWindow.close();
-      }, 1000);
-      that.setState({ printing: false });
-    }, 500);
-  };
-
   render = () => {
     const loading =
       this.props.currentStepFields.loading ||
@@ -158,20 +128,6 @@ class StepBody extends Component {
             "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
-          <Tooltip
-            title={this.props.intl.formatMessage({
-              id: "stepBodyFormInstances.printStep"
-            })}
-          >
-            <span
-              className="text-anchor pd-ard-sm"
-              onClick={this.printDiv}
-              style={{ position: "relative", top: "-62px", right: "-18px" }}
-            >
-              <i className="material-icons t-16 text-middle">print</i>
-            </span>
-          </Tooltip>
-
           {this.versionDropDown()}
           <span className="display-inline-block pd-right-sm"> </span>
           <span

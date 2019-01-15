@@ -8,9 +8,8 @@ import {
   Button,
   Dropdown,
   Menu,
-  Tooltip,
-  Drawer,
-  Switch
+  Switch,
+  Tooltip
 } from "antd";
 import WorkflowList from "./workflow-list";
 import {
@@ -23,9 +22,9 @@ import {
 import FilterSidebar from "./filter";
 import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
+import AlertFilter from "./AlertFilter";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
-import MetaGraph from "./MetaGraph";
 import { FormattedMessage, injectIntl } from "react-intl";
 
 class Workflow extends Component {
@@ -38,7 +37,7 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true,
       visible: false,
-      sortOrderAsc: false
+      sortOrderAsc: true
     };
 
     if (!this.props.users.me) {
@@ -183,18 +182,6 @@ class Workflow extends Component {
     this.props.dispatch(checkAuth());
   };
 
-  showDrawer = () => {
-    this.setState({
-      visible: true
-    });
-  };
-
-  onClose = () => {
-    this.setState({
-      visible: false
-    });
-  };
-
   changeScoreOrder = order => {
     let sort = this.state.sortOrderAsc
       ? "-sorting_primary_field"
@@ -205,14 +192,6 @@ class Workflow extends Component {
   };
 
   render = () => {
-    let showInsights = false;
-    if (
-      this.props.authentication.user &&
-      _.includes(this.props.authentication.user.features, "view_reports")
-    ) {
-      showInsights = true;
-    }
-
     let showRisk = false;
     if (
       _.size(this.props.workflow.workflow) &&
@@ -226,90 +205,57 @@ class Workflow extends Component {
         <FilterSidebar />
 
         <Layout
-          style={{ marginLeft: 250, minHeight: "100vh" }}
+          style={{ marginLeft: 320, minHeight: "100vh" }}
           hasSider={false}
         >
-          <div className="section-top ">
-            <div>
-              <Row>
-                <Col span="12" className="waiting-section">
-                  <span
-                    className="waiting-filter-trigger text-anchor"
-                    onClick={this.toggleWaitingFilter}
-                  >
-                    <FormattedMessage id="workflowsInstances.waitingDropdown" />
-                    <i className="material-icons">
-                      {this.state.showWaitingFitler
-                        ? "keyboard_arrow_down"
-                        : "keyboard_arrow_up"}
-                    </i>
-                  </span>
-                </Col>
-                <Col span="12" className="text-right export-section">
-                  {showInsights ? (
-                    <Tooltip title={"Insight"}>
-                      <span className="pd-ard-sm" onClick={this.showDrawer}>
-                        <i className="material-icons text-light text-anchor t-18 ">
-                          trending_up
-                        </i>
-                      </span>
-                    </Tooltip>
-                  ) : null}
-
-                  {_.includes(
-                    this.props.config.permissions,
-                    "Can export workflow data"
-                  ) ? (
-                    <Tooltip
-                      title={this.props.intl.formatMessage({
-                        id: "workflowsInstances.exportWorkflowData"
-                      })}
-                    >
-                      <Dropdown
-                        overlay={this.getExportList()}
-                        trigger="click"
-                        onClick={this.loadExportList}
-                      >
-                        <span className="pd-ard-sm text-light text-anchor">
-                          <i className="material-icons">save_alt</i>
-                        </span>
-                      </Dropdown>
-                    </Tooltip>
-                  ) : null}
-                </Col>
-              </Row>
-              <div
-                className={
-                  "waiting-filter-warpper animated " +
-                  (this.state.showWaitingFitler ? " grow " : " shrink")
-                }
-              >
-                {this.state.defKind ? (
-                  <WorkflowFilterTop {...this.props} />
-                ) : null}
-              </div>
+          <div className="section-top">
+            <div
+              className={
+                "waiting-filter-warpper animated " +
+                (this.state.showWaitingFitler ? " grow " : " shrink")
+              }
+            >
+              {this.state.defKind ? <AlertFilter {...this.props} /> : null}
             </div>
           </div>
 
           {this.props.workflow.loading ? null : this.props.workflow
             .loadingStatus === "failed" ? null : (
-            <Row className="list-view-header">
-              <Col span="12">
-                <div className="workflow-count">
+            <Row className="list-view-header t-14 ">
+              <Col span="7">
+                <div className="workflow-count text-metal">
                   {this.props.workflow.count}{" "}
                   <FormattedMessage id="workflowsInstances.workflowsCount" />
                 </div>
               </Col>
-              <Col span="12">
-                <div className="text-right list-toggle-btn">
-                  <span className="pd-right t-14">
-                    <FormattedMessage id="workflowsInstances.detailsViewToggle" />
-                  </span>
-                  <Switch defaultChecked onChange={this.toggleListView} />
-                  <span className="pd-left  t-14">
-                    <FormattedMessage id="workflowsInstances.workflowViewToggle" />
-                  </span>
-                </div>
+              <Col span="11" className="text-metal">
+                <span style={{ paddingLeft: "16px" }}>Step-group name</span>
+              </Col>
+              <Col span="2" className="text-secondary text-center">
+                {showRisk ? (
+                  <Tooltip
+                    title={
+                      this.state.sortOrderAsc
+                        ? "High to low risk score"
+                        : "Low to high risk score"
+                    }
+                  >
+                    <span
+                      className="text-secondary text-anchor"
+                      onClick={this.changeScoreOrder}
+                    >
+                      Risk
+                      <i className="material-icons t-14  text-middle">
+                        {this.state.sortOrderAsc
+                          ? "keyboard_arrow_up"
+                          : "keyboard_arrow_down"}
+                      </i>
+                    </span>
+                  </Tooltip>
+                ) : null}
+              </Col>
+              <Col span="4" className="text-secondary text-center">
+                Status
               </Col>
             </Row>
           )}
@@ -347,42 +293,6 @@ class Workflow extends Component {
             </div>
           ) : (
             <div className="clearfix">
-              <div
-                className="score-filter"
-                style={{
-                  padding: "10px 78px",
-                  position: "relative",
-                  bottom: "-47px",
-                  left: "-10px"
-                }}
-              >
-                <Row>
-                  <Col span={19} />
-                  <Col span={5}>
-                    {showRisk ? (
-                      <Tooltip
-                        title={
-                          this.state.sortOrderAsc
-                            ? "High to low risk score"
-                            : "Low to high risk score"
-                        }
-                      >
-                        <span
-                          className="text-secondary text-anchor"
-                          onClick={this.changeScoreOrder}
-                        >
-                          Risk
-                          <i className="material-icons t-14  text-middle">
-                            {this.state.sortOrderAsc
-                              ? "keyboard_arrow_up"
-                              : "keyboard_arrow_down"}
-                          </i>
-                        </span>
-                      </Tooltip>
-                    ) : null}
-                  </Col>
-                </Row>
-              </div>
               <WorkflowList
                 profile={this.props.match}
                 {...this.props}
@@ -390,16 +300,6 @@ class Workflow extends Component {
               />
             </div>
           )}
-          <Drawer
-            width={600}
-            title="Insight"
-            placement="right"
-            closable={false}
-            onClose={this.onClose}
-            visible={this.state.visible}
-          >
-            <MetaGraph />
-          </Drawer>
         </Layout>
       </Layout>
     );

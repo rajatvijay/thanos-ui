@@ -210,8 +210,7 @@ class WorkflowAdvFilter extends Component {
             style={{ width: "100%" }}
             onClick={this.onAddFilterItem}
           >
-            <FormattedMessage id="workflowFiltersTranslated.addFilterButtonText" />Add
-            Filter
+            <FormattedMessage id="workflowFiltersTranslated.addFilterButtonText" />
           </Button>
 
           <div className="adv-filter-list">

@@ -26,7 +26,7 @@ function getCount(tag) {
   };
 
   return fetch(
-    baseUrl + "workflow-kinds/" + tag + "/count/?type=stepgroup",
+    baseUrl + "workflow-kinds/" + tag + "/alert-count",
     requestOptions
   ).then(handleResponse);
 }

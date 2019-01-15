@@ -322,7 +322,7 @@ class WorkflowDetails extends Component {
 
           <Layout
             style={{
-              marginLeft: 250,
+              marginLeft: 320,
               background: "#FBFBFF",
               minHeight: "100vh",
               paddingTop: "30px"
@@ -387,11 +387,16 @@ class WorkflowDetails extends Component {
             defaultOpenKeys={this.state.selectedGroup}
             onStepSelected={this.onStepSelected.bind(this)}
             loading={stepLoading}
+            alerts={
+              this.props.workflowDetailsHeader.workflowDetailsHeader
+                ? this.props.workflowDetailsHeader.workflowDetailsHeader.alerts
+                : null
+            }
           />
 
           <Layout
             style={{
-              marginLeft: 250,
+              marginLeft: 320,
               background: "#FBFBFF",
               minHeight: "100vh",
               paddingTop: "30px"
