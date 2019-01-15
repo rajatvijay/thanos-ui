@@ -229,7 +229,9 @@ class Workflow extends Component {
                 </div>
               </Col>
               <Col span="11" className="text-metal">
-                <span style={{ paddingLeft: "16px" }}>Step-group name</span>
+                <span style={{ paddingLeft: "16px" }}>
+                  <FormattedMessage id="workflowsInstances.stepGroupName" />
+                </span>
               </Col>
               <Col span="2" className="text-secondary text-center">
                 {showRisk ? (
@@ -255,7 +257,7 @@ class Workflow extends Component {
                 ) : null}
               </Col>
               <Col span="4" className="text-secondary text-center">
-                Status
+                <FormattedMessage id="workflowsInstances.statusText" />
               </Col>
             </Row>
           )}
