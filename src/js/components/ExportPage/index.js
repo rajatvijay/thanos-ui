@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Card, Layout, List, Row, Col } from "antd";
 import { connect } from "react-redux";
+import { FormattedMessage } from "react-intl";
 
 const { Content } = Layout;
 
@@ -19,7 +20,9 @@ class ExportList extends Component {
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <Row type="flex" justify="center">
               <Col span={18}>
-                <h4 className="text-metal mr-bottom">Export workflow data</h4>
+                <h4 className="text-metal mr-bottom">
+                  <FormattedMessage id="workflowsInstances.exportWorkflowData" />
+                </h4>
 
                 <Card>
                   <List
@@ -41,7 +44,7 @@ class ExportList extends Component {
                               "/data-export/"
                             }
                           >
-                            Export
+                            <FormattedMessage id="commonTextInstances.exportText" />
                           </Button>
                         ]}
                       >

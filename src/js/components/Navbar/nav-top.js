@@ -22,8 +22,8 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
-import { FormattedMessage } from "react-intl";
 import MetaGraph from "../Workflow/MetaGraph";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -228,4 +228,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(NavTop);
+export default connect(mapStateToProps)(injectIntl(NavTop));

@@ -608,7 +608,7 @@ class StepBodyForm extends Component {
                 !_.includes(this.props.permission, "Can submit a step") ||
                 !editable ? (
                   <Button type="primary " className="no-print  disabled">
-                    Submit
+                    <FormattedMessage id="commonTextInstances.submitButtonText" />
                   </Button>
                 ) : (
                   <Button
@@ -620,7 +620,7 @@ class StepBodyForm extends Component {
                     {this.props.isSubmitting ? (
                       <FormattedMessage id="commonTextInstances.submittingButtonText" />
                     ) : (
-                      "Submit"
+                      <FormattedMessage id="commonTextInstances.submitButtonText" />
                     )}
                   </Button>
                 )}

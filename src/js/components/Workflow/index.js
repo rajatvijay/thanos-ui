@@ -325,4 +325,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Workflow);
+export default connect(mapStateToProps)(injectIntl(Workflow));

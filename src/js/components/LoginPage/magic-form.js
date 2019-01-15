@@ -6,7 +6,7 @@ import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
 import { connect } from "react-redux";
 import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -139,7 +139,7 @@ class MagicLoginLinkForm extends React.Component {
                   className="login-form-button"
                   onClick={this.onSubmit}
                 >
-                  <FormattedMessage id="loginPageInstances.submitText" />
+                  <FormattedMessage id="commonTextInstances.submitButtonText" />
                 </Button>
               </FormItem>
             </Form>
@@ -212,4 +212,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MagicLoginLinkForm);
+export default connect(mapStateToProps)(injectIntl(MagicLoginLinkForm));

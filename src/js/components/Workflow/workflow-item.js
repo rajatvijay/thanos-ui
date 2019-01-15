@@ -28,6 +28,7 @@ import { history } from "../../_helpers";
 import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
 import AuditList from "../Navbar/audit_log";
+import { FormattedMessage } from "react-intl";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
