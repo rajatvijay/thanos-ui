@@ -23,6 +23,7 @@ import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
 //import { regionData } from "./regionData";
+import { FormattedMessage } from "react-intl";
 
 //const filter = {};
 const { Sider } = Layout;
@@ -242,6 +243,12 @@ class WorkflowKindFilter extends Component {
     // }
   };
 
+  shouldComponentUpdate(nextProps) {
+    // if(!this.props.languageSelector.language){
+    //   return nextProps.languageSelector.language !== this.props.languageSelector.language;
+    // }
+  }
+
   workflowKindList = workflowKind => {
     let that = this;
 
@@ -455,7 +462,8 @@ class FilterSidebar extends Component {
                     loading={this.props.workflowKind.loading}
                     className="shadow-2 btn-block btn-create"
                   >
-                    Create new <Icon type="down" />
+                    <FormattedMessage id="workflowFiltersTranslated.createNewWorkflow" />
+                    <Icon type="down" />
                   </Button>
                 </Dropdown>
               </div>
@@ -464,7 +472,9 @@ class FilterSidebar extends Component {
           ) : null}
 
           <div className="filter-section section-kind">
-            <h5 className="aux-item aux-lead">Filter workflow type</h5>
+            <h5 className="aux-item aux-lead">
+              <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
+            </h5>
             <WorkflowKindFilter
               workflowKind={this.props.workflowKind}
               workflowFilters={this.props.workflowFilters}
@@ -497,7 +507,7 @@ class FilterSidebar extends Component {
               className="aux-item aux-lead  text-anchor"
               onClick={this.toggleAdvFilters}
             >
-              Advanced filter{" "}
+              <FormattedMessage id="workflowFiltersTranslated.advancedFilter" />{" "}
               <i className="material-icons t-16 text-middle">
                 {this.state.showAdvFilters
                   ? "keyboard_arrow_up "
@@ -512,7 +522,9 @@ class FilterSidebar extends Component {
             }
           >
             <div className="filter-section">
-              <h5 className="aux-item aux-lead filter-title">Select Field</h5>
+              <h5 className="aux-item aux-lead filter-title">
+                <FormattedMessage id="workflowFiltersTranslated.selectField" />
+              </h5>
               <div className="aux-item aux-lead">
                 <WrappedAdvancedFilterForm
                   {...this.props}
@@ -541,11 +553,17 @@ class FilterSidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowFilterType, workflowFilters } = state;
+  const {
+    workflowKind,
+    workflowFilterType,
+    workflowFilters,
+    languageSelector
+  } = state;
   return {
     workflowKind,
     workflowFilterType,
-    workflowFilters
+    workflowFilters,
+    languageSelector
   };
 }
 

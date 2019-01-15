@@ -5,6 +5,7 @@ import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
 import { getFieldType } from "./field-types";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -331,6 +332,7 @@ class StepBodyForm extends Component {
       changeFlag: that.props.changeFlag,
       getIntegrationComments: that.props.getIntegrationComments,
       dispatch: that.props.dispatch,
+      intl: that.props.intl,
       permission: that.props.permission
     };
 
@@ -419,6 +421,7 @@ class StepBodyForm extends Component {
                       changeFlag: that.props.changeFlag,
                       getIntegrationComments: that.props.getIntegrationComments,
                       dispatch: that.props.dispatch,
+                      intl: that.props.intl,
                       permission: that.props.permission
                     };
 
@@ -518,9 +521,9 @@ class StepBodyForm extends Component {
               changeFlag: that.props.changeFlag,
               getIntegrationComments: that.props.getIntegrationComments,
               dispatch: that.props.dispatch,
+              intl: that.props.intl,
               permission: that.props.permission
             };
-
             let field = getFieldType(param);
 
             ///row size method
@@ -614,7 +617,11 @@ class StepBodyForm extends Component {
                     htmlType="submit"
                     disabled={this.props.isSubmitting}
                   >
-                    {this.props.isSubmitting ? "Submitting" : "Submit"}
+                    {this.props.isSubmitting ? (
+                      <FormattedMessage id="commonTextInstances.submittingButtonText" />
+                    ) : (
+                      "Submit"
+                    )}
                   </Button>
                 )}
               </FormItem>
@@ -629,6 +636,6 @@ class StepBodyForm extends Component {
   };
 }
 
-const WrappedStepBodyForm = Form.create()(StepBodyForm);
+const WrappedStepBodyForm = Form.create()(injectIntl(StepBodyForm));
 
 export default WrappedStepBodyForm;

@@ -18,6 +18,7 @@ import { currentStepFields } from "./workflow_step";
 import { changeStatus } from "./change_status";
 import { workflowComments } from "./workflow_comments";
 import { stepVersionFields } from "./step_version";
+import { languageSelector } from "./internationalize";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -39,7 +40,8 @@ const rootReducer = combineReducers({
   workflowFilterType,
   workflowGroupCount,
   workflowKind,
-  workflowKindStatus
+  workflowKindStatus,
+  languageSelector
 });
 
 export default rootReducer;

@@ -18,6 +18,8 @@ import { workflowDetailsActions } from "../../actions";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import _ from "lodash";
 import Moment from "react-moment";
+import { FormattedMessage } from "react-intl";
+
 const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
@@ -152,7 +154,9 @@ class Comments extends Component {
             className="sidebar-head"
             //style={{ background: "#18eada", color: "#000" }}
           >
-            <span className="sidebar-title">Add comment/question</span>
+            <span className="sidebar-title">
+              <FormattedMessage id="stepBodyFormInstances.addComments" />
+            </span>
             <Icon
               type="close"
               onClick={this.toggle}
@@ -212,7 +216,7 @@ class Comments extends Component {
                           color: "#575757"
                         }}
                       >
-                        Add comment/question
+                        <FormattedMessage id="stepBodyFormInstances.addComments" />
                       </span>
                     </div>
                   ) : null}
