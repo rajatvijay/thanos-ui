@@ -28,6 +28,7 @@ import { history } from "../../_helpers";
 import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
 import AuditList from "../Navbar/audit_log";
+import { FormattedMessage } from "react-intl";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -552,12 +553,13 @@ class MetaRow extends React.Component {
               </span>
             ) : null}
             <span className="pd-left">
-              Created <Moment fromNow>{props.workflow.created_at}</Moment>
+              <FormattedMessage id="commonTextInstances.createdText" />{" "}
+              <Moment fromNow>{props.workflow.created_at}</Moment>
             </span>
             <span className="pd-left pd-right">|</span>
             <Link to={"/workflows/instances/" + props.workflow.id}>
               <span className="pd-ard-sm text-medium text-base text-underline">
-                View details
+                <FormattedMessage id="workflowsInstances.viewDetails" />
               </span>
             </Link>
           </Col>
@@ -569,7 +571,8 @@ class MetaRow extends React.Component {
                 placement="bottomRight"
               >
                 <a className="ant-dropdown-link ant-btn secondary-btn" href="#">
-                  Add <i className="material-icons t-14">keyboard_arrow_down</i>
+                  <FormattedMessage id="commonTextInstances.addButton" />{" "}
+                  <i className="material-icons t-14">keyboard_arrow_down</i>
                 </a>
               </Dropdown>
             ) : null}

@@ -122,7 +122,7 @@ class DynamicFieldSet extends React.Component {
         </FormItem>
         <FormItem {...formItemLayoutWithOutLabel}>
           <Button type="primary" htmlType="submit">
-            Submit
+            <FormattedMessage id="commonTextInstances.submitButtonText" />
           </Button>
         </FormItem>
       </Form>

@@ -26,7 +26,7 @@ import WorkflowFilterTop from "./filter-top";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import MetaGraph from "./MetaGraph";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 class Workflow extends Component {
   constructor(props) {
@@ -260,7 +260,11 @@ class Workflow extends Component {
                     this.props.config.permissions,
                     "Can export workflow data"
                   ) ? (
-                    <Tooltip title={"Export workflow data"}>
+                    <Tooltip
+                      title={this.props.intl.formatMessage({
+                        id: "workflowsInstances.exportWorkflowData"
+                      })}
+                    >
                       <Dropdown
                         overlay={this.getExportList()}
                         trigger="click"
@@ -421,4 +425,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Workflow);
+export default connect(mapStateToProps)(injectIntl(Workflow));

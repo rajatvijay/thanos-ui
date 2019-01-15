@@ -6,13 +6,37 @@ export default {
       workflowViewToggle: "Workflow view",
       workflowsCount: "Workflows",
       comments: "Comments",
+      viewDetails: "View details",
+      exportWorkflowData: "Export workflow data",
       viewActivityLog: "View Activity Log"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
       createNewWorkflow: "Create new",
       advancedFilter: "Advanced filter",
-      selectField: "Select Field"
+      selectField: "Select Field",
+      pleaseSelectField: "Please select field",
+      fetchingFieldsData: "Fetching fields data...",
+      advancedFilterOperators: {
+        eq: "Equal",
+        not_eq: "Not equal",
+        is_set: "Has value",
+        contains: "Contains",
+        not_contains: "Does not contain"
+      },
+      inputValue: "Input value",
+      selectOperator: "Select operator",
+      addFilterButtonText: "Add filter",
+      filterLabels: {
+        status: "Status",
+        Business: "Business Unit",
+        region: "Region"
+      },
+      filterPlaceholders: {
+        status: "Status",
+        Business: "Business",
+        region: "Region"
+      }
     },
     commonTextInstances: {
       submitButtonText: "Submit",
@@ -21,6 +45,15 @@ export default {
       emailSent: "Email sent.",
       clickHere: "Click here",
       clickToLogin: "Click here to Login",
+      addButton: "Add",
+      removeButton: "Remove",
+      search: "Search",
+      createdText: "Created",
+      submittedText: "Submitted",
+      createdByText: "Created by",
+      submittedByText: "Submitted by",
+      exportText: "Export",
+      scrollToTop: "Scroll to top",
       reloadText: "reload",
       loadingText: "loading"
     },
@@ -49,7 +82,8 @@ export default {
       loginUsingEmailOnly: "Login using email only",
       loginText: "Login",
       logoutText: "Logout",
-      submitText: "Submit",
+      emailText: "email",
+      passwordText: "password",
       orText: "or",
       customSAMLloginText1: "Login via your ",
       customSAMLloginText2: "username and password",
@@ -66,13 +100,37 @@ export default {
       workflowViewToggle: "Vista de flujo de trabajo",
       workflowsCount: "Flujo de trabajo",
       comments: "Comentarios",
+      viewDetails: "Ver detalles",
+      exportWorkflowData: "Exportar datos de flujo de trabajo",
       viewActivityLog: "Ver registro de actividad"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
       createNewWorkflow: "Crear nuevo",
       advancedFilter: "Filtro avanzado",
-      selectField: "Seleccionar campo"
+      selectField: "Seleccionar campo",
+      pleaseSelectField: "Seleccionar el campo",
+      fetchingFieldsData: "Obteniendo datos de campos ...",
+      advancedFilterOperators: {
+        eq: "Igual",
+        not_eq: "No es igual",
+        is_set: "Tiene valor",
+        contains: "Contiene",
+        not_contains: "No contiene"
+      },
+      inputValue: "Valor de entrada",
+      selectOperator: "Seleccionar operador",
+      addFilterButtonText: "Añadir filtro",
+      filterLabels: {
+        status: "Estado",
+        Business: "Unidad de negocio",
+        region: "Región"
+      },
+      filterPlaceholders: {
+        status: "Estado",
+        Business: "Negocio",
+        region: "Región"
+      }
     },
     commonTextInstances: {
       submitButtonText: "Enviar",
@@ -81,6 +139,15 @@ export default {
       emailSent: "Email enviado.",
       clickHere: "Haga clic aquí",
       clickToLogin: "Haga clic aquí para iniciar sesión",
+      addButton: "Añadir",
+      removeButton: "Eliminar",
+      search: "Buscar",
+      createdText: "Creado",
+      submittedText: "Enviado",
+      createdByText: "Creado por",
+      submittedByText: "Enviado por",
+      exportText: "Exportar",
+      scrollToTop: "Hasta arriba",
       reloadText: "recargar",
       loadingText: "cargando"
     },
@@ -100,7 +167,7 @@ export default {
         "para ir a la página de inicio de sesión y generar un nuevo enlace",
       magicLinkExpirationWindow: "Nota: el enlace caduca en 24 horas",
       noWorkflowsError: "No se puede cargar la lista de flujo de trabajo",
-      logOutError:
+      loggedOutError:
         "Se ha desconectado. Por favor, vuelva a iniciar sesión para continuar",
       noWorkflowsToShow:
         "No hay flujos de trabajo que mostrar. Intente borrar los filtros o"
@@ -113,7 +180,8 @@ export default {
       loginUsingEmailOnly: "Iniciar sesión usando solo el correo electrónico",
       loginText: "Iniciar sesión",
       logoutText: "Cerrar sesión",
-      submitText: "Enviar",
+      emailText: "email",
+      passwordText: "contraseña",
       orText: "o",
       customSAMLloginText1: "Iniciar sesión a través de su",
       customSAMLloginText2: "nombre de usuario y contraseña",

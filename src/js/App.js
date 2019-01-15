@@ -39,11 +39,7 @@ class App extends React.Component {
       locale = locale.split("-")[0];
     }
     if (messages[locale]) {
-      messageTranslate = Object.assign(
-        {},
-        messagesDefaultLocale,
-        flattenMessages(messages[locale])
-      );
+      messageTranslate = flattenMessages(messages[locale]);
       let missing = Object.keys(messagesDefaultLocale).reduce(
         (missing, key) => {
           messageTranslate[key] || missing.push(key);
@@ -52,6 +48,11 @@ class App extends React.Component {
         []
       );
       missing.length && console.log("Missing translations for:", missing);
+      messageTranslate = Object.assign(
+        {},
+        messagesDefaultLocale,
+        messageTranslate
+      );
     } else {
       console.log("Missing support for:", locale);
     }

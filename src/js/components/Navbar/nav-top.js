@@ -21,7 +21,7 @@ import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
 
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -78,7 +78,9 @@ class NavTop extends Component {
                 {document.location.pathname.match("/workflows/instances/") ? (
                   <div className={"search-box "}>
                     <Search
-                      placeholder="Search"
+                      placeholder={this.props.intl.formatMessage({
+                        id: "commonTextInstances.search"
+                      })}
                       onSearch={value => this.onSearch(value)}
                       // prefix={
                       //   <Icon
@@ -155,4 +157,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(NavTop);
+export default connect(mapStateToProps)(injectIntl(NavTop));
