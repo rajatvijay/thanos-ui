@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Tag } from "antd";
+import { Icon, Tag, Divider } from "antd";
 import { connect } from "react-redux";
 import { workflowFiltersActions, workflowKindActions } from "../../actions";
 import _ from "lodash";
@@ -7,15 +7,16 @@ import { Scrollbars } from "react-custom-scrollbars";
 
 class AlertFilter extends Component {
   state = {
-    activeFilter: []
+    activeFilter: [],
+    parent: null
   };
 
   handleClick = (value, e) => {
-    console.log(value, e);
-
     e.preventDefault();
 
-    if (this.state.activeFilter[0] === value.tag) {
+    if (value.sub_categories) {
+      this.setState({ parent: value });
+    } else if (this.state.activeFilter[0] === value.tag) {
       this.setState({ activeFilter: [] }, function() {
         this.setFilter();
       });
@@ -24,6 +25,16 @@ class AlertFilter extends Component {
         this.setFilter();
       });
     }
+  };
+
+  onClose = value => {
+    if (this.state.activeFilter[0] === value.tag) {
+      this.setState({ activeFilter: [] }, function() {
+        this.setFilter();
+      });
+    }
+
+    //this.setState({parent:null});
   };
 
   setFilter = () => {
@@ -52,52 +63,56 @@ class AlertFilter extends Component {
     }
   };
 
+  clearFilter = () => {
+    this.setState({ parent: null });
+  };
+
+  getTags = list => {
+    let that = this;
+    const { parent, activeFilter } = this.state;
+
+    //const collapseButton = <i className="material-icons text-dark t-14 pd-left-sm" style={{position:"relative",top:"3px", right:"-5px",zIndex:1}} onClick={this.clearFilter}>cancel</i>
+
+    let tagsList = _.map(list, function(item, index) {
+      const closableButton = (
+        <i
+          className="material-icons text-dark t-14 pd-left-sm"
+          style={{ position: "relative", top: "3px", right: "-5px", zIndex: 1 }}
+          onClick={that.onClose.bind(that, item)}
+        >
+          cancel
+        </i>
+      );
+
+      let closable = false;
+      if (activeFilter[0] === item.tag) {
+        closable = true;
+      }
+
+      return (
+        <Tag
+          key={item.id}
+          className={
+            "alert-tag-item  " +
+            (activeFilter[0] === item.tag ? "alert-tag-item-active " : " ") +
+            (item.color_label ? " " : "alert-primary ")
+          }
+          color={item.color_label || null}
+          onClick={that.handleClick.bind(that, item)}
+        >
+          {item.name} ({item.count})
+          {closable ? closableButton : null}
+        </Tag>
+      );
+    });
+
+    return tagsList;
+  };
+
   render() {
     let that = this;
     const { alert_details, loading } = this.props.workflowGroupCount;
-    //const { loading } = this.props.workflowGroupCount;
-
-    // let alert_details = [
-    //     {
-    //       "sub_categories": [
-    //         {
-    //           "id": 5,
-    //           "name": "20 days reminder",
-    //           "help_text": "asdsdaadsdsaads",
-    //           "tag": "20-days-reminder",
-    //           "count": 0
-    //         }
-    //       ],
-    //       "id": 4,
-    //       "name": "intimation before date",
-    //       "help_text": "asfdssfdsfsfddf",
-    //       "tag": "intimation",
-    //       "count": 0
-    //     },
-    //     {
-    //       "sub_categories": [
-    //         {
-    //           "id": 1,
-    //           "name": "90 days expiry",
-    //           "help_text": "some help text",
-    //           "tag": "90-days-expiry",
-    //           "count": 0
-    //         },
-    //         {
-    //           "id": 2,
-    //           "name": "60 days expiry",
-    //           "help_text": "sdahsdgdshbk",
-    //           "tag": "60-days-expiry",
-    //           "count": 0
-    //         }
-    //       ],
-    //       "id": 3,
-    //       "name": "expiration",
-    //       "help_text": "fafdsfdfsdfdffdsfsdfdsfd",
-    //       "tag": "expiration-01",
-    //       "count": 0
-    //     }
-    //   ];
+    const { parent } = this.state;
 
     return (
       <div>
@@ -118,39 +133,28 @@ class AlertFilter extends Component {
                       right: "2px",
                       bottom: "2px",
                       left: "2px"
-                      //opacity:0,
-                      //visibility:'hidden',
-                      //borderRadius: "3px"
                     }}
                   />
                 )}
               >
                 <div>
                   <div className="filter-top-list alert-tag-list">
-                    {_.map(alert_details, function(item, index) {
-                      return (
-                        <Tag
-                          key={item.id}
-                          className={
-                            "alert-tag-item  " +
-                            (that.state.activeFilter[0] === item.tag
-                              ? "alert-tag-item-active "
-                              : " ") +
-                            (item.color_label ? " " : "alert-primary ")
-                          }
-                          closable={
-                            that.state.activeFilter[0] === item.tag
-                              ? true
-                              : false
-                          }
-                          onClose={that.handleClick.bind(that, item)}
-                          color={item.color_label ? item.color_label : null}
-                          onClick={that.handleClick.bind(that, item)}
+                    {_.size(parent) ? (
+                      <span>
+                        <i
+                          onClick={this.clearFilter}
+                          className="material-icons t-16 text-anchor text-middle pd-right-sm"
                         >
-                          {item.name} ({item.count})
-                        </Tag>
-                      );
-                    })}
+                          arrow_back
+                        </i>
+                        {this.getTags([parent])}
+                        <Divider type="vertical" />
+                      </span>
+                    ) : null}
+
+                    {_.size(parent)
+                      ? this.getTags(parent.sub_categories)
+                      : this.getTags(alert_details)}
                   </div>
                 </div>
               </Scrollbars>
