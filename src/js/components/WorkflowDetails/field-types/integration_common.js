@@ -174,27 +174,57 @@ function google_search_html(record, search) {
   const entity_data_block =
     record.entity_data &&
     salienceSortedValues.map(entity => {
-      return (
-        <div style={{ width: "250px", float: "left", paddingBottom: "10px" }}>
-          {entity.entity_type}:
-          <br />
-          <b>
-            {entity.entity_metadata.wikipedia_url &&
-            entity.entity_metadata.wikipedia_url ? (
-              <a href={entity.entity_metadata.wikipedia_url}>
-                {entity.entity_name}
-              </a>
-            ) : (
-              <span>{entity.entity_name}</span>
-            )}
-          </b>
-        </div>
-      );
+      if (entity.entity_metadata && entity.entity_metadata.wikipedia_url) {
+        return (
+          <div style={{ width: "250px", float: "left", paddingBottom: "10px" }}>
+            {entity.entity_type}:
+            <br />
+            <b>
+              {entity.entity_metadata.wikipedia_url &&
+              entity.entity_metadata.wikipedia_url ? (
+                <a href={entity.entity_metadata.wikipedia_url}>
+                  {entity.entity_name}
+                </a>
+              ) : (
+                <span>{entity.entity_name}</span>
+              )}
+            </b>
+          </div>
+        );
+      } else {
+        return null;
+      }
     });
+  const getProgressPercent = ({ score }) => {
+    /**
+     * Scores range from -1 to 1, we normalize that to 0 to 2
+     * Finally dividing this by 2 will give us the actual percentage
+     */
+    const normalized_score = score + 1;
+    return normalized_score * 100 / 2;
+  };
+  const getProgressColor = ({ percent }) => {
+    /**
+     * Creates a very simple color gradient range from red to green
+     */
+    let r,
+      g,
+      b = 0;
+    if (percent < 50) {
+      r = 255;
+      g = Math.round(5.1 * percent);
+    } else {
+      g = 255;
+      r = Math.round(510 - 5.1 * percent);
+    }
+    const h = r * 0x10000 + g * 0x100 + b * 0x1;
+    return "#" + ("000000" + h.toString(16)).slice(-6);
+  };
+  const progressPercent = getProgressPercent({ score: record.sentiment_score });
   return (
     <div>
       <strong
-        style={{ "font-size": "x-large" }}
+        style={{ "font-size": "large" }}
         dangerouslySetInnerHTML={{ __html: record.htmlTitle }}
       />
       <br />
@@ -212,13 +242,16 @@ function google_search_html(record, search) {
       <div style={{ width: "250px", float: "left" }}>
         Sentiment score:
         <br />
-        <Progress
-          showInfo={false}
-          size="small"
-          percent={record.sentiment_score}
-          min={-1}
-          max={1}
-        />
+        <small style={{ float: "left", padding: "5px" }}>-1</small>
+        <div style={{ width: "200px", float: "left" }}>
+          <Progress
+            showInfo={false}
+            size="small"
+            percent={progressPercent}
+            strokeColor={getProgressColor({ percent: progressPercent })}
+          />
+        </div>
+        <small style={{ float: "left", padding: "5px" }}>1</small>
       </div>
       <div
         style={{
@@ -228,15 +261,6 @@ function google_search_html(record, search) {
         }}
       >
         {entity_data_block}
-        {!record.entity_data && (
-          <div
-            style={{ width: "250px", float: "left", "padding-left": "100px" }}
-          >
-            <Button disabled={false} onClick={() => search()}>
-              Refresh
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
