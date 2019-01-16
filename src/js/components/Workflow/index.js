@@ -25,7 +25,7 @@ import WorkflowFilterTop from "./filter-top";
 import AlertFilter from "./AlertFilter";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 class Workflow extends Component {
   constructor(props) {
@@ -221,15 +221,17 @@ class Workflow extends Component {
 
           {this.props.workflow.loading ? null : this.props.workflow
             .loadingStatus === "failed" ? null : (
-
             <Row className="list-view-header t-14 ">
               <Col span="7">
                 <div className="workflow-count text-metal">
-                  {this.props.workflow.count} <FormattedMessage id="workflowsInstances.workflowsCount" />
+                  {this.props.workflow.count}{" "}
+                  <FormattedMessage id="workflowsInstances.workflowsCount" />
                 </div>
               </Col>
               <Col span="11" className="text-metal">
-                <span style={{ paddingLeft: "16px" }}>Step-group name</span>
+                <span style={{ paddingLeft: "16px" }}>
+                  <FormattedMessage id="workflowsInstances.stepGroupName" />
+                </span>
               </Col>
               <Col span="2" className="text-secondary text-center">
                 {showRisk ? (
@@ -255,7 +257,7 @@ class Workflow extends Component {
                 ) : null}
               </Col>
               <Col span="4" className="text-secondary text-center">
-                Status
+                <FormattedMessage id="workflowsInstances.statusText" />
               </Col>
             </Row>
           )}
@@ -325,4 +327,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Workflow);
+export default connect(mapStateToProps)(injectIntl(Workflow));

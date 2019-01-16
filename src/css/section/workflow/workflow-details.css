@@ -321,7 +321,7 @@ h5 {
   .ant-menu-submenu
   > .ant-menu:not(.ant-menu-horizontal)
   .ant-menu-item-selected {
-  background: #f2f5fa;
+  background: #ecf1fb;
   color: #343b4c;
 }
 .aux-step-sidebar .ant-menu .ant-menu-item:-active {
@@ -332,6 +332,23 @@ h5 {
 }
 .aux-step-sidebar .ant-menu .ant-menu-item:hover {
   color: #343b4c;
+}
+.aux-step-sidebar .ant-menu:not(.ant-menu-sub) {
+  padding: 0 26px;
+}
+.aux-step-sidebar .ant-menu-submenu > .ant-menu {
+  background: transparent;
+}
+.aux-step-sidebar .ant-menu-item {
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.aux-step-sidebar .ant-menu-item:after {
+  border: none;
+}
+.aux-step-sidebar .ant-menu-sub.ant-menu-inline > .ant-menu-item {
+  height: 30px;
+  line-height: 30px;
 }
 .aux-nav-menu {
   overflow-x: visible !important;
@@ -364,10 +381,10 @@ h5 {
   color: #3c763d;
 }
 .ant-form.step-form .step-form-paragraph {
-  margin-bottom: 24px;
-  font-size: 16px;
-  font-weight: bold;
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #505050;
 }
@@ -446,7 +463,8 @@ h5 {
   width: 100%;
 }
 .ant-form.step-form .ant-input-disabled,
-.ant-form.step-form .ant-select-disabled {
+.ant-form.step-form .ant-select-disabled,
+.ant-form.step-form .ant-select-disabled .ant-select-selection {
   color: rgba(0, 0, 0, 0.55);
   background-color: #f2f5fa;
 }
@@ -497,7 +515,7 @@ h5 {
 .aux-nav .ant-menu .ant-menu-submenu-title .material-icons,
 .aux-nav .ant-menu .ant-menu-submenu .material-icons,
 .aux-nav .ant-menu .ant-menu-submenu > .ant-menu-item .material-icons {
-  font-size: 20px;
+  font-size: 14px;
   vertical-align: middle;
 }
 .version-item {

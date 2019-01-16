@@ -5,7 +5,7 @@ import { Form, Button, Input, Icon, Divider, Alert } from "antd";
 import { login } from "../../actions";
 import SelectLanguage from "../SelectLanguage/";
 import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -109,7 +109,9 @@ class LoginForm extends React.Component {
               name="username"
               type="text"
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="email"
+              placeholder={this.props.intl.formatMessage({
+                id: "loginPageInstances.emailText"
+              })}
               value={data.username}
               onChange={this.onInputChange}
             />
@@ -123,7 +125,9 @@ class LoginForm extends React.Component {
               name="password"
               type="password"
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="password"
+              placeholder={this.props.intl.formatMessage({
+                id: "loginPageInstances.passwordText"
+              })}
               value={data.password}
               onChange={this.onInputChange}
             />
@@ -162,4 +166,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm;
+export default injectIntl(LoginForm);

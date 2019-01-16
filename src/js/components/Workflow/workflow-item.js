@@ -28,6 +28,7 @@ import { history } from "../../_helpers";
 import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
 import AuditList from "../Navbar/audit_log";
+import { FormattedMessage } from "react-intl";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -280,7 +281,7 @@ class HeaderOptions2 extends React.Component {
             <i className="material-icons t-18 text-middle pd-right-sm">
               restore
             </i>{" "}
-            View activity log
+            <FormattedMessage id="workflowsInstances.viewActivityLog" />
           </span>
         </Menu.Item>
 
@@ -289,14 +290,14 @@ class HeaderOptions2 extends React.Component {
             <i className="material-icons t-18 text-middle pd-right-sm">
               message
             </i>{" "}
-            message
+            <FormattedMessage id="stepBodyFormInstances.addComments" />
           </span>
         </Menu.Item>
 
         <Menu.Item key={"pint"} onClick={this.printDiv}>
           <span>
             <i className="material-icons t-18 text-middle pd-right-sm">print</i>{" "}
-            print
+            <FormattedMessage id="stepBodyFormInstances.printText" />
           </span>
         </Menu.Item>
       </Menu>
@@ -674,14 +675,15 @@ class MetaRow extends React.Component {
               ) : null}
 
               <span className="text-light">
-                Created <Moment fromNow>{props.workflow.created_at}</Moment>
+                <FormattedMessage id="commonTextInstances.createdText" />
+                <Moment fromNow>{props.workflow.created_at}</Moment>
               </span>
             </Col>
 
             <Col span="6" className="text-right text-light small">
               <Link to={"/workflows/instances/" + props.workflow.id}>
                 <span className="pd-ard-sm text-nounderline">
-                  View details ⟶
+                  <FormattedMessage id="workflowsInstances.viewDetails" /> ⟶
                 </span>
               </Link>
             </Col>

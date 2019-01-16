@@ -22,7 +22,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import MetaGraph from "../Workflow/MetaGraph";
 
 const { Header } = Layout;
@@ -129,11 +129,12 @@ class NavTop extends Component {
                 {document.location.pathname.match("/workflows/instances/") ? (
                   <div className={"search-box "}>
                     <Input
-                      placeholder="Enter your username"
                       prefix={prefix}
                       suffix={suffix}
                       value={searchInput}
-                      placeholder="Search..."
+                      placeholder={this.props.intl.formatMessage({
+                        id: "commonTextInstances.search"
+                      })}
                       onChange={this.onSearchChange}
                       ref={node => (this.searchInput = node)}
                       onKeyPress={this.handleKeyPress}
@@ -227,4 +228,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(NavTop);
+export default connect(mapStateToProps)(injectIntl(NavTop));

@@ -23,7 +23,7 @@ import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
 //import { regionData } from "./regionData";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 //const filter = {};
 const { Sider } = Layout;
@@ -83,7 +83,7 @@ class WorkflowFilter extends Component {
   }
 
   componentDidMount = () => {
-    switch (this.props.placeholder) {
+    switch (this.props.filterType) {
       case "Business":
         this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
         break;
@@ -99,7 +99,7 @@ class WorkflowFilter extends Component {
   //SELECT TYPE FILTER DISPATCHED HERE
   handleChange = value => {
     this.setState({ value });
-    let fType = this.props.placeholder.toLowerCase();
+    let fType = this.props.filterType.toLowerCase();
     let payload = { filterType: fType, filterValue: [] };
 
     if (value !== undefined && value.length !== 0) {
@@ -150,11 +150,17 @@ class WorkflowFilter extends Component {
             {this.props.label ? this.props.label : this.props.placeholder}
           </label>
         </div>
-        {this.props.placeholder === "Business" ? (
+        {this.props.filterType === "Business" ? (
           <FormItem
             hasFeedback={businessData.loading ? true : false}
             validateStatus={this.state.fetching ? "validating" : null}
-            help={businessData.loading ? "Fetching fields data..." : ""}
+            help={
+              businessData.loading
+                ? this.props.intl.formatMessage({
+                    id: "workflowFiltersTranslated.fetchingFieldsData"
+                  })
+                : ""
+            }
           >
             <Cascader
               options={businessData.results}
@@ -194,7 +200,7 @@ class WorkflowFilter extends Component {
               // }
             >
               {_.map(
-                this.props.placeholder === "region"
+                this.props.filterType === "region"
                   ? regionData.results
                   : statusData,
 
@@ -467,14 +473,25 @@ class FilterSidebar extends Component {
 
           <div className="filter-section">
             {_.map(filterTypeSelect, function(f, index) {
+              let label =
+                that.props.intl.formatMessage({
+                  id: `workflowFiltersTranslated.filterLabels.${f.filterType}`
+                }) || f.filterName;
+              let placeholder =
+                that.props.intl.formatMessage({
+                  id: `workflowFiltersTranslated.filterPlaceholders.${
+                    f.filterType
+                  }`
+                }) || f.filterType;
               return (
                 <div
                   className="aux-item aux-lead filter-title"
                   key={"filter-2-" + index}
                 >
                   <WorkflowFilter
-                    label={f.filterName}
-                    placeholder={f.filterType}
+                    label={label}
+                    placeholder={placeholder}
+                    filterType={f.filterType}
                     childeren={f.results}
                     {...that.props}
                   />
@@ -547,4 +564,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(FilterSidebar);
+export default connect(mapStateToProps)(injectIntl(FilterSidebar));
