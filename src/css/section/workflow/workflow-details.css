@@ -1,28 +1,23 @@
 .Avenir-light {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-normal {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .Avenir-medium {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-heavy {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 h1,
 h2,
 h3,
 h4,
 h5 {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 /*text colors*/
 .text-primary {
@@ -79,22 +74,18 @@ h5 {
 }
 /*Text weight*/
 .text-bold {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .text-medium {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .text-normal {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .text-thin {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 /*Text size*/
 .t-12 {
@@ -316,12 +307,8 @@ h5 {
 .disabled {
   cursor: not-allowed;
 }
-.workflow-details-container
-  .ant-layout-sider
-  .ant-menu-submenu
-  > .ant-menu:not(.ant-menu-horizontal)
-  .ant-menu-item-selected {
-  background: #f2f5fa;
+.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: #ecf1fb;
   color: #343b4c;
 }
 .aux-step-sidebar .ant-menu .ant-menu-item:-active {
@@ -332,6 +319,23 @@ h5 {
 }
 .aux-step-sidebar .ant-menu .ant-menu-item:hover {
   color: #343b4c;
+}
+.aux-step-sidebar .ant-menu:not(.ant-menu-sub) {
+  padding: 0 26px;
+}
+.aux-step-sidebar .ant-menu-submenu > .ant-menu {
+  background: transparent;
+}
+.aux-step-sidebar .ant-menu-item {
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.aux-step-sidebar .ant-menu-item:after {
+  border: none;
+}
+.aux-step-sidebar .ant-menu-sub.ant-menu-inline > .ant-menu-item {
+  height: 30px;
+  line-height: 30px;
 }
 .aux-nav-menu {
   overflow-x: visible !important;
@@ -364,11 +368,10 @@ h5 {
   color: #3c763d;
 }
 .ant-form.step-form .step-form-paragraph {
-  margin-bottom: 24px;
-  font-size: 16px;
-  font-weight: bold;
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #505050;
 }
 .ant-form.step-form .step-form-paragraph .material-icons {
@@ -427,9 +430,7 @@ h5 {
   background-color: #305ebe;
 }
 .ant-form.step-form .ant-input:not(.ant-input-disabled):hover,
-.ant-form.step-form
-  .ant-input-affix-wrapper:hover
-  .ant-input:not(.ant-input-disabled),
+.ant-form.step-form .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
 .ant-form.step-form .ant-radio-wrapper:hover .ant-radio .ant-radio-inner,
 .ant-form.step-form .ant-radio:hover .ant-radio-inner,
 .ant-form.step-form .ant-radio-focused .ant-radio-inner,
@@ -446,9 +447,9 @@ h5 {
   width: 100%;
 }
 .ant-form.step-form .ant-input-disabled,
-.ant-form.step-form .ant-select-disabled {
+.ant-form.step-form .ant-select-disabled,
+.ant-form.step-form .ant-select-disabled .ant-select-selection {
   color: rgba(0, 0, 0, 0.55);
-  background-color: #f2f5fa;
 }
 .ant-form.step-form .file-upload-field {
   width: 100%;
@@ -474,7 +475,7 @@ h5 {
 }
 .ant-form.step-form .dropped-files ul {
   list-style: none;
-  padding: 20px 0;
+  padding: 20px 0 ;
 }
 .ant-form.step-form .dropped-files li a {
   color: #305ebe;
@@ -497,7 +498,7 @@ h5 {
 .aux-nav .ant-menu .ant-menu-submenu-title .material-icons,
 .aux-nav .ant-menu .ant-menu-submenu .material-icons,
 .aux-nav .ant-menu .ant-menu-submenu > .ant-menu-item .material-icons {
-  font-size: 20px;
+  font-size: 14px;
   vertical-align: middle;
 }
 .version-item {
@@ -510,20 +511,17 @@ h5 {
   position: relative;
 }
 .dnb-rdc-wrapper .match-value > span {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   display: block;
   margin-bottom: 10px;
 }
-.financial-statement-collapse.ant-collapse
-  .ant-collapse-item
-  .ant-collapse-header {
+.financial-statement-collapse.ant-collapse .ant-collapse-item .ant-collapse-header {
   background: #f5f5f5;
 }
 #GraphContainer {
   margin-bottom: 24px;
   background-color: #fff;
-  border: 1px solid #d7e0e4;
+  border: 1px solid #D7E0E4;
   height: 600px;
   position: relative;
 }
@@ -541,4 +539,14 @@ h5 {
   max-width: 250px;
   max-height: 30px;
   margin-right: 20px;
+}
+.comment-column {
+  vertical-align: top;
+}
+.gsearch-title {
+  font-weight: bold;
+}
+.gsearch-title .salience-icon {
+  position: absolute;
+  right: 42px;
 }
