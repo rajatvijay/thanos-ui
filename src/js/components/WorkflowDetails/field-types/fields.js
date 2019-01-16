@@ -529,8 +529,27 @@ export const Phone = props => {
 
 //Field Type Paragraph
 export const Paragraph = props => {
+  const { extra } = props.field.definition;
+
+  console.log("extra----");
+  console.log(props.field.definition);
+  console.log(extra);
+
+  const customParaStyle = {
+    fontSize: extra.font_size || "",
+    textDecoration: extra.underline ? "underline" : "",
+    color: extra.font_color || ""
+  };
+
   return (
-    <h2 key={props.field.id} className="step-form-paragraph">
+    <h2
+      key={props.field.id}
+      className={
+        "step-form-paragraph" +
+        (extra.font_weight === "normal" ? "text-normal" : "")
+      }
+      style={customParaStyle}
+    >
       {props.field.definition.extra.icon ? (
         <i
           className="material-icons"
