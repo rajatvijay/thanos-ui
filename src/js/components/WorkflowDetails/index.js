@@ -18,6 +18,7 @@ import {
 import { WorkflowHeader } from "../Workflow/workflow-item";
 import Comments from "./comments";
 import { veryfiyClient } from "../../utils/verification";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const requestOptions = {
   method: "GET",
@@ -321,7 +322,7 @@ class WorkflowDetails extends Component {
 
           <Layout
             style={{
-              marginLeft: 250,
+              marginLeft: 320,
               background: "#FBFBFF",
               minHeight: "100vh",
               paddingTop: "30px"
@@ -386,11 +387,16 @@ class WorkflowDetails extends Component {
             defaultOpenKeys={this.state.selectedGroup}
             onStepSelected={this.onStepSelected.bind(this)}
             loading={stepLoading}
+            alerts={
+              this.props.workflowDetailsHeader.workflowDetailsHeader
+                ? this.props.workflowDetailsHeader.workflowDetailsHeader.alerts
+                : null
+            }
           />
 
           <Layout
             style={{
-              marginLeft: 250,
+              marginLeft: 320,
               background: "#FBFBFF",
               minHeight: "100vh",
               paddingTop: "30px"
@@ -412,7 +418,12 @@ class WorkflowDetails extends Component {
             </div>
 
             <div className="text-right pd-ard mr-ard-md">
-              <Tooltip title="Scroll to top" placement="topRight">
+              <Tooltip
+                title={this.props.intl.formatMessage({
+                  id: "commonTextInstances.scrollToTop"
+                })}
+                placement="topRight"
+              >
                 <span
                   className="text-anchor"
                   onClick={() => {
@@ -468,4 +479,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(WorkflowDetails);
+export default connect(mapStateToProps)(injectIntl(WorkflowDetails));

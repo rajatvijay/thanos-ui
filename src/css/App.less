@@ -1,6 +1,6 @@
 @import url("AvenirFont.less");
 @import url("utilities/font-classes.less");
-//@import url("utilities/font.less");
+@import url("utilities/font.less");
 @import url("utilities/variables.less");
 @import url("utilities/helper.less");
 @import url("framework/bootstrap-reboot.min.less");
@@ -12,6 +12,7 @@
 @import url("module/checkbox.less");
 @import url("module/layout-main.less");
 @import url("module/add-comment.less");
+@import url("module/alert-tag.less");
 @import url("section/users/users.less");
 @import url("section/users/profile.less");
 @import url("section/navbar/navbar-top.less");
@@ -26,7 +27,5 @@
 
 body,
 * {
-  font-family: "AvenirLTPro-Book", "Avenir LT Std", Roboto, "Helvetica Neue",
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  //font-family: Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: @base-font;
 }

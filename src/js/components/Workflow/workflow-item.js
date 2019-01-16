@@ -28,6 +28,7 @@ import { history } from "../../_helpers";
 import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
 import AuditList from "../Navbar/audit_log";
+import { FormattedMessage } from "react-intl";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -52,11 +53,11 @@ const SubMenu = Menu.SubMenu;
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   return (
-    <Col span={5} className="text-left">
+    <Col span={6} className="text-left">
       {props.link ? (
         <a
           href={"/workflows/instances/" + props.workflow.id + "/"}
-          className="text-nounderline"
+          className="text-nounderline "
         >
           <span
             className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
@@ -68,7 +69,7 @@ const HeaderTitle = props => {
       ) : (
         <Link
           to={"/workflows/instances/" + props.workflow.id + "/"}
-          className="text-nounderline"
+          className="text-nounderline "
         >
           <span
             className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
@@ -97,11 +98,26 @@ const getGroupProgress = group => {
   return progress;
 };
 
+const getAllProgress = group => {
+  let progress = 0;
+  let allSteps = group.steps.length;
+  let stepCompleted = 0;
+
+  _.map(group.steps, function(step) {
+    if (step.completed_at !== null) {
+      stepCompleted += 1;
+    }
+  });
+
+  progress = Math.trunc(stepCompleted / allSteps * 100);
+  return progress;
+};
+
 const HeaderWorkflowGroup = props => {
   let progressData = getProgressData(props.workflow);
   let visible_steps = getVisibleSteps(props.workflow.step_groups);
   return (
-    <Col span={12}>
+    <Col span={11}>
       <div className="group-overview">
         <div className="overflow-wrapper">
           <div className="step-ui">
@@ -123,46 +139,38 @@ const HeaderWorkflowGroup = props => {
               return (
                 <span key={index} className="step-item">
                   <span className="pd-right-sm">
-                    <Popover
-                      content={
-                        <div className="text-center">
-                          {groupitem.definition.name}
-                          <div className="small">
-                            {groupProgress}% completed
-                          </div>
-                        </div>
-                      }
-                    >
-                      {groupProgress === 100 ? (
-                        <i className="material-icons text-middle t-18 text-secondary">
-                          check_circle_outline
-                        </i>
-                      ) : (
-                        <Progress
-                          showInfo={false}
-                          type="circle"
-                          percent={groupProgress}
-                          width={18}
-                          strokeWidth={8}
-                        />
-                      )}
-                    </Popover>
+                    {groupProgress === 100 ? (
+                      <i className="material-icons text-middle t-16 text-metal">
+                        check_circle
+                      </i>
+                    ) : (
+                      <i className="material-icons text-middle t-16 text-metal">
+                        panorama_fish_eye
+                      </i>
+                    )}
                   </span>
                   <span
                     className={
                       completed
-                        ? "title-c text-medium text-secondary"
+                        ? "title-c text-medium t-14 text-metal"
                         : od
-                          ? "title-c text-red text-normal "
-                          : "title-c text-normal text-base"
+                          ? "title-c text-red  text-medium t-14"
+                          : "title-c text-metal text-medium t-14"
                     }
                   >
                     {groupitem.definition.name}
                   </span>
-                  <span className="dash"> </span>
                 </span>
               );
             })}
+            <div>
+              <Progress
+                percent={progressData}
+                showInfo={false}
+                strokeColor={"#305ebe"}
+                style={{ height: "4px" }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -209,6 +217,36 @@ class HeaderOptions2 extends React.Component {
     this.props.getCommentSidebar(object_id, "all_data");
   };
 
+  printDiv = () => {
+    var that = this;
+    this.setState({ printing: true });
+
+    setTimeout(function() {
+      var printContents = document.getElementById("StepBody").innerHTML;
+      var docHead = document.querySelector("head").innerHTML;
+
+      var body =
+        "<!DOCTYPE html><html><head>" +
+        "<title>" +
+        //that.props.currentStepFields.currentStepFields.definition.name +
+        "</title>" +
+        docHead +
+        "</head><body>" +
+        printContents +
+        "</body></html>";
+      var myWindow = window.open();
+      myWindow.document.write(body);
+      myWindow.document.close();
+      myWindow.focus();
+
+      setTimeout(function() {
+        myWindow.print();
+        myWindow.close();
+      }, 1000);
+      that.setState({ printing: false });
+    }, 500);
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -236,8 +274,41 @@ class HeaderOptions2 extends React.Component {
       </Menu>
     );
 
+    const workflowActionMenu = (
+      <Menu>
+        <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              restore
+            </i>{" "}
+            <FormattedMessage id="workflowsInstances.viewActivityLog" />
+          </span>
+        </Menu.Item>
+
+        <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              message
+            </i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.addComments" />
+          </span>
+        </Menu.Item>
+
+        <Menu.Item key={"pint"} onClick={this.printDiv}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">print</i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.printText" />
+          </span>
+        </Menu.Item>
+      </Menu>
+    );
+
     return (
-      <Col span="5" className="text-right">
+      <Col span="4" className="text-right">
+        <span className="status-text text-light t-12">
+          {this.state.current}
+        </span>
+
         {props.showCommentIcon && false ? (
           <span style={{ position: "relative", right: "25px" }}>
             <Badge count={5}>
@@ -246,44 +317,6 @@ class HeaderOptions2 extends React.Component {
           </span>
         ) : null}
 
-        {this.props.detailsPage ? (
-          <span>
-            <Tooltip title="Comments">
-              <span
-                className="mr-right mr-left text-anchor display-inline-block text-light"
-                onClick={this.openCommentSidebar}
-              >
-                <i className="material-icons t-22">message</i>
-              </span>
-            </Tooltip>
-
-            <Tooltip title="View activity log">
-              <span
-                className="mr-right mr-left text-anchor display-inline-block text-light"
-                onClick={this.toggleSidebar}
-              >
-                <i className="material-icons t-22">restore</i>
-              </span>
-            </Tooltip>
-          </span>
-        ) : null}
-
-        <Tooltip title={props.workflow.status.label}>
-          <Button
-            className="main-btn status-btn"
-            type="main"
-            title={props.workflow.status.label}
-          >
-            <span className="status-text">{this.state.current}</span>
-            {/*<Icon
-                          className="pd-left-sm icon"
-                          type="down"
-                          style={{ fontSize: 11 }}
-                        />*/}
-          </Button>
-        </Tooltip>
-        {/*<Dropdown overlay={menu} >
-                </Dropdown>*/}
         {this.state.showSidebar ? (
           <Drawer
             title="Activity log"
@@ -296,6 +329,17 @@ class HeaderOptions2 extends React.Component {
           >
             <AuditList id={props.workflow.id} />
           </Drawer>
+        ) : null}
+
+        {this.props.detailsPage ? (
+          <Dropdown
+            overlay={workflowActionMenu}
+            className="child-workflow-dropdown"
+          >
+            <span className="pd-ard-sm text-metal text-anchor">
+              <i className="material-icons text-middle t-18 ">more_vert</i>
+            </span>
+          </Dropdown>
         ) : null}
       </Col>
     );
@@ -344,7 +388,7 @@ const HeaderOptions = props => {
 
 const getIcon = (id, kinds) => {
   let returnKind = _.filter(kinds.workflowKind, ["id", id]);
-  let icon = returnKind[0].icon;
+  let icon = _.size(returnKind) ? returnKind[0].icon : null;
 
   if (icon) {
     return icon;
@@ -362,23 +406,76 @@ const CheckData = props => {
 };
 
 const GetQuickData = props => {
+  const colors = [
+    "magenta",
+    "red",
+    "volcano",
+    "orange",
+    "gold",
+    "lime",
+    "green",
+    "cyan",
+    "blue",
+    "geekblue",
+    "purple"
+  ];
+
   return (
     <div className="group-overview">
       <div className="overflow-wrapper">
-        <div className="step-ui">
-          {_.map(props.workflow.lc_data, function(lcItem, index) {
-            return (
-              <span key={index} className="step-item">
-                <span className={"title-c text-normal text-light pd-right"}>
-                  {lcItem.label}:
-                </span>
-                {props.column ? <br /> : null}
-                <span className={" text-normal  text-base"}>
-                  <CheckData data={lcItem.value} />
-                </span>
-                {props.column ? null : <span className="dash"> </span>}
-              </span>
-            );
+        {/* <div className="step-ui">
+                 {_.map(props.workflow.lc_data, function(lcItem, index) {
+                   return (
+                     <span key={index} className="step-item">
+                       <span className={"title-c text-normal text-light pd-right"}>
+                         {lcItem.label}:
+                       </span>
+                       {props.column ? <br /> : null}
+                       <span className={" text-normal  text-base"}>
+                         <CheckData data={lcItem.value} />
+                       </span>
+                       {props.column ? null : <span className="dash"> </span>}
+                     </span>
+                   );
+                 })}
+               </div>*/}
+
+        <div className="filter-top-list alert-tag-list">
+          {_.map(props.workflow.alerts, function(item, index) {
+            let more = props.workflow.alerts - 3;
+
+            if (index >= 3) {
+              if (index === 4) {
+                return <span className="text-light">+{more}</span>;
+              } else {
+                return;
+              }
+            } else {
+              return (
+                <Tag
+                  key={item.alert.id}
+                  className={
+                    "alert-tag-item " + item.alert.category.color_label ||
+                    "alert-primary"
+                  }
+                  color={item.alert.category.color_label || null}
+                >
+                  <Link
+                    to={
+                      "/workflows/instances/" +
+                      item.workflow +
+                      "/" +
+                      "?group=" +
+                      item.step_group +
+                      "&step=" +
+                      item.step
+                    }
+                  >
+                    {item.alert.category.name}
+                  </Link>
+                </Tag>
+              );
+            }
           })}
         </div>
       </div>
@@ -386,18 +483,34 @@ const GetQuickData = props => {
   );
 };
 
+const getScoreColor = riskValue => {
+  let value = parseInt(riskValue, 10);
+  if (value >= 7) {
+    return "#3c763d";
+  } else if (value >= 4 && value <= 6) {
+    return "#eebd47";
+  } else if (value <= 3) {
+    return "#f16b51";
+  } else {
+    return "#505050";
+  }
+};
+
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
 
+  console.log("props--------");
+  console.log(props);
+
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
-        <Col span={2} className="text-center text-anchor">
+        <Col span={1} className=" text-anchor">
           {props.detailsPage ? (
             <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
               <i
-                className="material-icons"
+                className="material-icons text-secondary"
                 style={{ fontSize: "18px", verticalAlign: "middle" }}
               >
                 keyboard_backspace
@@ -433,8 +546,9 @@ export const WorkflowHeader = props => {
         </Col>
 
         <HeaderTitle {...props} />
-        {!props.statusView && !props.detailsPage ? (
-          <Col span={12}>
+
+        {_.size(props.workflow.alerts) ? (
+          <Col span={11}>
             <GetQuickData {...props} />
           </Col>
         ) : (
@@ -445,6 +559,18 @@ export const WorkflowHeader = props => {
           />
         )}
 
+        <Col span="2" className="text-center">
+          {props.workflow.sorting_primary_field ? (
+            <Badge
+              count={<span>{props.workflow.sorting_primary_field}</span>}
+              style={{
+                backgroundColor: getScoreColor(
+                  props.workflow.sorting_primary_field
+                )
+              }}
+            />
+          ) : null}{" "}
+        </Col>
         <HeaderOptions2 {...props} />
       </Row>
     </div>
@@ -458,18 +584,18 @@ export const WorkflowHeader = props => {
 export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
+      <div className="lc-card-section">
+        {!props.statusView ? (
+          <Row align="top">
+            <Col span={24}>
+              <GetQuickData {...props} column={true} />
+            </Col>
+          </Row>
+        ) : (
+          <StepGroupList {...props} />
+        )}
+      </div>
       <MetaRow {...props} />
-      <Divider />
-
-      {!props.statusView ? (
-        <Row align="top">
-          <Col span={24}>
-            <GetQuickData {...props} column={true} />
-          </Col>
-        </Row>
-      ) : (
-        <StepGroupList {...props} />
-      )}
     </div>
   );
 };
@@ -506,56 +632,78 @@ class MetaRow extends React.Component {
 
     return (
       <div>
-        <Row>
-          <Col span="18" className="">
-            {props.workflow.lc_duedate ? (
-              <span>
-                <span className="text-bold text-primary">
-                  EAT {props.workflow.lc_duedate}
-                </span>
-                <span className="pd-left pd-right">|</span>
-              </span>
-            ) : null}
+        <Divider className="no-margin" />
 
-            {props.workflow.lc_id ? (
-              <span>
-                <span className="">
-                  <b>ID: </b> {props.workflow.lc_id}
-                </span>
-                <span className="pd-left pd-right">|</span>
-              </span>
-            ) : null}
-            <span className="pd-left">
-              Created <Moment fromNow>{props.workflow.created_at}</Moment>
-            </span>
-            <span className="pd-left pd-right">|</span>
-            <Link to={"/workflows/instances/" + props.workflow.id}>
-              <span className="pd-ard-sm text-medium text-base text-underline">
-                View details
-              </span>
-            </Link>
-          </Col>
-          <Col span="6" className="text-right text-light small">
-            {props.relatedKind ? (
-              <Dropdown
-                overlay={childWorkflowMenu}
-                className="child-workflow-dropdown"
-                placement="bottomRight"
-              >
-                <a className="ant-dropdown-link ant-btn secondary-btn" href="#">
-                  Add <i className="material-icons t-14">keyboard_arrow_down</i>
-                </a>
-              </Dropdown>
-            ) : null}
-          </Col>
-        </Row>
-        {props.workflow.lc_message ? (
+        <div className="lc-card-section">
           <Row>
-            <Col span="24" className="mr-top">
-              <Alert message={props.workflow.lc_message} type="info" showIcon />
+            <Col span="12">{props.hasChildren ? "show child" : null}</Col>
+            <Col span="12" className="text-right">
+              {props.relatedKind ? (
+                <Dropdown
+                  overlay={childWorkflowMenu}
+                  className="child-workflow-dropdown"
+                  placement="bottomRight"
+                >
+                  <a className="ant-dropdown-link ant-btn main-btn" href="#">
+                    +{" "}
+                    <FormattedMessage id="workflowsInstances.createChildButtonText" />
+                    <i className="material-icons t-14">keyboard_arrow_down</i>
+                  </a>
+                </Dropdown>
+              ) : null}
             </Col>
           </Row>
-        ) : null}
+        </div>
+
+        <Divider className="no-margin" />
+
+        <div className="lc-card-section">
+          <Row>
+            <Col span="18" className=" t-12">
+              {props.workflow.lc_duedate ? (
+                <span>
+                  <span className="text-bold text-primary">
+                    EAT {props.workflow.lc_duedate}
+                  </span>
+                  <span className="pd-left pd-right">|</span>
+                </span>
+              ) : null}
+
+              {props.workflow.lc_id ? (
+                <span>
+                  <span className="text-light">
+                    <b>ID: </b> {props.workflow.lc_id}
+                  </span>
+                  <span className="pd-left pd-right">|</span>
+                </span>
+              ) : null}
+
+              <span className="text-light">
+                <FormattedMessage id="commonTextInstances.createdText" />
+                <Moment fromNow>{props.workflow.created_at}</Moment>
+              </span>
+            </Col>
+
+            <Col span="6" className="text-right text-light small">
+              <Link to={"/workflows/instances/" + props.workflow.id}>
+                <span className="pd-ard-sm text-nounderline">
+                  <FormattedMessage id="workflowsInstances.viewDetails" /> ⟶
+                </span>
+              </Link>
+            </Col>
+          </Row>
+          {props.workflow.lc_message ? (
+            <Row>
+              <Col span="24" className="mr-top">
+                <Alert
+                  message={props.workflow.lc_message}
+                  type="info"
+                  showIcon
+                />
+              </Col>
+            </Row>
+          ) : null}
+        </div>
       </div>
     );
   };
@@ -588,12 +736,12 @@ const StepGroupList = props => {
                   className={
                     "grp-name " +
                     (completed
-                      ? "text-secondary text-medium"
-                      : od ? "text-red text-normal" : "text-light  text-normal")
+                      ? "text-metal text-medium"
+                      : od ? "text-red text-red" : "text-metal  text-normal")
                   }
                 >
                   <i className="material-icons mr-right-lg ">
-                    {completed ? "check_circle_outline" : "panorama_fish_eye"}
+                    {completed ? "check_circle" : "panorama_fish_eye"}
                   </i>
                   <span className=" pd-left-sm t-14">
                     {group.definition.name}
@@ -626,7 +774,7 @@ const StepItem = props => {
   let overdue = props.stepData.overdue ? true : false;
   let icon_cls = "panorama_fish_eye";
   if (step_complete) {
-    icon_cls = "check_circle_outline";
+    icon_cls = "check_circle";
   } else if (props.stepData.is_locked) {
     icon_cls = "lock";
     // if (!isLockedStepEnable(props.stepData, props.visible_steps)) {
@@ -634,6 +782,16 @@ const StepItem = props => {
     // }
   } else if (overdue) {
     icon_cls = "alarm";
+  }
+
+  let hasAlert = null;
+
+  if (_.size(props.workflow.alerts)) {
+    _.forEach(props.workflow.alerts, function(value) {
+      if (value.step === props.stepData.id) {
+        hasAlert = value;
+      }
+    });
   }
 
   return (
@@ -649,14 +807,21 @@ const StepItem = props => {
         }
         className={
           step_complete
-            ? "text-secondary text-nounderline text-medium"
+            ? "text-metal text-nounderline text-bold"
             : overdue
               ? "text-red text-nounderline text-normal"
-              : "text-base text-nounderline text-normal"
+              : "text-metal text-nounderline text-normal"
         }
       >
         <i className="material-icons text-middle">{icon_cls}</i>
         <span>{props.stepData.name}</span>
+        {_.size(hasAlert) ? (
+          <span className="float-right">
+            <Tooltip title={hasAlert.alert.category.name}>
+              <Badge status="error" />
+            </Tooltip>
+          </span>
+        ) : null}
       </Link>
     </li>
   );

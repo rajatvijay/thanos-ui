@@ -45,6 +45,23 @@ function getLabel(props, that) {
         <span className="float-right">
           {addCommentBtn(that, props)}
           {fieldFlagDropdown(that, props)}
+
+          {_.size(props.field.alerts)
+            ? _.map(props.field.alerts, function(item) {
+                return (
+                  <Tag
+                    key={item.alert.id}
+                    className={
+                      "alert-tag-item " + item.alert.category.color_label ||
+                      "alert-primary"
+                    }
+                    color={item.alert.category.color_label || null}
+                  >
+                    {item.alert.category.name}
+                  </Tag>
+                );
+              })
+            : null}
         </span>
 
         {props.field.definition.body}
@@ -140,14 +157,32 @@ function addCommentBtn(e, props) {
   }
   return (
     <div className="add_comment_btn" onClick={addComment.bind(e, props)}>
-      <Tooltip placement="topRight" title={comment_btn_text}>
+      <Tooltip
+        placement="topRight"
+        title={props.intl.formatMessage(
+          { id: "stepBodyFormInstances.commentsButtonText" },
+          { count: props.field.comment_count }
+        )}
+      >
         <span>
           {" "}
           {props.field.comment_count > 0 ? (
-            <span className="pd-right-md">{props.field.comment_count}</span>
+            <span
+              className="display-inline-block text-secondary"
+              style={{ position: "relative", top: "-4px" }}
+            >
+              {props.field.comment_count}
+            </span>
           ) : null}{" "}
-          <i className="material-icons  t-18 text-secondary">
-            chat_bubble_outline
+          <i
+            className={
+              "material-icons  t-18 " +
+              (props.field.comment_count > 0 ? "text-secondary" : "text-metal")
+            }
+          >
+            {props.field.comment_count > 0
+              ? "chat_bubble"
+              : "chat_bubble_outline"}
           </i>
         </span>
       </Tooltip>
@@ -197,10 +232,7 @@ function fieldFlagDropdown(e, props) {
       }}
     >
       <Dropdown overlay={flag_dropdown}>
-        <a
-          className="ant-dropdown-link text-nounderline text-secondary"
-          href="#"
-        >
+        <a className="ant-dropdown-link text-nounderline text-metal" href="#">
           <i className="material-icons text-middle t-18">outlined_flag</i>{" "}
           <Icon type="down" />
         </a>
@@ -263,6 +295,7 @@ function getIntegrationSearchButton(props) {
     dnb_financials: "Get Financial Statements",
     dnb_litigation: "Get Bankcryptcy Statements",
     dnb_cmp_ent_vw: "Get Complaince Entity View",
+    dnb_cmpcvf: "Get CMPCVF",
     translation: "Translate",
     transliteration: "Transliterate",
     thomson_reuters_group: "Get TR group",
@@ -292,6 +325,7 @@ function getIntegrationSearchButton(props) {
           className="btn-block float-left"
           onClick={props.onSearch}
           style={{ width: "auto", marginRight: "20px" }}
+          disabled={isDisabled(props)}
         >
           {button_name}
         </Button>

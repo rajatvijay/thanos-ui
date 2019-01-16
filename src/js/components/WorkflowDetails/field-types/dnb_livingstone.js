@@ -66,7 +66,11 @@ class DnbLivingstone extends Component {
 
     const props = {
       field: field,
-      onSearch: this.onSearch
+      onSearch: this.onSearch,
+      currentStepFields: this.props.currentStepFields,
+      is_locked: this.props.is_locked,
+      completed: this.props.completed,
+      permission: this.props.permission
     };
 
     let final_html = null;

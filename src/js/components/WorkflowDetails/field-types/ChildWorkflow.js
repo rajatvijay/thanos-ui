@@ -33,7 +33,8 @@ const {
   field_error,
   getRequired,
   feedValue,
-  getLink
+  getLink,
+  isDisabled
 } = commonFunctions;
 
 class ChildWorkflowField2 extends Component {
@@ -162,6 +163,7 @@ class ChildWorkflowField2 extends Component {
         overlay={this.getKindMenu()}
         className="child-workflow-dropdown"
         placement="bottomRight"
+        //disabled={isDisabled(this.props)}
       >
         <Button
           type="primary"
@@ -221,31 +223,33 @@ class ChildWorkflowField2 extends Component {
               </div>
             </div>
             <br />
-            <div className="paper">
-              {_.size(this.state.childWorkflow) ? (
-                _.map(this.state.childWorkflow, function(workflow) {
-                  return (
-                    <div class="workflow-list-item ">
-                      <div class="collapse-wrapper">
-                        <div class="Collapsible">
-                          <span class="Collapsible__trigger is-closed">
-                            <div class="ant-collapse-item ant-collapse-no-arrow lc-card">
-                              <WorkflowHeader
-                                workflow={workflow}
-                                link={true}
-                                kind={""}
-                                statusView={that.state.statusView}
-                              />
-                            </div>
-                          </span>
+            <div className="workflow-list">
+              <div className="paper">
+                {_.size(this.state.childWorkflow) ? (
+                  _.map(this.state.childWorkflow, function(workflow) {
+                    return (
+                      <div class="workflow-list-item ">
+                        <div class="collapse-wrapper">
+                          <div class="Collapsible">
+                            <span class="Collapsible__trigger is-closed">
+                              <div class="ant-collapse-item ant-collapse-no-arrow lc-card">
+                                <WorkflowHeader
+                                  workflow={workflow}
+                                  link={true}
+                                  kind={""}
+                                  statusView={that.state.statusView}
+                                />
+                              </div>
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <div>No related workflows</div>
-              )}
+                    );
+                  })
+                ) : (
+                  <div>No related workflows</div>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -254,17 +258,10 @@ class ChildWorkflowField2 extends Component {
   };
 }
 function mapPropsToState(state) {
-  const {
-    workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
-  } = state;
+  const { workflowDetailsHeader, workflowKind } = state;
   return {
     workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
+    workflowKind
   };
 }
 

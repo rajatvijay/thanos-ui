@@ -27,12 +27,14 @@ import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import Users from "../components/Users";
 import ExportList from "../components/ExportPage";
 import "antd/dist/antd.css";
+import { injectIntl } from "react-intl";
 
 function mapStateToProps(state) {
-  const { config, users } = state;
+  const { config, users, languageSelector } = state;
   return {
     users,
-    config
+    config,
+    languageSelector
   };
 }
 
@@ -146,5 +148,5 @@ class MainRoutes extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(MainRoutes);
+export default injectIntl(connect(mapStateToProps)(MainRoutes));
 //export default { connectedApp as MainRoutes };

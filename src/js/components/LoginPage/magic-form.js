@@ -5,6 +5,9 @@ import validator from "validator";
 import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
 import { connect } from "react-redux";
+import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
+
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -98,10 +101,13 @@ class MagicLoginLinkForm extends React.Component {
     const { data, errors } = this.state;
     return (
       <div className="login-form-box">
+        <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />{" "}
+        <LoginSelectLanguage />
+        <Divider />
         {!this.props.emailAuth.submitted ? (
           <div>
             <div className="text-center mr-bottom t-18 text-base">
-              Enter your email to receive one-time sign in link
+              <FormattedMessage id="loginPageInstances.oneTimeLink" />
             </div>
             <Form
               layout="vertical"
@@ -134,15 +140,17 @@ class MagicLoginLinkForm extends React.Component {
                   className="login-form-button"
                   onClick={this.onSubmit}
                 >
-                  Submit
+                  <FormattedMessage id="commonTextInstances.submitButtonText" />
                 </Button>
               </FormItem>
             </Form>
             {!this.props.config.saml_url ? (
               <div>
-                <Divider>or</Divider>
+                <Divider>
+                  <FormattedMessage id="loginPageInstances.orText" />
+                </Divider>
                 <Link to="/login">
-                  Login using email and password
+                  <FormattedMessage id="loginPageInstances.loginEmailPassword" />
                   <i className="material-icons t-14 text-middle pd-left-sm">
                     arrow_forward
                   </i>
@@ -150,9 +158,13 @@ class MagicLoginLinkForm extends React.Component {
               </div>
             ) : (
               <div>
-                <Divider>or</Divider>
+                <Divider>
+                  <FormattedMessage id="loginPageInstances.orText" />
+                </Divider>
                 <a href={this.props.config.saml_url}>
-                  Login via your {this.props.config.name} username and password
+                  <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                  {this.props.config.name}
+                  <FormattedMessage id="loginPageInstances.customSAMLloginText2" />
                   <i className="material-icons t-14 text-middle pd-left-sm">
                     arrow_forward
                   </i>
@@ -166,20 +178,24 @@ class MagicLoginLinkForm extends React.Component {
               <i className="material-icons material-icons-24">check_circle</i>
             </div>
             <div>
-              <h2 className="text-grey-dark">Email sent.</h2>
+              <h2 className="text-grey-dark">
+                <FormattedMessage id="commonTextInstances.emailSent" />
+              </h2>
               <br />
               <p className="t-14">
                 <span className="text-grey-dark">
-                  Your contact information must be on file in order for you to
-                  complete this request.<br />
+                  <FormattedMessage id="loginPageInstances.loginErrorMessage" />
+                  <br />
                   <br />
                 </span>
               </p>
-              <div className="t-12">NOTE: Link expires in 24 hours.</div>
+              <div className="t-12">
+                <FormattedMessage id="errorMessageInstances.magicLinkExpirationWindow" />
+              </div>
               <Divider />
               <div>
                 <a href="/" onClick={this.refresh}>
-                  Go to login page
+                  <FormattedMessage id="loginPageInstances.goToLoginPage" />
                 </a>
               </div>
             </div>
@@ -197,4 +213,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MagicLoginLinkForm);
+export default connect(mapStateToProps)(injectIntl(MagicLoginLinkForm));

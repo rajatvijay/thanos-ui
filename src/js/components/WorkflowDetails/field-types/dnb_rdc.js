@@ -73,7 +73,11 @@ class DnbRDC extends Component {
 
     const props = {
       field: field,
-      onSearch: this.onSearch
+      onSearch: this.onSearch,
+      currentStepFields: this.props.currentStepFields,
+      is_locked: this.props.is_locked,
+      completed: this.props.completed,
+      permission: this.props.permission
     };
 
     let final_html = null;
@@ -722,21 +726,23 @@ const buildDetails = obj => {
           >
             <Row gutter={16} className="mr-bottom-lg">
               {_.map(obj.NonspecificParameterDetail, function(item) {
-                return (
-                  <Column
-                    column={12}
-                    label={item.ParameterIdentificationNumber + ":"}
-                    value={
-                      item.ParameterIdentificationNumber === "URL" ? (
-                        <a href={item.ParameterValue} target="_blank">
-                          {item.ParameterValue}
-                        </a>
-                      ) : (
-                        item.ParameterValue
-                      )
-                    }
-                  />
-                );
+                if (item.ParameterIdentificationNumber !== "RGP") {
+                  return (
+                    <Column
+                      column={12}
+                      label={item.ParameterIdentificationNumber + ":"}
+                      value={
+                        item.ParameterIdentificationNumber === "URL" ? (
+                          <a href={item.ParameterValue} target="_blank">
+                            {item.ParameterValue}
+                          </a>
+                        ) : (
+                          item.ParameterValue
+                        )
+                      }
+                    />
+                  );
+                }
               })}
               <br />
               <br />

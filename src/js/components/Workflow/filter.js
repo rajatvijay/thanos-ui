@@ -23,6 +23,7 @@ import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
 //import { regionData } from "./regionData";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 //const filter = {};
 const { Sider } = Layout;
@@ -82,7 +83,7 @@ class WorkflowFilter extends Component {
   }
 
   componentDidMount = () => {
-    switch (this.props.placeholder) {
+    switch (this.props.filterType) {
       case "Business":
         this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
         break;
@@ -98,7 +99,7 @@ class WorkflowFilter extends Component {
   //SELECT TYPE FILTER DISPATCHED HERE
   handleChange = value => {
     this.setState({ value });
-    let fType = this.props.placeholder.toLowerCase();
+    let fType = this.props.filterType.toLowerCase();
     let payload = { filterType: fType, filterValue: [] };
 
     if (value !== undefined && value.length !== 0) {
@@ -149,11 +150,17 @@ class WorkflowFilter extends Component {
             {this.props.label ? this.props.label : this.props.placeholder}
           </label>
         </div>
-        {this.props.placeholder === "Business" ? (
+        {this.props.filterType === "Business" ? (
           <FormItem
             hasFeedback={businessData.loading ? true : false}
             validateStatus={this.state.fetching ? "validating" : null}
-            help={businessData.loading ? "Fetching fields data..." : ""}
+            help={
+              businessData.loading
+                ? this.props.intl.formatMessage({
+                    id: "workflowFiltersTranslated.fetchingFieldsData"
+                  })
+                : ""
+            }
           >
             <Cascader
               options={businessData.results}
@@ -193,7 +200,7 @@ class WorkflowFilter extends Component {
               // }
             >
               {_.map(
-                this.props.placeholder === "region"
+                this.props.filterType === "region"
                   ? regionData.results
                   : statusData,
 
@@ -236,12 +243,6 @@ class WorkflowKindFilter extends Component {
     }
   };
 
-  componentDidMount = () => {
-    // if (!this.props.workflowFilterType.statusType) {
-    //   this.props.dispatch(workflowFiltersActions.getStatusData());
-    // }
-  };
-
   workflowKindList = workflowKind => {
     let that = this;
 
@@ -253,15 +254,12 @@ class WorkflowKindFilter extends Component {
             (that.state.selected === i.id ||
             that.props.workflowFilters.kind.filterValue[0] === i.id
               ? "ant-menu-item-selected "
-              : "")
+              : "text-light")
           }
           key={i.id}
           kind={i.id}
           onClick={that.onFilterSelected.bind(this, i)}
         >
-          <i className="material-icons icon">
-            {i.icon ? i.icon : "library_books"}
-          </i>
           {i.name}
         </li>
       );
@@ -301,6 +299,7 @@ class WorkflowKindFilter extends Component {
         className="ant-menu ant-menu-light ant-menu-root ant-menu-inline"
         style={{
           width: "100%",
+          padding: "0 14px",
           height: "vh100",
           overflowX: "hidden",
           background: "transparent"
@@ -369,24 +368,6 @@ class FilterSidebar extends Component {
     //workflow Kind list
 
     //kind temp hide list
-
-    const getTagToHide = tag => {
-      let pass = true;
-
-      switch (tag) {
-        case "users":
-          pass = false;
-          break;
-        case "entity-id":
-          pass = false;
-          break;
-        default:
-          pass = false;
-      }
-
-      return pass;
-    };
-
     const menu = (
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKindFiltered, function(item, index) {
@@ -406,7 +387,6 @@ class FilterSidebar extends Component {
                   onClick={that.clicked.bind(this, item.tag)}
                   className="kind-item "
                 >
-                  <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
                   {item.name}
                 </div>
               </Menu.Item>
@@ -436,9 +416,14 @@ class FilterSidebar extends Component {
 
     return (
       <Sider
-        width={250}
-        style={{ overflow: "auto", height: "100vh", position: "fixed" }}
-        className="aux-nav aux-nav-filter bg-white"
+        width={320}
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          background: "#ebf0fa"
+        }}
+        className="aux-nav aux-nav-filter "
       >
         <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
           {_.size(workflowKindFiltered) ? (
@@ -455,7 +440,8 @@ class FilterSidebar extends Component {
                     loading={this.props.workflowKind.loading}
                     className="shadow-2 btn-block btn-create"
                   >
-                    Create new <Icon type="down" />
+                    <FormattedMessage id="workflowFiltersTranslated.createNewWorkflow" />
+                    <Icon type="down" />
                   </Button>
                 </Dropdown>
               </div>
@@ -463,8 +449,21 @@ class FilterSidebar extends Component {
             </div>
           ) : null}
 
+          <span className="aux-item aux-lead mr-bottom-lg">
+            <span className="text-secondary t-14 text-medium text-uppercase">
+              Filters
+            </span>
+          </span>
+          <br />
+          <br />
+
           <div className="filter-section section-kind">
-            <h5 className="aux-item aux-lead">Filter workflow type</h5>
+            <span className="aux-item aux-lead filter-title">
+              <label>
+                <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
+              </label>
+            </span>
+
             <WorkflowKindFilter
               workflowKind={this.props.workflowKind}
               workflowFilters={this.props.workflowFilters}
@@ -472,18 +471,27 @@ class FilterSidebar extends Component {
             />
           </div>
 
-          <div className="filter-divider" />
-
           <div className="filter-section">
             {_.map(filterTypeSelect, function(f, index) {
+              let label =
+                that.props.intl.formatMessage({
+                  id: `workflowFiltersTranslated.filterLabels.${f.filterType}`
+                }) || f.filterName;
+              let placeholder =
+                that.props.intl.formatMessage({
+                  id: `workflowFiltersTranslated.filterPlaceholders.${
+                    f.filterType
+                  }`
+                }) || f.filterType;
               return (
                 <div
                   className="aux-item aux-lead filter-title"
                   key={"filter-2-" + index}
                 >
                   <WorkflowFilter
-                    label={f.filterName}
-                    placeholder={f.filterType}
+                    label={label}
+                    placeholder={placeholder}
+                    filterType={f.filterType}
                     childeren={f.results}
                     {...that.props}
                   />
@@ -493,17 +501,19 @@ class FilterSidebar extends Component {
           </div>
 
           <div>
-            <h5
-              className="aux-item aux-lead  text-anchor"
+            <span
+              className="aux-item aux-lead  text-anchor filter-title"
               onClick={this.toggleAdvFilters}
             >
-              Advanced filter{" "}
-              <i className="material-icons t-16 text-middle">
-                {this.state.showAdvFilters
-                  ? "keyboard_arrow_up "
-                  : "keyboard_arrow_down  "}
-              </i>
-            </h5>
+              <label>
+                <FormattedMessage id="workflowFiltersTranslated.advancedFilter" />{" "}
+                <i className="material-icons t-16 text-middle">
+                  {this.state.showAdvFilters
+                    ? "keyboard_arrow_up "
+                    : "keyboard_arrow_down  "}
+                </i>
+              </label>
+            </span>
           </div>
 
           <div
@@ -512,7 +522,6 @@ class FilterSidebar extends Component {
             }
           >
             <div className="filter-section">
-              <h5 className="aux-item aux-lead filter-title">Select Field</h5>
               <div className="aux-item aux-lead">
                 <WrappedAdvancedFilterForm
                   {...this.props}
@@ -541,12 +550,18 @@ class FilterSidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowFilterType, workflowFilters } = state;
+  const {
+    workflowKind,
+    workflowFilterType,
+    workflowFilters,
+    languageSelector
+  } = state;
   return {
     workflowKind,
     workflowFilterType,
-    workflowFilters
+    workflowFilters,
+    languageSelector
   };
 }
 
-export default connect(mapStateToProps)(FilterSidebar);
+export default connect(mapStateToProps)(injectIntl(FilterSidebar));

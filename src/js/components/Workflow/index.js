@@ -8,9 +8,8 @@ import {
   Button,
   Dropdown,
   Menu,
-  Tooltip,
-  Drawer,
-  Switch
+  Switch,
+  Tooltip
 } from "antd";
 import WorkflowList from "./workflow-list";
 import {
@@ -23,9 +22,10 @@ import {
 import FilterSidebar from "./filter";
 import { baseUrl2, authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
+import AlertFilter from "./AlertFilter";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
-import MetaGraph from "./MetaGraph";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 class Workflow extends Component {
   constructor(props) {
@@ -36,7 +36,8 @@ class Workflow extends Component {
       showWaitingFitler: false,
       isUserAuthenticated: false,
       statusView: true,
-      visible: false
+      visible: false,
+      sortOrderAsc: true
     };
 
     if (!this.props.users.me) {
@@ -181,25 +182,22 @@ class Workflow extends Component {
     this.props.dispatch(checkAuth());
   };
 
-  showDrawer = () => {
-    this.setState({
-      visible: true
-    });
-  };
-
-  onClose = () => {
-    this.setState({
-      visible: false
-    });
+  changeScoreOrder = order => {
+    let sort = this.state.sortOrderAsc
+      ? "-sorting_primary_field"
+      : "sorting_primary_field";
+    let payload = { filterType: "ordering", filterValue: [sort] };
+    this.setState({ sortOrderAsc: !this.state.sortOrderAsc });
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
   render = () => {
-    let showInsights = false;
+    let showRisk = false;
     if (
-      this.props.authentication.user &&
-      _.includes(this.props.authentication.user.features, "view_reports")
+      _.size(this.props.workflow.workflow) &&
+      this.props.workflow.workflow[0].sorting_primary_field
     ) {
-      showInsights = true;
+      showRisk = true;
     }
 
     return (
@@ -207,81 +205,59 @@ class Workflow extends Component {
         <FilterSidebar />
 
         <Layout
-          style={{ marginLeft: 250, minHeight: "100vh" }}
+          style={{ marginLeft: 320, minHeight: "100vh" }}
           hasSider={false}
         >
-          <div className="section-top ">
-            <div>
-              <Row>
-                <Col span="12" className="waiting-section">
-                  <span
-                    className="waiting-filter-trigger text-anchor"
-                    onClick={this.toggleWaitingFilter}
-                  >
-                    Waiting on{" "}
-                    <i className="material-icons">
-                      {this.state.showWaitingFitler
-                        ? "keyboard_arrow_down"
-                        : "keyboard_arrow_up"}
-                    </i>
-                  </span>
-                </Col>
-                <Col span="12" className="text-right export-section">
-                  {showInsights ? (
-                    <Tooltip title={"Insight"}>
-                      <span className="pd-ard-sm" onClick={this.showDrawer}>
-                        <i className="material-icons text-light text-anchor t-18 ">
-                          trending_up
-                        </i>
-                      </span>
-                    </Tooltip>
-                  ) : null}
-
-                  {_.includes(
-                    this.props.config.permissions,
-                    "Can export workflow data"
-                  ) ? (
-                    <Tooltip title={"Export workflow data"}>
-                      <Dropdown
-                        overlay={this.getExportList()}
-                        trigger="click"
-                        onClick={this.loadExportList}
-                      >
-                        <span className="pd-ard-sm text-light text-anchor">
-                          <i className="material-icons">save_alt</i>
-                        </span>
-                      </Dropdown>
-                    </Tooltip>
-                  ) : null}
-                </Col>
-              </Row>
-              <div
-                className={
-                  "waiting-filter-warpper animated " +
-                  (this.state.showWaitingFitler ? " grow " : " shrink")
-                }
-              >
-                {this.state.defKind ? (
-                  <WorkflowFilterTop {...this.props} />
-                ) : null}
-              </div>
+          <div className="section-top">
+            <div
+              className={
+                "waiting-filter-warpper animated " +
+                (this.state.showWaitingFitler ? " grow " : " shrink")
+              }
+            >
+              {this.state.defKind ? <AlertFilter {...this.props} /> : null}
             </div>
           </div>
 
           {this.props.workflow.loading ? null : this.props.workflow
             .loadingStatus === "failed" ? null : (
-            <Row className="list-view-header">
-              <Col span="12">
-                <div className="workflow-count">
-                  {this.props.workflow.count} Workflows
+            <Row className="list-view-header t-14 ">
+              <Col span="7">
+                <div className="workflow-count text-metal">
+                  {this.props.workflow.count}{" "}
+                  <FormattedMessage id="workflowsInstances.workflowsCount" />
                 </div>
               </Col>
-              <Col span="12">
-                <div className="text-right list-toggle-btn">
-                  <span className="pd-right t-14">Details view</span>
-                  <Switch defaultChecked onChange={this.toggleListView} />
-                  <span className="pd-left  t-14">Workflow view</span>
-                </div>
+              <Col span="11" className="text-metal">
+                <span style={{ paddingLeft: "16px" }}>
+                  <FormattedMessage id="workflowsInstances.stepGroupName" />
+                </span>
+              </Col>
+              <Col span="2" className="text-secondary text-center">
+                {showRisk ? (
+                  <Tooltip
+                    title={
+                      this.state.sortOrderAsc
+                        ? "High to low risk score"
+                        : "Low to high risk score"
+                    }
+                  >
+                    <span
+                      className="text-secondary text-anchor"
+                      onClick={this.changeScoreOrder}
+                    >
+                      Risk
+                      <i className="material-icons t-14  text-middle">
+                        {this.state.sortOrderAsc
+                          ? "keyboard_arrow_up"
+                          : "keyboard_arrow_down"}
+                      </i>
+                    </span>
+                  </Tooltip>
+                ) : null}
+              </Col>
+              <Col span="4" className="text-secondary text-center">
+                <FormattedMessage id="workflowsInstances.statusText" />
               </Col>
             </Row>
           )}
@@ -293,27 +269,33 @@ class Workflow extends Component {
               <Icon type="loading" style={{ fontSize: 24 }} />
               <span className="text-normal pd-left">
                 {" "}
-                {this.props.config.loading
-                  ? "Loading configurations..."
-                  : this.props.workflowKind.loading
-                    ? "Loading filters..."
-                    : this.props.workflow.loading ? "Fetching data..." : null}
+                <FormattedMessage
+                  id={
+                    this.props.config.loading
+                      ? "workflowsInstances.loadingConfigsText"
+                      : this.props.workflowKind.loading
+                        ? "workflowsInstances.loadingFiltersText"
+                        : this.props.workflow.loading
+                          ? "workflowsInstances.fetchingDataText"
+                          : null
+                  }
+                />
               </span>
             </div>
           ) : this.props.workflow.loadingStatus === "failed" ? (
             <div className="mr-top-lg text-center text-bold text-metal">
-              Unable to load workflow list.{" "}
+              <FormattedMessage id="errorMessageInstances.noWorkflowsError" />.{" "}
               {/**<div className="text-anchor ">
                  Click here to reload{" "}
                  <i className="material-icons text-middle">refresh</i>
                </div>**/}
               <div className="mr-top-lg text-center text-bold text-metal">
-                You have been logged out. Please Login again to continue
+                <FormattedMessage id="errorMessageInstances.loggedOutError" />
                 <div
                   className="text-anchor text-anchor "
                   onClick={this.redirectLoginPage}
                 >
-                  Click here to Login
+                  <FormattedMessage id="commonTextInstances.clickToLogin" />
                 </div>
               </div>
             </div>
@@ -326,16 +308,6 @@ class Workflow extends Component {
               />
             </div>
           )}
-          <Drawer
-            width={600}
-            title="Insight"
-            placement="right"
-            closable={false}
-            onClose={this.onClose}
-            visible={this.state.visible}
-          >
-            <MetaGraph />
-          </Drawer>
         </Layout>
       </Layout>
     );
@@ -361,4 +333,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Workflow);
+export default connect(mapStateToProps)(injectIntl(Workflow));

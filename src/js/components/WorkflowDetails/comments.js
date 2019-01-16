@@ -18,6 +18,8 @@ import { workflowDetailsActions } from "../../actions";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import _ from "lodash";
 import Moment from "react-moment";
+import { FormattedMessage, injectIntl } from "react-intl";
+
 const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
@@ -152,7 +154,9 @@ class Comments extends Component {
             className="sidebar-head"
             //style={{ background: "#18eada", color: "#000" }}
           >
-            <span className="sidebar-title">Add comment/question</span>
+            <span className="sidebar-title">
+              <FormattedMessage id="stepBodyFormInstances.addComments" />
+            </span>
             <Icon
               type="close"
               onClick={this.toggle}
@@ -212,7 +216,7 @@ class Comments extends Component {
                           color: "#575757"
                         }}
                       >
-                        Add comment/question
+                        <FormattedMessage id="stepBodyFormInstances.commentsQuetions" />
                       </span>
                     </div>
                   ) : null}
@@ -266,7 +270,9 @@ class Comments extends Component {
                         <Mention
                           style={{ width: "100%", height: 60 }}
                           suggestions={c.mentions}
-                          placeholder="Enter comment or question"
+                          placeholder={that.props.intl.formatMessage({
+                            id: "stepBodyFormInstances.enterComment"
+                          })}
                           multiLines
                           onChange={that.onChange}
                           value={that.state.message}
@@ -278,7 +284,7 @@ class Comments extends Component {
                         style={{ marginTop: "-8px" }}
                         onClick={that.addComment.bind(this, c)}
                       >
-                        Post
+                        <FormattedMessage id="stepBodyFormInstances.postButtonText" />
                       </Button>{" "}
                     </span>
                   ) : null}
@@ -292,4 +298,4 @@ class Comments extends Component {
   }
 }
 
-export default Comments;
+export default injectIntl(Comments);

@@ -3,6 +3,7 @@ import { Button, Select, Input, Cascader, Form } from "antd";
 import { baseUrl, authHeader } from "../../_helpers";
 import { workflowFiltersActions } from "../../actions";
 import _ from "lodash";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -124,12 +125,20 @@ class WorkflowAdvFilter extends Component {
                     ? "error"
                     : ""
               }
-              help={this.state.fetching ? "Fetching fields data..." : ""}
+              help={
+                this.state.fetching
+                  ? this.props.intl.formatMessage({
+                      id: "workflowFiltersTranslated.fetchingFieldsData"
+                    })
+                  : ""
+              }
             >
               <Cascader
                 options={this.state.fieldOptions}
                 onChange={this.handleChange.bind(this, "field")}
-                placeholder="Please select field"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.pleaseSelectField"
+                })}
               />
             </FormItem>
 
@@ -148,15 +157,27 @@ class WorkflowAdvFilter extends Component {
               }
             >
               <Select
-                placeholder="select operator"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.selectOperator"
+                })}
                 style={{ width: "100%" }}
                 onChange={this.handleChange.bind(this, "operator")}
               >
-                <Option value="eq">Equal</Option>
-                <Option value="not_eq">Not equal</Option>
-                <Option value="is_set">Has value</Option>
-                <Option value="contains">Contains</Option>
-                <Option value="not_contains">Does not contain</Option>
+                <Option value="eq">
+                  <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.eq" />
+                </Option>
+                <Option value="not_eq">
+                  <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_eq" />
+                </Option>
+                <Option value="is_set">
+                  <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.is_set" />
+                </Option>
+                <Option value="contains">
+                  <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.contains" />
+                </Option>
+                <Option value="not_contains">
+                  <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_contains" />
+                </Option>
               </Select>
             </FormItem>
 
@@ -175,7 +196,9 @@ class WorkflowAdvFilter extends Component {
               }
             >
               <Input
-                placeholder="Input value"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.inputValue"
+                })}
                 onChange={this.handleChange.bind(this, "fieldValue")}
               />
             </FormItem>
@@ -187,7 +210,7 @@ class WorkflowAdvFilter extends Component {
             style={{ width: "100%" }}
             onClick={this.onAddFilterItem}
           >
-            Add Filter
+            <FormattedMessage id="workflowFiltersTranslated.addFilterButtonText" />
           </Button>
 
           <div className="adv-filter-list">
@@ -209,4 +232,6 @@ class WorkflowAdvFilter extends Component {
   };
 }
 
-export const WrappedAdvancedFilterForm = Form.create()(WorkflowAdvFilter);
+export const WrappedAdvancedFilterForm = Form.create()(
+  injectIntl(WorkflowAdvFilter)
+);

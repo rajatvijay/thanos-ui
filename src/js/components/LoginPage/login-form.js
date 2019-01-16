@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Alert } from "antd";
 //import validator from "validator";
-import { connect } from "react-redux";
 import { login } from "../../actions";
+import SelectLanguage from "../SelectLanguage/";
+import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -88,6 +90,9 @@ class LoginForm extends React.Component {
 
     return (
       <div className="login-form-box">
+        <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />
+        <LoginSelectLanguage />
+        <Divider />
         <Form
           layout="vertical"
           onSubmit={this.onSubmit}
@@ -104,7 +109,9 @@ class LoginForm extends React.Component {
               name="username"
               type="text"
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="email"
+              placeholder={this.props.intl.formatMessage({
+                id: "loginPageInstances.emailText"
+              })}
               value={data.username}
               onChange={this.onInputChange}
             />
@@ -118,7 +125,9 @@ class LoginForm extends React.Component {
               name="password"
               type="password"
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="password"
+              placeholder={this.props.intl.formatMessage({
+                id: "loginPageInstances.passwordText"
+              })}
               value={data.password}
               onChange={this.onInputChange}
             />
@@ -131,7 +140,7 @@ class LoginForm extends React.Component {
               className="login-form-button"
             >
               {" "}
-              Login
+              <FormattedMessage id="loginPageInstances.loginText" />
             </Button>
             {/*<Link to="/register"> Sign up</Link>*/}
           </FormItem>
@@ -140,10 +149,13 @@ class LoginForm extends React.Component {
             <Alert message={this.props.error} type="error" showIcon />
           ) : null}
 
-          <Divider>or</Divider>
+          <Divider>
+            <FormattedMessage id="loginPageInstances.orText" />
+          </Divider>
           <div className="t-16">
             <Link to="/login/magic">
-              Login using email only<i className="material-icons t-14 text-middle pd-left-sm">
+              <FormattedMessage id="loginPageInstances.loginUsingEmailOnly" />
+              <i className="material-icons t-14 text-middle pd-left-sm">
                 arrow_forward
               </i>
             </Link>
@@ -154,4 +166,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm;
+export default injectIntl(LoginForm);
