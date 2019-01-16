@@ -500,9 +500,6 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
 
-  console.log("props--------");
-  console.log(props);
-
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
