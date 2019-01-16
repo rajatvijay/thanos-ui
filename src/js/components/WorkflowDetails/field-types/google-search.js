@@ -1,22 +1,11 @@
 import React, { Component } from "react";
 //import { authHeader, baseUrl } from "../../../_helpers";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select,
-  Tag
-} from "antd";
+import { Form, Icon, Select, Table, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
-import { countries } from "./countries.js";
-import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
+import { dunsFieldActions } from "../../../actions";
+import { jsonData } from "../../../constants/opensearchresults";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -71,6 +60,11 @@ class GoogleSrch extends Component {
       permission: this.props.permission
     };
 
+    // TODO: Hack to mock server response
+    let _field = Object.assign({}, field);
+    _field.integration_json = jsonData.data_fields[4].integration_json;
+    // TODO: 1. Field override
+
     let final_html = null;
     if (this.props.currentStepFields.integration_data_loading) {
       final_html = (
@@ -81,24 +75,25 @@ class GoogleSrch extends Component {
         </div>
       );
     } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
+      _.size(_field.integration_json) &&
+      !_field.integration_json.selected_match
     ) {
       final_html = (
         <div>
-          {_.size(field.integration_json) ? (
+          {_.size(_field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
               <GetTable
                 getComment={this.getComment}
-                jsonData={field.integration_json}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
+                jsonData={_field.integration_json}
+                commentCount={_field.integration_comment_count}
+                flag_dict={_field.selected_flag}
                 onSearch={this.onSearch}
               />
             </div>
           ) : null}
         </div>
       );
+      // TODO: Hack end - remove till 1, change _field -> field before review
     }
 
     return (
@@ -117,10 +112,11 @@ const GetTable = props => {
 
   const data = props.jsonData.results;
 
+  const title = `Found ${data.length} results`;
   const columns = [
     {
-      title: `Found ${data.length} results`,
       dataIndex: "result",
+      colspan: 2,
       render: (text, record, index) => {
         //let adrData = record
         return integrationCommonFunctions.google_search_html(
@@ -131,7 +127,7 @@ const GetTable = props => {
       key: "title"
     },
     {
-      title: "Comments",
+      title: "",
       key: "google_index",
       width: 150,
       render: record => {
@@ -163,7 +159,16 @@ const GetTable = props => {
     }
   ];
 
-  return <Table dataSource={data} pagination={false} columns={columns} />;
+  return (
+    <div>
+      <Table
+        dataSource={data}
+        pagination={false}
+        columns={columns}
+        title={() => title}
+      />
+    </div>
+  );
 };
 
 export const GoogleSearch = props => {
