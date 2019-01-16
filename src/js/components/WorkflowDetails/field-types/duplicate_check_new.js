@@ -50,7 +50,8 @@ class DuplicateCheckComp extends Component {
     this.state = {
       field: null,
       childWorkflow: null,
-      fetching: false
+      fetching: false,
+      error: null
     };
   }
 
@@ -96,24 +97,30 @@ class DuplicateCheckComp extends Component {
     };
 
     let workflow_ids = [];
+
     _.map(duplicate_data, function(v, k) {
       if (_.size(v.workflow_id)) {
         workflow_ids = workflow_ids.concat(v.workflow_id);
       }
     });
+
     workflow_ids = workflow_ids.join(",");
-    let url = baseUrl + "workflows-list/?workflow_ids=" + workflow_ids;
 
-    this.setState({ fetching: true });
+    if (_.size(workflow_ids)) {
+      let url = baseUrl + "workflows-list/?workflow_ids=" + workflow_ids;
+      this.setState({ fetching: true });
 
-    fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(body => {
-        this.setState({
-          childWorkflow: body.results,
-          fetching: false
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(body => {
+          this.setState({
+            childWorkflow: body.results,
+            fetching: false
+          });
         });
-      });
+    } else {
+      this.setState({ error: "No duplicates found" });
+    }
   };
 
   render = () => {
@@ -152,6 +159,8 @@ class DuplicateCheckComp extends Component {
             <div className="text-center mr-top-lg">
               <Icon type="loading" style={{ fontSize: 24 }} />
             </div>
+          ) : _.size(this.state.error) ? (
+            <div className="">No duplicates found</div>
           ) : (
             <div className="workflow-list">
               <div className="paper">
