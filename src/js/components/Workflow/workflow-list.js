@@ -7,6 +7,7 @@ import { calculatedData } from "./calculated-data";
 import Collapsible from "react-collapsible";
 import { connect } from "react-redux";
 import moment from "moment";
+import { FormattedMessage } from "react-intl";
 
 const { Content } = Layout;
 const { getProcessedData } = calculatedData;
@@ -105,12 +106,12 @@ class WorkflowList extends Component {
           ) : (
             <div className="text-center text-medium text-metal">
               {" "}
-              No workflows to show. Try clearing the filters or{" "}
+              <FormattedMessage id="errorMessageInstances.noWorkflowsToShow" />{" "}
               <span
                 className="text-underline text-anchor"
                 onClick={this.reload}
               >
-                reload
+                <FormattedMessage id="commonTextInstances.reloadText" />
               </span>
             </div>
           )}

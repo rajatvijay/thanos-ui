@@ -10,6 +10,10 @@ export default {
       comments: "Comments",
       viewDetails: "View details",
       exportWorkflowData: "Export workflow data",
+      createChildButtonText: "Create child",
+      loadingConfigsText: "Loading configurations...",
+      loadingFiltersText: "Loading filters...",
+      fetchingDataText: "Fetching data...",
       viewActivityLog: "View Activity Log"
     },
     workflowFiltersTranslated: {
@@ -110,6 +114,10 @@ export default {
       comments: "Comentarios",
       viewDetails: "Ver detalles",
       exportWorkflowData: "Exportar datos de flujo de trabajo",
+      createChildButtonText: "Crear hijo",
+      loadingConfigsText: "Cargando configuraciones...",
+      loadingFiltersText: "Cargando filtros...",
+      fetchingDataText: "Obteniendo datos...",
       viewActivityLog: "Ver registro de actividad"
     },
     workflowFiltersTranslated: {

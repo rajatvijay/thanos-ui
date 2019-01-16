@@ -269,11 +269,17 @@ class Workflow extends Component {
               <Icon type="loading" style={{ fontSize: 24 }} />
               <span className="text-normal pd-left">
                 {" "}
-                {this.props.config.loading
-                  ? "Loading configurations..."
-                  : this.props.workflowKind.loading
-                    ? "Loading filters..."
-                    : this.props.workflow.loading ? "Fetching data..." : null}
+                <FormattedMessage
+                  id={
+                    this.props.config.loading
+                      ? "workflowsInstances.loadingConfigsText"
+                      : this.props.workflowKind.loading
+                        ? "workflowsInstances.loadingFiltersText"
+                        : this.props.workflow.loading
+                          ? "workflowsInstances.fetchingDataText"
+                          : null
+                  }
+                />
               </span>
             </div>
           ) : this.props.workflow.loadingStatus === "failed" ? (
@@ -284,12 +290,12 @@ class Workflow extends Component {
                  <i className="material-icons text-middle">refresh</i>
                </div>**/}
               <div className="mr-top-lg text-center text-bold text-metal">
-                <FormattedMessage id="workflowsInstances.loggedOutError" />
+                <FormattedMessage id="errorMessageInstances.loggedOutError" />
                 <div
                   className="text-anchor text-anchor "
                   onClick={this.redirectLoginPage}
                 >
-                  <FormattedMessage id="workflowsInstances.clickToLogin" />
+                  <FormattedMessage id="commonTextInstances.clickToLogin" />
                 </div>
               </div>
             </div>
