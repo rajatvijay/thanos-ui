@@ -5,7 +5,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
-import { jsonData } from "../../../constants/opensearchresults";
+//import { jsonData } from "../../../constants/opensearchresults";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -60,12 +60,12 @@ class GoogleSrch extends Component {
       permission: this.props.permission
     };
 
-    // TODO: Hack to mock server response
-    let _field = Object.assign({}, field);
-    _field.integration_json = jsonData.data_fields[4].integration_json;
-    // TODO: 1. Field override
-    console.log("this.props--------");
-    console.log(_field);
+    // // TODO: Hack to mock server response
+    // let _field = Object.assign({}, field);
+    // _field.integration_json = jsonData.data_fields[4].integration_json;
+    // // TODO: 1. Field override
+    // console.log("this.props--------");
+    // console.log(_field);
 
     let final_html = null;
     if (this.props.currentStepFields.integration_data_loading) {
@@ -108,9 +108,6 @@ class GoogleSrch extends Component {
 
 const GetTable = props => {
   // for error
-
-  console.log("propslslslslslslslslslsls");
-  console.log(props);
 
   if (!props.jsonData.results) {
     return <div className="text-center text-red">No result found!</div>;
