@@ -645,7 +645,8 @@ class MetaRow extends React.Component {
                   placement="bottomRight"
                 >
                   <a className="ant-dropdown-link ant-btn main-btn" href="#">
-                    + Create child
+                    +{" "}
+                    <FormattedMessage id="workflowsInstances.createChildButtonText" />
                     <i className="material-icons t-14">keyboard_arrow_down</i>
                   </a>
                 </Dropdown>
