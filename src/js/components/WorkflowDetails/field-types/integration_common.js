@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tag } from "antd";
+import { Tag, List, Tooltip, Modal } from "antd";
 import _ from "lodash";
 import { Row, Col, Button, Progress } from "antd";
 
@@ -165,36 +165,122 @@ function serp_search_html(record) {
   );
 }
 
+class EntityGroup extends Component {
+  constructor() {
+    super();
+    this.state = {
+      visible: false
+    };
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  render() {
+    console.log(this.props);
+
+    let firstIEntity = this.props.group[0];
+
+    return (
+      <Col
+        span={12}
+        className="mr-bottom"
+        style={{ paddingLeft: "10px", paddingRight: "10px" }}
+      >
+        <div className="mr-bottom-sm t-12">{this.props.title}</div>
+        <div className="t-14">
+          <div className="text-light">
+            <span className="float-right">{firstIEntity.salience}</span>
+
+            {firstIEntity.entity_metadata.wikipedia_url ? (
+              <a
+                target="_blank"
+                href={firstIEntity.entity_metadata.wikipedia_url}
+                className="text-secondary"
+              >
+                {firstIEntity.entity_name}
+              </a>
+            ) : (
+              <span>{firstIEntity.entity_name}</span>
+            )}
+          </div>
+
+          <div className="text-right">
+            <span
+              onClick={this.showModal}
+              className="text-anchor text-secondary t-12"
+            >
+              {this.props.group.length - 1} more
+            </span>
+          </div>
+          <Modal
+            title={this.props.title}
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <div className="mr-bottom text-medium">
+              <b>
+                <span className="float-right">Salience score</span>
+                <span>Entity name</span>
+              </b>
+            </div>
+
+            {_.map(this.props.group, function(entity) {
+              return (
+                <div className="mr-bottom">
+                  <span className="float-right">{entity.salience || ""}</span>
+                  {entity.entity_metadata.wikipedia_url ? (
+                    <a
+                      target="_blank"
+                      href={entity.entity_metadata.wikipedia_url}
+                      className="text-secondary"
+                    >
+                      {entity.entity_name}
+                    </a>
+                  ) : (
+                    <span>{entity.entity_name}</span>
+                  )}
+                </div>
+              );
+            })}
+          </Modal>
+        </div>
+      </Col>
+    );
+  }
+}
+
 function google_search_html(record, search) {
   const salienceSortedValues =
     record.entity_data &&
     record.entity_data.sort((a, b) => {
       return b.salience - a.salience;
     });
-  const entity_data_block =
-    record.entity_data &&
-    salienceSortedValues.map(entity => {
-      if (entity.entity_metadata && entity.entity_metadata.wikipedia_url) {
-        return (
-          <div style={{ width: "250px", float: "left", paddingBottom: "10px" }}>
-            {entity.entity_type}:
-            <br />
-            <b>
-              {entity.entity_metadata.wikipedia_url &&
-              entity.entity_metadata.wikipedia_url ? (
-                <a href={entity.entity_metadata.wikipedia_url}>
-                  {entity.entity_name}
-                </a>
-              ) : (
-                <span>{entity.entity_name}</span>
-              )}
-            </b>
-          </div>
-        );
-      } else {
-        return null;
-      }
-    });
+
+  const groupedData = _.groupBy(salienceSortedValues, function(o) {
+    if (o.entity_type) {
+      return o.entity_type;
+    }
+  });
+
   const getProgressPercent = ({ score }) => {
     /**
      * Scores range from -1 to 1, we normalize that to 0 to 2
@@ -203,65 +289,48 @@ function google_search_html(record, search) {
     const normalized_score = score + 1;
     return normalized_score * 100 / 2;
   };
+
   const getProgressColor = ({ percent }) => {
-    /**
-     * Creates a very simple color gradient range from red to green
-     */
-    let r,
-      g,
-      b = 0;
-    if (percent < 50) {
-      r = 255;
-      g = Math.round(5.1 * percent);
-    } else {
-      g = 255;
-      r = Math.round(510 - 5.1 * percent);
+    let color = "#fd4d4a";
+    if (percent > 50) {
+      color = "#8bcd36";
     }
-    const h = r * 0x10000 + g * 0x100 + b * 0x1;
-    return "#" + ("000000" + h.toString(16)).slice(-6);
+    return color;
   };
   const progressPercent = getProgressPercent({ score: record.sentiment_score });
+
   return (
     <div>
-      <strong
-        style={{ "font-size": "large" }}
-        dangerouslySetInnerHTML={{ __html: record.htmlTitle }}
-      />
-      <br />
+      <div className="mr-bottom t-16 text-medium gsearch-title">
+        <span dangerouslySetInnerHTML={{ __html: record.htmlTitle }} />
+      </div>
       <div
-        style={{ "margin-top": "10px" }}
+        className="mr-bottom text-light"
         dangerouslySetInnerHTML={{ __html: record.htmlSnippet }}
       />
-      <br />
-      <div style={{ "margin-bottom": "10px" }}>
-        <a href={record.link} target="_blank">
+      <div className="mr-bottom-lg">
+        <a href={record.link} target="_blank" className="text-secondary">
           {record.formattedUrl}
         </a>
       </div>
-      <br />
-      <div style={{ width: "250px", float: "left" }}>
-        Sentiment score:
-        <br />
-        <small style={{ float: "left", padding: "5px" }}>-1</small>
-        <div style={{ width: "200px", float: "left" }}>
-          <Progress
-            showInfo={false}
-            size="small"
-            percent={progressPercent}
-            strokeColor={getProgressColor({ percent: progressPercent })}
-          />
-        </div>
-        <small style={{ float: "left", padding: "5px" }}>1</small>
-      </div>
-      <div
-        style={{
-          "overflow-x": "scroll",
-          "white-space": "nowrap",
-          display: "inline-block"
-        }}
-      >
-        {entity_data_block}
-      </div>
+
+      <Row gutter={20}>
+        <Col span={12} className="mr-bottom">
+          <div className="t-12 mr-bottom-sm">Sentiment score:</div>
+          <div
+            style={{
+              color: getProgressColor({ percent: progressPercent }),
+              fontSize: "16px",
+              fontWeight: 500
+            }}
+          >
+            {record.sentiment_score}
+          </div>
+        </Col>
+        {_.map(groupedData, function(group, key) {
+          return <EntityGroup group={group} title={key} />;
+        })}
+      </Row>
     </div>
   );
 }

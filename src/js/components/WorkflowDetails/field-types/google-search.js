@@ -64,6 +64,8 @@ class GoogleSrch extends Component {
     let _field = Object.assign({}, field);
     _field.integration_json = jsonData.data_fields[4].integration_json;
     // TODO: 1. Field override
+    console.log("this.props--------");
+    console.log(_field);
 
     let final_html = null;
     if (this.props.currentStepFields.integration_data_loading) {
@@ -106,13 +108,20 @@ class GoogleSrch extends Component {
 
 const GetTable = props => {
   // for error
+
+  console.log("propslslslslslslslslslsls");
+  console.log(props);
+
   if (!props.jsonData.results) {
     return <div className="text-center text-red">No result found!</div>;
   }
 
   const data = props.jsonData.results;
 
-  const title = `Found ${data.length} results`;
+  const title = (
+    <span className="text-metal">{`Found ${data.length} results`}</span>
+  );
+
   const columns = [
     {
       dataIndex: "result",
@@ -129,6 +138,10 @@ const GetTable = props => {
     {
       title: "",
       key: "google_index",
+      width: "10%",
+      align: "right",
+      className: "comment-column",
+      verticalAlign: "top",
       render: record => {
         let flag_data = _.size(props.flag_dict[record.cacheId])
           ? props.flag_dict[record.cacheId]
