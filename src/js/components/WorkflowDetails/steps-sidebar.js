@@ -128,7 +128,7 @@ class StepSidebarMenu extends Component {
           {s.name}
 
           {_.size(hasAlert) ? (
-            <span className="float-right">
+            <span className="float-right pd-left">
               <Tooltip title={hasAlert.alert.category.name}>
                 <Badge status="error" />
               </Tooltip>

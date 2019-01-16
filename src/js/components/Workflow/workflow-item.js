@@ -813,7 +813,7 @@ const StepItem = props => {
         <i className="material-icons text-middle">{icon_cls}</i>
         <span>{props.stepData.name}</span>
         {_.size(hasAlert) ? (
-          <span className="float-right">
+          <span className="float-right pd-left">
             <Tooltip title={hasAlert.alert.category.name}>
               <Badge status="error" />
             </Tooltip>
