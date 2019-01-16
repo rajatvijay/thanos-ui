@@ -77,18 +77,18 @@ class GoogleSrch extends Component {
         </div>
       );
     } else if (
-      _.size(_field.integration_json) &&
-      !_field.integration_json.selected_match
+      _.size(field.integration_json) &&
+      !field.integration_json.selected_match
     ) {
       final_html = (
         <div>
-          {_.size(_field.integration_json) ? (
+          {_.size(field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
               <GetTable
                 getComment={this.getComment}
-                jsonData={_field.integration_json}
-                commentCount={_field.integration_comment_count}
-                flag_dict={_field.selected_flag}
+                jsonData={field.integration_json}
+                commentCount={field.integration_comment_count}
+                flag_dict={field.selected_flag}
                 onSearch={this.onSearch}
               />
             </div>
