@@ -256,7 +256,7 @@ class Workflow extends Component {
                   </Tooltip>
                 ) : null}
               </Col>
-              <Col span="4" className="text-secondary text-center">
+              <Col span="4" className="text-metal text-center">
                 <FormattedMessage id="workflowsInstances.statusText" />
               </Col>
             </Row>
