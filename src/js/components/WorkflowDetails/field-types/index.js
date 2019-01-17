@@ -43,7 +43,7 @@ export const getFieldType = props => {
     case "text":
       return Text(props);
     case "bool":
-      return GoogleSearch(props);
+      return Bool(props);
     case "integer":
       return Number(props);
     case "attachment":
