@@ -306,7 +306,8 @@ function getIntegrationSearchButton(props) {
     thomson_reuters_screen_sync: "Get TR Screening results",
     thomson_reuters_casesystemid: "Get TR case system id",
     thomson_reuters_resolve_result: "Get TR resolve result",
-    duplicate_check: "Get Duplicates"
+    duplicate_check: "Get Duplicates",
+    dnb_gbo: "Get GBO"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
