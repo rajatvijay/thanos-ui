@@ -373,6 +373,10 @@ function google_search_html(record, search) {
           </Tooltip>
         </span>
         <span dangerouslySetInnerHTML={{ __html: record.htmlTitle }} />
+        <span className="pd-right" />{" "}
+        <Tag color="#305ebe" className="alert-tag-item">
+          {record.category.name}
+        </Tag>
       </div>
       <div
         className="mr-bottom text-light"

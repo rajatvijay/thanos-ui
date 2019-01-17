@@ -108,11 +108,17 @@ const GetTable = props => {
     return <div className="text-center text-red">No result found!</div>;
   }
 
-  const data = _.sortBy(props.jsonData.results, [
-    function(o) {
-      return o.relevance_score;
-    }
-  ]);
+  const data = _.reverse(
+    _.sortBy(
+      props.jsonData.results,
+      [
+        function(o) {
+          return o.relevance_score;
+        }
+      ],
+      []
+    )
+  );
   const title = (
     <span className="text-metal">{`Found ${data.length} results`}</span>
   );
@@ -185,10 +191,6 @@ const GetTable = props => {
       }
     }
   ];
-
-  console.log("cate----");
-  console.log(data);
-  console.log(cate);
 
   return (
     <div>
