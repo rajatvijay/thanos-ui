@@ -60,12 +60,10 @@ class GoogleSrch extends Component {
       permission: this.props.permission
     };
 
-    // // TODO: Hack to mock server response
+    // TODO: Hack to mock server response
     // let _field = Object.assign({}, field);
     // _field.integration_json = jsonData.data_fields[4].integration_json;
-    // // TODO: 1. Field override
-    // console.log("this.props--------");
-    // console.log(_field);
+    // TODO: 1. Field override
 
     let final_html = null;
     if (this.props.currentStepFields.integration_data_loading) {
@@ -82,17 +80,15 @@ class GoogleSrch extends Component {
     ) {
       final_html = (
         <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                getComment={this.getComment}
-                jsonData={field.integration_json}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
-                onSearch={this.onSearch}
-              />
-            </div>
-          ) : null}
+          <div className="mr-top-lg mr-bottom-lg google-search-table">
+            <GetTable
+              getComment={this.getComment}
+              jsonData={field.integration_json}
+              commentCount={field.integration_comment_count}
+              flag_dict={field.selected_flag}
+              onSearch={this.onSearch}
+            />
+          </div>
         </div>
       );
       // TODO: Hack end - remove till 1, change _field -> field before review
@@ -108,19 +104,41 @@ class GoogleSrch extends Component {
 
 const GetTable = props => {
   // for error
-
   if (!props.jsonData.results) {
     return <div className="text-center text-red">No result found!</div>;
   }
 
-  const data = props.jsonData.results;
-
+  const data = _.sortBy(props.jsonData.results, [
+    function(o) {
+      return o.relevance_score;
+    }
+  ]);
   const title = (
     <span className="text-metal">{`Found ${data.length} results`}</span>
   );
 
+  let cate = (
+    <div>
+      <span className="text-metal pd-right">Filter:</span>{" "}
+      {_.map(
+        _.uniqBy(data, function(o) {
+          return o.category.name;
+        }),
+        function(i) {
+          return (
+            <Tag className="alert-tag-item" color="#305ebe">
+              {" "}
+              {i.category.name}
+            </Tag>
+          );
+        }
+      )}
+    </div>
+  );
+
   const columns = [
     {
+      title: cate,
       dataIndex: "result",
       colspan: 2,
       render: (text, record, index) => {
@@ -168,11 +186,15 @@ const GetTable = props => {
     }
   ];
 
+  console.log("cate----");
+  console.log(data);
+  console.log(cate);
+
   return (
     <div>
       <Table
         dataSource={data}
-        pagination={false}
+        pagination={true}
         columns={columns}
         title={() => title}
       />
