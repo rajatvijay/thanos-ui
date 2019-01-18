@@ -1,39 +1,97 @@
 import React, { Component } from "react";
-import {
-  Layout,
-  Menu,
-  Icon,
-  Dropdown,
-  Badge,
-  Popover,
-  List,
-  Timeline,
-  Tooltip
-} from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import Moment from "react-moment";
-import { Scrollbars } from "react-custom-scrollbars";
 import InfiniteScroll from "react-infinite-scroller";
+import PropTypes from "prop-types";
 
-const { Header } = Layout;
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+const TabPane = Tabs.TabPane;
 
-class AuditList extends Component {
-  constructor() {
-    super();
-    this.state = { data: { results: [], next: null }, activityLoading: true };
+class AuditListTabs extends Component {
+  static ACTIVITY_ACTION_GROUPS = {
+    edits: ["step_submitted", "step_undo", "step_approved", "response_changed"],
+    emails: ["sendgrid_email"],
+    views: ["step_viewed", "workflow_viewed"]
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentTab: "edits"
+    };
   }
 
-  componentDidMount = () => {
-    this.loadData();
+  onTabChange = key => {
+    this.setState({
+      currentTab: key
+    });
   };
+
+  render = () => {
+    return (
+      <Tabs defaultActiveKey="edits" onChange={this.onTabChange}>
+        {Object.entries(AuditListTabs.ACTIVITY_ACTION_GROUPS).map(
+          ([key, value]) => {
+            return (
+              <TabPane
+                tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
+                key={key}
+              >
+                <AuditList
+                  actions={AuditListTabs.ACTIVITY_ACTION_GROUPS[key]}
+                  isFocused={this.state.currentTab === key}
+                  logType={key}
+                  id={this.props.id}
+                />
+              </TabPane>
+            );
+          }
+        )}
+        <TabPane
+          isFocused={this.state.currentTab === "download"}
+          key="download"
+          tab={
+            <span>
+              Download all <Icon type="download" />
+            </span>
+          }
+        >
+          <div style={{ textAlign: "center" }}>
+            <a href={`${baseUrl}workflows/${this.props.id}/export/`}>
+              <Icon type="download" style={{ fontSize: 30 }} />
+            </a>
+          </div>
+        </TabPane>
+      </Tabs>
+    );
+  };
+}
+
+AuditListTabs.propTypes = {
+  id: PropTypes.number.isRequired
+};
+
+class AuditList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {
+        results: [],
+        next: null
+      },
+      activityLoading: true,
+      initialLoad: true
+    };
+  }
 
   loadData = () => {
     let url = this.state.data.next
       ? this.state.data.next
-      : baseUrl + "workflows/" + this.props.id + "/activity/";
+      : baseUrl +
+        `workflows/${this.props.id}/activity/?actions=${this.props.actions.join(
+          ","
+        )}`;
     //let url = this.state.data.next? this.state.data.next: baseUrl + "activities/";
 
     const requestOptions = {
@@ -42,36 +100,142 @@ class AuditList extends Component {
       credentials: "include"
     };
 
-    //let url = baseUrl + "activities/";
-    //this.setState({ activityLoading: true });
-
     fetch(url, requestOptions)
       .then(response => response.json())
       .then(body => {
         this.appendData(body);
-        //this.setState({ data: body, activityLoading: false });
       });
   };
 
   appendData = body => {
     let oldData = this.state.data.results;
     let newData = body;
-    let concatList = oldData.concat(newData.results);
-    newData.results = concatList;
-    this.setState({ data: newData, activityLoading: false });
+    newData.results = oldData.concat(newData.results);
+    this.setState({
+      data: newData,
+      activityLoading: false,
+      initialLoad: false
+    });
+  };
+
+  hasMore = () => {
+    let _hasMore = false;
+    if (this.state.initialLoad) {
+      _hasMore = true;
+    } else {
+      _hasMore = !!this.state.data.next; // next can be null, undefined or a string
+    }
+    return _hasMore;
   };
 
   render = () => {
+    if (this.props.isFocused) {
+      if (!this.state.initialLoad && this.state.data.results.length === 0) {
+        return (
+          <div style={{ textAlign: "center" }}>
+            <Icon type={"exclamation-circle"} />{" "}
+            {`No activity log found for ${this.props.logType}`}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <AuditContent
+              data={this.state.data}
+              hasMore={this.hasMore}
+              loadData={this.loadData}
+            />
+          </div>
+        );
+      }
+    } else {
+      return null;
+    }
+  };
+}
+
+AuditList.propTypes = {
+  id: PropTypes.number.isRequired,
+  isFocused: PropTypes.bool,
+  actions: PropTypes.array.isRequired,
+  logType: PropTypes.string.isRequired
+};
+
+const ActivityLogSimple = ({ item }) => {
+  return (
+    <div>
+      <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
+        {item.actor.email}
+      </a>{" "}
+      {item.action.type} {item.object.name}
+      <br />
+      <span className="small text-light">
+        <Tooltip title={item.actiontime.humanize_time}>
+          <Moment fromNow>{item.actiontime.datetime}</Moment>
+        </Tooltip>
+      </span>
+    </div>
+  );
+};
+
+const ActivityLogEmail = ({ item }) => {
+  return (
+    <p className="pd-left-sm">
+      Email{" "}
+      {item.object.name ? <span>&#8220;{item.object.name}&#8221;</span> : " "}
+      {item.action.type ? item.action.type : item.action.name}{" "}
+      <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
+        {item.actor.email}
+      </a>
+      <br />
+      <span className="small text-light">
+        <Tooltip title={item.actiontime.humanize_time}>
+          <Moment fromNow>{item.actiontime.datetime}</Moment>
+        </Tooltip>
+      </span>
+    </p>
+  );
+};
+
+class ActivityLogCollapsible extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
+
+  toggle = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
+  render() {
+    const item = this.props.item;
     return (
-      <div>
-        {this.state.activityLoading ? (
-          <div className="text-center">loading...</div>
-        ) : (
-          <AuditContent data={this.state.data} loadData={this.loadData} />
+      <div onClick={this.toggle}>
+        <ActivityLogSimple item={item} />
+        {this.state.isOpen && (
+          <Timeline style={{ paddingTop: 20, marginBottom: -20 }}>
+            {_.map(item.object.changes, (change, index) => {
+              return (
+                <Timeline.Item style={{ paddingBottom: 10 }}>
+                  {change.event}
+                </Timeline.Item>
+              );
+            })}
+          </Timeline>
         )}
+        <Button
+          size={"small"}
+          style={{ position: "absolute", top: 0, right: 0 }}
+          icon={this.state.isOpen ? "up" : "down"}
+          className={"activity-log-collapse-btn"}
+        />
       </div>
     );
-  };
+  }
 }
 
 const AuditContent = props => {
@@ -80,18 +244,17 @@ const AuditContent = props => {
       <InfiniteScroll
         pageStart={0}
         loadMore={props.loadData}
-        hasMore={props.data.next ? true : false}
+        hasMore={props.hasMore()}
         loader={
           <div className="loader" key={0}>
-            Loading ...
+            <Icon type={"loading"} />
           </div>
         }
         useWindow={false}
+        initialLoad={true}
       >
         <Timeline>
           {_.map(props.data.results, function(item, index) {
-            console.log(item);
-
             let icon = "panorama_fish_eye";
             let color = "blue";
 
@@ -122,48 +285,14 @@ const AuditContent = props => {
                 color={color}
               >
                 {item.object.type === "email" ? (
-                  <p className="pd-left-sm">
-                    Email{" "}
-                    {item.object.name ? (
-                      <span>&#8220;{item.object.name}&#8221;</span>
-                    ) : (
-                      " "
-                    )}
-                    {item.action.type ? item.action.type : item.action.name}{" "}
-                    <a
-                      className="text-medium text-base"
-                      href={"mailto:" + item.actor.email}
-                    >
-                      {item.actor.email}
-                    </a>
-                    <br />
-                    <span className="small text-light">
-                      <Tooltip title={item.actiontime.humanize_time}>
-                        <Moment fromNow>{item.actiontime.datetime}</Moment>
-                      </Tooltip>
-                    </span>
-                  </p>
+                  <ActivityLogEmail item={item} />
+                ) : item.object.changes.length === 0 ? (
+                  <ActivityLogSimple item={item} />
                 ) : (
-                  <p className="pd-left-sm">
-                    <a
-                      className="text-medium text-base"
-                      href={"mailto:" + item.actor.email}
-                    >
-                      {item.actor.email}
-                    </a>{" "}
-                    {item.action.type} {item.object.name}
-                    <br />
-                    <span className="small text-light">
-                      <Tooltip title={item.actiontime.humanize_time}>
-                        <Moment fromNow>{item.actiontime.datetime}</Moment>
-                      </Tooltip>
-                    </span>
-                  </p>
+                  <ActivityLogCollapsible item={item} />
                 )}
               </Timeline.Item>
             );
-
-            //cons
           })}
         </Timeline>
       </InfiniteScroll>
@@ -171,4 +300,4 @@ const AuditContent = props => {
   );
 };
 
-export default AuditList;
+export default AuditListTabs;
