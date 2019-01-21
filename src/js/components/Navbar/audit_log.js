@@ -122,27 +122,9 @@ const AuditContent = props => {
                 color={color}
               >
                 {item.object.type === "email" ? (
-                  <p className="pd-left-sm">
-                    Email{" "}
-                    {item.object.name ? (
-                      <span>&#8220;{item.object.name}&#8221;</span>
-                    ) : (
-                      " "
-                    )}
-                    {item.action.type ? item.action.type : item.action.name}{" "}
-                    <a
-                      className="text-medium text-base"
-                      href={"mailto:" + item.actor.email}
-                    >
-                      {item.actor.email}
-                    </a>
-                    <br />
-                    <span className="small text-light">
-                      <Tooltip title={item.actiontime.humanize_time}>
-                        <Moment fromNow>{item.actiontime.datetime}</Moment>
-                      </Tooltip>
-                    </span>
-                  </p>
+                  <ActivityLogEmail item={item} />
+                ) : item.object.changes && item.object.changes.length === 0 ? (
+                  <ActivityLogSimple item={item} />
                 ) : (
                   <p className="pd-left-sm">
                     <a
