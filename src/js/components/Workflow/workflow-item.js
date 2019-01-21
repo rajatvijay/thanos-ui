@@ -27,8 +27,8 @@ import { utils } from "./utils";
 import { history } from "../../_helpers";
 import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
-import AuditList from "../Navbar/audit_log";
 import { FormattedMessage } from "react-intl";
+import AuditListTabs from "../Navbar/audit_log";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -325,9 +325,9 @@ class HeaderOptions2 extends React.Component {
             //style={{top:'64px'}}
             onClose={this.toggleSidebar}
             visible={this.state.showSidebar}
-            width={300}
+            width={500}
           >
-            <AuditList id={props.workflow.id} />
+            <AuditListTabs id={props.workflow.id} />
           </Drawer>
         ) : null}
 
@@ -499,9 +499,6 @@ const getScoreColor = riskValue => {
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
-
-  console.log("props--------");
-  console.log(props);
 
   return (
     <div className="ant-collapse-header">
@@ -816,7 +813,7 @@ const StepItem = props => {
         <i className="material-icons text-middle">{icon_cls}</i>
         <span>{props.stepData.name}</span>
         {_.size(hasAlert) ? (
-          <span className="float-right">
+          <span className="float-right pd-left">
             <Tooltip title={hasAlert.alert.category.name}>
               <Badge status="error" />
             </Tooltip>

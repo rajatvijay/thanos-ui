@@ -163,6 +163,8 @@ export const getFieldType = props => {
       return ChildWorkflowField(props);
     case "duplicate_check":
       return DuplicateCheck(props);
+    case "dnb_gbo":
+      return DnBCommon(props);
 
     default:
       return Text(props);

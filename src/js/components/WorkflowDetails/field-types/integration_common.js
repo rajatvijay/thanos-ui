@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Tag } from "antd";
+import { Tag, List, Tooltip, Modal } from "antd";
 import _ from "lodash";
-import { Row, Col } from "antd";
+import { Row, Col, Button, Progress } from "antd";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -165,16 +165,246 @@ function serp_search_html(record) {
   );
 }
 
-function google_search_html(record) {
+class EntityGroup extends Component {
+  constructor() {
+    super();
+    this.state = {
+      visible: false
+    };
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleOk = e => {
+    this.setState({
+      visible: false
+    });
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false
+    });
+  };
+
+  render() {
+    let firstEntity = this.props.group[0];
+
+    return (
+      <Col
+        span={8}
+        className="mr-bottom-lg "
+        style={{ paddingLeft: "15px", paddingRight: "15px", minHeight: "70px" }}
+      >
+        <div className="mr-bottom-sm t-12">
+          <span
+            onClick={this.showModal}
+            className="text-anchor text-secondary t-12 float-right"
+          >
+            {this.props.group.length - 1 !== 0
+              ? "view all " + this.props.group.length
+              : ""}
+          </span>
+          {this.props.title}
+        </div>
+        <div className="t-14">
+          <EntityItem
+            title={
+              firstEntity.entity_metadata.wikipedia_url ? (
+                <a
+                  target="_blank"
+                  href={firstEntity.entity_metadata.wikipedia_url}
+                  className="text-secondary"
+                >
+                  {firstEntity.entity_name}
+                </a>
+              ) : (
+                <span>{firstEntity.entity_name}</span>
+              )
+            }
+            score={firstEntity.salience}
+          />
+
+          <Modal
+            title={this.props.title}
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={<div />}
+            bodyStyle={{ height: "400px", overflow: "scroll" }}
+          >
+            <div className="mr-bottom text-medium">
+              <b>
+                <span className="float-right">Salience score</span>
+                <span>Entity name</span>
+              </b>
+            </div>
+
+            {_.map(
+              _.sortBy(this.props.group, [
+                function(o) {
+                  return o.entity_metadata.wikipedia_url;
+                }
+              ]),
+              function(entity) {
+                return (
+                  <div className="mr-bottom">
+                    <EntityItem
+                      title={
+                        entity.entity_metadata.wikipedia_url ? (
+                          <a
+                            target="_blank"
+                            href={entity.entity_metadata.wikipedia_url}
+                            className="text-secondary"
+                          >
+                            {entity.entity_name}
+                          </a>
+                        ) : (
+                          <span>{entity.entity_name}</span>
+                        )
+                      }
+                      score={entity.salience}
+                    />
+                  </div>
+                );
+              }
+            )}
+          </Modal>
+        </div>
+      </Col>
+    );
+  }
+}
+
+const getProgressPercent = ({ score }) => {
+  /**
+   * Scores range from -1 to 1, we normalize that to 0 to 2
+   * Finally dividing this by 2 will give us the actual percentage
+   */
+  const normalized_score = score + 1;
+  return normalized_score * 100 / 2;
+};
+
+//Get color according to score
+const getProgressColor = ({ percent }) => {
+  let color = "#fd4d4a";
+  if (percent > 50) {
+    color = "#8bcd36";
+  }
+  return color;
+};
+
+const EntityItem = props => {
+  let percent = getProgressPercent({ score: props.score });
+  let color = getProgressColor({ percent: percent });
+
+  let i = (
+    <Row gutter={10}>
+      <Col span={18} className="text-light">
+        <div className="text-ellipsis">{props.title}</div>
+      </Col>
+      <Col span={6} className="text-right">
+        <Tooltip title={props.score}>
+          <Progress
+            size="small"
+            percent={percent}
+            strokeColor={color}
+            showInfo={false}
+          />
+        </Tooltip>
+      </Col>
+    </Row>
+  );
+
+  return i;
+};
+
+function google_search_html(record, search) {
+  const salienceSortedValues =
+    record.entity_data &&
+    record.entity_data.sort((a, b) => {
+      return b.salience - a.salience;
+    });
+
+  const groupedData = _.groupBy(salienceSortedValues, function(o) {
+    if (o.entity_type) {
+      return o.entity_type;
+    }
+  });
+
+  const progressPercent = getProgressPercent({ score: record.sentiment_score });
+
+  let removeEntity = ["CONSUMER_GOOD", "WORK_OF_ART", "OTHER"];
+
+  const getRelevanceScore = score => {
+    let s = parseFloat(score).toFixed(2);
+    let icon = "nobar";
+    if (s > 0.5 && s < 0.625) {
+      icon = "bar1";
+    } else if (s >= 0.625 && s < 0.75) {
+      icon = "bar2";
+    } else if (s >= 0.75 && s < 0.875) {
+      icon = "bar3";
+    } else if (s >= 0.875) {
+      icon = "bar4";
+    }
+    return icon;
+  };
+
   return (
     <div>
-      <b dangerouslySetInnerHTML={{ __html: record.htmlTitle }} />
-      <br />
-      <span dangerouslySetInnerHTML={{ __html: record.htmlSnippet }} />
-      <br />
-      <a href={record.link} target="_blank">
-        {record.formattedUrl}
-      </a>
+      <div className="mr-bottom t-16 text-medium gsearch-title">
+        <span className="salience-icon">
+          <Tooltip
+            placement="left"
+            title={"Relevance score: " + record.relevance_score}
+          >
+            <span>
+              <span
+                className={
+                  "icon-custom " + getRelevanceScore(record.relevance_score)
+                }
+              />
+            </span>
+          </Tooltip>
+        </span>
+        <span dangerouslySetInnerHTML={{ __html: record.htmlTitle }} />
+        <span className="pd-right" />{" "}
+        <Tag color="#305ebe" className="alert-tag-item">
+          {record.category.name}
+        </Tag>
+      </div>
+      <div
+        className="mr-bottom text-light"
+        dangerouslySetInnerHTML={{ __html: record.htmlSnippet }}
+      />
+      <div className="mr-bottom-lg">
+        <a href={record.link} target="_blank" className="text-secondary">
+          {record.formattedUrl}
+        </a>
+      </div>
+
+      <Row gutter={30}>
+        <Col span={8} className="mr-bottom-lg" style={{ minHeight: "60px" }}>
+          <div className="t-12 mr-bottom-sm">Sentiment score:</div>
+
+          <Progress
+            size="small"
+            percent={progressPercent}
+            strokeColor={getProgressColor({ percent: progressPercent })}
+            showInfo={false}
+          />
+        </Col>
+        {_.map(groupedData, function(group, key) {
+          if (!removeEntity.includes(key)) {
+            return <EntityGroup group={group} title={key} />;
+          }
+        })}
+      </Row>
     </div>
   );
 }

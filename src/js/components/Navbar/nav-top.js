@@ -84,7 +84,6 @@ class NavTop extends Component {
   };
 
   render = () => {
-    console.log(this.props, "navbar Language");
     let that = this;
     let user = this.props.authentication.user;
     const { searchInput } = this.state;
