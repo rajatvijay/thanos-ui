@@ -258,28 +258,6 @@ class WorkflowItem extends React.Component {
             />
           </div>
         ) : null}
-
-        {/*this.props.workflow ? (
-          <div className="child-workflow-wrapper">
-            //]=o  <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
-                  <WorkflowHeader
-                    workflow={this.props.workflow}
-                    statusType={statusType}
-                  />
-                </div>
-              }
-              lazyRender={true}
-              transitionTime={200}
-            >
-              <div className="lc-card">
-                <WorkflowBody
-                  workflow={this.props.workflow}
-                  pData={this.props.pData}
-                />
-              </div>
-            </Collapsible>
-          </div>
-        ) : null*/}
       </div>
     );
   };

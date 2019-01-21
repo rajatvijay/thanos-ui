@@ -53,7 +53,7 @@ const SubMenu = Menu.SubMenu;
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   return (
-    <Col span={6} className="text-left">
+    <Col span={props.isChild ? 7 : 6} className="text-left">
       {props.link ? (
         <a
           href={"/workflows/instances/" + props.workflow.id + "/"}
@@ -503,44 +503,46 @@ export const WorkflowHeader = props => {
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
-        <Col span={1} className=" text-anchor">
-          {props.detailsPage ? (
-            <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
-              <i
-                className="material-icons text-secondary"
-                style={{ fontSize: "18px", verticalAlign: "middle" }}
-              >
-                keyboard_backspace
-              </i>
-            </span>
-          ) : (
-            <span className="pd-right">
-              <Popover
-                content={
-                  <div className="text-center">
-                    <div className="small">{progressData}% completed</div>
-                  </div>
-                }
-              >
-                <Progress
-                  type="circle"
-                  percent={progressData}
-                  width={35}
-                  format={percent => (
-                    <i
-                      className="material-icons"
-                      style={{ fontSize: "18px", verticalAlign: "middle" }}
-                    >
-                      {props.kind === ""
-                        ? "folder_open"
-                        : getIcon(props.workflow.definition.kind, props.kind)}
-                    </i>
-                  )}
-                />
-              </Popover>
-            </span>
-          )}
-        </Col>
+        {props.isChild ? null : (
+          <Col span={1} className=" text-anchor">
+            {props.detailsPage ? (
+              <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
+                <i
+                  className="material-icons text-secondary"
+                  style={{ fontSize: "18px", verticalAlign: "middle" }}
+                >
+                  keyboard_backspace
+                </i>
+              </span>
+            ) : (
+              <span className="pd-right">
+                <Popover
+                  content={
+                    <div className="text-center">
+                      <div className="small">{progressData}% completed</div>
+                    </div>
+                  }
+                >
+                  <Progress
+                    type="circle"
+                    percent={progressData}
+                    width={35}
+                    format={percent => (
+                      <i
+                        className="material-icons"
+                        style={{ fontSize: "18px", verticalAlign: "middle" }}
+                      >
+                        {props.kind === ""
+                          ? "folder_open"
+                          : getIcon(props.workflow.definition.kind, props.kind)}
+                      </i>
+                    )}
+                  />
+                </Popover>
+              </span>
+            )}
+          </Col>
+        )}
 
         <HeaderTitle {...props} />
 
