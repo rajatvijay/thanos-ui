@@ -286,7 +286,7 @@ const AuditContent = props => {
               >
                 {item.object.type === "email" ? (
                   <ActivityLogEmail item={item} />
-                ) : item.object.changes.length === 0 ? (
+                ) : item.object.changes && item.object.changes.length === 0 ? (
                   <ActivityLogSimple item={item} />
                 ) : (
                   <ActivityLogCollapsible item={item} />
