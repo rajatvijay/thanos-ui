@@ -27,8 +27,8 @@ import { utils } from "./utils";
 import { history } from "../../_helpers";
 import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
-import AuditList from "../Navbar/audit_log";
 import { FormattedMessage } from "react-intl";
+import AuditListTabs from "../Navbar/audit_log";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -325,9 +325,9 @@ class HeaderOptions2 extends React.Component {
             //style={{top:'64px'}}
             onClose={this.toggleSidebar}
             visible={this.state.showSidebar}
-            width={300}
+            width={500}
           >
-            <AuditList id={props.workflow.id} />
+            <AuditListTabs id={props.workflow.id} />
           </Drawer>
         ) : null}
 
