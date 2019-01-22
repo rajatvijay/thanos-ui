@@ -10,13 +10,18 @@ class LoginSelectLanguage extends React.Component {
     this.props.dispatch(languageActions.setLanguage(value));
   };
   render() {
-    let preferredLanguage = this.props.user
-      ? this.props.user.prefered_language
-      : this.props.languageSelector.language ||
-        (navigator.languages && navigator.languages[0]) ||
-        navigator.language ||
-        navigator.userLanguage ||
-        "English";
+    let preferredLanguage =
+      (navigator.languages && navigator.languages[0]) ||
+      navigator.language ||
+      navigator.userLanguage ||
+      languageConstants.DEFAULT_LOCALE;
+    if (!languages.endonyms[preferredLanguage]) {
+      preferredLanguage = preferredLanguage.split("-")[0];
+    }
+    let supportedLaguanges = this.props.config.supported_languages;
+    if (!_.includes(supportedLaguanges, preferredLanguage)) {
+      preferredLanguage = supportedLaguanges[0];
+    }
     return (
       <span>
         <Select
@@ -27,8 +32,17 @@ class LoginSelectLanguage extends React.Component {
           }}
           onChange={this.handleLanguageChangeLogin}
         >
-          <Option value="en">English</Option>
-          <Option value="es">Espanyol</Option>
+          {_.map(
+            Object.keys(languages.endonyms),
+
+            function(locale, index) {
+              return (
+                _.includes(supportedLaguanges, locale) && (
+                  <Option value={locale}>{languages.endonyms[locale]}</Option>
+                )
+              );
+            }
+          )}
         </Select>
       </span>
     );

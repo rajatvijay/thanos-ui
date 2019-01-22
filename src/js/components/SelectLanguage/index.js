@@ -21,7 +21,19 @@ class SelectLanguage extends React.Component {
   render() {
     let user = this.props.authentication.user;
     let preferredLanguage =
-      (user && user.prefered_language) || languageConstants.DEFAULT_LOCALE;
+      (user && user.prefered_language) ||
+      this.props.languageSelector.language ||
+      (navigator.languages && navigator.languages[0]) ||
+      navigator.language ||
+      navigator.userLanguage ||
+      languageConstants.DEFAULT_LOCALE;
+    if (!languages.endonyms[preferredLanguage]) {
+      preferredLanguage = preferredLanguage.split("-")[0];
+    }
+    let supportedLaguanges = this.props.config.supported_languages;
+    if (!_.includes(supportedLaguanges, preferredLanguage)) {
+      preferredLanguage = supportedLaguanges[0];
+    }
     return (
       <span>
         <Select
@@ -39,7 +51,9 @@ class SelectLanguage extends React.Component {
 
             function(locale, index) {
               return (
-                <Option value={locale}>{languages.endonyms[locale]}</Option>
+                _.includes(supportedLaguanges, locale) && (
+                  <Option value={locale}>{languages.endonyms[locale]}</Option>
+                )
               );
             }
           )}
