@@ -284,10 +284,18 @@ class ChildItem extends Component {
   }
 
   getKindID = kindTag => {
-    let kind = _.find(this.props.workflowKind.workflowKind, function(k) {
+    let kind = null;
+    console.log("this.props.workflowKind----");
+    kind = _.find(this.props.workflowKind.workflowKind, function(k) {
       return k.tag === kindTag;
     });
-    return kind.id;
+    console.log(kind);
+
+    if (kind) {
+      return kind.id;
+    } else {
+      return;
+    }
   };
 
   toggleExpand = (parent, kind) => {
@@ -300,8 +308,10 @@ class ChildItem extends Component {
   componentDidUpdate = prevProps => {
     let rKind = null;
     if (this.props.workflowKind !== prevProps.workflowKind) {
-      rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
-      this.setState({ kind: rKind });
+      if (_.size(this.props.workflowKind.workflowKind)) {
+        rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
+        this.setState({ kind: rKind });
+      }
     }
   };
 
