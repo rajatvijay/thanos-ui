@@ -3,6 +3,7 @@ import React from "react";
 import Routes from "./routes";
 
 import { loadReCaptcha } from "react-recaptcha-v3";
+import _ from "lodash";
 import { connect } from "react-redux";
 import messages from "./components/common/intlMessages";
 import { addLocaleData, IntlProvider, injectIntl } from "react-intl";
@@ -16,8 +17,13 @@ class App extends React.Component {
 
   render = () => {
     let user = this.props.authentication.user;
+    let supportedLaguanges = this.props.config.supported_languages;
+    let defaultLanguage = user && user.prefered_language;
+    if (!_.includes(supportedLaguanges, defaultLanguage)) {
+      defaultLanguage = supportedLaguanges && supportedLaguanges[0];
+    }
     let locale =
-      (user && user.prefered_language) ||
+      defaultLanguage ||
       this.props.languageSelector.language ||
       (navigator.languages && navigator.languages[0]) ||
       navigator.language ||

@@ -27,6 +27,10 @@ class SelectLanguage extends React.Component {
     if (!languages.endonyms[preferredLanguage]) {
       preferredLanguage = preferredLanguage.split("-")[0];
     }
+    let supportedLaguanges = this.props.config.supported_languages;
+    if (!_.includes(supportedLaguanges, preferredLanguage)) {
+      preferredLanguage = supportedLaguanges[0];
+    }
     return (
       <span>
         <Select
@@ -44,7 +48,9 @@ class SelectLanguage extends React.Component {
 
             function(locale, index) {
               return (
-                <Option value={locale}>{languages.endonyms[locale]}</Option>
+                _.includes(supportedLaguanges, locale) && (
+                  <Option value={locale}>{languages.endonyms[locale]}</Option>
+                )
               );
             }
           )}
