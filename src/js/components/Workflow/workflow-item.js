@@ -405,7 +405,7 @@ const CheckData = props => {
   }
 };
 
-const GetQuickData = props => {
+const GetAlertData = props => {
   const colors = [
     "magenta",
     "red",
@@ -483,6 +483,22 @@ const GetQuickData = props => {
   );
 };
 
+const GetQuickData = props => {
+  return (
+    <div className="group-overview">
+      <div className="overflow-wrapper">
+        <div className="step-ui">
+          {_.map(props.workflow.lc_data, function(lcItem, index) {
+            return (
+              <Tag className="alert-tag-item alert-primary">{lcItem.value}</Tag>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const getScoreColor = riskValue => {
   let value = parseInt(riskValue, 10);
   if (value >= 7) {
@@ -546,9 +562,13 @@ export const WorkflowHeader = props => {
 
         <HeaderTitle {...props} />
 
-        {_.size(props.workflow.alerts) ? (
+        {props.isEmbedded && _.size(props.workflow.lc_data) ? (
           <Col span={11}>
             <GetQuickData {...props} />
+          </Col>
+        ) : _.size(props.workflow.alerts) ? (
+          <Col span={11}>
+            <GetAlertData {...props} />
           </Col>
         ) : (
           <HeaderWorkflowGroup

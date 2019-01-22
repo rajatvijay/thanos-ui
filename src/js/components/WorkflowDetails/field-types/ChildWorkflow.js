@@ -355,6 +355,7 @@ class ChildItem extends Component {
           statusView={true}
           isChild={true}
           hasChild={workflow.children_count}
+          isEmbedded={true}
         />
 
         {workflow.children_count > 0 ? (
