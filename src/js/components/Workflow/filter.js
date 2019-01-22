@@ -473,16 +473,21 @@ class FilterSidebar extends Component {
 
           <div className="filter-section">
             {_.map(filterTypeSelect, function(f, index) {
+              let custom_ui_labels = that.props.config.custom_ui_labels || {};
               let label =
                 that.props.intl.formatMessage({
                   id: `workflowFiltersTranslated.filterLabels.${f.filterType}`
                 }) || f.filterName;
+              label = custom_ui_labels[`filterLabels.${label}`] || label;
               let placeholder =
                 that.props.intl.formatMessage({
                   id: `workflowFiltersTranslated.filterPlaceholders.${
                     f.filterType
                   }`
                 }) || f.filterType;
+              placeholder =
+                custom_ui_labels[`filterPlaceholders.${placeholder}`] ||
+                placeholder;
               return (
                 <div
                   className="aux-item aux-lead filter-title"
@@ -554,12 +559,14 @@ function mapStateToProps(state) {
     workflowKind,
     workflowFilterType,
     workflowFilters,
+    config,
     languageSelector
   } = state;
   return {
     workflowKind,
     workflowFilterType,
     workflowFilters,
+    config,
     languageSelector
   };
 }
