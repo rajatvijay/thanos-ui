@@ -203,11 +203,8 @@ class ChildWorkflowField2 extends Component {
 
   render = () => {
     let props = this.props;
-    let { field } = props;
+    let { field, workflowKind } = props;
     let that = this;
-
-    console.log("this.props");
-    console.log(this.state);
 
     //const childWorkflowMenu = this.getKindMenu();
 
@@ -256,64 +253,11 @@ class ChildWorkflowField2 extends Component {
               <div className="paper">
                 {_.size(this.state.childWorkflow) ? (
                   _.map(this.state.childWorkflow, function(workflow) {
-                    let gottenkind = null;
-                    if (
-                      workflow.children_count &&
-                      that.props.workflowKind.workflowKind
-                    ) {
-                      gottenkind = that.getKindID(
-                        workflow.definition.related_types[0]
-                      );
-                    }
-
                     return (
-                      <div class="workflow-list-item">
-                        <WorkflowHeader
-                          workflow={workflow}
-                          link={true}
-                          kind={""}
-                          statusView={true}
-                          isChild={true}
-                          hasChild={workflow.children_count}
-                        />
-
-                        {workflow.children_count > 0 ? (
-                          <span
-                            className="child-workflow-expande text-anchor "
-                            onClick={that.getChildWorkflow.bind(
-                              that,
-                              workflow.id,
-                              gottenkind,
-                              true
-                            )}
-                            title="Show child workflow"
-                          >
-                            <i
-                              className="material-icons"
-                              style={{ verticalAlign: "middle" }}
-                            >
-                              {that.state.showRelatedWorkflow
-                                ? "remove"
-                                : "add"}
-                            </i>
-                          </span>
-                        ) : null}
-
-                        {that.state.fetchingChild ? (
-                          <div>loading...</div>
-                        ) : that.state[workflow.id] ? (
-                          <div className="pd-left-lg">
-                            <WorkflowHeader
-                              workflow={that.state[workflow.id][0]}
-                              link={true}
-                              kind={""}
-                              statusView={true}
-                              isChild={true}
-                              //hasChild={workflow.children_count}
-                            />
-                          </div>
-                        ) : null}
-                      </div>
+                      <ChildItem
+                        workflow={workflow}
+                        workflowKind={workflowKind}
+                      />
                     );
                   })
                 ) : (
@@ -327,6 +271,121 @@ class ChildWorkflowField2 extends Component {
     );
   };
 }
+
+class ChildItem extends Component {
+  constructor() {
+    super();
+    this.state = {
+      hasChild: false,
+      isExpanded: false,
+      childWorkflow: null,
+      kind: null
+    };
+  }
+
+  getKindID = kindTag => {
+    let kind = _.find(this.props.workflowKind.workflowKind, function(k) {
+      return k.tag === kindTag;
+    });
+    return kind.id;
+  };
+
+  toggleExpand = (parent, kind) => {
+    this.setState({ isExpanded: !this.state.isExpanded });
+    if (!this.state.childWorkflow) {
+      this.getWorkflows(parent, kind);
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    let rKind = null;
+    if (this.props.workflowKind !== prevProps.workflowKind) {
+      rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
+      this.setState({ kind: rKind });
+    }
+  };
+
+  getWorkflows = (parent, kind) => {
+    let resp = { fetching: true };
+
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
+
+    let url =
+      baseUrl +
+      "workflows-list/?parent_workflow_id=" +
+      parent +
+      "&kind=" +
+      kind;
+
+    this.setState({ fetching: true });
+
+    fetch(url, requestOptions)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .then(body => {
+        this.setState({ fetching: false, childWorkflow: body.results });
+      })
+      .catch(error => {
+        this.setState({ fetching: false, error: error });
+        console.log(error);
+      });
+  };
+
+  render = () => {
+    let that = this;
+    let props = this.props;
+    const { workflow, workflowKind } = props;
+    const { isExpanded, kind, fetching } = this.state;
+
+    return (
+      <div class={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
+        <WorkflowHeader
+          workflow={workflow}
+          link={true}
+          kind={""}
+          statusView={true}
+          isChild={true}
+          hasChild={workflow.children_count}
+        />
+
+        {workflow.children_count > 0 ? (
+          <span
+            className="child-workflow-expand text-anchor "
+            onClick={that.toggleExpand.bind(that, workflow.id, kind)}
+            title="Show child workflow"
+          >
+            <i
+              className="material-icons t-18"
+              style={{ verticalAlign: "middle" }}
+            >
+              {isExpanded ? "remove" : "add"}
+            </i>
+          </span>
+        ) : null}
+
+        {fetching ? (
+          <div className="text-center pd-ard">loading...</div>
+        ) : that.state.childWorkflow && isExpanded ? (
+          <div className="pd-left-lg">
+            {_.map(this.state.childWorkflow, function(child) {
+              return <ChildItem workflow={child} workflowKind={kind} />;
+            })}
+          </div>
+        ) : null}
+      </div>
+    );
+  };
+}
+
 function mapPropsToState(state) {
   const { workflowDetailsHeader, workflowKind } = state;
   return {

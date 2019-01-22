@@ -3,9 +3,25 @@
 
 .workflows-list-embedded {
   .paper {
-    padding: 0 24px;
+    padding: 24px;
+    background: #fbfcff;
     .workflow-list-item {
       border-bottom: 1px solid #f2f5fa;
+      position: relative;
+      .ant-collapse-header {
+        padding: 0 10px;
+      }
+      &.expanded {
+        background: #fff;
+        > .ant-collapse-header {
+          background: #f2f5fa;
+        }
+      }
+      .child-workflow-expand {
+        position: absolute;
+        left: -18px;
+        top: 8px;
+      }
     }
   }
 }
