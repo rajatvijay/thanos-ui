@@ -18,8 +18,8 @@ class SelectLanguage extends React.Component {
   render() {
     let user = this.props.authentication.user;
     let preferredLanguage =
-      (user && user.prefered_language) ||
       this.props.languageSelector.language ||
+      (user && user.prefered_language) ||
       (navigator.languages && navigator.languages[0]) ||
       navigator.language ||
       navigator.userLanguage ||

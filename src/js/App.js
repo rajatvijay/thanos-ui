@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import messages from "./components/common/intlMessages";
 import { addLocaleData, IntlProvider, injectIntl } from "react-intl";
 import { flattenMessages } from "./components/common/messageUtils";
+import { languageActions } from "./actions";
 import { languageConstants } from "./constants";
 
 class App extends React.Component {
@@ -17,14 +18,20 @@ class App extends React.Component {
 
   render = () => {
     let user = this.props.authentication.user;
-    let supportedLaguanges = this.props.config.supported_languages;
-    let defaultLanguage = user && user.prefered_language;
-    if (!_.includes(supportedLaguanges, defaultLanguage)) {
-      defaultLanguage = supportedLaguanges && supportedLaguanges[0];
+    if (
+      user &&
+      user.prefered_language &&
+      user.prefered_language != this.props.languageSelector.language
+    ) {
+      user.prefered_language = this.props.languageSelector.language;
+      this.props.dispatch(
+        languageActions.updateUserLanguage(user.prefered_language)
+      );
+      console.log("Changing user's language:", user.prefered_language);
     }
     let locale =
-      defaultLanguage ||
       this.props.languageSelector.language ||
+      (user && user.prefered_language) ||
       (navigator.languages && navigator.languages[0]) ||
       navigator.language ||
       navigator.userLanguage ||

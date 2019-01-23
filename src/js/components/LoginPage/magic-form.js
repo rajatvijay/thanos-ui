@@ -212,9 +212,10 @@ class MagicLoginLinkForm extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { config } = state;
+  const { config, languageSelector } = state;
   return {
-    config
+    config,
+    languageSelector
   };
 }
 
