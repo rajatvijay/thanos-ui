@@ -20,7 +20,7 @@ import {
   checkAuth
 } from "../../actions";
 import FilterSidebar from "./filter";
-import { baseUrl2, authHeader } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import WorkflowFilterTop from "./filter-top";
 import AlertFilter from "./AlertFilter";
 import _ from "lodash";
@@ -135,35 +135,6 @@ class Workflow extends Component {
 
   redirectLoginPage = () => {
     this.props.dispatch(logout());
-  };
-
-  getExportList = () => {
-    let kind = this.props.workflowKind.workflowKind;
-    return (
-      <Menu>
-        {_.map(kind, function(item, index) {
-          return (
-            <Menu.Item key={index}>
-              <a
-                href={baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"}
-              >
-                <i
-                  className="material-icons text-primary-dark"
-                  style={{
-                    width: "20px",
-                    fontSize: "14px",
-                    verticalAlign: "middle"
-                  }}
-                >
-                  {item.icon}
-                </i>
-                {item.name}
-              </a>
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    );
   };
 
   toggleWaitingFilter = () => {
