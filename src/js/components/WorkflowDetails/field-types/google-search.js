@@ -128,7 +128,9 @@ const GetTable = props => {
       <span className="text-metal pd-right">Filter:</span>{" "}
       {_.map(
         _.uniqBy(data, function(o) {
-          return o.category.name;
+          if (o.category) {
+            return o.category.name;
+          }
         }),
         function(i) {
           return (

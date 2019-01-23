@@ -20,7 +20,7 @@ import { logout, workflowActions, languageActions } from "../../actions";
 //import logo from "../../../images/client-logo/dnb_logo.png";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { authHeader, baseUrl } from "../../_helpers";
+import { authHeader, baseUrl, baseUrl2 } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MetaGraph from "../Workflow/MetaGraph";
@@ -51,6 +51,7 @@ class NavTop extends Component {
       this.props.dispatch(workflowActions.getAll());
     }
   };
+
   handleChange = value => {
     this.props.dispatch(languageActions.updateUserLanguage(value));
   };
@@ -81,6 +82,44 @@ class NavTop extends Component {
     this.setState({
       showInsights: false
     });
+  };
+
+  getExportList = () => {
+    let kind = this.props.workflowKind.workflowKind;
+    return (
+      <SubMenu
+        key="sub4"
+        title={
+          <span>
+            <Icon type="download" />
+            <span>export</span>
+          </span>
+        }
+      >
+        {_.map(kind, function(item, index) {
+          return (
+            <Menu.Item key={index}>
+              <a
+                href={baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"}
+                className="text-nounderline"
+              >
+                <i
+                  className="material-icons text-primary-dark"
+                  style={{
+                    width: "20px",
+                    fontSize: "14px",
+                    verticalAlign: "middle"
+                  }}
+                >
+                  {item.icon}
+                </i>
+                {item.name}
+              </a>
+            </Menu.Item>
+          );
+        })}
+      </SubMenu>
+    );
   };
 
   render = () => {
@@ -162,6 +201,11 @@ class NavTop extends Component {
                          </i>
                        </Popover>
                      </Menu.Item>*/}
+
+                  {this.props.workflowKind.workflowKind
+                    ? this.getExportList()
+                    : null}
+
                   {showInsights ? (
                     <Menu.Item key="2">
                       <Tooltip title={"Insight"} placement={"bottom"}>
