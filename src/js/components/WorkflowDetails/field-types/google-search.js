@@ -133,12 +133,13 @@ const GetTable = props => {
           }
         }),
         function(i) {
-          return (
-            <Tag className="alert-tag-item" color="#305ebe">
-              {" "}
-              {i.category.name}
-            </Tag>
-          );
+          if (i.category && i.category.name) {
+            return (
+              <Tag className="alert-tag-item" color="#305ebe">
+                {i.category.name}
+              </Tag>
+            );
+          }
         }
       )}
     </div>
