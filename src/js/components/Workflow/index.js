@@ -207,7 +207,7 @@ class Workflow extends Component {
                 </span>
               </Col>
               <Col span="2" className="text-secondary text-center">
-                {!this.props.workflowFilters.kind.meta
+                {this.props.workflowFilters.kind.meta
                   .is_sorting_field_enabled ? (
                   <Tooltip
                     title={
