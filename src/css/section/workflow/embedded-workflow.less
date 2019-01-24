@@ -9,12 +9,21 @@
       border-bottom: 1px solid #f2f5fa;
       position: relative;
       .ant-collapse-header {
-        padding: 0 10px;
+        padding: 2px 10px;
       }
       &.expanded {
         background: #fff;
         > .ant-collapse-header {
           background: #f2f5fa;
+        }
+        > .workflow-list-item {
+          .company-name {
+            font-size: 12px;
+          }
+        }
+        .child-container {
+          border: 1px solid #d8d8d8;
+          border-top: none;
         }
       }
       .child-workflow-expand {

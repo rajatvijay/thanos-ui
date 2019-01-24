@@ -308,9 +308,13 @@ class ChildItem extends Component {
   componentDidUpdate = prevProps => {
     let rKind = null;
     if (this.props.workflowKind !== prevProps.workflowKind) {
+      console.log("dslksjdflsjdfklsjdsjdklfjaslkdfj");
+
       if (_.size(this.props.workflowKind.workflowKind)) {
+        console.log("sdnsnsnsnsnsnnsnsssnnnnnnnnnnnnnnnnnn");
         rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
         this.setState({ kind: rKind });
+        console.log(rKind);
       }
     }
   };
@@ -368,7 +372,7 @@ class ChildItem extends Component {
           isEmbedded={true}
         />
 
-        {workflow.children_count > 0 ? (
+        {workflow.children_count > 0 && this.state.kind ? (
           <span
             className="child-workflow-expand text-anchor "
             onClick={that.toggleExpand.bind(that, workflow.id, kind)}
@@ -386,7 +390,7 @@ class ChildItem extends Component {
         {fetching ? (
           <div className="text-center pd-ard">loading...</div>
         ) : that.state.childWorkflow && isExpanded ? (
-          <div className="pd-left-lg">
+          <div className="pd-left-lg child-container">
             {_.map(this.state.childWorkflow, function(child) {
               return <ChildItem workflow={child} workflowKind={kind} />;
             })}
