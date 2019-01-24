@@ -54,6 +54,7 @@ class WorkflowList extends Component {
     };
 
     var result = _.groupBy(data.workflow, occurrenceDay);
+
     var ListCompletes = _.map(result, function(list, key, index) {
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
