@@ -285,11 +285,9 @@ class ChildItem extends Component {
 
   getKindID = kindTag => {
     let kind = null;
-    console.log("this.props.workflowKind----");
     kind = _.find(this.props.workflowKind.workflowKind, function(k) {
       return k.tag === kindTag;
     });
-    console.log(kind);
 
     if (kind) {
       return kind.id;
@@ -308,10 +306,7 @@ class ChildItem extends Component {
   componentDidUpdate = prevProps => {
     let rKind = null;
     if (this.props.workflowKind !== prevProps.workflowKind) {
-      console.log("dslksjdflsjdfklsjdsjdklfjaslkdfj");
-
       if (_.size(this.props.workflowKind.workflowKind)) {
-        console.log("sdnsnsnsnsnsnnsnsssnnnnnnnnnnnnnnnnnn");
         rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
         this.setState({ kind: rKind });
         console.log(rKind);
@@ -372,18 +367,22 @@ class ChildItem extends Component {
           isEmbedded={true}
         />
 
-        {workflow.children_count > 0 && this.state.kind ? (
+        {workflow.children_count > 0 ? (
           <span
             className="child-workflow-expand text-anchor "
             onClick={that.toggleExpand.bind(that, workflow.id, kind)}
             title="Show child workflow"
           >
-            <i
-              className="material-icons t-18"
-              style={{ verticalAlign: "middle" }}
-            >
-              {isExpanded ? "remove" : "add"}
-            </i>
+            {this.state.kind ? (
+              <i
+                className="material-icons t-18"
+                style={{ verticalAlign: "middle" }}
+              >
+                {isExpanded ? "remove" : "add"}
+              </i>
+            ) : (
+              <Icon type="loading" style={{ fontSize: 12 }} />
+            )}
           </span>
         ) : null}
 
