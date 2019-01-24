@@ -134,7 +134,7 @@ class Workflow extends Component {
   };
 
   redirectLoginPage = () => {
-    this.props.dispatch(logout());
+    this.props.dispatch(checkAuth());
   };
 
   toggleWaitingFilter = () => {

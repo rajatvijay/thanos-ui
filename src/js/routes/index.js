@@ -87,6 +87,13 @@ class MainRoutes extends React.Component {
   componentWillReceiveProps(nextProps) {
     document.title = _.upperFirst(this.props.config.name) || "Vetted";
   }
+  watchRouteChange = history.listen((location, action) => {
+    // location is an object like window.location
+    console.log(action, location.pathname);
+    if (location.pathname === "/login/magic") {
+      this.props.dispatch(checkAuth());
+    }
+  });
 
   render() {
     const { alert } = this.props;
