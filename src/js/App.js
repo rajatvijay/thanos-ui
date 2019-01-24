@@ -21,6 +21,7 @@ class App extends React.Component {
     if (
       user &&
       user.prefered_language &&
+      this.props.languageSelector.language &&
       user.prefered_language != this.props.languageSelector.language
     ) {
       user.prefered_language = this.props.languageSelector.language;
