@@ -36,6 +36,7 @@ import { UBOGraph } from "./dnb_ubo_graph";
 import { TRResults } from "./tr_results";
 import { ChildWorkflowField } from "./ChildWorkflow";
 import { DuplicateCheck } from "./duplicate_check_new.js";
+import { RDCEventDetails } from "./rdc_event_details.js";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -165,6 +166,8 @@ export const getFieldType = props => {
       return DuplicateCheck(props);
     case "dnb_gbo":
       return DnBCommon(props);
+    case "rdc_event_details":
+      return RDCEventDetails(props);
 
     default:
       return Text(props);

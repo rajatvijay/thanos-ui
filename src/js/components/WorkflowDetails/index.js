@@ -302,6 +302,10 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateFlag(payload));
   };
 
+  changeIntegrationStatus = payload => {
+    this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
+  };
+
   render = () => {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
@@ -444,6 +448,7 @@ class WorkflowDetails extends Component {
               gotoStep={this.fetchStepData}
               selectActiveStep={this.selectActiveStep}
               changeFlag={this.changeFlag}
+              changeIntegrationStatus={this.changeIntegrationStatus}
               {...this.props}
             />
           ) : null}

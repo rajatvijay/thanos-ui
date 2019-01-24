@@ -53,7 +53,7 @@ const SubMenu = Menu.SubMenu;
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   return (
-    <Col span={6} className="text-left">
+    <Col span={props.isChild ? 7 : 6} className="text-left">
       {props.link ? (
         <a
           href={"/workflows/instances/" + props.workflow.id + "/"}
@@ -405,7 +405,7 @@ const CheckData = props => {
   }
 };
 
-const GetQuickData = props => {
+const GetAlertData = props => {
   const colors = [
     "magenta",
     "red",
@@ -483,6 +483,22 @@ const GetQuickData = props => {
   );
 };
 
+const GetQuickData = props => {
+  return (
+    <div className="group-overview">
+      <div className="overflow-wrapper">
+        <div className="step-ui">
+          {_.map(props.workflow.lc_data, function(lcItem, index) {
+            return (
+              <Tag className="alert-tag-item alert-primary">{lcItem.value}</Tag>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const getScoreColor = riskValue => {
   let value = parseInt(riskValue, 10);
   if (value >= 7) {
@@ -503,50 +519,56 @@ export const WorkflowHeader = props => {
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
-        <Col span={1} className=" text-anchor">
-          {props.detailsPage ? (
-            <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
-              <i
-                className="material-icons text-secondary"
-                style={{ fontSize: "18px", verticalAlign: "middle" }}
-              >
-                keyboard_backspace
-              </i>
-            </span>
-          ) : (
-            <span className="pd-right">
-              <Popover
-                content={
-                  <div className="text-center">
-                    <div className="small">{progressData}% completed</div>
-                  </div>
-                }
-              >
-                <Progress
-                  type="circle"
-                  percent={progressData}
-                  width={35}
-                  format={percent => (
-                    <i
-                      className="material-icons"
-                      style={{ fontSize: "18px", verticalAlign: "middle" }}
-                    >
-                      {props.kind === ""
-                        ? "folder_open"
-                        : getIcon(props.workflow.definition.kind, props.kind)}
-                    </i>
-                  )}
-                />
-              </Popover>
-            </span>
-          )}
-        </Col>
+        {props.isChild ? null : (
+          <Col span={1} className=" text-anchor">
+            {props.detailsPage ? (
+              <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
+                <i
+                  className="material-icons text-secondary"
+                  style={{ fontSize: "18px", verticalAlign: "middle" }}
+                >
+                  keyboard_backspace
+                </i>
+              </span>
+            ) : (
+              <span className="pd-right">
+                <Popover
+                  content={
+                    <div className="text-center">
+                      <div className="small">{progressData}% completed</div>
+                    </div>
+                  }
+                >
+                  <Progress
+                    type="circle"
+                    percent={progressData}
+                    width={35}
+                    format={percent => (
+                      <i
+                        className="material-icons"
+                        style={{ fontSize: "18px", verticalAlign: "middle" }}
+                      >
+                        {props.kind === ""
+                          ? "folder_open"
+                          : getIcon(props.workflow.definition.kind, props.kind)}
+                      </i>
+                    )}
+                  />
+                </Popover>
+              </span>
+            )}
+          </Col>
+        )}
 
         <HeaderTitle {...props} />
 
-        {_.size(props.workflow.alerts) ? (
+        {props.isEmbedded && _.size(props.workflow.lc_data) ? (
           <Col span={11}>
             <GetQuickData {...props} />
+          </Col>
+        ) : _.size(props.workflow.alerts) ? (
+          <Col span={11}>
+            <GetAlertData {...props} />
           </Col>
         ) : (
           <HeaderWorkflowGroup

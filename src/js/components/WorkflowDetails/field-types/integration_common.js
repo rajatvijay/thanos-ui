@@ -12,6 +12,7 @@ export const integrationCommonFunctions = {
   lexisnexis_html,
   google_search_html,
   serp_search_html,
+  rdc_event_details,
   comment_answer_body
 };
 
@@ -55,6 +56,12 @@ function comment_answer_body(c) {
       return (
         <div style={{ marginTop: "10px", fontSize: "14px" }}>
           {tr_results_html(c.target.row_json)}
+        </div>
+      );
+    } else if (c.target.field_details.type == "rdc_event_details") {
+      return (
+        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+          {rdc_event_details(c.target.row_json)}
         </div>
       );
     }
@@ -407,6 +414,24 @@ function google_search_html(record, search) {
           }
         })}
       </Row>
+    </div>
+  );
+}
+
+function rdc_event_details(record) {
+  return (
+    <div>
+      <span>{record.EventTypeText}</span>
+      <br />
+      <span>{record.EventTypeCode}</span>
+      <br />
+      <span>{record.EventDate}</span>
+      <br />
+      <span>{record.EventSubTypeText}</span>
+      <br />
+      <span>{record.EventSubTypeCode}</span>
+      <br />
+      <span>{record.status}</span>
     </div>
   );
 }

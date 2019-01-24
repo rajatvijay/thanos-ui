@@ -8,6 +8,7 @@ export const workflowStepService = {
   undoStep,
   addComment,
   updateFlag,
+  updateIntegrationStatus,
   removeAttachment
 };
 
@@ -177,4 +178,17 @@ function handleResponse(response) {
     return response.json();
   }
   return response.json();
+}
+
+function updateIntegrationStatus(payload) {
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader.post(), "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(payload)
+  };
+  return fetch(
+    baseUrl + "integrations/status-update/" + payload["row_uid"] + "/",
+    requestOptions
+  ).then(handleResponse);
 }
