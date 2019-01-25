@@ -59,9 +59,7 @@ const GetAnsweredBy = props => {
           answer.submitted_by.last_name +
           " "}
         ( {answer.submitted_by.email}) on{" "}
-        <Moment format="MM/DD/YYYY">
-          {props.field.answers[0].submitted_at}
-        </Moment>
+        <Moment format="MM/DD/YYYY">{answer.updated_at}</Moment>
       </span>
     );
     return (
