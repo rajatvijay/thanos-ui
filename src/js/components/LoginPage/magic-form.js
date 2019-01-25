@@ -99,11 +99,16 @@ class MagicLoginLinkForm extends React.Component {
 
   render() {
     const { data, errors } = this.state;
+    let supportedLaguanges = this.props.config.supported_languages;
     return (
       <div className="login-form-box">
-        <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />{" "}
-        <LoginSelectLanguage />
-        <Divider />
+        {_.isEmpty(supportedLaguanges) || (
+          <div>
+            <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />{" "}
+            <LoginSelectLanguage />
+            <Divider />
+          </div>
+        )}
         {!this.props.emailAuth.submitted ? (
           <div>
             <div className="text-center mr-bottom t-18 text-base">
@@ -207,9 +212,10 @@ class MagicLoginLinkForm extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { config } = state;
+  const { config, languageSelector } = state;
   return {
-    config
+    config,
+    languageSelector
   };
 }
 

@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Alert } from "antd";
 //import validator from "validator";
+import _ from "lodash";
 import { login } from "../../actions";
-import SelectLanguage from "../SelectLanguage/";
+import { connect } from "react-redux";
 import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
 import { FormattedMessage, injectIntl } from "react-intl";
 
@@ -88,11 +89,16 @@ class LoginForm extends React.Component {
   render() {
     const { data, errors } = this.state;
 
+    let supportedLaguanges = this.props.config.supported_languages;
     return (
       <div className="login-form-box">
-        <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />
-        <LoginSelectLanguage />
-        <Divider />
+        {_.isEmpty(supportedLaguanges) || (
+          <div>
+            <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />{" "}
+            <LoginSelectLanguage />
+            <Divider />
+          </div>
+        )}
         <Form
           layout="vertical"
           onSubmit={this.onSubmit}
@@ -166,4 +172,12 @@ class LoginForm extends React.Component {
   }
 }
 
-export default injectIntl(LoginForm);
+function mapStateToProps(state) {
+  const { config, languageSelector } = state;
+  return {
+    config,
+    languageSelector
+  };
+}
+
+export default connect(mapStateToProps)(injectIntl(LoginForm));

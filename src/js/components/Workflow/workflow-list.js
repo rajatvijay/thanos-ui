@@ -54,6 +54,7 @@ class WorkflowList extends Component {
     };
 
     var result = _.groupBy(data.workflow, occurrenceDay);
+
     var ListCompletes = _.map(result, function(list, key, index) {
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
@@ -258,28 +259,6 @@ class WorkflowItem extends React.Component {
             />
           </div>
         ) : null}
-
-        {/*this.props.workflow ? (
-          <div className="child-workflow-wrapper">
-            //]=o  <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
-                  <WorkflowHeader
-                    workflow={this.props.workflow}
-                    statusType={statusType}
-                  />
-                </div>
-              }
-              lazyRender={true}
-              transitionTime={200}
-            >
-              <div className="lc-card">
-                <WorkflowBody
-                  workflow={this.props.workflow}
-                  pData={this.props.pData}
-                />
-              </div>
-            </Collapsible>
-          </div>
-        ) : null*/}
       </div>
     );
   };

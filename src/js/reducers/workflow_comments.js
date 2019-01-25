@@ -35,6 +35,22 @@ export function workflowComments(state = {}, action) {
         error: action.error
       };
 
+    // Integration Comment Status
+    case workflowCommentsConstants.STATUS_UPDATE_REQUEST:
+      return {
+        adding_comment: true
+      };
+    case workflowCommentsConstants.STATUS_UPDATE_SUCCESS:
+      return {
+        adding_comment: false,
+        data: action.data
+      };
+    case workflowCommentsConstants.STATUS_UPDATE_FAILURE:
+      return {
+        adding_comment: false,
+        error: action.error
+      };
+
     default:
       return state;
   }

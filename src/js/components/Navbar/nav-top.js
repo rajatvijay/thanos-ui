@@ -142,7 +142,7 @@ class NavTop extends Component {
     if (user && _.includes(user.features, "view_reports")) {
       showInsights = true;
     }
-
+    let supportedLaguanges = this.props.config.supported_languages;
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -182,7 +182,11 @@ class NavTop extends Component {
                 ) : null}
               </Col>
               <Col span={12}>
-                <SelectLanguage navbar={true} />
+                {_.isEmpty(supportedLaguanges) || (
+                  <div>
+                    <SelectLanguage navbar={true} />
+                  </div>
+                )}
                 <Menu
                   theme="light"
                   mode="horizontal"

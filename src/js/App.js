@@ -3,10 +3,12 @@ import React from "react";
 import Routes from "./routes";
 
 import { loadReCaptcha } from "react-recaptcha-v3";
+import _ from "lodash";
 import { connect } from "react-redux";
 import messages from "./components/common/intlMessages";
 import { addLocaleData, IntlProvider, injectIntl } from "react-intl";
 import { flattenMessages } from "./components/common/messageUtils";
+import { languageActions } from "./actions";
 import { languageConstants } from "./constants";
 
 class App extends React.Component {
@@ -16,9 +18,21 @@ class App extends React.Component {
 
   render = () => {
     let user = this.props.authentication.user;
+    if (
+      user &&
+      user.prefered_language &&
+      this.props.languageSelector.language &&
+      user.prefered_language != this.props.languageSelector.language
+    ) {
+      user.prefered_language = this.props.languageSelector.language;
+      this.props.dispatch(
+        languageActions.updateUserLanguage(user.prefered_language)
+      );
+      console.log("Changing user's language:", user.prefered_language);
+    }
     let locale =
-      (user && user.prefered_language) ||
       this.props.languageSelector.language ||
+      (user && user.prefered_language) ||
       (navigator.languages && navigator.languages[0]) ||
       navigator.language ||
       navigator.userLanguage ||

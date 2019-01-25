@@ -37,7 +37,8 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true,
       visible: false,
-      sortOrderAsc: true
+      sortOrderAsc: true,
+      sortingEnabled: false
     };
 
     if (!this.props.users.me) {
@@ -154,6 +155,7 @@ class Workflow extends Component {
   };
 
   changeScoreOrder = order => {
+    this.setState({ sortingEnabled: true });
     let sort = this.state.sortOrderAsc
       ? "-sorting_primary_field"
       : "sorting_primary_field";
@@ -205,7 +207,8 @@ class Workflow extends Component {
                 </span>
               </Col>
               <Col span="2" className="text-secondary text-center">
-                {showRisk ? (
+                {this.props.workflowFilters.kind.meta
+                  .is_sorting_field_enabled ? (
                   <Tooltip
                     title={
                       this.state.sortOrderAsc
@@ -276,6 +279,7 @@ class Workflow extends Component {
                 profile={this.props.match}
                 {...this.props}
                 statusView={this.state.statusView}
+                sortingEnabled={this.state.sortingEnabled}
               />
             </div>
           )}
@@ -292,7 +296,8 @@ function mapStateToProps(state) {
     authentication,
     workflowKind,
     workflowGroupCount,
-    users
+    users,
+    workflowFilters
   } = state;
   return {
     config,
@@ -300,7 +305,8 @@ function mapStateToProps(state) {
     workflowKind,
     authentication,
     workflowGroupCount,
-    users
+    users,
+    workflowFilters
   };
 }
 
