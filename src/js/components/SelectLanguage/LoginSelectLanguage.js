@@ -14,12 +14,17 @@ class LoginSelectLanguage extends React.Component {
   };
   render() {
     let preferredLanguage =
+      this.props.languageSelector.language ||
       (navigator.languages && navigator.languages[0]) ||
       navigator.language ||
       navigator.userLanguage ||
       languageConstants.DEFAULT_LOCALE;
     if (!languages.endonyms[preferredLanguage]) {
       preferredLanguage = preferredLanguage.split("-")[0];
+    }
+    let supportedLaguanges = this.props.config.supported_languages;
+    if (!_.includes(supportedLaguanges, preferredLanguage)) {
+      preferredLanguage = supportedLaguanges[0];
     }
     return (
       <span>
@@ -36,7 +41,9 @@ class LoginSelectLanguage extends React.Component {
 
             function(locale, index) {
               return (
-                <Option value={locale}>{languages.endonyms[locale]}</Option>
+                _.includes(supportedLaguanges, locale) && (
+                  <Option value={locale}>{languages.endonyms[locale]}</Option>
+                )
               );
             }
           )}
