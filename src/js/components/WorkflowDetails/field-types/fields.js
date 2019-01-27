@@ -21,7 +21,7 @@ import Moment from "react-moment";
 import moment from "moment";
 import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
-import flags from "../../../../images/flags.png";
+import flags from "../../../../images/flags2.png";
 import Dropzone from "react-dropzone";
 import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
