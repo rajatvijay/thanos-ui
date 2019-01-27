@@ -36,7 +36,6 @@ class SelectLanguage extends React.Component {
         <Select
           defaultValue={preferredLanguage}
           style={{
-            width: 110,
             paddingTop: "20px",
             float: this.props.navbar ? "right" : "",
             lineHeight: this.props.navbar ? "62px" : ""
