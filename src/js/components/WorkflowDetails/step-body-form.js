@@ -361,9 +361,9 @@ class StepBodyForm extends Component {
     };
 
     let rowGroup = {
-      rows: [],
+      fields: [],
       get currentOccupancy() {
-        return this.rows.reduce((accumulator, rawField) => {
+        return this.fields.reduce((accumulator, rawField) => {
           return accumulator + this.getSizeFraction(rawField);
         }, 0);
       },
@@ -371,10 +371,10 @@ class StepBodyForm extends Component {
         return this.currentOccupancy > 0.9;
       },
       addToRenderGroup(field) {
-        this.rows.push(field);
+        this.fields.push(field);
       },
       reset() {
-        this.rows = [];
+        this.fields = [];
       },
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
@@ -382,20 +382,22 @@ class StepBodyForm extends Component {
         return getFieldType(fieldParams);
       },
       getSizeFraction(field) {
+        // Get the current field size in fraction
         return sizeFractions[field.definition.size];
       },
       canAccommodateField(field) {
+        // Check if current field can fit into the current rendering group
         const fieldSizeFraction = this.getSizeFraction(field);
-        debugger;
         return 1 - this.currentOccupancy >= fieldSizeFraction;
       },
       render() {
+        // render the current group
         const _rowGroup = Object.assign(this);
-        const rows = _rowGroup.rows;
-        debugger;
+        const fields = _rowGroup.fields;
+        this.reset();
         return (
           <Row gutter={16}>
-            {_.map(rows, rawField => {
+            {_.map(fields, rawField => {
               let field = this.getFieldForRender(rawField);
               return (
                 <Col span={24 * this.getSizeFraction(rawField)}>
@@ -480,17 +482,16 @@ class StepBodyForm extends Component {
                 <TabPane tab={group.label} key={"group_" + index}>
                   {_.map(group.steps, function(field, index) {
                     if (rowGroup.canAccommodateField(field)) {
+                      // Current field can fit into the rendering group
                       rowGroup.addToRenderGroup(field);
                       if (rowGroup.shouldRender) {
-                        const renderedGroup = rowGroup.render();
-                        rowGroup.reset();
-                        return renderedGroup;
+                        // We're at capacity for this rendering group, render it
+                        return rowGroup.render();
                       }
                     } else {
                       // This field cannot be accommodated in the current group
                       // render the current group and append this to next batch for rendering
                       const renderedGroup = rowGroup.render();
-                      rowGroup.reset();
                       rowGroup.addToRenderGroup(field);
                       return renderedGroup;
                     }
@@ -504,15 +505,12 @@ class StepBodyForm extends Component {
             if (rowGroup.canAccommodateField(field)) {
               rowGroup.addToRenderGroup(field);
               if (rowGroup.shouldRender) {
-                const renderedGroup = rowGroup.render();
-                rowGroup.reset();
-                return renderedGroup;
+                return rowGroup.render();
               }
             } else {
               // This field cannot be accommodated in the current group
               // render the current group and append this to next batch for rendering
               const renderedGroup = rowGroup.render();
-              rowGroup.reset();
               rowGroup.addToRenderGroup(field);
               return renderedGroup;
             }
