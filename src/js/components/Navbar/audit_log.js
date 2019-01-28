@@ -15,6 +15,8 @@ import { authHeader, baseUrl } from "../../_helpers";
 import Moment from "react-moment";
 import { Scrollbars } from "react-custom-scrollbars";
 import InfiniteScroll from "react-infinite-scroller";
+import PropTypes from "prop-types";
+import download from "downloadjs";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -69,6 +71,12 @@ class AuditList extends Component {
         ) : (
           <AuditContent data={this.state.data} loadData={this.loadData} />
         )}
+        <Button
+          size={"small"}
+          style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
+          icon={this.state.isOpen ? "up" : "down"}
+          className={"activity-log-collapse-btn"}
+        />
       </div>
     );
   };
