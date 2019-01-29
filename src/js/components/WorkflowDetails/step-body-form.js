@@ -20,16 +20,6 @@ const sizeFractions = {
   [SIZE_100]: 1
 };
 
-class RowGroup extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return null;
-  }
-}
-
 class StepBodyForm extends Component {
   state = {
     version: false
@@ -383,7 +373,11 @@ class StepBodyForm extends Component {
       },
       getSizeFraction(field) {
         // Get the current field size in fraction
-        return sizeFractions[field.definition.size];
+        if (field.definition && field.definition.size in sizeFractions) {
+          return sizeFractions[field.definition.size];
+        } else {
+          return 1;
+        }
       },
       canAccommodateField(field) {
         // Check if current field can fit into the current rendering group
@@ -400,7 +394,7 @@ class StepBodyForm extends Component {
             {_.map(fields, rawField => {
               let field = this.getFieldForRender(rawField);
               return (
-                <Col span={24 * this.getSizeFraction(rawField)}>
+                <Col span={Math.ceil(24 * this.getSizeFraction(rawField))}>
                   {field}{" "}
                   {this.showFieldVersion ? this.getVersionField(field.key) : ""}{" "}
                 </Col>
