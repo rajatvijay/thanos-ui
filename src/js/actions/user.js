@@ -49,7 +49,6 @@ export const login = (username, password, token) => async dispatch => {
   }
 };
 
-
 export const loginOtp = (username, password) => async dispatch => {
   dispatch({ type: userConstants.LOGIN_REQUEST, username });
   try {

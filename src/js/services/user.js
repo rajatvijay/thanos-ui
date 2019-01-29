@@ -50,7 +50,6 @@ function login(username, password, token) {
     });
 }
 
-
 function loginOtp(username, password) {
   const requestOptions = {
     method: "POST",
@@ -84,7 +83,6 @@ function loginOtp(username, password) {
       return user;
     });
 }
-
 
 function tokenLogin(token, next) {
   console.log("tokend login service");
