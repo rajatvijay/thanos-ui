@@ -193,8 +193,7 @@ export default {
         "No hay flujos de trabajo que mostrar. Intente borrar los filtros o"
     },
     loginPageInstances: {
-      oneTimeLink:
-        "Introduzca su ID de correo electrónico empresarial",
+      oneTimeLink: "Introduzca su ID de correo electrónico empresarial",
       loginEmailPassword:
         "Iniciar sesión usando correo electrónico y contraseña",
       loginUsingEmailOnly: "Iniciar sesión usando solo el correo electrónico",

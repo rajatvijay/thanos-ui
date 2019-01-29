@@ -1,6 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Input, Icon, Divider,Row,Col, notification} from "antd";
+import {
+  Form,
+  Button,
+  Input,
+  Icon,
+  Divider,
+  Row,
+  Col,
+  notification
+} from "antd";
 import validator from "validator";
 import _ from "lodash";
 import { loginOtp } from "../../actions";
@@ -39,7 +48,7 @@ class MagicLoginLinkForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidUpdate =(prevProps)=> {
+  componentDidUpdate = prevProps => {
     if (this.props.config.name !== prevProps.config.name) {
       document.title = _.upperFirst(this.props.config.name) || "Vetted";
     }
@@ -49,19 +58,19 @@ class MagicLoginLinkForm extends React.Component {
     this.setState({showPassword:!this.state.showPassword})
   };
 
-  componentWillReceiveProps=(nextProps) =>{
+  componentWillReceiveProps = nextProps => {
     document.title = _.upperFirst(this.props.config.name) || "Vetted";
   };
 
-  handleChange=(e)=> {
+  handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit=(e)=> {
+  handleSubmit = e => {
     e.preventDefault();
     this.setState({ submitted: true });
-    const { email,password } = this.state;
+    const { email, password } = this.state;
     const { dispatch } = this.props;
 
     if (email && password) {
@@ -73,7 +82,7 @@ class MagicLoginLinkForm extends React.Component {
     // e.preventDefault();
 
     let data = this.state.data;
-    const errors = this.validate(data,"otp"); //error valitation in form
+    const errors = this.validate(data, "otp"); //error valitation in form
     this.setState({ errors: errors });
     if (Object.keys(errors).length === 0) {
       //if no error is found then submit
@@ -84,21 +93,21 @@ class MagicLoginLinkForm extends React.Component {
   };
 
   //counter to prevent opt request spamming
-  otpReset=()=> {
+  otpReset = () => {
     let that = this;
     let timer = 30;
 
-    setInterval(function () {
+    setInterval(function() {
       if (--timer < 0) {
-        that.setState({optSent:false})
+        that.setState({ optSent: false });
       } else {
-        that.setState({counter:timer})
+        that.setState({ counter: timer });
       }
     }, 1000);
   };
 
   //opt request success notification
-  showMessageSuccess = ()=> {
+  showMessageSuccess = () => {
     openNotificationWithIcon({
       type: "success",
       message: "OTP sent to " + this.state.data.email
@@ -106,7 +115,7 @@ class MagicLoginLinkForm extends React.Component {
   };
 
   //opt request failure notification
-  showMessageFaliure = ()=> {
+  showMessageFaliure = () => {
     openNotificationWithIcon({
       type: "error",
       message: "Unable to send OTP to " + this.state.data.email
@@ -114,17 +123,17 @@ class MagicLoginLinkForm extends React.Component {
   };
 
   //client side data validation
-  validate = (data, opt )=> {
+  validate = (data, opt) => {
     const errors = {};
     if (data.email) {
       if (!validator.isEmail(data.email)) errors.email = "Invalid email";
     }
     if (!data.email) errors.email = "email can't be empty";
 
-    if(opt === "otp"){
+    if (opt === "otp") {
       if (!data.password) errors.password = "OTP can't be empty";
     }
-    
+
     return errors;
   };
 
@@ -175,10 +184,10 @@ class MagicLoginLinkForm extends React.Component {
           });
           that.showMessageFaliure();
           throw Error(response.statusText);
-        }else {
-          that.setState({optSent:true})
+        } else {
+          that.setState({ optSent: true });
           that.otpReset();
-          that.showMessageSuccess()
+          that.showMessageSuccess();
         }
         return response;
       })
@@ -188,13 +197,13 @@ class MagicLoginLinkForm extends React.Component {
   };
 
   //returns article depending on first letter of passed param
-  getVowel=word=>{
-    if(word && _.includes("aeiou",word.charAt(0))){
-      return "an"
-    }else {
-      return "a"
+  getVowel = word => {
+    if (word && _.includes("aeiou", word.charAt(0))) {
+      return "an";
+    } else {
+      return "a";
     }
-  }
+  };
 
   render() {
     const { data, errors } = this.state;
@@ -203,9 +212,13 @@ class MagicLoginLinkForm extends React.Component {
     
     return (
       <div className="login-form-box magic-box">
-
         <Row gutter={32}>
-          <Col span={config.saml_url ? 12:24} className={"block-left text-left  "+ (config.saml_url?"":"noborder")}>
+          <Col
+            span={config.saml_url ? 12 : 24}
+            className={
+              "block-left text-left  " + (config.saml_url ? "" : "noborder")
+            }
+          >
             <div className="login-top text-bold">I am a third-party</div>
 
             <div>
@@ -214,14 +227,15 @@ class MagicLoginLinkForm extends React.Component {
                 onSubmit={this.onSubmit}
                 className="login-form"
                 autoComplete="off"
-                >
-
+              >
                 <FormItem
                   validateStatus={errors.message && "error"}
                   hasFeedback
-                  label={<FormattedMessage id="loginPageInstances.oneTimeLink" />}
+                  label={
+                    <FormattedMessage id="loginPageInstances.oneTimeLink" />
+                  }
                   help={errors.message}
-                  >
+                >
                   <Input
                     id="email"
                     name="email"
@@ -234,19 +248,21 @@ class MagicLoginLinkForm extends React.Component {
                     onChange={this.onInputChange}
                   />
                   <div className="opt-block text-left mr-top-sm t-12">
-                    {this.state.optSent 
-                      ? 
-                      <span className="text-grey">Click here to request one-time password ({this.state.counter})</span>
-                      :
+                    {this.state.optSent ? (
+                      <span className="text-grey">
+                        Click here to request one-time password ({
+                          this.state.counter
+                        })
+                      </span>
+                    ) : (
                       <span
                         onClick={this.onOptRequest}
                         className="text-secondary text-anchor"
-                        >
-                         Click here to request one-time password
+                      >
+                        Click here to request one-time password
                       </span>
-                    }
+                    )}
                   </div>
-
                 </FormItem>
 
                 <FormItem
@@ -254,7 +270,7 @@ class MagicLoginLinkForm extends React.Component {
                   hasFeedback
                   label="Enter the one time password to verify your account"
                   help={errors.message}
-                  >
+                >
                   <Input
                     id="password"
                     name="password"
@@ -266,9 +282,7 @@ class MagicLoginLinkForm extends React.Component {
                     value={data.password}
                     onChange={this.onInputChange}
                   />
-
                 </FormItem>
-
 
                 <FormItem>
                   <Button
@@ -280,30 +294,37 @@ class MagicLoginLinkForm extends React.Component {
                     <FormattedMessage id="commonTextInstances.submitButtonText" />
                   </Button>
                 </FormItem>
-              </Form> 
-            </div>
-
-          </Col>
-
-          {config.saml_url ? 
-          <Col span={12} className="block-right text-left">
-            
-            <div style={{height:"260px"}}>
-              <div className="login-top text-bold">I am {this.getVowel(config.name)} {config.name} employee </div>
-              <div className="logo"><img src={config.logo} style={{maxWidth:"120px"}}/></div>
-              <div className="text-light t-16">Login using your {config.name} username and password</div>
-            </div>
-            <div>
-              <a  className="ant-btn login-form-button ant-btn-primary btn-block text-white" href={this.props.config.saml_url} >
-                <span className="text-white">
-                  <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                  {config.name} account
-                </span>
-                {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
-              </a>
+              </Form>
             </div>
           </Col>
-          : null}
+
+          {config.saml_url ? (
+            <Col span={12} className="block-right text-left">
+              <div style={{ height: "260px" }}>
+                <div className="login-top text-bold">
+                  I am {this.getVowel(config.name)} {config.name} employee{" "}
+                </div>
+                <div className="logo">
+                  <img src={config.logo} style={{ maxWidth: "120px" }} />
+                </div>
+                <div className="text-light t-16">
+                  Login using your {config.name} username and password
+                </div>
+              </div>
+              <div>
+                <a
+                  className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                  href={this.props.config.saml_url}
+                >
+                  <span className="text-white">
+                    <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                    {config.name} account
+                  </span>
+                  {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
+                </a>
+              </div>
+            </Col>
+          ) : null}
         </Row>
 
         <div>

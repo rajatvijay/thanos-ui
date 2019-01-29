@@ -52,7 +52,7 @@ class SelectLanguage extends React.Component {
               return (
                 _.includes(supportedLaguanges, locale) && (
                 <Option value={locale}>
-                    {/*
+                  {/*
                   <Tooltip title={languages.endonyms[locale]} placement="leftTop">
                     <span>
                       <span class={"flag flag-" + locale} title={languages.endonyms[locale]}></span>

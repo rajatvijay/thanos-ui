@@ -49,7 +49,11 @@ class MagicLoginPage extends React.Component {
 
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
-            <div className={"login-box " +( this.props.config.saml_url? "magic":null)}>
+            <div
+              className={
+                "login-box " + (this.props.config.saml_url ? "magic" : null)
+              }
+            >
               {this.props.emailAuth.loading ? (
                 <div>
                   <Icon type="loading" />
@@ -69,17 +73,16 @@ class MagicLoginPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-
   const { config } = state;
-  const { emailAuth, } = state.users;
+  const { emailAuth } = state.users;
   const { loading, error, submitted } = emailAuth;
   return {
     emailAuth: {
       loading,
       error,
-      submitted,
+      submitted
     },
-    config:config
+    config: config
   };
 }
 

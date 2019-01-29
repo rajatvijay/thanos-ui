@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Alert } from "antd";
@@ -21,7 +20,7 @@ class LoginForm extends React.Component {
       submitted: false,
       data: {},
       loading: false,
-      errors: {},
+      errors: {}
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -61,9 +60,8 @@ class LoginForm extends React.Component {
     this.handleSubmit(e);
   };
 
-
   //client side data validation
-  validate = (data) => {
+  validate = data => {
     const errors = {};
     //if (!validator.isEmail(data.email)) errors.email = "Invalid email";
     if (!data.username) errors.username = "email can't be empty";
@@ -86,79 +84,75 @@ class LoginForm extends React.Component {
     let supportedLaguanges = this.props.config.supported_languages;
     return (
       <div className="login-form-box">
-          <Form
-            layout="vertical"
-            onSubmit={this.onSubmit}
-            className="login-form"
-            autoComplete="off"
+        <Form
+          layout="vertical"
+          onSubmit={this.onSubmit}
+          className="login-form"
+          autoComplete="off"
+        >
+          <FormItem
+            validateStatus={errors.username && "error"}
+            hasFeedback
+            help={errors.username}
           >
-            <FormItem
-              validateStatus={errors.username && "error"}
-              hasFeedback
-              help={errors.username}
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder={this.props.intl.formatMessage({
+                id: "loginPageInstances.emailText"
+              })}
+              value={data.username}
+              onChange={this.onInputChange}
+            />
+          </FormItem>
+
+          <FormItem
+            validateStatus={errors.password && "error"}
+            help={errors.password}
+          >
+            <Input
+              id="password"
+              name="password"
+              type="text"
+              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              placeholder={this.props.intl.formatMessage({
+                id: "loginPageInstances.passwordText"
+              })}
+              value={data.password}
+              onChange={this.onInputChange}
+            />
+          </FormItem>
+
+          <FormItem>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
             >
-              <Input
-                id="username"
-                name="username"
-                type="text"
-                prefix={
-                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                placeholder={this.props.intl.formatMessage({
-                  id: "loginPageInstances.emailText"
-                })}
-                value={data.username}
-                onChange={this.onInputChange}
-              />
-            </FormItem>
+              {" "}
+              <FormattedMessage id="loginPageInstances.loginText" />
+            </Button>
+            {/*<Link to="/register"> Sign up</Link>*/}
+          </FormItem>
 
-            <FormItem
-              validateStatus={errors.password && "error"}
-              help={errors.password}
-            >
-              <Input
-                id="password"
-                name="password"
-                type="text"
-                prefix={
-                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                }
-                placeholder={this.props.intl.formatMessage({
-                  id: "loginPageInstances.passwordText"
-                })}
-                value={data.password}
-                onChange={this.onInputChange}
-              />
-            </FormItem>
+          {this.props.error ? (
+            <Alert message={this.props.error} type="error" showIcon />
+          ) : null}
 
-            <FormItem>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-              >
-                {" "}
-                <FormattedMessage id="loginPageInstances.loginText" />
-              </Button>
-              {/*<Link to="/register"> Sign up</Link>*/}
-            </FormItem>
-
-            {this.props.error ? (
-              <Alert message={this.props.error} type="error" showIcon />
-            ) : null}
-
-            <Divider>
-              <FormattedMessage id="loginPageInstances.orText" />
-            </Divider>
-            <div className="t-16">
-              <Link to="/login/magic">
-                <FormattedMessage id="loginPageInstances.loginUsingEmailOnly" />
-                <i className="material-icons t-14 text-middle pd-left-sm">
-                  arrow_forward
-                </i>
-              </Link>
-            </div>
-          </Form>
+          <Divider>
+            <FormattedMessage id="loginPageInstances.orText" />
+          </Divider>
+          <div className="t-16">
+            <Link to="/login/magic">
+              <FormattedMessage id="loginPageInstances.loginUsingEmailOnly" />
+              <i className="material-icons t-14 text-middle pd-left-sm">
+                arrow_forward
+              </i>
+            </Link>
+          </div>
+        </Form>
       </div>
     );
   }
