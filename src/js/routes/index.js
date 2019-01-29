@@ -89,7 +89,6 @@ class MainRoutes extends React.Component {
   }
   watchRouteChange = history.listen((location, action) => {
     // location is an object like window.location
-    console.log(action, location.pathname);
     if (location.pathname === "/login/magic") {
       this.props.dispatch(checkAuth());
     }
