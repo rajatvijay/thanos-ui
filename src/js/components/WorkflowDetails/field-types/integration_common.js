@@ -379,27 +379,29 @@ function google_search_html(record, search) {
             </span>
           </Tooltip>
         </span>
-        <span dangerouslySetInnerHTML={{ __html: record.htmlTitle }} />
+        <span dangerouslySetInnerHTML={{ __html: record.title }} />
         <span className="pd-right" />{" "}
         {record.category && record.category.name ? (
-          <Tag color="#305ebe" className="alert-tag-item">
+          <Tag className="alert-tag-item alert-primary">
             {record.category.name}
           </Tag>
         ) : null}
       </div>
       <div
         className="mr-bottom text-light"
-        dangerouslySetInnerHTML={{ __html: record.htmlSnippet }}
+        dangerouslySetInnerHTML={{ __html: record.snippet }}
       />
       <div className="mr-bottom-lg">
         <a href={record.link} target="_blank" className="text-secondary">
-          {record.formattedUrl}
+          {record.link}
         </a>
       </div>
 
       <Row gutter={30}>
         <Col span={8} className="mr-bottom-lg" style={{ minHeight: "60px" }}>
-          <div className="t-12 mr-bottom-sm">Sentiment score:</div>
+          <div className="t-12 mr-bottom-sm text-uppercase">
+            Sentiment score:
+          </div>
 
           <Progress
             size="small"
@@ -407,6 +409,14 @@ function google_search_html(record, search) {
             strokeColor={getProgressColor({ percent: progressPercent })}
             showInfo={false}
           />
+        </Col>
+
+        <Col span={8} className="mr-bottom-lg" style={{ minHeight: "60px" }}>
+          <div className="t-12 mr-bottom-sm text-uppercase">
+            Sentiment Magnitude:
+          </div>
+
+          {parseFloat(record.sentiment_magnitude).toFixed(2)}
         </Col>
         {_.map(groupedData, function(group, key) {
           if (!removeEntity.includes(key)) {
