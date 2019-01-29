@@ -46,7 +46,8 @@ class GoogleSrch extends Component {
   };
 
   getComment = (e, data) => {
-    this.props.getIntegrationComments(data.cacheId, this.props.field.id);
+    let uid = data.custom_hash || data.cacheId;
+    this.props.getIntegrationComments(uid, this.props.field.id);
   };
 
   render = () => {
@@ -167,8 +168,9 @@ const GetTable = props => {
       className: "comment-column",
       verticalAlign: "top",
       render: record => {
-        let flag_data = _.size(props.flag_dict[record.cacheId])
-          ? props.flag_dict[record.cacheId]
+        let uid = record.custom_hash || record.cacheId;
+        let flag_data = _.size(props.flag_dict[uid])
+          ? props.flag_dict[uid]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
         let css = flag_data.extra || {};
@@ -179,8 +181,8 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.cacheId] ? (
-                props.commentCount[record.cacheId] + " comment(s)"
+              {props.commentCount[uid] ? (
+                props.commentCount[uid] + " comment(s)"
               ) : (
                 <i className="material-icons  t-18 text-secondary">
                   chat_bubble_outline
