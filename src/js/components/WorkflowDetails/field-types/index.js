@@ -168,6 +168,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "rdc_event_details":
       return RDCEventDetails(props);
+    case "greylist_check":
+      return DnBCommon(props);
 
     default:
       return Text(props);
