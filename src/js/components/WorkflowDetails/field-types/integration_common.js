@@ -362,9 +362,6 @@ function google_search_html(record, search) {
     return icon;
   };
 
-  console.log("record-------");
-  console.log(record.sorting_score);
-
   return (
     <div>
       <div className="mr-bottom t-16 text-medium gsearch-title">
