@@ -63,7 +63,7 @@ class GoogleSrch extends Component {
 
     // TODO: Hack to mock server response
     // let _field = Object.assign({}, field);
-    // _field.integration_json = jsonData.data_fields[4].integration_json;
+    // _field.integration_json = jsonData //.data_fields[4].integration_json;
     // TODO: 1. Field override
 
     let final_html = null;
@@ -114,7 +114,7 @@ const GetTable = props => {
       props.jsonData.results,
       [
         function(o) {
-          return o.relevance_score;
+          return o.sorting_score;
         }
       ],
       []
@@ -136,7 +136,7 @@ const GetTable = props => {
         function(i) {
           if (i.category && i.category.name) {
             return (
-              <Tag className="alert-tag-item" color="#305ebe">
+              <Tag className="alert-tag-item alert-primary">
                 {i.category.name}
               </Tag>
             );
