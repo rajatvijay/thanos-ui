@@ -66,6 +66,8 @@ class GoogleSrch extends Component {
     // _field.integration_json = jsonData //.data_fields[4].integration_json;
     // TODO: 1. Field override
 
+
+
     let final_html = null;
     if (this.props.currentStepFields.integration_data_loading) {
       final_html = (
@@ -109,15 +111,14 @@ const GetTable = props => {
     return <div className="text-center text-red">No result found!</div>;
   }
 
-  const data = _.sortBy(
-    props.jsonData.results,
-    [
-      function(o) {
-        return o.sorting_score;
-      }
-    ],
-    []
-  );
+  let data = props.jsonData.results.sort((a, b) => {
+    let aData = a.sentiment_score * a.sentiment_magnitude;
+    let bData = b.sentiment_score * b.sentiment_magnitude;
+
+    return aData - bData;
+  });
+    
+
 
   const title = (
     <span className="text-metal">{`Found ${data.length} results`}</span>

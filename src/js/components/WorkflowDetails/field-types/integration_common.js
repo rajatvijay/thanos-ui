@@ -319,7 +319,7 @@ const EntityItem = props => {
           <Progress
             size="small"
             percent={percent}
-            strokeColor={color}
+            strokeColor="#305ebe"
             showInfo={false}
           />
         </Tooltip>
@@ -361,6 +361,15 @@ function google_search_html(record, search) {
     }
     return icon;
   };
+
+  const keywordHighlight=(string, keyword)=> {
+    return string.replace(new RegExp('(^|\\s)(' + keyword + ')(\\s|$)','ig'), '$1<b>$2</b>$3');
+  }
+
+  let snippet = record.snippet;
+  
+  console.clear();
+  console.log(record.sorting_score + " --o-- " + (record.sentiment_score * record.sentiment_magnitude))
 
   return (
     <div>
