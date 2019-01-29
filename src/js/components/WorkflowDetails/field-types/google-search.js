@@ -109,17 +109,16 @@ const GetTable = props => {
     return <div className="text-center text-red">No result found!</div>;
   }
 
-  const data = _.reverse(
-    _.sortBy(
-      props.jsonData.results,
-      [
-        function(o) {
-          return o.sorting_score;
-        }
-      ],
-      []
-    )
+  const data = _.sortBy(
+    props.jsonData.results,
+    [
+      function(o) {
+        return o.sorting_score;
+      }
+    ],
+    []
   );
+
   const title = (
     <span className="text-metal">{`Found ${data.length} results`}</span>
   );
@@ -201,7 +200,7 @@ const GetTable = props => {
     <div>
       <Table
         dataSource={data}
-        pagination={true}
+        pagination={false}
         columns={columns}
         title={() => title}
       />
