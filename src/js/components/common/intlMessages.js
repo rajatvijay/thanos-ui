@@ -88,7 +88,7 @@ export default {
       noWorkflowsToShow: "No workflows to show. Try clearing the filters or"
     },
     loginPageInstances: {
-      oneTimeLink: "Enter your email to receive one-time sign in link",
+      oneTimeLink: "Enter your business E-mail ID",
       loginEmailPassword: "Login using email and password",
       loginUsingEmailOnly: "Login using email only",
       loginText: "Login",
@@ -100,7 +100,8 @@ export default {
       customSAMLloginText2: "username and password",
       loginErrorMessage:
         "Your contact information must be on file in order for you to complete this request.",
-      goToLoginPage: "Go to login page"
+      goToLoginPage: "Go to login page",
+      selectPreferedLanguage: " Choose language:"
     }
   },
   es: {
@@ -193,7 +194,7 @@ export default {
     },
     loginPageInstances: {
       oneTimeLink:
-        "Ingrese su correo electrónico para recibir el enlace de inicio de sesión único",
+        "Introduzca su ID de correo electrónico empresarial",
       loginEmailPassword:
         "Iniciar sesión usando correo electrónico y contraseña",
       loginUsingEmailOnly: "Iniciar sesión usando solo el correo electrónico",
@@ -207,7 +208,7 @@ export default {
       loginErrorMessage:
         "Su información de contacto debe estar archivada para que pueda completar esta solicitud",
       goToLoginPage: "Ir a la página de inicio de sesión",
-      selectPreferedLanguage: " Por favor seleccione su idioma preferido"
+      selectPreferedLanguage: " Elige lengua:"
     }
   }
 };

@@ -1,4 +1,4 @@
-export { userActions, login, logout, checkAuth, tokenLogin } from "./user";
+export { userActions, login,loginOtp, logout, checkAuth, tokenLogin } from "./user";
 export { configActions } from "./config";
 export { workflowActions } from "./workflows";
 export { workflowDetailsActions } from "./workflow_details";

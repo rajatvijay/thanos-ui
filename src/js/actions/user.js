@@ -49,6 +49,33 @@ export const login = (username, password, token) => async dispatch => {
   }
 };
 
+
+export const loginOtp = (username, password) => async dispatch => {
+  dispatch({ type: userConstants.LOGIN_REQUEST, username });
+  try {
+    const response = await userService.loginOtp(username, password);
+    dispatch({
+      type: userConstants.LOGIN_SUCCESS,
+      user: response
+    });
+
+    dispatch({
+      type: userConstants.GETME_SUCCESS,
+      user: response
+    });
+
+    history.push("/");
+  } catch (error) {
+    console.log("error login");
+    console.log(error);
+    dispatch({
+      type: userConstants.LOGIN_FAILURE,
+      error: error.detail ? error.detail : "Failed to fetch"
+    });
+    dispatch({ type: userConstants.GETME_FAILURE, error });
+  }
+};
+
 export const tokenLogin = (token, next) => async dispatch => {
   dispatch({ type: userConstants.TOKEN_LOGIN_REQUEST, token });
   try {

@@ -5,6 +5,7 @@ import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
 import { ReCaptcha } from "react-recaptcha-v3";
+import LoginHeader from "./LoginHeader";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -25,6 +26,8 @@ class LoginPage extends React.Component {
       return <Redirect to={"/workflows/instances/"} />;
     }
 
+    let supportedLaguanges = this.props.config.supported_languages;
+
     return (
       <div
         className="login login-container container-fluid"
@@ -36,6 +39,8 @@ class LoginPage extends React.Component {
           action="login"
           verifyCallback={this.verifyCallback}
         />
+
+        <LoginHeader showLanguage={_.isEmpty(supportedLaguanges)?false:true}/>
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
             <div className="login-box ">
@@ -56,9 +61,11 @@ class LoginPage extends React.Component {
 
 function mapStateToProps(state) {
   const { loggingIn, error } = state.authentication;
+  const { config } = state;
   return {
     loggingIn,
-    error
+    error,
+    config
   };
 }
 
