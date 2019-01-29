@@ -1,13 +1,10 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Alert } from "antd";
 //import validator from "validator";
 import _ from "lodash";
 import { login } from "../../actions";
-import { connect } from "react-redux";
-import { baseUrl, authHeader } from "../../_helpers";
-import SelectLanguage from "../SelectLanguage/";
-import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
 import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
@@ -17,7 +14,6 @@ class LoginForm extends React.Component {
     super(props);
 
     // reset login status
-
     this.state = {
       username: "",
       password: "",
@@ -26,7 +22,6 @@ class LoginForm extends React.Component {
       data: {},
       loading: false,
       errors: {},
-      optResponse: null
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -44,15 +39,10 @@ class LoginForm extends React.Component {
     this.setState({ submitted: true });
     const { username, password } = this.state;
     const { dispatch, token } = this.props;
-    console.log(token);
     if (username && password) {
       dispatch(login(username, password, token));
     }
   }
-
-  /////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////
 
   onSubmit = e => {
     // e.preventDefault();
@@ -71,32 +61,15 @@ class LoginForm extends React.Component {
     this.handleSubmit(e);
   };
 
-  onOptRequest = e => {
-    let data = this.state.data;
-    const errors = this.validate(data, "opt"); //error valitation in form
-
-    this.setState({ errors: errors });
-    if (Object.keys(errors).length === 0) {
-      this.getOtp();
-    } else {
-      console.log(this.state.errors);
-    }
-  };
 
   //client side data validation
-  validate = (data, opt) => {
-    console.log(opt);
+  validate = (data) => {
     const errors = {};
     //if (!validator.isEmail(data.email)) errors.email = "Invalid email";
-
     if (!data.username) errors.username = "email can't be empty";
-    if (opt !== "opt") {
-      if (!data.password) errors.password = "Password can't be empty";
-    }
+    if (!data.password) errors.password = "Password can't be empty";
     return errors;
   };
-
-  
 
   //capture form data in state
   onInputChange = e => {
@@ -113,12 +86,6 @@ class LoginForm extends React.Component {
     let supportedLaguanges = this.props.config.supported_languages;
     return (
       <div className="login-form-box">
-        {/*_.isEmpty(supportedLaguanges) || ("")*/}
-      
-        <div className="block-left">
-          <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />
-          <LoginSelectLanguage />
-          <Divider />
           <Form
             layout="vertical"
             onSubmit={this.onSubmit}
@@ -162,14 +129,6 @@ class LoginForm extends React.Component {
                 value={data.password}
                 onChange={this.onInputChange}
               />
-              <div className="opt-block text-left mr-top-sm">
-                <span
-                  onClick={this.onOptRequest}
-                  className="text-secondary text-anchor"
-                >
-                  Click here to request one-time password
-                </span>
-              </div>
             </FormItem>
 
             <FormItem>
@@ -200,7 +159,6 @@ class LoginForm extends React.Component {
               </Link>
             </div>
           </Form>
-        </div>
       </div>
     );
   }
