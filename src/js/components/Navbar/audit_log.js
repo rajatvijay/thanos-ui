@@ -3,8 +3,10 @@ import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import Moment from "react-moment";
+import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
+import download from "downloadjs";
 
 const TabPane = Tabs.TabPane;
 
@@ -26,6 +28,26 @@ class AuditListTabs extends Component {
     this.setState({
       currentTab: key
     });
+  };
+
+  downloadFile = () => {
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
+
+    let url = `${baseUrl}workflows/${this.props.id}/export/`;
+    return fetch(url, requestOptions)
+      .then(function(resp) {
+        return resp.blob();
+      })
+      .then(function(blob) {
+        download(
+          blob,
+          "Activity_log_" + moment().format("YYYY-MM-DD") + ".xlsx"
+        );
+      });
   };
 
   render = () => {
@@ -57,10 +79,18 @@ class AuditListTabs extends Component {
             </span>
           }
         >
-          <div style={{ textAlign: "center" }}>
-            <a href={`${baseUrl}workflows/${this.props.id}/export/`}>
+          <div className="text-center mr-top-lg">
+            <br />
+            <span
+              onClick={this.downloadFile}
+              className="text-secondary text-anchor"
+            >
               <Icon type="download" style={{ fontSize: 30 }} />
-            </a>
+            </span>
+            <br />
+            <div className="mr-top t-12 text-light">
+              Click above to download the activity log file.
+            </div>
           </div>
         </TabPane>
       </Tabs>
@@ -229,7 +259,7 @@ class ActivityLogCollapsible extends Component {
         )}
         <Button
           size={"small"}
-          style={{ position: "absolute", top: 0, right: 0 }}
+          style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
           icon={this.state.isOpen ? "up" : "down"}
           className={"activity-log-collapse-btn"}
         />
