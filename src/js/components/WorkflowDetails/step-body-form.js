@@ -490,14 +490,14 @@ class StepBodyForm extends Component {
                       // render the current group and append this to next batch for rendering
                       const renderedGroup = rowGroup.render();
                       rowGroup.addToRenderGroup(field);
+                      if (
+                        index === group.steps.length - 1 &&
+                        rowGroup.hasElements
+                      ) {
+                        // This is the last field & rowGroup still has elements remaining
+                        return [renderedGroup, rowGroup.render()];
+                      }
                       return renderedGroup;
-                    }
-                    if (
-                      index === group.steps.length - 1 &&
-                      rowGroup.hasElements
-                    ) {
-                      // This is the last field & rowGroup still has elements remaining
-                      rowGroup.render();
                     }
                   })}
                 </TabPane>
@@ -516,11 +516,11 @@ class StepBodyForm extends Component {
               // render the current group and append this to next batch for rendering
               const renderedGroup = rowGroup.render();
               rowGroup.addToRenderGroup(field);
+              if (index === orderedStep.length - 1 && rowGroup.hasElements) {
+                // This is the last field & rowGroup still has elements remaining
+                return [renderedGroup, rowGroup.render()];
+              }
               return renderedGroup;
-            }
-            if (index === orderedStep.length - 1 && rowGroup.hasElements) {
-              // This is the last field & rowGroup still has elements remaining
-              rowGroup.render();
             }
           })
         )}
