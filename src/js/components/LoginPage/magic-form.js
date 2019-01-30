@@ -40,9 +40,9 @@ class MagicLoginLinkForm extends React.Component {
       data: {},
       loading: false,
       errors: {},
-      optSent:false,
-      counter:0,
-      showPassword:false
+      optSent: false,
+      counter: 0,
+      showPassword: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -55,8 +55,8 @@ class MagicLoginLinkForm extends React.Component {
     }
   };
 
-  toggleShowPassword=()=>{
-    this.setState({showPassword:!this.state.showPassword})
+  toggleShowPassword = () => {
+    this.setState({ showPassword: !this.state.showPassword });
   };
 
   componentWillReceiveProps = nextProps => {
@@ -210,7 +210,6 @@ class MagicLoginLinkForm extends React.Component {
     const { data, errors } = this.state;
     const { config } = this.props;
 
-    
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
@@ -275,7 +274,7 @@ class MagicLoginLinkForm extends React.Component {
                   <Input
                     id="password"
                     name="password"
-                    type="text"
+                    type={this.state.showPassword ? "text" : "password"}
                     prefix={
                       <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
                     }
@@ -283,6 +282,14 @@ class MagicLoginLinkForm extends React.Component {
                     value={data.password}
                     onChange={this.onInputChange}
                   />
+                  <div className="opt-block text-left mr-top-sm t-12">
+                    <span
+                      onClick={this.toggleShowPassword}
+                      className="text-secondary text-anchor"
+                    >
+                      {this.state.showPassword ? "Hide" : "Show"} password
+                    </span>
+                  </div>
                 </FormItem>
 
                 <FormItem>
