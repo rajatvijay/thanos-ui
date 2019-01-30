@@ -3,6 +3,7 @@ import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import Moment from "react-moment";
+import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
@@ -42,7 +43,10 @@ class AuditListTabs extends Component {
         return resp.blob();
       })
       .then(function(blob) {
-        download(blob, "Activity_log.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        download(
+          blob,
+          "Activity_log_" + moment().format("YYYY-MM-DD") + ".xlsx"
+        );
       });
   };
 
