@@ -9,11 +9,32 @@ import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
+const SIZE_33 = 4,
+  SIZE_50 = 3,
+  SIZE_66 = 2,
+  SIZE_100 = 1;
+const sizeFractions = {
+  [SIZE_33]: 1 / 3,
+  [SIZE_50]: 1 / 2,
+  [SIZE_66]: 2 / 3,
+  [SIZE_100]: 1
+};
 
 class StepBodyForm extends Component {
   state = {
     version: false
   };
+
+  constructor(props) {
+    super(props);
+    this.showFieldVersion =
+      !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
+      this.props.showVersion;
+    this.editable =
+      this.props.currentStepFields.currentStepFields.is_editable !== undefined
+        ? this.props.currentStepFields.currentStepFields.is_editable
+        : true;
+  }
 
   getWorkflowId = () => {
     let path = document.location.pathname;
@@ -304,15 +325,8 @@ class StepBodyForm extends Component {
   render = () => {
     let that = this;
     let row = [];
-    let errors = this.props.currentStepFields.error;
-    let currentStepFields = this.props.currentStepFields;
-    let v =
-      !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
-      this.props.showVersion;
-    let editable =
-      this.props.currentStepFields.currentStepFields.is_editable !== undefined
-        ? this.props.currentStepFields.currentStepFields.is_editable
-        : true;
+    let showFieldVersion = this.showFieldVersion;
+    let editable = this.editable;
 
     let orderedStep = _.orderBy(
       this.props.stepData.data_fields,
@@ -321,19 +335,74 @@ class StepBodyForm extends Component {
     );
 
     let param = {
-      currentStepFields: currentStepFields,
-      error: errors,
-      onFieldChange: that.onFieldChange,
-      workflowId: that.getWorkflowId(),
-      formProps: that.props.form,
-      completed: that.props.stepData.completed_at ? true : false,
-      is_locked: that.props.stepData.is_locked,
-      addComment: that.props.toggleSidebar,
-      changeFlag: that.props.changeFlag,
-      getIntegrationComments: that.props.getIntegrationComments,
-      dispatch: that.props.dispatch,
-      intl: that.props.intl,
-      permission: that.props.permission
+      currentStepFields: this.props.currentStepFields,
+      error: this.props.currentStepFields.error,
+      onFieldChange: this.onFieldChange,
+      workflowId: this.getWorkflowId(),
+      formProps: this.props.form,
+      completed: !!this.props.stepData.completed_at,
+      is_locked: this.props.stepData.is_locked,
+      addComment: this.props.toggleSidebar,
+      changeFlag: this.props.changeFlag,
+      getIntegrationComments: this.props.getIntegrationComments,
+      dispatch: this.props.dispatch,
+      intl: this.props.intl,
+      permission: this.props.permission
+    };
+
+    let rowGroup = {
+      fields: [],
+      get currentOccupancy() {
+        return this.fields.reduce((accumulator, rawField) => {
+          return accumulator + this.getSizeFraction(rawField);
+        }, 0);
+      },
+      get shouldRender() {
+        return this.currentOccupancy > 0.9;
+      },
+      addToRenderGroup(field) {
+        this.fields.push(field);
+      },
+      reset() {
+        this.fields = [];
+      },
+      getFieldForRender(field) {
+        let fieldParams = Object.assign({}, param);
+        fieldParams["field"] = field;
+        return getFieldType(fieldParams);
+      },
+      getSizeFraction(field) {
+        // Get the current field size in fraction
+        if (field.definition && field.definition.size in sizeFractions) {
+          return sizeFractions[field.definition.size];
+        } else {
+          return 1;
+        }
+      },
+      canAccommodateField(field) {
+        // Check if current field can fit into the current rendering group
+        const fieldSizeFraction = this.getSizeFraction(field);
+        return 1 - this.currentOccupancy >= fieldSizeFraction;
+      },
+      render() {
+        // render the current group
+        const _rowGroup = Object.assign(this);
+        const fields = _rowGroup.fields;
+        this.reset();
+        return (
+          <Row gutter={16}>
+            {_.map(fields, rawField => {
+              let field = this.getFieldForRender(rawField);
+              return (
+                <Col span={Math.ceil(24 * this.getSizeFraction(rawField))}>
+                  {field}{" "}
+                  {this.showFieldVersion ? this.getVersionField(field.key) : ""}{" "}
+                </Col>
+              );
+            })}
+          </Row>
+        );
+      }
     };
 
     let groupedField = [];
@@ -360,7 +429,7 @@ class StepBodyForm extends Component {
         className="step-form"
         autoComplete="off"
       >
-        {v ? (
+        {showFieldVersion ? (
           <div className=" mr-bottom">
             <div className="version-item">
               <span className="float-right">
@@ -405,196 +474,40 @@ class StepBodyForm extends Component {
             {_.map(groupedField, function(group, index) {
               return (
                 <TabPane tab={group.label} key={"group_" + index}>
-                  {_.map(group.steps, function(f, index) {
-                    let param = {
-                      field: f,
-                      currentStepFields: currentStepFields,
-                      error: errors,
-                      onFieldChange: that.onFieldChange,
-                      workflowId: that.getWorkflowId(),
-                      formProps: that.props.form,
-                      completed: that.props.stepData.completed_at
-                        ? true
-                        : false,
-                      is_locked: that.props.stepData.is_locked,
-                      addComment: that.props.toggleSidebar,
-                      changeFlag: that.props.changeFlag,
-                      getIntegrationComments: that.props.getIntegrationComments,
-                      dispatch: that.props.dispatch,
-                      intl: that.props.intl,
-                      permission: that.props.permission
-                    };
-
-                    let field = getFieldType(param);
-
-                    ///row size method
-                    //todo: clean up this mess
-                    if (row.length === 2) {
-                      row = [];
-                    }
-
-                    if (f.definition.size === 3) {
-                      //If size is 50%
-
-                      if (
-                        index ===
-                        that.props.stepData.data_fields.length - 1
-                      ) {
-                        row.push(field);
-
-                        return (
-                          <Row gutter={16}>
-                            {_.map(row, function(col, index) {
-                              return (
-                                <Col span={12} key={"col-1-" + index}>
-                                  {col} {v ? that.getVersionField(col.key) : ""}{" "}
-                                </Col>
-                              );
-                            })}
-                          </Row>
-                        );
-                      } else {
-                        row.push(field);
-                        if (row.length === 2) {
-                          return (
-                            <Row gutter={16}>
-                              {_.map(row, function(col, index) {
-                                return (
-                                  <Col span={12} key={"col-" + index}>
-                                    {col}{" "}
-                                    {v ? that.getVersionField(col.key) : null}
-                                  </Col>
-                                );
-                              })}
-                            </Row>
-                          );
-                        }
+                  {_.map(group.steps, function(field, index) {
+                    if (rowGroup.canAccommodateField(field)) {
+                      // Current field can fit into the rendering group
+                      rowGroup.addToRenderGroup(field);
+                      if (rowGroup.shouldRender) {
+                        // We're at capacity for this rendering group, render it
+                        return rowGroup.render();
                       }
-                    } else if (f.definition.size === 1) {
-                      if (!_.isEmpty(row)) {
-                        row.push(field);
-                        let bow = (
-                          <div>
-                            {_.map(row, function(r, index) {
-                              return (
-                                <Row gutter={16} key={index}>
-                                  <Col span={index === 0 ? "12" : "24"}>
-                                    {r} {v ? that.getVersionField(r.key) : null}
-                                  </Col>
-                                </Row>
-                              );
-                            })}
-                          </div>
-                        );
-                        row = [];
-                        return bow;
-                      } else {
-                        return (
-                          <Row gutter={16} key={index}>
-                            <Col span="24">
-                              {field}{" "}
-                              {v ? that.getVersionField(field.key) : null}
-                            </Col>
-                          </Row>
-                        );
-                      }
+                    } else {
+                      // This field cannot be accommodated in the current group
+                      // render the current group and append this to next batch for rendering
+                      const renderedGroup = rowGroup.render();
+                      rowGroup.addToRenderGroup(field);
+                      return renderedGroup;
                     }
-                    //return field;
-                    //ends
                   })}
                 </TabPane>
               );
             })}
           </Tabs>
         ) : (
-          _.map(orderedStep, function(f, index) {
-            let param = {
-              field: f,
-              currentStepFields: currentStepFields,
-              error: errors,
-              onFieldChange: that.onFieldChange,
-              workflowId: that.getWorkflowId(),
-              formProps: that.props.form,
-              completed: that.props.stepData.completed_at ? true : false,
-              is_locked: that.props.stepData.is_locked,
-              addComment: that.props.toggleSidebar,
-              changeFlag: that.props.changeFlag,
-              getIntegrationComments: that.props.getIntegrationComments,
-              dispatch: that.props.dispatch,
-              intl: that.props.intl,
-              permission: that.props.permission
-            };
-            let field = getFieldType(param);
-
-            ///row size method
-            //todo: clean up this mess
-            if (row.length === 2) {
-              row = [];
-            }
-
-            if (f.definition.size === 3) {
-              //If size is 50%
-
-              if (index === that.props.stepData.data_fields.length - 1) {
-                row.push(field);
-
-                return (
-                  <Row gutter={16}>
-                    {_.map(row, function(col, index) {
-                      return (
-                        <Col span={12} key={"col-1-" + index}>
-                          {col} {v ? that.getVersionField(col.key) : ""}{" "}
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                );
-              } else {
-                row.push(field);
-                if (row.length === 2) {
-                  return (
-                    <Row gutter={16}>
-                      {_.map(row, function(col, index) {
-                        return (
-                          <Col span={12} key={"col-" + index}>
-                            {col} {v ? that.getVersionField(col.key) : null}
-                          </Col>
-                        );
-                      })}
-                    </Row>
-                  );
-                }
+          _.map(orderedStep, function(field) {
+            if (rowGroup.canAccommodateField(field)) {
+              rowGroup.addToRenderGroup(field);
+              if (rowGroup.shouldRender) {
+                return rowGroup.render();
               }
-            } else if (f.definition.size === 1) {
-              if (!_.isEmpty(row)) {
-                row.push(field);
-                let bow = (
-                  <div>
-                    {_.map(row, function(r, index) {
-                      return (
-                        <Row gutter={16} key={index}>
-                          <Col span={index === 0 ? "12" : "24"}>
-                            {r} {v ? that.getVersionField(r.key) : null}
-                          </Col>
-                        </Row>
-                      );
-                    })}
-                  </div>
-                );
-                row = [];
-                return bow;
-              } else {
-                return (
-                  <Row gutter={16} key={index}>
-                    <Col span="24">
-                      {field} {v ? that.getVersionField(field.key) : null}
-                    </Col>
-                  </Row>
-                );
-              }
+            } else {
+              // This field cannot be accommodated in the current group
+              // render the current group and append this to next batch for rendering
+              const renderedGroup = rowGroup.render();
+              rowGroup.addToRenderGroup(field);
+              return renderedGroup;
             }
-            //return field;
-            //ends
           })
         )}
 
