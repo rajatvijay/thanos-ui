@@ -360,6 +360,9 @@ class StepBodyForm extends Component {
       get shouldRender() {
         return this.currentOccupancy > 0.9;
       },
+      get hasElements() {
+        return this.fields.length > 0;
+      },
       addToRenderGroup(field) {
         this.fields.push(field);
       },
@@ -489,13 +492,20 @@ class StepBodyForm extends Component {
                       rowGroup.addToRenderGroup(field);
                       return renderedGroup;
                     }
+                    if (
+                      index === group.steps.length - 1 &&
+                      rowGroup.hasElements
+                    ) {
+                      // This is the last field & rowGroup still has elements remaining
+                      rowGroup.render();
+                    }
                   })}
                 </TabPane>
               );
             })}
           </Tabs>
         ) : (
-          _.map(orderedStep, function(field) {
+          _.map(orderedStep, function(field, index) {
             if (rowGroup.canAccommodateField(field)) {
               rowGroup.addToRenderGroup(field);
               if (rowGroup.shouldRender) {
@@ -507,6 +517,10 @@ class StepBodyForm extends Component {
               const renderedGroup = rowGroup.render();
               rowGroup.addToRenderGroup(field);
               return renderedGroup;
+            }
+            if (index === orderedStep.length - 1 && rowGroup.hasElements) {
+              // This is the last field & rowGroup still has elements remaining
+              rowGroup.render();
             }
           })
         )}
