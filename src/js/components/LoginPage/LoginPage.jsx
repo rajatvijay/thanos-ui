@@ -6,6 +6,7 @@ import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
 import { ReCaptcha } from "react-recaptcha-v3";
 import LoginHeader from "./LoginHeader";
+import _ from "lodash";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -40,7 +41,9 @@ class LoginPage extends React.Component {
           verifyCallback={this.verifyCallback}
         />
 
-        <LoginHeader showLanguage={_.isEmpty(supportedLaguanges)?false:true}/>
+        <LoginHeader
+          showLanguage={_.isEmpty(supportedLaguanges) ? false : true}
+        />
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
             <div className="login-box ">

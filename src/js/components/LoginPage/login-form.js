@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Alert } from "antd";
+import { connect } from "react-redux";
 //import validator from "validator";
 import _ from "lodash";
 import { login } from "../../actions";
@@ -115,7 +116,7 @@ class LoginForm extends React.Component {
             <Input
               id="password"
               name="password"
-              type="text"
+              type="password"
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder={this.props.intl.formatMessage({
                 id: "loginPageInstances.passwordText"

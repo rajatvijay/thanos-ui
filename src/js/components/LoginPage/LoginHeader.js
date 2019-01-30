@@ -21,19 +21,17 @@ const LoginHeader = props => {
           </div>
           <span className="logo-subtext">PARTNERS</span>
         </div>
+
         <div className="language-selection text-center mr-bottom-lg ">
-          <span className="text-light t-14 pd-right-sm">
-            <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />
-          </span>
-          <LoginSelectLanguage />
+          {props.showLanguage ? (
+            <div>
+              <span className="text-light t-14 pd-right-sm">
+                <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />
+              </span>
+              <LoginSelectLanguage />
+            </div>
+          ) : null}
         </div>
-        <span className="logo-subtext">PARTNERS</span>
-      </div>
-      <div className="language-selection text-center mr-bottom-lg ">
-        {props.showLanguage? 
-        <div><span className="text-light t-14 pd-right-sm"><FormattedMessage id="loginPageInstances.selectPreferedLanguage" /></span>
-        <LoginSelectLanguage /></div>
-        :null}
       </div>
     );
   }
