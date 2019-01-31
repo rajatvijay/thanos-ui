@@ -423,12 +423,8 @@ class GetQuickData extends React.Component {
     let that = this;
 
     const GetType = item => {
-      let i = null;
-      console.log(item);
       if (item.label) {
-        console.log("lcdalllta");
-        console.log(item);
-        i = (
+        return (
           <span>
             <Tooltip title={item.label + ": " + item.value}>
               <span className="text-metal t-14 t-md pd-right ellip-small">
@@ -438,8 +434,7 @@ class GetQuickData extends React.Component {
           </span>
         );
       } else if (item.alert) {
-        console.log("alert");
-        i = (
+        return (
           <Tag
             key={item.alert.id}
             className={
@@ -464,24 +459,95 @@ class GetQuickData extends React.Component {
           </Tag>
         );
       }
-
-      return i;
     };
 
     return (
-      <div className="group-overview">
+      <div className="group-overviewl">
         <div className="overflow-wrapper">
           <div className="step-ui">
             {_.map(data, function(item, index) {
               if (index < 3) {
-                return <GetType item={item} />;
+                if (item.label) {
+                  return (
+                    <span>
+                      <Tooltip title={item.label + ": " + item.value}>
+                        <span className="text-metal t-14 t-md pd-right ellip-small">
+                          {item.label}: {item.value || "N/A"}
+                        </span>
+                      </Tooltip>
+                    </span>
+                  );
+                } else if (item.alert) {
+                  return (
+                    <Tag
+                      key={item.alert.id}
+                      className={
+                        "alert-tag-item tag-small" +
+                          item.alert.category.color_label || "alert-primary"
+                      }
+                      color={item.alert.category.color_label || null}
+                    >
+                      <Link
+                        to={
+                          "/workflows/instances/" +
+                          item.workflow +
+                          "/" +
+                          "?group=" +
+                          item.step_group +
+                          "&step=" +
+                          item.step
+                        }
+                      >
+                        {item.alert.category.name}
+                      </Link>
+                    </Tag>
+                  );
+                }
               } else if (that.state.expanded) {
-                return <GetType item={item} />;
+                if (item.label) {
+                  return (
+                    <span>
+                      <Tooltip title={item.label + ": " + item.value}>
+                        <span className="text-metal t-14 t-md pd-right ellip-small">
+                          {item.label}: {item.value || "N/A"}
+                        </span>
+                      </Tooltip>
+                    </span>
+                  );
+                } else if (item.alert) {
+                  return (
+                    <Tag
+                      key={item.alert.id}
+                      className={
+                        "alert-tag-item tag-small" +
+                          item.alert.category.color_label || "alert-primary"
+                      }
+                      color={item.alert.category.color_label || null}
+                    >
+                      <Link
+                        to={
+                          "/workflows/instances/" +
+                          item.workflow +
+                          "/" +
+                          "?group=" +
+                          item.step_group +
+                          "&step=" +
+                          item.step
+                        }
+                      >
+                        {item.alert.category.name}
+                      </Link>
+                    </Tag>
+                  );
+                }
               }
             })}
 
             {props.data.length > 3 ? (
-              <span className="text-anchor" onClick={this.toggleExpand}>
+              <span
+                className="text-anchor text-middle float-right"
+                onClick={this.toggleExpand}
+              >
                 {this.state.expanded ? "-" : "+"} {props.data.length - 3}
               </span>
             ) : null}
