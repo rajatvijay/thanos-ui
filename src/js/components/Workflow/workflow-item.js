@@ -422,44 +422,44 @@ class GetMergedData extends React.Component {
     const { data } = props;
     let that = this;
 
-    const GetType = item => {
-      if (item.label) {
-        return (
-          <span>
-            <Tooltip title={item.label + ": " + item.value}>
-              <Tag className="alert-tag-item alert-primary  ellip-small">
-                {item.label}: {item.value || "N/A"}
-              </Tag>
-            </Tooltip>
-          </span>
-        );
-      } else if (item.alert) {
-        return (
-          <Tag
-            key={item.alert.id}
-            className={
-              "alert-tag-item tag-small" + item.alert.category.color_label ||
-              "alert-primary"
-            }
-            color={item.alert.category.color_label || null}
-          >
-            <Link
-              to={
-                "/workflows/instances/" +
-                item.workflow +
-                "/" +
-                "?group=" +
-                item.step_group +
-                "&step=" +
-                item.step
-              }
-            >
-              {item.alert.category.name}
-            </Link>
-          </Tag>
-        );
-      }
-    };
+    // const GetType = item => {
+    //   if (item.label) {
+    //     return (
+    //       <span>
+    //         <Tooltip title={item.label + ": " + item.value}>
+    //           <Tag className="alert-tag-item alert-primary  ellip-small">
+    //             {item.label}: {item.value || "N/A"}
+    //           </Tag>
+    //         </Tooltip>
+    //       </span>
+    //     );
+    //   } else if (item.alert) {
+    //     return (
+    //       <Tag
+    //         key={item.alert.id}
+    //         className={
+    //           "alert-tag-item tag-small" + item.alert.category.color_label ||
+    //           "alert-primary"
+    //         }
+    //         color={item.alert.category.color_label || null}
+    //       >
+    //         <Link
+    //           to={
+    //             "/workflows/instances/" +
+    //             item.workflow +
+    //             "/" +
+    //             "?group=" +
+    //             item.step_group +
+    //             "&step=" +
+    //             item.step
+    //           }
+    //         >
+    //           {item.alert.category.name}
+    //         </Link>
+    //       </Tag>
+    //     );
+    //   }
+    // };
 
     return (
       <div className="group-overviewl">
@@ -471,9 +471,9 @@ class GetMergedData extends React.Component {
                   return (
                     <span>
                       <Tooltip title={item.label + ": " + item.value}>
-                        <span className="text-metal t-14 t-md pd-right ellip-small">
+                        <Tag className="alert-tag-item alert-primary  ellip-small">
                           {item.label}: {item.value || "N/A"}
-                        </span>
+                        </Tag>
                       </Tooltip>
                     </span>
                   );
