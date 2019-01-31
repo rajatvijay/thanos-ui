@@ -20,6 +20,17 @@
         .Avenir-medium();
       }
     }
+    .ant-tabs-nav .ant-tabs-tab-active {
+      color: #505050;
+      font-weight: 500;
+    }
+    .ant-tabs-nav .ant-tabs-tab:hover {
+      color: #505050;
+    }
+
+    .ant-tabs-ink-bar {
+      background: @color-secondary;
+    }
   }
   .divider-top {
     border-bottom: 1px solid @color-text;
@@ -290,6 +301,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            position: relative;
             a:hover {
               text-decoration: none;
               color: @color-text;
