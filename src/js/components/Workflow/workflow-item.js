@@ -405,7 +405,7 @@ const CheckData = props => {
   }
 };
 
-class GetQuickData extends React.Component {
+class GetMergedData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -427,9 +427,9 @@ class GetQuickData extends React.Component {
         return (
           <span>
             <Tooltip title={item.label + ": " + item.value}>
-              <span className="text-metal t-14 t-md pd-right ellip-small">
+              <Tag className="alert-tag-item alert-primary  ellip-small">
                 {item.label}: {item.value || "N/A"}
-              </span>
+              </Tag>
             </Tooltip>
           </span>
         );
@@ -558,6 +558,22 @@ class GetQuickData extends React.Component {
   }
 }
 
+const GetQuickData = props => {
+  return (
+    <div className="group-overview">
+      <div className="overflow-wrapper">
+        <div className="step-ui">
+          {_.map(props.workflow.lc_data, function(lcItem, index) {
+            return (
+              <Tag className="alert-tag-item alert-primary">{lcItem.value}</Tag>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const getScoreColor = riskValue => {
   let value = parseInt(riskValue, 10);
   if (value >= 7) {
@@ -569,6 +585,53 @@ const getScoreColor = riskValue => {
   } else {
     return "#505050";
   }
+};
+
+const GetAlertData = props => {
+  return (
+    <div className="group-overview">
+      <div className="overflow-wrapper">
+        <div className="filter-top-list alert-tag-list">
+          {_.map(props.workflow.alerts, function(item, index) {
+            let more = props.workflow.alerts - 3;
+
+            if (index >= 3) {
+              if (index === 4) {
+                return <span className="text-light">+{more}</span>;
+              } else {
+                return;
+              }
+            } else {
+              return (
+                <Tag
+                  key={item.alert.id}
+                  className={
+                    "alert-tag-item " + item.alert.category.color_label ||
+                    "alert-primary"
+                  }
+                  color={item.alert.category.color_label || null}
+                >
+                  <Link
+                    to={
+                      "/workflows/instances/" +
+                      item.workflow +
+                      "/" +
+                      "?group=" +
+                      item.step_group +
+                      "&step=" +
+                      item.step
+                    }
+                  >
+                    {item.alert.category.name}
+                  </Link>
+                </Tag>
+              );
+            }
+          })}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export const WorkflowHeader = props => {
@@ -638,7 +701,11 @@ export const WorkflowHeader = props => {
 
         {props.isEmbedded && _.size(mergedData) ? (
           <Col span={11}>
-            <GetQuickData data={mergedData} />
+            <GetMergedData data={mergedData} />
+          </Col>
+        ) : _.size(props.workflow.alerts) ? (
+          <Col span={11}>
+            <GetAlertData {...props} />
           </Col>
         ) : (
           <HeaderWorkflowGroup
@@ -906,7 +973,7 @@ const StepItem = props => {
         <i className="material-icons text-middle">{icon_cls}</i>
         <span>{props.stepData.name}</span>
         {_.size(hasAlert) ? (
-          <span className="float-right pd-left">
+          <span className="alert-dot">
             <Tooltip title={hasAlert.alert.category.name}>
               <Badge status="error" />
             </Tooltip>

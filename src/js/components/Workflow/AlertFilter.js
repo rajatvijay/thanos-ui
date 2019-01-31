@@ -94,13 +94,21 @@ class AlertFilter extends Component {
           key={item.id}
           className={
             "pd-right-lg text-anchor pd-bottom-sm  t-12 text-secondary " +
-            (activeFilter[0] === item.tag ? "text-bold " : " ") 
+            (activeFilter[0] === item.tag ? "text-bold " : " ")
           }
           color={item.color_label || null}
           onClick={that.handleClick.bind(that, item)}
         >
           {item.name} ({item.count})
           {closable ? closableButton : null}
+          {item.color_label ? (
+            <i
+              class="material-icons t-12 text-middle"
+              style={{ color: item.color_label }}
+            >
+              fiber_manual_record
+            </i>
+          ) : null}
         </span>
       );
     });
@@ -120,28 +128,26 @@ class AlertFilter extends Component {
             <div />
           ) : (
             <div className="filter-">
-              
-                <div>
-                  <div className="filter-top-list alert-tag-list">
-                    {_.size(parent) ? (
-                      <span>
-                        <i
-                          onClick={this.clearFilter}
-                          className="material-icons t-16 text-anchor text-middle pd-right-sm"
-                        >
-                          arrow_back
-                        </i>
-                        {this.getTags([parent])}
-                        <Divider type="vertical" />
-                      </span>
-                    ) : null}
+              <div>
+                <div className="filter-top-list alert-tag-list">
+                  {_.size(parent) ? (
+                    <span>
+                      <i
+                        onClick={this.clearFilter}
+                        className="material-icons t-16 text-anchor text-middle pd-right-sm"
+                      >
+                        arrow_back
+                      </i>
+                      {this.getTags([parent])}
+                      <Divider type="vertical" />
+                    </span>
+                  ) : null}
 
-                    {_.size(parent)
-                      ? this.getTags(parent.sub_categories)
-                      : this.getTags(alert_details)}
-                  </div>
+                  {_.size(parent)
+                    ? this.getTags(parent.sub_categories)
+                    : this.getTags(alert_details)}
                 </div>
-              
+              </div>
             </div>
           )
         ) : (
@@ -153,6 +159,5 @@ class AlertFilter extends Component {
     );
   }
 }
-
 
 export default AlertFilter;
