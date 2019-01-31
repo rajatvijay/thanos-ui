@@ -9,6 +9,7 @@ import { workflowCreate } from "./workflow_create";
 import {
   workflowKind,
   workflowGroupCount,
+  workflowAlertGroupCount,
   workflowKindStatus
 } from "./workflow_kind";
 import { workflowDetails, hasStepinfo } from "./workflow_details";
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   workflowFilters,
   workflowFilterType,
   workflowGroupCount,
+  workflowAlertGroupCount,
   workflowKind,
   workflowKindStatus,
   languageSelector

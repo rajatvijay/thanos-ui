@@ -9,7 +9,8 @@ import {
   Dropdown,
   Menu,
   Switch,
-  Tooltip
+  Tooltip,
+  Tabs
 } from "antd";
 import WorkflowList from "./workflow-list";
 import {
@@ -21,11 +22,13 @@ import {
 } from "../../actions";
 import FilterSidebar from "./filter";
 import { authHeader } from "../../_helpers";
-import WorkflowFilterTop from "./filter-top";
 import AlertFilter from "./AlertFilter";
+import WorkflowFilterTop from "./WorkflowFilterTop";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
+
+const TabPane = Tabs.TabPane;
 
 class Workflow extends Component {
   constructor(props) {
@@ -61,7 +64,6 @@ class Workflow extends Component {
   }
 
   componentDidMount = () => {
-    //this.reloadWorkflowList();
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
@@ -93,6 +95,8 @@ class Workflow extends Component {
     // if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind ) {
     //     this.reloadWorkflowList();
     // }
+
+
   };
 
   getDefaultKind = config_loaded => {
@@ -175,6 +179,7 @@ class Workflow extends Component {
 
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
+        
         <FilterSidebar />
 
         <Layout
@@ -182,14 +187,19 @@ class Workflow extends Component {
           hasSider={false}
         >
           <div className="section-top">
-            <div
-              className={
-                "waiting-filter-warpper animated " +
-                (this.state.showWaitingFitler ? " grow " : " shrink")
-              }
-            >
-              {this.state.defKind ? <AlertFilter {...this.props} /> : null}
-            </div>
+            <Tabs defaultActiveKey="1" size="small">
+              <TabPane tab="Task queue" key="1">
+                {this.state.defKind ? <WorkflowFilterTop {...this.props} /> : null}
+              </TabPane>
+              <TabPane tab="Alerts" key="2">
+                {this.state.defKind ? <AlertFilter {...this.props} /> : null}
+              </TabPane>
+            </Tabs>
+
+              
+
+              
+              <br/>
           </div>
 
           {this.props.workflow.loading ? null : this.props.workflow
@@ -296,6 +306,7 @@ function mapStateToProps(state) {
     authentication,
     workflowKind,
     workflowGroupCount,
+    workflowAlertGroupCount,
     users,
     workflowFilters
   } = state;
@@ -304,6 +315,7 @@ function mapStateToProps(state) {
     workflow,
     workflowKind,
     authentication,
+    workflowAlertGroupCount,
     workflowGroupCount,
     users,
     workflowFilters

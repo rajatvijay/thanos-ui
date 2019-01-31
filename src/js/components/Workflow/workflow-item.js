@@ -405,99 +405,158 @@ const CheckData = props => {
   }
 };
 
-const GetAlertData = props => {
-  const colors = [
-    "magenta",
-    "red",
-    "volcano",
-    "orange",
-    "gold",
-    "lime",
-    "green",
-    "cyan",
-    "blue",
-    "geekblue",
-    "purple"
-  ];
+class GetQuickData extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false
+    };
+  }
 
-  return (
-    <div className="group-overview">
-      <div className="overflow-wrapper">
-        {/* <div className="step-ui">
-                 {_.map(props.workflow.lc_data, function(lcItem, index) {
-                   return (
-                     <span key={index} className="step-item">
-                       <span className={"title-c text-normal text-light pd-right"}>
-                         {lcItem.label}:
-                       </span>
-                       {props.column ? <br /> : null}
-                       <span className={" text-normal  text-base"}>
-                         <CheckData data={lcItem.value} />
-                       </span>
-                       {props.column ? null : <span className="dash"> </span>}
-                     </span>
-                   );
-                 })}
-               </div>*/}
+  toggleExpand = () => {
+    this.setState({ expanded: !this.state.expanded });
+  };
 
-        <div className="filter-top-list alert-tag-list">
-          {_.map(props.workflow.alerts, function(item, index) {
-            let more = props.workflow.alerts - 3;
+  render() {
+    let props = this.props;
+    const { data } = props;
+    let that = this;
 
-            if (index >= 3) {
-              if (index === 4) {
-                return <span className="text-light">+{more}</span>;
-              } else {
-                return;
-              }
-            } else {
-              return (
-                <Tag
-                  key={item.alert.id}
-                  className={
-                    "alert-tag-item " + item.alert.category.color_label ||
-                    "alert-primary"
-                  }
-                  color={item.alert.category.color_label || null}
-                >
-                  <Link
-                    to={
-                      "/workflows/instances/" +
-                      item.workflow +
-                      "/" +
-                      "?group=" +
-                      item.step_group +
-                      "&step=" +
-                      item.step
-                    }
-                  >
-                    {item.alert.category.name}
-                  </Link>
-                </Tag>
-              );
+    const GetType = item => {
+      if (item.label) {
+        return (
+          <span>
+            <Tooltip title={item.label + ": " + item.value}>
+              <span className="text-metal t-14 t-md pd-right ellip-small">
+                {item.label}: {item.value || "N/A"}
+              </span>
+            </Tooltip>
+          </span>
+        );
+      } else if (item.alert) {
+        return (
+          <Tag
+            key={item.alert.id}
+            className={
+              "alert-tag-item tag-small" + item.alert.category.color_label ||
+              "alert-primary"
             }
-          })}
-        </div>
-      </div>
-    </div>
-  );
-};
+            color={item.alert.category.color_label || null}
+          >
+            <Link
+              to={
+                "/workflows/instances/" +
+                item.workflow +
+                "/" +
+                "?group=" +
+                item.step_group +
+                "&step=" +
+                item.step
+              }
+            >
+              {item.alert.category.name}
+            </Link>
+          </Tag>
+        );
+      }
+    };
 
-const GetQuickData = props => {
-  return (
-    <div className="group-overview">
-      <div className="overflow-wrapper">
-        <div className="step-ui">
-          {_.map(props.workflow.lc_data, function(lcItem, index) {
-            return (
-              <Tag className="alert-tag-item alert-primary">{lcItem.value}</Tag>
-            );
-          })}
+    return (
+      <div className="group-overviewl">
+        <div className="overflow-wrapper">
+          <div className="step-ui">
+            {_.map(data, function(item, index) {
+              if (index < 3) {
+                if (item.label) {
+                  return (
+                    <span>
+                      <Tooltip title={item.label + ": " + item.value}>
+                        <span className="text-metal t-14 t-md pd-right ellip-small">
+                          {item.label}: {item.value || "N/A"}
+                        </span>
+                      </Tooltip>
+                    </span>
+                  );
+                } else if (item.alert) {
+                  return (
+                    <Tag
+                      key={item.alert.id}
+                      className={
+                        "alert-tag-item tag-small" +
+                          item.alert.category.color_label || "alert-primary"
+                      }
+                      color={item.alert.category.color_label || null}
+                    >
+                      <Link
+                        to={
+                          "/workflows/instances/" +
+                          item.workflow +
+                          "/" +
+                          "?group=" +
+                          item.step_group +
+                          "&step=" +
+                          item.step
+                        }
+                      >
+                        {item.alert.category.name}
+                      </Link>
+                    </Tag>
+                  );
+                }
+              } else if (that.state.expanded) {
+                if (item.label) {
+                  return (
+                    <span>
+                      <Tooltip title={item.label + ": " + item.value}>
+                        <span className="text-metal t-14 t-md pd-right ellip-small">
+                          {item.label}: {item.value || "N/A"}
+                        </span>
+                      </Tooltip>
+                    </span>
+                  );
+                } else if (item.alert) {
+                  return (
+                    <Tag
+                      key={item.alert.id}
+                      className={
+                        "alert-tag-item tag-small" +
+                          item.alert.category.color_label || "alert-primary"
+                      }
+                      color={item.alert.category.color_label || null}
+                    >
+                      <Link
+                        to={
+                          "/workflows/instances/" +
+                          item.workflow +
+                          "/" +
+                          "?group=" +
+                          item.step_group +
+                          "&step=" +
+                          item.step
+                        }
+                      >
+                        {item.alert.category.name}
+                      </Link>
+                    </Tag>
+                  );
+                }
+              }
+            })}
+
+            {props.data.length > 3 ? (
+              <span
+                className="text-anchor text-middle float-right"
+                onClick={this.toggleExpand}
+              >
+                {this.state.expanded ? "-" : "+"} {props.data.length - 3}
+              </span>
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const getScoreColor = riskValue => {
   let value = parseInt(riskValue, 10);
@@ -515,6 +574,21 @@ const getScoreColor = riskValue => {
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
+  let mergedData = [];
+
+  if (props.isEmbedded) {
+    if (_.size(props.workflow.lc_data)) {
+      _.forEach(props.workflow.lc_data, function(lcitem) {
+        mergedData.push(lcitem);
+      });
+    }
+
+    if (_.size(props.workflow.alerts)) {
+      _.forEach(props.workflow.alerts, function(lcitem) {
+        mergedData.push(lcitem);
+      });
+    }
+  }
 
   return (
     <div className="ant-collapse-header">
@@ -562,13 +636,9 @@ export const WorkflowHeader = props => {
 
         <HeaderTitle {...props} />
 
-        {props.isEmbedded && _.size(props.workflow.lc_data) ? (
+        {props.isEmbedded && _.size(mergedData) ? (
           <Col span={11}>
-            <GetQuickData {...props} />
-          </Col>
-        ) : _.size(props.workflow.alerts) ? (
-          <Col span={11}>
-            <GetAlertData {...props} />
+            <GetQuickData data={mergedData} />
           </Col>
         ) : (
           <HeaderWorkflowGroup
@@ -653,11 +723,11 @@ class MetaRow extends React.Component {
       <div>
         <Divider className="no-margin" />
 
-        <div className="lc-card-section">
+        <div className="lc-card-section " style={{ display: "none" }}>
           <Row>
             <Col span="12">{props.hasChildren ? "show child" : null}</Col>
             <Col span="12" className="text-right">
-              {props.relatedKind ? (
+              {/* props.relatedKind ? (
                 <Dropdown
                   overlay={childWorkflowMenu}
                   className="child-workflow-dropdown"
@@ -669,7 +739,8 @@ class MetaRow extends React.Component {
                     <i className="material-icons t-14">keyboard_arrow_down</i>
                   </a>
                 </Dropdown>
-              ) : null}
+              ) : null
+              */}
             </Col>
           </Row>
         </div>

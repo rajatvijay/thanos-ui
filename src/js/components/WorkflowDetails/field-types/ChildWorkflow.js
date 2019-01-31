@@ -272,6 +272,90 @@ class ChildWorkflowField2 extends Component {
   };
 }
 
+// export const WorkflowHeader = props => {
+//   let proccessedData = getProcessedData(props.workflow.step_groups);
+//   let progressData = getProgressData(props.workflow);
+
+//   return (
+//     <div className="ant-collapse-header">
+//       <Row type="flex" align="middle" className="lc-card-head">
+//         {props.isChild ? null : (
+//           <Col span={1} className=" text-anchor">
+//             {props.detailsPage ? (
+//               <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
+//                 <i
+//                   className="material-icons text-secondary"
+//                   style={{ fontSize: "18px", verticalAlign: "middle" }}
+//                 >
+//                   keyboard_backspace
+//                 </i>
+//               </span>
+//             ) : (
+//               <span className="pd-right">
+//                 <Popover
+//                   content={
+//                     <div className="text-center">
+//                       <div className="small">{progressData}% completed</div>
+//                     </div>
+//                   }
+//                 >
+//                   <Progress
+//                     type="circle"
+//                     percent={progressData}
+//                     width={35}
+//                     format={percent => (
+//                       <i
+//                         className="material-icons"
+//                         style={{ fontSize: "18px", verticalAlign: "middle" }}
+//                       >
+//                         {props.kind === ""
+//                           ? "folder_open"
+//                           : getIcon(props.workflow.definition.kind, props.kind)}
+//                       </i>
+//                     )}
+//                   />
+//                 </Popover>
+//               </span>
+//             )}
+//           </Col>
+//         )}
+
+//         <HeaderTitle {...props} />
+
+//         {props.isEmbedded && _.size(props.workflow.lc_data) ? (
+//           <Col span={11}>
+//             <GetQuickData {...props} />
+//           </Col>
+//         ) : _.size(props.workflow.alerts) ? (
+//           <Col span={11}>
+//             <GetAlertData {...props} />
+//           </Col>
+//         ) : (
+//           <HeaderWorkflowGroup
+//             {...props}
+//             //progressData={progressData}
+//             pdata={proccessedData}
+//           />
+//         )}
+
+//         <Col span="2" className="text-center">
+//           {props.workflow.sorting_primary_field ? (
+//             <Badge
+//               count={<span>{props.workflow.sorting_primary_field}</span>}
+//               style={{
+//                 backgroundColor: getScoreColor(
+//                   props.workflow.sorting_primary_field
+//                 )
+//               }}
+//             />
+//           ) : null}{" "}
+//         </Col>
+//         <HeaderOptions2 {...props} />
+//       </Row>
+//     </div>
+//   );
+// };
+
 class ChildItem extends Component {
   constructor() {
     super();
@@ -282,6 +366,10 @@ class ChildItem extends Component {
       kind: null
     };
   }
+
+  componentDidMount = () => {
+    this.setKind();
+  };
 
   getKindID = kindTag => {
     let kind = null;
@@ -303,14 +391,17 @@ class ChildItem extends Component {
     }
   };
 
-  componentDidUpdate = prevProps => {
+  setKind = () => {
     let rKind = null;
+    if (_.size(this.props.workflowKind.workflowKind)) {
+      rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
+      this.setState({ kind: rKind });
+    }
+  };
+
+  componentDidUpdate = prevProps => {
     if (this.props.workflowKind !== prevProps.workflowKind) {
-      if (_.size(this.props.workflowKind.workflowKind)) {
-        rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
-        this.setState({ kind: rKind });
-        console.log(rKind);
-      }
+      this.setKind();
     }
   };
 
@@ -375,7 +466,7 @@ class ChildItem extends Component {
           >
             {this.state.kind ? (
               <i
-                className="material-icons t-18"
+                className="material-icons t-16"
                 style={{ verticalAlign: "middle" }}
               >
                 {isExpanded ? "remove" : "add"}

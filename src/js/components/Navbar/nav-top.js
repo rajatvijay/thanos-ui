@@ -92,7 +92,6 @@ class NavTop extends Component {
         title={
           <span>
             <Icon type="download" />
-            <span>export</span>
           </span>
         }
       >
@@ -212,13 +211,11 @@ class NavTop extends Component {
 
                   {showInsights ? (
                     <Menu.Item key="2">
-                      <Tooltip title={"Insight"} placement={"bottom"}>
                         <span className="pd-ard-sm" onClick={this.showDrawer}>
                           <i className="material-icons text-light text-anchor t-18 ">
                             trending_up
                           </i>
                         </span>
-                      </Tooltip>
                     </Menu.Item>
                   ) : null}
 
