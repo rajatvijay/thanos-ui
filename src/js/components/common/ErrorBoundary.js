@@ -10,6 +10,12 @@ export default class ErrorBoundary extends Component {
   componentDidCatch(err, info) {
     this.setState({ hasError: true });
     Sentry.captureException(err);
+    Sentry.captureEvent({
+     stacktrace: [],
+    beforeBreadcrumb(breadcrumb, hint) {
+    return breadcrumb.category === 'ui.click' ? null : breadcrumb;
+  },
+})
   }
 
   render() {
