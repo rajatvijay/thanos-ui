@@ -508,9 +508,9 @@ class GetMergedData extends React.Component {
                   return (
                     <span>
                       <Tooltip title={item.label + ": " + item.value}>
-                        <span className="text-metal t-14 t-md pd-right ellip-small">
+                        <Tag className="alert-tag-item alert-primary  ellip-small">
                           {item.label}: {item.value || "N/A"}
-                        </span>
+                        </Tag>
                       </Tooltip>
                     </span>
                   );
