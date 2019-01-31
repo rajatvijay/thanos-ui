@@ -10,6 +10,7 @@ import { addLocaleData, IntlProvider, injectIntl } from "react-intl";
 import { flattenMessages } from "./components/common/messageUtils";
 import { languageActions } from "./actions";
 import { languageConstants } from "./constants";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 class App extends React.Component {
   componentDidMount() {
@@ -71,9 +72,11 @@ class App extends React.Component {
       console.log("Missing support for:", locale);
     }
     return (
-      <IntlProvider locale={locale} messages={messageTranslate}>
-        <Routes />
-      </IntlProvider>
+      <ErrorBoundary>
+        <IntlProvider locale={locale} messages={messageTranslate}>
+          <Routes />
+        </IntlProvider>
+      </ErrorBoundary>
     );
   };
 }
