@@ -25,17 +25,6 @@ class StepBodyForm extends Component {
     version: false
   };
 
-  constructor(props) {
-    super(props);
-    this.showFieldVersion =
-      !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
-      this.props.showVersion;
-    this.editable =
-      this.props.currentStepFields.currentStepFields.is_editable !== undefined
-        ? this.props.currentStepFields.currentStepFields.is_editable
-        : true;
-  }
-
   getWorkflowId = () => {
     let path = document.location.pathname;
     let pathLast = path.split("/")[3];
@@ -325,8 +314,13 @@ class StepBodyForm extends Component {
   render = () => {
     let that = this;
     let row = [];
-    let showFieldVersion = this.showFieldVersion;
-    let editable = this.editable;
+    let showFieldVersion =
+      !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
+      this.props.showVersion;
+    let editable =
+      this.props.currentStepFields.currentStepFields.is_editable !== undefined
+        ? this.props.currentStepFields.currentStepFields.is_editable
+        : true;
 
     let orderedStep = _.orderBy(
       this.props.stepData.data_fields,
@@ -399,7 +393,7 @@ class StepBodyForm extends Component {
               return (
                 <Col span={Math.ceil(24 * this.getSizeFraction(rawField))}>
                   {field}{" "}
-                  {this.showFieldVersion ? this.getVersionField(field.key) : ""}{" "}
+                  {showFieldVersion ? that.getVersionField(field.key) : ""}{" "}
                 </Col>
               );
             })}
