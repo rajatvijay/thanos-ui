@@ -4,6 +4,7 @@ import { workflowKindService } from "../services";
 export const workflowKindActions = {
   getAll,
   getCount,
+  getAlertCount,
   getStatusCount
 };
 
@@ -31,6 +32,32 @@ function getAll() {
 }
 
 //get workflow agrrated filter data i.e group counts
+function getAlertCount(tag) {
+  return dispatch => {
+    dispatch(request(tag));
+
+    workflowKindService
+      .getAlertCount(tag)
+      .then(
+        workflowAlertGroupCount => dispatch(success(workflowAlertGroupCount)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request() {
+    return { type: workflowKindConstants.GET_ALERT_COUNT_REQUEST };
+  }
+  function success(workflowAlertGroupCount) {
+    return {
+      type: workflowKindConstants.GET_ALERT_COUNT_SUCCESS,
+      workflowAlertGroupCount
+    };
+  }
+  function failure(error) {
+    return { type: workflowKindConstants.GET_ALERT_COUNT_FAILURE, error };
+  }
+}
+
 function getCount(tag) {
   return dispatch => {
     dispatch(request(tag));

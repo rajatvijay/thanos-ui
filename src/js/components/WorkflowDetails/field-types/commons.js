@@ -44,7 +44,7 @@ function getLabel(props, that) {
       <span className="label-with-action">
         <span className="float-right">
           {addCommentBtn(that, props)}
-          {fieldFlagDropdown(that, props)}
+          {/*fieldFlagDropdown(that, props)*/}
 
           {_.size(props.field.alerts)
             ? _.map(props.field.alerts, function(item) {

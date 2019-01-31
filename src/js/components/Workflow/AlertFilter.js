@@ -48,8 +48,8 @@ class AlertFilter extends Component {
   componentDidMount = () => {
     let tag = this.props.workflowFilters.kind.meta.tag;
 
-    if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
-      this.props.dispatch(workflowKindActions.getCount(tag));
+    if (_.isEmpty(this.props.workflowAlertGroupCount.stepgroupdef_counts)) {
+      this.props.dispatch(workflowKindActions.getAlertCount(tag));
       this.props.dispatch(workflowKindActions.getStatusCount(tag));
     }
   };
@@ -58,7 +58,7 @@ class AlertFilter extends Component {
     let tag = this.props.workflowFilters.kind.meta.tag;
 
     if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind) {
-      this.props.dispatch(workflowKindActions.getCount(tag));
+      this.props.dispatch(workflowKindActions.getAlertCount(tag));
       this.props.dispatch(workflowKindActions.getStatusCount(tag));
     }
   };
@@ -90,19 +90,18 @@ class AlertFilter extends Component {
       }
 
       return (
-        <Tag
+        <span
           key={item.id}
           className={
-            "alert-tag-item  " +
-            (activeFilter[0] === item.tag ? "alert-tag-item-active " : " ") +
-            (item.color_label ? " " : "alert-primary ")
+            "pd-right-lg text-anchor pd-bottom-sm  t-12 text-secondary " +
+            (activeFilter[0] === item.tag ? "text-bold " : " ") 
           }
           color={item.color_label || null}
           onClick={that.handleClick.bind(that, item)}
         >
           {item.name} ({item.count})
           {closable ? closableButton : null}
-        </Tag>
+        </span>
       );
     });
 
@@ -111,7 +110,7 @@ class AlertFilter extends Component {
 
   render() {
     let that = this;
-    const { alert_details, loading } = this.props.workflowGroupCount;
+    const { alert_details, loading } = this.props.workflowAlertGroupCount;
     const { parent } = this.state;
 
     return (
@@ -120,23 +119,8 @@ class AlertFilter extends Component {
           _.isEmpty(alert_details) ? (
             <div />
           ) : (
-            <div className="filter-top">
-              <Scrollbars
-                style={{ width: "100%", height: "30px" }}
-                autoHide
-                renderTrackHorizontal={({ style, ...props }) => (
-                  <div
-                    {...props}
-                    style={{
-                      ...style,
-                      height: "1px",
-                      right: "2px",
-                      bottom: "2px",
-                      left: "2px"
-                    }}
-                  />
-                )}
-              >
+            <div className="filter-">
+              
                 <div>
                   <div className="filter-top-list alert-tag-list">
                     {_.size(parent) ? (
@@ -157,7 +141,7 @@ class AlertFilter extends Component {
                       : this.getTags(alert_details)}
                   </div>
                 </div>
-              </Scrollbars>
+              
             </div>
           )
         ) : (
@@ -170,13 +154,5 @@ class AlertFilter extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { workflowKind, workflowGroupCount, workflowFilters } = state;
-  return {
-    workflowKind,
-    workflowGroupCount,
-    workflowFilters
-  };
-}
 
-export default connect(mapStateToProps)(AlertFilter);
+export default AlertFilter;

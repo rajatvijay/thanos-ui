@@ -187,7 +187,7 @@ class WorkflowFilter extends Component {
               value={value}
               placeholder={this.props.placeholder}
               onChange={this.handleChange}
-              onDeselect={this.onDeselect}
+              //onDeselect={this.onDeselect}
               onSelect={this.onSelect}
               style={{ width: "100%" }}
               allowClear={true}
@@ -226,7 +226,8 @@ class WorkflowKindFilter extends Component {
     super();
     this.state = {
       selected: null,
-      initialLoad: true
+      initialLoad: true,
+      value:null
     };
   }
 
@@ -237,76 +238,61 @@ class WorkflowKindFilter extends Component {
       this.state.initialLoad
     ) {
       this.setState({
-        selected: this.props.workflowFilters.kind.filterValue[0],
+        value: this.props.workflowFilters.kind.meta.name,
         initialLoad: false
       });
     }
   };
 
-  workflowKindList = workflowKind => {
+  handleChange = value => {
+    let id = parseInt(value,10);
     let that = this;
-
-    return _.map(workflowKind, function(i, index) {
-      return (
-        <li
-          className={
-            "ant-menu-item " +
-            (that.state.selected === i.id ||
-            that.props.workflowFilters.kind.filterValue[0] === i.id
-              ? "ant-menu-item-selected "
-              : "text-light")
-          }
-          key={i.id}
-          kind={i.id}
-          onClick={that.onFilterSelected.bind(this, i)}
-        >
-          {i.name}
-        </li>
-      );
-    });
-  };
-
-  onFilterSelected = value => {
-    let id = "";
-    id = value.id;
-    this.setState({ selected: id });
-    this.props.dispatch(
-      workflowFiltersActions.setFilters({
-        filterType: "kind",
-        filterValue: [id],
-        meta: { value }
-      })
-    );
-
-    this.fetchGroupData(value.tag);
+    this.setState({ value });
+    let metaValue= _.find(this.props.workflowKind.workflowKind,item => {return item.id === id});
+    
+    let payload = { filterType: "kind", filterValue: [id],meta: metaValue  };
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    setTimeout(function(){
+      that.fetchGroupData(metaValue.tag);
+    },300)
   };
 
   fetchGroupData = tag => {
     this.props.dispatch(workflowKindActions.getCount(tag));
-    this.props.dispatch(workflowKindActions.getStatusCount(tag));
+    this.props.dispatch(workflowKindActions.getAlertCount(tag));
+    this.props.dispatch(workflowKindActions.getStatusCount(tag))
   };
 
   render = () => {
     let workflowKindList = null;
+    let workflowKind = this.props.workflowKind.workflowKind;
+    const { value } = this.state;
 
-    if (this.props.workflowKind) {
-      let workflowKind = this.props.workflowKind.workflowKind;
-      workflowKindList = this.workflowKindList(workflowKind);
-    }
+    const options = workflowKind ? _.map(workflowKind,d => <Option key={d.id}  >{d.name}</Option>):[];
 
-    return (
-      <ul
-        className="ant-menu ant-menu-light ant-menu-root ant-menu-inline"
-        style={{
-          width: "100%",
-          padding: "0 14px",
-          height: "vh100",
-          overflowX: "hidden",
-          background: "transparent"
-        }}
-      >
-        {workflowKindList}
-      </ul>
+    return (<div className="aux-item aux-lead filter-title">
+       
+
+         <FormItem
+          label={<FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />}>
+
+            <Select
+              mode="single"
+         
+              value={value}
+              placeholder="Select Workflow Type"
+              onChange={this.handleChange}
+              onDeselect={this.onDeselect}
+              onSelect={this.onSelect}
+              style={{ width: "100%" }}
+              //allowClear={true}
+              //labelInValue={true}
+            
+            >
+              {options}
+            </Select>
+          </FormItem>
+      </div>
     );
   };
 }
@@ -457,18 +443,14 @@ class FilterSidebar extends Component {
           <br />
           <br />
 
-          <div className="filter-section section-kind">
-            <span className="aux-item aux-lead filter-title">
-              <label>
-                <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
-              </label>
-            </span>
+          <div className=" section-kind">
 
-            <WorkflowKindFilter
-              workflowKind={this.props.workflowKind}
-              workflowFilters={this.props.workflowFilters}
-              dispatch={this.props.dispatch}
-            />
+            {this.props.workflowKind?
+              <WorkflowKindFilter
+                workflowKind={this.props.workflowKind}
+                workflowFilters={this.props.workflowFilters}
+                dispatch={this.props.dispatch}
+              />:null}
           </div>
 
           <div className="filter-section">
