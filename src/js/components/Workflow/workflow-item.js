@@ -653,11 +653,11 @@ class MetaRow extends React.Component {
       <div>
         <Divider className="no-margin" />
 
-        <div className="lc-card-section">
+        <div className="lc-card-section " style={{display:"none"}}>
           <Row>
             <Col span="12">{props.hasChildren ? "show child" : null}</Col>
             <Col span="12" className="text-right">
-              {props.relatedKind ? (
+              {/* props.relatedKind ? (
                 <Dropdown
                   overlay={childWorkflowMenu}
                   className="child-workflow-dropdown"
@@ -669,7 +669,8 @@ class MetaRow extends React.Component {
                     <i className="material-icons t-14">keyboard_arrow_down</i>
                   </a>
                 </Dropdown>
-              ) : null}
+              ) : null
+              */}
             </Col>
           </Row>
         </div>
