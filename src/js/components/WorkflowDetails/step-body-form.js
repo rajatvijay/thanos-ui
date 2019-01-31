@@ -475,7 +475,10 @@ class StepBodyForm extends Component {
                     if (rowGroup.canAccommodateField(field)) {
                       // Current field can fit into the rendering group
                       rowGroup.addToRenderGroup(field);
-                      if (rowGroup.shouldRender) {
+                      if (
+                        rowGroup.shouldRender ||
+                        index === group.steps.length - 1
+                      ) {
                         // We're at capacity for this rendering group, render it
                         return rowGroup.render();
                       }
@@ -502,7 +505,7 @@ class StepBodyForm extends Component {
           _.map(orderedStep, function(field, index) {
             if (rowGroup.canAccommodateField(field)) {
               rowGroup.addToRenderGroup(field);
-              if (rowGroup.shouldRender) {
+              if (rowGroup.shouldRender || index === orderedStep.length - 1) {
                 return rowGroup.render();
               }
             } else {
