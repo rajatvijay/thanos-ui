@@ -83,18 +83,16 @@ function tokenLogin(token, next) {
     });
 }
 
-const getref = () => {
-  return window.location.href;
-};
-
 export const logout = async () => {
+  let referrer = window.location.href;
   localStorage.removeItem("user");
   const requestOptions = {
     method: "POST",
     headers: authHeader.post(),
     credentials: "include",
     body: JSON.stringify({}),
-    referrer: getref()
+    referrerPolicy: "no-referrer-when-downgrade",
+    referrer: referrer
   };
   try {
     const response = await fetch(baseUrl + "users/logout/", requestOptions);
