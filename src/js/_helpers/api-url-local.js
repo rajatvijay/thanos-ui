@@ -1,8 +1,16 @@
 const getSite = site => {
   let host = document.location.hostname;
   let hostSplit = host.split(".");
+  console.log("hostSplit");
+  console.log(hostSplit);
+
   let domain =
-    document.location.protocol + "//api" + "." + hostSplit[2] + "/api/v1/";
+    document.location.protocol +
+    "//api." +
+    hostSplit[1] +
+    "." +
+    hostSplit[2] +
+    "/api/v1/";
   return domain;
 };
 
