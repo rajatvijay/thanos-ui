@@ -472,30 +472,22 @@ class StepBodyForm extends Component {
               return (
                 <TabPane tab={group.label} key={"group_" + index}>
                   {_.map(group.steps, function(field, index) {
-                    if (rowGroup.canAccommodateField(field)) {
-                      // Current field can fit into the rendering group
-                      rowGroup.addToRenderGroup(field);
-                      if (
-                        rowGroup.shouldRender ||
-                        index === group.steps.length - 1
-                      ) {
-                        // We're at capacity for this rendering group, render it
-                        return rowGroup.render();
-                      }
-                    } else {
+                    let renderQueue = [];
+                    if (!rowGroup.canAccommodateField(field)) {
                       // This field cannot be accommodated in the current group
                       // render the current group and append this to next batch for rendering
-                      const renderedGroup = rowGroup.render();
-                      rowGroup.addToRenderGroup(field);
-                      if (
-                        index === group.steps.length - 1 &&
-                        rowGroup.hasElements
-                      ) {
-                        // This is the last field & rowGroup still has elements remaining
-                        return [renderedGroup, rowGroup.render()];
-                      }
-                      return renderedGroup;
+                      renderQueue.push(rowGroup.render());
                     }
+                    rowGroup.addToRenderGroup(field);
+                    if (
+                      rowGroup.shouldRender ||
+                      (index === group.steps.length - 1 && rowGroup.hasElements)
+                    ) {
+                      // Row is full or
+                      // this is the last field & rowGroup still has elements remaining
+                      renderQueue.push(rowGroup.render());
+                    }
+                    return renderQueue;
                   })}
                 </TabPane>
               );
@@ -503,22 +495,22 @@ class StepBodyForm extends Component {
           </Tabs>
         ) : (
           _.map(orderedStep, function(field, index) {
-            if (rowGroup.canAccommodateField(field)) {
-              rowGroup.addToRenderGroup(field);
-              if (rowGroup.shouldRender || index === orderedStep.length - 1) {
-                return rowGroup.render();
-              }
-            } else {
+            let renderQueue = [];
+            if (!rowGroup.canAccommodateField(field)) {
               // This field cannot be accommodated in the current group
               // render the current group and append this to next batch for rendering
-              const renderedGroup = rowGroup.render();
-              rowGroup.addToRenderGroup(field);
-              if (index === orderedStep.length - 1 && rowGroup.hasElements) {
-                // This is the last field & rowGroup still has elements remaining
-                return [renderedGroup, rowGroup.render()];
-              }
-              return renderedGroup;
+              renderQueue.push(rowGroup.render());
             }
+            rowGroup.addToRenderGroup(field);
+            if (
+              rowGroup.shouldRender ||
+              (index === orderedStep.length - 1 && rowGroup.hasElements)
+            ) {
+              // Row is full or
+              // this is the last field & rowGroup still has elements remaining
+              renderQueue.push(rowGroup.render());
+            }
+            return renderQueue;
           })
         )}
 
