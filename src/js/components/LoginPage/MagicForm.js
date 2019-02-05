@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Input, Icon, Divider } from "antd";
+import { Form, Button, Input, Icon, Divider,Row,Col } from "antd";
 import validator from "validator";
 import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
@@ -101,111 +101,94 @@ class MagicForm extends React.Component {
     const { data, errors } = this.state;
     let supportedLaguanges = this.props.config.supported_languages;
     return (
-      <div className="login-form-box">
-        {_.isEmpty(supportedLaguanges) || (
-          <div>
-            <FormattedMessage id="loginPageInstances.selectPreferedLanguage" />{" "}
-            <LoginSelectLanguage />
-            <Divider />
-          </div>
-        )}
-        {!this.props.emailAuth.submitted ? (
-          <div>
-            <div className="text-center mr-bottom t-18 text-base">
-              <FormattedMessage id="loginPageInstances.oneTimeLink" />
-            </div>
-            <Form
-              layout="vertical"
-              onSubmit={this.onSubmit}
-              className="login-form"
-              autoComplete="off"
+      <div className="login-form-box magic-box">
+        <Row gutter={32}>
+          <Col
+            span={24}
+            className={"block-left text-left "}
             >
-              <FormItem
-                validateStatus={errors.message && "error"}
-                hasFeedback
-                help={errors.message}
-              >
-                <Input
-                  id="email"
-                  name="email"
-                  type="text"
-                  prefix={
-                    <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
-                  placeholder="example@example.com"
-                  value={data.email}
-                  onChange={this.onInputChange}
-                />
-              </FormItem>
-
-              <FormItem>
-                <Button
-                  type="primary"
-                  // htmlType="submit"
-                  className="login-form-button"
-                  onClick={this.onSubmit}
-                >
-                  <FormattedMessage id="commonTextInstances.submitButtonText" />
-                </Button>
-              </FormItem>
-            </Form>
-            {!this.props.config.saml_url ? (
-              <div>
-                <Divider>
-                  <FormattedMessage id="loginPageInstances.orText" />
-                </Divider>
-                <Link to="/login">
-                  <FormattedMessage id="loginPageInstances.loginEmailPassword" />
-                  <i className="material-icons t-14 text-middle pd-left-sm">
-                    arrow_forward
-                  </i>
-                </Link>
-              </div>
-            ) : (
-              <div>
-                <Divider>
-                  <FormattedMessage id="loginPageInstances.orText" />
-                </Divider>
-                <a href={this.props.config.saml_url}>
-                  <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                  {this.props.config.name}
-                  <FormattedMessage id="loginPageInstances.customSAMLloginText2" />
-                  <i className="material-icons t-14 text-middle pd-left-sm">
-                    arrow_forward
-                  </i>
-                </a>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="magic--submitted text-center">
-            <div className="icon">
-              <i className="material-icons material-icons-24">check_circle</i>
-            </div>
+            {!this.props.emailAuth.submitted ? (
             <div>
-              <h2 className="text-grey-dark">
-                <FormattedMessage id="commonTextInstances.emailSent" />
-              </h2>
-              <br />
-              <p className="t-14">
-                <span className="text-grey-dark">
-                  <FormattedMessage id="loginPageInstances.loginErrorMessage" />
-                  <br />
-                  <br />
-                </span>
-              </p>
-              <div className="t-12">
-                <FormattedMessage id="errorMessageInstances.magicLinkExpirationWindow" />
-              </div>
-              <Divider />
+              <div className="login-top text-bold">Magic Link</div>
               <div>
-                <a href="/" onClick={this.refresh}>
-                  <FormattedMessage id="loginPageInstances.goToLoginPage" />
-                </a>
+                <Form
+                  layout="vertical"
+                  onSubmit={this.onSubmit}
+                  className="login-form"
+                  autoComplete="off"
+                  >
+                  <FormItem
+                    validateStatus={errors.message && "error"}
+                    hasFeedback
+                    help={errors.message}
+                    label={<FormattedMessage id="loginPageInstances.oneTimeLink" />}
+
+                  >
+                    <Input
+                      id="email"
+                      name="email"
+                      type="text"
+                      prefix={
+                        <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
+                      }
+                      placeholder="example@example.com"
+                      value={data.email}
+                      onChange={this.onInputChange}
+                    />
+                  </FormItem>
+
+                  <FormItem>
+                    <Button
+                      type="primary"
+                      // htmlType="submit"
+                      className="login-form-button btn-block"
+                      onClick={this.onSubmit}
+                    >
+                      <FormattedMessage id="commonTextInstances.submitButtonText" />
+                    </Button>
+                  </FormItem>
+                </Form>
               </div>
             </div>
+            ):(
+            <div className="magic--submitted text-center">
+              <div className="icon">
+                <i className="material-icons material-icons-24">check_circle</i>
+              </div>
+              <div>
+                <h2 className="text-grey-dark">
+                  <FormattedMessage id="commonTextInstances.emailSent" />
+                </h2>
+                <br />
+                <p className="t-14">
+                  <span className="text-grey-dark">
+                    <FormattedMessage id="loginPageInstances.loginErrorMessage" />
+                    <br />
+                    <br />
+                  </span>
+                </p>
+                <div className="t-12">
+                  <FormattedMessage id="errorMessageInstances.magicLinkExpirationWindow" />
+                </div>
+              </div>
+            </div>
+            )}
+          </Col>
+        </Row>
+
+        <div>
+          <Divider>
+            <FormattedMessage id="loginPageInstances.orText" />
+          </Divider>
+          <div className="t-16">
+            <Link to="/">
+              <FormattedMessage id="loginPageInstances.goToLoginPage" />
+              <i className="material-icons t-14 text-middle pd-left-sm">
+                arrow_forward
+              </i>
+            </Link>
           </div>
-        )}
+        </div>
       </div>
     );
   }

@@ -138,7 +138,7 @@ class MainRoutes extends React.Component {
                   <TransitionGroup>
                     <CSSTransition
                       key={history.location.key}
-                      className="fade"
+                      classNames="fade"
                       timeout={300}
                       >
 

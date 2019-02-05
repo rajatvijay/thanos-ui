@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import LoginForm from "./login-form";
+import LoginForm from "./LoginForm";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
