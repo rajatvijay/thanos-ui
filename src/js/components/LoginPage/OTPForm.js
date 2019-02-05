@@ -187,7 +187,7 @@ class OTPForm extends React.Component {
           throw Error(response.statusText);
         } else {
           that.setState({ optSent: true });
-          that.otpReset();
+          //that.otpReset();
           that.showMessageSuccess();
         }
         return response;
@@ -210,6 +210,8 @@ class OTPForm extends React.Component {
     const { data, errors } = this.state;
     const { config } = this.props;
 
+    const suffix =  <Icon type={this.state.showPassword ? "eye": "eye-invisible"} onClick={this.toggleShowPassword}  />
+
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
@@ -218,7 +220,7 @@ class OTPForm extends React.Component {
             className={
               "block-left text-left  " + (config.saml_url ? "" : "noborder")
             }
-          >
+            >
             <div className="login-top text-bold">I am a third-party</div>
 
             <div>
@@ -247,59 +249,42 @@ class OTPForm extends React.Component {
                     value={data.email}
                     onChange={this.onInputChange}
                   />
-                  <div className="opt-block text-left mr-top-sm t-12">
-                    {this.state.optSent ? (
-                      <span className="text-grey">
-                        Click here to request one-time password ({
-                          this.state.counter
-                        })
-                      </span>
-                    ) : (
-                      <span
-                        onClick={this.onOptRequest}
-                        className="text-secondary text-anchor"
-                      >
-                        Click here to request one-time password
-                      </span>
-                    )}
-                  </div>
                 </FormItem>
 
-                <FormItem
-                  validateStatus={errors.message && "error"}
-                  hasFeedback
-                  label="Enter the one time password to verify your account"
-                  help={errors.message}
-                >
-                  <Input
-                    id="password"
-                    name="password"
-                    type={this.state.showPassword ? "text" : "password"}
-                    prefix={
-                      <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
-                    }
-                    placeholder="One-time password"
-                    value={data.password}
-                    onChange={this.onInputChange}
-                  />
-                  <div className="opt-block text-left mr-top-sm t-12">
-                    <span
-                      onClick={this.toggleShowPassword}
-                      className="text-secondary text-anchor"
-                    >
-                      {this.state.showPassword ? "Hide" : "Show"} password
-                    </span>
-                  </div>
-                </FormItem>
+                {this.state.optSent ?
+                  <FormItem
+                    validateStatus={errors.message && "error"}
+                    hasFeedback
+                    label="Enter the one time password to verify your account"
+                    help={errors.message}
+                  >
+                    <Input
+                      id="password"
+                      name="password"
+                      type={this.state.showPassword ? "text" : "password"}
+                      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+                      suffix={<i className="material-icons t-12 text-anchor" onClick={this.toggleShowPassword}> {!this.state.showPassword ? "visibility": "visibility_off"}   </i>}
+                      placeholder="One-time password"
+                      value={data.password}
+                      onChange={this.onInputChange}
+                    />
+                    <div className="opt-block text-left mr-top-sm t-12">
+                        <span
+                          onClick={this.onOptRequest}
+                          className="text-secondary text-anchor"
+                          >Click here to request one-time password</span>
+                    </div>
+                  </FormItem>
+                :null}
 
                 <FormItem>
                   <Button
                     type="primary"
                     // htmlType="submit"
                     className="login-form-button btn-block"
-                    onClick={this.onSubmit}
+                    onClick={this.state.optSent ? this.onSubmit : this.onOptRequest}
                   >
-                    <FormattedMessage id="commonTextInstances.submitButtonText" />
+                    {this.state.optSent ? <FormattedMessage id="commonTextInstances.submitButtonText" /> : "Request One-time password"}
                   </Button>
                 </FormItem>
               </Form>
