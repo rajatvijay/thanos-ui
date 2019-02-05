@@ -28,7 +28,7 @@ const openNotificationWithIcon = data => {
   });
 };
 
-class MagicLoginLinkForm extends React.Component {
+class OTPForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -338,7 +338,7 @@ class MagicLoginLinkForm extends React.Component {
           <Divider>
             <FormattedMessage id="loginPageInstances.orText" />
           </Divider>
-          <Link to="/login">
+          <Link to="/login/basic">
             <FormattedMessage id="loginPageInstances.loginEmailPassword" />
             <i className="material-icons t-14 text-middle pd-left-sm">
               arrow_forward
@@ -358,4 +358,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(MagicLoginLinkForm));
+export default connect(mapStateToProps)(injectIntl(OTPForm));

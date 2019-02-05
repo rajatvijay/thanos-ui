@@ -159,6 +159,7 @@ export const checkAuth = () => async dispatch => {
     });
 
     if (
+      window.location.pathname === "/login/basic" ||
       window.location.pathname === "/login/magic" ||
       window.location.pathname === "/login"
     ) {
