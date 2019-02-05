@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import MagicLoginLinkForm from "./magic-form";
+import MagicForm from "./MagicForm";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
@@ -9,7 +9,7 @@ import _ from "lodash";
 import queryString from "query-string";
 import LoginHeader from "./LoginHeader";
 
-class MagicLoginPage extends React.Component {
+class MagicLogin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,26 +40,21 @@ class MagicLoginPage extends React.Component {
     }
 
     let supportedLaguanges = this.props.config.supported_languages;
-    
+
 
     return (
       <div className="login login-container container-fluid" id="login">
-
         <LoginHeader showLanguage={_.isEmpty(supportedLaguanges)?false:true}/>
 
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
-            <div
-              className={
-                "login-box " + (this.props.config.saml_url ? "magic" : null)
-              }
-            >
+            <div className="login-box ">
               {this.props.emailAuth.loading ? (
                 <div>
                   <Icon type="loading" />
                 </div>
               ) : (
-                <MagicLoginLinkForm
+                <MagicForm
                   {...this.props}
                   nextUrl={this.state.nextUrl}
                 />
@@ -81,10 +76,11 @@ function mapStateToProps(state) {
       loading,
       error,
       submitted
-    },
+    }, 
     config: config
+
   };
 }
 
-const connectedLoginPage = connect(mapStateToProps)(MagicLoginPage);
-export { connectedLoginPage as MagicLoginPage };
+const connectedLoginPage = connect(mapStateToProps)(MagicLogin);
+export { connectedLoginPage as MagicLogin };
