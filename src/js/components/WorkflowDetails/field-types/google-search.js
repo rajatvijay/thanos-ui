@@ -126,6 +126,7 @@ const GetTable = props => {
     {
       title: "Comments",
       key: "google_index",
+      width: 150,
       render: record => {
         let flag_data = _.size(props.flag_dict[record.cacheId])
           ? props.flag_dict[record.cacheId]
