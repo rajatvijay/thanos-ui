@@ -109,7 +109,7 @@ export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
         type: "error",
         message: "Something went wrong.",
         body:
-          "There was an error while submitting the form, please try again. If the proplem still persist please contact our team "
+          "There was an error while submitting the form, please try again. If the problem still persists please contact our team "
       });
     }
   } catch (error) {
