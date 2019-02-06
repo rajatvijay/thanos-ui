@@ -48,7 +48,7 @@ class FieldItem extends Component {
 
     this.setState({fetching:true});
 
-    let url = `${baseUrl}responses/${this.props.fieldParams.field.id}/decrypt`;
+    let url = `${baseUrl}responses/${this.props.fieldParams.field.id}/decrypt/`;
 
     fetch(url, requestOptions)
     .then(response => {
