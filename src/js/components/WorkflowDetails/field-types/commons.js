@@ -20,6 +20,7 @@ import Moment from "react-moment";
 
 export const commonFunctions = {
   getLabel,
+  getExtra,
   onFieldChange,
   onFieldChangeArray,
   arrayToString,
@@ -71,6 +72,17 @@ function getLabel(props, that) {
   } else {
     return props.field.definition.body;
   }
+}
+
+function getExtra(props) {
+  if (props.field.definition.extra.api_url) {
+    let extrasFromAPI = props.currentStepFields.extrasFromAPI || {};
+    return (
+      extrasFromAPI[props.field.definition.tag] ||
+      props.field.definition.extra.defaultValue
+    );
+  }
+  return props.field.definition.extra;
 }
 
 function onFieldChange(props, value, value2) {
