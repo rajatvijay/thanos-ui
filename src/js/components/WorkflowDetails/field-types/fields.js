@@ -78,7 +78,9 @@ export const Text = props => {
   if (props.field.selected_flag[props.field.id]) {
     css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
   }
+
   let that = this;
+
   let rows =
     props.field.definition.meta && props.field.definition.meta.height
       ? props.field.definition.meta.height
