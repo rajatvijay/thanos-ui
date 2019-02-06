@@ -78,9 +78,7 @@ export const Text = props => {
   if (props.field.selected_flag[props.field.id]) {
     css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
   }
-
   let that = this;
-
   let rows =
     props.field.definition.meta && props.field.definition.meta.height
       ? props.field.definition.meta.height
@@ -96,18 +94,16 @@ export const Text = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      //help={props.field.definition.help_text}
       hasFeedback
       autoComplete="new-password"
-      //validateStatus={props.field.answers.length !== 0 ? "success" : null}
       {...field_error(props)}
     >
       <TextArea
         disabled={isDisabled(props)}
-        //type="textarea"
         autosize={{ minRows: rows }}
         placeholder={props.field.placeholder}
         defaultValue={
+          props.decryptedData? props.decryptedData.answer :
           props.field.answers[0]
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
