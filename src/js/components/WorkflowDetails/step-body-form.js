@@ -4,7 +4,8 @@ import { Form, Divider, Row, Col, Alert, Button, Tooltip, Tabs } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
-import { getFieldType } from "./field-types";
+//import { getFieldType } from "./field-types";
+import FieldItem from "./FieldItem";
 import { FormattedMessage, injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
@@ -366,7 +367,7 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
-        return getFieldType(fieldParams);
+        return <FieldItem fieldParams={fieldParams}/>
       },
       getSizeFraction(field) {
         // Get the current field size in fraction
