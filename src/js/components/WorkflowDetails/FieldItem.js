@@ -34,7 +34,7 @@ class FieldItem extends Component {
   };
 
   componentWillMount = () => {
-    let e =_.sample([true, false]);
+    //let e =_.sample([true, false]);
     this.setState({encrypted:this.props.fieldParams.field.definition.is_encrypted})
   };
 
@@ -48,9 +48,15 @@ class FieldItem extends Component {
 
     this.setState({fetching:true});
 
-    let url = `${baseUrl}response/${this.props.fieldParams.field.id}/decrypt`;
+    let url = `${baseUrl}responses/${this.props.fieldParams.field.id}/decrypt`;
 
     fetch(url, requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        this.setState({error: response.statusText,fetching: false});
+      }
+      return response;
+    })
     .then(response => response.json())
     .then(data => {
       this.setState({decrypted:data,fetching:false, encrypted:false});
@@ -69,8 +75,7 @@ class FieldItem extends Component {
     fieldParams["decryptError"] = this.state.error;
     fieldParams["decryptedData"] = this.state.decrypted;
 
-
-    if(this.state.encrypted){
+    if(!this.props.fieldParams.field.answers[0] && this.state.encrypted ){
       return (
         <FormItem
           label={getLabel(props, this)}
@@ -92,7 +97,10 @@ class FieldItem extends Component {
     } else {
       return getFieldType(fieldParams)
     }
+    
   };
 }
+
+
 
 export default FieldItem;
