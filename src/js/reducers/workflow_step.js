@@ -98,6 +98,30 @@ export function currentStepFields(state = initialState, action) {
         error: action.error
       };
 
+    /////////////////////////////
+    //Update options for field //
+    /////////////////////////////
+    case fieldConstants.FETCH_FIELD_EXTRA_REQUEST:
+      return {
+        ...state,
+        loading: false
+      };
+    case fieldConstants.FETCH_FIELD_EXTRA_SUCCESS:
+      let extrasFromAPI = state.extrasFromAPI || {};
+      extrasFromAPI[action.field.definition.tag] = action.extra;
+      console.log({ extrasFromAPI });
+      return {
+        ...state,
+        loading: false,
+        extrasFromAPI: extrasFromAPI
+      };
+    case fieldConstants.FETCH_FIELD_EXTRA_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+
     ///////////////////////
     ///Duns field update///
     ///////////////////////

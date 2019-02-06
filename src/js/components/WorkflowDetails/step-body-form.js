@@ -124,20 +124,11 @@ class StepBodyForm extends Component {
     } else {
       this.dispatchDebounced(data, method);
     }
-    let dependentFields =
-      this.triggerFields()[payload.field.definition.tag] || [];
+    let dependentFields = this.getDependentFields(payload.field) || [];
     for (let dependentField of dependentFields) {
-      // TODO: remove log
-      console.log(
-        payload.field.definition.tag,
-        " will now update options for ",
-        dependentField
+      this.props.dispatch(
+        workflowStepActions.fetchFieldExtra(dependentField, data.answer)
       );
-      if (dependentField.definition.extra.api_data) {
-        // TODO: fetch details from API and render the dependent field
-        console.log("url: ", dependentField.definition.extra.api_data.url);
-        console.log("payload: ", data.answer);
-      }
     }
   };
 
@@ -145,19 +136,17 @@ class StepBodyForm extends Component {
     this.props.dispatch(workflowStepActions.saveField(data));
   }, 1500);
 
-  triggerFields = () => {
+  getDependentFields = targetField => {
     return _.reduce(
       this.props.stepData.data_fields,
-      (targetFields, dependentField) => {
-        let extra = dependentField.definition.extra;
-        if (extra && extra.trigger_field_tag) {
-          targetFields[extra.trigger_field_tag] =
-            targetFields[extra.trigger_field_tag] || [];
-          targetFields[extra.trigger_field_tag].push(dependentField);
+      (dependentFields, field) => {
+        let extra = field.definition.extra;
+        if (extra && extra.trigger_field_tag == targetField.definition.tag) {
+          dependentFields.push(field);
         }
-        return targetFields;
+        return dependentFields;
       },
-      {}
+      []
     );
   };
 

@@ -3,6 +3,7 @@ import { authHeader, baseUrl } from "../_helpers";
 export const workflowStepService = {
   saveField,
   updateField,
+  fetchFieldExtra,
   submitStep,
   approveStep,
   undoStep,
@@ -82,6 +83,26 @@ function updateField(payload) {
     baseUrl + "responses/" + payload.answerId + "/",
     requestOptions
   ).then(handleResponse);
+}
+
+//fetch extra for field
+function fetchFieldExtra(field, targetAnswer) {
+  let url = field.definition.extra.api_url;
+  if (!url) {
+    return Promise.reject('"url" not defined for fetchFieldExtra');
+  }
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+  if (targetAnswer) {
+    url = url.replace(/{}/, targetAnswer);
+  }
+  if (!url.match(/^https?:\/\//)) {
+    url = baseUrl + url;
+  }
+  return fetch(url, requestOptions).then(handleResponse);
 }
 
 //Save step data on submit
