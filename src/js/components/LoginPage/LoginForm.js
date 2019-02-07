@@ -86,10 +86,7 @@ class LoginForm extends React.Component {
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
-          <Col
-            span={24}
-            className={"block-left text-left "}
-          >
+          <Col span={24} className={"block-left text-left "}>
             <div className="login-top text-bold">Login</div>
 
             <div>
@@ -98,18 +95,22 @@ class LoginForm extends React.Component {
                 onSubmit={this.onSubmit}
                 className="login-form"
                 autoComplete="off"
-                >
+              >
                 <FormItem
                   validateStatus={errors.username && "error"}
                   hasFeedback
                   help={errors.username}
-                  label={<FormattedMessage id="loginPageInstances.oneTimeLink" />}
+                  label={
+                    <FormattedMessage id="loginPageInstances.oneTimeLink" />
+                  }
                 >
                   <Input
                     id="username"
                     name="username"
                     type="text"
-                    prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+                    prefix={
+                      <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
                     placeholder={this.props.intl.formatMessage({
                       id: "loginPageInstances.emailText"
                     })}
@@ -127,7 +128,9 @@ class LoginForm extends React.Component {
                     id="password"
                     name="password"
                     type="password"
-                    prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+                    prefix={
+                      <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                    }
                     placeholder={this.props.intl.formatMessage({
                       id: "loginPageInstances.passwordText"
                     })}
@@ -154,8 +157,6 @@ class LoginForm extends React.Component {
               </Form>
             </div>
           </Col>
-
-          
         </Row>
 
         <div>
@@ -163,7 +164,7 @@ class LoginForm extends React.Component {
             <FormattedMessage id="loginPageInstances.orText" />
           </Divider>
           <div className="t-16">
-            <Link to="/login/magic">
+            <Link to="/login">
               <FormattedMessage id="loginPageInstances.loginUsingEmailOnly" />
               <i className="material-icons t-14 text-middle pd-left-sm">
                 arrow_forward

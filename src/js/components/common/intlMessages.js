@@ -86,7 +86,7 @@ export default {
       noWorkflowsToShow: "No workflows to show. Try clearing the filters or"
     },
     loginPageInstances: {
-      oneTimeLink: "Enter your business E-mail ID",
+      oneTimeLink: "Enter your business e-mail ID",
       loginEmailPassword: "Login using email and password",
       loginUsingEmailOnly: "Login using email only",
       loginText: "Login",
