@@ -105,25 +105,3 @@ function getStepVersionFields(step) {
     requestOptions
   ).then(handleResponse);
 }
-
-function getStepVersionFields(step) {
-  const requestOptions = {
-    method: "GET",
-    headers: authHeader.get(),
-    credentials: "include"
-  };
-
-  return fetch(
-    //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    baseUrl +
-      "workflows/" +
-      step.workflowId +
-      "/stepgroups/" +
-      step.groupId +
-      "/steps/" +
-      step.stepId +
-      "/?version="+
-      step.versionId,
-    requestOptions
-  ).then(handleResponse);
-}

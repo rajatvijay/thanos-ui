@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Select } from "antd";
+import { Select, Tooltip } from "antd";
 import { languageActions } from "../../actions";
 import _ from "lodash";
 import languages from "../common/intlLanguages";
@@ -22,8 +22,12 @@ class LoginSelectLanguage extends React.Component {
     if (!languages.endonyms[preferredLanguage]) {
       preferredLanguage = preferredLanguage.split("-")[0];
     }
+
     let supportedLaguanges = this.props.config.supported_languages;
-    if (!_.includes(supportedLaguanges, preferredLanguage)) {
+    if (
+      supportedLaguanges &&
+      !_.includes(supportedLaguanges, preferredLanguage)
+    ) {
       preferredLanguage = supportedLaguanges[0];
     }
     return (
@@ -31,7 +35,6 @@ class LoginSelectLanguage extends React.Component {
         <Select
           defaultValue={preferredLanguage}
           style={{
-            width: 110,
             paddingTop: "20px"
           }}
           onChange={this.handleLanguageChangeLogin}
@@ -42,7 +45,20 @@ class LoginSelectLanguage extends React.Component {
             function(locale, index) {
               return (
                 _.includes(supportedLaguanges, locale) && (
-                  <Option value={locale}>{languages.endonyms[locale]}</Option>
+                  <Option value={locale}>
+                    <Tooltip
+                      title={languages.endonyms[locale]}
+                      placement="leftTop"
+                    >
+                      <span className="f16">
+                        <span
+                          className={"flag " + locale}
+                          title={languages.endonyms[locale]}
+                        />
+                      </span>{" "}
+                      {locale}
+                    </Tooltip>
+                  </Option>
                 )
               );
             }

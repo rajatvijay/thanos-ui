@@ -2,6 +2,7 @@ import { authHeader, baseUrl, baseUrl2 } from "../_helpers";
 
 export const userService = {
   login,
+  loginOtp,
   tokenLogin,
   register,
   getAll,
@@ -49,8 +50,42 @@ function login(username, password, token) {
     });
 }
 
+function loginOtp(username, password) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
+    },
+    credentials: "include",
+    body: JSON.stringify({ email: username, token: password })
+  };
+
+  return fetch(baseUrl + "users/submit_otp/", requestOptions)
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(error => {
+          return Promise.reject(error);
+        });
+      }
+      return response.json();
+    })
+    .then(user => {
+      // login successful if there's a jwt token in the response
+      if (user) {
+        let userData = user;
+        userData.client = client;
+        userData.csrf = document.cookie;
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+
+      return user;
+    });
+}
+
 function tokenLogin(token, next) {
-  console.log("tokend loigin service");
+  console.log("tokend login service");
 
   const requestOptions = {
     method: "GET",

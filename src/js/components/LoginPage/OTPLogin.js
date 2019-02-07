@@ -1,14 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-import MagicLoginLinkForm from "./magic-form";
+import OTPForm from "./OTPForm";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
 import { logout } from "../../actions";
 import _ from "lodash";
 import queryString from "query-string";
+import LoginHeader from "./LoginHeader";
 
-class MagicLoginPage extends React.Component {
+class OTPLogin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,20 +39,22 @@ class MagicLoginPage extends React.Component {
       }
     }
 
+    let supportedLaguanges = this.props.config.supported_languages;
     return (
       <div className="login login-container container-fluid" id="login">
+        <LoginHeader
+          showLanguage={_.isEmpty(supportedLaguanges) ? false : true}
+        />
+
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
-            <div className="login-box ">
+            <div className="login-box magic">
               {this.props.emailAuth.loading ? (
                 <div>
                   <Icon type="loading" />
                 </div>
               ) : (
-                <MagicLoginLinkForm
-                  {...this.props}
-                  nextUrl={this.state.nextUrl}
-                />
+                <OTPForm {...this.props} nextUrl={this.state.nextUrl} />
               )}
             </div>
           </div>
@@ -62,6 +65,7 @@ class MagicLoginPage extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const { config } = state;
   const { emailAuth } = state.users;
   const { loading, error, submitted } = emailAuth;
   return {
@@ -69,9 +73,10 @@ function mapStateToProps(state) {
       loading,
       error,
       submitted
-    }
+    },
+    config: config
   };
 }
 
-const connectedLoginPage = connect(mapStateToProps)(MagicLoginPage);
-export { connectedLoginPage as MagicLoginPage };
+const connectedLoginPage = connect(mapStateToProps)(OTPLogin);
+export { connectedLoginPage as OTPLogin };
