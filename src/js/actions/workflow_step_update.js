@@ -30,6 +30,7 @@ export const workflowStepActions = {
   addComment,
   updateFlag,
   updateIntegrationStatus,
+  fetchFieldExtra,
   removeAttachment
 };
 
@@ -83,6 +84,38 @@ function saveField(payload, event_type) {
     //   message: "Unable to save."
     // });
     return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
+  }
+}
+
+/////////////////////////////
+// fetch extra for field   //
+/////////////////////////////
+function fetchFieldExtra(field, targetAnswer) {
+  return dispatch => {
+    dispatch(request(field));
+
+    workflowStepService
+      .fetchFieldExtra(field, targetAnswer)
+      .then(
+        extra => dispatch(success(field, extra)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request(field) {
+    return { type: workflowFieldConstants.FETCH_FIELD_EXTRA_REQUEST, field };
+  }
+
+  function success(field, extra) {
+    return {
+      type: workflowFieldConstants.FETCH_FIELD_EXTRA_SUCCESS,
+      field,
+      extra
+    };
+  }
+
+  function failure(error) {
+    return { type: workflowFieldConstants.FETCH_FIELD_EXTRA_FAILURE, error };
   }
 }
 

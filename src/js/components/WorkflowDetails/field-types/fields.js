@@ -35,6 +35,7 @@ const { TextArea } = Input;
 //Common utility fucntions bundled in one file commons.js//
 const {
   getLabel,
+  getExtra,
   onFieldChange,
   onFieldChangeArray,
   arrayToString,
@@ -478,7 +479,7 @@ export const Select = props => {
         }
         //filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
-        {_.map(props.field.definition.extra, function(item, index) {
+        {_.map(getExtra(props), function(item, index) {
           return (
             <Option key={index} value={item.value}>
               {item.label}
@@ -869,7 +870,7 @@ export const RadioField = props => {
         onChange={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       >
-        {_.map(props.field.definition.extra, function(item, index) {
+        {_.map(getExtra(props), function(item, index) {
           return (
             <Radio key={index} value={item.value}>
               {item.label}

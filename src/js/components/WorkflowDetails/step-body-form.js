@@ -124,11 +124,31 @@ class StepBodyForm extends Component {
     } else {
       this.dispatchDebounced(data, method);
     }
+    let dependentFields = this.getDependentFields(payload.field) || [];
+    for (let dependentField of dependentFields) {
+      this.props.dispatch(
+        workflowStepActions.fetchFieldExtra(dependentField, data.answer)
+      );
+    }
   };
 
   dispatchDebounced = _.debounce((data, method) => {
     this.props.dispatch(workflowStepActions.saveField(data));
   }, 1500);
+
+  getDependentFields = targetField => {
+    return _.reduce(
+      this.props.stepData.data_fields,
+      (dependentFields, field) => {
+        let extra = field.definition.extra;
+        if (extra && extra.trigger_field_tag == targetField.definition.tag) {
+          dependentFields.push(field);
+        }
+        return dependentFields;
+      },
+      []
+    );
+  };
 
   getUserById = (id, status) => {
     let that = this;
