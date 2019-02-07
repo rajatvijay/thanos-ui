@@ -40,29 +40,21 @@ class OTPLogin extends React.Component {
     }
 
     let supportedLaguanges = this.props.config.supported_languages;
-    
-
     return (
       <div className="login login-container container-fluid" id="login">
-
-        <LoginHeader showLanguage={_.isEmpty(supportedLaguanges)?false:true}/>
+        <LoginHeader
+          showLanguage={_.isEmpty(supportedLaguanges) ? false : true}
+        />
 
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
-            <div
-              className={
-                "login-box " + (this.props.config.saml_url ? "magic" : null)
-              }
-            >
+            <div className="login-box magic">
               {this.props.emailAuth.loading ? (
                 <div>
                   <Icon type="loading" />
                 </div>
               ) : (
-                <OTPForm
-                  {...this.props}
-                  nextUrl={this.state.nextUrl}
-                />
+                <OTPForm {...this.props} nextUrl={this.state.nextUrl} />
               )}
             </div>
           </div>

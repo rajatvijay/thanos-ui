@@ -24,7 +24,10 @@ class LoginSelectLanguage extends React.Component {
     }
 
     let supportedLaguanges = this.props.config.supported_languages;
-    if (supportedLaguanges && !_.includes(supportedLaguanges, preferredLanguage)) {
+    if (
+      supportedLaguanges &&
+      !_.includes(supportedLaguanges, preferredLanguage)
+    ) {
       preferredLanguage = supportedLaguanges[0];
     }
     return (
@@ -43,12 +46,18 @@ class LoginSelectLanguage extends React.Component {
               return (
                 _.includes(supportedLaguanges, locale) && (
                   <Option value={locale}>
-                    <Tooltip title={languages.endonyms[locale]} placement="leftTop">
+                    <Tooltip
+                      title={languages.endonyms[locale]}
+                      placement="leftTop"
+                    >
                       <span className="f16">
-                        <span className={"flag " + locale} title={languages.endonyms[locale]}></span>
-                      </span>
+                        <span
+                          className={"flag " + locale}
+                          title={languages.endonyms[locale]}
+                        />
+                      </span>{" "}
+                      {locale}
                     </Tooltip>
-                    {languages.endonyms[locale]}
                   </Option>
                 )
               );

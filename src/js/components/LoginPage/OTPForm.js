@@ -209,18 +209,18 @@ class OTPForm extends React.Component {
     const { data, errors } = this.state;
     const { config } = this.props;
 
-    const suffix =  <Icon type={this.state.showPassword ? "eye": "eye-invisible"} onClick={this.toggleShowPassword}  />
+    const suffix = (
+      <Icon
+        type={this.state.showPassword ? "eye" : "eye-invisible"}
+        onClick={this.toggleShowPassword}
+      />
+    );
 
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
-          <Col
-            span={config.saml_url ? 12 : 24}
-            className={
-              "block-left text-left  " + (config.saml_url ? "" : "noborder")
-            }
-            >
-            <div className="login-top text-bold">I am a third-party</div>
+          <Col span={12} className="block-left text-left">
+            <div className="login-top text-bold">Login using email only</div>
 
             <div>
               <Form
@@ -250,7 +250,7 @@ class OTPForm extends React.Component {
                   />
                 </FormItem>
 
-                {this.state.optSent ?
+                {this.state.optSent ? (
                   <FormItem
                     validateStatus={errors.message && "error"}
                     hasFeedback
@@ -261,40 +261,66 @@ class OTPForm extends React.Component {
                       id="password"
                       name="password"
                       type={this.state.showPassword ? "text" : "password"}
-                      prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-                      suffix={<i className="material-icons t-12 text-anchor" onClick={this.toggleShowPassword}> {!this.state.showPassword ? "visibility": "visibility_off"}   </i>}
+                      prefix={
+                        <Icon
+                          type="lock"
+                          style={{ color: "rgba(0,0,0,.25)" }}
+                        />
+                      }
+                      suffix={
+                        <i
+                          className="material-icons t-12 text-anchor"
+                          onClick={this.toggleShowPassword}
+                        >
+                          {" "}
+                          {!this.state.showPassword
+                            ? "visibility"
+                            : "visibility_off"}{" "}
+                        </i>
+                      }
                       placeholder="One-time password"
                       value={data.password}
                       onChange={this.onInputChange}
                     />
                     <div className="opt-block text-left mr-top-sm t-12">
-                        <span
-                          onClick={this.onOptRequest}
-                          className="text-secondary text-anchor"
-                          >Click here to request one-time password</span>
+                      <span
+                        onClick={this.onOptRequest}
+                        className="text-secondary text-anchor"
+                      >
+                        Click here to resend one-time password
+                      </span>
                     </div>
                   </FormItem>
-                :null}
+                ) : (
+                  <div style={{ height: "120px" }} />
+                )}
 
                 <FormItem>
                   <Button
                     type="primary"
                     // htmlType="submit"
                     className="login-form-button btn-block"
-                    onClick={this.state.optSent ? this.onSubmit : this.onOptRequest}
+                    onClick={
+                      this.state.optSent ? this.onSubmit : this.onOptRequest
+                    }
                   >
-                    {this.state.optSent ? <FormattedMessage id="commonTextInstances.submitButtonText" /> : "Request One-time password"}
+                    {this.state.optSent ? (
+                      <FormattedMessage id="commonTextInstances.submitButtonText" />
+                    ) : (
+                      "Request One-time password"
+                    )}
                   </Button>
                 </FormItem>
               </Form>
             </div>
           </Col>
 
-          {config.saml_url ? (
-            <Col span={12} className="block-right text-left">
+          <Col span={12} className="block-right text-left">
+            <div>
               <div style={{ height: "260px" }}>
                 <div className="login-top text-bold">
-                  I am {this.getVowel(config.name)} {config.name} employee{" "}
+                  Login using your {config.saml_url ? " company " : null}{" "}
+                  username and password
                 </div>
                 <div className="logo">
                   <img src={config.logo} style={{ maxWidth: "120px" }} />
@@ -303,33 +329,48 @@ class OTPForm extends React.Component {
                   Login using your {config.name} username and password
                 </div>
               </div>
+
               <div>
-                <a
-                  className="ant-btn login-form-button ant-btn-primary btn-block text-white"
-                  href={this.props.config.saml_url}
-                >
-                  <span className="text-white">
-                    <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                    {config.name} account
-                  </span>
-                  {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
-                </a>
+                {config.saml_url ? (
+                  <a
+                    className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                    href={this.props.config.saml_url}
+                  >
+                    <span className="text-white">
+                      <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                      {config.name} account
+                    </span>
+                    {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
+                  </a>
+                ) : (
+                  <Link
+                    to="/login/basic"
+                    className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                  >
+                    <FormattedMessage id="loginPageInstances.loginEmailPassword" />
+                    <i className="material-icons t-14 text-middle pd-left-sm">
+                      arrow_forward
+                    </i>
+                  </Link>
+                )}
               </div>
-            </Col>
-          ) : null}
+            </div>
+          </Col>
         </Row>
 
-        <div>
-          <Divider>
-            <FormattedMessage id="loginPageInstances.orText" />
-          </Divider>
-          <Link to="/login/basic">
-            <FormattedMessage id="loginPageInstances.loginEmailPassword" />
-            <i className="material-icons t-14 text-middle pd-left-sm">
-              arrow_forward
-            </i>
-          </Link>
-        </div>
+        {config.saml_url ? (
+          <div>
+            <Divider>
+              <FormattedMessage id="loginPageInstances.orText" />
+            </Divider>
+            <Link to="/login/basic">
+              <FormattedMessage id="loginPageInstances.loginEmailPassword" />
+              <i className="material-icons t-14 text-middle pd-left-sm">
+                arrow_forward
+              </i>
+            </Link>
+          </div>
+        ) : null}
       </div>
     );
   }

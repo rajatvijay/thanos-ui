@@ -49,18 +49,25 @@ class SelectLanguage extends React.Component {
             Object.keys(languages.endonyms),
 
             function(locale, index) {
+              console.log("locale---");
+              console.log(locale);
+
               return (
                 _.includes(supportedLaguanges, locale) && (
-                <Option value={locale}>
-                  {/*
-                  <Tooltip title={languages.endonyms[locale]} placement="leftTop">
-                    <span>
-                      <span class={"flag flag-" + locale} title={languages.endonyms[locale]}></span>
-                    </span>
-                  </Tooltip>
-                    */}
-                  {languages.endonyms[locale]}
-                </Option>
+                  <Option value={locale}>
+                    <Tooltip
+                      title={languages.endonyms[locale]}
+                      placement="leftTop"
+                    >
+                      <span className="f16">
+                        <span
+                          className={"flag " + locale}
+                          title={languages.endonyms[locale]}
+                        />
+                      </span>{" "}
+                      {locale}
+                    </Tooltip>
+                  </Option>
                 )
               );
             }
