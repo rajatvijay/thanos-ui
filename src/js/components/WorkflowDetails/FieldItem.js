@@ -76,7 +76,7 @@ class FieldItem extends Component {
     fieldParams["decryptError"] = this.state.error;
     fieldParams["decryptedData"] = this.state.decrypted;
 
-    if (!this.props.fieldParams.field.answers[0] && this.state.encrypted) {
+    if (this.props.fieldParams.field.answers[0] && this.state.encrypted) {
       return (
         <FormItem
           label={getLabel(props, this)}
