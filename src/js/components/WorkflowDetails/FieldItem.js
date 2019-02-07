@@ -45,7 +45,7 @@ class FieldItem extends Component {
       method: "POST",
       headers: authHeader.post(),
       credentials: "include",
-      body: {}
+      body: JSON.stringify({})
     };
 
     this.setState({ fetching: true });
