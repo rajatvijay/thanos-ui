@@ -125,6 +125,7 @@ const GetTable = props => {
     },
     {
       title: "Comments",
+      wordth: 140,
       key: "google_index",
       render: record => {
         let flag_data = _.size(props.flag_dict[record.custom_hash])
