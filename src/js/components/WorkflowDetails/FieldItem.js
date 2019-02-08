@@ -94,13 +94,13 @@ class FieldItem extends Component {
           {...field_error(props)}
         >
           <div className="masked-input mr-bottom">
-            {this.state.error ? "Unable to decrypt " : "encrypted data "}
+            {this.state.error ? "Unable to decrypt " : "Masked"}
             {this.state.fetching ? <Icon type="loading" /> : null}
             <span
               className="float-right text-anchor"
               onClick={this.decryptData}
             >
-              show data
+              Show
             </span>
           </div>
         </FormItem>
