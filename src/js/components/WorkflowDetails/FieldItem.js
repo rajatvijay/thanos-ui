@@ -50,7 +50,9 @@ class FieldItem extends Component {
 
     this.setState({ fetching: true });
 
-    let url = `${baseUrl}responses/${this.props.fieldParams.id}/decrypt/`;
+    let url = `${baseUrl}responses/${
+      this.props.fieldParams.field.answers[0].id
+    }/decrypt/`;
 
     fetch(url, requestOptions)
       .then(response => {
@@ -87,7 +89,7 @@ class FieldItem extends Component {
           style={{ display: "block" }}
           key={props.field.id}
           required={getRequired(props)}
-          hasFeedback
+          //hasFeedback
           autoComplete="new-password"
           {...field_error(props)}
         >
