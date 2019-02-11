@@ -97,7 +97,7 @@ function fetchFieldExtra(field, targetAnswer) {
     workflowStepService
       .fetchFieldExtra(field, targetAnswer)
       .then(
-        extra => dispatch(success(field, extra)),
+        body => dispatch(success(field, body.results)),
         error => dispatch(failure(error))
       );
   };
