@@ -43,6 +43,10 @@ class StepBodyForm extends Component {
     }
   };
 
+  componentDidMount = () => {
+    this.updateAllDependentFields();
+  };
+
   versionToggle = () => {
     this.setState({ showVersion: !this.state.showVersion });
   };
@@ -124,30 +128,29 @@ class StepBodyForm extends Component {
     } else {
       this.dispatchDebounced(data, method);
     }
-    let dependentFields = this.getDependentFields(payload.field) || [];
-    for (let dependentField of dependentFields) {
-      this.props.dispatch(
-        workflowStepActions.fetchFieldExtra(dependentField, data.answer)
-      );
-    }
+    this.updateDependentFields(payload.field, data.answer);
   };
 
   dispatchDebounced = _.debounce((data, method) => {
     this.props.dispatch(workflowStepActions.saveField(data));
   }, 1500);
 
-  getDependentFields = targetField => {
-    return _.reduce(
-      this.props.stepData.data_fields,
-      (dependentFields, field) => {
-        let extra = field.definition.extra;
-        if (extra && extra.trigger_field_tag == targetField.definition.tag) {
-          dependentFields.push(field);
-        }
-        return dependentFields;
-      },
-      []
-    );
+  updateDependentFields = (targetField, answer) => {
+    _.map(this.props.stepData.data_fields, field => {
+      let extra = field.definition.extra;
+      if (extra && extra.trigger_field_tag == targetField.definition.tag) {
+        this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
+      }
+    });
+  };
+
+  updateAllDependentFields = () => {
+    _.map(this.props.stepData.data_fields, field => {
+      let answer = field.answers[0]
+        ? field.answers[0].answer
+        : field.definition.defaultValue;
+      this.updateDependentFields(field, answer);
+    });
   };
 
   getUserById = (id, status) => {
@@ -385,9 +388,21 @@ class StepBodyForm extends Component {
         this.fields = [];
       },
       getFieldForRender(field) {
+        // if(field.definition.tag == 'company_type') {
+        //   field.definition.field_type = 'region';
+        // }
+        if (
+          field.definition.tag == "country" ||
+          field.definition.tag == "company_type"
+        ) {
+          field.definition.extra = {
+            trigger_field_tag: "company_name",
+            api_url: "business-unit/extra-data?regions__code={}"
+          };
+        }
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
-        return <FieldItem fieldParams={fieldParams}/>
+        return <FieldItem fieldParams={fieldParams} />;
       },
       getSizeFraction(field) {
         // Get the current field size in fraction
