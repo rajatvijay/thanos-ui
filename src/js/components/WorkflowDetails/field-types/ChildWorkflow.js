@@ -74,7 +74,7 @@ class ChildWorkflowField2 extends Component {
 
     let url =
       baseUrl +
-      "workflows-list/?parent_workflow_id=" +
+      "workflows-list/?limit=100&parent_workflow_id=" +
       parent_id +
       "&kind=" +
       kind;
@@ -98,6 +98,7 @@ class ChildWorkflowField2 extends Component {
             childWorkflow: body.results,
             fetching: false
           });
+          this.createFilterTag();
         }
       });
   };
@@ -193,6 +194,62 @@ class ChildWorkflowField2 extends Component {
     return menu;
   };
 
+  createFilterTag = () => {
+    let that = this;
+    if (!_.size(that.state.childWorkflow)) {
+      this.setState({ filterTags: <span /> });
+      return;
+    }
+
+    let filter_tag_count = { All: _.size(that.state.childWorkflow) };
+    let tag_workflow_map = { All: that.state.childWorkflow };
+    _.map(that.state.childWorkflow, function(v, k) {
+      _.map(v.lc_data, function(tag, i) {
+        if (!tag.value) {
+          return true;
+        }
+        if (tag.type && tag.type["type"] == "normal") {
+          return true;
+        }
+        if (filter_tag_count[tag.label]) {
+          filter_tag_count[tag.label] += 1; //parseInt(tag.value)
+        } else {
+          filter_tag_count[tag.label] = 1; //parseInt(tag.value)
+        }
+
+        if (tag_workflow_map[tag.label]) {
+          tag_workflow_map[tag.label].push(v);
+        } else {
+          tag_workflow_map[tag.label] = [v];
+        }
+      });
+    });
+
+    this.state.tag_workflow_map = tag_workflow_map;
+    let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
+    let filterTags = (
+      <div>
+        {_.map(filter_tag_count, function(v, k) {
+          return (
+            <Tag
+              style={styling[k]}
+              className="alert-tag-item alert-primary"
+              onClick={that.onFilterTagChange.bind(that, k)}
+            >
+              {k} ({v})
+            </Tag>
+          );
+        })}
+      </div>
+    );
+    this.setState({ filterTags: filterTags });
+  };
+
+  onFilterTagChange = tag => {
+    let filtered_workflow = this.state.tag_workflow_map[tag];
+    this.setState({ childWorkflow: filtered_workflow });
+  };
+
   // expandChildWorkflow = () => {
   //   this.setState({ showRelatedWorkflow: !this.state.showRelatedWorkflow });
 
@@ -207,7 +264,6 @@ class ChildWorkflowField2 extends Component {
     let that = this;
 
     //const childWorkflowMenu = this.getKindMenu();
-
     return (
       <FormItem
         label={""}
@@ -230,7 +286,13 @@ class ChildWorkflowField2 extends Component {
           <div>
             <Row>
               <Col span="18">
-                <span className="text-metal">Filters: </span>
+                <span
+                  className="text-metal"
+                  style={{ marginRight: "10px", float: "left" }}
+                >
+                  Filters:{" "}
+                </span>
+                <span>{this.state.filterTags}</span>
               </Col>
               <Col span="6" className="text-right text-light small">
                 {this.props.workflowDetailsHeader.workflowDetailsHeader
@@ -250,12 +312,13 @@ class ChildWorkflowField2 extends Component {
             <br />
 
             <div className="workflow-list workflows-list-embedded">
-              <div className="paper">
+              <div className="paper" style={{ padding: "7px" }}>
                 {_.size(this.state.childWorkflow) ? (
                   _.map(this.state.childWorkflow, function(workflow) {
                     return (
                       <ChildItem
                         workflow={workflow}
+                        field={field}
                         workflowKind={workflowKind}
                       />
                     );
@@ -416,7 +479,7 @@ class ChildItem extends Component {
 
     let url =
       baseUrl +
-      "workflows-list/?parent_workflow_id=" +
+      "workflows-list/?&parent_workflow_id=" +
       parent +
       "&kind=" +
       kind;
@@ -443,19 +506,20 @@ class ChildItem extends Component {
   render = () => {
     let that = this;
     let props = this.props;
-    const { workflow, workflowKind } = props;
+    const { workflow, workflowKind, field } = props;
     const { isExpanded, kind, fetching } = this.state;
-
     return (
       <div class={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
         <WorkflowHeader
           workflow={workflow}
+          field={field}
           link={true}
           kind={""}
           statusView={true}
           isChild={true}
           hasChild={workflow.children_count}
           isEmbedded={true}
+          showCommentIcon={true}
         />
 
         {workflow.children_count > 0 ? (
