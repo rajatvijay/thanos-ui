@@ -388,18 +388,6 @@ class StepBodyForm extends Component {
         this.fields = [];
       },
       getFieldForRender(field) {
-        // if(field.definition.tag == 'company_type') {
-        //   field.definition.field_type = 'region';
-        // }
-        if (
-          field.definition.tag == "country" ||
-          field.definition.tag == "company_type"
-        ) {
-          field.definition.extra = {
-            trigger_field_tag: "company_name",
-            api_url: "business-unit/extra-data?regions__code={}"
-          };
-        }
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
         return <FieldItem fieldParams={fieldParams} />;
