@@ -37,17 +37,23 @@ class AuditListTabs extends Component {
       credentials: "include"
     };
 
+    function getFileName(resp) {
+      var filename = resp.headers.get("Content-Disposition");
+      return filename && (filename.match(/filename=\"(.*)\"/) || []).pop();
+    }
+
     let url = `${baseUrl}workflows/${this.props.id}/export/`;
-    return fetch(url, requestOptions)
-      .then(function(resp) {
-        return resp.blob();
-      })
-      .then(function(blob) {
+    return fetch(url, requestOptions).then(function(resp) {
+      resp.blob().then(function(blob) {
+        // Allowing filename and MIME type to be decided by the backend
+        // though it's possible to specify here
         download(
           blob,
-          "Activity_log_" + moment().format("YYYY-MM-DD") + ".xlsx"
+          getFileName(resp) ||
+            "activity_log_" + moment().format("YYYY-MM-DD") + ".xlsx"
         );
       });
+    });
   };
 
   render = () => {
