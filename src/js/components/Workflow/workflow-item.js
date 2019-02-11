@@ -274,6 +274,8 @@ class HeaderOptions2 extends React.Component {
       </Menu>
     );
 
+    
+
     const workflowActionMenu = (
       <Menu>
         <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
@@ -309,8 +311,8 @@ class HeaderOptions2 extends React.Component {
           {this.state.current}
         </span>
 
-        {props.showCommentIcon && false ? (
-          <span style={{ position: "relative", right: "25px" }}>
+        {props.showCommentIcon ? (
+          <span style={{ position: "relative", right: "25px" }} onClick={this.}>
             <Badge count={5}>
               <i class="material-icons">comment</i>
             </Badge>
@@ -419,9 +421,25 @@ class GetMergedData extends React.Component {
 
   render() {
     let props = this.props;
-    const { data } = props;
+    let lc_data = _.filter(props["data"], function(v, k) { return v.value != '' && v.type["type"] == 'alert'});
+    let lc_data_normal = _.filter(props["data"], function(v, k) { return v.value != '' && v.type["type"] == 'normal'});
     let that = this;
-
+    let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
+    lc_data_normal = (<span style={{marginRight: "20px"}}>
+        {_.map(lc_data_normal, function(item, index) {
+              if (item.label && item.value) {
+                  return (
+                    <div style={{float: "left", margin: "0px 8px 3px 0px"}}>
+                      <Tooltip title={item.label}>
+                        <span style={styling[item.label]}>
+                          {item.value}
+                        </span>
+                      </Tooltip>
+                    </div>
+                  );
+                }
+         })}
+      </span>);
     // const GetType = item => {
     //   if (item.label) {
     //     return (
@@ -465,13 +483,14 @@ class GetMergedData extends React.Component {
       <div className="group-overviewl">
         <div className="overflow-wrapper">
           <div className="step-ui">
-            {_.map(data, function(item, index) {
+            {lc_data_normal}
+            {_.map(lc_data, function(item, index) {
               if (index < 3) {
-                if (item.label) {
+                if (item.label && item.value) {
                   return (
                     <span>
                       <Tooltip title={item.label + ": " + item.value}>
-                        <Tag className="alert-tag-item alert-primary  ellip-small">
+                        <Tag style={styling[item.label]} className="alert-tag-item alert-primary  ellip-small">
                           {item.label}: {item.value || "N/A"}
                         </Tag>
                       </Tooltip>
@@ -504,11 +523,11 @@ class GetMergedData extends React.Component {
                   );
                 }
               } else if (that.state.expanded) {
-                if (item.label) {
+                if (item.label && item.value) {
                   return (
                     <span>
                       <Tooltip title={item.label + ": " + item.value}>
-                        <Tag className="alert-tag-item alert-primary  ellip-small">
+                        <Tag style={styling[item.label]} className="alert-tag-item alert-primary  ellip-small">
                           {item.label}: {item.value || "N/A"}
                         </Tag>
                       </Tooltip>
@@ -543,12 +562,12 @@ class GetMergedData extends React.Component {
               }
             })}
 
-            {props.data.length > 3 ? (
+            {lc_data.length > 3 ? (
               <span
                 className="text-anchor text-middle float-right"
                 onClick={this.toggleExpand}
               >
-                {this.state.expanded ? "-" : "+"} {props.data.length - 3}
+                {this.state.expanded ? "-" : "+"} {lc_data.length - 3}
               </span>
             ) : null}
           </div>
@@ -701,7 +720,7 @@ export const WorkflowHeader = props => {
 
         {props.isEmbedded && _.size(mergedData) ? (
           <Col span={11}>
-            <GetMergedData data={mergedData} />
+            <GetMergedData data={mergedData} {...props}/>
           </Col>
         ) : _.size(props.workflow.alerts) ? (
           <Col span={11}>
