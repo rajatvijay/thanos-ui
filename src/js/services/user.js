@@ -122,12 +122,10 @@ export const logout = async () => {
   let referrer = window.location.href;
   localStorage.removeItem("user");
   const requestOptions = {
-    method: "POST",
-    headers: authHeader.post(),
-    credentials: "include",
-    body: JSON.stringify({}),
-    referrerPolicy: "no-referrer-when-downgrade",
-    referrer: referrer
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+    //body: JSON.stringify({})
   };
   try {
     const response = await fetch(baseUrl + "users/logout/", requestOptions);
