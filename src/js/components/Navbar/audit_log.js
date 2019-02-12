@@ -313,6 +313,11 @@ const AuditContent = props => {
             } else if (item.action.type === "undo") {
               icon = "restore";
               color = "orange";
+            } else if (item.action.type === "alert_created") {
+              icon = "alarm_add";
+              color = "green";
+            } else if (item.action.type === "alert_dismissed") {
+              icon = "alarm_off";
             }
 
             return (
