@@ -362,14 +362,21 @@ function google_search_html(record, search) {
     return icon;
   };
 
-  const keywordHighlight=(string, keyword)=> {
-    return string.replace(new RegExp('(^|\\s)(' + keyword + ')(\\s|$)','ig'), '$1<b>$2</b>$3');
-  }
+  const keywordHighlight = (string, keyword) => {
+    return string.replace(
+      new RegExp("(^|\\s)(" + keyword + ")(\\s|$)", "ig"),
+      "$1<b>$2</b>$3"
+    );
+  };
 
   let snippet = record.snippet;
-  
+
   console.clear();
-  console.log(record.sorting_score + " --o-- " + (record.sentiment_score * record.sentiment_magnitude))
+  console.log(
+    record.sorting_score +
+      " --o-- " +
+      record.sentiment_score * record.sentiment_magnitude
+  );
 
   return (
     <div>
@@ -404,6 +411,9 @@ function google_search_html(record, search) {
         <a href={record.link} target="_blank" className="text-secondary">
           {record.link}
         </a>
+      </div>
+      <div className="mr-bottom-lg text-light">
+        Published at: {record.published_at}
       </div>
 
       <Row gutter={30}>
