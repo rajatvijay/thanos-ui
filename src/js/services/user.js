@@ -124,7 +124,7 @@ export const logout = async () => logoutNavigate();
 
 const logoutNavigate = async () => {
   localStorage.removeItem("user");
-  _.defer(() => (document.location.href = baseUrl + "users/logout/"));
+  _.defer(() => (document.location.href = baseUrl2 + "users/logout/"));
 };
 
 const logoutXHR = async () => {
