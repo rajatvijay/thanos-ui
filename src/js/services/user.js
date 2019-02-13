@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { authHeader, baseUrl, baseUrl2 } from "../_helpers";
 
 export const userService = {
@@ -118,7 +120,14 @@ function tokenLogin(token, next) {
     });
 }
 
-export const logout = async () => {
+export const logout = async () => logoutNavigate();
+
+const logoutNavigate = async () => {
+  localStorage.removeItem("user");
+  _.defer(() => (document.location.href = baseUrl + "users/logout/"));
+};
+
+const logoutXHR = async () => {
   localStorage.removeItem("user");
   const requestOptions = {
     method: "GET",
