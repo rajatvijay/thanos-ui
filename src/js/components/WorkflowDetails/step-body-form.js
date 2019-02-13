@@ -180,7 +180,7 @@ class StepBodyForm extends Component {
     this.props.dispatch(workflowStepActions.undoStep(step));
   };
 
-  getComletedBy = step => {
+  getCompletedBy = step => {
     let completed_by = null;
     if (step.completed_by.first_name !== "") {
       completed_by = step.completed_by.first_name;
@@ -213,7 +213,7 @@ class StepBodyForm extends Component {
 
       return (
         <div className=" step-status-box pd-top-sm">
-          {step.completed_at ? this.getComletedBy(step) : null}
+          {step.completed_at ? this.getCompletedBy(step) : null}
 
           {_.includes(this.props.permission, "Can undo a step") ? (
             <span>
