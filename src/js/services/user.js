@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import { authHeader, baseUrl, baseUrl2 } from "../_helpers";
 
 export const userService = {
@@ -121,7 +119,6 @@ function tokenLogin(token, next) {
 }
 
 export const logout = async () => {
-  let referrer = window.location.href;
   localStorage.removeItem("user");
   const requestOptions = {
     method: "GET",

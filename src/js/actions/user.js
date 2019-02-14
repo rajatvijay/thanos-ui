@@ -4,7 +4,7 @@ import {
   logout as UserLogout,
   sendEmailAuthToken as userSendEmailAuthToken
 } from "../services/user";
-import { history } from "../_helpers";
+import { history, baseUrl2 } from "../_helpers";
 import { notification } from "antd";
 
 export const userActions = {
@@ -106,7 +106,18 @@ function removeCookies() {
   }
 }
 
-export const logout = () => async dispatch => {
+const logoutNav = () => async dispatch => {
+  try {
+    dispatch({ type: userConstants.LOGOUT });
+    removeCookies();
+    document.location.href = baseUrl2 + "users/logout/";
+  } catch (error) {
+    removeCookies();
+    throw error;
+  }
+};
+
+const logoutXHR = () => async dispatch => {
   try {
     // history.push("/login/magic");
     const response = await UserLogout();
@@ -118,6 +129,8 @@ export const logout = () => async dispatch => {
     throw error;
   }
 };
+
+export const logout = logoutNav;
 
 export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
   dispatch({ type: userConstants.LOGIN_LINK_REQUEST, email, nextUrl });
