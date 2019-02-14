@@ -247,6 +247,12 @@ class HeaderOptions2 extends React.Component {
     }, 500);
   };
 
+  getComment = object_id => {
+    this.state.loading_sidebar = true;
+    this.state.object_id = object_id;
+    this.props.addComment(object_id, "workflow");
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -273,8 +279,6 @@ class HeaderOptions2 extends React.Component {
           : null}
       </Menu>
     );
-
-    
 
     const workflowActionMenu = (
       <Menu>
@@ -305,17 +309,36 @@ class HeaderOptions2 extends React.Component {
       </Menu>
     );
 
+    let that = this;
     return (
-      <Col span="4" className="text-right">
+      <Col span="4" className={props.isEmbedded ? "text-center" : "text-right"}>
         <span className="status-text text-light t-12">
           {this.state.current}
         </span>
 
-        {props.showCommentIcon ? (
-          <span style={{ position: "relative", right: "25px" }} onClick={this.}>
+        {props.showCommentIcon && false ? (
+          <span
+            style={{ position: "relative", right: "25px" }}
+            onClick={that.getComment.bind(that, props.workflow.id)}
+          >
             <Badge count={5}>
               <i class="material-icons">comment</i>
             </Badge>
+          </span>
+        ) : null}
+
+        {props.showCommentIcon && props.isEmbedded ? (
+          <span class="float-right">
+            <div class="add_comment_btn">
+              <span>
+                <i
+                  class="material-icons  t-18 text-metal"
+                  onClick={that.getComment.bind(that, props.workflow.id)}
+                >
+                  chat_bubble_outline
+                </i>
+              </span>
+            </div>
           </span>
         ) : null}
 
@@ -421,25 +444,30 @@ class GetMergedData extends React.Component {
 
   render() {
     let props = this.props;
-    let lc_data = _.filter(props["data"], function(v, k) { return v.value != '' && v.type["type"] == 'alert'});
-    let lc_data_normal = _.filter(props["data"], function(v, k) { return v.value != '' && v.type["type"] == 'normal'});
+    let lc_data = _.filter(props["data"], function(v, k) {
+      return v.value != "" && v.type == "alert";
+    });
+    let lc_data_normal = _.filter(props["data"], function(v, k) {
+      return v.value != "" && v.type == "normal";
+    });
     let that = this;
     let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
-    lc_data_normal = (<span style={{marginRight: "20px"}}>
+    console.log(lc_data, lc_data_normal);
+    lc_data_normal = (
+      <span style={{ marginRight: "20px" }}>
         {_.map(lc_data_normal, function(item, index) {
-              if (item.label && item.value) {
-                  return (
-                    <div style={{float: "left", margin: "0px 8px 3px 0px"}}>
-                      <Tooltip title={item.label}>
-                        <span style={styling[item.label]}>
-                          {item.value}
-                        </span>
-                      </Tooltip>
-                    </div>
-                  );
-                }
-         })}
-      </span>);
+          if (item.label && item.value) {
+            return (
+              <div style={{ float: "left", margin: "0px 8px 3px 0px" }}>
+                <Tooltip title={item.label}>
+                  <span style={styling[item.label]}>{item.value}</span>
+                </Tooltip>
+              </div>
+            );
+          }
+        })}
+      </span>
+    );
     // const GetType = item => {
     //   if (item.label) {
     //     return (
@@ -490,7 +518,10 @@ class GetMergedData extends React.Component {
                   return (
                     <span>
                       <Tooltip title={item.label + ": " + item.value}>
-                        <Tag style={styling[item.label]} className="alert-tag-item alert-primary  ellip-small">
+                        <Tag
+                          style={styling[item.label]}
+                          className="alert-tag-item alert-primary  ellip-small"
+                        >
                           {item.label}: {item.value || "N/A"}
                         </Tag>
                       </Tooltip>
@@ -527,7 +558,10 @@ class GetMergedData extends React.Component {
                   return (
                     <span>
                       <Tooltip title={item.label + ": " + item.value}>
-                        <Tag style={styling[item.label]} className="alert-tag-item alert-primary  ellip-small">
+                        <Tag
+                          style={styling[item.label]}
+                          className="alert-tag-item alert-primary  ellip-small"
+                        >
                           {item.label}: {item.value || "N/A"}
                         </Tag>
                       </Tooltip>
@@ -720,7 +754,7 @@ export const WorkflowHeader = props => {
 
         {props.isEmbedded && _.size(mergedData) ? (
           <Col span={11}>
-            <GetMergedData data={mergedData} {...props}/>
+            <GetMergedData data={mergedData} {...props} />
           </Col>
         ) : _.size(props.workflow.alerts) ? (
           <Col span={11}>

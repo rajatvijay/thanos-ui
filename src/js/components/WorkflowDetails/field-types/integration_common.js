@@ -17,6 +17,14 @@ export const integrationCommonFunctions = {
 };
 
 function comment_answer_body(c) {
+  if (_.size(c.target.workflow_details)) {
+    return (
+      <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        {workflow_comment_html(c.target)}
+      </div>
+    );
+  }
+
   if (!_.size(c.target.field_details)) {
     return null;
   }
@@ -798,6 +806,14 @@ function dnb_rdc_html(record) {
           {alias_html ? alias_html : null}
         </Col>
       </Row>
+    </div>
+  );
+}
+
+function workflow_comment_html(record) {
+  return (
+    <div>
+      <span>{record.name}</span>
     </div>
   );
 }

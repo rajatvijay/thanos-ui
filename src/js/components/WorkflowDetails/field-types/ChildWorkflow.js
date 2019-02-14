@@ -319,7 +319,9 @@ class ChildWorkflowField2 extends Component {
                       <ChildItem
                         workflow={workflow}
                         field={field}
+                        currentStepFields={props.currentStepFields}
                         workflowKind={workflowKind}
+                        addComment={props.addComment}
                       />
                     );
                   })
@@ -520,6 +522,8 @@ class ChildItem extends Component {
           hasChild={workflow.children_count}
           isEmbedded={true}
           showCommentIcon={true}
+          addComment={props.addComment}
+          currentStepFields={props.currentStepFields}
         />
 
         {workflow.children_count > 0 ? (

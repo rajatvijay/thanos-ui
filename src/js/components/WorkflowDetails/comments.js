@@ -14,7 +14,7 @@ import {
   Dropdown
 } from "antd";
 import { Link } from "react-router-dom";
-import { workflowDetailsActions } from "../../actions";
+import { workflowDetailsActions, changeStatusActions } from "../../actions";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import _ from "lodash";
 import Moment from "react-moment";
@@ -53,12 +53,20 @@ class Comments extends Component {
       content_type = "workflow";
     }
 
-    console.log(content_type);
-    this.props.addComment({
-      object_id: c.object_id,
-      type: content_type,
-      message: this.state.comment
-    });
+    let step_reload_payload = {
+      workflowId: this.props.currentStepFields.currentStepFields.workflow,
+      groupId: this.props.currentStepFields.currentStepFields.step_group,
+      stepId: this.props.currentStepFields.currentStepFields.id
+    };
+
+    this.props.addComment(
+      {
+        object_id: c.object_id,
+        type: content_type,
+        message: this.state.comment
+      },
+      step_reload_payload
+    );
     this.setState({ message: toContentState("") });
   };
 
@@ -87,13 +95,22 @@ class Comments extends Component {
       ? this.props.workflowComments.data
       : {};
     let target = _.size(comments.results) ? comments.results[0].target : {};
-    console.log(target);
-    let payload = {
-      workflow: target.workflow,
-      field: target.field_details.id,
-      flag: parseInt(flag.key)
-    };
-    if (target.field_details.is_integration_type) {
+
+    let payload = {};
+    if (target.field_details) {
+      payload = {
+        workflow: target.workflow,
+        field: target.field_details.id,
+        flag: parseInt(flag.key)
+      };
+    } else if (target.workflow_details) {
+      payload = {
+        workflow: target.workflow_details.id,
+        flag: parseInt(flag.key)
+      };
+    }
+
+    if (target.field_details && target.field_details.is_integration_type) {
       payload["integration_uid"] = target.uid;
     }
     this.props.changeFlag(payload);
@@ -116,8 +133,32 @@ class Comments extends Component {
       row_uid: target.uid
     };
 
-    console.log(payload);
     this.props.changeIntegrationStatus(payload);
+  };
+
+  changeWorkflowStatus = value => {
+    let comments = this.props.workflowComments
+      ? this.props.workflowComments.data
+      : {};
+    let target = _.size(comments.results) ? comments.results[0].target : {};
+
+    if (!target.workflow_details) {
+      return;
+    }
+
+    let payload = {
+      workflowId: target.workflow_details.id,
+      statusId: value,
+      addComment: true
+    };
+
+    let step_reload_payload = {
+      workflowId: this.props.currentStepFields.currentStepFields.workflow,
+      groupId: this.props.currentStepFields.currentStepFields.step_group,
+      stepId: this.props.currentStepFields.currentStepFields.id
+    };
+
+    this.props.dispatch(changeStatusActions(payload, step_reload_payload));
   };
 
   render() {
@@ -152,6 +193,26 @@ class Comments extends Component {
         })}
       </Menu>
     );
+
+    let workflow_status_dropdown = (
+      <div style={{ marginTop: "10px" }}>
+        <div>
+          <span style={{ color: "#575757", fontSize: "12px" }}>
+            Workflow Status:
+          </span>
+        </div>
+        <Select
+          placeholder="Select a status"
+          style={{ width: "100%" }}
+          onChange={that.changeWorkflowStatus}
+        >
+          {_.map(that.props.workflowFilterType.statusType, function(v) {
+            return <Option value={v.value}>{v.label}</Option>;
+          })}
+        </Select>
+      </div>
+    );
+
     return (
       <Sider
         className="comments-sidebar profile-sidebar sidebar-right"
@@ -192,7 +253,8 @@ class Comments extends Component {
               }
               return (
                 <div>
-                  {c.target.field_details && comments.results ? (
+                  {(c.target.field_details || c.target.workflow_details) &&
+                  comments.results ? (
                     <div
                       style={{
                         position: "absolute",
@@ -214,31 +276,38 @@ class Comments extends Component {
                     </div>
                   ) : null}
 
-                  <Tag style={{ width: "100%" }} className="comment_step_bar">
-                    <span>{c.target.step_group_details.name}</span>
-                    <span> > </span>
-                    <span onClick={that.selectStep.bind(this, c.target)}>
-                      {c.target.step_details.name}
-                    </span>
-                  </Tag>
+                  {c.target.step_group_details ? (
+                    <Tag style={{ width: "100%" }} className="comment_step_bar">
+                      <span>{c.target.step_group_details.name}</span>
+                      <span> > </span>
+                      <span onClick={that.selectStep.bind(this, c.target)}>
+                        {c.target.step_details.name}
+                      </span>
+                    </Tag>
+                  ) : null}
 
                   {integrationCommonFunctions.comment_answer_body(c)}
 
-                  <div style={{ marginTop: "10px" }}>
-                    <div>
-                      <span style={{ color: "#575757", fontSize: "12px" }}>
-                        Status:
-                      </span>
+                  {c.target.field_details &&
+                  c.target.field_details.is_integration_type ? (
+                    <div style={{ marginTop: "10px" }}>
+                      <div>
+                        <span style={{ color: "#575757", fontSize: "12px" }}>
+                          Status:
+                        </span>
+                      </div>
+                      <Select
+                        placeholder="Select a status"
+                        style={{ width: "100%" }}
+                        onChange={that.changeStatus}
+                      >
+                        <Option value="open">Open</Option>
+                        <Option value="closed">Closed</Option>
+                      </Select>
                     </div>
-                    <Select
-                      placeholder="Select a status"
-                      style={{ width: "100%" }}
-                      onChange={that.changeStatus}
-                    >
-                      <Option value="open">Open</Option>
-                      <Option value="closed">Closed</Option>
-                    </Select>
-                  </div>
+                  ) : null}
+
+                  {c.target.workflow_details ? workflow_status_dropdown : null}
 
                   <Divider />
 

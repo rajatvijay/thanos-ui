@@ -281,10 +281,12 @@ class WorkflowDetails extends Component {
     );
   };
 
-  addComment = payload => {
+  addComment = (payload, step_reload_payload) => {
     this.state.adding_comment = true;
     this.state.object_id = payload.object_id;
-    this.props.dispatch(workflowStepActions.addComment(payload));
+    this.props.dispatch(
+      workflowStepActions.addComment(payload, step_reload_payload)
+    );
   };
 
   getIntegrationComments = (uid, field_id) => {
@@ -460,6 +462,7 @@ class WorkflowDetails extends Component {
 
 function mapStateToProps(state) {
   const {
+    currentStepFields,
     workflowDetails,
     workflowDetailsHeader,
     workflowFilterType,
@@ -472,6 +475,7 @@ function mapStateToProps(state) {
   } = state;
 
   return {
+    currentStepFields,
     workflowDetails,
     workflowDetailsHeader,
     workflowFilterType,
