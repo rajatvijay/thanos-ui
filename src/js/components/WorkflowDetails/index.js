@@ -91,7 +91,7 @@ class WorkflowDetails extends Component {
         }
         activeStepGroup = step_group;
         _.forEach(step_group.steps, function(step) {
-          if (step.is_editable && !step.completed_at && !step.is_locked) {
+          if (!step.completed_at && !step.is_locked) {
             activeStep = step;
             return false;
           }
