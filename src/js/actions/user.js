@@ -106,16 +106,10 @@ function removeCookies() {
   }
 }
 
-const logoutNav = () => async dispatch => {
-  try {
-    localStorage.removeItem("user");
-    dispatch({ type: userConstants.LOGOUT });
-    removeCookies();
-    document.location.href = baseUrl2 + "users/logout/";
-  } catch (error) {
-    removeCookies();
-    throw error;
-  }
+const logoutNav = () => {
+  localStorage.removeItem("user");
+  removeCookies();
+  document.location.href = baseUrl2 + "users/logout/";
 };
 
 const logoutXHR = () => async dispatch => {
