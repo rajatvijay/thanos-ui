@@ -110,6 +110,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "dnb_cmpcvf":
       return DnBCommon(props);
+    case "dnb_familytree":
+      return DnBCommon(props);
     case "dnb_livingstone":
       return Livingstone(props);
     case "dnb_data_reader":
