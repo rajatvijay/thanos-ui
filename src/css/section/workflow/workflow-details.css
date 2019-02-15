@@ -57,22 +57,28 @@ h5 {
   color: #305ebe;
 }
 /*Text aligmnet*/
-.text-center {
+.text-center,
+.t-cntr {
   text-align: center;
 }
-.text-left {
+.text-left,
+.t-lt {
   text-align: left;
 }
-.text-right {
+.text-right,
+.t-rt {
   text-align: right;
 }
-.text-middle {
+.text-middle,
+.t-mdl {
   vertical-align: middle;
 }
-.text-bottom {
+.text-bottom,
+.t-btm {
   vertical-align: bottom;
 }
 /*Text weight*/
+<<<<<<< HEAD
 .text-bold {
   font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
@@ -86,6 +92,29 @@ h5 {
 }
 .text-thin {
   font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+=======
+.text-bold,
+.t-bld {
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+.text-medium,
+.t-mdm {
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+.text-normal,
+.t-nrml {
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: normal;
+  font-style: normal;
+}
+.text-thin,
+.t-thn {
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+>>>>>>> CarViz UI and Adjutication UI changes
 }
 /*Text size*/
 .t-12 {
@@ -107,25 +136,31 @@ h5 {
   font-size: 24px;
 }
 /*Text case*/
-.text-uppercase {
+.text-uppercase,
+.t-upr {
   text-transform: uppercase;
 }
-.text-lowercase {
+.text-lowercase,
+.t-lwr {
   text-transform: lowercase;
 }
-.text-capitalize {
+.text-capitalize,
+.t-cam {
   text-transform: capitalize;
 }
-.text-ellipsis {
+.text-ellipsis,
+.t-ell {
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.text-anchor {
+.text-anchor,
+.t-ancr {
   cursor: pointer;
 }
-.text-underline {
+.text-underline,
+.t-undr {
   text-decoration: underline;
 }
 .text-nounderline,
@@ -172,16 +207,19 @@ h5 {
   padding-top: 16px;
   padding-bottom: 16px;
 }
-.pd-left {
+.pd-left,
+.pd-lft {
   padding-left: 16px;
 }
-.pd-right {
+.pd-right,
+.pd-rt {
   padding-right: 16px;
 }
 .pd-top {
   padding-top: 16px;
 }
-.pd-bottom {
+.pd-bottom,
+.pd-btm {
   padding-bottom: 16px;
 }
 .pd-left-sm {
@@ -550,3 +588,54 @@ h5 {
   position: absolute;
   right: 42px;
 }
+<<<<<<< HEAD
+=======
+.google-search-table .ant-table-tbody > tr:hover > td {
+  background: none;
+}
+.icon-custom {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.icon-custom.nobar {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgAgMAAACf9p+rAAAACVBMVEUAAAAvLy8yMjLMEW2RAAAAA3RSTlMAJkxGwkpBAAAAj0lEQVR4Ad3NMQEAIAzAMHgQgUSkVSUKYmB9e2SNbmscjavxRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlojekD4BwDq+6fm1uaaaaasuvork5cyii=);
+}
+.icon-custom.bar1 {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgBAMAAAAQtmoLAAAAD1BMVEUAAAAvLy8yMjIxMTEzMzMALA1yAAAABHRSTlMAJkyTupmePwAAALVJREFUeAHtzUENAgAQA0FIHSChGirh/GtCApkXIWH/k338+7mecl46qa6qg+qgOqgOqoPqoDqoDqqD6qA6qA6qg+qgOqgOqoPqoDqoDqqD6qA6qA6qg+qgOqgOqoPqoDqoDqqD6qA6qA0+gBTBEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQTMG/r/cGklYHgGqMKJgAAAAASUVORK5CYII=);
+}
+.icon-custom.bar2 {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgBAMAAAAQtmoLAAAAD1BMVEUAAAAvLy8yMjIxMTEzMzMALA1yAAAABHRSTlMAJkyTupmePwAAALVJREFUeAHtzUENAgAQA0FIHSChGirh/GvCAvMiJOx/so+f699TwUsH1UF1UB1UB9VBdVAdVAfVQXVQHVQH1UF1UB1UB9VBdVAdVAfVQXVQHVQH1UF1UB1UB/1gYCBFMAQ5BEOQQzAEOQRDkEMwBDkEQ5BDMAQ5BEOQQzAEOQRDkEMwBDkEQ5BDMAQ5BEOQQzAEOQRDkEMwBDkEQ5BDMAQ5BEOQQzAEOQRDkEMwBDkEQ/D9/r0BNNMe6EpRLNAAAAAASUVORK5CYII=);
+}
+.icon-custom.bar3 {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgBAMAAAAQtmoLAAAAD1BMVEUAAAAvLy8yMjIxMTEzMzMALA1yAAAABHRSTlMAJkyTupmePwAAALJJREFUeAHtzUENQgEUA0FIHSDhaaiE+teEhjkRkr/3yb6e/q63go8OTgeng9PB6eB0cDo4HZwOTgeng9PB6eB0cDo4HZwODgYCcgiKIENQBBmCIsgQFEGGoAgyBEWQISiCDEERZAiKIENQBBmCIsgQFEGGoAgyBEWQISiCDEERZAiKIENQBBmCIsgQFEGGoAgyBEWQISiCDEERZAiKIENQBBmCIsgQFEGGoAgyBFXw9PO+zW1J/BH8tOQAAAAASUVORK5CYII=);
+}
+.icon-custom.bar4 {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgAgMAAACf9p+rAAAACVBMVEUAAAAyMjIzMzMmhMtFAAAAAnRSTlMAgJsrThgAAACPSURBVHgB3c0xAQAgDMAweBCBRKRVJQpiYH17ZI1uaxyNq/FEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiWiN6QPgHAOr7oUzVQAAAABJRU5ErkJggg==);
+}
+.ant-table-tbody .ant-table-expanded-row:hover > td {
+  background: #fff;
+}
+.masked-input {
+  position: relative;
+  background-color: #f2f5fa;
+  background-image: linear-gradient(
+    45deg,
+    #d9d9d9 8.33%,
+    #f2f5fa 8.33%,
+    #f2f5fa 50%,
+    #d9d9d9 50%,
+    #d9d9d9 58.33%,
+    #f2f5fa 58.33%,
+    #f2f5fa 100%
+  );
+  background-size: 6px 6px;
+  height: 30px;
+  border-radius: 3px;
+  line-height: 30px;
+  vertical-align: middle;
+  padding: 0 10px;
+}
+>>>>>>> CarViz UI and Adjutication UI changes
