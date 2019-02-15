@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Divider, Badge,Tag,Tooltip } from "antd";
+import { Icon, Divider, Badge, Tag, Tooltip } from "antd";
 import { connect } from "react-redux";
 import { workflowFiltersActions, workflowKindActions } from "../../actions";
 import _ from "lodash";
@@ -55,23 +55,28 @@ class WorkflowFilterTop extends Component {
     return (
       <div className="mr-top-sm">
         {!loading ? (
-          _.isEmpty(stepgroupdef_counts) ? (
-            null
-          ) : (
+          _.isEmpty(stepgroupdef_counts) ? null : (
             <div>
               {_.map(stepgroupdef_counts, function(item, index) {
                 return (
-                  <span 
-                    key={item.id} 
+                  <Tag
+                    key={item.id}
                     className={
-                          "text-secondary pd-right-lg pd-bottom-sm t-12 text-anchor  " +
-                          (that.state.activeFilter[0] === item.id
-                            ? "text-bold"
-                            : "")
-                        } 
-                    onClick={that.handleClick.bind(that, item)}>
-                    {item.overdue_count ? <Tooltip title={"Overdue: "+item.overdue_count }> {item.name}({item.count}) <Badge status="error" /></Tooltip>:<span>{item.name}({item.count}) </span>}
-                  </span>
+                      " pd-bottom-sm t-12 v-tag alert-metal  " +
+                      (that.state.activeFilter[0] === item.id
+                        ? "text-bold alert-active"
+                        : "")
+                    }
+                    onClick={that.handleClick.bind(that, item)}
+                  >
+                    <Tooltip title={"Overdue: " + item.overdue_count}>
+                      <span className="ellip-small s50">{item.name} </span>
+                      <span className="ellip-small s50">
+                        ({item.count}){" "}
+                        {item.overdue_count ? <Badge status="error" /> : null}
+                      </span>
+                    </Tooltip>
+                  </Tag>
                 );
               })}
             </div>

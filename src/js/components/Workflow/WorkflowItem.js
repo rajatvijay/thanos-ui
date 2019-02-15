@@ -34,7 +34,6 @@ class WorkflowItem extends React.Component {
   };
 
   showRelatedType = () => {
-    console.log("djslkdfjskdjf");
     this.setState({
       relatedWorkflow: !this.state.relatedWorkflow,
       open: this.state.relatedWorkflow

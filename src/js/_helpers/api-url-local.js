@@ -3,18 +3,20 @@ const getSite = site => {
   let hostSplit = host.split(".");
   let domain =
     document.location.protocol +
-    "//api." +
+    "//" +
+    hostSplit[0] +
+    "." +
     hostSplit[1] +
     "." +
     hostSplit[2] +
-    "/api/v1/";
+    ":8000/api/v1/";
   return domain;
 };
 
 const subDomainUrl = site => {
   let host = document.location.hostname;
   let hostSplit = host.split(".");
-  let domain = document.location.protocol + "//" + host + "/api/v1/";
+  let domain = document.location.protocol + "//" + host + ":8000/api/v1/";
   return domain;
 };
 

@@ -4,26 +4,21 @@ import { WorkflowHeader } from "../../Workflow/workflow-item";
 import { connect } from "react-redux";
 import {
   Form,
-  Input,
   Button,
   Dropdown,
   Row,
   Menu,
   Col,
-  Table,
   Icon,
+  Tooltip,
   Divider,
-  Select,
-  Tag,
-  Switch
+  Tag
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 
 const FormItem = Form.Item;
-const Option = Select.Option;
-const { Column, ColumnGroup } = Table;
 const {
   getLabel,
   onFieldChange,
@@ -184,8 +179,9 @@ class ChildWorkflowField2 extends Component {
         <Button
           type="primary"
           loading={this.props.workflowKind.loading ? true : false}
+          className="btn-o"
         >
-          Add {this.state.fetching ? "loadin..." : ""}
+          + create new {this.state.fetching ? "loadin..." : ""}
           <i className="material-icons t-14">keyboard_arrow_down</i>
         </Button>
       </Dropdown>
@@ -233,10 +229,13 @@ class ChildWorkflowField2 extends Component {
           return (
             <Tag
               style={styling[k]}
-              className="alert-tag-item alert-primary"
+              className="alert-tag-item alert-metal"
               onClick={that.onFilterTagChange.bind(that, k)}
             >
-              {k} ({v})
+              <Tooltip title={k}>
+                <span className="ellip-small s50">{k} </span>
+                <span className="ellip-small s50">({v})</span>
+              </Tooltip>
             </Tag>
           );
         })}
@@ -290,7 +289,7 @@ class ChildWorkflowField2 extends Component {
                   className="text-metal"
                   style={{ marginRight: "10px", float: "left" }}
                 >
-                  Filters:{" "}
+                  Filter tag:{" "}
                 </span>
                 <span>{this.state.filterTags}</span>
               </Col>
@@ -303,10 +302,10 @@ class ChildWorkflowField2 extends Component {
             <Divider />
 
             <Row className="text-metal">
-              <Col span="7">Name</Col>
-              <Col span="12">Alerts</Col>
-              <Col span="2" />
-              <Col span="3">Status</Col>
+              <Col span="10">Name</Col>
+              <Col span="9" />
+              <Col span="2">Status</Col>
+              <Col span="3" />
             </Row>
 
             <br />
@@ -336,90 +335,6 @@ class ChildWorkflowField2 extends Component {
     );
   };
 }
-
-// export const WorkflowHeader = props => {
-//   let proccessedData = getProcessedData(props.workflow.step_groups);
-//   let progressData = getProgressData(props.workflow);
-
-//   return (
-//     <div className="ant-collapse-header">
-//       <Row type="flex" align="middle" className="lc-card-head">
-//         {props.isChild ? null : (
-//           <Col span={1} className=" text-anchor">
-//             {props.detailsPage ? (
-//               <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
-//                 <i
-//                   className="material-icons text-secondary"
-//                   style={{ fontSize: "18px", verticalAlign: "middle" }}
-//                 >
-//                   keyboard_backspace
-//                 </i>
-//               </span>
-//             ) : (
-//               <span className="pd-right">
-//                 <Popover
-//                   content={
-//                     <div className="text-center">
-//                       <div className="small">{progressData}% completed</div>
-//                     </div>
-//                   }
-//                 >
-//                   <Progress
-//                     type="circle"
-//                     percent={progressData}
-//                     width={35}
-//                     format={percent => (
-//                       <i
-//                         className="material-icons"
-//                         style={{ fontSize: "18px", verticalAlign: "middle" }}
-//                       >
-//                         {props.kind === ""
-//                           ? "folder_open"
-//                           : getIcon(props.workflow.definition.kind, props.kind)}
-//                       </i>
-//                     )}
-//                   />
-//                 </Popover>
-//               </span>
-//             )}
-//           </Col>
-//         )}
-
-//         <HeaderTitle {...props} />
-
-//         {props.isEmbedded && _.size(props.workflow.lc_data) ? (
-//           <Col span={11}>
-//             <GetQuickData {...props} />
-//           </Col>
-//         ) : _.size(props.workflow.alerts) ? (
-//           <Col span={11}>
-//             <GetAlertData {...props} />
-//           </Col>
-//         ) : (
-//           <HeaderWorkflowGroup
-//             {...props}
-//             //progressData={progressData}
-//             pdata={proccessedData}
-//           />
-//         )}
-
-//         <Col span="2" className="text-center">
-//           {props.workflow.sorting_primary_field ? (
-//             <Badge
-//               count={<span>{props.workflow.sorting_primary_field}</span>}
-//               style={{
-//                 backgroundColor: getScoreColor(
-//                   props.workflow.sorting_primary_field
-//                 )
-//               }}
-//             />
-//           ) : null}{" "}
-//         </Col>
-//         <HeaderOptions2 {...props} />
-//       </Row>
-//     </div>
-//   );
-// };
 
 class ChildItem extends Component {
   constructor() {
@@ -526,11 +441,21 @@ class ChildItem extends Component {
           currentStepFields={props.currentStepFields}
         />
 
+        {fetching ? (
+          <div className="text-center pd-ard">loading...</div>
+        ) : that.state.childWorkflow && isExpanded ? (
+          <div className="child-container">
+            {_.map(this.state.childWorkflow, function(child) {
+              return <ChildItem workflow={child} workflowKind={kind} />;
+            })}
+          </div>
+        ) : null}
+
         {workflow.children_count > 0 ? (
           <span
             className="child-workflow-expand text-anchor "
             onClick={that.toggleExpand.bind(that, workflow.id, kind)}
-            title="Show child workflow"
+            title="Show related workflow"
           >
             {this.state.kind ? (
               <i
@@ -543,16 +468,6 @@ class ChildItem extends Component {
               <Icon type="loading" style={{ fontSize: 12 }} />
             )}
           </span>
-        ) : null}
-
-        {fetching ? (
-          <div className="text-center pd-ard">loading...</div>
-        ) : that.state.childWorkflow && isExpanded ? (
-          <div className="pd-left-lg child-container">
-            {_.map(this.state.childWorkflow, function(child) {
-              return <ChildItem workflow={child} workflowKind={kind} />;
-            })}
-          </div>
         ) : null}
       </div>
     );
