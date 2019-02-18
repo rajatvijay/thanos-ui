@@ -228,6 +228,7 @@ class ChildWorkflowField2 extends Component {
         {_.map(filter_tag_count, function(v, k) {
           return (
             <Tag
+              key={v}
               className="alert-tag-item alert-metal"
               onClick={that.onFilterTagChange.bind(that, k)}
             >
@@ -324,6 +325,7 @@ class ChildWorkflowField2 extends Component {
                   _.map(this.state.childWorkflow, function(workflow) {
                     return (
                       <ChildItem
+                        key={workflow.id}
                         workflow={workflow}
                         field={field}
                         currentStepFields={props.currentStepFields}

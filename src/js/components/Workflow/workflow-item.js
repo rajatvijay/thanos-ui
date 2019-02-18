@@ -53,7 +53,7 @@ const SubMenu = Menu.SubMenu;
 
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
-  let subtext = _.filter(props.workflow.lc_data, (item, key) => {
+  let subtext = _.filter(props.workflow.lc_data, item => {
     return (item.type = "normal" && item.value !== "");
   });
 
@@ -270,7 +270,7 @@ class HeaderOptions2 extends React.Component {
                 <div class="add_comment_btn">
                   <span>
                     <i
-                      class="material-icons  t-18 text-metal"
+                      className="material-icons  t-18 text-metal"
                       onClick={that.getComment.bind(that, props.workflow.id)}
                     >
                       chat_bubble_outline
@@ -340,6 +340,11 @@ class GetMergedData extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    console.log("this.props----");
+    console.log(this.props);
+  };
+
   toggleExpand = () => {
     this.setState({ expanded: !this.state.expanded });
   };
@@ -347,19 +352,29 @@ class GetMergedData extends React.Component {
   render() {
     let props = this.props;
 
-    if (!props.field) {
-      return <span />;
-    }
+    // if (!props.field) {
+    //   return <span />;
+    // }
 
-    let data = props.workflow.lc_data;
+    let data = this.props.workflow.lc_data;
+
     let alert_data = _.filter(data, function(v) {
       return v.type == "alert";
     });
+
     let lc_data = _.filter(data, function(v) {
-      return v.type == "normal" && v.value != "";
+      return v.type == "normal" && v.value !== "";
     });
+
+    console.log("lc_data");
+    console.log(alert_data);
+    console.log(lc_data);
+
     let that = this;
-    let styling = props.field.definition.extra.lc_data_colorcodes || {};
+    let styling =
+      props.field && props.field.definition
+        ? props.field.definition.extra.lc_data_colorcodes
+        : null;
 
     const expander = data => {
       if (_.size(data) > 2) {
@@ -458,7 +473,9 @@ const GetQuickData = props => {
         <div className="step-ui">
           {_.map(props.workflow.lc_data, function(lcItem, index) {
             return (
-              <Tag className="alert-tag-item alert-primary">{lcItem.value}</Tag>
+              <Tag className="alert-tag-item alert-primary">
+                {lcItem.label} : {lcItem.value}
+              </Tag>
             );
           })}
         </div>
@@ -530,8 +547,8 @@ const GetAlertData = props => {
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
-  let subtext = _.filter(props.workflow.lc_data, (item, key) => {
-    return (item.type = "normal" && item.value !== "");
+  let subtext = _.filter(props.workflow.lc_data, item => {
+    return (item.type = "normal" && item.value);
   });
   return (
     <div className="ant-collapse-header">
@@ -578,14 +595,19 @@ export const WorkflowHeader = props => {
         )}
 
         <HeaderTitle {...props} />
+
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
-            {subtext.length >= 2 ? subtext.value : ""}
+            {_.size(subtext) >= 2
+              ? subtext[0].label + ": " + subtext[1].value
+              : ""}
           </div>
         </Col>
+
         <Col span={7}>
           <GetMergedData {...props} />
         </Col>
+
         <Col span={2} className="text-center">
           {props.workflow.sorting_primary_field ? (
             <Badge
@@ -630,7 +652,7 @@ export const WorkflowBody = props => {
 };
 
 const LcData = props => {
-  let lcdata = props.workflow.definition.extra_fields_json;
+  let lcdata = props.workflow.lc_data;
   let lcdataList = _.map(lcdata, (item, key) => {
     if (item.type === "normal") {
       return <span className="lc-data-item text-medium">{item.label}</span>;
