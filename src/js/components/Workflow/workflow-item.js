@@ -260,11 +260,11 @@ class HeaderOptions2 extends React.Component {
       <Col span="5">
         <Row>
           <Col span={14}>
-            <span className="pd-left pd-right status-text text-light t-12">
-              <Tooltip title={this.state.current}>
-                <div className="text-ellipsis">{this.state.current}</div>
-              </Tooltip>
-            </span>
+            <Tooltip title={this.state.current}>
+              <div className="pd-left pd-right status-text text-light t-12 text-ellipsis">
+                {this.state.current}
+              </div>
+            </Tooltip>
           </Col>
           <Col span={5}>
             {props.showCommentIcon && props.isEmbedded ? (
