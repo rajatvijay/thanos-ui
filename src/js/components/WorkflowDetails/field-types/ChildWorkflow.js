@@ -204,7 +204,7 @@ class ChildWorkflowField2 extends Component {
         if (!tag.value) {
           return true;
         }
-        if (tag.type && tag.type["type"] == "normal") {
+        if (tag.display_type == "normal") {
           return true;
         }
         if (filter_tag_count[tag.label]) {
@@ -238,7 +238,12 @@ class ChildWorkflowField2 extends Component {
 
                 {styling && styling[k] ? (
                   <i
-                    style={{ color: styling[k].color }}
+                    style={{
+                      color: styling[k].color,
+                      position: "relative",
+                      top: "-7px",
+                      right: "-23px"
+                    }}
                     className="material-icons ellip-small s50 t-12 text-middle"
                   >
                     fiber_manual_records
