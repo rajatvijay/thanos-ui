@@ -356,7 +356,7 @@ class GetMergedData extends React.Component {
       return v.type == "normal" && v.value != "";
     });
     let that = this;
-    let styling = props.field.definition.extra.lc_data_colorcodes || {};
+    //let styling = props.field.definition.extra.lc_data_colorcodes || {};
 
     const expander = data => {
       if (_.size(data) && _.size(data) > 2) {
@@ -394,18 +394,6 @@ class GetMergedData extends React.Component {
           <Tooltip title={item.label + ": " + item.value}>
             {item.label}: {item.value}
           </Tooltip>
-          <i
-            class="material-icons t-12 text-middle"
-            style={{
-              color:
-                styling && styling[item.label] ? styling[item.label].color : "",
-              position: "absolute",
-              top: "4px",
-              right: "3px"
-            }}
-          >
-            fiber_manual_record
-          </i>
         </Tag>
       );
     };
