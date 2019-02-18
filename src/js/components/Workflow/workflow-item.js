@@ -50,35 +50,49 @@ const SubMenu = Menu.SubMenu;
 //////////////////
 /*workflow Head*/
 /////////////////
+
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
+  let subtext = _.map(
+    props.workflow.definition.extra_fields_json,
+    (item, key) => {
+      if ((item.type = "normal")) {
+        return item.label;
+      }
+    }
+  );
+
   return (
-    <Col span={props.isChild ? 7 : 6} className="text-left">
-      {props.link ? (
-        <a
-          href={"/workflows/instances/" + props.workflow.id + "/"}
-          className="text-nounderline "
-        >
-          <span
-            className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
-            title={props.workflow.name}
+    <Col span={props.isChild ? 6 : 5} className="text-left ">
+      <div>
+        {props.link ? (
+          <a
+            href={"/workflows/instances/" + props.workflow.id + "/"}
+            className="text-nounderline "
           >
-            {props.workflow.name}
-          </span>
-        </a>
-      ) : (
-        <Link
-          to={"/workflows/instances/" + props.workflow.id + "/"}
-          className="text-nounderline "
-        >
-          <span
-            className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
-            title={props.workflow.name}
+            <span
+              className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
+              title={props.workflow.name}
+            >
+              {props.workflow.name}
+            </span>
+          </a>
+        ) : (
+          <Link
+            to={"/workflows/instances/" + props.workflow.id + "/"}
+            className="text-nounderline "
           >
-            {props.workflow.name}
-          </span>
-        </Link>
-      )}
+            <span
+              className=" text-base company-name display-inline-block text-middle text-ellipsis "
+              title={props.workflow.name}
+            >
+              {props.workflow.name}
+            </span>
+          </Link>
+        )}
+
+        <div className="lc1 text-ellipsis ">{subtext ? subtext[0] : ""}</div>
+      </div>
     </Col>
   );
 };
@@ -111,71 +125,6 @@ const getAllProgress = group => {
 
   progress = Math.trunc(stepCompleted / allSteps * 100);
   return progress;
-};
-
-const HeaderWorkflowGroup = props => {
-  let progressData = getProgressData(props.workflow);
-  let visible_steps = getVisibleSteps(props.workflow.step_groups);
-  return (
-    <Col span={11}>
-      <div className="group-overview">
-        <div className="overflow-wrapper">
-          <div className="step-ui">
-            {_.map(getProcessedData(props.workflow.step_groups), function(
-              groupitem,
-              index
-            ) {
-              if (!_.size(groupitem.steps)) {
-                // checking for steps inside group
-                return null;
-              }
-              if (!isLockedStepGroupEnable(groupitem, visible_steps)) {
-                return null;
-              }
-              let completed = groupitem.is_complete;
-              let od = groupitem.overdue;
-              let groupProgress = getGroupProgress(groupitem);
-
-              return (
-                <span key={index} className="step-item">
-                  <span className="pd-right-sm">
-                    {groupProgress === 100 ? (
-                      <i className="material-icons text-middle t-16 text-metal">
-                        check_circle
-                      </i>
-                    ) : (
-                      <i className="material-icons text-middle t-16 text-metal">
-                        panorama_fish_eye
-                      </i>
-                    )}
-                  </span>
-                  <span
-                    className={
-                      completed
-                        ? "title-c text-medium t-14 text-metal"
-                        : od
-                          ? "title-c text-red  text-medium t-14"
-                          : "title-c text-metal text-medium t-14"
-                    }
-                  >
-                    {groupitem.definition.name}
-                  </span>
-                </span>
-              );
-            })}
-            <div>
-              <Progress
-                percent={progressData}
-                showInfo={false}
-                strokeColor={"#305ebe"}
-                style={{ height: "4px" }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </Col>
-  );
 };
 
 class HeaderOptions2 extends React.Component {
@@ -247,6 +196,12 @@ class HeaderOptions2 extends React.Component {
     }, 500);
   };
 
+  getComment = object_id => {
+    this.state.loading_sidebar = true;
+    this.state.object_id = object_id;
+    this.props.addComment(object_id, "workflow");
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -288,7 +243,7 @@ class HeaderOptions2 extends React.Component {
         <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
           <span>
             <i className="material-icons t-18 text-middle pd-right-sm">
-              message
+              chat_bubble
             </i>{" "}
             <FormattedMessage id="stepBodyFormInstances.addComments" />
           </span>
@@ -303,88 +258,62 @@ class HeaderOptions2 extends React.Component {
       </Menu>
     );
 
+    let that = this;
     return (
-      <Col span="4" className="text-right">
-        <span className="status-text text-light t-12">
-          {this.state.current}
-        </span>
-
-        {props.showCommentIcon && false ? (
-          <span style={{ position: "relative", right: "25px" }}>
-            <Badge count={5}>
-              <i class="material-icons">comment</i>
-            </Badge>
-          </span>
-        ) : null}
-
-        {this.state.showSidebar ? (
-          <Drawer
-            title="Activity log"
-            placement="right"
-            closable={true}
-            //style={{top:'64px'}}
-            onClose={this.toggleSidebar}
-            visible={this.state.showSidebar}
-            width={500}
-          >
-            <AuditListTabs id={props.workflow.id} />
-          </Drawer>
-        ) : null}
-
-        {this.props.detailsPage ? (
-          <Dropdown
-            overlay={workflowActionMenu}
-            className="child-workflow-dropdown"
-          >
-            <span className="pd-ard-sm text-metal text-anchor">
-              <i className="material-icons text-middle t-18 ">more_vert</i>
+      <Col span="5">
+        <Row>
+          <Col span={14}>
+            <span className="pd-left pd-right status-text text-light t-12">
+              {this.state.current}
             </span>
-          </Dropdown>
-        ) : null}
+          </Col>
+          <Col span={5}>
+            {props.showCommentIcon && props.isEmbedded ? (
+              <span class="float-right">
+                <div class="add_comment_btn">
+                  <span>
+                    <i
+                      class="material-icons  t-18 text-metal"
+                      onClick={that.getComment.bind(that, props.workflow.id)}
+                    >
+                      chat_bubble_outline
+                    </i>
+                  </span>
+                </div>
+              </span>
+            ) : null}
+
+            {this.state.showSidebar ? (
+              <Drawer
+                title="Activity log"
+                placement="right"
+                closable={true}
+                //style={{top:'64px'}}
+                onClose={this.toggleSidebar}
+                visible={this.state.showSidebar}
+                width={500}
+              >
+                <AuditListTabs id={props.workflow.id} />
+              </Drawer>
+            ) : null}
+          </Col>
+          <Col span={5}>
+            {this.props.detailsPage ? (
+              <Dropdown
+                overlay={workflowActionMenu}
+                className="child-workflow-dropdown"
+              >
+                <span className="pd-ard-sm text-metal text-anchor">
+                  <i className="material-icons text-middle t-18 ">more_vert</i>
+                </span>
+              </Dropdown>
+            ) : null}
+          </Col>
+        </Row>
       </Col>
     );
   };
 }
-
-const HeaderOptions = props => {
-  const menu = (
-    <Menu onClick={props.onStatusChange}>
-      {props.statusType
-        ? _.map(props.statusType, function(status) {
-            if (status.label !== props.workflow.status.label) {
-              return <Menu.Item key={status.id}>{status.label}</Menu.Item>;
-            }
-          })
-        : null}
-    </Menu>
-  );
-
-  return (
-    <Col span="5" className="text-right">
-      {props.showCommentIcon && false ? (
-        <span style={{ position: "relative", right: "25px" }}>
-          <Badge count={5}>
-            <i class="material-icons">comment</i>
-          </Badge>
-        </span>
-      ) : null}
-      <Dropdown overlay={menu}>
-        <Button
-          className="main-btn status-btn"
-          type="main"
-          title={props.workflow.status.label}
-        >
-          <span className="status-text">{props.workflow.status.label}</span>
-          <Icon
-            className="pd-left-sm icon"
-            type="down"
-            style={{ fontSize: 11 }}
-          />
-        </Button>
-      </Dropdown>
-    </Col>
-  );
-};
 
 const getIcon = (id, kinds) => {
   let returnKind = _.filter(kinds.workflowKind, ["id", id]);
@@ -419,138 +348,80 @@ class GetMergedData extends React.Component {
 
   render() {
     let props = this.props;
-    const { data } = props;
+    let data = props.workflow.definition.extra_fields_json;
+    let alert_data = _.filter(data, function(v) {
+      return v.type == "alert";
+    });
+    let lc_data = _.filter(data, function(v) {
+      return v.type == "normal";
+    });
     let that = this;
+    //let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
 
-    // const GetType = item => {
-    //   if (item.label) {
-    //     return (
-    //       <span>
-    //         <Tooltip title={item.label + ": " + item.value}>
-    //           <Tag className="alert-tag-item alert-primary  ellip-small">
-    //             {item.label}: {item.value || "N/A"}
-    //           </Tag>
-    //         </Tooltip>
-    //       </span>
-    //     );
-    //   } else if (item.alert) {
-    //     return (
-    //       <Tag
-    //         key={item.alert.id}
-    //         className={
-    //           "alert-tag-item tag-small" + item.alert.category.color_label ||
-    //           "alert-primary"
-    //         }
-    //         color={item.alert.category.color_label || null}
-    //       >
-    //         <Link
-    //           to={
-    //             "/workflows/instances/" +
-    //             item.workflow +
-    //             "/" +
-    //             "?group=" +
-    //             item.step_group +
-    //             "&step=" +
-    //             item.step
-    //           }
-    //         >
-    //           {item.alert.category.name}
-    //         </Link>
-    //       </Tag>
-    //     );
-    //   }
-    // };
+    console.log("lc_data----------");
+    console.log(lc_data);
+    console.log(alert_data);
+
+    const expander = data => {
+      if (_.size(data)) {
+        return (
+          <span
+            className="text-anchor text-middle float-right text-light"
+            onClick={this.toggleExpand}
+          >
+            {this.state.expanded ? "-" : "+"} {_.size(data) - 2}
+          </span>
+        );
+      } else {
+        return;
+      }
+    };
+
+    const LcItem = (item, index) => {
+      return (
+        <span
+          key={index}
+          className="pd-right t-12 text-middle pd-bottom-sm ellip-small text-light"
+        >
+          <Tooltip title={item.label}>{item.label}</Tooltip>
+        </span>
+      );
+    };
+
+    const AlertItem = (item, index) => {
+      return (
+        <Tag key={index} className="v-tag ellip-small text-metal">
+          <Tooltip title={item.label}>{item.label}</Tooltip>
+        </Tag>
+      );
+    };
 
     return (
       <div className="group-overviewl">
         <div className="overflow-wrapper">
           <div className="step-ui">
-            {_.map(data, function(item, index) {
-              if (index < 3) {
-                if (item.label) {
-                  return (
-                    <span>
-                      <Tooltip title={item.label + ": " + item.value}>
-                        <Tag className="alert-tag-item alert-primary  ellip-small">
-                          {item.label}: {item.value || "N/A"}
-                        </Tag>
-                      </Tooltip>
-                    </span>
-                  );
-                } else if (item.alert) {
-                  return (
-                    <Tag
-                      key={item.alert.id}
-                      className={
-                        "alert-tag-item tag-small" +
-                          item.alert.category.color_label || "alert-primary"
-                      }
-                      color={item.alert.category.color_label || null}
-                    >
-                      <Link
-                        to={
-                          "/workflows/instances/" +
-                          item.workflow +
-                          "/" +
-                          "?group=" +
-                          item.step_group +
-                          "&step=" +
-                          item.step
-                        }
-                      >
-                        {item.alert.category.name}
-                      </Link>
-                    </Tag>
-                  );
-                }
-              } else if (that.state.expanded) {
-                if (item.label) {
-                  return (
-                    <span>
-                      <Tooltip title={item.label + ": " + item.value}>
-                        <Tag className="alert-tag-item alert-primary  ellip-small">
-                          {item.label}: {item.value || "N/A"}
-                        </Tag>
-                      </Tooltip>
-                    </span>
-                  );
-                } else if (item.alert) {
-                  return (
-                    <Tag
-                      key={item.alert.id}
-                      className={
-                        "alert-tag-item tag-small" +
-                          item.alert.category.color_label || "alert-primary"
-                      }
-                      color={item.alert.category.color_label || null}
-                    >
-                      <Link
-                        to={
-                          "/workflows/instances/" +
-                          item.workflow +
-                          "/" +
-                          "?group=" +
-                          item.step_group +
-                          "&step=" +
-                          item.step
-                        }
-                      >
-                        {item.alert.category.name}
-                      </Link>
-                    </Tag>
-                  );
-                }
-              }
-            })}
+            {_.size(alert_data)
+              ? _.map(alert_data, function(item, index) {
+                  let count = index + 1;
+                  _.map(lc_data, function(item, index) {
+                    count = count + 1;
+                    if (count < 3) {
+                      return AlertItem(item, index);
+                    } else if (that.state.expanded) {
+                      return AlertItem(item, index);
+                    }
+                  });
+                })
+              : _.map(lc_data, function(item, index) {
+                  let count = index + 1;
+                  if (count < 3) {
+                    return LcItem(item, index);
+                  } else if (that.state.expanded) {
+                    return LcItem(item, index);
+                  }
+                })}
 
-            {props.data.length > 3 ? (
-              <span
-                className="text-anchor text-middle float-right"
-                onClick={this.toggleExpand}
-              >
-                {this.state.expanded ? "-" : "+"} {props.data.length - 3}
-              </span>
-            ) : null}
+            {expander(_.size(alert_data) ? alert_data : lc_data)}
           </div>
         </div>
       </div>
@@ -637,22 +508,15 @@ const GetAlertData = props => {
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
-  let mergedData = [];
 
-  if (props.isEmbedded) {
-    if (_.size(props.workflow.lc_data)) {
-      _.forEach(props.workflow.lc_data, function(lcitem) {
-        mergedData.push(lcitem);
-      });
+  let subtext = _.map(
+    props.workflow.definition.extra_fields_json,
+    (item, key) => {
+      if ((item.type = "normal")) {
+        return item.label;
+      }
     }
-
-    if (_.size(props.workflow.alerts)) {
-      _.forEach(props.workflow.alerts, function(lcitem) {
-        mergedData.push(lcitem);
-      });
-    }
-  }
-
+  );
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
@@ -698,24 +562,15 @@ export const WorkflowHeader = props => {
         )}
 
         <HeaderTitle {...props} />
-
-        {props.isEmbedded && _.size(mergedData) ? (
-          <Col span={11}>
-            <GetMergedData data={mergedData} />
-          </Col>
-        ) : _.size(props.workflow.alerts) ? (
-          <Col span={11}>
-            <GetAlertData {...props} />
-          </Col>
-        ) : (
-          <HeaderWorkflowGroup
-            {...props}
-            //progressData={progressData}
-            pdata={proccessedData}
-          />
-        )}
-
-        <Col span="2" className="text-center">
+        <Col span={4} className="t-12 text-light pd-right-sm">
+          <div className="text-ellipsis">
+            {subtext.length >= 2 ? subtext[1] : ""}
+          </div>
+        </Col>
+        <Col span={7}>
+          <GetMergedData {...props} />
+        </Col>
+        <Col span={2} className="text-center">
           {props.workflow.sorting_primary_field ? (
             <Badge
               count={<span>{props.workflow.sorting_primary_field}</span>}
@@ -741,6 +596,8 @@ export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
       <div className="lc-card-section">
+        <LcData {...props} />
+
         {!props.statusView ? (
           <Row align="top">
             <Col span={24}>
@@ -752,6 +609,22 @@ export const WorkflowBody = props => {
         )}
       </div>
       <MetaRow {...props} />
+    </div>
+  );
+};
+
+const LcData = props => {
+  let lcdata = props.workflow.definition.extra_fields_json;
+  let lcdataList = _.map(lcdata, (item, key) => {
+    if (item.type === "normal") {
+      return <span className="lc-data-item text-medium">{item.label}</span>;
+    }
+  });
+
+  return (
+    <div className="shadow-wrapper shadow-lc">
+      <div className="lc-data-wrapper">{lcdataList}</div>
+      <div className="white-shadow" />
     </div>
   );
 };
@@ -869,59 +742,62 @@ class MetaRow extends React.Component {
 const StepGroupList = props => {
   let visible_steps = getVisibleSteps(props.pData);
   return (
-    <div className="sub-step-list">
-      <ul className="groupaz-list" id="groupaz-list">
-        {_.map(props.pData, function(group, index) {
-          let completed = group.completed;
-          let od = group.overdue;
+    <div className="shadow-wrapper">
+      <div className="sub-step-list">
+        <ul className="groupaz-list" id="groupaz-list">
+          {_.map(props.pData, function(group, index) {
+            let completed = group.completed;
+            let od = group.overdue;
 
-          if (!_.size(group.steps)) {
-            return null;
-          }
-          if (!isLockedStepGroupEnable(group, visible_steps)) {
-            return null;
-          }
-          return (
-            <li className="groupaz" key={"group-" + index}>
-              <div
-                className={
-                  "lc-step grp-class step-group-status text-ellipsis  " +
-                  group.definition.status
-                }
-              >
-                <span
+            if (!_.size(group.steps)) {
+              return null;
+            }
+            if (!isLockedStepGroupEnable(group, visible_steps)) {
+              return null;
+            }
+            return (
+              <li className="groupaz" key={"group-" + index}>
+                <div
                   className={
-                    "grp-name " +
-                    (completed
-                      ? "text-metal text-medium"
-                      : od ? "text-red text-red" : "text-metal  text-normal")
+                    "lc-step grp-class step-group-status text-ellipsis  " +
+                    group.definition.status
                   }
                 >
-                  <i className="material-icons mr-right-lg ">
-                    {completed ? "check_circle" : "panorama_fish_eye"}
-                  </i>
-                  <span className=" pd-left-sm t-14">
-                    {group.definition.name}
+                  <span
+                    className={
+                      "grp-name " +
+                      (completed
+                        ? "text-metal text-medium"
+                        : od ? "text-red text-red" : "text-metal  text-normal")
+                    }
+                  >
+                    <i className="material-icons mr-right-lg ">
+                      {completed ? "check_circle" : "panorama_fish_eye"}
+                    </i>
+                    <span className=" pd-left-sm t-14">
+                      {group.definition.name}
+                    </span>
                   </span>
-                </span>
-              </div>
-              <ul>
-                {_.map(group.steps, function(steps, index) {
-                  return (
-                    <StepItem
-                      {...props}
-                      stepData={steps}
-                      group={group}
-                      visible_steps={visible_steps}
-                      key={"step-" + index}
-                    />
-                  );
-                })}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
+                </div>
+                <ul>
+                  {_.map(group.steps, function(steps, index) {
+                    return (
+                      <StepItem
+                        {...props}
+                        stepData={steps}
+                        group={group}
+                        visible_steps={visible_steps}
+                        key={"step-" + index}
+                      />
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="white-shadow" />
     </div>
   );
 };

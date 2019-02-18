@@ -95,8 +95,6 @@ class Workflow extends Component {
     // if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind ) {
     //     this.reloadWorkflowList();
     // }
-
-
   };
 
   getDefaultKind = config_loaded => {
@@ -179,7 +177,6 @@ class Workflow extends Component {
 
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
-        
         <FilterSidebar />
 
         <Layout
@@ -189,33 +186,30 @@ class Workflow extends Component {
           <div className="section-top">
             <Tabs defaultActiveKey="1" size="small">
               <TabPane tab="Task queue" key="1">
-                {this.state.defKind ? <WorkflowFilterTop {...this.props} /> : null}
+                {this.state.defKind ? (
+                  <WorkflowFilterTop {...this.props} />
+                ) : null}
               </TabPane>
               <TabPane tab="Alerts" key="2">
                 {this.state.defKind ? <AlertFilter {...this.props} /> : null}
               </TabPane>
             </Tabs>
 
-              
-
-              
-              <br/>
+            <br />
           </div>
 
           {this.props.workflow.loading ? null : this.props.workflow
             .loadingStatus === "failed" ? null : (
             <Row className="list-view-header t-14 ">
-              <Col span="7">
+              <Col span="6">
                 <div className="workflow-count text-metal">
                   {this.props.workflow.count}{" "}
                   <FormattedMessage id="workflowsInstances.workflowsCount" />
                 </div>
               </Col>
-              <Col span="11" className="text-metal">
-                <span style={{ paddingLeft: "16px" }}>
-                  <FormattedMessage id="workflowsInstances.stepGroupName" />
-                </span>
-              </Col>
+              <Col span={4} />
+              <Col span={7} className="text-metal" />
+
               <Col span="2" className="text-secondary text-center">
                 {this.props.workflowFilters.kind.meta
                   .is_sorting_field_enabled ? (
@@ -240,7 +234,8 @@ class Workflow extends Component {
                   </Tooltip>
                 ) : null}
               </Col>
-              <Col span="4" className="text-metal text-center">
+
+              <Col span="2" className="text-metal text-center">
                 <FormattedMessage id="workflowsInstances.statusText" />
               </Col>
             </Row>

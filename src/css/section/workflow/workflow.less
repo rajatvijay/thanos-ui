@@ -67,7 +67,7 @@
     }
   }
   .Collapsible {
-    cursor: pointer;
+    //cursor: pointer;
     background-color: @color-white;
     //margin-bottom: 10px;
     .ant-collapse-header {
@@ -79,7 +79,7 @@
   }
   .child-workflow-expander {
     position: absolute;
-    left: 0px;
+    left: -3px;
     z-index: 1;
     width: 30px;
     height: auto;
@@ -87,18 +87,21 @@
     line-height: 89px;
     text-align: center;
     display: inline-block;
-    top: 0;
+    top: -9px;
     i {
       font-size: 16px;
       color: @color-text;
     }
   }
   .child-workflow-wrapper {
+    //border-top: 1px solid #d9d9d9;
     padding-left: 30px;
   }
   .paper {
     margin-bottom: 58px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+    padding: 4px;
+    background: #fff;
     .workflow-list-item {
       transition: margin 0.3s ease;
       border-bottom: 1px solid lighten(@color-grey-light, 38%);
@@ -107,18 +110,28 @@
         border-bottom: none;
       }
 
-      .Collapsible {
+      .ant-collapse-header {
         //box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
         margin-bottom: 0;
+        //border-bottom: 1px solid #f2f5fa;
+        position: relative;
+        border-radius: 2px;
+        transition: all 0.3s ease-in;
+        &:hover {
+          background: #f2f5fa;
+        }
       }
       &.opened {
         //margin: 32px -20px;
-        margin-top: 4px;
-        margin-bottom: 4px;
-        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+        //margin-top: 4px;
+        //margin-bottom: 4px;
+        box-shadow: none; //0 2px 6px 0 rgba(0, 0, 0, 0.15);
         border-bottom: 1px solid #f2f5fa;
         .Collapsible {
           border: none;
+        }
+        > .ant-collapse-header {
+          background: #f2f5fa;
         }
       }
     }
@@ -156,6 +169,13 @@
   padding: 0px 0px;
   .company-name {
     font-size: 14px;
+    padding-left: 8px;
+    padding-right: 20px;
+    font-weight: bold;
+  }
+  .lc1 {
+    font-size: 10px;
+    color: @color-grey;
     padding-left: 8px;
     padding-right: 20px;
   }
@@ -241,11 +261,60 @@
 
 //LC CARD EXPANDED VIEW
 .lc-card {
+  .lc-data-wrapper {
+    border-bottom: 1px solid @color-grey-d;
+    padding: 0px 24px 18px;
+    margin: 0px -24px 18px;
+    white-space: nowrap;
+    list-style: none;
+    overflow: auto;
+    .lc-data-item {
+      font-weight: medium;
+      font-size: 12px;
+      margin-right: 40px;
+      color: @color-metal;
+    }
+  }
   .sub-step-list {
     display: block;
     overflow-x: auto;
   }
   .lc-card-body {
+    .shadow-wrapper {
+      position: relative;
+    }
+    .white-shadow {
+      position: absolute;
+      height: 100%;
+      width: 40px;
+      background: -moz-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+      );
+      background: -webkit-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+      );
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+      );
+      filter: progid:DXImageTransform.Microsoft.gradient(
+          startColorstr="#00ffffff",
+          endColorstr="#ffffff",
+          GradientType=1
+        );
+      right: 0;
+      top: 0;
+    }
+    .shadow-lc .white-shadow {
+      right: -24px;
+      height: 90%;
+      top: -1px;
+    }
     //padding: 28px;
     border-top: 1px solid #d9d9d9;
     .lc-card-section {

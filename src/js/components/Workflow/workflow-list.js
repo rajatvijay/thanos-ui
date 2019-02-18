@@ -239,7 +239,7 @@ class WorkflowItem extends React.Component {
             <span
               className="child-workflow-expander text-anchor "
               onClick={this.expandChildWorkflow}
-              title="Show child workflow"
+              title="Show related workflow"
             >
               <i className="material-icons" style={{ verticalAlign: "middle" }}>
                 {this.state.showRelatedWorkflow ? "remove" : "add"}

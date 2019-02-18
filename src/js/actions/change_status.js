@@ -1,6 +1,8 @@
-import { changeStatusConstants } from "../constants";
+import { changeStatusConstants, workflowCommentsConstants } from "../constants";
 import { changeStatusService } from "../services";
 import { notification } from "antd";
+import { workflowDetailsActions } from "../actions";
+import _ from "lodash";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -10,7 +12,10 @@ const openNotificationWithIcon = data => {
   });
 };
 
-export const changeStatusActions = payload => async dispatch => {
+export const changeStatusActions = (
+  payload,
+  step_reload_payload
+) => async dispatch => {
   dispatch({ type: changeStatusConstants.CHANGE_REQUEST, payload });
   try {
     const response = await changeStatusService.update(payload);
@@ -19,10 +24,20 @@ export const changeStatusActions = payload => async dispatch => {
       response: response
     });
 
+    if (_.size(step_reload_payload)) {
+      dispatch(workflowDetailsActions.getStepFields(step_reload_payload));
+    }
+
     openNotificationWithIcon({
       type: "success",
       message: "Status changed."
     });
+    if (payload.addComment) {
+      dispatch({
+        type: workflowCommentsConstants.ADD_COMMENTS_SUCCESS,
+        response
+      });
+    }
   } catch (error) {
     console.log(error);
     dispatch({ type: changeStatusConstants.CHANGE_FAILURE, error });

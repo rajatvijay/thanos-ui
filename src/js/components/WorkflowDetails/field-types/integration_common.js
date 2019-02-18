@@ -17,6 +17,14 @@ export const integrationCommonFunctions = {
 };
 
 function comment_answer_body(c) {
+  if (_.size(c.target.workflow_details)) {
+    return (
+      <div className="text-bold t-16 mr-top">
+        {workflow_comment_html(c.target)}
+      </div>
+    );
+  }
+
   if (!_.size(c.target.field_details)) {
     return null;
   }
@@ -24,43 +32,43 @@ function comment_answer_body(c) {
   if (c.target.field_details.is_integration_type) {
     if (c.target.field_details.type == "dnb_livingstone") {
       return (
-        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        <div className="text-bold t-16 mr-top">
           {dnb_livingston_html(c.target.row_json)}
         </div>
       );
     } else if (c.target.field_details.type == "dnb_ubo") {
       return (
-        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        <div className="text-bold t-16 mr-top">
           {dnb_ubo_html(c.target.row_json)}
         </div>
       );
     } else if (c.target.field_details.type == "dnb_directors") {
       return (
-        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        <div className="text-bold t-16 mr-top">
           {dnb_directors_html(c.target.row_json)}
         </div>
       );
     } else if (c.target.field_details.type == "google_search") {
       return (
-        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        <div className="text-bold t-16 mr-top">
           {google_search_html(c.target.row_json)}
         </div>
       );
     } else if (c.target.field_details.type == "ln_search") {
       return (
-        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        <div className="text-bold t-16 mr-top">
           {lexisnexis_html(c.target.row_json)}
         </div>
       );
     } else if (c.target.field_details.type == "thomson_reuters_screenresult") {
       return (
-        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        <div className="text-bold t-16 mr-top">
           {tr_results_html(c.target.row_json)}
         </div>
       );
     } else if (c.target.field_details.type == "rdc_event_details") {
       return (
-        <div style={{ marginTop: "10px", fontSize: "14px" }}>
+        <div className="text-bold t-16 mr-top">
           {rdc_event_details(c.target.row_json)}
         </div>
       );
@@ -798,6 +806,14 @@ function dnb_rdc_html(record) {
           {alias_html ? alias_html : null}
         </Col>
       </Row>
+    </div>
+  );
+}
+
+function workflow_comment_html(record) {
+  return (
+    <div>
+      <span>{record.name}</span>
     </div>
   );
 }

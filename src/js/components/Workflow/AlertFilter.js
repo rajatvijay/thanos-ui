@@ -90,11 +90,12 @@ class AlertFilter extends Component {
       }
 
       return (
-        <span
+        <Tag
           key={item.id}
           className={
-            "pd-right-lg text-anchor pd-bottom-sm  t-12 text-secondary " +
-            (activeFilter[0] === item.tag ? "text-bold " : " ")
+            "v-tag   pd-bottom-sm  t-12 " +
+            (activeFilter[0] === item.tag ? "text-bold alert-active " : " ") +
+            (item.color_label ? null : " alert-metal")
           }
           color={item.color_label || null}
           onClick={that.handleClick.bind(that, item)}
@@ -109,7 +110,7 @@ class AlertFilter extends Component {
               fiber_manual_record
             </i>
           ) : null}
-        </span>
+        </Tag>
       );
     });
 

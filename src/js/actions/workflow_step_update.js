@@ -329,14 +329,17 @@ function undoStep(payload) {
 ////////////////////
 //Adding a Commnt //
 ////////////////////
-function addComment(payload) {
+function addComment(payload, step_reload_payload) {
   return dispatch => {
     //dispatch(request(payload));
 
     workflowStepService.addComment(payload).then(
       commentData => {
         dispatch(success(commentData));
-        if (_.size(commentData.results)) {
+        if (
+          _.size(commentData.results) &&
+          !commentData.results[0].target.workflow_details
+        ) {
           let stepTrack = {
             workflowId: commentData.results[0].target.workflow,
             groupId: commentData.results[0].target.step_group_details.id,
@@ -344,6 +347,8 @@ function addComment(payload) {
             doNotRefresh: true
           };
           dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        } else if (_.size(step_reload_payload)) {
+          dispatch(workflowDetailsActions.getStepFields(step_reload_payload));
         }
       },
       error => dispatch(failure(error))
@@ -384,7 +389,10 @@ function updateFlag(payload) {
     workflowStepService.updateFlag(payload).then(
       commentData => {
         dispatch(success(commentData));
-        if (_.size(commentData.results)) {
+        if (
+          _.size(commentData.results) &&
+          !commentData.results[0].target.workflow_details
+        ) {
           let stepTrack = {
             workflowId: commentData.results[0].target.workflow,
             groupId: commentData.results[0].target.step_group_details.id,
