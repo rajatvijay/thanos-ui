@@ -228,13 +228,21 @@ class ChildWorkflowField2 extends Component {
         {_.map(filter_tag_count, function(v, k) {
           return (
             <Tag
-              style={styling[k]}
               className="alert-tag-item alert-metal"
               onClick={that.onFilterTagChange.bind(that, k)}
             >
               <Tooltip title={k}>
                 <span className="ellip-small s50">{k} </span>
-                <span className="ellip-small s50">({v})</span>
+                <span className="ellip-small s50">({v}) </span>
+
+                {styling && styling[k] ? (
+                  <i
+                    style={{ color: styling[k].color }}
+                    className="material-icons ellip-small s50 t-12 text-middle"
+                  >
+                    fiber_manual_records
+                  </i>
+                ) : null}
               </Tooltip>
             </Tag>
           );

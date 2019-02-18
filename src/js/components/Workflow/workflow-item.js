@@ -353,13 +353,13 @@ class GetMergedData extends React.Component {
 
     let data = props.workflow.lc_data;
     let alert_data = _.filter(data, function(v) {
-      return v.type == "alert" && v.value != "";
+      return v.type == "alert";
     });
     let lc_data = _.filter(data, function(v) {
       return v.type == "normal" && v.value != "";
     });
     let that = this;
-    //let styling = props.field.definition.extra.lc_data_colorcodes || {};
+    let styling = props.field.definition.extra.lc_data_colorcodes || {};
 
     const expander = data => {
       if (_.size(data) > 2) {
@@ -378,12 +378,22 @@ class GetMergedData extends React.Component {
 
     const LcItem = (item, index) => {
       return (
-        <span
-          key={index}
-          className="pd-right t-12 text-middle ellip-small text-light"
-        >
+        <span key={index} className="pd-right t-12 text-middle text-light">
           <Tooltip title={item.label + ": " + item.value}>
-            {item.label + ": " + item.value}
+            <span>
+              <span className="ellip-small s50">
+                {item.label + ": " + item.value}
+              </span>
+
+              {styling && styling[item.label] ? (
+                <i
+                  style={{ color: styling[item.label].color }}
+                  className="material-icons ellip-small s50 t-12 text-middle"
+                >
+                  fiber_manual_records
+                </i>
+              ) : null}
+            </span>
           </Tooltip>
         </span>
       );
@@ -391,13 +401,21 @@ class GetMergedData extends React.Component {
 
     const AlertItem = (item, index) => {
       return (
-        <Tag
-          key={index}
-          className="v-tag ellip-small text-metal"
-          style={{ position: "relative" }}
-        >
-          <Tooltip title={item.label + ": " + item.value}>
-            {item.label}: {item.value}
+        <Tag key={index} className="v-tag text-metal">
+          <Tooltip title={item.label}>
+            <span>
+              <span className="ellip-small s50">
+                {item.label + ": " + item.value}
+              </span>
+              {styling && styling[item.label] ? (
+                <i
+                  style={{ color: styling[item.label].color }}
+                  className="material-icons ellip-small s50 t-12 text-middle"
+                >
+                  fiber_manual_records
+                </i>
+              ) : null}
+            </span>
           </Tooltip>
         </Tag>
       );
