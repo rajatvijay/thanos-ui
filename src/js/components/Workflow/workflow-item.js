@@ -397,7 +397,7 @@ class GetMergedData extends React.Component {
           <i
             class="material-icons t-12 text-middle"
             style={{
-              color: styling[item.label].color,
+              color: styling ? styling[item.label].color : "",
               position: "absolute",
               top: "4px",
               right: "3px"
