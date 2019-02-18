@@ -86,7 +86,9 @@ const HeaderTitle = props => {
           </Link>
         )}
 
-        <div className="lc1 text-ellipsis ">{subtext ? subtext[0] : ""}</div>
+        <div className="lc1 text-ellipsis ">
+          {_.size(subtext) ? subtext[0].value : ""}
+        </div>
       </div>
     </Col>
   );
