@@ -53,14 +53,10 @@ const SubMenu = Menu.SubMenu;
 
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
-  let subtext = _.map(
-    props.workflow.definition.extra_fields_json,
-    (item, key) => {
-      if ((item.type = "normal")) {
-        return item.label;
-      }
-    }
-  );
+  let lc_data_normal = props.workflow.lc_data;
+  let subtext = _.filter(lc_data_normal, function(v) {
+    return v.type == "normal" && v.value != "";
+  });
 
   return (
     <Col span={props.isChild ? 6 : 5} className="text-left ">
@@ -349,22 +345,21 @@ class GetMergedData extends React.Component {
 
   render() {
     let props = this.props;
-    let data = props.workflow.definition.extra_fields_json;
+    if (!props.field) {
+      return <span />;
+    }
+    let data = props.workflow.lc_data;
     let alert_data = _.filter(data, function(v) {
-      return v.type == "alert";
+      return v.type == "alert" && v.value != "";
     });
     let lc_data = _.filter(data, function(v) {
-      return v.type == "normal";
+      return v.type == "normal" && v.value != "";
     });
     let that = this;
-    //let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
-
-    console.log("lc_data----------");
-    console.log(lc_data);
-    console.log(alert_data);
+    let styling = props.field.definition.extra.lc_data_colorcodes || {};
 
     const expander = data => {
-      if (_.size(data)) {
+      if (_.size(data) && _.size(data) > 2) {
         return (
           <span
             className="text-anchor text-middle float-right text-light"
@@ -384,15 +379,32 @@ class GetMergedData extends React.Component {
           key={index}
           className="pd-right t-12 text-middle ellip-small text-light"
         >
-          <Tooltip title={item.label}>{item.label}</Tooltip>
+          <Tooltip title={item.label}>{item.value}</Tooltip>
         </span>
       );
     };
 
     const AlertItem = (item, index) => {
       return (
-        <Tag key={index} className="v-tag ellip-small text-metal">
-          <Tooltip title={item.label}>{item.label}</Tooltip>
+        <Tag
+          key={index}
+          className="v-tag ellip-small text-metal"
+          style={{ position: "relative" }}
+        >
+          <Tooltip title={item.label + ": " + item.value}>
+            {item.label}: {item.value}
+          </Tooltip>
+          <i
+            class="material-icons t-12 text-middle"
+            style={{
+              color: styling[item.label].color,
+              position: "absolute",
+              top: "4px",
+              right: "3px"
+            }}
+          >
+            fiber_manual_record
+          </i>
         </Tag>
       );
     };
@@ -404,14 +416,14 @@ class GetMergedData extends React.Component {
             {_.size(alert_data)
               ? _.map(alert_data, function(item, index) {
                   let count = index + 1;
-                  _.map(lc_data, function(item, index) {
-                    count = count + 1;
-                    if (count < 3) {
-                      return AlertItem(item, index);
-                    } else if (that.state.expanded) {
-                      return AlertItem(item, index);
-                    }
-                  });
+                  //_.map(lc_data, function(item, index) {
+                  //  count = count + 1;
+                  if (count < 3) {
+                    return AlertItem(item, index);
+                  } else if (that.state.expanded) {
+                    return AlertItem(item, index);
+                  }
+                  //});
                 })
               : _.map(lc_data, function(item, index) {
                   let count = index + 1;
@@ -510,14 +522,10 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
 
-  let subtext = _.map(
-    props.workflow.definition.extra_fields_json,
-    (item, key) => {
-      if ((item.type = "normal")) {
-        return item.label;
-      }
-    }
-  );
+  let lc_data_normal = props.workflow.lc_data;
+  let subtext = _.filter(lc_data_normal, function(v) {
+    return v.type == "normal" && v.value != "";
+  });
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
@@ -565,7 +573,7 @@ export const WorkflowHeader = props => {
         <HeaderTitle {...props} />
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
-            {subtext.length >= 2 ? subtext[1] : ""}
+            {subtext.length >= 2 ? subtext.value : ""}
           </div>
         </Col>
         <Col span={7}>
