@@ -381,7 +381,7 @@ class GetMergedData extends React.Component {
       return (
         <span
           key={index}
-          className="pd-right t-12 text-middle pd-bottom-sm ellip-small text-light"
+          className="pd-right t-12 text-middle ellip-small text-light"
         >
           <Tooltip title={item.label}>{item.label}</Tooltip>
         </span>
