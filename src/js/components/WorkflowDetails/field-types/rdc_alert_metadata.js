@@ -133,12 +133,6 @@ const buildDetails = obj => {
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
         <Tabs defaultActiveKey="1">
-          <TabPane tab="Event details" key="1">
-            <div>
-              <EventDetailComp obj={obj} />
-            </div>
-          </TabPane>
-
           <TabPane tab="Alias" key="2">
             <Row gutter={16} className="mr-bottom-lg">
               {_.map(obj.Alias, function(aliasItem) {

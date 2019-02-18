@@ -54,7 +54,7 @@ const SubMenu = Menu.SubMenu;
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return (item.type = "normal" && item.value !== "");
+    return item.display_type == "normal" && item.value;
   });
 
   return (
@@ -339,11 +339,6 @@ class GetMergedData extends React.Component {
     };
   }
 
-  componentDidMount = () => {
-    console.log("this.props----");
-    console.log(this.props);
-  };
-
   toggleExpand = () => {
     this.setState({ expanded: !this.state.expanded });
   };
@@ -358,22 +353,18 @@ class GetMergedData extends React.Component {
     let data = this.props.workflow.lc_data;
 
     let alert_data = _.filter(data, function(v) {
-      return v.type == "alert";
+      return v.type == "alert" && v.value;
     });
 
     let lc_data = _.filter(data, function(v) {
-      return v.type == "normal" && v.value !== "";
+      return v.type == "normal" && v.value;
     });
-
-    console.log("lc_data");
-    console.log(alert_data);
-    console.log(lc_data);
 
     let that = this;
     let styling =
       props.field && props.field.definition
         ? props.field.definition.extra.lc_data_colorcodes
-        : null;
+        : {};
 
     const expander = data => {
       if (_.size(data) && _.size(data) > 2) {
@@ -416,7 +407,7 @@ class GetMergedData extends React.Component {
     const AlertItem = (item, index) => {
       return (
         <Tag key={index} className="v-tag text-metal">
-          <Tooltip title={item.label}>
+          <Tooltip title={item.label + ": " + item.value}>
             <span>
               <span className="ellip-small s50">
                 {item.label + ": " + item.value}
@@ -424,7 +415,12 @@ class GetMergedData extends React.Component {
 
               {styling && styling[item.label] ? (
                 <i
-                  style={{ color: styling[item.label].color }}
+                  style={{
+                    color: styling[item.label].color,
+                    position: "relative",
+                    top: "-7px",
+                    right: "-23px"
+                  }}
                   className="material-icons ellip-small s50 t-12 text-middle"
                 >
                   fiber_manual_records
@@ -548,7 +544,7 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return (item.type = "normal" && item.value);
+    return item.display_type == "normal" && item.value;
   });
   return (
     <div className="ant-collapse-header">
@@ -598,9 +594,11 @@ export const WorkflowHeader = props => {
 
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
-            {_.size(subtext) >= 2
-              ? subtext[0].label + ": " + subtext[1].value
-              : ""}
+            {_.size(subtext) >= 2 ? (
+              <Tooltip title={subtext[1].label}>{subtext[1].value}</Tooltip>
+            ) : (
+              ""
+            )}
           </div>
         </Col>
 
@@ -654,7 +652,7 @@ export const WorkflowBody = props => {
 const LcData = props => {
   let lcdata = props.workflow.lc_data;
   let lcdataList = _.map(lcdata, (item, key) => {
-    if (item.type === "normal") {
+    if (item.display_type === "normal") {
       return <span className="lc-data-item text-medium">{item.label}</span>;
     }
   });
