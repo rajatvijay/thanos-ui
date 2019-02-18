@@ -53,9 +53,8 @@ const SubMenu = Menu.SubMenu;
 
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
-  let lc_data_normal = props.workflow.lc_data;
-  let subtext = _.filter(lc_data_normal, function(v) {
-    return v.type == "normal" && v.value != "";
+  let subtext = _.filter(props.workflow.lc_data, (item, key) => {
+    return (item.type = "normal" && item.value !== "");
   });
 
   return (
@@ -346,9 +345,11 @@ class GetMergedData extends React.Component {
 
   render() {
     let props = this.props;
+
     if (!props.field) {
       return <span />;
     }
+
     let data = props.workflow.lc_data;
     let alert_data = _.filter(data, function(v) {
       return v.type == "alert" && v.value != "";
@@ -380,20 +381,18 @@ class GetMergedData extends React.Component {
           key={index}
           className="pd-right t-12 text-middle ellip-small text-light"
         >
-          <Tooltip title={item.label}>{item.value}</Tooltip>
+          <Tooltip title={item.label + ": " + item.value}>
+            {item.label + ": " + item.value}
+          </Tooltip>
         </span>
       );
     };
 
     const AlertItem = (item, index) => {
       return (
-        <Tag
-          key={index}
-          className="v-tag ellip-small text-metal"
-          style={{ position: "relative" }}
-        >
+        <Tag key={index} className="v-tag ellip-small text-metal">
           <Tooltip title={item.label + ": " + item.value}>
-            {item.label}: {item.value}
+            {item.label + ": " + item.value}
           </Tooltip>
         </Tag>
       );
@@ -406,14 +405,11 @@ class GetMergedData extends React.Component {
             {_.size(alert_data)
               ? _.map(alert_data, function(item, index) {
                   let count = index + 1;
-                  //_.map(lc_data, function(item, index) {
-                  //  count = count + 1;
                   if (count < 3) {
                     return AlertItem(item, index);
                   } else if (that.state.expanded) {
                     return AlertItem(item, index);
                   }
-                  //});
                 })
               : _.map(lc_data, function(item, index) {
                   let count = index + 1;
@@ -511,10 +507,8 @@ const GetAlertData = props => {
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
-
-  let lc_data_normal = props.workflow.lc_data;
-  let subtext = _.filter(lc_data_normal, function(v) {
-    return v.type == "normal" && v.value != "";
+  let subtext = _.filter(props.workflow.lc_data, (item, key) => {
+    return (item.type = "normal" && item.value !== "");
   });
   return (
     <div className="ant-collapse-header">
