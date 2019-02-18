@@ -53,14 +53,9 @@ const SubMenu = Menu.SubMenu;
 
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
-  let subtext = _.map(
-    props.workflow.definition.extra_fields_json,
-    (item, key) => {
-      if ((item.type = "normal")) {
-        return item.label;
-      }
-    }
-  );
+  let subtext = _.filter(props.workflow.lc_data, (item, key) => {
+    return (item.type = "normal" && item.value !== "");
+  });
 
   return (
     <Col span={props.isChild ? 6 : 5} className="text-left ">
@@ -348,7 +343,7 @@ class GetMergedData extends React.Component {
 
   render() {
     let props = this.props;
-    let data = props.workflow.definition.extra_fields_json;
+    let data = props.workflow.lc_data;
     let alert_data = _.filter(data, function(v) {
       return v.type == "alert";
     });
@@ -363,7 +358,7 @@ class GetMergedData extends React.Component {
     console.log(alert_data);
 
     const expander = data => {
-      if (_.size(data)) {
+      if (_.size(data) > 2) {
         return (
           <span
             className="text-anchor text-middle float-right text-light"
@@ -383,7 +378,9 @@ class GetMergedData extends React.Component {
           key={index}
           className="pd-right t-12 text-middle ellip-small text-light"
         >
-          <Tooltip title={item.label}>{item.label}</Tooltip>
+          <Tooltip title={item.label + ": " + item.value}>
+            {item.label + ": " + item.value}
+          </Tooltip>
         </span>
       );
     };
@@ -391,7 +388,9 @@ class GetMergedData extends React.Component {
     const AlertItem = (item, index) => {
       return (
         <Tag key={index} className="v-tag ellip-small text-metal">
-          <Tooltip title={item.label}>{item.label}</Tooltip>
+          <Tooltip title={item.label + ": " + item.value}>
+            {item.label + ": " + item.value}
+          </Tooltip>
         </Tag>
       );
     };
@@ -403,14 +402,12 @@ class GetMergedData extends React.Component {
             {_.size(alert_data)
               ? _.map(alert_data, function(item, index) {
                   let count = index + 1;
-                  _.map(lc_data, function(item, index) {
-                    count = count + 1;
-                    if (count < 3) {
-                      return AlertItem(item, index);
-                    } else if (that.state.expanded) {
-                      return AlertItem(item, index);
-                    }
-                  });
+                  count = count + 1;
+                  if (count < 3) {
+                    return AlertItem(item, index);
+                  } else if (that.state.expanded) {
+                    return AlertItem(item, index);
+                  }
                 })
               : _.map(lc_data, function(item, index) {
                   let count = index + 1;
@@ -509,14 +506,9 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
 
-  let subtext = _.map(
-    props.workflow.definition.extra_fields_json,
-    (item, key) => {
-      if ((item.type = "normal")) {
-        return item.label;
-      }
-    }
-  );
+  let subtext = _.filter(props.workflow.lc_data, (item, key) => {
+    return (item.type = "normal" && item.value !== "");
+  });
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
