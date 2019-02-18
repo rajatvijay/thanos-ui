@@ -657,7 +657,11 @@ const LcData = props => {
   let lcdata = props.workflow.lc_data;
   let lcdataList = _.map(lcdata, (item, key) => {
     if (item.display_type === "normal") {
-      return <span className="lc-data-item text-medium">{item.label}</span>;
+      return (
+        <span className="lc-data-item text-medium">
+          {item.label}: {item.value}
+        </span>
+      );
     }
   });
 
