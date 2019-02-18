@@ -2121,7 +2121,6 @@ template {
   padding: 0;
   list-style: none;
 }
-<<<<<<< HEAD
 .alert-tag-list .alert-tag-item.ant-tag {
   border-radius: 15px;
   padding: 0 16px;
@@ -2131,25 +2130,6 @@ template {
   color: #305ebe;
 }
 .alert-tag-list .alert-tag-item.alert-primary.alert-tag-item-active {
-=======
-.alert-tag-item,
-.v-tag {
-  margin-bottom: 3px;
-  font-weight: normal;
-}
-.alert-tag-item.ant-tag,
-.v-tag.ant-tag {
-  border-radius: 15px;
-  padding: 0 16px;
-}
-.alert-tag-item.alert-primary,
-.v-tag.alert-primary {
-  border-color: #305ebe;
-  color: #305ebe;
-}
-.alert-tag-item.alert-primary.alert-tag-item-active,
-.v-tag.alert-primary.alert-tag-item-active {
->>>>>>> CarViz UI and Adjutication UI changes
   background-color: #305ebe;
   color: #fff;
 }
