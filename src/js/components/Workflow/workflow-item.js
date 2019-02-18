@@ -86,7 +86,9 @@ const HeaderTitle = props => {
           </Link>
         )}
 
-        <div className="lc1 text-ellipsis ">{subtext ? subtext[0] : ""}</div>
+        <div className="lc1 text-ellipsis ">
+          {_.size(subtext) ? subtext[0].value : ""}
+        </div>
       </div>
     </Col>
   );
@@ -343,22 +345,23 @@ class GetMergedData extends React.Component {
 
   render() {
     let props = this.props;
+
+    if (!props.field) {
+      return <span />;
+    }
+
     let data = props.workflow.lc_data;
     let alert_data = _.filter(data, function(v) {
-      return v.type == "alert";
+      return v.type == "alert" && v.value != "";
     });
     let lc_data = _.filter(data, function(v) {
-      return v.type == "normal";
+      return v.type == "normal" && v.value != "";
     });
     let that = this;
-    //let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
-
-    console.log("lc_data----------");
-    console.log(lc_data);
-    console.log(alert_data);
+    //let styling = props.field.definition.extra.lc_data_colorcodes || {};
 
     const expander = data => {
-      if (_.size(data) > 2) {
+      if (_.size(data) && _.size(data) > 2) {
         return (
           <span
             className="text-anchor text-middle float-right text-light"
@@ -402,7 +405,6 @@ class GetMergedData extends React.Component {
             {_.size(alert_data)
               ? _.map(alert_data, function(item, index) {
                   let count = index + 1;
-                  count = count + 1;
                   if (count < 3) {
                     return AlertItem(item, index);
                   } else if (that.state.expanded) {
@@ -505,7 +507,6 @@ const GetAlertData = props => {
 export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
-
   let subtext = _.filter(props.workflow.lc_data, (item, key) => {
     return (item.type = "normal" && item.value !== "");
   });
@@ -556,7 +557,7 @@ export const WorkflowHeader = props => {
         <HeaderTitle {...props} />
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
-            {subtext.length >= 2 ? subtext[1] : ""}
+            {subtext.length >= 2 ? subtext.value : ""}
           </div>
         </Col>
         <Col span={7}>
