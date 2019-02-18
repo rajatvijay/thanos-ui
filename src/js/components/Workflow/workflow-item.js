@@ -356,7 +356,7 @@ class GetMergedData extends React.Component {
     let data = this.props.workflow.lc_data;
 
     let alert_data = _.filter(data, function(v) {
-      return v._display_type == "alert" && v.value;
+      return v.display_type == "alert" && v.value;
     });
 
     let lc_data = _.filter(data, function(v) {
