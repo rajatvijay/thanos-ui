@@ -261,7 +261,9 @@ class HeaderOptions2 extends React.Component {
         <Row>
           <Col span={14}>
             <span className="pd-left pd-right status-text text-light t-12">
-              {this.state.current}
+              <Tooltip title={this.state.current}>
+                <div className="text-ellipsis">{this.state.current}</div>
+              </Tooltip>
             </span>
           </Col>
           <Col span={5}>
@@ -353,11 +355,11 @@ class GetMergedData extends React.Component {
     let data = this.props.workflow.lc_data;
 
     let alert_data = _.filter(data, function(v) {
-      return v.type == "alert" && v.value;
+      return v._display_type == "alert" && v.value;
     });
 
     let lc_data = _.filter(data, function(v) {
-      return v.type == "normal" && v.value;
+      return v.display_type == "normal" && v.value;
     });
 
     let that = this;
@@ -463,6 +465,8 @@ class GetMergedData extends React.Component {
 }
 
 const GetQuickData = props => {
+  console.log(props);
+
   return (
     <div className="group-overview">
       <div className="overflow-wrapper">
@@ -544,7 +548,7 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type == "normal" && item.value;
+    return item.display_type === "normal" && item.value;
   });
   return (
     <div className="ant-collapse-header">
