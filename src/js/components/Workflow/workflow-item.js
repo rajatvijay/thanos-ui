@@ -381,7 +381,7 @@ class GetMergedData extends React.Component {
       console.log("data--");
       console.log(data);
       if (_.size(data) && data[0].display_type === "normal") {
-        count = 4;
+        count = 3;
       }
 
       if (_.size(data) > count) {
@@ -445,7 +445,7 @@ class GetMergedData extends React.Component {
                     })
                   : _.map(lc_data, function(item, index) {
                       let count = index + 1;
-                      if (count > 2 && count < 5) {
+                      if (count > 2 && count < 4) {
                         return TagItem(item, index, false);
                       } else if (that.state.expanded && count > 2) {
                         return TagItem(item, index, false);
