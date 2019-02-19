@@ -106,10 +106,11 @@ export const Text = props => {
         autosize={{ minRows: rows }}
         placeholder={props.field.placeholder}
         defaultValue={
-          props.decryptedData? props.decryptedData.answer :
-          props.field.answers[0]
-            ? props.field.answers[0].answer
-            : props.field.definition.defaultValue
+          props.decryptedData
+            ? props.decryptedData.answer
+            : props.field.answers[0]
+              ? props.field.answers[0].answer
+              : props.field.definition.defaultValue
         }
         {...feedValue(props)}
         autoComplete="new-password"
@@ -528,8 +529,22 @@ export const Phone = props => {
 
 //Field Type Paragraph
 export const Paragraph = props => {
+  const { extra } = props.field.definition;
+  const customParaStyle = {
+    fontSize: extra.font_size || "",
+    textDecoration: extra.underline ? "underline" : "",
+    color: extra.font_color || ""
+  };
+
   return (
-    <h2 key={props.field.id} className="step-form-paragraph">
+    <h2
+      key={props.field.id}
+      className={
+        "step-form-paragraph" +
+        (extra.font_weight === "normal" ? "text-normal" : "")
+      }
+      style={customParaStyle}
+    >
       {props.field.definition.extra.icon ? (
         <i
           className="material-icons"

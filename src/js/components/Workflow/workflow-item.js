@@ -87,7 +87,14 @@ const HeaderTitle = props => {
         )}
 
         <div className="lc1 text-ellipsis ">
-          {_.size(subtext) ? subtext[0].value : ""}
+          {_.size(subtext) ? (
+            <Tooltip title={subtext[0].label + ": " + subtext[0].value}>
+              {subtext[0].show_label ? subtext[0].label + ": " : ""}
+              {subtext[0].value}
+            </Tooltip>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </Col>
@@ -369,13 +376,19 @@ class GetMergedData extends React.Component {
         : {};
 
     const expander = data => {
-      if (_.size(data) && _.size(data) > 2) {
+      let count = 2;
+      if (data[0].display_type === "normal") {
+        count = 4;
+      }
+
+      if (_.size(data) > count) {
         return (
           <span
-            className="text-anchor text-middle float-right text-light"
+            className="text-anchor text-middle text-right text-light t-12"
             onClick={this.toggleExpand}
           >
-            {this.state.expanded ? "-" : "+"} {_.size(data) - 2}
+            {this.state.expanded ? "-" : "+"}
+            {_.size(data) - count}
           </span>
         );
       } else {
@@ -383,9 +396,13 @@ class GetMergedData extends React.Component {
       }
     };
 
-    const LcItem = (item, index) => {
+    const TagItem = (item, index, is_alert) => {
+      let classes = " pd-right t-12 text-middle text-light  ";
+      if (is_alert) {
+        classes += " ant-tag v-tag";
+      }
       return (
-        <span key={index} className="pd-right t-12 text-middle text-light">
+        <span key={index} className={classes}>
           <Tooltip title={item.label + ": " + item.value}>
             <span>
               <span className="ellip-small s50">
@@ -406,57 +423,34 @@ class GetMergedData extends React.Component {
       );
     };
 
-    const AlertItem = (item, index) => {
-      return (
-        <Tag key={index} className="v-tag text-metal">
-          <Tooltip title={item.label + ": " + item.value}>
-            <span>
-              <span className="ellip-small s50">
-                {item.label + ": " + item.value}
-              </span>
-
-              {styling && styling[item.label] ? (
-                <i
-                  style={{
-                    color: styling[item.label].color,
-                    position: "relative",
-                    top: "-7px",
-                    right: "-23px"
-                  }}
-                  className="material-icons ellip-small s50 t-12 text-middle"
-                >
-                  fiber_manual_records
-                </i>
-              ) : null}
-            </span>
-          </Tooltip>
-        </Tag>
-      );
-    };
-
     return (
       <div className="group-overviewl">
         <div className="overflow-wrapper">
           <div className="step-ui">
-            {_.size(alert_data)
-              ? _.map(alert_data, function(item, index) {
-                  let count = index + 1;
-                  if (count < 3) {
-                    return AlertItem(item, index);
-                  } else if (that.state.expanded) {
-                    return AlertItem(item, index);
-                  }
-                })
-              : _.map(lc_data, function(item, index) {
-                  let count = index + 1;
-                  if (count < 3) {
-                    return LcItem(item, index);
-                  } else if (that.state.expanded) {
-                    return LcItem(item, index);
-                  }
-                })}
-
-            {expander(_.size(alert_data) ? alert_data : lc_data)}
+            <Row type="flex" align="middle">
+              <Col span={22}>
+                {_.size(alert_data)
+                  ? _.map(alert_data, function(item, index) {
+                      let count = index + 1;
+                      if (count < 3) {
+                        return TagItem(item, index, true);
+                      } else if (that.state.expanded) {
+                        return TagItem(item, index, true);
+                      }
+                    })
+                  : _.map(lc_data, function(item, index) {
+                      let count = index + 1;
+                      if (count > 2 && count < 4) {
+                        return TagItem(item, index, false);
+                      } else if (that.state.expanded && count > 2) {
+                        return TagItem(item, index, false);
+                      }
+                    })}
+              </Col>
+              <Col span={2}>
+                {expander(_.size(alert_data) ? alert_data : lc_data)}
+              </Col>
+            </Row>
           </div>
         </div>
       </div>
@@ -465,8 +459,6 @@ class GetMergedData extends React.Component {
 }
 
 const GetQuickData = props => {
-  console.log(props);
-
   return (
     <div className="group-overview">
       <div className="overflow-wrapper">
@@ -599,7 +591,10 @@ export const WorkflowHeader = props => {
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
             {_.size(subtext) >= 2 ? (
-              <Tooltip title={subtext[1].label}>{subtext[1].value}</Tooltip>
+              <Tooltip title={subtext[1].label + ": " + subtext[1].value}>
+                {subtext[1].show_label ? subtext[1].label + ": " : ""}
+                {subtext[1].value}
+              </Tooltip>
             ) : (
               ""
             )}
@@ -656,10 +651,13 @@ export const WorkflowBody = props => {
 const LcData = props => {
   let lcdata = props.workflow.lc_data;
   let lcdataList = _.map(lcdata, (item, key) => {
-    if (item.display_type === "normal") {
+    if (item.display_type === "normal" && item.value !== "") {
       return (
         <span className="lc-data-item text-medium">
-          {item.label}: {item.value}
+          <Tooltip title={item.label + ": " + item.value}>
+            {item.show_label ? item.label + ": " : ""}
+            {item.value}
+          </Tooltip>
         </span>
       );
     }
