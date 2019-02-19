@@ -93,11 +93,10 @@ class AlertFilter extends Component {
         <Tag
           key={item.id}
           className={
-            "v-tag   pd-bottom-sm  t-12 " +
-            (activeFilter[0] === item.tag ? "text-bold alert-active " : " ") +
-            (item.color_label ? null : " alert-metal")
+            "v-tag   pd-bottom-sm  alert-metal  " +
+            (activeFilter[0] === item.tag ? "text-bold alert-active " : " ")
           }
-          color={item.color_label || null}
+          //color={item.color_label || null}
           onClick={that.handleClick.bind(that, item)}
         >
           {item.name} ({item.count})
