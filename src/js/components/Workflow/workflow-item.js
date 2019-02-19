@@ -407,24 +407,27 @@ class GetMergedData extends React.Component {
         classes += " pd-right-lg";
       }
       return (
-        <span key={index} className={classes}>
-          <Tooltip title={item.label + ": " + item.value}>
-            <span>
-              <span className="ellip-small s100">
-                {item.label + ": " + item.value}
-              </span>
-
-              {styling && styling[item.label] ? (
-                <i
-                  style={{ color: styling[item.label].color }}
-                  className="material-icons ellip-small s50 t-12 text-middle"
-                >
-                  fiber_manual_records
-                </i>
-              ) : null}
+        <Tooltip key={index} title={item.label + ": " + item.value}>
+          <span className={classes}>
+            <span
+              className={
+                is_alert ? " ellip-small s50 " : " ellip-small s100 text-middle"
+              }
+            >
+              {item.show_label || is_alert ? item.label + ": " : ""}
+              {item.value}
             </span>
-          </Tooltip>
-        </span>
+
+            {styling && styling[item.label] ? (
+              <i
+                style={{ color: styling[item.label].color }}
+                className="material-icons ellip-small s50 t-12 text-middle"
+              >
+                fiber_manual_records
+              </i>
+            ) : null}
+          </span>
+        </Tooltip>
       );
     };
 
@@ -445,16 +448,12 @@ class GetMergedData extends React.Component {
                     })
                   : _.map(lc_data, function(item, index) {
                       let count = index + 1;
-                      if (count > 2 && count < 4) {
-                        return TagItem(item, index, false);
-                      } else if (that.state.expanded && count > 2) {
+                      if (count >= 2 && count < 4) {
                         return TagItem(item, index, false);
                       }
                     })}
               </Col>
-              <Col span={2}>
-                {expander(_.size(alert_data) ? alert_data : lc_data)}
-              </Col>
+              <Col span={2}>{expander(alert_data)}</Col>
             </Row>
           </div>
         </div>
@@ -655,7 +654,7 @@ export const WorkflowBody = props => {
 
 const LcData = props => {
   let lcdata = props.workflow.lc_data;
-  let lcdataList = _.map(lcdata, (item, key) => {
+  let lcdataList = _.map(lcdata, (item, index) => {
     if (item.display_type === "normal" && item.value) {
       return (
         <span className="lc-data-item text-medium">
