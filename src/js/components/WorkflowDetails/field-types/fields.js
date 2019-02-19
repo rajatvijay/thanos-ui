@@ -106,10 +106,11 @@ export const Text = props => {
         autosize={{ minRows: rows }}
         placeholder={props.field.placeholder}
         defaultValue={
-          props.decryptedData? props.decryptedData.answer :
-          props.field.answers[0]
-            ? props.field.answers[0].answer
-            : props.field.definition.defaultValue
+          props.decryptedData
+            ? props.decryptedData.answer
+            : props.field.answers[0]
+              ? props.field.answers[0].answer
+              : props.field.definition.defaultValue
         }
         {...feedValue(props)}
         autoComplete="new-password"
@@ -529,11 +530,6 @@ export const Phone = props => {
 //Field Type Paragraph
 export const Paragraph = props => {
   const { extra } = props.field.definition;
-
-  console.log("extra----");
-  console.log(props.field.definition);
-  console.log(extra);
-
   const customParaStyle = {
     fontSize: extra.font_size || "",
     textDecoration: extra.underline ? "underline" : "",
