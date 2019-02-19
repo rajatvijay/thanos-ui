@@ -44,6 +44,7 @@ a {
   border-color: @color-primary;
 }*/
 
+//overrides//
 body {
   color: @color-text;
 }
@@ -58,4 +59,11 @@ body {
 
 .ant-divider-horizontal.thin {
   margin: 12px 0;
+}
+
+.activity-log-drawer .ant-drawer {
+  z-index: 1000;
+  .ant-drawer-header {
+    height: 65px;
+  }
 }

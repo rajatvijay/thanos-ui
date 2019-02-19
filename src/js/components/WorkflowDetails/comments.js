@@ -225,7 +225,7 @@ class Comments extends Component {
 
     return (
       <Sider
-        className="comments-sidebar profile-sidebar sidebar-right"
+        className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
         style={{
           background: "#fff",
           overflow: "auto",
