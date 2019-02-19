@@ -400,9 +400,11 @@ class GetMergedData extends React.Component {
     };
 
     const TagItem = (item, index, is_alert) => {
-      let classes = " pd-right t-12 text-middle text-light  ";
+      let classes = "  t-12 text-middle text-light ";
       if (is_alert) {
-        classes += " ant-tag v-tag";
+        classes += " ant-tag v-tag pd-right";
+      } else {
+        classes += " pd-right-lg";
       }
       return (
         <span key={index} className={classes}>
