@@ -299,6 +299,7 @@ class HeaderOptions2 extends React.Component {
                 onClose={this.toggleSidebar}
                 visible={this.state.showSidebar}
                 width={500}
+                className="activity-log-drawer"
               >
                 <AuditListTabs id={props.workflow.id} />
               </Drawer>
