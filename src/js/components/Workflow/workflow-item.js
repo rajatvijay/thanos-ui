@@ -381,13 +381,13 @@ class GetMergedData extends React.Component {
         count = 4;
       }
 
-      if (_.size(data) && _.size(data) > count) {
+      if (_.size(data) > count) {
         return (
           <span
-            className="text-anchor text-middle float-right text-light t-14"
+            className="text-anchor text-middle float-right text-light t-12"
             onClick={this.toggleExpand}
           >
-            {this.state.expanded ? "-" : "+"} {_.size(data) - count}
+            {this.state.expanded ? "-" : "+"}{_.size(data) - count}
           </span>
         );
       } else {
@@ -396,9 +396,9 @@ class GetMergedData extends React.Component {
     };
 
     const TagItem = (item, index, is_alert) => {
-      let classes = " pd-right t-12 text-middle text-light v-tag ";
+      let classes = " pd-right t-12 text-middle text-light  ";
       if (is_alert) {
-        classes += " ant-tag";
+        classes += " ant-tag v-tag";
       }
       return (
         <span key={index} className={classes}>
@@ -439,12 +439,12 @@ class GetMergedData extends React.Component {
                   let count = index + 1;
                   if (count > 2 && count < 4) {
                     return TagItem(item, index, false);
-                  } else if (that.state.expanded) {
+                  } else if (that.state.expanded && count > 2) {
                     return TagItem(item, index, false);
                   }
                 })}
 
-            {expander(_.size(alert_data) ? alert_data : lc_data)}
+            {expander(_.size(alert_data) ? alert_data : lc_data ), _.size(alert_data) ? false : true )}
           </div>
         </div>
       </div>
