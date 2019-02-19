@@ -388,7 +388,8 @@ class GetMergedData extends React.Component {
             className="text-anchor text-middle float-right text-light t-12"
             onClick={this.toggleExpand}
           >
-            {this.state.expanded ? "-" : "+"}{_.size(data) - count}
+            {this.state.expanded ? "-" : "+"}
+            {_.size(data) - count}
           </span>
         );
       } else {
@@ -445,7 +446,10 @@ class GetMergedData extends React.Component {
                   }
                 })}
 
-            {expander(_.size(alert_data) ? alert_data : lc_data ), _.size(alert_data) ? false : true )}
+            {expander(
+              _.size(alert_data) ? alert_data : lc_data,
+              _.size(alert_data) ? false : true
+            )}
           </div>
         </div>
       </div>
