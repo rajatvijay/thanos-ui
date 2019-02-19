@@ -378,7 +378,9 @@ class GetMergedData extends React.Component {
 
     const expander = data => {
       let count = 2;
-      if (data[0].display_type === "normal") {
+      console.log("data--");
+      console.log(data);
+      if (_.size(data) && data[0].display_type === "normal") {
         count = 4;
       }
 
@@ -652,7 +654,7 @@ export const WorkflowBody = props => {
 const LcData = props => {
   let lcdata = props.workflow.lc_data;
   let lcdataList = _.map(lcdata, (item, key) => {
-    if (item.display_type === "normal" && item.value !== "") {
+    if (item.display_type === "normal" && item.value) {
       return (
         <span className="lc-data-item text-medium">
           <Tooltip title={item.label + ": " + item.value}>
