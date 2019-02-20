@@ -363,8 +363,27 @@ class GetMergedData extends React.Component {
 
     let data = this.props.workflow.lc_data;
 
-    let alert_data = _.filter(data, function(v) {
-      return v.display_type == "alert" && v.value;
+    let alert_data = _.map(this.props.workflow.alerts, function(alert) {
+      let alertReduced = {
+        display_type: "alert",
+        label: alert.alert.category.name,
+        link:
+          "/workflows/instances/" +
+          alert.workflow +
+          "/" +
+          "?group=" +
+          alert.step_group +
+          "&step=" +
+          alert.step,
+        color: alert.alert.category.color_label
+      };
+      return alertReduced;
+    });
+
+    _.forEach(data, function(v) {
+      if (v.display_type == "alert" && v.value) {
+        alert_data.push(v);
+      }
     });
 
     let lc_data = _.filter(data, function(v) {
@@ -377,14 +396,51 @@ class GetMergedData extends React.Component {
         ? props.field.definition.extra.lc_data_colorcodes
         : {};
 
+    //   let wfalerts =
+
+    // const WfAlert =(item)=>{
+
+    //   _.map(props.workflow.alerts, function(item, index) {
+    //     let more = props.workflow.alerts - 3;
+
+    //     if (index >= 3) {
+    //       if (index === 4) {
+    //         return <span className="text-light">+{more}</span>;
+    //       } else {
+    //         return;
+    //       }
+    //     } else {
+    //       return (
+    //       <Tooltip key={index} title={item.label + ": " + item.value}>
+    //         <Tag key={item.alert.id} className="v-tag text-metal ">
+    //           <Link
+    //             to={
+    //               "/workflows/instances/" +
+    //               item.workflow +
+    //               "/" +
+    //               "?group=" +
+    //               item.step_group +
+    //               "&step=" +
+    //               item.step
+    //             }
+    //             className="ellip-small s50">
+    //             {item.alert.category.name}
+    //             <i
+    //               style={{ color: item.alert.category.color_label}}
+    //               className="material-icons ellip-small s50 t-12 text-middle"
+    //               >
+    //               fiber_manual_records
+    //             </i>
+    //           </Link>
+    //         </Tag>
+    //       </Tooltip>
+    //       );
+    //     }
+    //   })
+    // }
+
     const expander = data => {
       let count = 2;
-      console.log("data--");
-      console.log(data);
-      if (_.size(data) && data[0].display_type === "normal") {
-        count = 3;
-      }
-
       if (_.size(data) > count) {
         return (
           <span
@@ -407,27 +463,60 @@ class GetMergedData extends React.Component {
       } else {
         classes += " pd-right-lg";
       }
-      return (
-        <Tooltip key={index} title={item.label + ": " + item.value}>
-          <span className={classes}>
-            <span
-              className={
-                is_alert ? " ellip-small s50 " : " ellip-small s100 text-middle"
-              }
-            >
-              {item.show_label || is_alert ? item.label + ": " : ""}
-              {item.value}
-            </span>
 
-            {styling && styling[item.label] ? (
+      console.log(item.color);
+
+      //let tagLabel = <span className={classes}>
+      let tagLabel = (
+        <span>
+          <span
+            className={
+              is_alert ? " ellip-small s50 " : " ellip-small s100 text-middle"
+            }
+          >
+            {item.show_label || is_alert ? item.label + ": " : ""}
+            {item.value || ""}
+          </span>
+
+          <span className="ellip-small s50">
+            {item.color ? (
+              <i
+                style={{
+                  color: item.color,
+                  lineHeight: "15px",
+                  verticalAlign: "middle"
+                }}
+                className="material-icons  t-12 text-sub"
+              >
+                fiber_manual_records
+              </i>
+            ) : styling && styling[item.label] ? (
               <i
                 style={{ color: styling[item.label].color }}
-                className="material-icons ellip-small s50 t-12 text-middle"
+                className="material-icons t-12 text-middle"
               >
                 fiber_manual_records
               </i>
             ) : null}
           </span>
+        </span>
+      );
+
+      let tagWrapper = null;
+
+      if (item.link) {
+        tagWrapper = (
+          <Link to={item.link} className={classes}>
+            {tagLabel}
+          </Link>
+        );
+      } else {
+        tagWrapper = <span className={classes}>{tagLabel}</span>;
+      }
+
+      return (
+        <Tooltip key={index} title={item.label + ": " + (item.value || "")}>
+          {tagWrapper}
         </Tooltip>
       );
     };
@@ -440,6 +529,8 @@ class GetMergedData extends React.Component {
               <Col span={22}>
                 {_.size(alert_data)
                   ? _.map(alert_data, function(item, index) {
+                      console.log("item----o00000990099");
+                      console.log(item);
                       let count = index + 1;
                       if (count < 3) {
                         return TagItem(item, index, true);
@@ -658,7 +749,7 @@ const LcData = props => {
   let lcdataList = _.map(lcdata, (item, index) => {
     if (item.display_type === "normal" && item.value) {
       return (
-        <span className="lc-data-item text-medium">
+        <span key={index} className="lc-data-item text-medium">
           <Tooltip title={item.label + ": " + item.value}>
             {item.show_label ? item.label + ": " : ""}
             {item.value}
@@ -863,12 +954,15 @@ const StepItem = props => {
     icon_cls = "alarm";
   }
 
-  let hasAlert = null;
+  let hasAlert = [];
 
   if (_.size(props.workflow.alerts)) {
-    _.forEach(props.workflow.alerts, function(value) {
-      if (value.step === props.stepData.id) {
-        hasAlert = value;
+    _.forEach(props.workflow.alerts, function(alert) {
+      if (alert.step === props.stepData.id) {
+        hasAlert.push({
+          label: alert.alert.category.name,
+          color: alert.alert.category.color_label
+        });
       }
     });
   }
@@ -896,9 +990,18 @@ const StepItem = props => {
         <span>{props.stepData.name}</span>
         {_.size(hasAlert) ? (
           <span className="alert-dot">
-            <Tooltip title={hasAlert.alert.category.name}>
-              <Badge status="error" />
-            </Tooltip>
+            {_.map(hasAlert, alert => {
+              return (
+                <Tooltip title={alert.label}>
+                  <i
+                    className="material-icons"
+                    style={{ fontSize: "9px", color: alert.color }}
+                  >
+                    fiber_manual_records
+                  </i>
+                </Tooltip>
+              );
+            })}
           </span>
         ) : null}
       </Link>

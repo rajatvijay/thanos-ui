@@ -104,11 +104,14 @@ class StepSidebarMenu extends Component {
       }
 
       //check alerts for steps
-      let hasAlert = false;
+      let hasAlert = [];
       if (_.size(that.props.alerts)) {
-        _.forEach(that.props.alerts, function(value) {
-          if (value.step === s.id) {
-            hasAlert = value;
+        _.forEach(that.props.alerts, function(alert) {
+          if (alert.step === s.id) {
+            hasAlert.push({
+              label: alert.alert.category.name,
+              color: alert.alert.category.color_label
+            });
           }
         });
       }
@@ -129,9 +132,18 @@ class StepSidebarMenu extends Component {
 
           {_.size(hasAlert) ? (
             <span className="float-right pd-left">
-              <Tooltip title={hasAlert.alert.category.name}>
-                <Badge status="error" />
-              </Tooltip>
+              {_.map(hasAlert, alert => {
+                return (
+                  <Tooltip title={alert.label}>
+                    <i
+                      className="material-icons"
+                      style={{ fontSize: "9px", color: alert.color }}
+                    >
+                      fiber_manual_records
+                    </i>
+                  </Tooltip>
+                );
+              })}
             </span>
           ) : null}
         </Menu.Item>
