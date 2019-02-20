@@ -50,15 +50,17 @@ function getLabel(props, that) {
           {_.size(props.field.alerts)
             ? _.map(props.field.alerts, function(item) {
                 return (
-                  <Tag
-                    key={item.alert.id}
-                    className={
-                      "alert-tag-item " + item.alert.category.color_label ||
-                      "alert-primary"
-                    }
-                    color={item.alert.category.color_label || null}
-                  >
-                    {item.alert.category.name}
+                  <Tag key={item.alert.id} className="v-tag alert-metal ">
+                    {item.alert.category.name}{" "}
+                    <i
+                      className="material-icons text-middle pd-left-sm"
+                      style={{
+                        fontSize: "12px",
+                        color: item.alert.category.color_label
+                      }}
+                    >
+                      fiber_manual_records
+                    </i>
                   </Tag>
                 );
               })
