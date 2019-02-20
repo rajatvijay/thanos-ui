@@ -449,7 +449,7 @@ class GetMergedData extends React.Component {
                     })
                   : _.map(lc_data, function(item, index) {
                       let count = index + 1;
-                      if (count >= 2 && count < 4) {
+                      if (count >= 2 && count < 3) {
                         return TagItem(item, index, false);
                       }
                     })}
