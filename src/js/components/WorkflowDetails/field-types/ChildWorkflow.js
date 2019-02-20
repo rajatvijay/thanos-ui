@@ -13,7 +13,8 @@ import {
   Tooltip,
   Divider,
   Tag,
-  Select
+  Select,
+  Collapse
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
@@ -34,15 +35,28 @@ const {
   getLink,
   isDisabled
 } = commonFunctions;
+const Panel = Collapse.Panel;
 
 const getKindID = (kindTag, workflowkind) => {
   let kind = null;
   kind = _.find(workflowkind, function(k) {
     return k.tag === kindTag;
   });
-
   if (kind) {
     return kind.id;
+  } else {
+    return;
+  }
+};
+
+const getKindName = (kindId, workflowKinds) => {
+  let kind = _.find(workflowKinds, function(k) {
+    console.log(k, kindId)
+    return k.id === parseInt(kindId,10);
+  });
+
+  if (kind) {
+    return kind.name;
   } else {
     return;
   }
@@ -540,13 +554,15 @@ class ChildItem extends Component {
 
   setKind = () => {
     let rKind = null;
+
+    console.log("workflow-->"+this.props.workflow.id)
+    console.log(this.props.workflow.definition.related_types[0])
+
     let workflowKind = this.props.workflowKind.workflowKind;
     if (_.size(workflowKind)) {
-      rKind = getKindID(
-        this.props.workflow.definition.related_types[0],
-        workflowKind
-      );
+      rKind = getKindID(this.props.workflow.definition.related_types[0],workflowKind);
       this.setState({ kind: rKind });
+      console.log(rKind)
     }
   };
 
@@ -583,7 +599,14 @@ class ChildItem extends Component {
         }
       })
       .then(body => {
-        this.setState({ fetching: false, childWorkflow: body.results });
+        let grouped = _.groupBy(body.results, function(child) {
+        return child.definition.kind;
+        });
+
+        console.log('grouped-----')
+        console.log(grouped)
+
+        this.setState({ fetching: false, childWorkflow: grouped });
       })
       .catch(error => {
         this.setState({ fetching: false, error: error });
@@ -596,6 +619,14 @@ class ChildItem extends Component {
     let props = this.props;
     const { workflow, workflowKind, field } = props;
     const { isExpanded, kind, fetching } = this.state;
+
+    const customPanelStyle = {
+      borderRadius:0,
+      //marginBottom:24,
+      border: 0,
+      overflow: "hidden",
+      backgroud:"#FFF"
+    };
     return (
       <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
         <WorkflowHeader
@@ -616,9 +647,15 @@ class ChildItem extends Component {
           <div className="text-center pd-ard">loading...</div>
         ) : that.state.childWorkflow && isExpanded ? (
           <div className="child-container">
-            {_.map(this.state.childWorkflow, function(child) {
-              return <ChildItem workflow={child} workflowKind={kind} />;
-            })}
+            <Collapse defaultActiveKey={['1']} bordered={false} >
+              {_.map(this.state.childWorkflow, function(group,key) {
+                return <Panel style={customPanelStyle} showArrow={false} header={getKindName(key,workflowKind.workflowKind)} key={key}>
+                  {_.map(group,function(child,key){
+                    return <ChildItem key={workflow.id} workflow={workflow} workflowKind={kind}/>  
+                  })}
+                </Panel>
+              })}
+            </Collapse>
           </div>
         ) : null}
 
