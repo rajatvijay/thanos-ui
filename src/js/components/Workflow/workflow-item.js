@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import moment from "moment";
@@ -398,49 +398,6 @@ class GetMergedData extends React.Component {
         ? props.field.definition.extra.lc_data_colorcodes
         : {};
 
-    //   let wfalerts =
-
-    // const WfAlert =(item)=>{
-
-    //   _.map(props.workflow.alerts, function(item, index) {
-    //     let more = props.workflow.alerts - 3;
-
-    //     if (index >= 3) {
-    //       if (index === 4) {
-    //         return <span className="text-light">+{more}</span>;
-    //       } else {
-    //         return;
-    //       }
-    //     } else {
-    //       return (
-    //       <Tooltip key={index} title={item.label + ": " + item.value}>
-    //         <Tag key={item.alert.id} className="v-tag text-metal ">
-    //           <Link
-    //             to={
-    //               "/workflows/instances/" +
-    //               item.workflow +
-    //               "/" +
-    //               "?group=" +
-    //               item.step_group +
-    //               "&step=" +
-    //               item.step
-    //             }
-    //             className="ellip-small s50">
-    //             {item.alert.category.name}
-    //             <i
-    //               style={{ color: item.alert.category.color_label}}
-    //               className="material-icons ellip-small s50 t-12 text-middle"
-    //               >
-    //               fiber_manual_records
-    //             </i>
-    //           </Link>
-    //         </Tag>
-    //       </Tooltip>
-    //       );
-    //     }
-    //   })
-    // }
-
     const expander = data => {
       let count = 2;
       if (_.size(data) > count) {
@@ -482,27 +439,21 @@ class GetMergedData extends React.Component {
             {item.value || ""}
           </span>
 
-          <span className="ellip-small s50">
-            {item.color ? (
-              <i
-                style={{
-                  color: item.color,
-                  lineHeight: "15px",
-                  verticalAlign: "middle"
-                }}
-                className="material-icons  t-12 text-sub"
-              >
-                fiber_manual_records
-              </i>
-            ) : styling && styling[item.label] ? (
-              <i
-                style={{ color: styling[item.label].color }}
-                className="material-icons t-12 text-middle"
-              >
-                fiber_manual_records
-              </i>
-            ) : null}
-          </span>
+          {item.color ? (
+            <i
+              style={{ color: item.color }}
+              className="material-icons  t-12 tag-dot"
+            >
+              fiber_manual_records
+            </i>
+          ) : styling && styling[item.label] ? (
+            <i
+              style={{ color: styling[item.label].color }}
+              className="material-icons t-12 tag-dot"
+            >
+              fiber_manual_records
+            </i>
+          ) : null}
         </span>
       );
 
@@ -533,8 +484,6 @@ class GetMergedData extends React.Component {
               <Col span={22}>
                 {_.size(alert_data)
                   ? _.map(alert_data, function(item, index) {
-                      console.log("item----o00000990099");
-                      console.log(item);
                       let count = index + 1;
                       if (count < 3) {
                         return TagItem(item, index, true);
@@ -733,7 +682,14 @@ export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
       <div className="lc-card-section">
-        <LcData {...props} />
+        <Row className="card-section-item">
+          <Col span={18}>
+            <LcData {...props} />
+          </Col>
+          <Col span={6} className="text-right">
+            <CreateRelated {...props} />
+          </Col>
+        </Row>
 
         {!props.statusView ? (
           <Row align="top">
@@ -748,6 +704,50 @@ export const WorkflowBody = props => {
       <MetaRow {...props} />
     </div>
   );
+};
+
+const CreateRelated = props => {
+  const relatedKind = props.relatedKind;
+
+  const menuItems = () => {
+    let workflowKindFiltered = [];
+
+    _.map(props.relatedKind, function(item) {
+      if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+        workflowKindFiltered.push(item);
+      }
+    });
+
+    return (
+      <Menu onClick={props.onChildSelect}>
+        {!_.isEmpty(workflowKindFiltered) ? (
+          _.map(workflowKindFiltered, function(item, index) {
+            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          })
+        ) : (
+          <Menu.Item disabled>No related workflow kind</Menu.Item>
+        )}
+      </Menu>
+    );
+  };
+  const childWorkflowMenu = menuItems(props);
+
+  if (props.relatedKind && _.size(childWorkflowMenu)) {
+    return (
+      <Dropdown
+        overlay={childWorkflowMenu}
+        className="child-workflow-dropdown"
+        placement="bottomRight"
+      >
+        <a className="ant-dropdown-link ant-btn main-btn" href="#">
+          + <FormattedMessage id="workflowsInstances.createChildButtonText" />
+          <i className="material-icons t-14">keyboard_arrow_down</i>
+        </a>
+      </Dropdown>
+    );
+  } else {
+    return <span />;
+  }
 };
 
 const LcData = props => {
@@ -813,7 +813,7 @@ class MetaRow extends React.Component {
           <Row>
             <Col span="12">{props.hasChildren ? "show child" : null}</Col>
             <Col span="12" className="text-right">
-              {/* props.relatedKind ? (
+              {props.relatedKind ? (
                 <Dropdown
                   overlay={childWorkflowMenu}
                   className="child-workflow-dropdown"
@@ -825,8 +825,7 @@ class MetaRow extends React.Component {
                     <i className="material-icons t-14">keyboard_arrow_down</i>
                   </a>
                 </Dropdown>
-              ) : null
-              */}
+              ) : null}
             </Col>
           </Row>
         </div>
