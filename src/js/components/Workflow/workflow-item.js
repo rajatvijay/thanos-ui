@@ -86,10 +86,12 @@ const HeaderTitle = props => {
           </Link>
         )}
 
-        <div className="lc1 text-ellipsis ">
+        <div className="lc1 text-ellipsis">
           {_.size(subtext) ? (
             <Tooltip title={subtext[0].label + ": " + subtext[0].value}>
-              {subtext[0].show_label ? subtext[0].label + ": " : ""}
+              <span className="t-cap">
+                {subtext[0].show_label ? subtext[0].label + ": " : ""}
+              </span>
               {subtext[0].value}
             </Tooltip>
           ) : (
@@ -463,17 +465,19 @@ class GetMergedData extends React.Component {
         classes += " pd-right-lg";
       }
 
-      console.log(item.color);
-
       //let tagLabel = <span className={classes}>
       let tagLabel = (
         <span>
           <span
             className={
-              is_alert ? " ellip-small s50 " : " ellip-small s100 text-middle"
+              is_alert ? " ellip-small s50 " : " ellip-small s100 text-middle "
             }
           >
-            {item.show_label || is_alert ? item.label + ": " : ""}
+            <span className="t-cap">
+              {item.show_label || is_alert
+                ? item.label.replace(/_/g, " ") + ": "
+                : ""}
+            </span>
             {item.value || ""}
           </span>
 
@@ -687,7 +691,9 @@ export const WorkflowHeader = props => {
           <div className="text-ellipsis">
             {_.size(subtext) >= 2 ? (
               <Tooltip title={subtext[1].label + ": " + subtext[1].value}>
-                {subtext[1].show_label ? subtext[1].label + ": " : ""}
+                <span className="t-cap">
+                  {subtext[1].show_label ? subtext[1].label + ": " : ""}
+                </span>
                 {subtext[1].value}
               </Tooltip>
             ) : (
@@ -748,9 +754,11 @@ const LcData = props => {
   let lcdataList = _.map(lcdata, (item, index) => {
     if (item.display_type === "normal" && item.value) {
       return (
-        <span key={index} className="lc-data-item text-medium">
+        <span key={index} className="lc-data-item text-medium ">
           <Tooltip title={item.label + ": " + item.value}>
-            {item.show_label ? item.label + ": " : ""}
+            <span className="t-cap">
+              {item.show_label ? item.label + ": " : ""}
+            </span>
             {item.value}
           </Tooltip>
         </span>
