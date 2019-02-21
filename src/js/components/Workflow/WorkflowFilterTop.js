@@ -73,7 +73,9 @@ class WorkflowFilterTop extends Component {
                       <span className="ellip-small s50">{item.name} </span>
                       <span className="ellip-small s50">
                         ({item.count}){" "}
-                        {item.overdue_count ? <Badge status="error" /> : null}
+                        {item.overdue_count ? (
+                          <Badge status="error" className="lc-tag-dot" />
+                        ) : null}
                       </span>
                     </Tooltip>
                   </Tag>
