@@ -600,11 +600,11 @@ class ChildItem extends Component {
       })
       .then(body => {
         let grouped = _.groupBy(body.results, function(child) {
-        return child.definition.kind;
+          return child.definition.kind;
         });
 
-        console.log('grouped-----')
-        console.log(grouped)
+        console.log("grouped-----");
+        console.log(grouped);
 
         this.setState({ fetching: false, childWorkflow: grouped });
       })
@@ -621,11 +621,11 @@ class ChildItem extends Component {
     const { isExpanded, kind, fetching } = this.state;
 
     const customPanelStyle = {
-      borderRadius:0,
+      borderRadius: 0,
       //marginBottom:24,
       border: 0,
       overflow: "hidden",
-      backgroud:"#FFF"
+      backgroud: "#FFF"
     };
     return (
       <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
@@ -647,13 +647,26 @@ class ChildItem extends Component {
           <div className="text-center pd-ard">loading...</div>
         ) : that.state.childWorkflow && isExpanded ? (
           <div className="child-container">
-            <Collapse defaultActiveKey={['1']} bordered={false} >
-              {_.map(this.state.childWorkflow, function(group,key) {
-                return <Panel style={customPanelStyle} showArrow={false} header={getKindName(key,workflowKind.workflowKind)} key={key}>
-                  {_.map(group,function(child,key){
-                    return <ChildItem key={workflow.id} workflow={workflow} workflowKind={kind}/>  
-                  })}
-                </Panel>
+            <Collapse defaultActiveKey={["1"]} bordered={false}>
+              {_.map(this.state.childWorkflow, function(group, key) {
+                return (
+                  <Panel
+                    style={customPanelStyle}
+                    showArrow={false}
+                    header={getKindName(key, workflowKind.workflowKind)}
+                    key={key}
+                  >
+                    {_.map(group, function(child, key) {
+                      return (
+                        <ChildItem
+                          key={workflow.id}
+                          workflow={workflow}
+                          workflowKind={kind}
+                        />
+                      );
+                    })}
+                  </Panel>
+                );
               })}
             </Collapse>
           </div>
