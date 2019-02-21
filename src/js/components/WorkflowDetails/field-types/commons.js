@@ -349,12 +349,13 @@ function getIntegrationSearchButton(props) {
       </Col>
 
       <Col style={{ marginTop: "5px" }}>
-        {_.map(props.field.search_param_data, function(item) {
+        {_.map(props.field.search_param_data, function(item, index) {
           if (_.size(item.answer) && item.answer.answer)
             return (
               <div className="float-left" style={{ marginRight: "15px" }}>
                 <span>{item.answer.field__definition__body}</span>:{" "}
-                <span>{item.answer.answer}</span>,
+                <span>{item.answer.answer}</span>
+                {_.size(props.field.search_param_data) === index + 1 ? "" : ","}
               </div>
             );
         })}
