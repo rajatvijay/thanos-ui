@@ -65,14 +65,15 @@ class WorkflowFilterTop extends Component {
                       " pd-bottom-sm t-12 v-tag alert-metal  " +
                       (that.state.activeFilter[0] === item.id
                         ? "text-bold alert-active"
-                        : "")
+                        : "") +
+                      (item.overdue_count ? " has-alert" : "")
                     }
                     onClick={that.handleClick.bind(that, item)}
                   >
                     <Tooltip title={"Overdue: " + item.overdue_count}>
-                      <span className="ellip-small s50">{item.name} </span>
+                      <span className="ellip-small s100">{item.name}</span>{" "}
                       <span className="ellip-small s50">
-                        ({item.count}){" "}
+                        ({item.count})
                         {item.overdue_count ? (
                           <Badge status="error" className="lc-tag-dot" />
                         ) : null}
