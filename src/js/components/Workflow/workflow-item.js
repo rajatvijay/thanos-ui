@@ -29,6 +29,7 @@ import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
 import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
+import WorkflowPDFModal from "./WorkflowPDFModal";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -138,7 +139,8 @@ class HeaderOptions2 extends React.Component {
     super(props);
     this.state = {
       current: this.props.workflow.status.label,
-      showSidebar: false
+      showSidebar: false,
+      isWorkflowPDFModalVisible: false
     };
   }
 
@@ -208,6 +210,12 @@ class HeaderOptions2 extends React.Component {
     this.props.addComment(object_id, "workflow");
   };
 
+  toggleWorkflowPDFModal = () => {
+    this.setState(state => ({
+      isWorkflowPDFModalVisible: !state.isWorkflowPDFModalVisible
+    }));
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -261,65 +269,84 @@ class HeaderOptions2 extends React.Component {
             <FormattedMessage id="stepBodyFormInstances.printText" />
           </span>
         </Menu.Item>
+
+        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              file_copy
+            </i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
+          </span>
+        </Menu.Item>
       </Menu>
     );
 
     let that = this;
+    const { isWorkflowPDFModalVisible } = this.state;
     return (
-      <Col span="5">
-        <Row>
-          <Col span={14}>
-            <Tooltip title={this.state.current}>
-              <div className="pd-left pd-right status-text text-light t-12 text-ellipsis">
-                {this.state.current}
-              </div>
-            </Tooltip>
-          </Col>
-          <Col span={5}>
-            {props.showCommentIcon && props.isEmbedded ? (
-              <span class="float-right">
-                <div class="add_comment_btn">
-                  <span>
-                    <i
-                      className="material-icons  t-18 text-metal"
-                      onClick={that.getComment.bind(that, props.workflow.id)}
-                    >
-                      chat_bubble_outline
+      <Fragment>
+        <WorkflowPDFModal
+          visible={isWorkflowPDFModalVisible}
+          onOk={this.toggleWorkflowPDFModal}
+          onCancel={this.toggleWorkflowPDFModal}
+        />
+        <Col span="5">
+          <Row>
+            <Col span={14}>
+              <Tooltip title={this.state.current}>
+                <div className="pd-left pd-right status-text text-light t-12 text-ellipsis">
+                  {this.state.current}
+                </div>
+              </Tooltip>
+            </Col>
+            <Col span={5}>
+              {props.showCommentIcon && props.isEmbedded ? (
+                <span class="float-right">
+                  <div class="add_comment_btn">
+                    <span>
+                      <i
+                        className="material-icons  t-18 text-metal"
+                        onClick={that.getComment.bind(that, props.workflow.id)}
+                      >
+                        chat_bubble_outline
+                      </i>
+                    </span>
+                  </div>
+                </span>
+              ) : null}
+
+              {this.state.showSidebar ? (
+                <Drawer
+                  title="Activity log"
+                  placement="right"
+                  closable={true}
+                  //style={{top:'64px'}}
+                  onClose={this.toggleSidebar}
+                  visible={this.state.showSidebar}
+                  width={500}
+                  className="activity-log-drawer"
+                >
+                  <AuditListTabs id={props.workflow.id} />
+                </Drawer>
+              ) : null}
+            </Col>
+            <Col span={5}>
+              {this.props.detailsPage ? (
+                <Dropdown
+                  overlay={workflowActionMenu}
+                  className="child-workflow-dropdown"
+                >
+                  <span className="pd-ard-sm text-metal text-anchor">
+                    <i className="material-icons text-middle t-18 ">
+                      more_vert
                     </i>
                   </span>
-                </div>
-              </span>
-            ) : null}
-
-            {this.state.showSidebar ? (
-              <Drawer
-                title="Activity log"
-                placement="right"
-                closable={true}
-                //style={{top:'64px'}}
-                onClose={this.toggleSidebar}
-                visible={this.state.showSidebar}
-                width={500}
-                className="activity-log-drawer"
-              >
-                <AuditListTabs id={props.workflow.id} />
-              </Drawer>
-            ) : null}
-          </Col>
-          <Col span={5}>
-            {this.props.detailsPage ? (
-              <Dropdown
-                overlay={workflowActionMenu}
-                className="child-workflow-dropdown"
-              >
-                <span className="pd-ard-sm text-metal text-anchor">
-                  <i className="material-icons text-middle t-18 ">more_vert</i>
-                </span>
-              </Dropdown>
-            ) : null}
-          </Col>
-        </Row>
-      </Col>
+                </Dropdown>
+              ) : null}
+            </Col>
+          </Row>
+        </Col>
+      </Fragment>
     );
   };
 }
