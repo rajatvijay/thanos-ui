@@ -284,9 +284,11 @@ class HeaderOptions2 extends React.Component {
 
     let that = this;
     const { isWorkflowPDFModalVisible } = this.state;
+    const { workflow } = this.props;
     return (
       <Fragment>
         <WorkflowPDFModal
+          workflow={workflow}
           visible={isWorkflowPDFModalVisible}
           onOk={this.toggleWorkflowPDFModal}
           onCancel={this.toggleWorkflowPDFModal}
