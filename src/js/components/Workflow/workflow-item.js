@@ -53,6 +53,20 @@ const SubMenu = Menu.SubMenu;
 /*workflow Head*/
 /////////////////
 
+const ProcessLcData = lc => {
+  let subtext_value = <span />;
+
+  if (lc.format === "date") {
+    subtext_value = <Moment format="MM/DD/YYYY">{lc.value}</Moment>;
+  } else if (lc.format && lc.format.toLowerCase() === "pid") {
+    subtext_value = <span className="t-upr">{lc.value}</span>;
+  } else {
+    subtext_value = <span>{lc.value}</span>;
+  }
+
+  return subtext_value;
+};
+
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
@@ -94,7 +108,7 @@ const HeaderTitle = props => {
               <span className="t-cap">
                 {subtext[0].show_label ? subtext[0].label + ": " : ""}
               </span>
-              {subtext[0].value}
+              {ProcessLcData(subtext[0])}
             </Tooltip>
           ) : (
             ""
@@ -465,7 +479,7 @@ class GetMergedData extends React.Component {
                 ? item.label.replace(/_/g, " ") + ": "
                 : ""}
             </span>
-            {item.value || ""}
+            {ProcessLcData(item) || ""}
           </span>
 
           {item.color ? (
@@ -673,7 +687,7 @@ export const WorkflowHeader = props => {
                 <span className="t-cap">
                   {subtext[1].show_label ? subtext[1].label + ": " : ""}
                 </span>
-                {subtext[1].value}
+                {ProcessLcData(subtext[1])}
               </Tooltip>
             ) : (
               ""
@@ -789,7 +803,7 @@ const LcData = props => {
             <span className="t-cap">
               {item.show_label ? item.label + ": " : ""}
             </span>
-            {item.value}
+            {ProcessLcData(item)}
           </Tooltip>
         </span>
       );
