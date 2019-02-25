@@ -175,7 +175,7 @@ export const Number = props => {
     >
       <InputNumber
         disabled={isDisabled(props)}
-        min={1}
+        min={0}
         type="number"
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
