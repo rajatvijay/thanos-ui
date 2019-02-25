@@ -463,7 +463,7 @@ export const Select = props => {
         mode={single ? "default" : "multiple"}
         style={getStyle(props)}
         disabled={isDisabled(props)}
-        defaultValue={
+        value={
           props.field.answers[0]
             ? single
               ? props.field.answers[0].answer
@@ -877,7 +877,7 @@ export const RadioField = props => {
     >
       <RadioGroup
         disabled={isDisabled(props)}
-        defaultValue={
+        value={
           props.field.answers[0]
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue

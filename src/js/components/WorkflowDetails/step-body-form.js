@@ -128,20 +128,30 @@ class StepBodyForm extends Component {
     } else {
       this.dispatchDebounced(data, method);
     }
-    this.updateDependentFields(payload.field, data.answer);
+    this.updateDependentFields(payload.field, data.answer, true);
   };
 
   dispatchDebounced = _.debounce((data, method) => {
     this.props.dispatch(workflowStepActions.saveField(data));
   }, 1500);
 
-  updateDependentFields = (targetField, answer) => {
+  updateDependentFields = (targetField, answer, clear) => {
     _.map(this.props.stepData.data_fields, field => {
       let extra = field.definition.extra;
       if (extra && extra.trigger_field_tag == targetField.definition.tag) {
+        clear && this.clearFieldValue(field);
         this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
       }
     });
+  };
+
+  clearFieldValue = field => {
+    let payload = {
+      field: field,
+      workflowId: field.workflow
+    };
+    field.answers[0].answer = "";
+    this.onFieldChange("", payload, true);
   };
 
   updateAllDependentFields = () => {
