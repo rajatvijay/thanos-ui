@@ -40,8 +40,7 @@ class ChildWorkflowField2 extends Component {
       country: null,
       statusView: true,
       kindChecked: false,
-      showRelatedWorkflow: false,
-      embeddedKind: null
+      showRelatedWorkflow: false
     };
   }
 
@@ -148,14 +147,9 @@ class ChildWorkflowField2 extends Component {
       <Menu onClick={this.onChildSelect}>
         {!_.isEmpty(workflowKindFiltered) ? (
           _.map(workflowKindFiltered, function(item, index) {
-            if (
-              that.state.childWorkflow &&
-              that.state.childWorkflow[0].definition.kind === item.id
-            ) {
+            if (that.state.childWorkflow[0].definition.kind === item.id) {
               return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-            } /*else {
-              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-            }*/
+            }
           })
         ) : (
           <Menu.Item disabled>No related workflow kind</Menu.Item>
@@ -307,7 +301,7 @@ class ChildWorkflowField2 extends Component {
               </Col>
               <Col span="6" className="text-right text-light small">
                 {this.props.workflowDetailsHeader.workflowDetailsHeader &&
-                this.state.childWorkflow
+                _.size(this.state.childWorkflow)
                   ? this.getAddMenu()
                   : null}
               </Col>
