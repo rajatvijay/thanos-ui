@@ -40,7 +40,8 @@ class ChildWorkflowField2 extends Component {
       country: null,
       statusView: true,
       kindChecked: false,
-      showRelatedWorkflow: false
+      showRelatedWorkflow: false,
+      embeddedKind: null
     };
   }
 
@@ -57,7 +58,7 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
-  getChildWorkflow = (parentId, kind, isChildWorkflow) => {
+  getChildWorkflow = (parentId, kind) => {
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),
@@ -74,27 +75,16 @@ class ChildWorkflowField2 extends Component {
       "&kind=" +
       kind;
 
-    if (isChildWorkflow) {
-      this.setState({ fetchingChild: true });
-    } else {
-      this.setState({ fetching: true });
-    }
+    this.setState({ fetching: true });
 
     fetch(url, requestOptions)
       .then(response => response.json())
       .then(body => {
-        if (isChildWorkflow) {
-          this.setState({
-            [parentId]: body.results,
-            fetchingChild: false
-          });
-        } else {
-          this.setState({
-            childWorkflow: body.results,
-            fetching: false
-          });
-          this.createFilterTag();
-        }
+        this.setState({
+          childWorkflow: body.results,
+          fetching: false
+        });
+        this.createFilterTag();
       });
   };
 
@@ -144,6 +134,7 @@ class ChildWorkflowField2 extends Component {
   };
 
   getKindMenu = () => {
+    let that = this;
     let workflowKindFiltered = [];
     const relatedKind = this.getRelatedTypes();
 
@@ -157,7 +148,14 @@ class ChildWorkflowField2 extends Component {
       <Menu onClick={this.onChildSelect}>
         {!_.isEmpty(workflowKindFiltered) ? (
           _.map(workflowKindFiltered, function(item, index) {
-            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+            if (
+              that.state.childWorkflow &&
+              that.state.childWorkflow[0].definition.kind === item.id
+            ) {
+              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+            } /*else {
+              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+            }*/
           })
         ) : (
           <Menu.Item disabled>No related workflow kind</Menu.Item>
@@ -308,7 +306,8 @@ class ChildWorkflowField2 extends Component {
                 <span>{this.state.filterTags}</span>
               </Col>
               <Col span="6" className="text-right text-light small">
-                {this.props.workflowDetailsHeader.workflowDetailsHeader
+                {this.props.workflowDetailsHeader.workflowDetailsHeader &&
+                this.state.childWorkflow
                   ? this.getAddMenu()
                   : null}
               </Col>
