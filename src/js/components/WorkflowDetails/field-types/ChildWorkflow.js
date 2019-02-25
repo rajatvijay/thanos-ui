@@ -627,6 +627,9 @@ class ChildItem extends Component {
       overflow: "hidden",
       backgroud: "#FFF"
     };
+
+    console.log("workflow------->>");
+    console.log(workflow);
     return (
       <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
         <WorkflowHeader
