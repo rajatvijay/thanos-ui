@@ -147,8 +147,8 @@ class ChildWorkflowField2 extends Component {
       <Menu onClick={this.onChildSelect}>
         {!_.isEmpty(workflowKindFiltered) ? (
           _.map(workflowKindFiltered, function(item, index) {
-            if (_.size(this.state.childWorkflow))
-              if(that.state.childWorkflow[0].definition.kind === item.id) {
+            if (_.size(this.state.childWorkflow)) {
+              if (that.state.childWorkflow[0].definition.kind === item.id) {
                 return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
               }
             } else {
@@ -304,7 +304,7 @@ class ChildWorkflowField2 extends Component {
                 <span>{this.state.filterTags}</span>
               </Col>
               <Col span="6" className="text-right text-light small">
-                {this.props.workflowDetailsHeader.workflowDetailsHeader 
+                {this.props.workflowDetailsHeader.workflowDetailsHeader
                   ? this.getAddMenu()
                   : null}
               </Col>
