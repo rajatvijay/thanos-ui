@@ -45,19 +45,6 @@ const getKindID = (kindTag, workflowkind) => {
   }
 };
 
-const getKindTag = (kindId, workflowkind) => {
-  let kind = null;
-  kind = _.find(workflowkind, function(k) {
-    return k.tag === kindId;
-  });
-
-  if (kind) {
-    return kind.id;
-  } else {
-    return;
-  }
-};
-
 class ChildWorkflowField2 extends Component {
   constructor() {
     super();
@@ -81,9 +68,6 @@ class ChildWorkflowField2 extends Component {
       this.props.dispatch(workflowKindActions.getAll());
       this.setState({ kindChecked: true });
     }
-
-    console.log("this.props---");
-    console.log(this.props);
   };
 
   getChildWorkflow = (parentId, kind) => {
