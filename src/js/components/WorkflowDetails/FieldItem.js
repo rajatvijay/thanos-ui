@@ -38,6 +38,9 @@ class FieldItem extends Component {
     this.setState({
       encrypted: this.props.fieldParams.field.definition.is_encrypted
     });
+
+    console.log("this.props---");
+    console.log(this.props);
   };
 
   decryptData = () => {
@@ -78,6 +81,11 @@ class FieldItem extends Component {
     fieldParams["decryptError"] = this.state.error;
     fieldParams["decryptedData"] = this.state.decrypted;
 
+    let showButton = false;
+    if (this.props.currentStepFields.currentStepFields.decrypt_fields) {
+      showButton = true;
+    }
+
     if (this.props.fieldParams.field.answers[0] && this.state.encrypted) {
       return (
         <FormItem
@@ -96,12 +104,14 @@ class FieldItem extends Component {
           <div className="masked-input mr-bottom">
             {this.state.error ? "Unable to decrypt " : "Masked"}
             {this.state.fetching ? <Icon type="loading" /> : null}
-            <span
-              className="float-right text-anchor"
-              onClick={this.decryptData}
-            >
-              Show
-            </span>
+            {showButton ? (
+              <span
+                className="float-right text-anchor"
+                onClick={this.decryptData}
+              >
+                Show
+              </span>
+            ) : null}
           </div>
         </FormItem>
       );
