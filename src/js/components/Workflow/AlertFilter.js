@@ -103,7 +103,7 @@ class AlertFilter extends Component {
           {closable ? closableButton : null}
           {item.color_label ? (
             <i
-              class="material-icons t-12 text-middle"
+              className="material-icons t-12 text-middle"
               style={{ color: item.color_label }}
             >
               fiber_manual_record
