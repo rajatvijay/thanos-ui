@@ -291,8 +291,8 @@ class HeaderOptions2 extends React.Component {
           </Col>
           <Col span={5}>
             {props.showCommentIcon && props.isEmbedded ? (
-              <span class="float-right">
-                <div class="add_comment_btn">
+              <span className="float-right">
+                <div className="add_comment_btn">
                   <span>
                     <i
                       className="material-icons  t-18 text-metal"
