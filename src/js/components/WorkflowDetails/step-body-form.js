@@ -146,12 +146,17 @@ class StepBodyForm extends Component {
   };
 
   clearFieldValue = field => {
-    let payload = {
-      field: field,
-      workflowId: field.workflow
-    };
-    field.answers[0].answer = "";
-    this.onFieldChange("", payload, true);
+    if (field.answers[0]) {
+      field.answers[0].answer = "";
+      this.onFieldChange(
+        "",
+        {
+          field: field,
+          workflowId: field.workflow
+        },
+        true
+      );
+    }
   };
 
   updateAllDependentFields = () => {
