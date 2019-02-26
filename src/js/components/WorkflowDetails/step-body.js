@@ -110,7 +110,7 @@ class StepBody extends Component {
       });
       locked_tag = (
         <div>
-          <div data-show="true" class="ant-tag">
+          <div data-show="true" className="ant-tag">
             To initiate this step, please complete the following steps
             first:&nbsp;
             <b>{dependent_step_name.join(", ")}</b>

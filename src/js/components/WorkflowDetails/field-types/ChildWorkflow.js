@@ -32,6 +32,32 @@ const {
   isDisabled
 } = commonFunctions;
 
+const getKindID = (kindTag, workflowkind) => {
+  let kind = null;
+  kind = _.find(workflowkind, function(k) {
+    return k.tag === kindTag;
+  });
+
+  if (kind) {
+    return kind.id;
+  } else {
+    return;
+  }
+};
+
+const getKindTag = (kindId, workflowkind) => {
+  let kind = null;
+  kind = _.find(workflowkind, function(k) {
+    return k.tag === kindId;
+  });
+
+  if (kind) {
+    return kind.id;
+  } else {
+    return;
+  }
+};
+
 class ChildWorkflowField2 extends Component {
   constructor() {
     super();
@@ -55,6 +81,9 @@ class ChildWorkflowField2 extends Component {
       this.props.dispatch(workflowKindActions.getAll());
       this.setState({ kindChecked: true });
     }
+
+    console.log("this.props---");
+    console.log(this.props);
   };
 
   getChildWorkflow = (parentId, kind) => {
@@ -85,13 +114,6 @@ class ChildWorkflowField2 extends Component {
         });
         this.createFilterTag();
       });
-  };
-
-  getKindID = kindTag => {
-    let kind = _.find(this.props.workflowKind.workflowKind, function(k) {
-      return k.tag === kindTag;
-    });
-    return kind.id;
   };
 
   getGroupedData = children => {
@@ -147,11 +169,10 @@ class ChildWorkflowField2 extends Component {
       <Menu onClick={this.onChildSelect}>
         {!_.isEmpty(workflowKindFiltered) ? (
           _.map(workflowKindFiltered, function(item, index) {
-            if (_.size(this.state.childWorkflow)) {
-              if (that.state.childWorkflow[0].definition.kind === item.id) {
-                return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-              }
-            } else {
+            if (
+              that.props.field.definition.extra.child_workflow_kind_id ===
+              item.id
+            ) {
               return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
             }
           })
@@ -362,19 +383,6 @@ class ChildItem extends Component {
     this.setKind();
   };
 
-  getKindID = kindTag => {
-    let kind = null;
-    kind = _.find(this.props.workflowKind.workflowKind, function(k) {
-      return k.tag === kindTag;
-    });
-
-    if (kind) {
-      return kind.id;
-    } else {
-      return;
-    }
-  };
-
   toggleExpand = (parent, kind) => {
     this.setState({ isExpanded: !this.state.isExpanded });
     if (!this.state.childWorkflow) {
@@ -384,8 +392,12 @@ class ChildItem extends Component {
 
   setKind = () => {
     let rKind = null;
-    if (_.size(this.props.workflowKind.workflowKind)) {
-      rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
+    let workflowKind = this.props.workflowKind.workflowKind;
+    if (_.size(workflowKind)) {
+      rKind = getKindID(
+        this.props.workflow.definition.related_types[0],
+        workflowKind
+      );
       this.setState({ kind: rKind });
     }
   };
@@ -437,7 +449,7 @@ class ChildItem extends Component {
     const { workflow, workflowKind, field } = props;
     const { isExpanded, kind, fetching } = this.state;
     return (
-      <div class={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
+      <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
         <WorkflowHeader
           workflow={workflow}
           field={field}
