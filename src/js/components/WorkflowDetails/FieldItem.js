@@ -38,9 +38,6 @@ class FieldItem extends Component {
     this.setState({
       encrypted: this.props.fieldParams.field.definition.is_encrypted
     });
-
-    console.log("this.props---");
-    console.log(this.props);
   };
 
   decryptData = () => {
@@ -82,7 +79,9 @@ class FieldItem extends Component {
     fieldParams["decryptedData"] = this.state.decrypted;
 
     let showButton = false;
-    if (this.props.currentStepFields.currentStepFields.decrypt_fields) {
+    if (
+      this.props.fieldParams.currentStepFields.currentStepFields.decrypt_fields
+    ) {
       showButton = true;
     }
 
