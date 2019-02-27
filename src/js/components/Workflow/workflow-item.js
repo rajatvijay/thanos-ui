@@ -296,6 +296,10 @@ class HeaderOptions2 extends React.Component {
       </Menu>
     );
 
+    let selected_flag = null;
+    if (_.size(props.workflow.selected_flag)) {
+      selected_flag = props.workflow.selected_flag[props.workflow.id];
+    }
     let that = this;
     const { isWorkflowPDFModalVisible } = this.state;
     const { workflow } = this.props;
