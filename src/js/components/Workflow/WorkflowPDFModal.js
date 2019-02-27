@@ -19,8 +19,10 @@ class WorkflowPDFModal extends Component {
   };
   parseWorkflowsForCheckboxes = (parentWorkflow, childWorkflows) => {
     return {
-      parent: [],
-      child: []
+      parent: createWorkflowSteps(parentWorkflow),
+      child: childWorkflows.map(childWorkflow =>
+        createWorkflowSteps(childWorkflow)
+      )
     };
   };
   getWorkflows = async () => {
@@ -131,4 +133,11 @@ async function getChildWorkflows(workflowId, kindId) {
   } catch (err) {
     throw new Error("Some error occurred!");
   }
+}
+
+function createWorkflowSteps(workflow) {
+  const { step_groups: stepGroups } = workflow;
+  return _.flatMap(stepGroups, stepGroup =>
+    stepGroup.steps.map(step => ({ value: step.id, label: step.name }))
+  );
 }
