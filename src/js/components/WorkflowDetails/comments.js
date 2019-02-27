@@ -14,7 +14,8 @@ import {
   Col,
   Menu,
   Affix,
-  Dropdown
+  Dropdown,
+  Cascader
 } from "antd";
 import { Link } from "react-router-dom";
 import { workflowDetailsActions, changeStatusActions } from "../../actions";
@@ -93,7 +94,9 @@ class Comments extends Component {
     }
   };
 
-  selectFlag = flag => {
+  selectFlag = option => {
+    let flag = option[0];
+    let reason = _.size(option) > 1 ? option[1] : "";
     let comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
@@ -104,12 +107,14 @@ class Comments extends Component {
       payload = {
         workflow: target.workflow,
         field: target.field_details.id,
-        flag: parseInt(flag)
+        flag: parseInt(flag),
+        reason_code: reason
       };
     } else if (target.workflow_details) {
       payload = {
         workflow: target.workflow_details.id,
-        flag: parseInt(flag)
+        flag: parseInt(flag),
+        reason_code: reason
       };
     }
 
@@ -178,31 +183,12 @@ class Comments extends Component {
         <span className="text-metal text-medium t-12 pd-right-sm">
           Adjudication:{" "}
         </span>
-        <Select
-          placeholder="change flag"
+        <Cascader
           style={{ width: "calc(100% - 85px)" }}
+          options={c.target.comment_flag_options}
           onChange={that.selectFlag}
-        >
-          {_.map(c.target.comment_flag_options, function(cfo) {
-            let text_color_css = cfo.extra.color
-              ? { color: cfo.extra.color }
-              : {};
-            return (
-              <Option value={cfo.value}>
-                <i
-                  className="material-icons t-18 "
-                  style={{
-                    verticalAlign: "text-bottom",
-                    color: text_color_css.color
-                  }}
-                >
-                  fiber_manual_record
-                </i>{" "}
-                {cfo.label}
-              </Option>
-            );
-          })}
-        </Select>
+          placeholder="Change flag"
+        />
       </div>
     );
 

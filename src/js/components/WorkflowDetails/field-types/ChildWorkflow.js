@@ -12,12 +12,14 @@ import {
   Icon,
   Tooltip,
   Divider,
-  Tag
+  Tag,
+  Select
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 
+const Option = Select.Option;
 const FormItem = Form.Item;
 const {
   getLabel,
@@ -31,6 +33,19 @@ const {
   getLink,
   isDisabled
 } = commonFunctions;
+
+const getKindID = (kindTag, workflowkind) => {
+  let kind = null;
+  kind = _.find(workflowkind, function(k) {
+    return k.tag === kindTag;
+  });
+
+  if (kind) {
+    return kind.id;
+  } else {
+    return;
+  }
+};
 
 class ChildWorkflowField2 extends Component {
   constructor() {
@@ -57,7 +72,9 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
-  getChildWorkflow = (parentId, kind, isChildWorkflow) => {
+  getChildWorkflow = () => {
+    let parentId = this.props.workflowId;
+    let kind = this.props.field.definition.extra.child_workflow_kind_id;
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),
@@ -74,35 +91,20 @@ class ChildWorkflowField2 extends Component {
       "&kind=" +
       kind;
 
-    if (isChildWorkflow) {
-      this.setState({ fetchingChild: true });
-    } else {
-      this.setState({ fetching: true });
-    }
+    this.setState({ fetching: true });
 
     fetch(url, requestOptions)
       .then(response => response.json())
       .then(body => {
-        if (isChildWorkflow) {
-          this.setState({
-            [parentId]: body.results,
-            fetchingChild: false
-          });
-        } else {
-          this.setState({
-            childWorkflow: body.results,
-            fetching: false
-          });
-          this.createFilterTag();
-        }
+        this.setState({
+          childWorkflow: body.results,
+          filteredChildWorkflow: body.results,
+          fetching: false
+        });
+        this.createStatusFilterTag();
+        this.createFilterTag();
+        this.filterByFlag();
       });
-  };
-
-  getKindID = kindTag => {
-    let kind = _.find(this.props.workflowKind.workflowKind, function(k) {
-      return k.tag === kindTag;
-    });
-    return kind.id;
   };
 
   getGroupedData = children => {
@@ -144,6 +146,7 @@ class ChildWorkflowField2 extends Component {
   };
 
   getKindMenu = () => {
+    let that = this;
     let workflowKindFiltered = [];
     const relatedKind = this.getRelatedTypes();
 
@@ -157,7 +160,12 @@ class ChildWorkflowField2 extends Component {
       <Menu onClick={this.onChildSelect}>
         {!_.isEmpty(workflowKindFiltered) ? (
           _.map(workflowKindFiltered, function(item, index) {
-            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+            if (
+              that.props.field.definition.extra.child_workflow_kind_id ===
+              item.id
+            ) {
+              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+            }
           })
         ) : (
           <Menu.Item disabled>No related workflow kind</Menu.Item>
@@ -190,17 +198,115 @@ class ChildWorkflowField2 extends Component {
     return menu;
   };
 
-  createFilterTag = () => {
+  createFlagFilter = () => {
     let that = this;
     if (!_.size(that.state.childWorkflow)) {
+      return <span />;
+    }
+
+    return (
+      <Select
+        placeholder="Filter by Adjudication Code"
+        onChange={that.onFilterTagChange.bind(that, "flag")}
+      >
+        {_.map(that.state.childWorkflow[0].comment_flag_options, function(
+          v,
+          k
+        ) {
+          return <Option value={v.label}>{v.label}</Option>;
+        })}
+      </Select>
+    );
+  };
+
+  filterByFlag = () => {
+    let that = this;
+    let flag_workflow_map = {};
+
+    // getting lc data alerts count
+    _.map(that.state.filteredChildWorkflow, function(val, k) {
+      if (!_.size(val.selected_flag)) {
+        return;
+      }
+      let flag = val.selected_flag[val.id]["flag_detail"]["label"];
+      if (flag_workflow_map[flag]) {
+        flag_workflow_map[flag].push(val);
+      } else {
+        flag_workflow_map[flag] = [val];
+      }
+    });
+    this.setState({
+      flag_workflow_map: flag_workflow_map
+    });
+  };
+
+  createStatusFilterTag = () => {
+    let that = this;
+    let status_workflow_map = { "All Status": that.state.childWorkflow };
+    let workflow_status_count = {
+      "All Status": _.size(that.state.childWorkflow)
+    };
+
+    // getting workflow status count
+    _.map(that.state.childWorkflow, function(v, k) {
+      let wstatus = v["status"]["label"];
+      if (workflow_status_count[wstatus]) {
+        workflow_status_count[wstatus] += 1;
+      } else {
+        workflow_status_count[wstatus] = 1;
+      }
+      if (status_workflow_map[wstatus]) {
+        status_workflow_map[wstatus].push(v);
+      } else {
+        status_workflow_map[wstatus] = [v];
+      }
+    });
+
+    let statusfilterTags = (
+      <div>
+        {_.map(workflow_status_count, function(v, k) {
+          return (
+            <Tag
+              key={v}
+              className="alert-tag-item alert-metal"
+              onClick={that.onFilterTagChange.bind(that, k, "status")}
+            >
+              <Tooltip title={k}>
+                <span className="ellip-small s50">{k} </span>
+                <span className="ellip-small s50">({v}) </span>
+              </Tooltip>
+            </Tag>
+          );
+        })}
+      </div>
+    );
+    this.setState({
+      statusfilterTags: statusfilterTags,
+      status_workflow_map: status_workflow_map
+    });
+  };
+
+  createFilterTag = () => {
+    let that = this;
+    this.setState({
+      filterTags: null
+    });
+
+    if (!_.size(that.state.filteredChildWorkflow)) {
       this.setState({ filterTags: <span /> });
       return;
     }
 
-    let filter_tag_count = { All: _.size(that.state.childWorkflow) };
-    let tag_workflow_map = { All: that.state.childWorkflow };
-    _.map(that.state.childWorkflow, function(v, k) {
-      _.map(v.lc_data, function(tag, i) {
+    let filter_tag_count = {
+      "All Categories": _.size(that.state.filteredChildWorkflow)
+    };
+    let tag_workflow_map = {
+      "All Categories": that.state.filteredChildWorkflow
+    };
+
+    // getting lc data alerts count
+    _.map(that.state.filteredChildWorkflow, function(val, k) {
+      _.map(val.lc_data, function(tag, i) {
         if (!tag.value) {
           return true;
         }
@@ -214,23 +320,22 @@ class ChildWorkflowField2 extends Component {
         }
 
         if (tag_workflow_map[tag.label]) {
-          tag_workflow_map[tag.label].push(v);
+          tag_workflow_map[tag.label].push(val);
         } else {
-          tag_workflow_map[tag.label] = [v];
+          tag_workflow_map[tag.label] = [val];
         }
       });
     });
 
-    this.state.tag_workflow_map = tag_workflow_map;
     let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
     let filterTags = (
       <div>
         {_.map(filter_tag_count, function(v, k) {
           return (
             <Tag
-              key={v}
+              key={v + k}
               className="alert-tag-item alert-metal"
-              onClick={that.onFilterTagChange.bind(that, k)}
+              onClick={that.onFilterTagChange.bind(that, k, "category")}
             >
               <Tooltip title={k}>
                 <span className="ellip-small s50">{k} </span>
@@ -255,12 +360,35 @@ class ChildWorkflowField2 extends Component {
         })}
       </div>
     );
-    this.setState({ filterTags: filterTags });
+
+    this.setState({
+      filterTags: filterTags,
+      tag_workflow_map: tag_workflow_map
+    });
   };
 
-  onFilterTagChange = tag => {
-    let filtered_workflow = this.state.tag_workflow_map[tag];
-    this.setState({ childWorkflow: filtered_workflow });
+  onFilterTagChange = (tag, _type) => {
+    console.log(tag, _type);
+    let filtered_workflow = this.state.filteredChildWorkflow;
+    if (this.state.status_workflow_map[tag] && _type == "status") {
+      filtered_workflow = this.state.status_workflow_map[tag];
+      this.state.filteredChildWorkflow = filtered_workflow;
+      this.setState({
+        filteredChildWorkflow: filtered_workflow,
+        filterTags: null
+      });
+      this.createFilterTag();
+      this.filterByFlag();
+    } else if (_type == "category") {
+      filtered_workflow = this.state.tag_workflow_map[tag];
+      this.setState({ filteredChildWorkflow: filtered_workflow });
+      this.filterByFlag();
+    } else if (tag == "flag") {
+      console.log(this.state.flag_workflow_map, _type);
+      filtered_workflow = this.state.flag_workflow_map[_type];
+      this.state.filteredChildWorkflow = filtered_workflow;
+      this.setState({ filteredChildWorkflow: filtered_workflow });
+    }
   };
 
   // expandChildWorkflow = () => {
@@ -303,7 +431,19 @@ class ChildWorkflowField2 extends Component {
                   className="text-metal"
                   style={{ marginRight: "10px", float: "left" }}
                 >
-                  Filter tag:{" "}
+                  Status:{" "}
+                </span>
+                <span>{this.state.statusfilterTags}</span>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span="18">
+                <span
+                  className="text-metal"
+                  style={{ marginRight: "10px", float: "left" }}
+                >
+                  Category:{" "}
                 </span>
                 <span>{this.state.filterTags}</span>
               </Col>
@@ -313,6 +453,32 @@ class ChildWorkflowField2 extends Component {
                   : null}
               </Col>
             </Row>
+
+            <Row>
+              <Col span="5">
+                <span
+                  className="text-metal"
+                  style={{ marginRight: "10px", float: "left" }}
+                >
+                  Adjudication Code:{" "}
+                </span>
+                <span>{this.createFlagFilter()}</span>
+              </Col>
+
+              <Col
+                span="19"
+                className="text-right"
+                style={{ marginTop: "10px" }}
+              >
+                <span
+                  onClick={this.getChildWorkflow}
+                  style={{ cursor: "pointer" }}
+                >
+                  Reload
+                </span>
+              </Col>
+            </Row>
+
             <Divider />
 
             <Row className="text-metal">
@@ -326,8 +492,8 @@ class ChildWorkflowField2 extends Component {
 
             <div className="workflow-list workflows-list-embedded">
               <div className="paper" style={{ padding: "7px" }}>
-                {_.size(this.state.childWorkflow) ? (
-                  _.map(this.state.childWorkflow, function(workflow) {
+                {_.size(this.state.filteredChildWorkflow) ? (
+                  _.map(this.state.filteredChildWorkflow, function(workflow) {
                     return (
                       <ChildItem
                         key={workflow.id}
@@ -366,19 +532,6 @@ class ChildItem extends Component {
     this.setKind();
   };
 
-  getKindID = kindTag => {
-    let kind = null;
-    kind = _.find(this.props.workflowKind.workflowKind, function(k) {
-      return k.tag === kindTag;
-    });
-
-    if (kind) {
-      return kind.id;
-    } else {
-      return;
-    }
-  };
-
   toggleExpand = (parent, kind) => {
     this.setState({ isExpanded: !this.state.isExpanded });
     if (!this.state.childWorkflow) {
@@ -388,8 +541,12 @@ class ChildItem extends Component {
 
   setKind = () => {
     let rKind = null;
-    if (_.size(this.props.workflowKind.workflowKind)) {
-      rKind = this.getKindID(this.props.workflow.definition.related_types[0]);
+    let workflowKind = this.props.workflowKind.workflowKind;
+    if (_.size(workflowKind)) {
+      rKind = getKindID(
+        this.props.workflow.definition.related_types[0],
+        workflowKind
+      );
       this.setState({ kind: rKind });
     }
   };
@@ -411,7 +568,7 @@ class ChildItem extends Component {
 
     let url =
       baseUrl +
-      "workflows-list/?&parent_workflow_id=" +
+      "workflows-list/?limit=100&parent_workflow_id=" +
       parent +
       "&kind=" +
       kind;
@@ -441,7 +598,7 @@ class ChildItem extends Component {
     const { workflow, workflowKind, field } = props;
     const { isExpanded, kind, fetching } = this.state;
     return (
-      <div class={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
+      <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
         <WorkflowHeader
           workflow={workflow}
           field={field}

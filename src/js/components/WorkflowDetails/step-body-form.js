@@ -128,20 +128,35 @@ class StepBodyForm extends Component {
     } else {
       this.dispatchDebounced(data, method);
     }
-    this.updateDependentFields(payload.field, data.answer);
+    this.updateDependentFields(payload.field, data.answer, true);
   };
 
   dispatchDebounced = _.debounce((data, method) => {
     this.props.dispatch(workflowStepActions.saveField(data));
   }, 1500);
 
-  updateDependentFields = (targetField, answer) => {
+  updateDependentFields = (targetField, answer, clear) => {
     _.map(this.props.stepData.data_fields, field => {
       let extra = field.definition.extra;
       if (extra && extra.trigger_field_tag == targetField.definition.tag) {
+        clear && this.clearFieldValue(field);
         this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
       }
     });
+  };
+
+  clearFieldValue = field => {
+    if (field.answers[0]) {
+      field.answers[0].answer = "";
+      this.onFieldChange(
+        "",
+        {
+          field: field,
+          workflowId: field.workflow
+        },
+        true
+      );
+    }
   };
 
   updateAllDependentFields = () => {
@@ -365,7 +380,8 @@ class StepBodyForm extends Component {
       getIntegrationComments: this.props.getIntegrationComments,
       dispatch: this.props.dispatch,
       intl: this.props.intl,
-      permission: this.props.permission
+      permission: this.props.permission,
+      dynamicUserPerms: this.props.dynamicUserPerms
     };
 
     let rowGroup = {

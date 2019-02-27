@@ -40,6 +40,11 @@ class FieldItem extends Component {
     });
   };
 
+  componentDidUpdate = () => {
+    console.log("this.props.dynamicUserPerms fileitems");
+    console.log(this.props.fieldParams.dynamicUserPerms);
+  };
+
   decryptData = () => {
     const requestOptions = {
       method: "POST",
@@ -78,6 +83,21 @@ class FieldItem extends Component {
     fieldParams["decryptError"] = this.state.error;
     fieldParams["decryptedData"] = this.state.decrypted;
 
+    let dynamicUserPerm = this.props.fieldParams.dynamicUserPerms;
+
+    let showButton = false;
+    if (
+      _.includes(
+        this.props.fieldParams.permission,
+        "Can decrypt fields in a step"
+      ) ||
+      (dynamicUserPerm &&
+        _.size(dynamicUserPerm.third_party_vendor) &&
+        _.includes(dynamicUserPerm.third_party_vendor, "decrypt_fields"))
+    ) {
+      showButton = true;
+    }
+
     if (this.props.fieldParams.field.answers[0] && this.state.encrypted) {
       return (
         <FormItem
@@ -96,12 +116,14 @@ class FieldItem extends Component {
           <div className="masked-input mr-bottom">
             {this.state.error ? "Unable to decrypt " : "Masked"}
             {this.state.fetching ? <Icon type="loading" /> : null}
-            <span
-              className="float-right text-anchor"
-              onClick={this.decryptData}
-            >
-              Show
-            </span>
+            {showButton ? (
+              <span
+                className="float-right text-anchor"
+                onClick={this.decryptData}
+              >
+                Show
+              </span>
+            ) : null}
           </div>
         </FormItem>
       );

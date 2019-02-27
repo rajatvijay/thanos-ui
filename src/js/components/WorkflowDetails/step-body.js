@@ -110,7 +110,7 @@ class StepBody extends Component {
       });
       locked_tag = (
         <div>
-          <div data-show="true" class="ant-tag">
+          <div data-show="true" className="ant-tag">
             To initiate this step, please complete the following steps
             first:&nbsp;
             <b>{dependent_step_name.join(", ")}</b>
@@ -143,6 +143,12 @@ class StepBody extends Component {
         </div>
       );
     }
+
+    let dynamicUserPerms = this.props.workflowDetailsHeader
+      .workflowDetailsHeader
+      ? this.props.workflowDetailsHeader.workflowDetailsHeader.definition
+          .dynamic_group_names_with_perm
+      : null;
 
     return (
       <div className="pd-ard-lg">
@@ -223,6 +229,7 @@ class StepBody extends Component {
               versionToggle={this.versionToggle}
               permission={this.props.config.permissions}
               isSubmitting={this.props.currentStepFields.isSubmitting}
+              dynamicUserPerms={dynamicUserPerms}
             />
           </div>
         ) : (
@@ -240,13 +247,15 @@ function mapStateToProps(state) {
     currentStepFields,
     workflowDetails,
     stepVersionFields,
-    config
+    config,
+    workflowDetailsHeader
   } = state;
   return {
     currentStepFields,
     workflowDetails,
     stepVersionFields,
-    config
+    config,
+    workflowDetailsHeader
   };
 }
 
