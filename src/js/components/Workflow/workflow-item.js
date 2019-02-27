@@ -278,6 +278,10 @@ class HeaderOptions2 extends React.Component {
       </Menu>
     );
 
+    let selected_flag = null;
+    if (_.size(props.workflow.selected_flag)) {
+      selected_flag = props.workflow.selected_flag[props.workflow.id];
+    }
     let that = this;
     return (
       <Col span="5">
@@ -303,6 +307,19 @@ class HeaderOptions2 extends React.Component {
                   </span>
                 </div>
               </span>
+            ) : null}
+
+            {selected_flag && props.isEmbedded ? (
+              <Tooltip title={selected_flag.flag_detail.label}>
+                <span class="float-right" style={{ marginTop: "3px" }}>
+                  <i
+                    style={{ color: selected_flag.flag_detail.extra.color }}
+                    className="material-icons  t-12 tag-dot"
+                  >
+                    fiber_manual_records
+                  </i>
+                </span>
+              </Tooltip>
             ) : null}
 
             {this.state.showSidebar ? (
