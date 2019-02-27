@@ -351,20 +351,6 @@ class HeaderOptions2 extends React.Component {
                 </Drawer>
               ) : null}
             </Col>
-            <Col span={5}>
-              {this.props.detailsPage ? (
-                <Dropdown
-                  overlay={workflowActionMenu}
-                  className="child-workflow-dropdown"
-                >
-                  <span className="pd-ard-sm text-metal text-anchor">
-                    <i className="material-icons text-middle t-18 ">
-                      more_vert
-                    </i>
-                  </span>
-                </Dropdown>
-              ) : null}
-            </Col>
           </Row>
         </Col>
       </Fragment>

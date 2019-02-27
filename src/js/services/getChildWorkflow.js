@@ -1,9 +1,12 @@
 import { authHeader, baseUrl } from "../_helpers";
 
-const getURL = (parentId, kind, limit = 100) =>
-  `${baseUrl}workflows-list/?limit=${limit}&parent_workflow_id=${
-    parentId
-  }&kind=${kind}`;
+const getURL = (parentId, kind, limit = 100) => {
+  const sanitizedParamsObject = JSON.parse(
+    JSON.stringify({ parentId, kind, limit })
+  );
+  const params = new URLSearchParams(sanitizedParamsObject);
+  return `${baseUrl}workflows-list/?${params}`;
+};
 
 function getChildWorkflow(parentId, kind) {
   const requestOptions = {

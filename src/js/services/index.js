@@ -10,3 +10,4 @@ export { changeStatusService } from "./change_status";
 export { dunsFieldService } from "./integration_field_update";
 export { updateSelectedLanguageService } from "./internationalize";
 export { getChildWorkflow } from "./getChildWorkflow";
+export { requestWorflowPDF } from "./requestWorkflowPDF";
