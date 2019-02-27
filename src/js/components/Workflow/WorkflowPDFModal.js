@@ -34,24 +34,20 @@ class WorkflowPDFModal extends Component {
     childWorkflows,
     workflowKinds
   }) => {
-    const parent = createWorkflowSteps(parentWorkflow);
+    const parent = extractStepsFromWorkflow(parentWorkflow);
     const child = childWorkflows.map(childWorkflow => {
-      const kind = workflowKinds.find(
-        ({ id }) => id === childWorkflow.definition.kind
-      );
       return {
-        kind: kind.tag,
-        stepsForCheckboxes: createWorkflowSteps(childWorkflow),
+        kind: extractKindTagFromWorkflow(childWorkflow, workflowKinds),
+        stepsForCheckboxes: extractStepsFromWorkflow(childWorkflow),
         name: childWorkflow.name
       };
     });
-    const workflows = {
+    return {
       parent,
       child
     };
-    return workflows;
   };
-  getWorkflows = async () => {
+  fetchWorkflowsAndKinds = async () => {
     const { workflow: parentWorkflow } = this.props;
     const workflowId = parentWorkflow.id;
 
@@ -77,33 +73,29 @@ class WorkflowPDFModal extends Component {
       });
     }
   };
-  getWorkflowKinds = () => {
-    return workflowKindService.getAll().then(({ results: workflowKinds }) => {
-      this.setState({
-        workflowKinds
-      });
-    });
-  };
   componentDidMount() {
     if (!this.props.workflow) {
       throw new Error("No parent workflow found");
     }
-    this.getWorkflows();
+
+    this.fetchWorkflowsAndKinds();
 
     if (!this.props.onOk || !this.props.onCancel) {
       console.warn("WorkflowPDFModal: onOk and onCancel are required props");
     }
     return null;
   }
-  onCheckboxStateChange = selectedSteps => {
-    this.setState({ selectedSteps });
+  handlePDFConfigChange = config => {
+    this.setState({
+      pdfConfig: config
+    });
   };
-  onParentCheckboxStateChange = stepTags => {
+  handleParentCheckboxStateChange = stepTags => {
     this.setState({
       parentWorkflowStepsSelected: stepTags
     });
   };
-  handleChildWorkflowStepSelected = (childWorkflow, steps) => {
+  handleChildWorkflowStateChange = (childWorkflow, steps) => {
     this.setState(state => ({
       childWorkflowStepsSelected: {
         ...state.childWorkflowStepsSelected,
@@ -132,15 +124,15 @@ class WorkflowPDFModal extends Component {
             marginBottom: "0.5rem"
           }}
         >
-          Include the following sections:{" "}
+          Include the following sections:
         </p>
         <ParentStepCheckboxes
           steps={workflows.parent}
-          onChange={this.onParentCheckboxStateChange}
+          onChange={this.handleParentCheckboxStateChange}
         />
         <ChildStepsCheckboxes
           steps={workflows.child}
-          onChange={this.handleChildWorkflowStepSelected}
+          onChange={this.handleChildWorkflowStateChange}
         />
       </div>
     );
@@ -159,18 +151,14 @@ class WorkflowPDFModal extends Component {
       pdfConfig
     } = this.state;
     const { workflow: parentWorkflow } = this.props;
-    const payload = {
-      workflow_id: parentWorkflow.id,
-      parent_steps_to_print: parentWorkflowStepsSelected,
-      child_steps_to_print: childWorkflowStepsSelected,
-      ...this.pdfConfigOptions.reduce(
-        (acc, option) => ({
-          ...acc,
-          [option.value]: pdfConfig.includes(option.value)
-        }),
-        {}
-      )
-    };
+
+    const payload = makeRequestPDFPayload({
+      parentWorkflow,
+      childWorkflowStepsSelected,
+      parentWorkflowStepsSelected,
+      pdfConfig,
+      pdfConfigOptions: this.pdfConfigOptions
+    });
     console.log(JSON.stringify(payload, null, 4));
     this.setState({ requestingPDF: true });
     requestWorflowPDF(payload)
@@ -196,11 +184,6 @@ class WorkflowPDFModal extends Component {
     { value: "include_flags", label: "Include Flags" },
     { value: "include_archived_related_workflows", label: "Include Archived" }
   ];
-  handlePDFConfigChange = config => {
-    this.setState({
-      pdfConfig: config
-    });
-  };
   render() {
     const { visible, width, onOk, onCancel } = this.props;
     const { isLoading, workflows, errorMessage, requestingPDF } = this.state;
@@ -342,7 +325,7 @@ function WorkflowPDFModalFooter({
 }
 
 // Utils
-function createWorkflowSteps(workflow) {
+function extractStepsFromWorkflow(workflow) {
   const { step_groups: stepGroups } = workflow;
   return _.flatMap(stepGroups, stepGroup =>
     stepGroup.steps.map(step => ({
@@ -350,4 +333,30 @@ function createWorkflowSteps(workflow) {
       label: step.name
     }))
   );
+}
+
+function extractKindTagFromWorkflow(workflow, kinds) {
+  const kind = kinds.find(({ id }) => id === workflow.definition.kind);
+  return kind ? kind.tag : "none";
+}
+
+function makeRequestPDFPayload({
+  parentWorkflow,
+  childWorkflowStepsSelected,
+  parentWorkflowStepsSelected,
+  pdfConfig,
+  pdfConfigOptions
+}) {
+  return {
+    workflow_id: parentWorkflow.id,
+    parent_steps_to_print: parentWorkflowStepsSelected,
+    child_steps_to_print: childWorkflowStepsSelected,
+    ...pdfConfigOptions.reduce(
+      (acc, option) => ({
+        ...acc,
+        [option.value]: pdfConfig.includes(option.value)
+      }),
+      {}
+    )
+  };
 }
