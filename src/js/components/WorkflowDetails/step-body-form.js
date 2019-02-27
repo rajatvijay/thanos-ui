@@ -380,7 +380,8 @@ class StepBodyForm extends Component {
       getIntegrationComments: this.props.getIntegrationComments,
       dispatch: this.props.dispatch,
       intl: this.props.intl,
-      permission: this.props.permission
+      permission: this.props.permission,
+      dynamicUserPerms: this.props.dynamicUserPerms
     };
 
     let rowGroup = {

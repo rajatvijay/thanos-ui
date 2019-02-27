@@ -144,6 +144,12 @@ class StepBody extends Component {
       );
     }
 
+    let dynamicUserPerms = this.props.workflowDetailsHeader
+      .workflowDetailsHeader
+      ? this.props.workflowDetailsHeader.workflowDetailsHeader.definition
+          .dynamic_group_names_with_perm
+      : null;
+
     return (
       <div className="pd-ard-lg">
         {this.state.printing ? (
@@ -223,6 +229,7 @@ class StepBody extends Component {
               versionToggle={this.versionToggle}
               permission={this.props.config.permissions}
               isSubmitting={this.props.currentStepFields.isSubmitting}
+              dynamicUserPerms={dynamicUserPerms}
             />
           </div>
         ) : (
@@ -240,13 +247,15 @@ function mapStateToProps(state) {
     currentStepFields,
     workflowDetails,
     stepVersionFields,
-    config
+    config,
+    workflowDetailsHeader
   } = state;
   return {
     currentStepFields,
     workflowDetails,
     stepVersionFields,
-    config
+    config,
+    workflowDetailsHeader
   };
 }
 
