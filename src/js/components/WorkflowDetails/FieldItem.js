@@ -39,7 +39,7 @@ class FieldItem extends Component {
       encrypted: this.props.fieldParams.field.definition.is_encrypted
     });
 
-    console.log(this.props)
+    console.log(this.props);
   };
 
   decryptData = () => {
@@ -80,11 +80,18 @@ class FieldItem extends Component {
     fieldParams["decryptError"] = this.state.error;
     fieldParams["decryptedData"] = this.state.decrypted;
 
-    let dynamicUserPerm = this.props.fieldParams.currentStepFields.currentStepFields.dynamic_group_names_with_perm;
+    let dynamicUserPerm = this.props.fieldParams.currentStepFields
+      .currentStepFields.dynamic_group_names_with_perm;
 
     let showButton = false;
-    if (_.includes(this.props.fieldParams.permission,"Can decrypt fields in a step") ||
-        dynamicUserPerm && _.size(dynamicUserPerm.third_party_vendor) && .includes(dynamicUserPerm.third_party_vendor,"decrypt_fields")
+    if (
+      _.includes(
+        this.props.fieldParams.permission,
+        "Can decrypt fields in a step"
+      ) ||
+      (dynamicUserPerm &&
+        _.size(dynamicUserPerm.third_party_vendor) &&
+        _.includes(dynamicUserPerm.third_party_vendor, "decrypt_fields"))
     ) {
       showButton = true;
     }
