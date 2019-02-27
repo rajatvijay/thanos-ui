@@ -65,6 +65,7 @@ export default {
       loadingText: "loading",
       addComments: "Add comment/question",
       commentsText: "comments"
+      categoryText: "Category"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -169,7 +170,8 @@ export default {
       exportText: "Exportar",
       scrollToTop: "Hasta arriba",
       reloadText: "recargar",
-      loadingText: "cargando"
+      loadingText: "cargando",
+      categoryText: "categoría"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por",
