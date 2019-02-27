@@ -1,47 +1,75 @@
 import React, { Component } from "react";
-import { Modal, Checkbox, Spin, Icon } from "antd";
-import { connect } from "react-redux";
+import { Modal, Checkbox, Spin, Icon, Row, Col, Button, message } from "antd";
 import _ from "lodash";
-import { getChildWorkflow, workflowKindService } from "../../services";
+import {
+  getChildWorkflow,
+  workflowKindService,
+  requestWorflowPDF
+} from "../../services";
 
 const CheckboxGroup = Checkbox.Group;
+
+/**
+ * TODO:
+ */
 
 class WorkflowPDFModal extends Component {
   state = {
     selectedSteps: [],
     isLoading: false,
     errorMessage: null,
-    workflows: null
+    workflows: null,
+    workflowKinds: [],
+    requestingPDF: false,
+    pdfConfig: [],
+    childWorkflowStepsSelected: {},
+    parentWorkflowStepsSelected: []
   };
   static defaultProps = {
     visible: false,
     width: "80vw"
   };
-  parseWorkflowsForCheckboxes = (parentWorkflow, childWorkflows) => {
-    return {
-      parent: createWorkflowSteps(parentWorkflow),
-      child: childWorkflows.map(childWorkflow =>
-        createWorkflowSteps(childWorkflow)
-      )
+  parseWorkflowsForCheckboxes = ({
+    parentWorkflow,
+    childWorkflows,
+    workflowKinds
+  }) => {
+    const parent = createWorkflowSteps(parentWorkflow);
+    const child = childWorkflows.map(childWorkflow => {
+      const kind = workflowKinds.find(
+        ({ id }) => id === childWorkflow.definition.kind
+      );
+      return {
+        kind: kind.tag,
+        stepsForCheckboxes: createWorkflowSteps(childWorkflow),
+        name: childWorkflow.name
+      };
+    });
+    const workflows = {
+      parent,
+      child
     };
+    return workflows;
   };
   getWorkflows = async () => {
-    // TODO: Take these from store
     const { workflow: parentWorkflow } = this.props;
     const workflowId = parentWorkflow.id;
-    const kindId = parentWorkflow.definition.kind;
 
     try {
       this.setState({ isLoading: true });
-      const childWrokflows = await getChildWorkflows(workflowId, kindId);
+      const { results: workflowKinds } = await workflowKindService.getAll();
+      const { results: childWorkflows } = await getChildWorkflow(workflowId);
       this.setState({
         isLoading: false,
-        workflows: this.parseWorkflowsForCheckboxes(
+        workflowKinds,
+        workflows: this.parseWorkflowsForCheckboxes({
           parentWorkflow,
-          childWrokflows
-        )
+          childWorkflows,
+          workflowKinds
+        })
       });
     } catch (err) {
+      console.error(err);
       this.setState({
         isLoading: false,
         errorMessage: err.message,
@@ -49,11 +77,19 @@ class WorkflowPDFModal extends Component {
       });
     }
   };
+  getWorkflowKinds = () => {
+    return workflowKindService.getAll().then(({ results: workflowKinds }) => {
+      this.setState({
+        workflowKinds
+      });
+    });
+  };
   componentDidMount() {
     if (!this.props.workflow) {
-      // TODO: Put a check
+      throw new Error("No parent workflow found");
     }
     this.getWorkflows();
+
     if (!this.props.onOk || !this.props.onCancel) {
       console.warn("WorkflowPDFModal: onOk and onCancel are required props");
     }
@@ -62,17 +98,49 @@ class WorkflowPDFModal extends Component {
   onCheckboxStateChange = selectedSteps => {
     this.setState({ selectedSteps });
   };
+  onParentCheckboxStateChange = stepTags => {
+    this.setState({
+      parentWorkflowStepsSelected: stepTags
+    });
+  };
+  handleChildWorkflowStepSelected = (childWorkflow, steps) => {
+    this.setState(state => ({
+      childWorkflowStepsSelected: {
+        ...state.childWorkflowStepsSelected,
+        [childWorkflow]: steps
+      }
+    }));
+  };
   renderStepsCheckboxes = (workflows, isLoading) => {
     if (isLoading) {
-      return <Spin indicator={<Icon type="" spin />} />;
+      return (
+        <div style={{ width: "100%", textAlign: "center" }}>
+          <Spin
+            indicator={<Icon type="loading" style={{ fontSize: 48 }} spin />}
+          />
+        </div>
+      );
     }
 
     return (
       <div>
-        <h2>Include the following sections: </h2>
-        <CheckboxGroup
-          options={workflows}
-          onChange={this.onCheckboxStateChange}
+        <p
+          style={{
+            fontSize: 20,
+            fontWeight: 500,
+            color: "black",
+            marginBottom: "0.5rem"
+          }}
+        >
+          Include the following sections:{" "}
+        </p>
+        <ParentStepCheckboxes
+          steps={workflows.parent}
+          onChange={this.onParentCheckboxStateChange}
+        />
+        <ChildStepsCheckboxes
+          steps={workflows.child}
+          onChange={this.handleChildWorkflowStepSelected}
         />
       </div>
     );
@@ -84,13 +152,85 @@ class WorkflowPDFModal extends Component {
       </div>
     );
   };
+  requestPDF = () => {
+    const {
+      childWorkflowStepsSelected,
+      parentWorkflowStepsSelected,
+      pdfConfig
+    } = this.state;
+    const { workflow: parentWorkflow } = this.props;
+    const payload = {
+      workflow_id: parentWorkflow.id,
+      parent_steps_to_print: parentWorkflowStepsSelected,
+      child_steps_to_print: childWorkflowStepsSelected,
+      ...this.pdfConfigOptions.reduce(
+        (acc, option) => ({
+          ...acc,
+          [option.value]: pdfConfig.includes(option.value)
+        }),
+        {}
+      )
+    };
+    console.log(JSON.stringify(payload, null, 4));
+    this.setState({ requestingPDF: true });
+    requestWorflowPDF(payload)
+      .then(() => {
+        this.setState({ requestingPDF: false });
+        this.props.onOk();
+        message.success(
+          "Request to generate PDF has been successfully created. You'll soon recieve PDF on you email."
+        );
+      })
+      .catch(err => {
+        this.setState({ requestingPDF: false });
+        message.error("Oops! Some error occurred. Please try again!");
+
+        // this.props.onOk();
+        // message.success(
+        //   "Request to generate PDF has been successfully created. You'll soon recieve PDF on you email."
+        // );
+      });
+  };
+  pdfConfigOptions = [
+    { value: "include_comments", label: "Include Comments" },
+    { value: "include_flags", label: "Include Flags" },
+    { value: "include_archived_related_workflows", label: "Include Archived" }
+  ];
+  handlePDFConfigChange = config => {
+    this.setState({
+      pdfConfig: config
+    });
+  };
   render() {
     const { visible, width, onOk, onCancel } = this.props;
-    const { isLoading, workflows, errorMessage } = this.state;
+    const { isLoading, workflows, errorMessage, requestingPDF } = this.state;
     return (
-      <Modal width={width} visible={visible} onOk={onOk} onCancel={onCancel}>
+      <Modal
+        width={width}
+        visible={visible}
+        onOk={onOk}
+        onCancel={onCancel}
+        footer={
+          <WorkflowPDFModalFooter
+            options={this.pdfConfigOptions}
+            onOk={this.requestPDF}
+            onCancel={onCancel}
+            onChange={this.handlePDFConfigChange}
+            isLoading={requestingPDF}
+          />
+        }
+      >
         <div>
-          <h2>Generate PDF</h2>
+          <p
+            style={{
+              fontSize: 20,
+              fontWeight: 500,
+              color: "black",
+              marginBottom: "0.5rem"
+            }}
+          >
+            Generate PDF
+          </p>
           <p>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy text
@@ -113,31 +253,101 @@ export default WorkflowPDFModal;
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-// Utils
-async function getChildWorkflows(workflowId, kindId) {
-  try {
-    // Fetch all kinds
-    const { results: kindMap } = await workflowKindService.getAll();
+// Util Component
 
-    const workflowTag = kindMap.find(m => m.id === kindId);
-    if (!workflowTag) {
-      throw new Error("Cant find the workflow Id!");
-    }
-
-    // Fetching child workflows
-    const { results: childWorkflows } = await getChildWorkflow(
-      workflowId,
-      workflowTag.tag
-    );
-    return childWorkflows;
-  } catch (err) {
-    throw new Error("Some error occurred!");
-  }
+function ParentStepCheckboxes({ steps, onChange }) {
+  return (
+    <CheckboxGroup onChange={onChange} style={{ marginBottom: 10 }}>
+      <Row type="flex">
+        {steps.map(step => (
+          <Col xs={6}>
+            <Checkbox value={step.value}>{step.label}</Checkbox>
+          </Col>
+        ))}
+      </Row>
+    </CheckboxGroup>
+  );
 }
 
+function ChildStepsCheckboxes({ steps, onChange }) {
+  return (
+    <div
+      type="flex"
+      style={{ overflowX: "scroll", width: "100%", marginLeft: -15 }}
+    >
+      <div style={{ width: "10000px" }}>
+        {steps.map(step => (
+          <div
+            style={{
+              display: "inline-block",
+              verticalAlign: "top",
+              margin: "15px 0"
+            }}
+          >
+            <p
+              style={{
+                marginBottom: "0.5rem",
+                paddingLeft: 15,
+                paddingRight: 15,
+                fontWeight: 500,
+                color: "black"
+              }}
+            >
+              {step.name}
+            </p>
+            <CheckboxGroup
+              style={{
+                borderRight: "1px solid #eee",
+                width: "100%"
+              }}
+              onChange={value => onChange(step.kind, value)}
+            >
+              <ul style={{ listStyleType: "none", padding: "0 20px" }}>
+                {step.stepsForCheckboxes.map(option => (
+                  <li>
+                    <Checkbox value={option.value}>{option.label}</Checkbox>
+                  </li>
+                ))}
+              </ul>
+            </CheckboxGroup>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function WorkflowPDFModalFooter({
+  options,
+  onOk,
+  onCancel,
+  onChange,
+  isLoading
+}) {
+  return (
+    <Row type="flex" justify="space-between">
+      <Col xs={16} style={{ textAlign: "left" }}>
+        <CheckboxGroup onChange={onChange} options={options} />
+      </Col>
+      <Col>
+        <Button type="default" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button loading={isLoading} type="primary" onClick={onOk}>
+          OK
+        </Button>
+      </Col>
+    </Row>
+  );
+}
+
+// Utils
 function createWorkflowSteps(workflow) {
   const { step_groups: stepGroups } = workflow;
   return _.flatMap(stepGroups, stepGroup =>
-    stepGroup.steps.map(step => ({ value: step.id, label: step.name }))
+    stepGroup.steps.map(step => ({
+      value: step.definition_tag,
+      label: step.name
+    }))
   );
 }
