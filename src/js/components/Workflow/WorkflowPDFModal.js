@@ -103,29 +103,19 @@ class WorkflowPDFModal extends Component {
       }
     }));
   };
-  renderStepsCheckboxes = (workflows, isLoading) => {
-    if (isLoading) {
-      return (
-        <div style={{ width: "100%", textAlign: "center" }}>
-          <Spin
-            indicator={<Icon type="loading" style={{ fontSize: 48 }} spin />}
-          />
-        </div>
-      );
-    }
-
+  renderLoader = () => {
+    return (
+      <div className="loader">
+        <Spin
+          indicator={<Icon type="loading" style={{ fontSize: 48 }} spin />}
+        />
+      </div>
+    );
+  };
+  renderStepsCheckboxes = workflows => {
     return (
       <div>
-        <p
-          style={{
-            fontSize: 20,
-            fontWeight: 500,
-            color: "black",
-            marginBottom: "0.5rem"
-          }}
-        >
-          Include the following sections:
-        </p>
+        <p className="heading">Include the following sections:</p>
         <ParentStepCheckboxes
           steps={workflows.parent}
           onChange={this.handleParentCheckboxStateChange}
@@ -140,7 +130,7 @@ class WorkflowPDFModal extends Component {
   renderErrorMessage = errorMessage => {
     return (
       <div>
-        <p style={{ textAlign: "center", color: "red" }}>{errorMessage}</p>
+        <p className="error-message">{errorMessage}</p>
       </div>
     );
   };
@@ -193,6 +183,7 @@ class WorkflowPDFModal extends Component {
         visible={visible}
         onOk={onOk}
         onCancel={onCancel}
+        className="workflow-pdf"
         footer={
           <WorkflowPDFModalFooter
             options={this.pdfConfigOptions}
@@ -204,16 +195,7 @@ class WorkflowPDFModal extends Component {
         }
       >
         <div>
-          <p
-            style={{
-              fontSize: 20,
-              fontWeight: 500,
-              color: "black",
-              marginBottom: "0.5rem"
-            }}
-          >
-            Generate PDF
-          </p>
+          <p className="heading">Generate PDF</p>
           <p>
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy text
@@ -222,7 +204,8 @@ class WorkflowPDFModal extends Component {
           </p>
         </div>
 
-        {workflows ? this.renderStepsCheckboxes(workflows, isLoading) : null}
+        {isLoading ? this.renderLoader() : null}
+        {workflows ? this.renderStepsCheckboxes(workflows) : null}
         {errorMessage ? this.renderErrorMessage(errorMessage) : null}
       </Modal>
     );
@@ -254,38 +237,16 @@ function ParentStepCheckboxes({ steps, onChange }) {
 
 function ChildStepsCheckboxes({ steps, onChange }) {
   return (
-    <div
-      type="flex"
-      style={{ overflowX: "scroll", width: "100%", marginLeft: -15 }}
-    >
-      <div style={{ width: "10000px" }}>
+    <div type="flex" className="child-checkboxes-outer">
+      <div className="child-checkboxes-inner">
         {steps.map(step => (
-          <div
-            style={{
-              display: "inline-block",
-              verticalAlign: "top",
-              margin: "15px 0"
-            }}
-          >
-            <p
-              style={{
-                marginBottom: "0.5rem",
-                paddingLeft: 15,
-                paddingRight: 15,
-                fontWeight: 500,
-                color: "black"
-              }}
-            >
-              {step.name}
-            </p>
+          <div className="child-checkbox-group-container">
+            <p>{step.name}</p>
             <CheckboxGroup
-              style={{
-                borderRight: "1px solid #eee",
-                width: "100%"
-              }}
+              className="child-checkbox-group"
               onChange={value => onChange(step.kind, value)}
             >
-              <ul style={{ listStyleType: "none", padding: "0 20px" }}>
+              <ul>
                 {step.stepsForCheckboxes.map(option => (
                   <li>
                     <Checkbox value={option.value}>{option.label}</Checkbox>
