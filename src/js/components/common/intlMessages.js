@@ -62,7 +62,8 @@ export default {
       exportText: "Export",
       scrollToTop: "Scroll to top",
       reloadText: "reload",
-      loadingText: "loading"
+      loadingText: "loading",
+      categoryText: "Category"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -166,7 +167,8 @@ export default {
       exportText: "Exportar",
       scrollToTop: "Hasta arriba",
       reloadText: "recargar",
-      loadingText: "cargando"
+      loadingText: "cargando",
+      categoryText: "categoría"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por",
