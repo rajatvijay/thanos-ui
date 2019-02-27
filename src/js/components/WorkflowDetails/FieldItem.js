@@ -38,8 +38,11 @@ class FieldItem extends Component {
     this.setState({
       encrypted: this.props.fieldParams.field.definition.is_encrypted
     });
+  };
 
-    console.log(this.props);
+  componentDidUpdate = () => {
+    console.log("this.props.dynamicUserPerms fileitems");
+    console.log(this.props.fieldParams.dynamicUserPerms);
   };
 
   decryptData = () => {
@@ -80,8 +83,7 @@ class FieldItem extends Component {
     fieldParams["decryptError"] = this.state.error;
     fieldParams["decryptedData"] = this.state.decrypted;
 
-    let dynamicUserPerm = this.props.fieldParams.currentStepFields
-      .currentStepFields.dynamic_group_names_with_perm;
+    let dynamicUserPerm = this.props.fieldParams.dynamicUserPerms;
 
     let showButton = false;
     if (
