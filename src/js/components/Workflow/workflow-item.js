@@ -27,7 +27,6 @@ import { utils } from "./utils";
 import { history } from "../../_helpers";
 import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
-import AuditList from "../Navbar/audit_log";
 import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
 import WorkflowPDFModal from "./WorkflowPDFModal";
@@ -53,15 +52,33 @@ const SubMenu = Menu.SubMenu;
 /*workflow Head*/
 /////////////////
 
+const openWindow = url => {
+  console.log(url);
+  window.open(url, "_blank");
+};
+
 const ProcessLcData = lc => {
   let subtext_value = <span />;
 
   if (lc.format === "date") {
-    subtext_value = <Moment format="MM/DD/YYYY">{lc.value}</Moment>;
+    subtext_value = <Moment format="MM/DD/YYYY">{lc.value || "-"}</Moment>;
   } else if (lc.format && lc.format.toLowerCase() === "pid") {
-    subtext_value = <span className="t-upr">{lc.value}</span>;
+    subtext_value = <span className="t-upr">{lc.value || "-"}</span>;
+  } else if (lc.format && lc.format.toLowerCase() === "icon") {
+    subtext_value = lc.value ? (
+      <span
+        onClick={() => {
+          window.open(lc.value, "_blank");
+        }}
+        className="text-nounderline text-anchor"
+      >
+        <i className="material-icons">picture_as_pdf</i>
+      </span>
+    ) : (
+      "-"
+    );
   } else {
-    subtext_value = <span>{lc.value}</span>;
+    subtext_value = <span>{lc.value || "-"}</span>;
   }
 
   return subtext_value;
@@ -70,7 +87,7 @@ const ProcessLcData = lc => {
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type == "normal" && item.value;
+    return item.display_type == "normal";
   });
 
   return (
@@ -80,6 +97,7 @@ const HeaderTitle = props => {
           <a
             href={"/workflows/instances/" + props.workflow.id + "/"}
             className="text-nounderline "
+            target={props.isEmbedded ? "_blank" : ""}
           >
             <span
               className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
@@ -104,7 +122,9 @@ const HeaderTitle = props => {
 
         <div className="lc1 text-ellipsis">
           {_.size(subtext) ? (
-            <Tooltip title={subtext[0].label + ": " + subtext[0].value}>
+            <Tooltip
+              title={subtext[0].label + ": " + (subtext[0].value || "-")}
+            >
               <span className="t-cap">
                 {subtext[0].show_label ? subtext[0].label + ": " : ""}
               </span>
@@ -285,14 +305,14 @@ class HeaderOptions2 extends React.Component {
           </span>
         </Menu.Item>
 
-        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              file_copy
-            </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
-          </span>
-        </Menu.Item>
+        {/*<Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>*/}
+        {/*<span>*/}
+        {/*<i className="material-icons t-18 text-middle pd-right-sm">*/}
+        {/*file_copy*/}
+        {/*</i>{" "}*/}
+        {/*<FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />*/}
+        {/*</span>*/}
+        {/*</Menu.Item>*/}
       </Menu>
     );
 
@@ -304,56 +324,85 @@ class HeaderOptions2 extends React.Component {
     const { isWorkflowPDFModalVisible } = this.state;
     const { workflow } = this.props;
     return (
-      <Fragment>
-        <WorkflowPDFModal
-          workflow={workflow}
-          visible={isWorkflowPDFModalVisible}
-          onOk={this.toggleWorkflowPDFModal}
-          onCancel={this.toggleWorkflowPDFModal}
-        />
-        <Col span="5">
-          <Row>
-            <Col span={14}>
-              <Tooltip title={this.state.current}>
-                <div className="pd-left pd-right status-text text-light t-12 text-ellipsis">
-                  {this.state.current}
+      <Col span="5">
+        {this.props.detailsPage && !this.props.isEmbedded ? (
+          <WorkflowPDFModal
+            workflow={workflow}
+            visible={isWorkflowPDFModalVisible}
+            onOk={this.toggleWorkflowPDFModal}
+            onCancel={this.toggleWorkflowPDFModal}
+          />
+        ) : null}
+        <Row>
+          <Col span={14}>
+            <Tooltip title={this.state.current}>
+              <div className="pd-left pd-right status-text text-light t-12 text-ellipsis t-mdm">
+                {this.state.current}
+              </div>
+            </Tooltip>
+          </Col>
+          <Col span={5} className="text-right">
+            {props.showCommentIcon &&
+            props.isEmbedded &&
+            workflow.comments_allowed ? (
+              <span>
+                <div className="add_comment_btn">
+                  <span>
+                    <i
+                      className="material-icons  t-18 text-metal"
+                      onClick={that.getComment.bind(that, props.workflow.id)}
+                    >
+                      chat_bubble_outline
+                    </i>
+                  </span>
                 </div>
-              </Tooltip>
-            </Col>
-            <Col span={5}>
-              {props.showCommentIcon && props.isEmbedded ? (
-                <span class="float-right">
-                  <div class="add_comment_btn">
-                    <span>
-                      <i
-                        className="material-icons  t-18 text-metal"
-                        onClick={that.getComment.bind(that, props.workflow.id)}
-                      >
-                        chat_bubble_outline
-                      </i>
-                    </span>
-                  </div>
+              </span>
+            ) : null}
+            {selected_flag && props.isEmbedded ? (
+              <Tooltip title={selected_flag.flag_detail.label}>
+                <span style={{ marginTop: "3px" }}>
+                  <i
+                    style={{
+                      color: selected_flag.flag_detail.extra.color,
+                      width: "14px"
+                    }}
+                    className="material-icons  t-12 "
+                  >
+                    fiber_manual_records
+                  </i>
                 </span>
-              ) : null}
+              </Tooltip>
+            ) : null}
 
-              {this.state.showSidebar ? (
-                <Drawer
-                  title="Activity log"
-                  placement="right"
-                  closable={true}
-                  //style={{top:'64px'}}
-                  onClose={this.toggleSidebar}
-                  visible={this.state.showSidebar}
-                  width={500}
-                  className="activity-log-drawer"
-                >
-                  <AuditListTabs id={props.workflow.id} />
-                </Drawer>
-              ) : null}
-            </Col>
-          </Row>
-        </Col>
-      </Fragment>
+            {this.state.showSidebar ? (
+              <Drawer
+                title="Activity log"
+                placement="right"
+                closable={true}
+                //style={{top:'64px'}}
+                onClose={this.toggleSidebar}
+                visible={this.state.showSidebar}
+                width={500}
+                className="activity-log-drawer"
+              >
+                <AuditListTabs id={props.workflow.id} />
+              </Drawer>
+            ) : null}
+          </Col>
+          <Col span={5}>
+            {this.props.detailsPage ? (
+              <Dropdown
+                overlay={workflowActionMenu}
+                className="child-workflow-dropdown"
+              >
+                <span className="pd-ard-sm text-metal text-anchor">
+                  <i className="material-icons text-middle t-18 ">more_vert</i>
+                </span>
+              </Dropdown>
+            ) : null}
+          </Col>
+        </Row>
+      </Col>
     );
   };
 }
@@ -422,7 +471,11 @@ class GetMergedData extends React.Component {
     });
 
     let lc_data = _.filter(data, function(v) {
-      return v.display_type == "normal" && v.value;
+      return v.display_type == "normal";
+    });
+
+    let lc_data_filtered = _.filter(lc_data, function(v, index) {
+      return v.value && index > 1;
     });
 
     let that = this;
@@ -465,9 +518,8 @@ class GetMergedData extends React.Component {
             }
           >
             <span className="t-cap">
-              {item.show_label || is_alert
-                ? item.label.replace(/_/g, " ") + item.link ? "" : ": "
-                : ""}
+              {item.show_label || (is_alert && item.link) ? item.label : ""}
+              {item.link ? "" : item.show_label ? ": " : ""}
             </span>
             {ProcessLcData(item) || ""}
           </span>
@@ -524,9 +576,9 @@ class GetMergedData extends React.Component {
                         return TagItem(item, index, true);
                       }
                     })
-                  : _.map(lc_data, function(item, index) {
+                  : _.map(lc_data_filtered, function(item, index) {
                       let count = index + 1;
-                      if (count > 2 && count < 4) {
+                      if (count < 2) {
                         return TagItem(item, index, false);
                       }
                     })}
@@ -622,7 +674,7 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type === "normal" && item.value;
+    return item.display_type === "normal";
   });
   return (
     <div className="ant-collapse-header">
@@ -672,16 +724,7 @@ export const WorkflowHeader = props => {
 
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
-            {_.size(subtext) >= 2 ? (
-              <Tooltip title={subtext[1].label + ": " + subtext[1].value}>
-                <span className="t-cap">
-                  {subtext[1].show_label ? subtext[1].label + ": " : ""}
-                </span>
-                {ProcessLcData(subtext[1])}
-              </Tooltip>
-            ) : (
-              ""
-            )}
+            {_.size(subtext) >= 2 ? ProcessLcData(subtext[1]) : ""}
           </div>
         </Col>
 
@@ -690,9 +733,10 @@ export const WorkflowHeader = props => {
         </Col>
 
         <Col span={2} className="text-center">
-          {props.workflow.sorting_primary_field ? (
+          {/* props.workflow.sorting_primary_field &&  */}
+          {props.workflow.sorting_primary_field && props.sortingEnabled ? (
             <Badge
-              count={<span>{props.workflow.sorting_primary_field}</span>}
+              count={<span>{props.rank}</span>}
               style={{
                 backgroundColor: getScoreColor(
                   props.workflow.sorting_primary_field
@@ -887,14 +931,15 @@ class MetaRow extends React.Component {
               ) : null}
 
               <span className="text-light">
-                Created <Moment fromNow>{props.workflow.created_at}</Moment>
+                <FormattedMessage id="commonTextInstances.createdText" />
+                <Moment fromNow>{props.workflow.created_at}</Moment>
               </span>
             </Col>
 
             <Col span="6" className="text-right text-light small">
               <Link to={"/workflows/instances/" + props.workflow.id}>
                 <span className="pd-ard-sm text-nounderline">
-                  View details ⟶
+                  <FormattedMessage id="workflowsInstances.viewDetails" /> ⟶
                 </span>
               </Link>
             </Col>
@@ -1048,5 +1093,3 @@ const StepItem = props => {
     </li>
   );
 };
-
-//export default WorkflowItem;
