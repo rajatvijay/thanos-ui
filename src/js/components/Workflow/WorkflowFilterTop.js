@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { workflowFiltersActions, workflowKindActions } from "../../actions";
 import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
-import { FormattedMessage, injectIntl } from "react-intl";
 
 class WorkflowFilterTop extends Component {
   state = {
@@ -58,9 +57,6 @@ class WorkflowFilterTop extends Component {
         {!loading ? (
           _.isEmpty(stepgroupdef_counts) ? null : (
             <div>
-              <span className="text-metal text-bold t-12 ellip-small s100 pd-right-sm">
-                <FormattedMessage id="commonTextInstances.categoryText" />:
-              </span>
               {_.map(stepgroupdef_counts, function(item, index) {
                 return (
                   <Tag
@@ -98,4 +94,4 @@ class WorkflowFilterTop extends Component {
   }
 }
 
-export default injectIntl(WorkflowFilterTop);
+export default WorkflowFilterTop;
