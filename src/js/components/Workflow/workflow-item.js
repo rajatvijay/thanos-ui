@@ -319,6 +319,20 @@ class HeaderOptions2 extends React.Component {
             </Tooltip>
           </Col>
           <Col span={5} className="text-right">
+            {props.showCommentIcon && props.isEmbedded ? (
+              <span>
+                <div className="add_comment_btn">
+                  <span>
+                    <i
+                      className="material-icons  t-18 text-metal"
+                      onClick={that.getComment.bind(that, props.workflow.id)}
+                    >
+                      chat_bubble_outline
+                    </i>
+                  </span>
+                </div>
+              </span>
+            ) : null}
             {selected_flag && props.isEmbedded ? (
               <Tooltip title={selected_flag.flag_detail.label}>
                 <span style={{ marginTop: "3px" }}>
