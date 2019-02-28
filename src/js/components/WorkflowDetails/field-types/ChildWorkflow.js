@@ -18,6 +18,7 @@ import {
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -439,11 +440,8 @@ class ChildWorkflowField2 extends Component {
 
             <Row>
               <Col span="18">
-                <span
-                  className="text-metal"
-                  style={{ marginRight: "10px", float: "left" }}
-                >
-                  Category:{" "}
+                <span className="text-metal text-bold t-12 ellip-small s100 pd-right-sm float-left">
+                  <FormattedMessage id="commonTextInstances.categoryText" />:
                 </span>
                 <span>{this.state.filterTags}</span>
               </Col>
@@ -655,7 +653,7 @@ function mapPropsToState(state) {
 }
 
 const ChildWorkflowFieldComponent = connect(mapPropsToState)(
-  ChildWorkflowField2
+  injectIntl(ChildWorkflowField2)
 );
 
 export const ChildWorkflowField = props => {
