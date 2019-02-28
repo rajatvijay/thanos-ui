@@ -29,6 +29,7 @@ import { changeStatusActions, workflowDetailsActions } from "../../actions";
 import Sidebar from "../common/sidebar";
 import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
+import WorkflowPDFModal from "./WorkflowPDFModal";
 
 const { getProcessedData, getProgressData } = calculatedData;
 const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
@@ -152,7 +153,8 @@ class HeaderOptions2 extends React.Component {
     super(props);
     this.state = {
       current: this.props.workflow.status.label,
-      showSidebar: false
+      showSidebar: false,
+      isWorkflowPDFModalVisible: false
     };
   }
 
@@ -222,6 +224,12 @@ class HeaderOptions2 extends React.Component {
     this.props.addComment(object_id, "workflow");
   };
 
+  toggleWorkflowPDFModal = () => {
+    this.setState(state => ({
+      isWorkflowPDFModalVisible: !state.isWorkflowPDFModalVisible
+    }));
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -275,6 +283,15 @@ class HeaderOptions2 extends React.Component {
             <FormattedMessage id="stepBodyFormInstances.printText" />
           </span>
         </Menu.Item>
+
+        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              file_copy
+            </i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
+          </span>
+        </Menu.Item>
       </Menu>
     );
 
@@ -283,8 +300,16 @@ class HeaderOptions2 extends React.Component {
       selected_flag = props.workflow.selected_flag[props.workflow.id];
     }
     let that = this;
+    const { isWorkflowPDFModalVisible } = this.state;
+    const { workflow } = this.props;
     return (
       <Col span="5">
+        <WorkflowPDFModal
+          workflow={workflow}
+          visible={isWorkflowPDFModalVisible}
+          onOk={this.toggleWorkflowPDFModal}
+          onCancel={this.toggleWorkflowPDFModal}
+        />
         <Row>
           <Col span={14}>
             <Tooltip title={this.state.current}>
@@ -308,7 +333,6 @@ class HeaderOptions2 extends React.Component {
                 </div>
               </span>
             ) : null}
-
             {selected_flag && props.isEmbedded ? (
               <Tooltip title={selected_flag.flag_detail.label}>
                 <span style={{ marginTop: "3px" }}>
