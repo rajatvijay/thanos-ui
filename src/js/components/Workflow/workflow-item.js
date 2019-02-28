@@ -293,9 +293,9 @@ class HeaderOptions2 extends React.Component {
               </div>
             </Tooltip>
           </Col>
-          <Col span={5}>
+          <Col span={5} className="text-right">
             {props.showCommentIcon && props.isEmbedded ? (
-              <span className="float-right">
+              <span>
                 <div className="add_comment_btn">
                   <span>
                     <i
@@ -311,10 +311,13 @@ class HeaderOptions2 extends React.Component {
 
             {selected_flag && props.isEmbedded ? (
               <Tooltip title={selected_flag.flag_detail.label}>
-                <span class="float-right" style={{ marginTop: "3px" }}>
+                <span style={{ marginTop: "3px" }}>
                   <i
-                    style={{ color: selected_flag.flag_detail.extra.color }}
-                    className="material-icons  t-12 tag-dot"
+                    style={{
+                      color: selected_flag.flag_detail.extra.color,
+                      width: "14px"
+                    }}
+                    className="material-icons  t-12 "
                   >
                     fiber_manual_records
                   </i>
