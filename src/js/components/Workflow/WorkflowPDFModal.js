@@ -196,12 +196,7 @@ class WorkflowPDFModal extends Component {
       >
         <div>
           <p className="heading">Generate PDF</p>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a.
-          </p>
+          <p>Please select steps to be printed in the CAR report</p>
         </div>
 
         {isLoading ? this.renderLoader() : null}
@@ -223,7 +218,10 @@ export default WorkflowPDFModal;
 
 function ParentStepCheckboxes({ steps, onChange }) {
   return (
-    <CheckboxGroup onChange={onChange} style={{ marginBottom: 10 }}>
+    <CheckboxGroup
+      onChange={onChange}
+      style={{ marginBottom: 10, width: "100%" }}
+    >
       <Row type="flex">
         {steps.map(step => (
           <Col xs={6}>
