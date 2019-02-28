@@ -303,98 +303,67 @@ class HeaderOptions2 extends React.Component {
     const { isWorkflowPDFModalVisible } = this.state;
     const { workflow } = this.props;
     return (
-      <Fragment>
+      <Col span="5">
         <WorkflowPDFModal
           workflow={workflow}
           visible={isWorkflowPDFModalVisible}
           onOk={this.toggleWorkflowPDFModal}
           onCancel={this.toggleWorkflowPDFModal}
         />
-        <Col span="5">
-          <Row>
-            <Col span={14}>
-              <Tooltip title={this.state.current}>
-                <div className="pd-left pd-right status-text text-light t-12 text-ellipsis">
-                  {this.state.current}
-                </div>
-              </Tooltip>
-            </Col>
-            <Col span={5}>
-              {props.showCommentIcon && props.isEmbedded ? (
-                <span className="float-right">
-                  <div className="add_comment_btn">
-                    <span>
-                      <i
-                        className="material-icons  t-18 text-metal"
-                        onClick={that.getComment.bind(that, props.workflow.id)}
-                      >
-                        chat_bubble_outline
-                      </i>
-                    </span>
-                  </div>
+        <Row>
+          <Col span={14}>
+            <Tooltip title={this.state.current}>
+              <div className="pd-left pd-right status-text text-light t-12 text-ellipsis">
+                {this.state.current}
+              </div>
+            </Tooltip>
+          </Col>
+          <Col span={5} className="text-right">
+            {selected_flag && props.isEmbedded ? (
+              <Tooltip title={selected_flag.flag_detail.label}>
+                <span style={{ marginTop: "3px" }}>
+                  <i
+                    style={{
+                      color: selected_flag.flag_detail.extra.color,
+                      width: "14px"
+                    }}
+                    className="material-icons  t-12 "
+                  >
+                    fiber_manual_records
+                  </i>
                 </span>
-              ) : null}
+              </Tooltip>
+            ) : null}
 
-              {selected_flag && props.isEmbedded ? (
-                <Tooltip title={selected_flag.flag_detail.label}>
-                  <span class="float-right" style={{ marginTop: "3px" }}>
-                    <i
-                      style={{ color: selected_flag.flag_detail.extra.color }}
-                      className="material-icons  t-12 tag-dot"
-                    >
-                      fiber_manual_records
-                    </i>
-                  </span>
-                </Tooltip>
-              ) : null}
-
-              {this.state.showSidebar ? (
-                <Drawer
-                  title="Activity log"
-                  placement="right"
-                  closable={true}
-                  //style={{top:'64px'}}
-                  onClose={this.toggleSidebar}
-                  visible={this.state.showSidebar}
-                  width={500}
-                  className="activity-log-drawer"
-                >
-                  <AuditListTabs id={props.workflow.id} />
-                </Drawer>
-              ) : null}
-            </Col>
-            <Col span={5}>
-              {this.props.detailsPage ? (
-                <Dropdown
-                  overlay={workflowActionMenu}
-                  className="child-workflow-dropdown"
-                >
-                  <span className="pd-ard-sm text-metal text-anchor">
-                    <i className="material-icons text-middle t-18 ">
-                      more_vert
-                    </i>
-                  </span>
-                </Dropdown>
-              ) : null}
-
-              {this.state.showSidebar ? (
-                <Drawer
-                  title="Activity log"
-                  placement="right"
-                  closable={true}
-                  //style={{top:'64px'}}
-                  onClose={this.toggleSidebar}
-                  visible={this.state.showSidebar}
-                  width={500}
-                  className="activity-log-drawer"
-                >
-                  <AuditListTabs id={props.workflow.id} />
-                </Drawer>
-              ) : null}
-            </Col>
-          </Row>
-        </Col>
-      </Fragment>
+            {this.state.showSidebar ? (
+              <Drawer
+                title="Activity log"
+                placement="right"
+                closable={true}
+                //style={{top:'64px'}}
+                onClose={this.toggleSidebar}
+                visible={this.state.showSidebar}
+                width={500}
+                className="activity-log-drawer"
+              >
+                <AuditListTabs id={props.workflow.id} />
+              </Drawer>
+            ) : null}
+          </Col>
+          <Col span={5}>
+            {this.props.detailsPage ? (
+              <Dropdown
+                overlay={workflowActionMenu}
+                className="child-workflow-dropdown"
+              >
+                <span className="pd-ard-sm text-metal text-anchor">
+                  <i className="material-icons text-middle t-18 ">more_vert</i>
+                </span>
+              </Dropdown>
+            ) : null}
+          </Col>
+        </Row>
+      </Col>
     );
   };
 }
