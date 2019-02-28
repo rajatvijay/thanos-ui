@@ -286,12 +286,12 @@ function WorkflowPDFModalFooter({
 // Utils
 function extractStepsFromWorkflow(workflow) {
   const { step_groups: stepGroups } = workflow;
-  return _.flatMap(stepGroups, stepGroup =>
-    stepGroup.steps.map(step => ({
+  return _.flatMap(stepGroups, stepGroup => {
+    return (stepGroup.steps || []).map(step => ({
       value: step.definition_tag,
       label: step.name
-    }))
-  );
+    }));
+  });
 }
 
 function extractKindTagFromWorkflow(workflow, kinds) {
