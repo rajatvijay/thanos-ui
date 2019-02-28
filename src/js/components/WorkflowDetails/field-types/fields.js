@@ -607,6 +607,8 @@ class FileUpload extends Component {
     this.state = {
       filesList: null,
       rejectedFilesList: null,
+      encrypted: props.encrypted,
+      decryptURL: null,
       loading: false
     };
   }
@@ -642,9 +644,19 @@ class FileUpload extends Component {
     console.log("file removed");
   };
 
+  showDecryptURL = () => {
+    this.setState({
+      encrypted: false,
+      decryptURL: this.props.decryptURL
+    });
+  };
+
   render = () => {
     let that = this;
     const { field } = this.props;
+    let url = this.state.encrypted
+      ? this.state.decryptURL
+      : field.answers[0] && field.answers[0].attachment;
 
     return (
       <FormItem
@@ -694,45 +706,58 @@ class FileUpload extends Component {
           </div>
         </Dropzone>
 
-        <div className="ant-upload-list ant-upload-list-text">
-          {field.answers[0] && field.answers[0].attachment !== null ? (
-            <div
-              className="ant-upload-list-item ant-upload-list-item-done"
-              key={"file-1"}
-            >
-              <div className="ant-upload-list-item-info">
-                <span>
-                  <i className="anticon anticon-paper-clip" />
-                  <a
-                    href={field.answers[0].attachment}
-                    target="_blank"
-                    className="ant-upload-list-item-name"
-                  >
-                    {field.answers[0].attachment.substring(
-                      field.answers[0].attachment.lastIndexOf("/") + 1,
-                      field.answers[0].attachment.lastIndexOf("?")
-                    )}
-                  </a>
-                </span>
+        {this.state.encrypted ? (
+          <div className="masked-input mr-bottom">
+            {"Masked"}
+            {this.props.decryptURL ? (
+              <span
+                className="float-right text-anchor"
+                onClick={this.showDecryptURL}
+              >
+                Show
+              </span>
+            ) : null}
+          </div>
+        ) : (
+          <div className="ant-upload-list ant-upload-list-text">
+            {url ? (
+              <div
+                className="ant-upload-list-item ant-upload-list-item-done"
+                key={"file-1"}
+              >
+                <div className="ant-upload-list-item-info">
+                  <span>
+                    <i className="anticon anticon-paper-clip" />
+                    <a
+                      href={url}
+                      target="_blank"
+                      className="ant-upload-list-item-name"
+                    >
+                      {field.answers[0].attachment.substring(
+                        field.answers[0].attachment.lastIndexOf("/") + 1,
+                        field.answers[0].attachment.lastIndexOf("?")
+                      )}
+                    </a>
+                  </span>
+                </div>
+
+                {this.props.completed ? (
+                  <i
+                    title="Remove file"
+                    className="anticon anticon-cross disabled"
+                    //onClick={this.removeFile}
+                  />
+                ) : (
+                  <i
+                    title="Remove file"
+                    className="anticon anticon-cross"
+                    onClick={this.removeFile}
+                  />
+                )}
               </div>
+            ) : null}
 
-              {this.props.completed ? (
-                <i
-                  title="Remove file"
-                  className="anticon anticon-cross disabled"
-                  //onClick={this.removeFile}
-                />
-              ) : (
-                <i
-                  title="Remove file"
-                  className="anticon anticon-cross"
-                  onClick={this.removeFile}
-                />
-              )}
-            </div>
-          ) : null}
-
-          {/*_.map(this.state.rejectedFilesList, function(file, index) {
+            {/*_.map(this.state.rejectedFilesList, function(file, index) {
             return (
               <div
                 className="ant-upload-list-item ant-upload-list-item-error"
@@ -756,7 +781,8 @@ class FileUpload extends Component {
               </div>
             );
           })*/}
-        </div>
+          </div>
+        )}
         <GetAnsweredBy {...this.props} />
       </FormItem>
     );
