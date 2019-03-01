@@ -215,6 +215,73 @@ const ActivityLogSimple = ({ item }) => {
   );
 };
 
+class ActivityLogAlert extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
+
+  toggle = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
+  render() {
+    const item = this.props.item;
+
+    return (
+      <div>
+        <div>
+          <span
+            className="float-right text-secondary small text-anchor"
+            onClick={this.toggle}
+          >
+            {this.state.isOpen ? "show less" : "show more"}
+          </span>
+          {item.actor.email ? (
+            <a
+              className="text-medium text-base"
+              href={"mailto:" + item.actor.email}
+            >
+              {item.actor.email}
+            </a>
+          ) : item.actor.username ? (
+            item.actor.username
+          ) : null}{" "}
+          {item.action.type} <b>{item.object.name}</b>
+        </div>
+
+        {this.state.isOpen ? (
+          <div className="small pd-top-sm pd-bottom-sm">
+            <div className="pbs">
+              <b>On:</b>{" "}
+              <span className="">{item.actiontime.humanize_time}</span>{" "}
+            </div>
+            <div className="pbs">
+              <b>Type:</b>{" "}
+              <span className="">{item.object.details.trigger_type}</span>{" "}
+            </div>
+            <div className="pbs">
+              <b>Operator:</b>{" "}
+              <span className="">{item.object.details.operator}</span>{" "}
+            </div>
+          </div>
+        ) : null}
+        <div>
+          <span className="small text-light">
+            <Tooltip title={item.actiontime.humanize_time}>
+              <Moment fromNow>{item.actiontime.datetime}</Moment>
+            </Tooltip>
+          </span>
+        </div>
+      </div>
+    );
+  }
+}
+
 const ActivityLogEmail = ({ item }) => {
   return (
     <p className="pd-left-sm">
@@ -313,11 +380,12 @@ const AuditContent = props => {
             } else if (item.action.type === "undo") {
               icon = "restore";
               color = "orange";
-            } else if (item.action.type === "alert_created") {
+            } else if (item.action.code === "alert_created") {
               icon = "alarm_add";
-              color = "green";
-            } else if (item.action.type === "alert_dismissed") {
+              color = "red";
+            } else if (item.action.code === "alert_dismissed") {
               icon = "alarm_off";
+              color = "green";
             }
 
             return (
@@ -326,7 +394,9 @@ const AuditContent = props => {
                 dot={<i className="material-icons t-14">{icon}</i>}
                 color={color}
               >
-                {item.object.type === "email" ? (
+                {item.object.type === "alert" ? (
+                  <ActivityLogAlert item={item} />
+                ) : item.object.type === "email" ? (
                   <ActivityLogEmail item={item} />
                 ) : item.object.changes && item.object.changes.length === 0 ? (
                   <ActivityLogSimple item={item} />
