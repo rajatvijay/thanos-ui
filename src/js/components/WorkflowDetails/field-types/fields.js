@@ -608,7 +608,7 @@ class FileUpload extends Component {
       filesList: null,
       rejectedFilesList: null,
       encrypted: props.encrypted,
-      decryptURL: null,
+      decryptURL: props.decryptURL,
       loading: false
     };
   }
@@ -618,7 +618,11 @@ class FileUpload extends Component {
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
     if (this.props !== nextProps) {
-      this.setState({ loading: false });
+      this.setState({
+        loading: false,
+        encrypted: nextProps.encrypted,
+        decryptURL: nextProps.decryptURL
+      });
     }
   };
 
@@ -646,17 +650,16 @@ class FileUpload extends Component {
 
   showDecryptURL = () => {
     this.setState({
-      encrypted: false,
-      decryptURL: this.props.decryptURL
+      encrypted: false
     });
   };
 
   render = () => {
     let that = this;
     const { field } = this.props;
-    let url = this.state.encrypted
-      ? this.state.decryptURL
-      : field.answers[0] && field.answers[0].attachment;
+    let url =
+      this.state.decryptURL ||
+      (field.answers[0] && field.answers[0].attachment);
 
     return (
       <FormItem
