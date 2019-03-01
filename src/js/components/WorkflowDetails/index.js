@@ -213,13 +213,7 @@ class WorkflowDetails extends Component {
       return step.id === currentStep.id;
     });
 
-    console.log("<<<<<<<<<<<<");
-    console.log(currentStep);
-    console.log(workflowData);
-    console.log(">>>>>>>>>>>>");
-
     if (sbStep.completed_at !== currentStep.completed_at) {
-      console.log("initialaiinzzee");
       this.getInitialData();
     }
   };
