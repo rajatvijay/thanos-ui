@@ -54,10 +54,9 @@ class FieldItem extends Component {
 
   decryptData = () => {
     const requestOptions = {
-      method: "POST",
-      headers: authHeader.post(),
-      credentials: "include",
-      body: JSON.stringify({})
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
     };
 
     this.setState({ fetching: true });
@@ -109,6 +108,8 @@ class FieldItem extends Component {
         return getFieldType(fieldParams);
       }
 
+      // TODO: this needs to be refactored by moving `decrypt` API to a service
+      // and masked UI to TextField
       return (
         <FormItem
           label={getLabel(props, this)}
