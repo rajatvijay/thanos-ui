@@ -13,7 +13,6 @@ import {
   Row,
   Col,
   Menu,
-  Affix,
   Dropdown,
   Cascader
 } from "antd";
@@ -214,8 +213,8 @@ class Comments extends Component {
         className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
         style={{
           background: "#fff",
-          overflow: "auto",
-          height: "100vh",
+          // overflow: "auto",
+          height: "calc(100vh - 70px)",
           position: "fixed",
           right: 0,
           top: "65px",
@@ -302,7 +301,10 @@ class Comments extends Component {
                     </div>
                   ) : null*/}
 
-                  <div className="comments-list">
+                  <div
+                    className="comments-list"
+                    style={{ maxHeight: "calc(100vh - 430px)" }}
+                  >
                     {_.map(c.messages, function(msg) {
                       return (
                         <div key={msg.id} className="mr-bottom">
@@ -346,7 +348,7 @@ class Comments extends Component {
                   </div>
 
                   {single_comments ? (
-                    <Affix offsetBottom={10}>
+                    <div className="affix-bottom">
                       <div className="comment-actions">
                         <Row>
                           {c.target.workflow_details ? (
@@ -381,13 +383,13 @@ class Comments extends Component {
                             notFoundContent={"user not found"}
                           />
                         </div>
-                        <div className="text-right">
+                        <div className="text-right ">
                           <Button onClick={that.addComment.bind(this, c)}>
                             <FormattedMessage id="stepBodyFormInstances.postButtonText" />
                           </Button>
                         </div>
                       </div>
-                    </Affix>
+                    </div>
                   ) : null}
                 </div>
               );
