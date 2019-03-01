@@ -1,4 +1,5 @@
 import { authHeader, baseUrl } from "../_helpers";
+import _ from "lodash";
 
 export const workflowStepService = {
   saveField,
@@ -15,7 +16,6 @@ export const workflowStepService = {
 
 function saveField(payload) {
   let requestOptions = {};
-
   if (payload.attachment) {
     let data = new FormData();
     data.append("workflow", payload.workflow);
@@ -173,12 +173,27 @@ function undoStep(payload) {
 }
 
 function addComment(payload) {
-  const requestOptions = {
+  let requestOptions = {};
+
+  let data = JSON.stringify(payload);
+  if (_.size(payload.attachment)) {
+    data = new FormData();
+    data.append("object_id", payload.object_id);
+    data.append("type", payload.type);
+    data.append("message", payload.message);
+    data.append("attachment", payload.attachment);
+  }
+
+  requestOptions = {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify(payload)
+    body: data
   };
+  if (_.size(payload.attachment)) {
+    delete requestOptions.headers["Content-Type"];
+  }
+
   return fetch(baseUrl + "channels/addmessage/", requestOptions).then(
     handleResponse
   );

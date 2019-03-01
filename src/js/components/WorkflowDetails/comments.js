@@ -14,7 +14,8 @@ import {
   Col,
   Menu,
   Dropdown,
-  Cascader
+  Cascader,
+  Upload
 } from "antd";
 import { Link } from "react-router-dom";
 import { workflowDetailsActions, changeStatusActions } from "../../actions";
@@ -31,7 +32,11 @@ const Option = Select.Option;
 class Comments extends Component {
   constructor(props) {
     super();
-    this.state = { message: toContentState("") };
+    this.state = {
+      message: toContentState(""),
+      fileList: [],
+      uploading: false
+    };
     // call action
   }
 
@@ -56,6 +61,12 @@ class Comments extends Component {
       content_type = "workflow";
     }
 
+    const { fileList } = this.state;
+    const formData = new FormData();
+    fileList.forEach(file => {
+      formData.append("files[]", file);
+    });
+
     let step_reload_payload = {
       workflowId: this.props.currentStepFields.currentStepFields.workflow,
       groupId: this.props.currentStepFields.currentStepFields.step_group,
@@ -66,11 +77,12 @@ class Comments extends Component {
       {
         object_id: c.object_id,
         type: content_type,
-        message: this.state.comment
+        message: this.state.comment,
+        attachment: _.size(fileList) ? fileList[0] : ""
       },
       step_reload_payload
     );
-    this.setState({ message: toContentState("") });
+    this.setState({ message: toContentState(""), fileList: [] });
   };
 
   selectStep = target => {
@@ -208,6 +220,28 @@ class Comments extends Component {
       </div>
     );
 
+    // for comment attachments
+    const { uploading, fileList } = this.state;
+    const props = {
+      onRemove: file => {
+        this.setState(state => {
+          const index = state.fileList.indexOf(file);
+          const newFileList = state.fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList: newFileList
+          };
+        });
+      },
+      beforeUpload: file => {
+        this.setState(state => ({
+          fileList: [...state.fileList, file]
+        }));
+        return false;
+      },
+      fileList
+    };
+
     return (
       <Sider
         className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
@@ -342,6 +376,25 @@ class Comments extends Component {
                               }}
                             />
                           </p>
+                          {msg.attachment ? (
+                            <span
+                              style={{
+                                fontSize: "12px",
+                                paddingLeft: "32px",
+                                position: "relative",
+                                top: "-17px"
+                              }}
+                            >
+                              <i class="anticon anticon-paper-clip" />&nbsp;
+                              <a href={msg.attachment}>
+                                {
+                                  msg.attachment.split("/")[
+                                    msg.attachment.split("/").length - 1
+                                  ]
+                                }
+                              </a>
+                            </span>
+                          ) : null}
                         </div>
                       );
                     })}
@@ -383,8 +436,23 @@ class Comments extends Component {
                             notFoundContent={"user not found"}
                           />
                         </div>
-                        <div className="text-right ">
-                          <Button onClick={that.addComment.bind(this, c)}>
+
+                        <div>
+                          <Upload
+                            {...props}
+                            style={{ position: "relative", left: "68px" }}
+                          >
+                            <Button>
+                              <Icon type="upload" /> Add attachment
+                            </Button>
+                          </Upload>
+                        </div>
+
+                        <div className="text-right">
+                          <Button
+                            onClick={that.addComment.bind(this, c)}
+                            style={{ position: "relative", top: "-31px" }}
+                          >
                             <FormattedMessage id="stepBodyFormInstances.postButtonText" />
                           </Button>
                         </div>
