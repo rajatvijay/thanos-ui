@@ -18,8 +18,10 @@ function requestWorflowPDF(payload) {
 
   const url = getURL();
   return fetch(url, requestOptions).then(response => {
-    console.log(response.json());
-    return response.json();
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
+    return response;
   });
 }
 
