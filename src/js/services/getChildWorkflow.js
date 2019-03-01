@@ -1,8 +1,8 @@
 import { authHeader, baseUrl } from "../_helpers";
 
-const getURL = (parentId, kind, limit = 100) => {
+const getURL = (parent_workflow_id, kind, limit = 100) => {
   const sanitizedParamsObject = JSON.parse(
-    JSON.stringify({ parentId, kind, limit })
+    JSON.stringify({ parent_workflow_id, kind, limit })
   );
   const params = new URLSearchParams(sanitizedParamsObject);
   return `${baseUrl}workflows-list/?${params}`;
