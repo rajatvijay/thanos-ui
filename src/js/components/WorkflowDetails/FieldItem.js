@@ -40,11 +40,6 @@ class FieldItem extends Component {
     });
   };
 
-  componentDidUpdate = () => {
-    console.log("this.props.dynamicUserPerms fileitems");
-    console.log(this.props.fieldParams.dynamicUserPerms);
-  };
-
   decryptData = () => {
     const requestOptions = {
       method: "POST",
