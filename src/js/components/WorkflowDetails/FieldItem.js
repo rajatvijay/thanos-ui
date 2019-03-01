@@ -45,6 +45,13 @@ class FieldItem extends Component {
     console.log(this.props.fieldParams.dynamicUserPerms);
   };
 
+  decryptURL = () => {
+    let answerObj = this.props.fieldParams.field.answers[0];
+    if (answerObj) {
+      return `${baseUrl}responses/${answerObj.id}/decrypt/`;
+    }
+  };
+
   decryptData = () => {
     const requestOptions = {
       method: "POST",
@@ -54,11 +61,7 @@ class FieldItem extends Component {
     };
 
     this.setState({ fetching: true });
-
-    let url = `${baseUrl}responses/${
-      this.props.fieldParams.field.answers[0].id
-    }/decrypt/`;
-
+    let url = this.decryptURL();
     fetch(url, requestOptions)
       .then(response => {
         if (!response.ok) {
@@ -99,6 +102,13 @@ class FieldItem extends Component {
     }
 
     if (this.props.fieldParams.field.answers[0] && this.state.encrypted) {
+      if (this.props.fieldParams.field.definition.field_type == "file") {
+        if (showButton) {
+          fieldParams["decryptURL"] = this.decryptURL();
+        }
+        return getFieldType(fieldParams);
+      }
+
       return (
         <FormItem
           label={getLabel(props, this)}
