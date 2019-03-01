@@ -335,6 +335,10 @@ function addComment(payload, step_reload_payload) {
 
     workflowStepService.addComment(payload).then(
       commentData => {
+        if (commentData["detail"]) {
+          dispatch(failure(commentData));
+          return;
+        }
         dispatch(success(commentData));
         if (
           _.size(commentData.results) &&
