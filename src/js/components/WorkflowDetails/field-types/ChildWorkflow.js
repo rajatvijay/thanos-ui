@@ -18,6 +18,7 @@ import {
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -208,6 +209,7 @@ class ChildWorkflowField2 extends Component {
       <Select
         placeholder="Filter by Adjudication Code"
         onChange={that.onFilterTagChange.bind(that, "flag")}
+        style={{ width: "150px" }}
       >
         {_.map(that.state.childWorkflow[0].comment_flag_options, function(
           v,
@@ -425,7 +427,7 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div>
-            <Row>
+            <Row className="mr-bottom">
               <Col span="18">
                 <span
                   className="text-metal"
@@ -437,13 +439,10 @@ class ChildWorkflowField2 extends Component {
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mr-bottom">
               <Col span="18">
-                <span
-                  className="text-metal"
-                  style={{ marginRight: "10px", float: "left" }}
-                >
-                  Category:{" "}
+                <span className="text-metal text-bold t-12 ellip-small s100 pd-right-sm float-left">
+                  <FormattedMessage id="commonTextInstances.categoryText" />:
                 </span>
                 <span>{this.state.filterTags}</span>
               </Col>
@@ -455,7 +454,7 @@ class ChildWorkflowField2 extends Component {
             </Row>
 
             <Row>
-              <Col span="5">
+              <Col span="12">
                 <span
                   className="text-metal"
                   style={{ marginRight: "10px", float: "left" }}
@@ -466,13 +465,13 @@ class ChildWorkflowField2 extends Component {
               </Col>
 
               <Col
-                span="19"
+                span="12"
                 className="text-right"
                 style={{ marginTop: "10px" }}
               >
                 <span
                   onClick={this.getChildWorkflow}
-                  style={{ cursor: "pointer" }}
+                  className="text-anchor text-secondary"
                 >
                   Reload
                 </span>
@@ -655,7 +654,7 @@ function mapPropsToState(state) {
 }
 
 const ChildWorkflowFieldComponent = connect(mapPropsToState)(
-  ChildWorkflowField2
+  injectIntl(ChildWorkflowField2)
 );
 
 export const ChildWorkflowField = props => {
