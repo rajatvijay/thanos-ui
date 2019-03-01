@@ -39,7 +39,7 @@ class FieldItem extends Component {
       encrypted: this.props.fieldParams.field.definition.is_encrypted
     });
   };
-
+  
   componentDidUpdate = () => {
     console.log("this.props.dynamicUserPerms fileitems");
     console.log(this.props.fieldParams.dynamicUserPerms);
