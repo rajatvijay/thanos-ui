@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
-import { WorkflowHeader } from "../../Workflow/workflow-item";
+import Collapsible from "react-collapsible";
+import { WorkflowHeader, WorkflowBody } from "../../Workflow/workflow-item";
+import { calculatedData } from "../../Workflow/calculated-data";
 import { connect } from "react-redux";
 import {
   Form,
@@ -21,6 +23,7 @@ import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { FormattedMessage, injectIntl } from "react-intl";
 
+const { getProcessedData } = calculatedData;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const {
@@ -51,7 +54,6 @@ const getKindID = (kindTag, workflowkind) => {
 
 const getKindName = (kindId, workflowKinds) => {
   let kind = _.find(workflowKinds, function(k) {
-    console.log(k, kindId);
     return k.id === parseInt(kindId, 10);
   });
 
@@ -605,14 +607,7 @@ class ChildItem extends Component {
         }
       })
       .then(body => {
-        let grouped = _.groupBy(body.results, function(child) {
-          return child.definition.kind;
-        });
-
-        console.log("grouped-----");
-        console.log(grouped);
-
-        this.setState({ fetching: false, childWorkflow: grouped });
+        this.setState({ fetching: false, childWorkflow: body.results });
       })
       .catch(error => {
         this.setState({ fetching: false, error: error });
@@ -626,81 +621,133 @@ class ChildItem extends Component {
     const { workflow, workflowKind, field } = props;
     const { isExpanded, kind, fetching } = this.state;
 
-    const customPanelStyle = {
-      borderRadius: 0,
-      border: 0,
-      overflow: "hidden",
-      backgroud: "#FFF"
-    };
+    let groupedChildren = null;
+    if (this.state.childWorkflow) {
+      groupedChildren = _.groupBy(this.state.childWorkflow, function(child) {
+        return child.definition.kind;
+      });
+
+      console.log("this.groupedChildren");
+      console.log(groupedChildren);
+    }
+
     return (
       <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
-        <WorkflowHeader
-          workflow={workflow}
-          field={field}
-          link={true}
-          kind={""}
-          statusView={true}
-          isChild={true}
-          hasChild={workflow.children_count}
-          isEmbedded={true}
-          showCommentIcon={true}
-          addComment={props.addComment}
-          currentStepFields={props.currentStepFields}
-        />
-
-        {fetching ? (
-          <div className="text-center pd-ard">loading...</div>
-        ) : that.state.childWorkflow && isExpanded ? (
-          <div className="child-container">
-            <Collapse defaultActiveKey={["1"]} bordered={false}>
-              {_.map(this.state.childWorkflow, function(group, key) {
-                return (
-                  <Panel
-                    style={customPanelStyle}
-                    showArrow={false}
-                    header={getKindName(key, workflowKind.workflowKind)}
-                    key={key}
-                  >
-                    {_.map(group, function(child, key) {
-                      return (
-                        <ChildItem
-                          key={workflow.id}
-                          workflow={workflow}
-                          workflowKind={kind}
-                        />
-                      );
-                    })}
-                  </Panel>
-                );
-              })}
-            </Collapse>
-          </div>
-        ) : null}
-
-        {workflow.children_count > 0 ? (
-          <span
-            className="child-workflow-expand text-anchor "
-            onClick={that.toggleExpand.bind(that, workflow.id, kind)}
-            title="Show related workflow"
+        <div className="collapse-wrapper">
+          <Collapsible
+            trigger={
+              <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
+                <WorkflowHeader
+                  workflow={workflow}
+                  field={field}
+                  link={true}
+                  kind={""}
+                  statusView={true}
+                  isChild={true}
+                  hasChild={workflow.children_count}
+                  isEmbedded={true}
+                  showCommentIcon={true}
+                  addComment={props.addComment}
+                  currentStepFields={props.currentStepFields}
+                />
+              </div>
+            }
+            lazyRender={true}
+            transitionTime={200}
+            onOpen={this.onOpen}
+            onClose={this.onClose}
+            //hasChildren={hasChildren}
           >
-            {console.log("this.state.kind------dddd")}
-            {console.log(workflow)}
-            {this.state.kind ? (
-              <i
-                className="material-icons t-16"
-                style={{ verticalAlign: "middle" }}
-              >
-                {isExpanded ? "remove" : "add"}
-              </i>
-            ) : workflow.children_count > 0 ? (
-              <Icon type="loading" style={{ fontSize: 12 }} />
-            ) : null}
-          </span>
-        ) : null}
+            <div className="lc-card">
+              <WorkflowBody
+                isChild={true}
+                //relatedKind={this.state.relatedWorkflow}
+                //onChildSelect={this.onChildSelect}
+                workflow={workflow}
+                //ondata={this.ondata}
+                statusView={true}
+                pData={getProcessedData(workflow.step_groups)}
+              />
+            </div>
+          </Collapsible>
+
+          {fetching ? (
+            <div className="text-center pd-ard">loading...</div>
+          ) : that.state.childWorkflow && isExpanded ? (
+            <div className="child-container">
+              <ChildCollapse
+                groupedChildren={groupedChildren}
+                workflowKind={workflowKind}
+                kind={kind}
+              />
+            </div>
+          ) : null}
+
+          {workflow.children_count > 0 ? (
+            <span
+              className="child-workflow-expand text-anchor "
+              onClick={that.toggleExpand.bind(that, workflow.id, kind)}
+              title="Show related workflow"
+            >
+              {kind ? (
+                <i
+                  className="material-icons t-16"
+                  style={{ verticalAlign: "middle" }}
+                >
+                  {isExpanded ? "remove" : "add"}
+                </i>
+              ) : workflow.children_count > 0 ? (
+                <Icon type="loading" style={{ fontSize: 12 }} />
+              ) : null}
+            </span>
+          ) : null}
+        </div>
       </div>
     );
   };
 }
+
+const ChildCollapse = props => {
+  const customPanelStyle = {
+    borderRadius: 0,
+    border: 0,
+    overflow: "hidden",
+    backgroud: "#FFF"
+  };
+
+  return (
+    <div
+      defaultActiveKey={Object.keys(props.groupedChildren)}
+      bordered={false}
+      className="embed-child-collapse"
+    >
+      {_.map(props.groupedChildren, function(group, key) {
+        return (
+          <Collapsible
+            trigger={
+              <div className="text-metal">
+                <b>{getKindName(key, props.workflowKind.workflowKind)}</b>
+              </div>
+            }
+            lazyRender={true}
+            transitionTime={200}
+            open={true}
+          >
+            {_.map(group, function(child, key) {
+              return (
+                <ChildItem
+                  key={child.id}
+                  workflow={child}
+                  workflowKind={props.kind}
+                />
+              );
+            })}
+          </Collapsible>
+        );
+      })}
+    </div>
+  );
+};
 
 function mapPropsToState(state) {
   const { workflowDetailsHeader, workflowKind } = state;
