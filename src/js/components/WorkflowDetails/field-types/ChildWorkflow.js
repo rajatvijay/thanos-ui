@@ -51,8 +51,8 @@ const getKindID = (kindTag, workflowkind) => {
 
 const getKindName = (kindId, workflowKinds) => {
   let kind = _.find(workflowKinds, function(k) {
-    console.log(k, kindId)
-    return k.id === parseInt(kindId,10);
+    console.log(k, kindId);
+    return k.id === parseInt(kindId, 10);
   });
 
   if (kind) {
@@ -542,7 +542,7 @@ class ChildItem extends Component {
   }
 
   componentDidMount = () => {
-    this.setKind();
+    //this.setKind();
   };
 
   toggleExpand = (parent, kind) => {
@@ -555,19 +555,25 @@ class ChildItem extends Component {
   setKind = () => {
     let rKind = null;
 
-    console.log("workflow-->"+this.props.workflow.id)
-    console.log(this.props.workflow.definition.related_types[0])
+    console.log("workflow-->" + this.props.workflow);
+    console.log(this.props.workflow.definition.related_types[0]);
 
     let workflowKind = this.props.workflowKind.workflowKind;
     if (_.size(workflowKind)) {
-      rKind = getKindID(this.props.workflow.definition.related_types[0],workflowKind);
+      rKind = getKindID(
+        this.props.workflow.definition.related_types[0],
+        workflowKind
+      );
       this.setState({ kind: rKind });
-      console.log(rKind)
+      console.log(rKind);
     }
   };
 
   componentDidUpdate = prevProps => {
-    if (this.props.workflowKind !== prevProps.workflowKind) {
+    if (
+      this.props.workflowKind !== prevProps.workflowKind ||
+      (this.props.workflowKind && !this.state.kind)
+    ) {
       this.setKind();
     }
   };
@@ -622,14 +628,10 @@ class ChildItem extends Component {
 
     const customPanelStyle = {
       borderRadius: 0,
-      //marginBottom:24,
       border: 0,
       overflow: "hidden",
       backgroud: "#FFF"
     };
-
-    console.log("workflow------->>");
-    console.log(workflow);
     return (
       <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
         <WorkflowHeader
@@ -681,6 +683,8 @@ class ChildItem extends Component {
             onClick={that.toggleExpand.bind(that, workflow.id, kind)}
             title="Show related workflow"
           >
+            {console.log("this.state.kind------dddd")}
+            {console.log(workflow)}
             {this.state.kind ? (
               <i
                 className="material-icons t-16"
@@ -688,9 +692,9 @@ class ChildItem extends Component {
               >
                 {isExpanded ? "remove" : "add"}
               </i>
-            ) : (
+            ) : workflow.children_count > 0 ? (
               <Icon type="loading" style={{ fontSize: 12 }} />
-            )}
+            ) : null}
           </span>
         ) : null}
       </div>
