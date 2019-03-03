@@ -725,8 +725,8 @@ const ChildCollapse = props => {
         return (
           <Collapsible
             trigger={
-              <div className="text-metal">
-                <b>{getKindName(key, props.workflowKind.workflowKind)}</b>
+              <div className="text-metal text-medium text-anchor">
+                {getKindName(key, props.workflowKind.workflowKind)}
               </div>
             }
             lazyRender={true}
