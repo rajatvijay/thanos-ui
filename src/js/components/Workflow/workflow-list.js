@@ -269,8 +269,6 @@ const GetChildWorkflow = props => {
   let childList = null;
   let workflowId = props.workflow.id;
 
-  console.log(props);
-
   if (props.workflowChildren[workflowId].loading) {
     return (childList = (
       <div className="text-center mr-bottom">loading...</div>
