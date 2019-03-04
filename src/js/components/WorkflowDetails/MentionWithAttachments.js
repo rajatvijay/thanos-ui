@@ -11,9 +11,20 @@ class MentionWithAttachments extends Component {
   };
 
   toggleAddAttachmentModal = () => {
-    this.setState(state => ({
-      isAddAttachmentModalVisible: !state.isAddAttachmentModalVisible
-    }));
+    this.setState(state => {
+      if (state.isAddAttachmentModalVisible) {
+        // If the modal is already visible, close it and reset the state
+        return {
+          isAddAttachmentModalVisible: !state.isAddAttachmentModalVisible,
+          files: [],
+          inputComment: null
+        };
+      } else {
+        return {
+          isAddAttachmentModalVisible: !state.isAddAttachmentModalVisible
+        };
+      }
+    });
   };
 
   addFile = file =>
