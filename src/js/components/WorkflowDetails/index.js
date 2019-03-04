@@ -205,6 +205,7 @@ class WorkflowDetails extends Component {
   syncStepCompletion = () => {
     let currentStep = this.props.currentStepFields.currentStepFields;
     let workflowData = this.props.workflowDetailsHeader.workflowDetailsHeader;
+
     let sbGroup = _.find(workflowData.step_groups, group => {
       return group.id === currentStep.step_group;
     });
@@ -212,7 +213,13 @@ class WorkflowDetails extends Component {
       return step.id === currentStep.id;
     });
 
-    if (!sbStep.completed_at === currentStep.completed_at) {
+    console.log("<<<<<<<<<<<<");
+    console.log(currentStep);
+    console.log(workflowData);
+    console.log(">>>>>>>>>>>>");
+
+    if (sbStep.completed_at !== currentStep.completed_at) {
+      console.log("initialaiinzzee");
       this.getInitialData();
     }
   };
