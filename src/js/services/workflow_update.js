@@ -183,6 +183,8 @@ function addComment(payload) {
     data.append("type", payload.type);
     data.append("message", payload.message);
     data.append("attachment", payload.attachment);
+  } else {
+    data = JSON.stringify(payload);
   }
 
   requestOptions = {
@@ -191,7 +193,7 @@ function addComment(payload) {
     credentials: "include",
     body: data
   };
-  if (_.size(payload.attachment)) {
+  if (payload.attachment) {
     delete requestOptions.headers["Content-Type"];
   }
 
