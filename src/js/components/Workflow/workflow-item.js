@@ -489,9 +489,8 @@ class GetMergedData extends React.Component {
             }
           >
             <span className="t-cap">
-              {item.show_label || is_alert
-                ? item.label.replace(/_/g, " ") + item.link ? "" : ": "
-                : ""}
+              {item.show_label || is_alert ? item.label.replace(/_/g, " ") : ""}
+              {item.link ? "" : ": "}
             </span>
             {ProcessLcData(item) || ""}
           </span>
