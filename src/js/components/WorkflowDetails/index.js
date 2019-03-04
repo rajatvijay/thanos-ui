@@ -197,7 +197,6 @@ class WorkflowDetails extends Component {
       this.props.currentStepFields.currentStepFields.step_group &&
       this.props.workflowDetailsHeader.workflowDetailsHeader
     ) {
-      console.log(this.props.currentStepFields.currentStepFields);
       this.syncStepCompletion();
     }
   };
