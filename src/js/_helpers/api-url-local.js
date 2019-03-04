@@ -3,13 +3,11 @@ const getSite = site => {
   let hostSplit = host.split(".");
   let domain =
     document.location.protocol +
-    "//" +
-    hostSplit[0] +
-    "." +
+    "//api." +
     hostSplit[1] +
     "." +
     hostSplit[2] +
-    ":8000/api/v1/";
+    "/api/v1/";
   return domain;
 };
 
