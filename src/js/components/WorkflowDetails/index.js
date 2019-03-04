@@ -197,7 +197,6 @@ class WorkflowDetails extends Component {
       this.props.currentStepFields.currentStepFields.step_group &&
       this.props.workflowDetailsHeader.workflowDetailsHeader
     ) {
-      console.log(this.props.currentStepFields.currentStepFields);
       this.syncStepCompletion();
     }
   };
@@ -213,13 +212,7 @@ class WorkflowDetails extends Component {
       return step.id === currentStep.id;
     });
 
-    console.log("<<<<<<<<<<<<");
-    console.log(currentStep);
-    console.log(workflowData);
-    console.log(">>>>>>>>>>>>");
-
     if (sbStep.completed_at !== currentStep.completed_at) {
-      console.log("initialaiinzzee");
       this.getInitialData();
     }
   };
