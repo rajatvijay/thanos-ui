@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
-import { WorkflowHeader } from "../../Workflow/workflow-item";
+import Collapsible from "react-collapsible";
+import { WorkflowHeader, WorkflowBody } from "../../Workflow/workflow-item";
+import { calculatedData } from "../../Workflow/calculated-data";
 import { connect } from "react-redux";
 import {
   Form,
@@ -13,13 +15,15 @@ import {
   Tooltip,
   Divider,
   Tag,
-  Select
+  Select,
+  Collapse
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { FormattedMessage, injectIntl } from "react-intl";
 
+const { getProcessedData } = calculatedData;
 const Option = Select.Option;
 const FormItem = Form.Item;
 const {
@@ -34,15 +38,27 @@ const {
   getLink,
   isDisabled
 } = commonFunctions;
+const Panel = Collapse.Panel;
 
 const getKindID = (kindTag, workflowkind) => {
   let kind = null;
   kind = _.find(workflowkind, function(k) {
     return k.tag === kindTag;
   });
-
   if (kind) {
     return kind.id;
+  } else {
+    return;
+  }
+};
+
+const getKindName = (kindId, workflowKinds) => {
+  let kind = _.find(workflowKinds, function(k) {
+    return k.id === parseInt(kindId, 10);
+  });
+
+  if (kind) {
+    return kind.name;
   } else {
     return;
   }
@@ -370,7 +386,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   onFilterTagChange = (tag, _type) => {
-    console.log(tag, _type);
     let filtered_workflow = this.state.filteredChildWorkflow;
     if (this.state.status_workflow_map[tag] && _type == "status") {
       filtered_workflow = this.state.status_workflow_map[tag];
@@ -386,7 +401,6 @@ class ChildWorkflowField2 extends Component {
       this.setState({ filteredChildWorkflow: filtered_workflow });
       this.filterByFlag();
     } else if (tag == "flag") {
-      console.log(this.state.flag_workflow_map, _type);
       filtered_workflow = this.state.flag_workflow_map[_type];
       this.state.filteredChildWorkflow = filtered_workflow;
       this.setState({ filteredChildWorkflow: filtered_workflow });
@@ -527,10 +541,6 @@ class ChildItem extends Component {
     };
   }
 
-  componentDidMount = () => {
-    this.setKind();
-  };
-
   toggleExpand = (parent, kind) => {
     this.setState({ isExpanded: !this.state.isExpanded });
     if (!this.state.childWorkflow) {
@@ -551,7 +561,10 @@ class ChildItem extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    if (this.props.workflowKind !== prevProps.workflowKind) {
+    if (
+      this.props.workflowKind !== prevProps.workflowKind ||
+      (this.props.workflowKind && !this.state.kind)
+    ) {
       this.setKind();
     }
   };
@@ -596,54 +609,131 @@ class ChildItem extends Component {
     let props = this.props;
     const { workflow, workflowKind, field } = props;
     const { isExpanded, kind, fetching } = this.state;
+
+    let groupedChildren = null;
+    if (this.state.childWorkflow) {
+      groupedChildren = _.groupBy(this.state.childWorkflow, function(child) {
+        return child.definition.kind;
+      });
+    }
+
     return (
       <div className={"workflow-list-item " + (isExpanded ? "expanded " : "")}>
-        <WorkflowHeader
-          workflow={workflow}
-          field={field}
-          link={true}
-          kind={""}
-          statusView={true}
-          isChild={true}
-          hasChild={workflow.children_count}
-          isEmbedded={true}
-          showCommentIcon={true}
-          addComment={props.addComment}
-          currentStepFields={props.currentStepFields}
-        />
-
-        {fetching ? (
-          <div className="text-center pd-ard">loading...</div>
-        ) : that.state.childWorkflow && isExpanded ? (
-          <div className="child-container">
-            {_.map(this.state.childWorkflow, function(child) {
-              return <ChildItem workflow={child} workflowKind={kind} />;
-            })}
-          </div>
-        ) : null}
-
-        {workflow.children_count > 0 ? (
-          <span
-            className="child-workflow-expand text-anchor "
-            onClick={that.toggleExpand.bind(that, workflow.id, kind)}
-            title="Show related workflow"
+        <div className="collapse-wrapper">
+          <Collapsible
+            trigger={
+              <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
+                <WorkflowHeader
+                  workflow={workflow}
+                  field={field}
+                  link={true}
+                  kind={""}
+                  statusView={true}
+                  isChild={true}
+                  hasChild={workflow.children_count}
+                  isEmbedded={true}
+                  showCommentIcon={true}
+                  addComment={props.addComment}
+                  currentStepFields={props.currentStepFields}
+                />
+              </div>
+            }
+            lazyRender={true}
+            transitionTime={200}
+            onOpen={this.onOpen}
+            onClose={this.onClose}
+            //hasChildren={hasChildren}
           >
-            {this.state.kind ? (
-              <i
-                className="material-icons t-16"
-                style={{ verticalAlign: "middle" }}
-              >
-                {isExpanded ? "remove" : "add"}
-              </i>
-            ) : (
-              <Icon type="loading" style={{ fontSize: 12 }} />
-            )}
-          </span>
-        ) : null}
+            <div className="lc-card">
+              <WorkflowBody
+                isChild={true}
+                //relatedKind={this.state.relatedWorkflow}
+                //onChildSelect={this.onChildSelect}
+                workflow={workflow}
+                //ondata={this.ondata}
+                statusView={true}
+                pData={getProcessedData(workflow.step_groups)}
+              />
+            </div>
+          </Collapsible>
+
+          {fetching ? (
+            <div className="text-center pd-ard">loading...</div>
+          ) : that.state.childWorkflow && isExpanded ? (
+            <div className="child-container">
+              <ChildCollapse
+                groupedChildren={groupedChildren}
+                workflowKind={workflowKind}
+                kind={kind}
+              />
+            </div>
+          ) : null}
+
+          {workflow.children_count > 0 ? (
+            <span
+              className="child-workflow-expand text-anchor "
+              onClick={that.toggleExpand.bind(that, workflow.id, kind)}
+              title="Show related workflow"
+            >
+              {kind ? (
+                <i
+                  className="material-icons t-16"
+                  style={{ verticalAlign: "middle" }}
+                >
+                  {isExpanded ? "remove" : "add"}
+                </i>
+              ) : workflow.children_count > 0 ? (
+                <Icon type="loading" style={{ fontSize: 12 }} />
+              ) : null}
+            </span>
+          ) : null}
+        </div>
       </div>
     );
   };
 }
+
+const ChildCollapse = props => {
+  const customPanelStyle = {
+    borderRadius: 0,
+    border: 0,
+    overflow: "hidden",
+    backgroud: "#FFF"
+  };
+
+  return (
+    <div
+      defaultActiveKey={Object.keys(props.groupedChildren)}
+      bordered={false}
+      className="embed-child-collapse"
+    >
+      {_.map(props.groupedChildren, function(group, key) {
+        return (
+          <Collapsible
+            trigger={
+              <div className="text-metal text-medium text-anchor">
+                {getKindName(key, props.workflowKind.workflowKind)}
+              </div>
+            }
+            lazyRender={true}
+            transitionTime={200}
+            open={true}
+          >
+            {_.map(group, function(child, key) {
+              return (
+                <ChildItem
+                  key={child.id}
+                  workflow={child}
+                  workflowKind={props.kind}
+                />
+              );
+            })}
+          </Collapsible>
+        );
+      })}
+    </div>
+  );
+};
 
 function mapPropsToState(state) {
   const { workflowDetailsHeader, workflowKind } = state;

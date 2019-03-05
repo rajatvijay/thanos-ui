@@ -79,6 +79,7 @@ const HeaderTitle = props => {
           <a
             href={"/workflows/instances/" + props.workflow.id + "/"}
             className="text-nounderline "
+            target={props.isEmbedded ? "_blank" : ""}
           >
             <span
               className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
