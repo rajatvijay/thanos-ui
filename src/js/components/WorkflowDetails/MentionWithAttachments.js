@@ -10,21 +10,16 @@ class MentionWithAttachments extends Component {
     files: []
   };
 
-  toggleAddAttachmentModal = () => {
-    this.setState(state => {
-      if (state.isAddAttachmentModalVisible) {
-        // If the modal is already visible, close it and reset the state
-        return {
-          isAddAttachmentModalVisible: !state.isAddAttachmentModalVisible,
-          files: [],
-          inputComment: null
-        };
-      } else {
-        return {
-          isAddAttachmentModalVisible: !state.isAddAttachmentModalVisible
-        };
-      }
+  hideModalAndResetState = () => {
+    this.setState({
+      isAddAttachmentModalVisible: false,
+      files: [],
+      inputComment: null
     });
+  };
+
+  showModal = () => {
+    this.setState({ isAddAttachmentModalVisible: true });
   };
 
   addFile = file =>
@@ -41,7 +36,7 @@ class MentionWithAttachments extends Component {
           e.clipboardData.files[0].type.startsWith("image/")
         ) {
           this.addFile(e.clipboardData.files[0]);
-          this.toggleAddAttachmentModal();
+          this.showModal();
         }
       }
     };
@@ -57,7 +52,7 @@ class MentionWithAttachments extends Component {
     const { comment } = this.props;
     const files = fileWithURL.map(({ file }) => file);
     this.props.addComment(comment, inputComment, files);
-    this.toggleAddAttachmentModal();
+    this.hideModalAndResetState();
   };
 
   render() {
@@ -69,7 +64,7 @@ class MentionWithAttachments extends Component {
           title="Add Attachment"
           visible={isAddAttachmentModalVisible}
           onOk={this.uploadAndAddComment}
-          onCancel={this.toggleAddAttachmentModal}
+          onCancel={this.hideModalAndResetState}
         >
           {files.map(file => (
             <div>
