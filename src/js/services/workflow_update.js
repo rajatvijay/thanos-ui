@@ -175,13 +175,16 @@ function undoStep(payload) {
 function addComment(payload) {
   let requestOptions = {};
 
-  let data = JSON.stringify(payload);
-  if (_.size(payload.attachment)) {
+  // let data = JSON.stringify(payload);
+  let data = payload;
+  if (payload.attachment) {
     data = new FormData();
     data.append("object_id", payload.object_id);
     data.append("type", payload.type);
     data.append("message", payload.message);
     data.append("attachment", payload.attachment);
+  } else {
+    data = JSON.stringify(payload);
   }
 
   requestOptions = {
@@ -190,7 +193,7 @@ function addComment(payload) {
     credentials: "include",
     body: data
   };
-  if (_.size(payload.attachment)) {
+  if (payload.attachment) {
     delete requestOptions.headers["Content-Type"];
   }
 
