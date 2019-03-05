@@ -64,7 +64,7 @@ class Comments extends Component {
     }
 
     const { fileList: filesFromState } = this.state;
-    const fileList = files.length ? files : filesFromState;
+    const fileList = files && files.length ? files : filesFromState;
     // const formData = new FormData();
     // fileList.forEach(file => {
     //   formData.append("files[]", file);
