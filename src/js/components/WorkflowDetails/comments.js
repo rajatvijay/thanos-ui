@@ -360,9 +360,9 @@ class Comments extends Component {
                             }}
                           >
                             <b style={{ color: "#162c5b" }}>
-                              {msg.posted_by_user.first_name !== ""
-                                ? msg.posted_by_user.first_name
-                                : msg.posted_by_user.email}
+                              {msg.posted_by.first_name !== ""
+                                ? msg.posted_by.first_name
+                                : msg.posted_by.email}
                             </b>
                             <span
                               style={{ fontSize: "11px", marginLeft: "6px" }}
