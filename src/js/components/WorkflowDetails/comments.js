@@ -15,7 +15,8 @@ import {
   Menu,
   Dropdown,
   Cascader,
-  Upload
+  Upload,
+  Modal
 } from "antd";
 import { Link } from "react-router-dom";
 import { workflowDetailsActions, changeStatusActions } from "../../actions";
@@ -23,6 +24,7 @@ import { integrationCommonFunctions } from "./field-types/integration_common";
 import _ from "lodash";
 import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
+import MentionWithAttachments from "./MentionWithAttachments";
 
 const { toString, toContentState } = Mention;
 
@@ -51,7 +53,7 @@ class Comments extends Component {
     this.setState({ message: value });
   };
 
-  addComment = c => {
+  addComment = (c, message, files) => {
     let content_type = "step";
     if (c.content_type == "integrationresult") {
       content_type = "integrationresult";
@@ -61,11 +63,12 @@ class Comments extends Component {
       content_type = "workflow";
     }
 
-    const { fileList } = this.state;
-    const formData = new FormData();
-    fileList.forEach(file => {
-      formData.append("files[]", file);
-    });
+    const { fileList: filesFromState } = this.state;
+    const fileList = files.length ? files : filesFromState;
+    // const formData = new FormData();
+    // fileList.forEach(file => {
+    //   formData.append("files[]", file);
+    // });
 
     let step_reload_payload = {
       workflowId: this.props.currentStepFields.currentStepFields.workflow,
@@ -77,7 +80,7 @@ class Comments extends Component {
       {
         object_id: c.object_id,
         type: content_type,
-        message: this.state.comment,
+        message: message || this.state.comment,
         attachment: _.size(fileList) ? fileList[0] : ""
       },
       step_reload_payload
@@ -180,6 +183,10 @@ class Comments extends Component {
     this.props.dispatch(changeStatusActions(payload, step_reload_payload));
   };
 
+  addAttachementInState = file => {
+    this.setState(state => ({ fileList: [...state.fileList, file] }));
+  };
+
   render() {
     const Panel = Collapse.Panel;
     let comments = this.props.workflowComments
@@ -234,9 +241,7 @@ class Comments extends Component {
         });
       },
       beforeUpload: file => {
-        this.setState(state => ({
-          fileList: [...state.fileList, file]
-        }));
+        this.addAttachementInState(file);
         return false;
       },
       fileList
@@ -424,7 +429,18 @@ class Comments extends Component {
                           <span className="text-metal text-medium t-12 pd-right-sm">
                             Comment:{" "}
                           </span>
-                          <Mention
+                          <MentionWithAttachments
+                            comment={c}
+                            addComment={that.addComment}
+                            placeholder={that.props.intl.formatMessage({
+                              id: "stepBodyFormInstances.enterComment"
+                            })}
+                            onChange={that.onChange}
+                            message={that.state.message}
+                            addAttachement={that.addAttachementInState}
+                          />
+                          {/* <Mention
+                            ref={el => that.addRefAndData(el, c)}
                             style={{ width: "470px", height: 30 }}
                             suggestions={c.mentions}
                             placeholder={that.props.intl.formatMessage({
@@ -434,7 +450,7 @@ class Comments extends Component {
                             onChange={that.onChange}
                             value={that.state.message}
                             notFoundContent={"user not found"}
-                          />
+                          /> */}
                         </div>
 
                         <div>
