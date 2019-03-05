@@ -17,12 +17,10 @@ export const integrationCommonFunctions = {
 };
 
 function comment_answer_body(c) {
+  let classes = "text-bold t-16 mr-top";
+
   if (_.size(c.target.workflow_details)) {
-    return (
-      <div className="text-bold t-16 mr-top">
-        {workflow_comment_html(c.target)}
-      </div>
-    );
+    return <div className={classes}>{workflow_comment_html(c.target)}</div>;
   }
 
   if (!_.size(c.target.field_details)) {
@@ -32,45 +30,29 @@ function comment_answer_body(c) {
   if (c.target.field_details.is_integration_type) {
     if (c.target.field_details.type == "dnb_livingstone") {
       return (
-        <div className="text-bold t-16 mr-top">
-          {dnb_livingston_html(c.target.row_json)}
-        </div>
+        <div className={classes}>{dnb_livingston_html(c.target.row_json)}</div>
       );
     } else if (c.target.field_details.type == "dnb_ubo") {
-      return (
-        <div className="text-bold t-16 mr-top">
-          {dnb_ubo_html(c.target.row_json)}
-        </div>
-      );
+      return <div className={classes}>{dnb_ubo_html(c.target.row_json)}</div>;
     } else if (c.target.field_details.type == "dnb_directors") {
       return (
-        <div className="text-bold t-16 mr-top">
-          {dnb_directors_html(c.target.row_json)}
-        </div>
+        <div className={classes}>{dnb_directors_html(c.target.row_json)}</div>
       );
     } else if (c.target.field_details.type == "google_search") {
       return (
-        <div className="text-bold t-16 mr-top">
-          {google_search_html(c.target.row_json)}
-        </div>
+        <div className={classes}>{google_search_html(c.target.row_json)}</div>
       );
     } else if (c.target.field_details.type == "ln_search") {
       return (
-        <div className="text-bold t-16 mr-top">
-          {lexisnexis_html(c.target.row_json)}
-        </div>
+        <div className={classes}>{lexisnexis_html(c.target.row_json)}</div>
       );
     } else if (c.target.field_details.type == "thomson_reuters_screenresult") {
       return (
-        <div className="text-bold t-16 mr-top">
-          {tr_results_html(c.target.row_json)}
-        </div>
+        <div className={classes}>{tr_results_html(c.target.row_json)}</div>
       );
     } else if (c.target.field_details.type == "rdc_event_details") {
       return (
-        <div className="text-bold t-16 mr-top">
-          {rdc_event_details(c.target.row_json)}
-        </div>
+        <div className={classes}>{rdc_event_details(c.target.row_json)}</div>
       );
     }
   } else {

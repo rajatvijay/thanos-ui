@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Layout, Collapse, Pagination } from "antd";
 import { WorkflowHeader, WorkflowBody } from "./workflow-item";
 import { workflowActions, createWorkflow } from "../../actions";
@@ -248,9 +248,10 @@ class WorkflowItem extends React.Component {
           ) : null}
         </div>
 
-        {this.state.opened ? " " : <div className="workflow-divider" />}
+        <div className="workflow-divider" />
 
-        {/*show children here */}
+        {/*show kind name  here */}
+
         {hasChildren && this.state.showRelatedWorkflow ? (
           <div className="child-workflow-wrapper mr-top">
             <ChildWorkflow
@@ -269,10 +270,9 @@ const GetChildWorkflow = props => {
   let workflowId = props.workflow.id;
 
   if (props.workflowChildren[workflowId].loading) {
-    return null;
-  }
-  if (props.loading) {
-    childList = <div className="text-center mr-bottom">loading...</div>;
+    return (childList = (
+      <div className="text-center mr-bottom">loading...</div>
+    ));
   } else {
     childList = _.map(
       props.getGroupedData(props.workflowChildren[workflowId].children),

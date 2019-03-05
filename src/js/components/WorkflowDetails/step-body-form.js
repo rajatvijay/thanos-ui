@@ -317,17 +317,18 @@ class StepBodyForm extends Component {
       }
     });
 
-    return (
-      <div className="version-item">
+    let showAnswer =
+      fieldReturn &&
+      fieldReturn.answers.length !== 0 &&
+      fieldReturn.answers[0].answer !== "";
+
+    if (showAnswer) {
+      let tooltip = (
         <span className="float-right">
-          {this.props.stepVersionFields.stepVersionFields.completed_by ? (
+          {fieldReturn.answers[0].submitted_by_email ? (
             <Tooltip
               placement="topRight"
-              title={
-                "Submitted by " +
-                this.props.stepVersionFields.stepVersionFields.completed_by
-                  .email
-              }
+              title={"Answered by " + fieldReturn.answers[0].submitted_by_email}
             >
               <i className="material-icons t-14 text-middle text-light">
                 history
@@ -341,14 +342,18 @@ class StepBodyForm extends Component {
             </span>
           )}
         </span>
-        <div className="text-medium mr-bottom-sm">
-          {fieldReturn ? fieldReturn.definition.body : ""}
+      );
+
+      return (
+        <div className="version-item">
+          {tooltip}
+          <div className="text-medium">{fieldReturn.definition.body || ""}</div>
+          {fieldReturn.answers[0].answer || ""}
         </div>
-        {fieldReturn && fieldReturn.answers.length !== 0
-          ? fieldReturn.answers[0] ? fieldReturn.answers[0].answer : " "
-          : " "}
-      </div>
-    );
+      );
+    } else {
+      return <div />;
+    }
   };
 
   render = () => {
@@ -426,15 +431,17 @@ class StepBodyForm extends Component {
         // render the current group
         const _rowGroup = Object.assign(this);
         const fields = _rowGroup.fields;
+
         this.reset();
         return (
           <Row gutter={16}>
             {_.map(fields, rawField => {
               let field = this.getFieldForRender(rawField);
+              let ftype = rawField.definition.field_type;
               return (
                 <Col span={Math.ceil(24 * this.getSizeFraction(rawField))}>
-                  {field}{" "}
-                  {showFieldVersion ? that.getVersionField(field.key) : ""}{" "}
+                  {field}
+                  {showFieldVersion ? that.getVersionField(rawField.id) : null}
                 </Col>
               );
             })}

@@ -79,6 +79,7 @@ const HeaderTitle = props => {
           <a
             href={"/workflows/instances/" + props.workflow.id + "/"}
             className="text-nounderline "
+            target={props.isEmbedded ? "_blank" : ""}
           >
             <span
               className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
@@ -489,9 +490,8 @@ class GetMergedData extends React.Component {
             }
           >
             <span className="t-cap">
-              {item.show_label || is_alert
-                ? item.label.replace(/_/g, " ") + item.link ? "" : ": "
-                : ""}
+              {item.show_label || (is_alert && item.link) ? item.label : ""}
+              {item.link ? "" : item.show_label ? ": " : ""}
             </span>
             {ProcessLcData(item) || ""}
           </span>

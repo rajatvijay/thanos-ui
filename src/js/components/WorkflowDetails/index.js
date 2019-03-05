@@ -191,6 +191,30 @@ class WorkflowDetails extends Component {
       this.preConstruct();
       this.getInitialData();
     }
+
+    if (
+      this.props.currentStepFields.currentStepFields &&
+      this.props.currentStepFields.currentStepFields.step_group &&
+      this.props.workflowDetailsHeader.workflowDetailsHeader
+    ) {
+      this.syncStepCompletion();
+    }
+  };
+
+  syncStepCompletion = () => {
+    let currentStep = this.props.currentStepFields.currentStepFields;
+    let workflowData = this.props.workflowDetailsHeader.workflowDetailsHeader;
+
+    let sbGroup = _.find(workflowData.step_groups, group => {
+      return group.id === currentStep.step_group;
+    });
+    let sbStep = _.find(sbGroup.steps, step => {
+      return step.id === currentStep.id;
+    });
+
+    if (sbStep.completed_at !== currentStep.completed_at) {
+      this.getInitialData();
+    }
   };
 
   getInitialData = () => {
