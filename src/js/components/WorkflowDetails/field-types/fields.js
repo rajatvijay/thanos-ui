@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { authHeader, baseUrl } from "../../../_helpers";
+import { authHeader, baseUrl, baseUrl2 } from "../../../_helpers";
 import {
   Icon,
   Form,
@@ -657,9 +657,9 @@ class FileUpload extends Component {
   render = () => {
     let that = this;
     const { field } = this.props;
-    let url =
-      this.state.decryptURL ||
-      (field.answers[0] && field.answers[0].attachment);
+    let url = this.state.decryptURL
+      ? baseUrl2 + this.state.decryptURL
+      : field.answers[0] && field.answers[0].attachment;
 
     return (
       <FormItem

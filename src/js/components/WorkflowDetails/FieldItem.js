@@ -43,7 +43,7 @@ class FieldItem extends Component {
   decryptURL = () => {
     let answerObj = this.props.fieldParams.field.answers[0];
     if (answerObj) {
-      return `${baseUrl}responses/${answerObj.id}/decrypt/`;
+      return `responses/${answerObj.id}/decrypt/`;
     }
   };
 
@@ -55,7 +55,7 @@ class FieldItem extends Component {
     };
 
     this.setState({ fetching: true });
-    let url = this.decryptURL();
+    let url = baseUrl + this.decryptURL();
     fetch(url, requestOptions)
       .then(response => {
         if (!response.ok) {
