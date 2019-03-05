@@ -345,6 +345,13 @@ class Comments extends Component {
                     style={{ maxHeight: "calc(100vh - 430px)" }}
                   >
                     {_.map(c.messages, function(msg) {
+                      let attachment_text = null;
+                      if (msg.attachment) {
+                        attachment_text = msg.attachment.split("/")[
+                          msg.attachment.split("/").length - 1
+                        ];
+                        attachment_text = attachment_text.split("?")[0];
+                      }
                       return (
                         <div key={msg.id} className="mr-bottom">
                           <Avatar
@@ -391,13 +398,7 @@ class Comments extends Component {
                               }}
                             >
                               <i class="anticon anticon-paper-clip" />&nbsp;
-                              <a href={msg.attachment}>
-                                {
-                                  msg.attachment.split("/")[
-                                    msg.attachment.split("/").length - 1
-                                  ]
-                                }
-                              </a>
+                              <a href={msg.attachment}>{attachment_text}</a>
                             </span>
                           ) : null}
                         </div>
