@@ -386,7 +386,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   onFilterTagChange = (tag, _type) => {
-    console.log(tag, _type);
     let filtered_workflow = this.state.filteredChildWorkflow;
     if (this.state.status_workflow_map[tag] && _type == "status") {
       filtered_workflow = this.state.status_workflow_map[tag];
@@ -402,7 +401,6 @@ class ChildWorkflowField2 extends Component {
       this.setState({ filteredChildWorkflow: filtered_workflow });
       this.filterByFlag();
     } else if (tag == "flag") {
-      console.log(this.state.flag_workflow_map, _type);
       filtered_workflow = this.state.flag_workflow_map[_type];
       this.state.filteredChildWorkflow = filtered_workflow;
       this.setState({ filteredChildWorkflow: filtered_workflow });
@@ -543,10 +541,6 @@ class ChildItem extends Component {
     };
   }
 
-  componentDidMount = () => {
-    //this.setKind();
-  };
-
   toggleExpand = (parent, kind) => {
     this.setState({ isExpanded: !this.state.isExpanded });
     if (!this.state.childWorkflow) {
@@ -556,10 +550,6 @@ class ChildItem extends Component {
 
   setKind = () => {
     let rKind = null;
-
-    console.log("workflow-->" + this.props.workflow);
-    console.log(this.props.workflow.definition.related_types[0]);
-
     let workflowKind = this.props.workflowKind.workflowKind;
     if (_.size(workflowKind)) {
       rKind = getKindID(
@@ -567,7 +557,6 @@ class ChildItem extends Component {
         workflowKind
       );
       this.setState({ kind: rKind });
-      console.log(rKind);
     }
   };
 
@@ -626,9 +615,6 @@ class ChildItem extends Component {
       groupedChildren = _.groupBy(this.state.childWorkflow, function(child) {
         return child.definition.kind;
       });
-
-      console.log("this.groupedChildren");
-      console.log(groupedChildren);
     }
 
     return (
