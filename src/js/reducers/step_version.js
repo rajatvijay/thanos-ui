@@ -12,8 +12,8 @@ export function stepVersionFields(state = initialState, action) {
     /////////////////////////////////
     case stepVersionConstants.GET_VERSION_REQUEST:
       return {
-        ...state,
-        loading: true
+        loading: true,
+        stepVersionFields: {}
       };
     case stepVersionConstants.GET_VERSION_SUCCESS:
       return {
