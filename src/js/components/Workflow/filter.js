@@ -33,41 +33,15 @@ const FormItem = Form.Item;
 const filterTypeSelect = [
   {
     filterType: "status",
-    filterName: "Status",
-    results: [
-      { id: 1, filterType: "status", value: "main", label: "Main Group" },
-      { id: 2, filterType: "status", value: "ae_uae_ou", label: "AE UAE OU" },
-      { id: 3, filterType: "status", value: "AO_AGO_OU", label: "AO AGO OU" },
-      { id: 4, filterType: "status", value: "AO_ANG_OU", label: "AO ANG OU" }
-    ]
-  },
-  {
-    filterType: "Business",
-    filterName: "business unit",
-    results: [
-      { id: 1, filterType: "bu", value: "main", label: "Main Group" },
-      { id: 2, filterType: "bu", value: "ae_uae_ou", label: "AE UAE OU" },
-      { id: 3, filterType: "bu", value: "AO_AGO_OU", label: "AO AGO OU" },
-      { id: 4, filterType: "bu", value: "AO_ANG_OU", label: "AO ANG OU" },
-      {
-        id: 5,
-        filterType: "bu",
-        value: "AR_ARS_USD_OU",
-        label: "AR ARS USD OU"
-      },
-      { id: 6, filterType: "bu", value: "AT_LIX_OU", label: "AT LIX OU" },
-      { id: 7, filterType: "bu", value: "AU_RTA_OU", label: "AU RTA OU" }
-    ]
+    filterName: "Status"
   },
   {
     filterType: "region",
-    filterName: "region",
-    results: [
-      { id: 1, filterType: "region", value: "EMEA", label: "EMEA" },
-      { id: 2, filterType: "region", value: "LATAM", label: "LATAM" },
-      { id: 3, filterType: "region", value: "APAC", label: "APAC" },
-      { id: 4, filterType: "region", value: "US", label: "US" }
-    ]
+    filterName: "region"
+  },
+  {
+    filterType: "Business",
+    filterName: "business unit"
   }
 ];
 
