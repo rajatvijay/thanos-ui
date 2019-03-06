@@ -22,13 +22,15 @@ function getStatusData() {
   return fetch(url, requestOptions).then(handleResponse);
 }
 
-function getBusinessData() {
+function getBusinessData(region) {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
     credentials: "include"
   };
-  let url = baseUrl + "fields/export-business-json/";
+  let url = region
+    ? baseUrl + `business-unit/extra-data/?regions__code=${region}`
+    : baseUrl + "fields/export-business-json/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

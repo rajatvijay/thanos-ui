@@ -36,12 +36,12 @@ export default {
       addFilterButtonText: "Add filter",
       filterLabels: {
         status: "Status",
-        Business: "Business Unit",
+        business_unit: "Business Unit",
         region: "Region"
       },
       filterPlaceholders: {
         status: "Status",
-        Business: "Business",
+        business_unit: "Business",
         region: "Region"
       }
     },
@@ -144,12 +144,12 @@ export default {
       addFilterButtonText: "Añadir filtro",
       filterLabels: {
         status: "Estado",
-        Business: "Unidad de negocio",
+        business_unit: "Unidad de negocio",
         region: "Región"
       },
       filterPlaceholders: {
         status: "Estado",
-        Business: "Negocio",
+        business_unit: "Negocio",
         region: "Región"
       }
     },
