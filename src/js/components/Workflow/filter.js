@@ -265,7 +265,11 @@ class WorkflowKindFilter extends Component {
 
   render = () => {
     let workflowKindList = null;
-    let workflowKind = this.props.workflowKind.workflowKind;
+    let workflowKind = _.orderBy(
+      this.props.workflowKind.workflowKind,
+      ["name"],
+      ["asc"]
+    );
     const { value } = this.state;
 
     const options = workflowKind
