@@ -305,12 +305,14 @@ class HeaderOptions2 extends React.Component {
     const { workflow } = this.props;
     return (
       <Col span="5">
-        <WorkflowPDFModal
-          workflow={workflow}
-          visible={isWorkflowPDFModalVisible}
-          onOk={this.toggleWorkflowPDFModal}
-          onCancel={this.toggleWorkflowPDFModal}
-        />
+        {this.props.detailsPage && !this.props.isEmbedded ? (
+          <WorkflowPDFModal
+            workflow={workflow}
+            visible={isWorkflowPDFModalVisible}
+            onOk={this.toggleWorkflowPDFModal}
+            onCancel={this.toggleWorkflowPDFModal}
+          />
+        ) : null}
         <Row>
           <Col span={14}>
             <Tooltip title={this.state.current}>
