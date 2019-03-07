@@ -48,7 +48,9 @@ class WorkflowDetails extends Component {
   preConstruct = () => {
     let params = this.props.location.search;
     let qs = this.queryStringToObject(params);
+
     this.props.location.search = "";
+
     if (!_.isEmpty(qs)) {
       this.state.selectedStep = qs.step;
       this.state.selectedGroup = qs.group;
@@ -208,12 +210,15 @@ class WorkflowDetails extends Component {
     let sbGroup = _.find(workflowData.step_groups, group => {
       return group.id === currentStep.step_group;
     });
-    let sbStep = _.find(sbGroup.steps, step => {
-      return step.id === currentStep.id;
-    });
 
-    if (sbStep.completed_at !== currentStep.completed_at) {
-      this.getInitialData();
+    if (sbGroup) {
+      let sbStep = _.find(sbGroup.steps, step => {
+        return step.id === currentStep.id;
+      });
+
+      if (sbStep.completed_at !== currentStep.completed_at) {
+        this.getInitialData();
+      }
     }
   };
 
