@@ -56,11 +56,18 @@ const ProcessLcData = lc => {
   let subtext_value = <span />;
 
   if (lc.format === "date") {
-    subtext_value = <Moment format="MM/DD/YYYY">{lc.value}</Moment>;
+    subtext_value = <Moment format="MM/DD/YYYY">{lc.value || "-"}</Moment>;
   } else if (lc.format && lc.format.toLowerCase() === "pid") {
-    subtext_value = <span className="t-upr">{lc.value}</span>;
+    subtext_value = <span className="t-upr">{lc.value || "-"}</span>;
+  } else if (lc.format && lc.format.toLowerCase() === "icon") {
+    subtext_value = (
+      <a href={lc.value || "#"} target="_blank" className="text-nounderline ">
+        {" "}
+        <i className="material-icons">attachment</i>
+      </a>
+    );
   } else {
-    subtext_value = <span>{lc.value}</span>;
+    subtext_value = <span>{lc.value || "-"}</span>;
   }
 
   return subtext_value;
@@ -69,7 +76,7 @@ const ProcessLcData = lc => {
 const HeaderTitle = props => {
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type == "normal" && item.value;
+    return item.display_type == "normal";
   });
 
   return (
@@ -104,7 +111,9 @@ const HeaderTitle = props => {
 
         <div className="lc1 text-ellipsis">
           {_.size(subtext) ? (
-            <Tooltip title={subtext[0].label + ": " + subtext[0].value}>
+            <Tooltip
+              title={subtext[0].label + ": " + (subtext[0].value || "-")}
+            >
               <span className="t-cap">
                 {subtext[0].show_label ? subtext[0].label + ": " : ""}
               </span>
@@ -447,7 +456,11 @@ class GetMergedData extends React.Component {
     });
 
     let lc_data = _.filter(data, function(v) {
-      return v.display_type == "normal" && v.value;
+      return v.display_type == "normal";
+    });
+
+    let lc_data_filtered = _.filter(lc_data, function(v, index) {
+      return v.value && index > 1;
     });
 
     let that = this;
@@ -548,9 +561,9 @@ class GetMergedData extends React.Component {
                         return TagItem(item, index, true);
                       }
                     })
-                  : _.map(lc_data, function(item, index) {
+                  : _.map(lc_data_filtered, function(item, index) {
                       let count = index + 1;
-                      if (count > 2 && count < 4) {
+                      if (count < 2) {
                         return TagItem(item, index, false);
                       }
                     })}
@@ -646,7 +659,7 @@ export const WorkflowHeader = props => {
   let proccessedData = getProcessedData(props.workflow.step_groups);
   let progressData = getProgressData(props.workflow);
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type === "normal" && item.value;
+    return item.display_type === "normal";
   });
   return (
     <div className="ant-collapse-header">
@@ -697,7 +710,9 @@ export const WorkflowHeader = props => {
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
             {_.size(subtext) >= 2 ? (
-              <Tooltip title={subtext[1].label + ": " + subtext[1].value}>
+              <Tooltip
+                title={subtext[1].label + ": " + (subtext[1].value || "-")}
+              >
                 <span className="t-cap">
                   {subtext[1].show_label ? subtext[1].label + ": " : ""}
                 </span>
