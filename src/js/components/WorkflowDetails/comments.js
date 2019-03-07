@@ -467,7 +467,7 @@ class Comments extends Component {
 
                         <div className="text-right">
                           <Button
-                            onClick={that.addComment.bind(this, c)}
+                            onClick={() => that.addComment.bind(this)(c)}
                             style={{ position: "relative", top: "-31px" }}
                           >
                             <FormattedMessage id="stepBodyFormInstances.postButtonText" />
