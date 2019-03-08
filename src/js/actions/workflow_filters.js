@@ -78,12 +78,12 @@ function getStatusData() {
   }
 }
 
-function getBusinessUnitData() {
+function getBusinessUnitData(region) {
   return dispatch => {
     dispatch(request());
 
     workflowFiltersService
-      .getBusinessData()
+      .getBusinessData(region)
       .then(
         workflowFilterBusiness => dispatch(success(workflowFilterBusiness)),
         error => dispatch(failure(error))
