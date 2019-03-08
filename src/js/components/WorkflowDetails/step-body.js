@@ -133,7 +133,7 @@ class StepBody extends Component {
           <span
             style={{ position: "relative", top: "-62px", right: "-25px" }}
             onClick={this.addComment.bind(this, stepData)}
-            className="ant-btn ant-btn-sm"
+            className="ant-btn ant-btn-sm no-print "
           >
             <FormattedMessage
               id="stepBodyFormInstances.commentsButtonText"
