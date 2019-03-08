@@ -216,7 +216,7 @@ class WorkflowDetails extends Component {
         return step.id === currentStep.id;
       });
 
-      if (sbStep.completed_at !== currentStep.completed_at) {
+      if (sbStep && sbStep.completed_at !== currentStep.completed_at) {
         this.getInitialData();
       }
     }
