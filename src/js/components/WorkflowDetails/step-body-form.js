@@ -324,7 +324,7 @@ class StepBodyForm extends Component {
 
     if (showAnswer) {
       let tooltip = (
-        <span className="float-right">
+        <span className="float-right ">
           {fieldReturn.answers[0].submitted_by_email ? (
             <Tooltip
               placement="topRight"
@@ -345,7 +345,7 @@ class StepBodyForm extends Component {
       );
 
       return (
-        <div className="version-item">
+        <div className="version-item no-print ">
           {tooltip}
           <div className="text-medium">{fieldReturn.definition.body || ""}</div>
           {fieldReturn.answers[0].answer || ""}

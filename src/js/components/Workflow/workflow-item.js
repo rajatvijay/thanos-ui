@@ -316,7 +316,7 @@ class HeaderOptions2 extends React.Component {
         <Row>
           <Col span={14}>
             <Tooltip title={this.state.current}>
-              <div className="pd-left pd-right status-text text-light t-12 text-ellipsis">
+              <div className="pd-left pd-right status-text text-light t-12 text-ellipsis t-mdm">
                 {this.state.current}
               </div>
             </Tooltip>
