@@ -567,7 +567,9 @@ class ChildItem extends Component {
   componentDidUpdate = prevProps => {
     if (
       this.props.workflowKind !== prevProps.workflowKind ||
-      (this.props.workflowKind && !this.state.kind)
+      (this.props.workflowKind.workflowkind &&
+        !this.state.kind &&
+        this.props.workflow.definition.related_types[0])
     ) {
       console.log("test--");
       this.props.workflowKind;
