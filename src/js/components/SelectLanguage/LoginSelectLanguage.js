@@ -45,7 +45,7 @@ class LoginSelectLanguage extends React.Component {
             function(locale, index) {
               return (
                 _.includes(supportedLaguanges, locale) && (
-                  <Option value={locale}>
+                  <Option key={locale} value={locale}>
                     <Tooltip
                       title={languages.endonyms[locale]}
                       placement="leftTop"

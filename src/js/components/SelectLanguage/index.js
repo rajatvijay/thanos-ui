@@ -45,7 +45,7 @@ class SelectLanguage extends React.Component {
           {_.map(Object.keys(languages.endonyms), function(locale, index) {
             return (
               _.includes(supportedLaguanges, locale) && (
-                <Option value={locale}>
+                <Option key={locale} value={locale}>
                   <Tooltip
                     title={languages.endonyms[locale]}
                     placement="leftTop"

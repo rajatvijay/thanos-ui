@@ -231,7 +231,11 @@ class ChildWorkflowField2 extends Component {
           v,
           k
         ) {
-          return <Option value={v.label}>{v.label}</Option>;
+          return (
+            <Option key={v.label} value={v.label}>
+              {v.label}
+            </Option>
+          );
         })}
       </Select>
     );
@@ -285,7 +289,7 @@ class ChildWorkflowField2 extends Component {
         {_.map(workflow_status_count, function(v, k) {
           return (
             <Tag
-              key={v}
+              key={v + k}
               className="alert-tag-item alert-metal"
               onClick={that.onFilterTagChange.bind(that, k, "status")}
             >
@@ -565,6 +569,8 @@ class ChildItem extends Component {
       this.props.workflowKind !== prevProps.workflowKind ||
       (this.props.workflowKind && !this.state.kind)
     ) {
+      console.log("test--");
+      this.props.workflowKind;
       this.setKind();
     }
   };
