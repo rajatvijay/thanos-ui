@@ -320,38 +320,47 @@ class StepBodyForm extends Component {
       fieldReturn.answers.length !== 0 &&
       fieldReturn.answers[0].answer !== "";
 
-    if (showAnswer) {
-      let tooltip = (
-        <span className="float-right ">
-          {fieldReturn.answers[0].submitted_by_email ? (
-            <Tooltip
-              placement="topRight"
-              title={"Answered by " + fieldReturn.answers[0].submitted_by_email}
-            >
-              <i className="material-icons t-14 text-middle text-light">
-                history
-              </i>
-            </Tooltip>
-          ) : (
-            <span>
-              <i className="material-icons t-14 text-middle text-light">
-                history
-              </i>
-            </span>
-          )}
-        </span>
-      );
+    if (showAnswer)
+      if (showAnswer && fieldReturn.definition.field_type !== "paragraph") {
+        let tooltip = (
+          <span className="float-right ">
+            {fieldReturn.answers[0].submitted_by_email ? (
+              <Tooltip
+                placement="topRight"
+                title={
+                  "Answered by " + fieldReturn.answers[0].submitted_by_email
+                }
+              >
+                <i className="material-icons t-14 text-middle text-light">
+                  history
+                </i>
+              </Tooltip>
+            ) : (
+              <span>
+                <i className="material-icons t-14 text-middle text-light">
+                  history
+                </i>
+              </span>
+            )}
+          </span>
+        );
 
-      return (
-        <div className="version-item no-print ">
-          {tooltip}
-          <div className="text-medium">{fieldReturn.definition.body || ""}</div>
-          {fieldReturn.answers[0].answer || ""}
-        </div>
-      );
-    } else {
-      return <div />;
-    }
+        return (
+          <div className="version-item no-print ">
+            {tooltip}
+            <div className="text-medium">
+              {fieldReturn.definition.body || ""}
+            </div>
+            {fieldReturn.answers[0].answer ? (
+              <mark>{fieldReturn.answers[0].answer}</mark>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      } else {
+        return <div />;
+      }
   };
 
   render = () => {
