@@ -62,8 +62,7 @@ const ProcessLcData = lc => {
   } else if (lc.format && lc.format.toLowerCase() === "icon") {
     subtext_value = (
       <a href={lc.value || "#"} target="_blank" className="text-nounderline ">
-        {" "}
-        <i className="material-icons">attachment</i>
+        <i className="material-icons">picture_as_pdf</i>
       </a>
     );
   } else {
