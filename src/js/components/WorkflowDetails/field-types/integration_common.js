@@ -333,7 +333,7 @@ class DescriptionToggle extends Component {
     let body = this.props.body;
     let show = this.state.show;
 
-    if (body.length > 50) {
+    if (body & (body.length > 50)) {
       this.setState({ body: this.props.body.slice(0, 300) });
     }
   };
