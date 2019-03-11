@@ -2,6 +2,8 @@ export default {
   endonyms: {
     en: "English",
     es: "Español",
+    "es-cl": "Español Chileno",
+    "es-419": "Español Latino",
     pt: "Português",
     ru: "русский",
     fr: "Français",
@@ -17,6 +19,8 @@ export default {
   names: {
     en: "English",
     es: "Spanish",
+    "es-cl": "Spanish Chilean",
+    "es-419": "Spanish Latin",
     pt: "Portuguese",
     ru: "Russian",
     fr: "French",
