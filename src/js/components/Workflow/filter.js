@@ -24,6 +24,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
 //import { regionData } from "./regionData";
 import { FormattedMessage, injectIntl } from "react-intl";
+import FooterLink from "./FooterLinks";
 
 //const filter = {};
 const { Sider } = Layout;
@@ -414,7 +415,11 @@ class FilterSidebar extends Component {
         }}
         className="aux-nav aux-nav-filter "
       >
-        <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
+        <Scrollbars
+          autoWidth={true}
+          autoHide={true}
+          style={{ height: "100%", position: "relative" }}
+        >
           {_.size(workflowKindFiltered) ? (
             <div>
               <div className="create-btn">
@@ -499,18 +504,13 @@ class FilterSidebar extends Component {
             </div>
           </div>
 
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <div style={{ height: "150px" }} />
+          {this.props.config.custom_ui_labels &&
+          this.props.config.custom_ui_labels.footer_links ? (
+            <FooterLink
+              footerLinks={this.props.config.custom_ui_labels.footer_links}
+            />
+          ) : null}
+          <div style={{ height: "100px" }} />
         </Scrollbars>
       </Sider>
     );
