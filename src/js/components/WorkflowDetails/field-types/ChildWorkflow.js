@@ -445,24 +445,32 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div>
-            <Row className="mr-bottom">
-              <Col span="18">
-                <span
-                  className="text-metal"
-                  style={{ marginRight: "10px", float: "left" }}
-                >
-                  Status:{" "}
-                </span>
-                <span>{this.state.statusfilterTags}</span>
-              </Col>
-            </Row>
+            {field.extra.show_filters ? (
+              <Row className="mr-bottom">
+                <Col span="18">
+                  <span
+                    className="text-metal"
+                    style={{ marginRight: "10px", float: "left" }}
+                  >
+                    Status:{" "}
+                  </span>
+                  <span>{this.state.statusfilterTags}</span>
+                </Col>
+              </Row>
+            ) : null}
 
             <Row className="mr-bottom">
               <Col span="18">
-                <span className="text-metal text-bold t-12 ellip-small s100 pd-right-sm float-left">
-                  <FormattedMessage id="commonTextInstances.categoryText" />:
-                </span>
-                <span>{this.state.filterTags}</span>
+                {field.extra.show_filters ? (
+                  <span>
+                    <span className="text-metal text-bold t-12 ellip-small s100 pd-right-sm float-left">
+                      <FormattedMessage id="commonTextInstances.categoryText" />:
+                    </span>
+                    <span>{this.state.filterTags}</span>
+                  </span>
+                ) : (
+                  <span />
+                )}
               </Col>
               <Col span="6" className="text-right text-light small">
                 {this.props.workflowDetailsHeader.workflowDetailsHeader
@@ -473,13 +481,19 @@ class ChildWorkflowField2 extends Component {
 
             <Row>
               <Col span="12">
-                <span
-                  className="text-metal"
-                  style={{ marginRight: "10px", float: "left" }}
-                >
-                  Adjudication Code:{" "}
-                </span>
-                <span>{this.createFlagFilter()}</span>
+                {field.extra.show_filters ? (
+                  <span>
+                    <span
+                      className="text-metal"
+                      style={{ marginRight: "10px", float: "left" }}
+                    >
+                      Adjudication Code:{" "}
+                    </span>
+                    <span>{this.createFlagFilter()}</span>
+                  </span>
+                ) : (
+                  <span />
+                )}
               </Col>
 
               <Col
