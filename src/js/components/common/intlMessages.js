@@ -213,5 +213,11 @@ export default {
       goToLoginPage: "Ir a la página de inicio de sesión",
       selectPreferedLanguage: " Elige lengua:"
     }
+  },
+  "es-cl": {
+    // override translations for parent locale
+  },
+  "es-419": {
+    // override translations for parent locale
   }
 };
