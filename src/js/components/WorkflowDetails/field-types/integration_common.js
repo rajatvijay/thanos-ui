@@ -320,6 +320,52 @@ const EntityItem = props => {
   return i;
 };
 
+class DescriptionToggle extends Component {
+  state = {
+    show: false
+  };
+
+  onToggle = () => {
+    this.setState({ show: !this.state.show });
+  };
+
+  componentDidMount = () => {
+    let body = this.props.body;
+    let show = this.state.show;
+
+    if (body.length > 50) {
+      this.setState({ body: this.props.body.slice(0, 300) });
+    }
+  };
+
+  render() {
+    let toggle = (
+      <span
+        onClick={this.onToggle}
+        className="text-secondary text-underline text-anchor pd-left-sm"
+      >
+        {this.state.show ? " ...show less" : " show more..."}
+      </span>
+    );
+
+    return (
+      <div>
+        {this.state.show ? (
+          <p className="animated ">
+            {this.props.body}
+            {this.props.body.length > 50 ? toggle : null}
+          </p>
+        ) : (
+          <p className="animated ">
+            {this.state.body}
+            {this.props.body.length > 50 ? toggle : null}
+          </p>
+        )}
+      </div>
+    );
+  }
+}
+
 function google_search_html(record, search) {
   const salienceSortedValues =
     record.entity_data &&
@@ -355,11 +401,16 @@ function google_search_html(record, search) {
   const keywordHighlight = (string, keyword) => {
     return string.replace(
       new RegExp("(^|\\s)(" + keyword + ")(\\s|$)", "ig"),
-      "$1<mark>$2</mark>$3"
+      "$1<mark><b>$2</b></mark>$3"
     );
   };
 
   let snippet = record.snippet;
+  let highlighted = snippet;
+
+  _.forEach(record.matched_keywords, function(keyword) {
+    highlighted = keywordHighlight(highlighted, keyword);
+  });
 
   return (
     <div>
@@ -388,7 +439,7 @@ function google_search_html(record, search) {
       </div>
       <div
         className="mr-bottom text-light"
-        dangerouslySetInnerHTML={{ __html: record.snippet }}
+        dangerouslySetInnerHTML={{ __html: highlighted }}
       />
       <div className="mr-bottom-lg">
         <a href={record.link} target="_blank" className="text-secondary">
@@ -397,7 +448,7 @@ function google_search_html(record, search) {
       </div>
 
       <div className="mr-bottom-lg">
-        <p className="text-light">{record.description}</p>
+        <DescriptionToggle body={record.description} />
       </div>
 
       <div className="mr-bottom-lg text-light">
