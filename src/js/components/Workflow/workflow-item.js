@@ -330,7 +330,9 @@ class HeaderOptions2 extends React.Component {
             </Tooltip>
           </Col>
           <Col span={5} className="text-right">
-            {props.showCommentIcon && props.isEmbedded ? (
+            {props.showCommentIcon &&
+            props.isEmbedded &&
+            workflow.comments_allowed ? (
               <span>
                 <div className="add_comment_btn">
                   <span>
