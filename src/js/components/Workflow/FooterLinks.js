@@ -1,10 +1,4 @@
-import React, { Component } from "react";
-
-const footerLinks = [
-  { label: "Terms & Condition", url: "https://google.com" },
-  { label: "Privacy Policy", url: "https://google.com" },
-  { label: "Legal", url: "https://google.com" }
-];
+import React from "react";
 
 const FooterLink = ({ footerLinks = [] }) => {
   if (!footerLinks.length) {
