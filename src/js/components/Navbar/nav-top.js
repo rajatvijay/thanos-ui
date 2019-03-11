@@ -96,26 +96,34 @@ class NavTop extends Component {
         }
       >
         {_.map(kind, function(item, index) {
-          return (
-            <Menu.Item key={index}>
-              <a
-                href={baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"}
-                className="text-nounderline"
-              >
-                <i
-                  className="material-icons text-primary-dark"
-                  style={{
-                    width: "20px",
-                    fontSize: "14px",
-                    verticalAlign: "middle"
-                  }}
+          if (
+            !item.is_related_kind &&
+            _.includes(item.features, "add_workflow")
+          ) {
+            return (
+              <Menu.Item key={index}>
+                <a
+                  href={
+                    baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"
+                  }
+                  className="text-nounderline"
                 >
-                  {item.icon}
-                </i>
-                {item.name}
-              </a>
-            </Menu.Item>
-          );
+                  <i
+                    className="material-icons text-primary-dark"
+                    style={{
+                      width: "20px",
+                      fontSize: "14px",
+                      verticalAlign: "middle"
+                    }}
+                  >
+                    {item.icon}
+                  </i>
+                  {item.name}
+                </a>
+              </Menu.Item>
+            );
+          }
+          return null;
         })}
       </SubMenu>
     );
@@ -138,6 +146,9 @@ class NavTop extends Component {
     );
 
     let showInsights = true;
+    let showExportOption =
+      this.props.config.permissions &&
+      this.props.config.permissions.includes("Can export workflow data");
     if (user && _.includes(user.features, "view_reports")) {
       showInsights = true;
     }
@@ -204,17 +215,17 @@ class NavTop extends Component {
                        </Popover>
                      </Menu.Item>*/}
 
-                  {this.props.workflowKind.workflowKind
+                  {this.props.workflowKind.workflowKind && showExportOption
                     ? this.getExportList()
                     : null}
 
                   {showInsights ? (
                     <Menu.Item key="2">
-                        <span className="pd-ard-sm" onClick={this.showDrawer}>
-                          <i className="material-icons text-light text-anchor t-18 ">
-                            trending_up
-                          </i>
-                        </span>
+                      <span className="pd-ard-sm" onClick={this.showDrawer}>
+                        <i className="material-icons text-light text-anchor t-18 ">
+                          trending_up
+                        </i>
+                      </span>
                     </Menu.Item>
                   ) : null}
 
