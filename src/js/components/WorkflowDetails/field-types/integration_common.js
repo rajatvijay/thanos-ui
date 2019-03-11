@@ -358,7 +358,7 @@ class DescriptionToggle extends Component {
         ) : (
           <p className="animated ">
             {this.state.body}
-            {this.props.body.length > 50 ? toggle : null}
+            {this.props.body && this.props.body.length > 50 ? toggle : null}
           </p>
         )}
       </div>
