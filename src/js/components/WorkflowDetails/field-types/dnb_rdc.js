@@ -380,7 +380,7 @@ const buildDetails = obj => {
 
           {obj.EntityTypeText === "Person" ? (
             <TabPane tab="Position" key="3">
-              {obj.Positions && obj.Positions.position
+              {obj.Positions && obj.Positions.Position
                 ? _.map(obj.Positions.Position, function(position, index) {
                     return <RowItem key={index} text={position} />;
                   })
