@@ -212,9 +212,6 @@ const buildDetails = obj => {
     overflow: "hidden"
   };
 
-  console.log("obj");
-  console.log(obj);
-
   const getImg = () => {
     let imgItem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "IMG";
@@ -258,7 +255,9 @@ const buildDetails = obj => {
     let riskItem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "RID";
     });
-    return riskItem.ParameterValue;
+    return riskItem ? (
+      <span className="text-uppercase">riskItem.ParameterValue</span>
+    ) : null;
   };
 
   const getPepType = () => {
@@ -281,7 +280,7 @@ const buildDetails = obj => {
     let ratingItem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "PRT";
     });
-    return ratingItem.ParameterValue;
+    return ratingItem ? ratingItem.ParameterValue : null;
   };
 
   const RowItem = props => {
