@@ -55,7 +55,7 @@ class App extends React.Component {
     }
     if (messages[locale]) {
       messageTranslate = flattenMessages(messages[locale]);
-      if (locale.indexOf("-")) {
+      if (_.includes(locale, "-")) {
         // has parent locale
         let parentLocale = locale.split("-")[0];
         if (messages[parentLocale]) {
