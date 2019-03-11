@@ -355,18 +355,11 @@ function google_search_html(record, search) {
   const keywordHighlight = (string, keyword) => {
     return string.replace(
       new RegExp("(^|\\s)(" + keyword + ")(\\s|$)", "ig"),
-      "$1<b>$2</b>$3"
+      "$1<mark>$2</mark>$3"
     );
   };
 
   let snippet = record.snippet;
-
-  console.clear();
-  console.log(
-    record.sorting_score +
-      " --o-- " +
-      record.sentiment_score * record.sentiment_magnitude
-  );
 
   return (
     <div>
@@ -402,8 +395,13 @@ function google_search_html(record, search) {
           {record.link}
         </a>
       </div>
+
+      <div className="mr-bottom-lg">
+        <p className="text-light">{record.description}</p>
+      </div>
+
       <div className="mr-bottom-lg text-light">
-        Published at: {record.published_at}
+        Published at: {record.published_at || "N/A"}
       </div>
 
       <Row gutter={30}>
