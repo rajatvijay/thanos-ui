@@ -256,7 +256,7 @@ const buildDetails = obj => {
       return item.ParameterIdentificationNumber === "RID";
     });
     return riskItem ? (
-      <span className="text-uppercase">riskItem.ParameterValue</span>
+      <span className="text-uppercase">{riskItem.ParameterValue}</span>
     ) : null;
   };
 
@@ -303,7 +303,7 @@ const buildDetails = obj => {
         <Tabs
           defaultActiveKey="1"
           tabPosition="top"
-          style={{ maxWidth: "75%" }}
+          //style={{ maxWidth: "75%" }}
         >
           <TabPane tab="Entity details & Alias" key="1">
             <Row gutter={16} className="mr-bottom-lg">
@@ -711,12 +711,12 @@ class EventDetailComp extends Component {
             className="mr-bottom-sm"
           />
 
-          <Block
-            column={4}
-            label="Postal Code:"
-            value={refItem.PostalCode || "-"}
-            className="mr-bottom-sm"
-          />
+          {/*<Block
+                      column={4}
+                      label="Postal Code:"
+                      value={refItem.PostalCode || "-"}
+                      className="mr-bottom-sm"
+                    />*/}
         </Row>
         <Divider />
       </div>
