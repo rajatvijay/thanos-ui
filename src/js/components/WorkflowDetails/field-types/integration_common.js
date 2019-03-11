@@ -329,20 +329,38 @@ class DescriptionToggle extends Component {
     this.setState({ show: !this.state.show });
   };
 
+  componentDidMount = () => {
+    let body = this.props.body;
+    let show = this.state.show;
+
+    if (body.length > 50) {
+      this.setState({ body: this.props.body.slice(0, 300) });
+    }
+  };
+
   render() {
+    let toggle = (
+      <span
+        onClick={this.onToggle}
+        className="text-secondary text-underline text-anchor pd-left-sm"
+      >
+        {this.state.show ? " ...show less" : " show more..."}
+      </span>
+    );
+
     return (
       <div>
         {this.state.show ? (
-          <p className="animated  fadeInUp">
-            {this.props.body || "No details available"}
+          <p className="animated ">
+            {this.props.body}
+            {this.props.body.length > 50 ? toggle : null}
           </p>
-        ) : null}
-        <span
-          onClick={this.onToggle}
-          className="text-secondary text-underline text-anchor"
-        >
-          {this.state.show ? "Hide " : "Show "} details
-        </span>
+        ) : (
+          <p className="animated ">
+            {this.state.body}
+            {this.props.body.length > 50 ? toggle : null}
+          </p>
+        )}
       </div>
     );
   }
