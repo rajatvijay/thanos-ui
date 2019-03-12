@@ -445,7 +445,7 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div>
-            {field.extra.show_filters ? (
+            {field.definition.extra.show_filters ? (
               <Row className="mr-bottom">
                 <Col span="18">
                   <span
@@ -461,7 +461,7 @@ class ChildWorkflowField2 extends Component {
 
             <Row className="mr-bottom">
               <Col span="18">
-                {field.extra.show_filters ? (
+                {field.definition.extra.show_filters ? (
                   <span>
                     <span className="text-metal text-bold t-12 ellip-small s100 pd-right-sm float-left">
                       <FormattedMessage id="commonTextInstances.categoryText" />:
@@ -481,7 +481,7 @@ class ChildWorkflowField2 extends Component {
 
             <Row>
               <Col span="12">
-                {field.extra.show_filters ? (
+                {field.definition.extra.show_filters ? (
                   <span>
                     <span
                       className="text-metal"
