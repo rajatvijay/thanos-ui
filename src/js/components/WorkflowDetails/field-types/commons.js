@@ -1,20 +1,5 @@
-import React, { Component } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select,
-  Tabs,
-  Tag,
-  Menu,
-  Dropdown,
-  Tooltip
-} from "antd";
+import React from "react";
+import { Button, Row, Col, Icon, Tag, Menu, Dropdown, Tooltip } from "antd";
 import _ from "lodash";
 import Moment from "react-moment";
 
@@ -336,17 +321,19 @@ function getIntegrationSearchButton(props) {
 
   return (
     <Row gutter={16} style={{ marginBottom: "30px" }}>
-      <Col>
-        <Button
-          type="primary"
-          className="btn-block float-left"
-          onClick={props.onSearch}
-          style={{ width: "auto", marginRight: "20px" }}
-          disabled={isDisabled(props)}
-        >
-          {button_name}
-        </Button>
-      </Col>
+      {!props.field.definition.extra.hide_integration_button ? (
+        <Col>
+          <Button
+            type="primary"
+            className="btn-block float-left"
+            onClick={props.onSearch}
+            style={{ width: "auto", marginRight: "20px" }}
+            disabled={isDisabled(props)}
+          >
+            {button_name}
+          </Button>
+        </Col>
+      ) : null}
       <Col style={{ marginTop: "5px" }}>
         {_.map(props.field.search_param_data, function(item, index) {
           if (_.size(item.answer) && item.answer.answer)
