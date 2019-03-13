@@ -58,7 +58,7 @@ class WorkflowFilterTop extends Component {
           _.isEmpty(stepgroupdef_counts) ? null : (
             <div>
               {_.map(stepgroupdef_counts, function(item, index) {
-                if (!item.extra.hide) {
+                if (!item.extra || !item.extra.hide) {
                   return (
                     <Tag
                       key={item.id}
