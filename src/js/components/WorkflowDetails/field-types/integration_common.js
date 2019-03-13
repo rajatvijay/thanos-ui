@@ -399,10 +399,8 @@ function google_search_html(record, search) {
   };
 
   const keywordHighlight = (string, keyword) => {
-    return string.replace(
-      new RegExp("(^|\\s)(" + keyword + ")(\\s|$)", "ig"),
-      "$1<mark><b>$2</b></mark>$3"
-    );
+    let marked = `<mark><b>${keyword}</b></mark>`;
+    return string.replace(new RegExp(keyword, "gi"), marked);
   };
 
   let snippet = record.snippet;
