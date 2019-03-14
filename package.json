@@ -45,7 +45,7 @@
     "react-infinite-scroller": "^1.2.0",
     "react-intl": "^2.7.2",
     "react-moment": "^0.7.0",
-    "react-recaptcha-v3-global": "^1.0.0",
+    "react-recaptcha-v3-global": "^2.1.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-telephone-input": "^4.71.11",
