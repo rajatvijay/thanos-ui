@@ -402,11 +402,11 @@ function google_search_html(record, search) {
     let marked = `<mark><b>${keyword}</b></mark>`;
     let regEsc = /^[a-zA-Z ]*$/g;
 
-    //if (keyword.match(regEsc)) {
-    if (!_.includes(keyword, "+")) {
+    if (keyword && keyword.match(regEsc)) {
+      //if (keyword && !_.includes(keyword, "+")) {
       return string.replace(new RegExp(keyword, "gi"), marked);
     } else {
-      return keyword;
+      return string;
     }
   };
 
