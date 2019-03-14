@@ -2,7 +2,7 @@ import React from "react";
 
 import Routes from "./routes";
 
-import { loadReCaptcha } from "react-recaptcha-v3";
+import { loadReCaptcha } from "react-recaptcha-v3-global";
 import _ from "lodash";
 import { connect } from "react-redux";
 import messages from "./components/common/intlMessages";
