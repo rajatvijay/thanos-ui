@@ -399,7 +399,12 @@ class WorkflowDetails extends Component {
               </div>
             ) : (
               <div>
-                <BreadCrums workflowId={this.props.match.params.id} />
+                <BreadCrums
+                  items={
+                    this.props.workflowDetailsHeader.workflowDetailsHeader
+                      .workflow_family
+                  }
+                />
                 <WorkflowHeader
                   detailsPage={true}
                   kind={this.props.workflowKind}

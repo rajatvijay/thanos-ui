@@ -1,37 +1,8 @@
 import React from "react";
-import { workflowDetailsService } from "../../services";
-import { Icon } from "antd";
 
 class BreadCrums extends React.Component {
-  state = {
-    isLoading: false,
-    items: null
-  };
-
-  componentDidMount() {
-    this.setState({ isLoading: true });
-    workflowDetailsService
-      .getById(this.props.workflowId)
-      .then(response => {
-        this.setState({ isLoading: false });
-        this.setState({ items: response.workflow_family });
-      })
-      .catch(err => {
-        this.setState({ isLoading: false });
-      });
-  }
-
   render() {
-    const { items, isLoading } = this.state;
-    console.log("redering", isLoading);
-
-    if (isLoading) {
-      return (
-        <div className="text-center">
-          <Icon type="loading" />
-        </div>
-      );
-    }
+    const { items } = this.props;
 
     if (!items || !items.length) {
       return null;
