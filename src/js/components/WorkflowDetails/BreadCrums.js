@@ -50,7 +50,7 @@ class BreadCrums extends React.Component {
           color: "#305ebe"
         }}
       >
-        {items.map(item => <span>{`${item.name} >`}</span>)}
+        {items.map(item => <span>{`${item.name} > `}</span>)}
       </div>
     );
   }
