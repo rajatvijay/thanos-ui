@@ -400,7 +400,13 @@ function google_search_html(record, search) {
 
   const keywordHighlight = (string, keyword) => {
     let marked = `<mark><b>${keyword}</b></mark>`;
-    return string.replace(new RegExp(keyword, "gi"), marked);
+    let regEsc = /^[a-zA-Z ]*$/g;
+
+    if (keyword.match(regEsc)) {
+      return string.replace(new RegExp(keyword, "gi"), marked);
+    } else {
+      return keyword;
+    }
   };
 
   let snippet = record.snippet;
