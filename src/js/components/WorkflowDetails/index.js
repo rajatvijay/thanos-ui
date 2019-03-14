@@ -19,6 +19,7 @@ import { WorkflowHeader } from "../Workflow/workflow-item";
 import Comments from "./comments";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
+import BreadCrums from "./BreadCrums";
 
 const requestOptions = {
   method: "GET",
@@ -398,6 +399,12 @@ class WorkflowDetails extends Component {
               </div>
             ) : (
               <div>
+                <BreadCrums
+                  items={
+                    this.props.workflowDetailsHeader.workflowDetailsHeader
+                      .workflow_family
+                  }
+                />
                 <WorkflowHeader
                   detailsPage={true}
                   kind={this.props.workflowKind}
