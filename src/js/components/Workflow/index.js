@@ -167,13 +167,13 @@ class Workflow extends Component {
   };
 
   render = () => {
-    let showRisk = false;
-    if (
-      _.size(this.props.workflow.workflow) &&
-      this.props.workflow.workflow[0].sorting_primary_field
-    ) {
-      showRisk = true;
-    }
+    // let showRisk = false;
+    // if (
+    //   _.size(this.props.workflow.workflow) &&
+    //   this.props.workflow.workflow[0].sorting_primary_field
+    // ) {
+    //   showRisk = true;
+    // }
 
     return (
       <Layout className="workflow-container inner-container" hasSider={false}>
@@ -281,6 +281,7 @@ class Workflow extends Component {
           ) : (
             <div className="clearfix">
               <WorkflowList
+                sortAscending={this.state.sortOrderAsc}
                 profile={this.props.match}
                 {...this.props}
                 statusView={this.state.statusView}

@@ -24,6 +24,15 @@ class WorkflowList extends Component {
     this.props.dispatch(workflowActions.getAll());
   };
 
+  getRank = (page, index) => {
+    const { sortAscending } = this.props;
+    if (sortAscending) {
+      return (page - 1) * 10 + index;
+    } else {
+      return (page - 1) * 10 - index;
+    }
+  };
+
   render() {
     let that = this;
     const data = this.props.workflow;
@@ -55,12 +64,13 @@ class WorkflowList extends Component {
 
     var result = _.groupBy(data.workflow, occurrenceDay);
 
-    var ListCompletes = _.map(result, function(list, key, index) {
+    var ListCompletes = _.map(result, (list, key, parentIndex) => {
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
 
         return (
           <WorkflowItem
+            rank={this.getRank(page, parentIndex)}
             pData={proccessedData}
             workflow={item}
             key={index}
@@ -206,6 +216,7 @@ class WorkflowItem extends React.Component {
             trigger={
               <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
                 <WorkflowHeader
+                  rank={this.props.rank}
                   workflow={this.props.workflow}
                   statusType={statusType}
                   kind={this.props.kinds}

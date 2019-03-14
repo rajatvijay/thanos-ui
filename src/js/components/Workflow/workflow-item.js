@@ -734,7 +734,7 @@ export const WorkflowHeader = props => {
         <Col span={2} className="text-center">
           {props.workflow.sorting_primary_field ? (
             <Badge
-              count={<span>{props.workflow.sorting_primary_field}</span>}
+              count={<span>{props.rank}</span>}
               style={{
                 backgroundColor: getScoreColor(
                   props.workflow.sorting_primary_field
