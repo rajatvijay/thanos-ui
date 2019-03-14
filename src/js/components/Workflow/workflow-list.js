@@ -27,9 +27,9 @@ class WorkflowList extends Component {
   getRank = (page, index) => {
     const { sortAscending } = this.props;
     if (sortAscending) {
-      return (page - 1) * 10 + index;
+      return (page - 1) * 10 + index + 1;
     } else {
-      return (page - 1) * 10 - index;
+      return (page - 1) * 10 - index + 1;
     }
   };
 
@@ -64,13 +64,34 @@ class WorkflowList extends Component {
 
     var result = _.groupBy(data.workflow, occurrenceDay);
 
-    var ListCompletes = _.map(result, (list, key, parentIndex) => {
+    // var ListCompletes = _.map(result, (list, key) => {
+    //   var listL = _.map(list, function(item, index) {
+    //     let proccessedData = getProcessedData(item.step_groups);
+
+    //     return (
+    //       <WorkflowItem
+    //         rank={that.getRank(page, index)}
+    //         pData={proccessedData}
+    //         workflow={item}
+    //         key={index}
+    //         kinds={that.props.workflowKind}
+    //         dispatch={that.props.dispatch}
+    //         workflowFilterType={that.props.workflowFilterType}
+    //         onStatusChange={that.onStatusChange}
+    //         statusView={that.props.statusView}
+    //         workflowChildren={that.props.workflowChildren}
+    //       />
+    //     );
+    //   });
+
+    var ListCompletes = Object.keys(result).map((key, parentIndex) => {
+      const list = result[key];
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
 
         return (
           <WorkflowItem
-            rank={this.getRank(page, parentIndex)}
+            rank={that.getRank(page, index)}
             pData={proccessedData}
             workflow={item}
             key={index}
