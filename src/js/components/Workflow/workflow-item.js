@@ -52,6 +52,11 @@ const SubMenu = Menu.SubMenu;
 /*workflow Head*/
 /////////////////
 
+const openWindow = url => {
+  console.log(url);
+  window.open(url, "_blank");
+};
+
 const ProcessLcData = lc => {
   let subtext_value = <span />;
 
@@ -60,10 +65,17 @@ const ProcessLcData = lc => {
   } else if (lc.format && lc.format.toLowerCase() === "pid") {
     subtext_value = <span className="t-upr">{lc.value || "-"}</span>;
   } else if (lc.format && lc.format.toLowerCase() === "icon") {
-    subtext_value = (
-      <a href={lc.value || "#"} target="_blank" className="text-nounderline ">
+    subtext_value = lc.value ? (
+      <span
+        onClick={() => {
+          window.open(lc.value, "_blank");
+        }}
+        className="text-nounderline text-anchor"
+      >
         <i className="material-icons">picture_as_pdf</i>
-      </a>
+      </span>
+    ) : (
+      "-"
     );
   } else {
     subtext_value = <span>{lc.value || "-"}</span>;
@@ -712,18 +724,7 @@ export const WorkflowHeader = props => {
 
         <Col span={4} className="t-12 text-light pd-right-sm">
           <div className="text-ellipsis">
-            {_.size(subtext) >= 2 ? (
-              <Tooltip
-                title={subtext[1].label + ": " + (subtext[1].value || "-")}
-              >
-                <span className="t-cap">
-                  {subtext[1].show_label ? subtext[1].label + ": " : ""}
-                </span>
-                {ProcessLcData(subtext[1])}
-              </Tooltip>
-            ) : (
-              ""
-            )}
+            {_.size(subtext) >= 2 ? ProcessLcData(subtext[1]) : ""}
           </div>
         </Col>
 
