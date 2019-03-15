@@ -66,10 +66,11 @@ class GoogleSrch extends Component {
     // _field.integration_json = jsonData //.data_fields[4].integration_json;
     // TODO: 1. Field override
 
-
-
     let final_html = null;
-    if (this.props.currentStepFields.integration_data_loading) {
+    if (
+      this.props.currentStepFields.integration_data_loading ||
+      field.integration_json.status_message == "Fetching data for this field..."
+    ) {
       final_html = (
         <div>
           <div className="text-center mr-top-lg">
@@ -117,8 +118,6 @@ const GetTable = props => {
 
     return aData - bData;
   });
-    
-
 
   const title = (
     <span className="text-metal">{`Found ${data.length} results`}</span>
