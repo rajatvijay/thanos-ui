@@ -215,73 +215,6 @@ const ActivityLogSimple = ({ item }) => {
   );
 };
 
-class ActivityLogAlert extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false
-    };
-  }
-
-  toggle = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  };
-
-  render() {
-    const item = this.props.item;
-
-    return (
-      <div>
-        <div>
-          <span
-            className="float-right text-secondary small text-anchor"
-            onClick={this.toggle}
-          >
-            {this.state.isOpen ? "show less" : "show more"}
-          </span>
-          {item.actor.email ? (
-            <a
-              className="text-medium text-base"
-              href={"mailto:" + item.actor.email}
-            >
-              {item.actor.email}
-            </a>
-          ) : item.actor.username ? (
-            item.actor.username
-          ) : null}{" "}
-          {item.action.type} <b>{item.object.name}</b>
-        </div>
-
-        {this.state.isOpen ? (
-          <div className="small pd-top-sm pd-bottom-sm">
-            <div className="pbs">
-              <b>On:</b>{" "}
-              <span className="">{item.actiontime.humanize_time}</span>{" "}
-            </div>
-            <div className="pbs">
-              <b>Type:</b>{" "}
-              <span className="">{item.object.details.trigger_type}</span>{" "}
-            </div>
-            <div className="pbs">
-              <b>Operator:</b>{" "}
-              <span className="">{item.object.details.operator}</span>{" "}
-            </div>
-          </div>
-        ) : null}
-        <div>
-          <span className="small text-light">
-            <Tooltip title={item.actiontime.humanize_time}>
-              <Moment fromNow>{item.actiontime.datetime}</Moment>
-            </Tooltip>
-          </span>
-        </div>
-      </div>
-    );
-  }
-}
-
 const ActivityLogEmail = ({ item }) => {
   return (
     <p className="pd-left-sm">
@@ -331,12 +264,14 @@ class ActivityLogCollapsible extends Component {
             })}
           </Timeline>
         )}
-        <Button
-          size={"small"}
-          style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
-          icon={this.state.isOpen ? "up" : "down"}
-          className={"activity-log-collapse-btn"}
-        />
+        {item.object.changes.length > 0 ? (
+          <Button
+            size={"small"}
+            style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
+            icon={this.state.isOpen ? "up" : "down"}
+            className={"activity-log-collapse-btn"}
+          />
+        ) : null}
       </div>
     );
   }
@@ -395,7 +330,7 @@ const AuditContent = props => {
                 color={color}
               >
                 {item.object.type === "alert" ? (
-                  <ActivityLogAlert item={item} />
+                  <ActivityLogCollapsible item={item} />
                 ) : item.object.type === "email" ? (
                   <ActivityLogEmail item={item} />
                 ) : item.object.changes && item.object.changes.length === 0 ? (
