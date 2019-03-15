@@ -24,6 +24,15 @@ class WorkflowList extends Component {
     this.props.dispatch(workflowActions.getAll());
   };
 
+  getRank = (page, index, count) => {
+    const { sortAscending } = this.props;
+    if (sortAscending) {
+      return (page - 1) * 20 + index;
+    } else {
+      return count - (page - 1) * 20 - index + 1;
+    }
+  };
+
   render() {
     let that = this;
     const data = this.props.workflow;
@@ -53,14 +62,21 @@ class WorkflowList extends Component {
       return moment(occurrence.created_at).format("MMM");
     };
 
-    var result = _.groupBy(data.workflow, occurrenceDay);
+    const workflowWithHumanReadableRiskRank =
+      data.workflow &&
+      data.workflow.map((w, i) => ({
+        ...w,
+        rank: that.getRank(page, i + 1, data.count)
+      }));
+    var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
 
-    var ListCompletes = _.map(result, function(list, key, index) {
+    var ListCompletes = _.map(result, (list, key) => {
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
 
         return (
           <WorkflowItem
+            rank={item.rank}
             pData={proccessedData}
             workflow={item}
             key={index}
@@ -70,6 +86,7 @@ class WorkflowList extends Component {
             onStatusChange={that.onStatusChange}
             statusView={that.props.statusView}
             workflowChildren={that.props.workflowChildren}
+            sortingEnabled={that.props.sortingEnabled}
           />
         );
       });
@@ -206,6 +223,8 @@ class WorkflowItem extends React.Component {
             trigger={
               <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
                 <WorkflowHeader
+                  sortingEnabled={this.props.sortingEnabled}
+                  rank={this.props.rank}
                   workflow={this.props.workflow}
                   statusType={statusType}
                   kind={this.props.kinds}
