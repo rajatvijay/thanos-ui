@@ -24,12 +24,12 @@ class WorkflowList extends Component {
     this.props.dispatch(workflowActions.getAll());
   };
 
-  getRank = (page, index) => {
+  getRank = (page, index, count) => {
     const { sortAscending } = this.props;
     if (sortAscending) {
       return (page - 1) * 10 + index;
     } else {
-      return (page - 1) * 10 - index;
+      return count - (page - 1) * 10 - index + 1;
     }
   };
 
@@ -62,15 +62,21 @@ class WorkflowList extends Component {
       return moment(occurrence.created_at).format("MMM");
     };
 
-    var result = _.groupBy(data.workflow, occurrenceDay);
+    const workflowWithHumanReadableRiskRank =
+      data.workflow &&
+      data.workflow.map((w, i) => ({
+        ...w,
+        rank: that.getRank(page, i + 1, data.count)
+      }));
+    var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
 
-    var ListCompletes = _.map(result, (list, key, parentIndex) => {
+    var ListCompletes = _.map(result, (list, key) => {
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
 
         return (
           <WorkflowItem
-            rank={this.getRank(page, parentIndex)}
+            rank={item.rank}
             pData={proccessedData}
             workflow={item}
             key={index}

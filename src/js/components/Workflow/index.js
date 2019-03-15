@@ -40,7 +40,7 @@ class Workflow extends Component {
       isUserAuthenticated: false,
       statusView: true,
       visible: false,
-      sortOrderAsc: true,
+      sortOrderAsc: false,
       sortingEnabled: false
     };
 
@@ -211,7 +211,7 @@ class Workflow extends Component {
               <Col span={7} className="text-metal" />
 
               <Col span="2" className="text-secondary text-center">
-                {this.props.workflowFilters.kind.meta
+                {!this.props.workflowFilters.kind.meta
                   .is_sorting_field_enabled ? (
                   <Tooltip
                     title={
