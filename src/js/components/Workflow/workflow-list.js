@@ -27,9 +27,9 @@ class WorkflowList extends Component {
   getRank = (page, index, count) => {
     const { sortAscending } = this.props;
     if (sortAscending) {
-      return (page - 1) * 10 + index + 1;
+      return (page - 1) * 20 + index;
     } else {
-      return count - (page - 1) * 10 - index + 1;
+      return count - (page - 1) * 20 - index + 1;
     }
   };
 
@@ -86,6 +86,7 @@ class WorkflowList extends Component {
             onStatusChange={that.onStatusChange}
             statusView={that.props.statusView}
             workflowChildren={that.props.workflowChildren}
+            sortingEnabled={that.props.sortingEnabled}
           />
         );
       });
@@ -222,6 +223,7 @@ class WorkflowItem extends React.Component {
             trigger={
               <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
                 <WorkflowHeader
+                  sortingEnabled={this.props.sortingEnabled}
                   rank={this.props.rank}
                   workflow={this.props.workflow}
                   statusType={statusType}

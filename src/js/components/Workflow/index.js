@@ -157,16 +157,48 @@ class Workflow extends Component {
   };
 
   changeScoreOrder = order => {
-    this.setState({ sortingEnabled: true });
-    let sort = this.state.sortOrderAsc
-      ? "-sorting_primary_field"
-      : "sorting_primary_field";
-    let payload = { filterType: "ordering", filterValue: [sort] };
-    this.setState({ sortOrderAsc: !this.state.sortOrderAsc });
-    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    const isAscending = this.state.sortOrderAsc;
+    const isSortingEnabled = this.state.sortingEnabled;
+    if (!isSortingEnabled) {
+      // Enable the sroting in descending mode
+      this.setState({
+        sortOrderAsc: false,
+        sortingEnabled: true
+      });
+      return this.props.dispatch(
+        workflowFiltersActions.setFilters({
+          filterType: "ordering",
+          filterValue: ["-sorting_primary_field"]
+        })
+      );
+    }
+
+    if (isAscending) {
+      // Disable the sorting
+      this.setState({ sortingEnabled: false });
+      this.props.dispatch(
+        workflowFiltersActions.setFilters({
+          filterType: "ordering",
+          filterValue: []
+        })
+      );
+    } else {
+      // Enable sorting in the ascending mode
+      this.setState({
+        sortOrderAsc: true,
+        sortingEnabled: true
+      });
+      this.props.dispatch(
+        workflowFiltersActions.setFilters({
+          filterType: "ordering",
+          filterValue: ["sorting_primary_field"]
+        })
+      );
+    }
   };
 
   render = () => {
+    const { sortingEnabled } = this.state;
     // let showRisk = false;
     // if (
     //   _.size(this.props.workflow.workflow) &&
@@ -211,7 +243,7 @@ class Workflow extends Component {
               <Col span={7} className="text-metal" />
 
               <Col span="2" className="text-secondary text-center">
-                {!this.props.workflowFilters.kind.meta
+                {this.props.workflowFilters.kind.meta
                   .is_sorting_field_enabled ? (
                   <Tooltip
                     title={
@@ -225,11 +257,13 @@ class Workflow extends Component {
                       onClick={this.changeScoreOrder}
                     >
                       Risk
-                      <i className="material-icons t-14  text-middle">
-                        {this.state.sortOrderAsc
-                          ? "keyboard_arrow_up"
-                          : "keyboard_arrow_down"}
-                      </i>
+                      {sortingEnabled ? (
+                        <i className="material-icons t-14  text-middle">
+                          {this.state.sortOrderAsc
+                            ? "keyboard_arrow_up"
+                            : "keyboard_arrow_down"}
+                        </i>
+                      ) : null}
                     </span>
                   </Tooltip>
                 ) : null}
