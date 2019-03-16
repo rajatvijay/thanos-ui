@@ -23,52 +23,13 @@ import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
 //import { regionData } from "./regionData";
+import { FormattedMessage, injectIntl } from "react-intl";
+import FooterLink from "./FooterLinks";
 
 //const filter = {};
 const { Sider } = Layout;
 const Option = Select.Option;
 const FormItem = Form.Item;
-
-const filterTypeSelect = [
-  {
-    filterType: "status",
-    filterName: "Status",
-    results: [
-      { id: 1, filterType: "status", value: "main", label: "Main Group" },
-      { id: 2, filterType: "status", value: "ae_uae_ou", label: "AE UAE OU" },
-      { id: 3, filterType: "status", value: "AO_AGO_OU", label: "AO AGO OU" },
-      { id: 4, filterType: "status", value: "AO_ANG_OU", label: "AO ANG OU" }
-    ]
-  },
-  {
-    filterType: "Business",
-    filterName: "business unit",
-    results: [
-      { id: 1, filterType: "bu", value: "main", label: "Main Group" },
-      { id: 2, filterType: "bu", value: "ae_uae_ou", label: "AE UAE OU" },
-      { id: 3, filterType: "bu", value: "AO_AGO_OU", label: "AO AGO OU" },
-      { id: 4, filterType: "bu", value: "AO_ANG_OU", label: "AO ANG OU" },
-      {
-        id: 5,
-        filterType: "bu",
-        value: "AR_ARS_USD_OU",
-        label: "AR ARS USD OU"
-      },
-      { id: 6, filterType: "bu", value: "AT_LIX_OU", label: "AT LIX OU" },
-      { id: 7, filterType: "bu", value: "AU_RTA_OU", label: "AU RTA OU" }
-    ]
-  },
-  {
-    filterType: "region",
-    filterName: "region",
-    results: [
-      { id: 1, filterType: "region", value: "EMEA", label: "EMEA" },
-      { id: 2, filterType: "region", value: "LATAM", label: "LATAM" },
-      { id: 3, filterType: "region", value: "APAC", label: "APAC" },
-      { id: 4, filterType: "region", value: "US", label: "US" }
-    ]
-  }
-];
 
 //REACT COMPONENT FOR ANTD SELECT TYPE FILTERS SO THAT STATE FOR INDIVISUAL FILTERS ARE HANDLED SMOOTHLY.
 class WorkflowFilter extends Component {
@@ -81,24 +42,10 @@ class WorkflowFilter extends Component {
     };
   }
 
-  componentDidMount = () => {
-    switch (this.props.placeholder) {
-      case "Business":
-        this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
-        break;
-      case "region":
-        this.props.dispatch(workflowFiltersActions.getRegionData());
-        break;
-      case "status":
-        this.props.dispatch(workflowFiltersActions.getStatusData());
-        break;
-    }
-  };
-
-  //SELECT TYPE FILTER DISPATCHED HERE
-  handleChange = value => {
+  // this is required as super.handleChange is not possible for react components
+  _handleChange = value => {
     this.setState({ value });
-    let fType = this.props.placeholder.toLowerCase();
+    let fType = this.filterType.toLowerCase();
     let payload = { filterType: fType, filterValue: [] };
 
     if (value !== undefined && value.length !== 0) {
@@ -116,7 +63,106 @@ class WorkflowFilter extends Component {
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
-  businessUnitFilterChange = value => {
+  handleChange = this._handleChange;
+
+  getLabel = () => {
+    let custom_ui_labels = this.props.config.custom_ui_labels || {};
+    let label =
+      this.props.intl.formatMessage({
+        id: `workflowFiltersTranslated.filterLabels.${this.filterType}`
+      }) || this.filterType;
+    return custom_ui_labels[`filterLabels.${label}`] || label;
+  };
+
+  getPlaceHolder = () => {
+    let custom_ui_labels = this.props.config.custom_ui_labels || {};
+    let placeholder =
+      this.props.intl.formatMessage({
+        id: `workflowFiltersTranslated.filterPlaceholders.${this.filterType}`
+      }) || this.filterType;
+    return custom_ui_labels[`filterPlaceholders.${placeholder}`] || placeholder;
+  };
+
+  render() {
+    const { value } = this.state;
+    let label = this.getLabel();
+    let placeholder = this.getPlaceHolder();
+    return (
+      <div>
+        <div>
+          <label>{label ? label : placeholder}</label>
+        </div>
+        <FormItem>
+          <Select
+            showSearch
+            mode="single"
+            label={placeholder}
+            value={value}
+            placeholder={placeholder}
+            onChange={this.handleChange}
+            //onDeselect={this.onDeselect}
+            onSelect={this.onSelect}
+            style={{ width: "100%" }}
+            allowClear={true}
+            labelInValue={true}
+          >
+            {_.map(this.getData(), function(c, index) {
+              return (
+                <Option prop={c} title={c.value} key={c.value}>
+                  {c.label}
+                </Option>
+              );
+            })}
+          </Select>
+        </FormItem>
+      </div>
+    );
+  }
+}
+
+//REACT COMPONENT FOR ANTD SELECT TYPE FILTERS SO THAT STATE FOR INDIVISUAL FILTERS ARE HANDLED SMOOTHLY.
+class WorkflowStatusFilter extends WorkflowFilter {
+  filterType = "status";
+
+  componentDidMount = () => {
+    this.props.dispatch(workflowFiltersActions.getStatusData());
+  };
+
+  getData = () => {
+    return !this.props.workflowFilterType.statusType.error
+      ? _.orderBy(this.props.workflowFilterType.statusType, ["label"], ["asc"])
+      : [{ value: "empty", label: "empty" }];
+  };
+}
+
+//REACT COMPONENT FOR ANTD SELECT TYPE FILTERS SO THAT STATE FOR INDIVISUAL FILTERS ARE HANDLED SMOOTHLY.
+class WorkflowRegionFilter extends WorkflowFilter {
+  filterType = "region";
+
+  componentDidMount = () => {
+    this.props.dispatch(workflowFiltersActions.getRegionData());
+  };
+
+  getData = () => {
+    return this.props.workflowFilterType.regionType.results;
+  };
+
+  handleChange = value => {
+    this._handleChange(value);
+    let region = value && value.key;
+    this.props.dispatch(workflowFiltersActions.getBusinessUnitData(region));
+  };
+}
+
+//REACT COMPONENT FOR ANTD SELECT TYPE FILTERS SO THAT STATE FOR INDIVISUAL FILTERS ARE HANDLED SMOOTHLY.
+class WorkflowBUFilter extends WorkflowFilter {
+  filterType = "business_unit";
+
+  componentDidMount = () => {
+    this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
+  };
+
+  handleChange = value => {
     this.setState({ value });
 
     let payload = { filterType: "business_unit", filterValue: [] };
@@ -132,82 +178,45 @@ class WorkflowFilter extends Component {
 
   render() {
     const { value } = this.state;
-    const regionData = this.props.workflowFilterType.regionType;
     const bd = this.props.workflowFilterType.businessType;
     const businessData = {
       loading: bd.loading,
       results: _.orderBy(bd.results, ["label"], ["asc"])
     };
     const statusData = !this.props.workflowFilterType.statusType.error
-      ? this.props.workflowFilterType.statusType
+      ? _.orderBy(this.props.workflowFilterType.statusType, ["label"], ["asc"])
       : [{ value: "empty", label: "empty" }];
+    let label = this.getLabel();
+    let placeholder = this.getPlaceHolder();
 
     return (
       <div>
         <div>
-          <label>
-            {this.props.label ? this.props.label : this.props.placeholder}
-          </label>
+          <label>{label ? label : placeholder}</label>
         </div>
-        {this.props.placeholder === "Business" ? (
-          <FormItem
-            hasFeedback={businessData.loading ? true : false}
-            validateStatus={this.state.fetching ? "validating" : null}
-            help={businessData.loading ? "Fetching fields data..." : ""}
-          >
-            <Cascader
-              options={businessData.results}
-              onChange={this.businessUnitFilterChange}
-              label={this.props.placeholder}
-              placeholder={this.props.placeholder}
-              value={value}
-              //onDeselect={this.onDeselect}
-              onSelect={this.onSelect}
-              style={{ width: "100%" }}
-              loading={businessData.loading}
-            />
-          </FormItem>
-        ) : (
-          <FormItem
-          //hasFeedback={regionData.loading ? true : false}
-          //validateStatus={ "validating" : null}
-          //help={ "Fetching fields data..." : ""}
-          >
-            <Select
-              showSearch
-              mode="single"
-              label={this.props.placeholder}
-              value={value}
-              placeholder={this.props.placeholder}
-              onChange={this.handleChange}
-              onDeselect={this.onDeselect}
-              onSelect={this.onSelect}
-              style={{ width: "100%" }}
-              allowClear={true}
-              labelInValue={true}
-              //optionFilterProp="children"
-              // filterOption={(input, option) =>
-              //   option.props.children
-              //     .toLowerCase()
-              //     .indexOf(input.toLowerCase()) >= 0
-              // }
-            >
-              {_.map(
-                this.props.placeholder === "region"
-                  ? regionData.results
-                  : statusData,
-
-                function(c, index) {
-                  return (
-                    <Option prop={c} title={c.value} key={c.value}>
-                      {c.label}
-                    </Option>
-                  );
-                }
-              )}
-            </Select>
-          </FormItem>
-        )}
+        <FormItem
+          hasFeedback={businessData.loading ? true : false}
+          validateStatus={this.state.fetching ? "validating" : null}
+          help={
+            businessData.loading
+              ? this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.fetchingFieldsData"
+                })
+              : ""
+          }
+        >
+          <Cascader
+            options={businessData.results}
+            onChange={this.handleChange}
+            label={placeholder}
+            placeholder={placeholder}
+            value={value}
+            //onDeselect={this.onDeselect}
+            onSelect={this.onSelect}
+            style={{ width: "100%" }}
+            loading={businessData.loading}
+          />
+        </FormItem>
       </div>
     );
   }
@@ -219,7 +228,8 @@ class WorkflowKindFilter extends Component {
     super();
     this.state = {
       selected: null,
-      initialLoad: true
+      initialLoad: true,
+      value: null
     };
   }
 
@@ -230,84 +240,68 @@ class WorkflowKindFilter extends Component {
       this.state.initialLoad
     ) {
       this.setState({
-        selected: this.props.workflowFilters.kind.filterValue[0],
+        value: this.props.workflowFilters.kind.meta.name,
         initialLoad: false
       });
     }
   };
 
-  componentDidMount = () => {
-    // if (!this.props.workflowFilterType.statusType) {
-    //   this.props.dispatch(workflowFiltersActions.getStatusData());
-    // }
-  };
-
-  workflowKindList = workflowKind => {
+  handleChange = value => {
+    let id = parseInt(value, 10);
     let that = this;
-
-    return _.map(workflowKind, function(i, index) {
-      return (
-        <li
-          className={
-            "ant-menu-item " +
-            (that.state.selected === i.id ||
-            that.props.workflowFilters.kind.filterValue[0] === i.id
-              ? "ant-menu-item-selected "
-              : "")
-          }
-          key={i.id}
-          kind={i.id}
-          onClick={that.onFilterSelected.bind(this, i)}
-        >
-          <i className="material-icons icon">
-            {i.icon ? i.icon : "library_books"}
-          </i>
-          {i.name}
-        </li>
-      );
+    this.setState({ value });
+    let metaValue = _.find(this.props.workflowKind.workflowKind, item => {
+      return item.id === id;
     });
-  };
 
-  onFilterSelected = value => {
-    let id = "";
-    id = value.id;
-    this.setState({ selected: id });
-    this.props.dispatch(
-      workflowFiltersActions.setFilters({
-        filterType: "kind",
-        filterValue: [id],
-        meta: { value }
-      })
-    );
-
-    this.fetchGroupData(value.tag);
+    let payload = { filterType: "kind", filterValue: [id], meta: metaValue };
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    setTimeout(function() {
+      that.fetchGroupData(metaValue.tag);
+    }, 300);
   };
 
   fetchGroupData = tag => {
     this.props.dispatch(workflowKindActions.getCount(tag));
+    this.props.dispatch(workflowKindActions.getAlertCount(tag));
     this.props.dispatch(workflowKindActions.getStatusCount(tag));
   };
 
   render = () => {
     let workflowKindList = null;
+    let workflowKind = _.orderBy(
+      this.props.workflowKind.workflowKind,
+      ["name"],
+      ["asc"]
+    );
+    const { value } = this.state;
 
-    if (this.props.workflowKind) {
-      let workflowKind = this.props.workflowKind.workflowKind;
-      workflowKindList = this.workflowKindList(workflowKind);
-    }
+    const options = workflowKind
+      ? _.map(workflowKind, d => <Option key={d.id}>{d.name}</Option>)
+      : [];
 
     return (
-      <ul
-        className="ant-menu ant-menu-light ant-menu-root ant-menu-inline"
-        style={{
-          width: "100%",
-          height: "vh100",
-          overflowX: "hidden",
-          background: "transparent"
-        }}
-      >
-        {workflowKindList}
-      </ul>
+      <div className="aux-item aux-lead filter-title">
+        <FormItem
+          label={
+            <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
+          }
+        >
+          <Select
+            mode="single"
+            value={value}
+            placeholder="Select Workflow Type"
+            onChange={this.handleChange}
+            onDeselect={this.onDeselect}
+            onSelect={this.onSelect}
+            style={{ width: "100%" }}
+            //allowClear={true}
+            //labelInValue={true}
+          >
+            {options}
+          </Select>
+        </FormItem>
+      </div>
     );
   };
 }
@@ -328,10 +322,6 @@ class FilterSidebar extends Component {
     if (!this.props.workflowKind.workflowKind) {
       this.loadWorkflowKind();
     }
-
-    this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
-    this.props.dispatch(workflowFiltersActions.getRegionData());
-    this.props.dispatch(workflowFiltersActions.getStatusData());
   };
 
   loadWorkflowKind = () => {
@@ -353,8 +343,7 @@ class FilterSidebar extends Component {
   };
 
   render = () => {
-    let that = this,
-      filterList = filterTypeSelect;
+    let that = this;
 
     const { workflowKind } = this.props.workflowKind;
 
@@ -369,24 +358,6 @@ class FilterSidebar extends Component {
     //workflow Kind list
 
     //kind temp hide list
-
-    const getTagToHide = tag => {
-      let pass = true;
-
-      switch (tag) {
-        case "users":
-          pass = false;
-          break;
-        case "entity-id":
-          pass = false;
-          break;
-        default:
-          pass = false;
-      }
-
-      return pass;
-    };
-
     const menu = (
       <Menu className="kind-menu" theme="Light">
         {_.map(workflowKindFiltered, function(item, index) {
@@ -406,7 +377,6 @@ class FilterSidebar extends Component {
                   onClick={that.clicked.bind(this, item.tag)}
                   className="kind-item "
                 >
-                  <i className="material-icons t-14 pd-right-sm">{item.icon}</i>{" "}
                   {item.name}
                 </div>
               </Menu.Item>
@@ -436,11 +406,20 @@ class FilterSidebar extends Component {
 
     return (
       <Sider
-        width={250}
-        style={{ overflow: "auto", height: "100vh", position: "fixed" }}
-        className="aux-nav aux-nav-filter bg-white"
+        width={320}
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          background: "#ebf0fa"
+        }}
+        className="aux-nav aux-nav-filter "
       >
-        <Scrollbars autoWidth={true} autoHide={true} style={{ height: "100%" }}>
+        <Scrollbars
+          autoWidth={true}
+          autoHide={true}
+          style={{ height: "100%", position: "relative" }}
+        >
           {_.size(workflowKindFiltered) ? (
             <div>
               <div className="create-btn">
@@ -455,7 +434,8 @@ class FilterSidebar extends Component {
                     loading={this.props.workflowKind.loading}
                     className="shadow-2 btn-block btn-create"
                   >
-                    Create new <Icon type="down" />
+                    <FormattedMessage id="workflowFiltersTranslated.createNewWorkflow" />
+                    <Icon type="down" />
                   </Button>
                 </Dropdown>
               </div>
@@ -463,47 +443,50 @@ class FilterSidebar extends Component {
             </div>
           ) : null}
 
-          <div className="filter-section section-kind">
-            <h5 className="aux-item aux-lead">Filter workflow type</h5>
-            <WorkflowKindFilter
-              workflowKind={this.props.workflowKind}
-              workflowFilters={this.props.workflowFilters}
-              dispatch={this.props.dispatch}
-            />
+          <span className="aux-item aux-lead mr-bottom-lg">
+            <span className="text-secondary t-14 text-medium text-uppercase">
+              Filters
+            </span>
+          </span>
+          <br />
+          <br />
+
+          <div className=" section-kind">
+            {this.props.workflowKind ? (
+              <WorkflowKindFilter
+                workflowKind={this.props.workflowKind}
+                workflowFilters={this.props.workflowFilters}
+                dispatch={this.props.dispatch}
+              />
+            ) : null}
           </div>
 
-          <div className="filter-divider" />
-
           <div className="filter-section">
-            {_.map(filterTypeSelect, function(f, index) {
-              return (
-                <div
-                  className="aux-item aux-lead filter-title"
-                  key={"filter-2-" + index}
-                >
-                  <WorkflowFilter
-                    label={f.filterName}
-                    placeholder={f.filterType}
-                    childeren={f.results}
-                    {...that.props}
-                  />
-                </div>
-              );
-            })}
+            <div className="aux-item aux-lead filter-title" key="filter-2-0">
+              <WorkflowStatusFilter {...that.props} />
+            </div>
+            <div className="aux-item aux-lead filter-title" key="filter-2-1">
+              <WorkflowRegionFilter {...that.props} />
+            </div>
+            <div className="aux-item aux-lead filter-title" key="filter-2-2">
+              <WorkflowBUFilter {...that.props} />
+            </div>
           </div>
 
           <div>
-            <h5
-              className="aux-item aux-lead  text-anchor"
+            <span
+              className="aux-item aux-lead  text-anchor filter-title"
               onClick={this.toggleAdvFilters}
             >
-              Advanced filter{" "}
-              <i className="material-icons t-16 text-middle">
-                {this.state.showAdvFilters
-                  ? "keyboard_arrow_up "
-                  : "keyboard_arrow_down  "}
-              </i>
-            </h5>
+              <label>
+                <FormattedMessage id="workflowFiltersTranslated.advancedFilter" />{" "}
+                <i className="material-icons t-16 text-middle">
+                  {this.state.showAdvFilters
+                    ? "keyboard_arrow_up "
+                    : "keyboard_arrow_down  "}
+                </i>
+              </label>
+            </span>
           </div>
 
           <div
@@ -512,7 +495,6 @@ class FilterSidebar extends Component {
             }
           >
             <div className="filter-section">
-              <h5 className="aux-item aux-lead filter-title">Select Field</h5>
               <div className="aux-item aux-lead">
                 <WrappedAdvancedFilterForm
                   {...this.props}
@@ -522,18 +504,13 @@ class FilterSidebar extends Component {
             </div>
           </div>
 
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <div style={{ height: "150px" }} />
+          {this.props.config.custom_ui_labels &&
+          this.props.config.custom_ui_labels.footer_links ? (
+            <FooterLink
+              footerLinks={this.props.config.custom_ui_labels.footer_links}
+            />
+          ) : null}
+          <div style={{ height: "100px" }} />
         </Scrollbars>
       </Sider>
     );
@@ -541,12 +518,20 @@ class FilterSidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowFilterType, workflowFilters } = state;
+  const {
+    workflowKind,
+    workflowFilterType,
+    workflowFilters,
+    config,
+    languageSelector
+  } = state;
   return {
     workflowKind,
     workflowFilterType,
-    workflowFilters
+    workflowFilters,
+    config,
+    languageSelector
   };
 }
 
-export default connect(mapStateToProps)(FilterSidebar);
+export default connect(mapStateToProps)(injectIntl(FilterSidebar));

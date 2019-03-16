@@ -1,19 +1,21 @@
 import { authHeader, baseUrl } from "../_helpers";
+import _ from "lodash";
 
 export const workflowStepService = {
   saveField,
   updateField,
+  fetchFieldExtra,
   submitStep,
   approveStep,
   undoStep,
   addComment,
   updateFlag,
+  updateIntegrationStatus,
   removeAttachment
 };
 
 function saveField(payload) {
   let requestOptions = {};
-
   if (payload.attachment) {
     let data = new FormData();
     data.append("workflow", payload.workflow);
@@ -81,6 +83,26 @@ function updateField(payload) {
     baseUrl + "responses/" + payload.answerId + "/",
     requestOptions
   ).then(handleResponse);
+}
+
+//fetch extra for field
+function fetchFieldExtra(field, targetAnswer) {
+  let url = field.definition.extra.api_url;
+  if (!url) {
+    return Promise.reject('"url" not defined for fetchFieldExtra');
+  }
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+  if (targetAnswer) {
+    url = url.replace(/{}/, targetAnswer);
+  }
+  if (!url.match(/^https?:\/\//)) {
+    url = baseUrl + url;
+  }
+  return fetch(url, requestOptions).then(handleResponse);
 }
 
 //Save step data on submit
@@ -151,12 +173,30 @@ function undoStep(payload) {
 }
 
 function addComment(payload) {
-  const requestOptions = {
+  let requestOptions = {};
+
+  // let data = JSON.stringify(payload);
+  let data = payload;
+  if (payload.attachment) {
+    data = new FormData();
+    data.append("object_id", payload.object_id);
+    data.append("type", payload.type);
+    data.append("message", payload.message);
+    data.append("attachment", payload.attachment);
+  } else {
+    data = JSON.stringify(payload);
+  }
+
+  requestOptions = {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify(payload)
+    body: data
   };
+  if (payload.attachment) {
+    delete requestOptions.headers["Content-Type"];
+  }
+
   return fetch(baseUrl + "channels/addmessage/", requestOptions).then(
     handleResponse
   );
@@ -177,4 +217,17 @@ function handleResponse(response) {
     return response.json();
   }
   return response.json();
+}
+
+function updateIntegrationStatus(payload) {
+  const requestOptions = {
+    method: "POST",
+    headers: { ...authHeader.post(), "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(payload)
+  };
+  return fetch(
+    baseUrl + "integrations/status-update/" + payload["row_uid"] + "/",
+    requestOptions
+  ).then(handleResponse);
 }

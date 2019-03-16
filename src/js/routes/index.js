@@ -18,7 +18,8 @@ import {
 import { PrivateRoute } from "../components/PrivateRoute";
 import { GenericNotFound } from "../components/notfound";
 import { LoginPage } from "../components/LoginPage";
-import { MagicLoginPage } from "../components/LoginPage/MagicLinkPage";
+import { MagicLogin } from "../components/LoginPage/MagicLogin";
+import { OTPLogin } from "../components/LoginPage/OTPLogin";
 import { RegisterPage } from "../components/RegisterPage";
 import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
@@ -26,15 +27,31 @@ import WorkflowDetails from "../components/WorkflowDetails";
 import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import Users from "../components/Users";
 import ExportList from "../components/ExportPage";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "antd/dist/antd.css";
+import { injectIntl } from "react-intl";
 
 function mapStateToProps(state) {
-  const { config, users } = state;
+  const { config, users, languageSelector } = state;
   return {
     users,
-    config
+    config,
+    languageSelector
   };
 }
+
+/* you'll need this CSS somewhere
+.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}
+*/
+
 
 class MainRoutes extends React.Component {
   constructor(props) {
@@ -85,6 +102,12 @@ class MainRoutes extends React.Component {
   componentWillReceiveProps(nextProps) {
     document.title = _.upperFirst(this.props.config.name) || "Vetted";
   }
+  watchRouteChange = history.listen((location, action) => {
+    // location is an object like window.location
+    if (location.pathname === "/login/magic" || location.pathname === "/login") {
+      this.props.dispatch(checkAuth());
+    }
+  });
 
   render() {
     const { alert } = this.props;
@@ -102,40 +125,63 @@ class MainRoutes extends React.Component {
               {this.props.users.me && this.props.users.me.loading ? (
                 <div className="text-center mr-top-lg">loading...</div>
               ) : (
+
+
+
                 <div>
+                 
                   {localStorage.getItem("user") ||
                   !history.location.pathname === "/login/magic/" ? (
                     <Navbar />
                   ) : null}
 
-                  <Switch>
-                    <Route path="/login" exact component={LoginPage} />
-                    <Route
-                      path="/login/magic"
-                      exact
-                      component={MagicLoginPage}
-                    />
-                    <Route
-                      path="/login/magicprocess"
-                      component={MagicLinkProcess}
-                    />
+                  <TransitionGroup>
+                    <CSSTransition
+                      key={history.location.key}
+                      classNames="fade"
+                      timeout={300}
+                      >
 
-                    <Redirect from="/" exact to="/workflows/instances/" />
+                      <Switch>
+                        <Route
+                          path="/login"
+                          exact
+                          component={OTPLogin}
+                        />
+                        <Route path="/login/basic" 
+                          exact 
+                          component={LoginPage} 
+                        />
+                        <Route
+                          path="/login/magic"
+                          exact
+                          component={MagicLogin}
+                        />
+                        <Route
+                          path="/login/magicprocess"
+                          component={MagicLinkProcess}
+                        />
 
-                    <PrivateRoute
-                      path="/workflows/instances/"
-                      exact
-                      component={Workflow}
-                    />
-                    <PrivateRoute
-                      path="/workflows/instances/:id?"
-                      component={WorkflowDetails}
-                    />
-                    <PrivateRoute path="/users/:id?" component={Users} />
-                    {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
+                        <Redirect from="/" exact to="/workflows/instances/" />
 
-                    <Route path="/" component={GenericNotFound} />
-                  </Switch>
+                        <PrivateRoute
+                          path="/workflows/instances/"
+                          exact
+                          component={Workflow}
+                        />
+                        <PrivateRoute
+                          path="/workflows/instances/:id?"
+                          component={WorkflowDetails}
+                        />
+                        <PrivateRoute path="/users/:id?" component={Users} />
+                        {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
+
+                        <Route path="/" component={GenericNotFound} />
+                      </Switch>
+
+                    </CSSTransition>
+
+                  </TransitionGroup>
                 </div>
               )}
             </Router>
@@ -146,5 +192,5 @@ class MainRoutes extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(MainRoutes);
+export default injectIntl(connect(mapStateToProps)(MainRoutes));
 //export default { connectedApp as MainRoutes };

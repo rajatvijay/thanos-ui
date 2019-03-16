@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { authHeader, baseUrl } from "../../../_helpers";
+import { authHeader, baseUrl, baseUrl2 } from "../../../_helpers";
 import {
   Icon,
   Form,
@@ -21,7 +21,7 @@ import Moment from "react-moment";
 import moment from "moment";
 import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
-import flags from "../../../../images/flags.png";
+import flags from "../../../../images/flags2.png";
 import Dropzone from "react-dropzone";
 import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
@@ -35,6 +35,7 @@ const { TextArea } = Input;
 //Common utility fucntions bundled in one file commons.js//
 const {
   getLabel,
+  getExtra,
   onFieldChange,
   onFieldChangeArray,
   arrayToString,
@@ -59,9 +60,7 @@ const GetAnsweredBy = props => {
           answer.submitted_by.last_name +
           " "}
         ( {answer.submitted_by.email}) on{" "}
-        <Moment format="MM/DD/YYYY">
-          {props.field.answers[0].submitted_at}
-        </Moment>
+        <Moment format="MM/DD/YYYY">{answer.updated_at}</Moment>
       </span>
     );
     return (
@@ -98,21 +97,20 @@ export const Text = props => {
       key={props.field.id}
       message=""
       required={getRequired(props)}
-      //help={props.field.definition.help_text}
       hasFeedback
       autoComplete="new-password"
-      //validateStatus={props.field.answers.length !== 0 ? "success" : null}
       {...field_error(props)}
     >
       <TextArea
         disabled={isDisabled(props)}
-        //type="textarea"
         autosize={{ minRows: rows }}
         placeholder={props.field.placeholder}
         defaultValue={
-          props.field.answers[0]
-            ? props.field.answers[0].answer
-            : props.field.definition.defaultValue
+          props.decryptedData
+            ? props.decryptedData.answer
+            : props.field.answers[0]
+              ? props.field.answers[0].answer
+              : props.field.definition.defaultValue
         }
         {...feedValue(props)}
         autoComplete="new-password"
@@ -177,7 +175,7 @@ export const Number = props => {
     >
       <InputNumber
         disabled={isDisabled(props)}
-        min={1}
+        min={0}
         type="number"
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
@@ -203,10 +201,10 @@ export const Date = props => {
     ? props.field.answers[0].answer
     : props.field.definition.defaultValue;
 
-  let defaultDate = moment(defaultAnswer, "YYYY-MM-DD").isValid();
-  let defaultAnswer2 = moment().format("YYYY/MM/DD");
+  let defaultDate = moment.utc(defaultAnswer, "YYYY-MM-DD").isValid();
+  let defaultAnswer2 = moment.utc().format("YYYY/MM/DD");
   if (defaultDate) {
-    defaultAnswer2 = moment(defaultAnswer).format("YYYY/MM/DD");
+    defaultAnswer2 = moment.utc(defaultAnswer).format("YYYY/MM/DD");
   }
   let that = this;
   return (
@@ -224,7 +222,9 @@ export const Date = props => {
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
-        defaultValue={defaultDate ? moment(defaultAnswer2, "YYYY/MM/DD") : null}
+        defaultValue={
+          defaultDate ? moment.utc(defaultAnswer2, "YYYY/MM/DD") : null
+        }
         format={"MM-DD-YYYY"}
       />
       <GetAnsweredBy {...props} />
@@ -463,7 +463,7 @@ export const Select = props => {
         mode={single ? "default" : "multiple"}
         style={getStyle(props)}
         disabled={isDisabled(props)}
-        defaultValue={
+        value={
           props.field.answers[0]
             ? single
               ? props.field.answers[0].answer
@@ -480,7 +480,7 @@ export const Select = props => {
         }
         //filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
-        {_.map(props.field.definition.extra, function(item, index) {
+        {_.map(getExtra(props), function(item, index) {
           return (
             <Option key={index} value={item.value}>
               {item.label}
@@ -514,7 +514,7 @@ export const Phone = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
-        className={props.completed ? "tel-input disabled" : "tel-input"}
+        className={isDisabled(props) ? "tel-input disabled" : "tel-input"}
         //style={{ width: "100%" }}
         defaultCountry="us"
         flagsImagePath={flags}
@@ -530,11 +530,6 @@ export const Phone = props => {
 //Field Type Paragraph
 export const Paragraph = props => {
   const { extra } = props.field.definition;
-
-  console.log("extra----");
-  console.log(props.field.definition);
-  console.log(extra);
-
   const customParaStyle = {
     fontSize: extra.font_size || "",
     textDecoration: extra.underline ? "underline" : "",
@@ -612,6 +607,8 @@ class FileUpload extends Component {
     this.state = {
       filesList: null,
       rejectedFilesList: null,
+      encrypted: props.encrypted,
+      decryptURL: props.decryptURL,
       loading: false
     };
   }
@@ -621,7 +618,11 @@ class FileUpload extends Component {
   componentWillReceiveProps = nextProps => {
     //reload workflow list if the filters change.
     if (this.props !== nextProps) {
-      this.setState({ loading: false });
+      this.setState({
+        loading: false,
+        encrypted: nextProps.encrypted,
+        decryptURL: nextProps.decryptURL
+      });
     }
   };
 
@@ -647,9 +648,18 @@ class FileUpload extends Component {
     console.log("file removed");
   };
 
+  showDecryptURL = () => {
+    this.setState({
+      encrypted: false
+    });
+  };
+
   render = () => {
     let that = this;
     const { field } = this.props;
+    let url = this.state.decryptURL
+      ? baseUrl2 + this.state.decryptURL
+      : field.answers[0] && field.answers[0].attachment;
 
     return (
       <FormItem
@@ -666,7 +676,7 @@ class FileUpload extends Component {
           // onDragEnter={this.onDragEnter.bind(this)}
           // onDragLeave={this.onDragLeave.bind(this)}
           className={
-            this.props.completed
+            isDisabled(this.props)
               ? "file-upload-field disabled"
               : "file-upload-field"
           }
@@ -699,45 +709,58 @@ class FileUpload extends Component {
           </div>
         </Dropzone>
 
-        <div className="ant-upload-list ant-upload-list-text">
-          {field.answers[0] && field.answers[0].attachment !== null ? (
-            <div
-              className="ant-upload-list-item ant-upload-list-item-done"
-              key={"file-1"}
-            >
-              <div className="ant-upload-list-item-info">
-                <span>
-                  <i className="anticon anticon-paper-clip" />
-                  <a
-                    href={field.answers[0].attachment}
-                    target="_blank"
-                    className="ant-upload-list-item-name"
-                  >
-                    {field.answers[0].attachment.substring(
-                      field.answers[0].attachment.lastIndexOf("/") + 1,
-                      field.answers[0].attachment.lastIndexOf("?")
-                    )}
-                  </a>
-                </span>
+        {this.state.encrypted ? (
+          <div className="masked-input mr-bottom">
+            {"Masked"}
+            {this.props.decryptURL ? (
+              <span
+                className="float-right text-anchor"
+                onClick={this.showDecryptURL}
+              >
+                Show
+              </span>
+            ) : null}
+          </div>
+        ) : (
+          <div className="ant-upload-list ant-upload-list-text">
+            {url ? (
+              <div
+                className="ant-upload-list-item ant-upload-list-item-done"
+                key={"file-1"}
+              >
+                <div className="ant-upload-list-item-info">
+                  <span>
+                    <i className="anticon anticon-paper-clip" />
+                    <a
+                      href={url}
+                      target="_blank"
+                      className="ant-upload-list-item-name"
+                    >
+                      {field.answers[0].attachment.substring(
+                        field.answers[0].attachment.lastIndexOf("/") + 1,
+                        field.answers[0].attachment.lastIndexOf("?")
+                      )}
+                    </a>
+                  </span>
+                </div>
+
+                {this.props.completed ? (
+                  <i
+                    title="Remove file"
+                    className="anticon anticon-cross disabled"
+                    //onClick={this.removeFile}
+                  />
+                ) : (
+                  <i
+                    title="Remove file"
+                    className="anticon anticon-cross"
+                    onClick={this.removeFile}
+                  />
+                )}
               </div>
+            ) : null}
 
-              {this.props.completed ? (
-                <i
-                  title="Remove file"
-                  className="anticon anticon-cross disabled"
-                  //onClick={this.removeFile}
-                />
-              ) : (
-                <i
-                  title="Remove file"
-                  className="anticon anticon-cross"
-                  onClick={this.removeFile}
-                />
-              )}
-            </div>
-          ) : null}
-
-          {/*_.map(this.state.rejectedFilesList, function(file, index) {
+            {/*_.map(this.state.rejectedFilesList, function(file, index) {
             return (
               <div
                 className="ant-upload-list-item ant-upload-list-item-error"
@@ -761,7 +784,8 @@ class FileUpload extends Component {
               </div>
             );
           })*/}
-        </div>
+          </div>
+        )}
         <GetAnsweredBy {...this.props} />
       </FormItem>
     );
@@ -882,7 +906,7 @@ export const RadioField = props => {
     >
       <RadioGroup
         disabled={isDisabled(props)}
-        defaultValue={
+        value={
           props.field.answers[0]
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
@@ -890,7 +914,7 @@ export const RadioField = props => {
         onChange={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       >
-        {_.map(props.field.definition.extra, function(item, index) {
+        {_.map(getExtra(props), function(item, index) {
           return (
             <Radio key={index} value={item.value}>
               {item.label}

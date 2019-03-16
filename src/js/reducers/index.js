@@ -9,6 +9,7 @@ import { workflowCreate } from "./workflow_create";
 import {
   workflowKind,
   workflowGroupCount,
+  workflowAlertGroupCount,
   workflowKindStatus
 } from "./workflow_kind";
 import { workflowDetails, hasStepinfo } from "./workflow_details";
@@ -18,6 +19,7 @@ import { currentStepFields } from "./workflow_step";
 import { changeStatus } from "./change_status";
 import { workflowComments } from "./workflow_comments";
 import { stepVersionFields } from "./step_version";
+import { languageSelector } from "./internationalize";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -38,8 +40,10 @@ const rootReducer = combineReducers({
   workflowFilters,
   workflowFilterType,
   workflowGroupCount,
+  workflowAlertGroupCount,
   workflowKind,
-  workflowKindStatus
+  workflowKindStatus,
+  languageSelector
 });
 
 export default rootReducer;

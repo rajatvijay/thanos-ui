@@ -50,7 +50,8 @@ class DuplicateCheckComp extends Component {
     this.state = {
       field: null,
       childWorkflow: null,
-      fetching: false
+      fetching: false,
+      error: null
     };
   }
 
@@ -69,6 +70,18 @@ class DuplicateCheckComp extends Component {
     this.getDuplicateWorkflow();
   };
 
+  componentWillReceiveProps = nextProps => {
+    let that = this;
+
+    if (
+      this.props.field.integration_json !== nextProps.field.integration_json
+    ) {
+      setTimeout(function() {
+        that.getDuplicateWorkflow();
+      }, 1000);
+    }
+  };
+
   getDuplicateWorkflow = () => {
     if (
       !_.size(this.props.field.integration_json) &&
@@ -84,31 +97,41 @@ class DuplicateCheckComp extends Component {
     };
 
     let workflow_ids = [];
+
     _.map(duplicate_data, function(v, k) {
       if (_.size(v.workflow_id)) {
         workflow_ids = workflow_ids.concat(v.workflow_id);
       }
     });
+
     workflow_ids = workflow_ids.join(",");
-    let url = baseUrl + "workflows-list/?workflow_ids=" + workflow_ids;
 
-    this.setState({ fetching: true });
+    if (_.size(workflow_ids)) {
+      let url = baseUrl + "workflows-list/?workflow_ids=" + workflow_ids;
+      this.setState({ fetching: true });
 
-    fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(body => {
-        this.setState({
-          childWorkflow: body.results,
-          fetching: false
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(body => {
+          this.setState({
+            childWorkflow: body.results,
+            fetching: false
+          });
         });
-      });
+    } else {
+      this.setState({ error: "No duplicates found" });
+    }
   };
 
   render = () => {
     let { field } = this.props;
     const props = {
       field: field,
-      onSearch: this.onSearch
+      onSearch: this.onSearch,
+      currentStepFields: this.props.currentStepFields,
+      is_locked: this.props.is_locked,
+      completed: this.props.completed,
+      permission: this.props.permission
     };
     let final_html = null;
     if (this.props.currentStepFields.integration_data_loading) {
@@ -136,17 +159,19 @@ class DuplicateCheckComp extends Component {
             <div className="text-center mr-top-lg">
               <Icon type="loading" style={{ fontSize: 24 }} />
             </div>
+          ) : _.size(this.state.error) ? (
+            <div className="">No duplicates found</div>
           ) : (
-            <div>
+            <div className="workflow-list">
               <div className="paper">
                 {_.size(this.state.childWorkflow) ? (
                   _.map(this.state.childWorkflow, function(workflow) {
                     return (
-                      <div class="workflow-list-item ">
-                        <div class="collapse-wrapper">
-                          <div class="Collapsible">
-                            <span class="Collapsible__trigger is-closed">
-                              <div class="ant-collapse-item ant-collapse-no-arrow lc-card">
+                      <div className="workflow-list-item ">
+                        <div className="collapse-wrapper">
+                          <div className="Collapsible">
+                            <span className="Collapsible__trigger is-closed">
+                              <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
                                 <WorkflowHeader
                                   workflow={workflow}
                                   link={true}
@@ -179,17 +204,9 @@ class DuplicateCheckComp extends Component {
 }
 
 function mapPropsToState(state) {
-  const {
-    workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
-  } = state;
+  const { currentStepFields } = state;
   return {
-    workflowDetailsHeader,
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
+    currentStepFields
   };
 }
 

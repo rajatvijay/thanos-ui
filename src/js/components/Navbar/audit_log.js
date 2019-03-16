@@ -7,14 +7,17 @@ import {
   Badge,
   Popover,
   List,
+  Button,
   Timeline,
   Tooltip
 } from "antd";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import Moment from "react-moment";
-import { Scrollbars } from "react-custom-scrollbars";
+import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
+import PropTypes from "prop-types";
+import download from "downloadjs";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -62,6 +65,157 @@ class AuditList extends Component {
   };
 
   render = () => {
+    if (this.props.isFocused) {
+      if (!this.state.initialLoad && this.state.data.results.length === 0) {
+        return (
+          <div style={{ textAlign: "center" }}>
+            <Icon type={"exclamation-circle"} />{" "}
+            {`No activity log found for ${this.props.logType}`}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <AuditContent
+              data={this.state.data}
+              hasMore={this.hasMore}
+              loadData={this.loadData}
+            />
+          </div>
+        );
+      }
+    } else {
+      return null;
+    }
+  };
+}
+
+AuditList.propTypes = {
+  id: PropTypes.number.isRequired,
+  isFocused: PropTypes.bool,
+  actions: PropTypes.array.isRequired,
+  logType: PropTypes.string.isRequired
+};
+
+const ActivityLogSimple = ({ item }) => {
+  return (
+    <div>
+      <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
+        {item.actor.email}
+      </a>{" "}
+      {item.action.type} {item.object.name}
+      <br />
+      <span className="small text-light">
+        <Tooltip title={item.actiontime.humanize_time}>
+          <Moment fromNow>{item.actiontime.datetime}</Moment>
+        </Tooltip>
+      </span>
+    </div>
+  );
+};
+
+class ActivityLogAlert extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
+
+  toggle = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
+  render() {
+    const item = this.props.item;
+
+    return (
+      <div>
+        <div>
+          <span
+            className="float-right text-secondary small text-anchor"
+            onClick={this.toggle}
+          >
+            {this.state.isOpen ? "show less" : "show more"}
+          </span>
+          {item.actor.email ? (
+            <a
+              className="text-medium text-base"
+              href={"mailto:" + item.actor.email}
+            >
+              {item.actor.email}
+            </a>
+          ) : item.actor.username ? (
+            item.actor.username
+          ) : null}{" "}
+          {item.action.type} <b>{item.object.name}</b>
+        </div>
+
+        {this.state.isOpen ? (
+          <div className="small pd-top-sm pd-bottom-sm">
+            <div className="pbs">
+              <b>On:</b>{" "}
+              <span className="">{item.actiontime.humanize_time}</span>{" "}
+            </div>
+            <div className="pbs">
+              <b>Type:</b>{" "}
+              <span className="">{item.object.details.trigger_type}</span>{" "}
+            </div>
+            <div className="pbs">
+              <b>Operator:</b>{" "}
+              <span className="">{item.object.details.operator}</span>{" "}
+            </div>
+          </div>
+        ) : null}
+        <div>
+          <span className="small text-light">
+            <Tooltip title={item.actiontime.humanize_time}>
+              <Moment fromNow>{item.actiontime.datetime}</Moment>
+            </Tooltip>
+          </span>
+        </div>
+      </div>
+    );
+  }
+}
+
+const ActivityLogEmail = ({ item }) => {
+  return (
+    <p className="pd-left-sm">
+      Email{" "}
+      {item.object.name ? <span>&#8220;{item.object.name}&#8221;</span> : " "}
+      {item.action.type ? item.action.type : item.action.name}{" "}
+      <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
+        {item.actor.email}
+      </a>
+      <br />
+      <span className="small text-light">
+        <Tooltip title={item.actiontime.humanize_time}>
+          <Moment fromNow>{item.actiontime.datetime}</Moment>
+        </Tooltip>
+      </span>
+    </p>
+  );
+};
+
+class ActivityLogCollapsible extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    };
+  }
+
+  toggle = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
+
+  render() {
+    const item = this.props.item;
     return (
       <div>
         {this.state.activityLoading ? (
@@ -69,9 +223,15 @@ class AuditList extends Component {
         ) : (
           <AuditContent data={this.state.data} loadData={this.loadData} />
         )}
+        <Button
+          size={"small"}
+          style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
+          icon={this.state.isOpen ? "up" : "down"}
+          className={"activity-log-collapse-btn"}
+        />
       </div>
     );
-  };
+  }
 }
 
 const AuditContent = props => {
@@ -113,6 +273,12 @@ const AuditContent = props => {
             } else if (item.action.type === "undo") {
               icon = "restore";
               color = "orange";
+            } else if (item.action.code === "alert_created") {
+              icon = "alarm_add";
+              color = "red";
+            } else if (item.action.code === "alert_dismissed") {
+              icon = "alarm_off";
+              color = "green";
             }
 
             return (
@@ -121,28 +287,12 @@ const AuditContent = props => {
                 dot={<i className="material-icons t-14">{icon}</i>}
                 color={color}
               >
-                {item.object.type === "email" ? (
-                  <p className="pd-left-sm">
-                    Email{" "}
-                    {item.object.name ? (
-                      <span>&#8220;{item.object.name}&#8221;</span>
-                    ) : (
-                      " "
-                    )}
-                    {item.action.type ? item.action.type : item.action.name}{" "}
-                    <a
-                      className="text-medium text-base"
-                      href={"mailto:" + item.actor.email}
-                    >
-                      {item.actor.email}
-                    </a>
-                    <br />
-                    <span className="small text-light">
-                      <Tooltip title={item.actiontime.humanize_time}>
-                        <Moment fromNow>{item.actiontime.datetime}</Moment>
-                      </Tooltip>
-                    </span>
-                  </p>
+                {item.object.type === "alert" ? (
+                  <ActivityLogAlert item={item} />
+                ) : item.object.type === "email" ? (
+                  <ActivityLogEmail item={item} />
+                ) : item.object.changes && item.object.changes.length === 0 ? (
+                  <ActivityLogSimple item={item} />
                 ) : (
                   <p className="pd-left-sm">
                     <a

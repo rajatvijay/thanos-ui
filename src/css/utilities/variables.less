@@ -2,7 +2,7 @@
 
 //@primary-color: red;
 
-@color-primary: #17ead9; //#305ebe; //#795548 ;//#f9a825; //#d84315 ;//#00838f; //#6a1b9a;
+@color-primary: #17ead9; //#17ead9; //#305ebe; //#795548 ;//#f9a825; //#d84315 ;//#00838f; //#6a1b9a;
 @color-cyan: #35f3e1;
 
 @color-primary-light: tint(@color-primary, 89%); //#e9effa
@@ -10,13 +10,15 @@
 @color-primary-dark: shade(@color-primary, 32%); //#214081;
 @color-primary-midtone: fade(@color-primary, 50%);
 
-@color-secondary: #6178ea;
+@color-secondary: #305ebe;
 @color-secondary-light: #7f93f4;
 @color-darkblue: #525f7f;
-@color-metal: lighten(
-  desaturate(@color-primary, 37%),
-  17%
-); //desaturate(@color-primary,30%); //#8c9ab8
+// @color-metal: lighten(
+//   desaturate(@color-primary, 37%),
+//   17%
+// ); //desaturate(@color-primary,30%); //#8c9ab8
+
+@color-metal: #8c9ab8;
 
 @color-text: #343b4c; //#525f7e;
 @color-text-light: #989eb1;
@@ -41,8 +43,7 @@
 @color-grey-light: #a0a0a0;
 @color-grey-lightest: #eee;
 
-@base-font : Avenir,
-  Roboto,
+@base-font : Roboto,
   "Helvetica Neue",
   Arial,
   sans-serif,

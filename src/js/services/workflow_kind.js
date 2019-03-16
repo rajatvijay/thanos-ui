@@ -3,8 +3,13 @@ import { authHeader, baseUrl, handleResponse } from "../_helpers";
 export const workflowKindService = {
   getAll,
   getCount,
+  getAlertCount,
   getStatusCount
 };
+
+
+
+
 
 function getAll() {
   const requestOptions = {
@@ -16,6 +21,21 @@ function getAll() {
   return fetch(baseUrl + "workflow-kinds/", requestOptions).then(
     handleResponse
   );
+}
+
+
+
+function getAlertCount(tag) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  return fetch(
+    baseUrl + "workflow-kinds/" + tag + "/alert-count",
+    requestOptions
+  ).then(handleResponse);
 }
 
 function getCount(tag) {

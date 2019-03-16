@@ -12,7 +12,10 @@ function update(payload) {
     method: "POST",
     headers: authHeader.post(),
     credentials: "include",
-    body: JSON.stringify({ status: payload.statusId })
+    body: JSON.stringify({
+      status: payload.statusId,
+      addComment: payload.addComment || ""
+    })
   };
 
   let url =

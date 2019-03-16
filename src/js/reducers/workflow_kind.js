@@ -26,8 +26,6 @@ export function workflowKind(
 }
 
 export function workflowGroupCount(state = {}, action) {
-  // console.log('action workflowGroupCountworkflowGroupCount')
-  // console.log(action)
 
   switch (action.type) {
     case workflowKindConstants.GET_COUNT_REQUEST:
@@ -42,6 +40,33 @@ export function workflowGroupCount(state = {}, action) {
       };
 
     case workflowKindConstants.GET_COUNT_FAILURE:
+      return {
+        loading: false,
+        loadingStatus: "failed",
+        error: action.error
+      };
+
+    default:
+      return state;
+  }
+}
+
+
+export function workflowAlertGroupCount(state = {}, action) {
+
+  switch (action.type) {
+    case workflowKindConstants.GET_ALERT_COUNT_REQUEST:
+      return {
+        loading: true
+      };
+
+    case workflowKindConstants.GET_ALERT_COUNT_SUCCESS:
+      return {
+        loading: false,
+        ...action.workflowAlertGroupCount
+      };
+
+    case workflowKindConstants.GET_ALERT_COUNT_FAILURE:
       return {
         loading: false,
         loadingStatus: "failed",

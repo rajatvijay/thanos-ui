@@ -10,14 +10,22 @@ import {
   Tag,
   Mention,
   Divider,
+  Row,
+  Col,
   Menu,
-  Dropdown
+  Dropdown,
+  Cascader,
+  Upload,
+  Modal
 } from "antd";
 import { Link } from "react-router-dom";
-import { workflowDetailsActions } from "../../actions";
+import { workflowDetailsActions, changeStatusActions } from "../../actions";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import _ from "lodash";
 import Moment from "react-moment";
+import { FormattedMessage, injectIntl } from "react-intl";
+import MentionWithAttachments from "./MentionWithAttachments";
+
 const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
@@ -26,7 +34,11 @@ const Option = Select.Option;
 class Comments extends Component {
   constructor(props) {
     super();
-    this.state = { message: toContentState("") };
+    this.state = {
+      message: toContentState(""),
+      fileList: [],
+      uploading: false
+    };
     // call action
   }
 
@@ -41,7 +53,7 @@ class Comments extends Component {
     this.setState({ message: value });
   };
 
-  addComment = c => {
+  addComment = (c, message, files) => {
     let content_type = "step";
     if (c.content_type == "integrationresult") {
       content_type = "integrationresult";
@@ -51,13 +63,29 @@ class Comments extends Component {
       content_type = "workflow";
     }
 
-    console.log(content_type);
-    this.props.addComment({
-      object_id: c.object_id,
-      type: content_type,
-      message: this.state.comment
-    });
-    this.setState({ message: toContentState("") });
+    const { fileList: filesFromState } = this.state;
+    const fileList = files && files.length ? files : filesFromState;
+    // const formData = new FormData();
+    // fileList.forEach(file => {
+    //   formData.append("files[]", file);
+    // });
+
+    let step_reload_payload = {
+      workflowId: this.props.currentStepFields.currentStepFields.workflow,
+      groupId: this.props.currentStepFields.currentStepFields.step_group,
+      stepId: this.props.currentStepFields.currentStepFields.id
+    };
+
+    this.props.addComment(
+      {
+        object_id: c.object_id,
+        type: content_type,
+        message: message || this.state.comment,
+        attachment: _.size(fileList) ? fileList[0] : ""
+      },
+      step_reload_payload
+    );
+    this.setState({ message: toContentState(""), fileList: [] });
   };
 
   selectStep = target => {
@@ -80,20 +108,83 @@ class Comments extends Component {
     }
   };
 
-  selectFlag = flag => {
+  selectFlag = option => {
+    let flag = option[0];
+    let reason = _.size(option) > 1 ? option[1] : "";
     let comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
     let target = _.size(comments.results) ? comments.results[0].target : {};
-    let payload = {
-      workflow: target.workflow,
-      field: target.field_details.id,
-      flag: parseInt(flag.key)
-    };
-    if (target.field_details.is_integration_type) {
+
+    let payload = {};
+    if (target.field_details) {
+      payload = {
+        workflow: target.workflow,
+        field: target.field_details.id,
+        flag: parseInt(flag),
+        reason_code: reason
+      };
+    } else if (target.workflow_details) {
+      payload = {
+        workflow: target.workflow_details.id,
+        flag: parseInt(flag),
+        reason_code: reason
+      };
+    }
+
+    if (target.field_details && target.field_details.is_integration_type) {
       payload["integration_uid"] = target.uid;
     }
     this.props.changeFlag(payload);
+  };
+
+  changeStatus = value => {
+    let comments = this.props.workflowComments
+      ? this.props.workflowComments.data
+      : {};
+    let target = _.size(comments.results) ? comments.results[0].target : {};
+
+    if (!target.field_details.is_integration_type) {
+      return;
+    }
+    let payload = {
+      parent_field_id: target.row_json.parent_field_id,
+      parent_row_uid: target.row_json.parent_row_uid,
+      krypton_status: value,
+      field_id: target.field,
+      row_uid: target.uid
+    };
+
+    this.props.changeIntegrationStatus(payload);
+  };
+
+  changeWorkflowStatus = value => {
+    let comments = this.props.workflowComments
+      ? this.props.workflowComments.data
+      : {};
+    let target = _.size(comments.results) ? comments.results[0].target : {};
+
+    if (!target.workflow_details) {
+      return;
+    }
+
+    let payload = {
+      workflowId: target.workflow_details.id,
+      statusId: value,
+      addComment: true
+    };
+
+    let step_reload_payload = {
+      workflowId: this.props.currentStepFields.currentStepFields.workflow,
+      groupId: this.props.currentStepFields.currentStepFields.step_group,
+      stepId: this.props.currentStepFields.currentStepFields.id
+    };
+
+    this.props.dispatch(changeStatusActions(payload, step_reload_payload));
+  };
+
+  addAttachementInState = file => {
+    this.setState(state => ({ fileList: [...state.fileList, file] }));
   };
 
   render() {
@@ -103,56 +194,83 @@ class Comments extends Component {
       : {};
     let that = this;
     let single_comments = _.size(comments.results) <= 1 ? true : false;
-
     let c = _.size(comments.results) ? comments.results[0] : [];
-    let flag_dropdown = (
-      <Menu onClick={that.selectFlag}>
-        {_.map(c.target.comment_flag_options, function(cfo) {
-          let text_color_css = cfo.extra.color
-            ? { color: cfo.extra.color }
-            : {};
-          return (
-            <Menu.Item key={cfo.value}>
-              <i
-                className="material-icons t-18 "
-                style={{
-                  verticalAlign: "text-bottom",
-                  color: text_color_css.color
-                }}
-              >
-                fiber_manual_record
-              </i>{" "}
-              {cfo.label}
-            </Menu.Item>
-          );
-        })}
-      </Menu>
+
+    let adjudication = (
+      <div>
+        <span className="text-metal text-medium t-12 pd-right-sm">
+          Adjudication:{" "}
+        </span>
+        <Cascader
+          style={{ width: "calc(100% - 85px)" }}
+          options={c.target.comment_flag_options}
+          onChange={that.selectFlag}
+          placeholder="Change flag"
+        />
+      </div>
     );
+
+    let workflow_status_dropdown = (
+      <div>
+        <span className="text-metal text-medium t-12 pd-right-sm">
+          Status:{" "}
+        </span>
+        <Select
+          placeholder="Select a status"
+          style={{ width: "calc(100% - 80px)" }}
+          onChange={that.changeWorkflowStatus}
+        >
+          {_.map(that.props.workflowFilterType.statusType, function(v) {
+            return <Option value={v.value}>{v.label}</Option>;
+          })}
+        </Select>
+      </div>
+    );
+
+    // for comment attachments
+    const { uploading, fileList } = this.state;
+    const props = {
+      onRemove: file => {
+        this.setState(state => {
+          const index = state.fileList.indexOf(file);
+          const newFileList = state.fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList: newFileList
+          };
+        });
+      },
+      beforeUpload: file => {
+        this.addAttachementInState(file);
+        return false;
+      },
+      fileList
+    };
+
     return (
       <Sider
-        className="comments-sidebar profile-sidebar sidebar-right"
+        className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
         style={{
           background: "#fff",
-          overflow: "auto",
-          height: "100vh",
+          // overflow: "auto",
+          height: "calc(100vh - 70px)",
           position: "fixed",
           right: 0,
           top: "65px",
           zIndex: 1
         }}
-        width="400"
+        width="570"
         collapsed={false}
         collapsedWidth={0}
         collapsible
         reverseArrow={true}
         trigger={null}
       >
-        <div className="comment-details" style={{ width: "400px" }}>
-          <div
-            className="sidebar-head"
-            //style={{ background: "#18eada", color: "#000" }}
-          >
-            <span className="sidebar-title">Add comment/question</span>
+        <div className="comment-details" style={{ width: "570px" }}>
+          <div className="sidebar-head">
+            <span className="sidebar-title">
+              <FormattedMessage id="stepBodyFormInstances.addComments" />
+            </span>
             <Icon
               type="close"
               onClick={this.toggle}
@@ -166,41 +284,46 @@ class Comments extends Component {
               }
               return (
                 <div>
-                  {c.target.field_details && comments.results ? (
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: "21px",
-                        zIndex: "1"
-                      }}
-                    >
-                      <Dropdown overlay={flag_dropdown}>
-                        <a
-                          className="ant-dropdown-link text-nounderline text-secondary"
-                          href="#"
-                        >
-                          <i className="material-icons text-middle t-16">
-                            flag
-                          </i>{" "}
-                          <Icon type="down" />
-                        </a>
-                      </Dropdown>
+                  {c.target.step_group_details ? (
+                    <span style={{ width: "100%" }}>
+                      <span className="text-bold">
+                        {c.target.step_group_details.name}{" "}
+                      </span>:{" "}
+                      <span
+                        className="text-bold text-grey"
+                        onClick={that.selectStep.bind(this, c.target)}
+                      >
+                        {c.target.step_details.name}
+                      </span>
+                    </span>
+                  ) : null}
+
+                  <span style={{ fontWeight: "bold" }}>
+                    {integrationCommonFunctions.comment_answer_body(c)}
+                  </span>
+
+                  {c.target.field_details &&
+                  c.target.field_details.is_integration_type ? (
+                    <div style={{ marginTop: "10px" }}>
+                      <div>
+                        <span style={{ color: "#575757", fontSize: "12px" }}>
+                          Status:
+                        </span>
+                      </div>
+                      <Select
+                        placeholder="Select a status"
+                        style={{ width: "100%" }}
+                        onChange={that.changeStatus}
+                      >
+                        <Option value="open">Open</Option>
+                        <Option value="closed">Closed</Option>
+                      </Select>
                     </div>
                   ) : null}
 
-                  <Tag style={{ width: "100%" }} className="comment_step_bar">
-                    <span>{c.target.step_group_details.name}</span>
-                    <span> > </span>
-                    <span onClick={that.selectStep.bind(this, c.target)}>
-                      {c.target.step_details.name}
-                    </span>
-                  </Tag>
+                  <Divider className="thin" />
 
-                  {integrationCommonFunctions.comment_answer_body(c)}
-
-                  <Divider />
-
-                  {single_comments || c.messages.length ? (
+                  {/*single_comments || c.messages.length  ? (
                     <div>
                       <span
                         style={{
@@ -212,15 +335,25 @@ class Comments extends Component {
                           color: "#575757"
                         }}
                       >
-                        Add comment/question
+                        <FormattedMessage id="stepBodyFormInstances.commentsQuetions" />
                       </span>
                     </div>
-                  ) : null}
+                  ) : null*/}
 
-                  <div style={{ position: "relative", top: "-30px" }}>
+                  <div
+                    className="comments-list"
+                    style={{ maxHeight: "calc(100vh - 430px)" }}
+                  >
                     {_.map(c.messages, function(msg) {
+                      let attachment_text = null;
+                      if (msg.attachment) {
+                        attachment_text = msg.attachment.split("/")[
+                          msg.attachment.split("/").length - 1
+                        ];
+                        attachment_text = attachment_text.split("?")[0];
+                      }
                       return (
-                        <div key={msg.id}>
+                        <div key={msg.id} className="mr-bottom">
                           <Avatar
                             size="small"
                             icon="user"
@@ -229,11 +362,11 @@ class Comments extends Component {
                           <div
                             style={{
                               marginLeft: "30px",
-                              fontSize: "13px",
+                              fontSize: "12px",
                               padding: "2px 0px 3px"
                             }}
                           >
-                            <b>
+                            <b style={{ color: "#162c5b" }}>
                               {msg.posted_by.first_name !== ""
                                 ? msg.posted_by.first_name
                                 : msg.posted_by.email}
@@ -244,7 +377,7 @@ class Comments extends Component {
                               <Moment fromNow>{msg.created_at}</Moment>
                             </span>
                           </div>
-                          <p style={{ fontSize: "14px", paddingLeft: "32px" }}>
+                          <p style={{ fontSize: "12px", paddingLeft: "32px" }}>
                             <div
                               className="Container"
                               dangerouslySetInnerHTML={{
@@ -255,32 +388,93 @@ class Comments extends Component {
                               }}
                             />
                           </p>
+                          {msg.attachment ? (
+                            <span
+                              style={{
+                                fontSize: "12px",
+                                paddingLeft: "32px",
+                                position: "relative",
+                                top: "-17px"
+                              }}
+                            >
+                              <i class="anticon anticon-paper-clip" />&nbsp;
+                              <a href={msg.attachment}>{attachment_text}</a>
+                            </span>
+                          ) : null}
                         </div>
                       );
                     })}
                   </div>
 
                   {single_comments ? (
-                    <span>
-                      <div style={{ position: "relative", top: "-20px" }}>
-                        <Mention
-                          style={{ width: "100%", height: 60 }}
-                          suggestions={c.mentions}
-                          placeholder="Enter comment or question"
-                          multiLines
-                          onChange={that.onChange}
-                          value={that.state.message}
-                          notFoundContent={"user not found"}
-                        />
+                    <div className="affix-bottom">
+                      <div className="comment-actions">
+                        <Row>
+                          {c.target.workflow_details ? (
+                            <Col span={10}>
+                              {c.target.workflow_details
+                                ? workflow_status_dropdown
+                                : null}
+                            </Col>
+                          ) : null}
+                          <Col span={c.target.workflow_details ? 14 : 24}>
+                            {(c.target.field_details ||
+                              c.target.workflow_details) &&
+                            comments.results
+                              ? adjudication
+                              : null}
+                          </Col>
+                        </Row>
+
+                        <div className="mr-top mr-bottom">
+                          <span className="text-metal text-medium t-12 pd-right-sm">
+                            Comment:{" "}
+                          </span>
+                          <MentionWithAttachments
+                            comment={c}
+                            addComment={that.addComment}
+                            placeholder={that.props.intl.formatMessage({
+                              id: "stepBodyFormInstances.enterComment"
+                            })}
+                            onChange={that.onChange}
+                            message={that.state.message}
+                            addAttachement={that.addAttachementInState}
+                          />
+                          {/* <Mention
+                            ref={el => that.addRefAndData(el, c)}
+                            style={{ width: "470px", height: 30 }}
+                            suggestions={c.mentions}
+                            placeholder={that.props.intl.formatMessage({
+                              id: "stepBodyFormInstances.enterComment"
+                            })}
+                            multiLines
+                            onChange={that.onChange}
+                            value={that.state.message}
+                            notFoundContent={"user not found"}
+                          /> */}
+                        </div>
+
+                        <div>
+                          <Upload
+                            {...props}
+                            style={{ position: "relative", left: "68px" }}
+                          >
+                            <Button>
+                              <Icon type="upload" /> Add attachment
+                            </Button>
+                          </Upload>
+                        </div>
+
+                        <div className="text-right">
+                          <Button
+                            onClick={() => that.addComment.bind(this)(c)}
+                            style={{ position: "relative", top: "-31px" }}
+                          >
+                            <FormattedMessage id="stepBodyFormInstances.postButtonText" />
+                          </Button>
+                        </div>
                       </div>
-                      <Button
-                        className="float-right"
-                        style={{ marginTop: "-8px" }}
-                        onClick={that.addComment.bind(this, c)}
-                      >
-                        Post
-                      </Button>{" "}
-                    </span>
+                    </div>
                   ) : null}
                 </div>
               );
@@ -292,4 +486,4 @@ class Comments extends Component {
   }
 }
 
-export default Comments;
+export default injectIntl(Comments);

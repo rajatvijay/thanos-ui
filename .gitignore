@@ -23,6 +23,7 @@ yarn-error.log*
 #editor project files
 krypton-ui.sublime-project
 krypton-ui.sublime-workspace
+.idea
 
 #extra css files not to be tracked anymore as we are using less
 *.css

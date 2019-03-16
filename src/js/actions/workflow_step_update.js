@@ -29,6 +29,8 @@ export const workflowStepActions = {
   undoStep,
   addComment,
   updateFlag,
+  updateIntegrationStatus,
+  fetchFieldExtra,
   removeAttachment
 };
 
@@ -82,6 +84,38 @@ function saveField(payload, event_type) {
     //   message: "Unable to save."
     // });
     return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
+  }
+}
+
+/////////////////////////////
+// fetch extra for field   //
+/////////////////////////////
+function fetchFieldExtra(field, targetAnswer) {
+  return dispatch => {
+    dispatch(request(field));
+
+    workflowStepService
+      .fetchFieldExtra(field, targetAnswer)
+      .then(
+        body => dispatch(success(field, body.results)),
+        error => dispatch(failure(error))
+      );
+  };
+
+  function request(field) {
+    return { type: workflowFieldConstants.FETCH_FIELD_EXTRA_REQUEST, field };
+  }
+
+  function success(field, extra) {
+    return {
+      type: workflowFieldConstants.FETCH_FIELD_EXTRA_SUCCESS,
+      field,
+      extra
+    };
+  }
+
+  function failure(error) {
+    return { type: workflowFieldConstants.FETCH_FIELD_EXTRA_FAILURE, error };
   }
 }
 
@@ -295,14 +329,21 @@ function undoStep(payload) {
 ////////////////////
 //Adding a Commnt //
 ////////////////////
-function addComment(payload) {
+function addComment(payload, step_reload_payload) {
   return dispatch => {
     //dispatch(request(payload));
 
     workflowStepService.addComment(payload).then(
       commentData => {
+        if (commentData["detail"]) {
+          dispatch(failure(commentData));
+          return;
+        }
         dispatch(success(commentData));
-        if (_.size(commentData.results)) {
+        if (
+          _.size(commentData.results) &&
+          !commentData.results[0].target.workflow_details
+        ) {
           let stepTrack = {
             workflowId: commentData.results[0].target.workflow,
             groupId: commentData.results[0].target.step_group_details.id,
@@ -310,6 +351,8 @@ function addComment(payload) {
             doNotRefresh: true
           };
           dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        } else if (_.size(step_reload_payload)) {
+          dispatch(workflowDetailsActions.getStepFields(step_reload_payload));
         }
       },
       error => dispatch(failure(error))
@@ -350,7 +393,10 @@ function updateFlag(payload) {
     workflowStepService.updateFlag(payload).then(
       commentData => {
         dispatch(success(commentData));
-        if (_.size(commentData.results)) {
+        if (
+          _.size(commentData.results) &&
+          !commentData.results[0].target.workflow_details
+        ) {
           let stepTrack = {
             workflowId: commentData.results[0].target.workflow,
             groupId: commentData.results[0].target.step_group_details.id,
@@ -372,6 +418,54 @@ function updateFlag(payload) {
     openNotificationWithIcon({
       type: "success",
       message: "Flag updated!",
+      duration: 7
+    });
+
+    return { type: workflowCommentsConstants.ADD_COMMENTS_SUCCESS, data };
+  }
+
+  function failure(error) {
+    openNotificationWithIcon({
+      type: "error",
+      message: "Failed to update",
+      duration: 7
+    });
+    return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };
+  }
+}
+
+////////////////////
+//Updating status //
+////////////////////
+function updateIntegrationStatus(payload) {
+  return dispatch => {
+    //dispatch(request(payload));
+
+    workflowStepService.updateIntegrationStatus(payload).then(
+      commentData => {
+        dispatch(success(commentData));
+        if (_.size(commentData.results)) {
+          let stepTrack = {
+            workflowId: commentData.results[0].target.workflow,
+            groupId: commentData.results[0].target.step_group_details.id,
+            stepId: commentData.results[0].target.step_details.id,
+            doNotRefresh: true
+          };
+          dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        }
+      },
+      error => dispatch(failure(error))
+    );
+  };
+
+  function request() {
+    return { type: workflowCommentsConstants.ADD_COMMENTS_REQUEST, payload };
+  }
+
+  function success(data) {
+    openNotificationWithIcon({
+      type: "success",
+      message: "Status updated!",
       duration: 7
     });
 

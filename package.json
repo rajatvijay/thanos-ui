@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:8000",
   "dependencies": {
+    "@sentry/browser": "^4.5.3",
     "antd": "^3.7.0",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
@@ -17,6 +18,7 @@
     "classnames": "^2.2.5",
     "css-loader": "0.28.7",
     "dotenv": "4.0.0",
+    "downloadjs": "^1.4.7",
     "extract-text-webpack-plugin": "3.0.2",
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
@@ -41,8 +43,9 @@
     "react-dom": "^16.2.0",
     "react-dropzone": "^4.2.9",
     "react-infinite-scroller": "^1.2.0",
+    "react-intl": "^2.7.2",
     "react-moment": "^0.7.0",
-    "react-recaptcha-v3": "^1.0.2",
+    "react-recaptcha-v3-global": "^2.1.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-telephone-input": "^4.71.11",
@@ -65,8 +68,7 @@
   },
   "scripts": {
     "build-css": "node-less-chokidar src/ -o src/",
-    "watch-css":
-      "npm run build-css && node-less-chokidar src/ -o src/ --watch --recursive",
+    "watch-css": "npm run build-css && node-less-chokidar src/ -o src/ --watch --recursive",
     "start-js": "node scripts/start.js",
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "node scripts/build.js",
@@ -75,8 +77,12 @@
     "precommit": "node scripts/check.js"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
-    "setupFiles": ["<rootDir>/config/polyfills.js"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,mjs}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
@@ -86,10 +92,11 @@
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)":
-        "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
+    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
@@ -104,7 +111,9 @@
     ]
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -121,7 +130,7 @@
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.4.0",
-    "husky": "^0.14.3",
+    "husky": "^1.3.1",
     "jest": "20.0.4",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Layout, Collapse, Pagination } from "antd";
 import { WorkflowHeader, WorkflowBody } from "./workflow-item";
 import { workflowActions, createWorkflow } from "../../actions";
@@ -7,6 +7,7 @@ import { calculatedData } from "./calculated-data";
 import Collapsible from "react-collapsible";
 import { connect } from "react-redux";
 import moment from "moment";
+import { FormattedMessage } from "react-intl";
 
 const { Content } = Layout;
 const { getProcessedData } = calculatedData;
@@ -53,6 +54,7 @@ class WorkflowList extends Component {
     };
 
     var result = _.groupBy(data.workflow, occurrenceDay);
+
     var ListCompletes = _.map(result, function(list, key, index) {
       var listL = _.map(list, function(item, index) {
         let proccessedData = getProcessedData(item.step_groups);
@@ -105,12 +107,12 @@ class WorkflowList extends Component {
           ) : (
             <div className="text-center text-medium text-metal">
               {" "}
-              No workflows to show. Try clearing the filters or{" "}
+              <FormattedMessage id="errorMessageInstances.noWorkflowsToShow" />{" "}
               <span
                 className="text-underline text-anchor"
                 onClick={this.reload}
               >
-                reload
+                <FormattedMessage id="commonTextInstances.reloadText" />
               </span>
             </div>
           )}
@@ -217,6 +219,7 @@ class WorkflowItem extends React.Component {
             transitionTime={200}
             onOpen={this.onOpen}
             onClose={this.onClose}
+            hasChildren={hasChildren}
           >
             <div className="lc-card">
               <WorkflowBody
@@ -236,7 +239,7 @@ class WorkflowItem extends React.Component {
             <span
               className="child-workflow-expander text-anchor "
               onClick={this.expandChildWorkflow}
-              title="Show child workflow"
+              title="Show related workflow"
             >
               <i className="material-icons" style={{ verticalAlign: "middle" }}>
                 {this.state.showRelatedWorkflow ? "remove" : "add"}
@@ -245,7 +248,10 @@ class WorkflowItem extends React.Component {
           ) : null}
         </div>
 
-        {/*show children here */}
+        <div className="workflow-divider" />
+
+        {/*show kind name  here */}
+
         {hasChildren && this.state.showRelatedWorkflow ? (
           <div className="child-workflow-wrapper mr-top">
             <ChildWorkflow
@@ -254,28 +260,6 @@ class WorkflowItem extends React.Component {
             />
           </div>
         ) : null}
-
-        {/*this.props.workflow ? (
-          <div className="child-workflow-wrapper">
-            //]=o  <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
-                  <WorkflowHeader
-                    workflow={this.props.workflow}
-                    statusType={statusType}
-                  />
-                </div>
-              }
-              lazyRender={true}
-              transitionTime={200}
-            >
-              <div className="lc-card">
-                <WorkflowBody
-                  workflow={this.props.workflow}
-                  pData={this.props.pData}
-                />
-              </div>
-            </Collapsible>
-          </div>
-        ) : null*/}
       </div>
     );
   };
@@ -286,10 +270,9 @@ const GetChildWorkflow = props => {
   let workflowId = props.workflow.id;
 
   if (props.workflowChildren[workflowId].loading) {
-    return null;
-  }
-  if (props.loading) {
-    childList = <div className="text-center mr-bottom">loading...</div>;
+    return (childList = (
+      <div className="text-center mr-bottom">loading...</div>
+    ));
   } else {
     childList = _.map(
       props.getGroupedData(props.workflowChildren[workflowId].children),

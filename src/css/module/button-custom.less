@@ -17,6 +17,10 @@
   &:hover,
   &:focus {
   }
+  &.btn-o {
+    background: transparent;
+    color: @color-secondary;
+  }
 }
 
 .ant-btn-primary:focus,
@@ -82,27 +86,7 @@
 
 .ant-btn.btn-create {
   font-size: 18px;
-  background: #17ead9; /* Old browsers */
-  background: -moz-linear-gradient(
-    left,
-    #17ead9 0%,
-    #6078ea 100%
-  ); /* FF3.6-15 */
-  background: -webkit-linear-gradient(
-    left,
-    #17ead9 0%,
-    #6078ea 100%
-  ); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(
-    to right,
-    #17ead9 0%,
-    #6078ea 100%
-  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient(
-      startColorstr="#17ead9",
-      endColorstr="#6078ea",
-      GradientType=1
-    ); /* IE6-9 */
+  background: @color-secondary; /* Old browsers */
   border: none;
   &:focus,
   &:hover,

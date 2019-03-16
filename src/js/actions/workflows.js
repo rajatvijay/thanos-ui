@@ -105,8 +105,6 @@ function searchWorkflow(query) {
 }
 
 function getChildWorkflow(parent) {
-  console.log(parent);
-
   return dispatch => {
     dispatch(request(parent));
 

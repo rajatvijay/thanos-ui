@@ -5,6 +5,7 @@ import StepBodyForm from "./step-body-form";
 import { workflowDetailsActions } from "../../actions";
 import _ from "lodash";
 import Moment from "react-moment";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 class StepBody extends Component {
   constructor(props) {
@@ -63,7 +64,7 @@ class StepBody extends Component {
         ) : (
           <Menu.Item key={0} disabled>
             {" "}
-            No other version available
+            <FormattedMessage id="stepBodyFormInstances.noOtherVersionAvailable" />
           </Menu.Item>
         )}
       </Menu>
@@ -71,7 +72,11 @@ class StepBody extends Component {
 
     return (
       <Dropdown overlay={versionList}>
-        <Tooltip title="Previous version">
+        <Tooltip
+          title={this.props.intl.formatMessage({
+            id: "stepBodyFormInstances.previousVersion"
+          })}
+        >
           <span
             style={{ position: "relative", top: "-58px", right: "-25px" }}
             className="text-anchor pd-ard-sm"
@@ -81,36 +86,6 @@ class StepBody extends Component {
         </Tooltip>
       </Dropdown>
     );
-  };
-
-  printDiv = () => {
-    var that = this;
-    this.setState({ printing: true });
-
-    setTimeout(function() {
-      var printContents = document.getElementById("StepBody").innerHTML;
-      var docHead = document.querySelector("head").innerHTML;
-
-      var body =
-        "<!DOCTYPE html><html><head>" +
-        "<title>" +
-        that.props.currentStepFields.currentStepFields.definition.name +
-        "</title>" +
-        docHead +
-        "</head><body>" +
-        printContents +
-        "</body></html>";
-      var myWindow = window.open();
-      myWindow.document.write(body);
-      myWindow.document.close();
-      myWindow.focus();
-
-      setTimeout(function() {
-        myWindow.print();
-        myWindow.close();
-      }, 1000);
-      that.setState({ printing: false });
-    }, 500);
   };
 
   render = () => {
@@ -135,7 +110,7 @@ class StepBody extends Component {
       });
       locked_tag = (
         <div>
-          <div data-show="true" class="ant-tag">
+          <div data-show="true" className="ant-tag">
             To initiate this step, please complete the following steps
             first:&nbsp;
             <b>{dependent_step_name.join(", ")}</b>
@@ -147,41 +122,33 @@ class StepBody extends Component {
     var step_comment_btn = null;
 
     if (_.size(stepData)) {
-      let comment_btn_text = "Add comment/question";
-      if (stepData.comment_count == 1) {
-        comment_btn_text = "1 comment";
-      } else if (stepData.comment_count > 1) {
-        comment_btn_text = stepData.comment_count + " comments";
-      }
-
       var step_comment_btn = (
         <div
           className={
             "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
-          <Tooltip title="Print step">
-            <span
-              className="text-anchor pd-ard-sm"
-              onClick={this.printDiv}
-              style={{ position: "relative", top: "-62px", right: "-18px" }}
-            >
-              <i className="material-icons t-16 text-middle">print</i>
-            </span>
-          </Tooltip>
-
           {this.versionDropDown()}
           <span className="display-inline-block pd-right-sm"> </span>
           <span
             style={{ position: "relative", top: "-62px", right: "-25px" }}
             onClick={this.addComment.bind(this, stepData)}
-            className="ant-btn ant-btn-sm"
+            className="ant-btn ant-btn-sm no-print "
           >
-            {comment_btn_text}
+            <FormattedMessage
+              id="stepBodyFormInstances.commentsButtonText"
+              values={{ count: stepData.comment_count }}
+            />
           </span>
         </div>
       );
     }
+
+    let dynamicUserPerms = this.props.workflowDetailsHeader
+      .workflowDetailsHeader
+      ? this.props.workflowDetailsHeader.workflowDetailsHeader.definition
+          .dynamic_group_names_with_perm
+      : null;
 
     return (
       <div className="pd-ard-lg">
@@ -262,6 +229,7 @@ class StepBody extends Component {
               versionToggle={this.versionToggle}
               permission={this.props.config.permissions}
               isSubmitting={this.props.currentStepFields.isSubmitting}
+              dynamicUserPerms={dynamicUserPerms}
             />
           </div>
         ) : (
@@ -279,14 +247,16 @@ function mapStateToProps(state) {
     currentStepFields,
     workflowDetails,
     stepVersionFields,
-    config
+    config,
+    workflowDetailsHeader
   } = state;
   return {
     currentStepFields,
     workflowDetails,
     stepVersionFields,
-    config
+    config,
+    workflowDetailsHeader
   };
 }
 
-export default connect(mapStateToProps)(StepBody);
+export default connect(mapStateToProps)(injectIntl(StepBody));

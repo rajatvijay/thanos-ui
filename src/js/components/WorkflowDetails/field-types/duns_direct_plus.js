@@ -78,7 +78,11 @@ class DunsSearch extends Component {
       field: field,
       queryChange: this.queryChange,
       countryChange: this.countryChange,
-      onSearch: this.onSearch
+      onSearch: this.onSearch,
+      currentStepFields: this.props.currentStepFields,
+      is_locked: this.props.is_locked,
+      completed: this.props.completed,
+      permission: this.props.permission
     };
 
     let final_html = null;
@@ -143,6 +147,28 @@ const GetTable = props => {
       dataIndex: "organization[primaryName]",
       key: "organization[primaryName]"
     },
+
+    {
+      title: "Tradestyle(s)",
+      dataIndex: "organization[tradeStyleNames]",
+      render: (text, data, index) => {
+        if (_.size(data.tradeStyleNames)) {
+          let record = data.tradeStyleNames[0];
+          return <span>{record.name}</span>;
+        } else {
+          return <span>-</span>;
+        }
+      },
+      key: "organization[tradeStyleNames][0][name]"
+    },
+
+    {
+      title: "Location Type",
+      dataIndex:
+        "organization[corporateLinkage][familytreeRolesPlayed][0][description]",
+      key:
+        "organization[corporateLinkage][familytreeRolesPlayed][0][description]"
+    },
     {
       title: "Address",
       dataIndex: "organization[primaryAddress][addressCountry]['name']",
@@ -165,11 +191,11 @@ const GetTable = props => {
       },
       key: "organization[primaryAddress][addressCountry]['name']"
     },
-    {
-      title: "Address",
-      dataIndex: "organization[primaryAddress][addressCountry]['name']",
-      key: "organization[primaryAddress][addressCountry]['name']"
-    },
+    // {
+    //   title: "Address",
+    //   dataIndex: "organization[primaryAddress][addressCountry]['name']",
+    //   key: "organization[primaryAddress][addressCountry]['name']"
+    //},
     {
       title: "Status",
       dataIndex:

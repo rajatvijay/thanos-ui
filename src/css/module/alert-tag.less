@@ -1,0 +1,86 @@
+@import url("../utilities/variables.less");
+
+.alert-tag-list {
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.alert-tag-item,
+.v-tag {
+  //max-width: 200px;
+  // white-space: nowrap;
+  // text-overflow: ellipsis;
+  //overflow: hidden;
+  //padding-bottom:5px;
+  position: relative;
+  margin-bottom: 3px;
+  font-weight: normal;
+  &.ant-tag {
+    border-radius: 15px;
+    padding: 0 12px 0 12px;
+  }
+
+  &.alert-primary {
+    border-color: @color-secondary;
+    color: @color-secondary;
+    &.alert-tag-item-active {
+      background-color: @color-secondary;
+      color: @color-white;
+    }
+  }
+  &.has-alert {
+    padding: 0 16px 0 10px;
+  }
+
+  &.alert-metal {
+    border-color: @color-metal;
+    color: @color-metal;
+    &.alert-active {
+      background-color: @color-metal;
+      color: @color-white;
+    }
+  }
+}
+
+.ellip-small {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  &.s50 {
+    max-width: 50px;
+  }
+  &.s75 {
+    max-width: 75px;
+  }
+  &.s100 {
+    max-width: 100px;
+  }
+  &.s150 {
+    max-width: 150px;
+  }
+  &.s200 {
+    max-width: 200px;
+  }
+}
+
+.alert-dot {
+  position: absolute;
+  top: 0px;
+  right: -7px;
+  background: white;
+  padding-left: 2px;
+  display: inline-block;
+}
+
+.tag-dot {
+  position: absolute;
+  top: 6px;
+}
+
+.lc-tag-dot {
+  position: absolute;
+  right: -1px;
+}

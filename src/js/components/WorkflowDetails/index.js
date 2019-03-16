@@ -18,6 +18,7 @@ import {
 import { WorkflowHeader } from "../Workflow/workflow-item";
 import Comments from "./comments";
 import { veryfiyClient } from "../../utils/verification";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const requestOptions = {
   method: "GET",
@@ -47,7 +48,9 @@ class WorkflowDetails extends Component {
   preConstruct = () => {
     let params = this.props.location.search;
     let qs = this.queryStringToObject(params);
+
     this.props.location.search = "";
+
     if (!_.isEmpty(qs)) {
       this.state.selectedStep = qs.step;
       this.state.selectedGroup = qs.group;
@@ -90,7 +93,7 @@ class WorkflowDetails extends Component {
         }
         activeStepGroup = step_group;
         _.forEach(step_group.steps, function(step) {
-          if (!step.completed_at && !step.is_locked) {
+          if (step.is_editable && !step.completed_at && !step.is_locked) {
             activeStep = step;
             return false;
           }
@@ -190,6 +193,33 @@ class WorkflowDetails extends Component {
       this.preConstruct();
       this.getInitialData();
     }
+
+    if (
+      this.props.currentStepFields.currentStepFields &&
+      this.props.currentStepFields.currentStepFields.step_group &&
+      this.props.workflowDetailsHeader.workflowDetailsHeader
+    ) {
+      this.syncStepCompletion();
+    }
+  };
+
+  syncStepCompletion = () => {
+    let currentStep = this.props.currentStepFields.currentStepFields;
+    let workflowData = this.props.workflowDetailsHeader.workflowDetailsHeader;
+
+    let sbGroup = _.find(workflowData.step_groups, group => {
+      return group.id === currentStep.step_group;
+    });
+
+    if (sbGroup) {
+      let sbStep = _.find(sbGroup.steps, step => {
+        return step.id === currentStep.id;
+      });
+
+      if (sbStep && sbStep.completed_at !== currentStep.completed_at) {
+        this.getInitialData();
+      }
+    }
   };
 
   getInitialData = () => {
@@ -280,10 +310,12 @@ class WorkflowDetails extends Component {
     );
   };
 
-  addComment = payload => {
+  addComment = (payload, step_reload_payload) => {
     this.state.adding_comment = true;
     this.state.object_id = payload.object_id;
-    this.props.dispatch(workflowStepActions.addComment(payload));
+    this.props.dispatch(
+      workflowStepActions.addComment(payload, step_reload_payload)
+    );
   };
 
   getIntegrationComments = (uid, field_id) => {
@@ -299,6 +331,10 @@ class WorkflowDetails extends Component {
 
   changeFlag = payload => {
     this.props.dispatch(workflowStepActions.updateFlag(payload));
+  };
+
+  changeIntegrationStatus = payload => {
+    this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
 
   render = () => {
@@ -321,7 +357,7 @@ class WorkflowDetails extends Component {
 
           <Layout
             style={{
-              marginLeft: 250,
+              marginLeft: 320,
               background: "#FBFBFF",
               minHeight: "100vh",
               paddingTop: "30px"
@@ -386,11 +422,16 @@ class WorkflowDetails extends Component {
             defaultOpenKeys={this.state.selectedGroup}
             onStepSelected={this.onStepSelected.bind(this)}
             loading={stepLoading}
+            alerts={
+              this.props.workflowDetailsHeader.workflowDetailsHeader
+                ? this.props.workflowDetailsHeader.workflowDetailsHeader.alerts
+                : null
+            }
           />
 
           <Layout
             style={{
-              marginLeft: 250,
+              marginLeft: 320,
               background: "#FBFBFF",
               minHeight: "100vh",
               paddingTop: "30px"
@@ -412,7 +453,12 @@ class WorkflowDetails extends Component {
             </div>
 
             <div className="text-right pd-ard mr-ard-md">
-              <Tooltip title="Scroll to top" placement="topRight">
+              <Tooltip
+                title={this.props.intl.formatMessage({
+                  id: "commonTextInstances.scrollToTop"
+                })}
+                placement="topRight"
+              >
                 <span
                   className="text-anchor"
                   onClick={() => {
@@ -433,6 +479,7 @@ class WorkflowDetails extends Component {
               gotoStep={this.fetchStepData}
               selectActiveStep={this.selectActiveStep}
               changeFlag={this.changeFlag}
+              changeIntegrationStatus={this.changeIntegrationStatus}
               {...this.props}
             />
           ) : null}
@@ -444,6 +491,7 @@ class WorkflowDetails extends Component {
 
 function mapStateToProps(state) {
   const {
+    currentStepFields,
     workflowDetails,
     workflowDetailsHeader,
     workflowFilterType,
@@ -456,6 +504,7 @@ function mapStateToProps(state) {
   } = state;
 
   return {
+    currentStepFields,
     workflowDetails,
     workflowDetailsHeader,
     workflowFilterType,
@@ -468,4 +517,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(WorkflowDetails);
+export default connect(mapStateToProps)(injectIntl(WorkflowDetails));

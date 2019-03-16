@@ -1,12 +1,15 @@
+@import url("variables.less");
+
 @media print {
   .no-print {
     display: none;
   }
   @page {
+    size: A4;
     margin: 0;
   }
   body {
-    margin: 1.6cm;
+    margin: 0;
   }
 
   .step-form .ant-row,
@@ -17,12 +20,15 @@
   .break-avoid {
     page-break-inside: avoid;
   }
+  .ant-radio.ant-radio-checked {
+    .ant-radio-inner {
+      background: @color-secondary;
+      border-color: @color-secondary;
+      border-width: 7px;
+      overflow: hidden;
+    }
+  }
 }
-
-// @page {
-//   margin-top: 20px;
-
-// }
 
 .printOnly {
   .hide-print {

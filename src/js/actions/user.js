@@ -4,7 +4,7 @@ import {
   logout as UserLogout,
   sendEmailAuthToken as userSendEmailAuthToken
 } from "../services/user";
-import { history } from "../_helpers";
+import { history, baseUrl2 } from "../_helpers";
 import { notification } from "antd";
 
 export const userActions = {
@@ -27,6 +27,32 @@ export const login = (username, password, token) => async dispatch => {
   dispatch({ type: userConstants.LOGIN_REQUEST, username });
   try {
     const response = await userService.login(username, password, token);
+    dispatch({
+      type: userConstants.LOGIN_SUCCESS,
+      user: response
+    });
+
+    dispatch({
+      type: userConstants.GETME_SUCCESS,
+      user: response
+    });
+
+    history.push("/");
+  } catch (error) {
+    console.log("error login");
+    console.log(error);
+    dispatch({
+      type: userConstants.LOGIN_FAILURE,
+      error: error.detail ? error.detail : "Failed to fetch"
+    });
+    dispatch({ type: userConstants.GETME_FAILURE, error });
+  }
+};
+
+export const loginOtp = (username, password) => async dispatch => {
+  dispatch({ type: userConstants.LOGIN_REQUEST, username });
+  try {
+    const response = await userService.loginOtp(username, password);
     dispatch({
       type: userConstants.LOGIN_SUCCESS,
       user: response
@@ -80,7 +106,13 @@ function removeCookies() {
   }
 }
 
-export const logout = () => async dispatch => {
+const logoutNav = () => {
+  localStorage.removeItem("user");
+  removeCookies();
+  document.location.href = baseUrl2 + "users/logout/";
+};
+
+const logoutXHR = () => async dispatch => {
   try {
     // history.push("/login/magic");
     const response = await UserLogout();
@@ -92,6 +124,8 @@ export const logout = () => async dispatch => {
     throw error;
   }
 };
+
+export const logout = logoutNav;
 
 export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
   dispatch({ type: userConstants.LOGIN_LINK_REQUEST, email, nextUrl });
@@ -109,7 +143,7 @@ export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
         type: "error",
         message: "Something went wrong.",
         body:
-          "There was an error while submitting the form, please try again. If the proplem still persist please contact our team "
+          "There was an error while submitting the form, please try again. If the problem still persists please contact our team "
       });
     }
   } catch (error) {
@@ -133,6 +167,7 @@ export const checkAuth = () => async dispatch => {
     });
 
     if (
+      window.location.pathname === "/login/basic" ||
       window.location.pathname === "/login/magic" ||
       window.location.pathname === "/login"
     ) {

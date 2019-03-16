@@ -1,25 +1,11 @@
-import React, { Component } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select,
-  Tabs,
-  Tag,
-  Menu,
-  Dropdown,
-  Tooltip
-} from "antd";
+import React from "react";
+import { Button, Row, Col, Icon, Tag, Menu, Dropdown, Tooltip } from "antd";
 import _ from "lodash";
 import Moment from "react-moment";
 
 export const commonFunctions = {
   getLabel,
+  getExtra,
   onFieldChange,
   onFieldChangeArray,
   arrayToString,
@@ -44,7 +30,26 @@ function getLabel(props, that) {
       <span className="label-with-action">
         <span className="float-right">
           {addCommentBtn(that, props)}
-          {fieldFlagDropdown(that, props)}
+          {/*fieldFlagDropdown(that, props)*/}
+
+          {_.size(props.field.alerts)
+            ? _.map(props.field.alerts, function(item) {
+                return (
+                  <Tag key={item.alert.id} className="v-tag alert-metal ">
+                    {item.alert.category.name}{" "}
+                    <i
+                      className="material-icons text-middle pd-left-sm"
+                      style={{
+                        fontSize: "12px",
+                        color: item.alert.category.color_label
+                      }}
+                    >
+                      fiber_manual_records
+                    </i>
+                  </Tag>
+                );
+              })
+            : null}
         </span>
 
         {props.field.definition.body}
@@ -54,6 +59,17 @@ function getLabel(props, that) {
   } else {
     return props.field.definition.body;
   }
+}
+
+function getExtra(props) {
+  if (props.field.definition.extra.api_url) {
+    let extrasFromAPI = props.currentStepFields.extrasFromAPI || {};
+    return (
+      extrasFromAPI[props.field.definition.tag] ||
+      props.field.definition.extra.defaultValue
+    );
+  }
+  return props.field.definition.extra;
 }
 
 function onFieldChange(props, value, value2) {
@@ -140,14 +156,32 @@ function addCommentBtn(e, props) {
   }
   return (
     <div className="add_comment_btn" onClick={addComment.bind(e, props)}>
-      <Tooltip placement="topRight" title={comment_btn_text}>
+      <Tooltip
+        placement="topRight"
+        title={props.intl.formatMessage(
+          { id: "stepBodyFormInstances.commentsButtonText" },
+          { count: props.field.comment_count }
+        )}
+      >
         <span>
           {" "}
           {props.field.comment_count > 0 ? (
-            <span className="pd-right-md">{props.field.comment_count}</span>
+            <span
+              className="display-inline-block text-secondary"
+              style={{ position: "relative", top: "-4px" }}
+            >
+              {props.field.comment_count}
+            </span>
           ) : null}{" "}
-          <i className="material-icons  t-18 text-secondary">
-            chat_bubble_outline
+          <i
+            className={
+              "material-icons  t-18 " +
+              (props.field.comment_count > 0 ? "text-secondary" : "text-metal")
+            }
+          >
+            {props.field.comment_count > 0
+              ? "chat_bubble"
+              : "chat_bubble_outline"}
           </i>
         </span>
       </Tooltip>
@@ -197,10 +231,7 @@ function fieldFlagDropdown(e, props) {
       }}
     >
       <Dropdown overlay={flag_dropdown}>
-        <a
-          className="ant-dropdown-link text-nounderline text-secondary"
-          href="#"
-        >
+        <a className="ant-dropdown-link text-nounderline text-metal" href="#">
           <i className="material-icons text-middle t-18">outlined_flag</i>{" "}
           <Icon type="down" />
         </a>
@@ -263,6 +294,8 @@ function getIntegrationSearchButton(props) {
     dnb_financials: "Get Financial Statements",
     dnb_litigation: "Get Bankcryptcy Statements",
     dnb_cmp_ent_vw: "Get Complaince Entity View",
+    dnb_cmpcvf: "Get CMPCVF",
+    dnb_familytree: "Get Family Tree",
     translation: "Translate",
     transliteration: "Transliterate",
     thomson_reuters_group: "Get TR group",
@@ -273,7 +306,9 @@ function getIntegrationSearchButton(props) {
     thomson_reuters_screen_sync: "Get TR Screening results",
     thomson_reuters_casesystemid: "Get TR case system id",
     thomson_reuters_resolve_result: "Get TR resolve result",
-    duplicate_check: "Get Duplicates"
+    duplicate_check: "Get Duplicates",
+    dnb_gbo: "Get GBO",
+    greylist_check: "Get Greylist"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
@@ -285,25 +320,32 @@ function getIntegrationSearchButton(props) {
   });
 
   return (
-    <Row gutter={16} style={{ marginBottom: "50px" }}>
-      <Col>
-        <Button
-          type="primary"
-          className="btn-block float-left"
-          onClick={props.onSearch}
-          style={{ width: "auto", marginRight: "20px" }}
-        >
-          {button_name}
-        </Button>
-      </Col>
-
+    <Row gutter={16} style={{ marginBottom: "30px" }}>
+      {!props.field.definition.extra.hide_integration_button ? (
+        <Col>
+          <Button
+            type="primary"
+            className="btn-block float-left"
+            onClick={props.onSearch}
+            style={{ width: "auto", marginRight: "20px" }}
+            disabled={isDisabled(props)}
+          >
+            {button_name}
+          </Button>
+        </Col>
+      ) : null}
       <Col style={{ marginTop: "5px" }}>
-        {_.map(props.field.search_param_data, function(item) {
+        {_.map(props.field.search_param_data, function(item, index) {
           if (_.size(item.answer) && item.answer.answer)
             return (
-              <div className="float-left" style={{ marginRight: "15px" }}>
+              <div
+                key={index}
+                className="float-left"
+                style={{ marginRight: "15px" }}
+              >
                 <span>{item.answer.field__definition__body}</span>:{" "}
-                <span>{item.answer.answer}</span>,
+                <span>{item.answer.answer}</span>
+                {_.size(props.field.search_param_data) === index + 1 ? "" : ","}
               </div>
             );
         })}
@@ -346,9 +388,7 @@ function getAnsweredBy(props) {
           answer.submitted_by.last_name +
           " "}
         ( {answer.submitted_by.email}) on{" "}
-        <Moment format="MM/DD/YYYY">
-          {props.field.answers[0].submitted_at}
-        </Moment>
+        <Moment format="MM/DD/YYYY">{answer.updated_at}</Moment>
       </span>
     );
     return (
