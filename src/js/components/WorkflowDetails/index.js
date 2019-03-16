@@ -172,7 +172,11 @@ class WorkflowDetails extends Component {
         this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
       }
 
-      if (!this.state.loading_sidebar) {
+      if (
+        !this.state.loading_sidebar &&
+        stepTrack.groupId &&
+        stepTrack.stepId
+      ) {
         this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
       }
     }

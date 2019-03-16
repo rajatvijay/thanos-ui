@@ -1,16 +1,5 @@
 import React, { Component } from "react";
-import {
-  Layout,
-  Menu,
-  Icon,
-  Dropdown,
-  Badge,
-  Popover,
-  List,
-  Button,
-  Timeline,
-  Tooltip
-} from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
 import { authHeader, baseUrl } from "../../_helpers";
 import Moment from "react-moment";
@@ -19,24 +8,127 @@ import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
 
-const { Header } = Layout;
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+const TabPane = Tabs.TabPane;
 
-class AuditList extends Component {
-  constructor() {
-    super();
-    this.state = { data: { results: [], next: null }, activityLoading: true };
+class AuditListTabs extends Component {
+  static ACTIVITY_ACTION_GROUPS = {
+    edits: ["step_submitted", "step_undo", "step_approved", "response_changed"],
+    emails: ["sendgrid_email"],
+    views: ["step_viewed", "workflow_viewed"],
+    alerts: ["alert_created", "alert_dismissed"]
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentTab: "edits"
+    };
   }
 
-  componentDidMount = () => {
-    this.loadData();
+  onTabChange = key => {
+    this.setState({
+      currentTab: key
+    });
   };
+
+  downloadFile = () => {
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
+
+    function getFileName(resp) {
+      var filename = resp.headers.get("Content-Disposition");
+      return filename && (filename.match(/filename=\"(.*)\"/) || []).pop();
+    }
+
+    let url = `${baseUrl}workflows/${this.props.id}/export/`;
+    return fetch(url, requestOptions).then(function(resp) {
+      resp.blob().then(function(blob) {
+        // Allowing filename and MIME type to be decided by the backend
+        // though it's possible to specify here
+        download(
+          blob,
+          getFileName(resp) ||
+            "activity_log_" + moment().format("YYYY-MM-DD") + ".xlsx"
+        );
+      });
+    });
+  };
+
+  render = () => {
+    return (
+      <Tabs defaultActiveKey="edits" onChange={this.onTabChange}>
+        {Object.entries(AuditListTabs.ACTIVITY_ACTION_GROUPS).map(
+          ([key, value]) => {
+            return (
+              <TabPane
+                tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
+                key={key}
+              >
+                <AuditList
+                  actions={AuditListTabs.ACTIVITY_ACTION_GROUPS[key]}
+                  isFocused={this.state.currentTab === key}
+                  logType={key}
+                  id={this.props.id}
+                />
+              </TabPane>
+            );
+          }
+        )}
+        <TabPane
+          isFocused={this.state.currentTab === "download"}
+          key="download"
+          tab={
+            <span>
+              Download all <Icon type="download" />
+            </span>
+          }
+        >
+          <div className="text-center mr-top-lg">
+            <br />
+            <span
+              onClick={this.downloadFile}
+              className="text-secondary text-anchor"
+            >
+              <Icon type="download" style={{ fontSize: 30 }} />
+            </span>
+            <br />
+            <div className="mr-top t-12 text-light">
+              Click above to download the activity log file.
+            </div>
+          </div>
+        </TabPane>
+      </Tabs>
+    );
+  };
+}
+
+AuditListTabs.propTypes = {
+  id: PropTypes.number.isRequired
+};
+
+class AuditList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {
+        results: [],
+        next: null
+      },
+      activityLoading: true,
+      initialLoad: true
+    };
+  }
 
   loadData = () => {
     let url = this.state.data.next
       ? this.state.data.next
-      : baseUrl + "workflows/" + this.props.id + "/activity/";
+      : baseUrl +
+        `workflows/${this.props.id}/activity/?actions=${this.props.actions.join(
+          ","
+        )}`;
     //let url = this.state.data.next? this.state.data.next: baseUrl + "activities/";
 
     const requestOptions = {
@@ -45,23 +137,32 @@ class AuditList extends Component {
       credentials: "include"
     };
 
-    //let url = baseUrl + "activities/";
-    //this.setState({ activityLoading: true });
-
     fetch(url, requestOptions)
       .then(response => response.json())
       .then(body => {
         this.appendData(body);
-        //this.setState({ data: body, activityLoading: false });
       });
   };
 
   appendData = body => {
     let oldData = this.state.data.results;
     let newData = body;
-    let concatList = oldData.concat(newData.results);
-    newData.results = concatList;
-    this.setState({ data: newData, activityLoading: false });
+    newData.results = oldData.concat(newData.results);
+    this.setState({
+      data: newData,
+      activityLoading: false,
+      initialLoad: false
+    });
+  };
+
+  hasMore = () => {
+    let _hasMore = false;
+    if (this.state.initialLoad) {
+      _hasMore = true;
+    } else {
+      _hasMore = !!this.state.data.next; // next can be null, undefined or a string
+    }
+    return _hasMore;
   };
 
   render = () => {
@@ -114,73 +215,6 @@ const ActivityLogSimple = ({ item }) => {
   );
 };
 
-class ActivityLogAlert extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false
-    };
-  }
-
-  toggle = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  };
-
-  render() {
-    const item = this.props.item;
-
-    return (
-      <div>
-        <div>
-          <span
-            className="float-right text-secondary small text-anchor"
-            onClick={this.toggle}
-          >
-            {this.state.isOpen ? "show less" : "show more"}
-          </span>
-          {item.actor.email ? (
-            <a
-              className="text-medium text-base"
-              href={"mailto:" + item.actor.email}
-            >
-              {item.actor.email}
-            </a>
-          ) : item.actor.username ? (
-            item.actor.username
-          ) : null}{" "}
-          {item.action.type} <b>{item.object.name}</b>
-        </div>
-
-        {this.state.isOpen ? (
-          <div className="small pd-top-sm pd-bottom-sm">
-            <div className="pbs">
-              <b>On:</b>{" "}
-              <span className="">{item.actiontime.humanize_time}</span>{" "}
-            </div>
-            <div className="pbs">
-              <b>Type:</b>{" "}
-              <span className="">{item.object.details.trigger_type}</span>{" "}
-            </div>
-            <div className="pbs">
-              <b>Operator:</b>{" "}
-              <span className="">{item.object.details.operator}</span>{" "}
-            </div>
-          </div>
-        ) : null}
-        <div>
-          <span className="small text-light">
-            <Tooltip title={item.actiontime.humanize_time}>
-              <Moment fromNow>{item.actiontime.datetime}</Moment>
-            </Tooltip>
-          </span>
-        </div>
-      </div>
-    );
-  }
-}
-
 const ActivityLogEmail = ({ item }) => {
   return (
     <p className="pd-left-sm">
@@ -217,18 +251,27 @@ class ActivityLogCollapsible extends Component {
   render() {
     const item = this.props.item;
     return (
-      <div>
-        {this.state.activityLoading ? (
-          <div className="text-center">loading...</div>
-        ) : (
-          <AuditContent data={this.state.data} loadData={this.loadData} />
+      <div onClick={this.toggle}>
+        <ActivityLogSimple item={item} />
+        {this.state.isOpen && (
+          <Timeline style={{ paddingTop: 20, marginBottom: -20 }}>
+            {_.map(item.object.changes, (change, index) => {
+              return (
+                <Timeline.Item style={{ paddingBottom: 10 }}>
+                  {change.event}
+                </Timeline.Item>
+              );
+            })}
+          </Timeline>
         )}
-        <Button
-          size={"small"}
-          style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
-          icon={this.state.isOpen ? "up" : "down"}
-          className={"activity-log-collapse-btn"}
-        />
+        {item.object.changes.length > 0 ? (
+          <Button
+            size={"small"}
+            style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
+            icon={this.state.isOpen ? "up" : "down"}
+            className={"activity-log-collapse-btn"}
+          />
+        ) : null}
       </div>
     );
   }
@@ -240,18 +283,17 @@ const AuditContent = props => {
       <InfiniteScroll
         pageStart={0}
         loadMore={props.loadData}
-        hasMore={props.data.next ? true : false}
+        hasMore={props.hasMore()}
         loader={
           <div className="loader" key={0}>
-            Loading ...
+            <Icon type={"loading"} />
           </div>
         }
         useWindow={false}
+        initialLoad={true}
       >
         <Timeline>
           {_.map(props.data.results, function(item, index) {
-            console.log(item);
-
             let icon = "panorama_fish_eye";
             let color = "blue";
 
@@ -288,32 +330,16 @@ const AuditContent = props => {
                 color={color}
               >
                 {item.object.type === "alert" ? (
-                  <ActivityLogAlert item={item} />
+                  <ActivityLogCollapsible item={item} />
                 ) : item.object.type === "email" ? (
                   <ActivityLogEmail item={item} />
                 ) : item.object.changes && item.object.changes.length === 0 ? (
                   <ActivityLogSimple item={item} />
                 ) : (
-                  <p className="pd-left-sm">
-                    <a
-                      className="text-medium text-base"
-                      href={"mailto:" + item.actor.email}
-                    >
-                      {item.actor.email}
-                    </a>{" "}
-                    {item.action.type} {item.object.name}
-                    <br />
-                    <span className="small text-light">
-                      <Tooltip title={item.actiontime.humanize_time}>
-                        <Moment fromNow>{item.actiontime.datetime}</Moment>
-                      </Tooltip>
-                    </span>
-                  </p>
+                  <ActivityLogCollapsible item={item} />
                 )}
               </Timeline.Item>
             );
-
-            //cons
           })}
         </Timeline>
       </InfiniteScroll>
@@ -321,4 +347,4 @@ const AuditContent = props => {
   );
 };
 
-export default AuditList;
+export default AuditListTabs;
