@@ -7,6 +7,7 @@ import {
   Badge,
   Popover,
   List,
+  Button,
   Timeline,
   Tooltip
 } from "antd";
@@ -230,7 +231,7 @@ class ActivityLogCollapsible extends Component {
         />
       </div>
     );
-  };
+  }
 }
 
 const AuditContent = props => {

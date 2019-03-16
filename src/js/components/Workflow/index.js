@@ -26,7 +26,7 @@ import AlertFilter from "./AlertFilter";
 import WorkflowFilterTop from "./WorkflowFilterTop";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const TabPane = Tabs.TabPane;
 
@@ -200,11 +200,11 @@ class Workflow extends Component {
 
           {this.props.workflow.loading ? null : this.props.workflow
             .loadingStatus === "failed" ? null : (
-
             <Row className="list-view-header t-14 ">
               <Col span="6">
                 <div className="workflow-count text-metal">
-                  {this.props.workflow.count} <FormattedMessage id="workflowsInstances.workflowsCount" />
+                  {this.props.workflow.count}{" "}
+                  <FormattedMessage id="workflowsInstances.workflowsCount" />
                 </div>
               </Col>
               <Col span={4} />

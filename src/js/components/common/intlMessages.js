@@ -64,7 +64,7 @@ export default {
       reloadText: "reload",
       loadingText: "loading",
       addComments: "Add comment/question",
-      commentsText: "comments"
+      commentsText: "comments",
       categoryText: "Category"
     },
     stepBodyFormInstances: {
