@@ -124,8 +124,7 @@ class MainRoutes extends React.Component {
             </div>
           ) : (
             <Router history={history}>
-              {(this.props.users.me && this.props.users.me.loading) ||
-              this.props.config.loading ? (
+              {this.props.users.me && this.props.users.me.loading ? (
                 <div className="text-center mr-top-lg">loading...</div>
               ) : (
                 <div>
