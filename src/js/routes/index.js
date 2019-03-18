@@ -52,7 +52,6 @@ function mapStateToProps(state) {
 }
 */
 
-
 class MainRoutes extends React.Component {
   constructor(props) {
     super();
@@ -104,7 +103,7 @@ class MainRoutes extends React.Component {
   }
   watchRouteChange = history.listen((location, action) => {
     // location is an object like window.location
-    if (location.pathname === "/login/magic" || location.pathname === "/login") {
+    if (_.includes(location.pathname, "/login")) {
       this.props.dispatch(checkAuth());
     }
   });
@@ -122,16 +121,13 @@ class MainRoutes extends React.Component {
             </div>
           ) : (
             <Router history={history}>
-              {this.props.users.me && this.props.users.me.loading ? (
+              {(this.props.users.me && this.props.users.me.loading) ||
+              this.props.config.loading ? (
                 <div className="text-center mr-top-lg">loading...</div>
               ) : (
-
-
-
                 <div>
-                 
                   {localStorage.getItem("user") ||
-                  !history.location.pathname === "/login/magic/" ? (
+                  !_.includes(history.location.pathname, "/login") ? (
                     <Navbar />
                   ) : null}
 
@@ -140,17 +136,13 @@ class MainRoutes extends React.Component {
                       key={history.location.key}
                       classNames="fade"
                       timeout={300}
-                      >
-
+                    >
                       <Switch>
+                        <Route path="/login" exact component={OTPLogin} />
                         <Route
-                          path="/login"
+                          path="/login/basic"
                           exact
-                          component={OTPLogin}
-                        />
-                        <Route path="/login/basic" 
-                          exact 
-                          component={LoginPage} 
+                          component={LoginPage}
                         />
                         <Route
                           path="/login/magic"
@@ -169,18 +161,18 @@ class MainRoutes extends React.Component {
                           exact
                           component={Workflow}
                         />
+
                         <PrivateRoute
                           path="/workflows/instances/:id?"
                           component={WorkflowDetails}
                         />
+
                         <PrivateRoute path="/users/:id?" component={Users} />
                         {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
 
                         <Route path="/" component={GenericNotFound} />
                       </Switch>
-
                     </CSSTransition>
-
                   </TransitionGroup>
                 </div>
               )}
