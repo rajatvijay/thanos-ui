@@ -10,6 +10,7 @@ import { flattenMessages } from "./components/common/messageUtils";
 import { languageActions } from "./actions";
 import { languageConstants } from "./constants";
 import ErrorBoundary from "./components/common/ErrorBoundary";
+import $ from "jquery";
 
 class App extends React.Component {
   componentDidMount() {
