@@ -3,6 +3,9 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
 import { Icon } from "antd";
+import $ from "jquery";
+
+window.$ = window.jquery = $;
 
 const { getIntegrationSearchButton } = commonFunctions;
 
