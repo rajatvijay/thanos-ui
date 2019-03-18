@@ -42,7 +42,7 @@ export const login = (username, password, token) => async dispatch => {
     console.log("error login");
     console.log(error);
     dispatch({
-      type: userConstants.LOGIN_FAILURE,
+      type: userConstants.NORMAL_FAILURE,
       error: error.detail ? error.detail : "Failed to fetch"
     });
     dispatch({ type: userConstants.GETME_FAILURE, error });
@@ -68,7 +68,7 @@ export const loginOtp = (username, password) => async dispatch => {
     console.log("error login");
     console.log(error);
     dispatch({
-      type: userConstants.LOGIN_FAILURE,
+      type: userConstants.OTP_FAILURE,
       error: error.detail ? error.detail : "Failed to fetch"
     });
     dispatch({ type: userConstants.GETME_FAILURE, error });

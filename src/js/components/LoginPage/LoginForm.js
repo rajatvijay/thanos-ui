@@ -151,8 +151,13 @@ class LoginForm extends React.Component {
                   {/*<Link to="/register"> Sign up</Link>*/}
                 </FormItem>
 
-                {this.props.error ? (
-                  <Alert message={this.props.error} type="error" showIcon />
+                {this.props.error && this.props.error.NormalErr ? (
+                  <Alert
+                    closable
+                    message={this.props.error.NormalErr}
+                    type="error"
+                    showIcon
+                  />
                 ) : null}
               </Form>
             </div>
