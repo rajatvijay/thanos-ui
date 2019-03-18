@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Input, Icon, Divider,Row,Col } from "antd";
+import { Form, Button, Input, Icon, Divider, Row, Col } from "antd";
 import validator from "validator";
 import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
@@ -103,75 +103,78 @@ class MagicForm extends React.Component {
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
-          <Col
-            span={24}
-            className={"block-left text-left "}
-            >
+          <Col span={24} className={"block-left text-left "}>
             {!this.props.emailAuth.submitted ? (
-            <div>
-              <div className="login-top text-bold">Magic Link</div>
               <div>
-                <Form
-                  layout="vertical"
-                  onSubmit={this.onSubmit}
-                  className="login-form"
-                  autoComplete="off"
+                <div className="login-top text-bold">Magic Link</div>
+                <div>
+                  <Form
+                    layout="vertical"
+                    onSubmit={this.onSubmit}
+                    className="login-form"
+                    autoComplete="off"
                   >
-                  <FormItem
-                    validateStatus={errors.message && "error"}
-                    hasFeedback
-                    help={errors.message}
-                    label={<FormattedMessage id="loginPageInstances.oneTimeLink" />}
-
-                  >
-                    <Input
-                      id="email"
-                      name="email"
-                      type="text"
-                      prefix={
-                        <Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />
+                    <FormItem
+                      validateStatus={errors.message && "error"}
+                      hasFeedback
+                      help={errors.message}
+                      label={
+                        <FormattedMessage id="loginPageInstances.oneTimeLink" />
                       }
-                      placeholder="example@example.com"
-                      value={data.email}
-                      onChange={this.onInputChange}
-                    />
-                  </FormItem>
-
-                  <FormItem>
-                    <Button
-                      type="primary"
-                      // htmlType="submit"
-                      className="login-form-button btn-block"
-                      onClick={this.onSubmit}
                     >
-                      <FormattedMessage id="commonTextInstances.submitButtonText" />
-                    </Button>
-                  </FormItem>
-                </Form>
-              </div>
-            </div>
-            ):(
-            <div className="magic--submitted text-center">
-              <div className="icon">
-                <i className="material-icons material-icons-24">check_circle</i>
-              </div>
-              <div>
-                <h2 className="text-grey-dark">
-                  <FormattedMessage id="commonTextInstances.emailSent" />
-                </h2>
-                <br />
-                <p className="t-14">
-                  <span className="text-grey-dark">
-                    <FormattedMessage id="loginPageInstances.loginErrorMessage" />
-                    <br />
-                    <br />
-                  </span>
-                </p>
-                <div className="t-12">
-                  <FormattedMessage id="errorMessageInstances.magicLinkExpirationWindow" />
+                      <Input
+                        id="email"
+                        name="email"
+                        type="text"
+                        prefix={
+                          <Icon
+                            type="mail"
+                            style={{ color: "rgba(0,0,0,.25)" }}
+                          />
+                        }
+                        placeholder="example@example.com"
+                        value={data.email}
+                        onChange={this.onInputChange}
+                      />
+                    </FormItem>
+
+                    <FormItem>
+                      <Button
+                        type="primary"
+                        // htmlType="submit"
+                        className="login-form-button btn-block"
+                        onClick={this.onSubmit}
+                      >
+                        <FormattedMessage id="commonTextInstances.submitButtonText" />
+                      </Button>
+                    </FormItem>
+                  </Form>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="magic--submitted text-center">
+                <div className="icon">
+                  <i className="material-icons material-icons-24">
+                    check_circle
+                  </i>
+                </div>
+                <div>
+                  <h2 className="text-grey-dark">
+                    <FormattedMessage id="commonTextInstances.emailSent" />
+                  </h2>
+                  <br />
+                  <p className="t-14">
+                    <span className="text-grey-dark">
+                      <FormattedMessage id="loginPageInstances.loginErrorMessage" />
+                      <br />
+                      <br />
+                    </span>
+                  </p>
+                  <div className="t-12">
+                    <FormattedMessage id="errorMessageInstances.magicLinkExpirationWindow" />
+                  </div>
+                </div>
+              </div>
             )}
           </Col>
         </Row>
@@ -181,7 +184,21 @@ class MagicForm extends React.Component {
             <FormattedMessage id="loginPageInstances.orText" />
           </Divider>
           <div className="t-16">
-            <Link to="/">
+            {/*
+            THIS WILL CHECK WHETHER OR NOT OTP LOGIN IS ENABLED FOR CLIENT AND 
+            POINT THE LINK TO SUITED PAGE. 
+            I.E: LOGIN EMAIL PASS IF OTP IS NOT ENABLED AND TO OTP/BASE LOGIN PAGE IF ITS ENABLED
+            */}
+            <Link
+              to={
+                !_.includes(
+                  this.props.config.configuration.client_auth_backends,
+                  3
+                )
+                  ? "/login/basic/"
+                  : "/"
+              }
+            >
               <FormattedMessage id="loginPageInstances.goToLoginPage" />
               <i className="material-icons t-14 text-middle pd-left-sm">
                 arrow_forward

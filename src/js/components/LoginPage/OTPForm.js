@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import {
   Form,
   Button,
@@ -7,6 +7,7 @@ import {
   Icon,
   Divider,
   Row,
+  Alert,
   Col,
   notification
 } from "antd";
@@ -111,7 +112,10 @@ class OTPForm extends React.Component {
   showMessageSuccess = () => {
     openNotificationWithIcon({
       type: "success",
-      message: "OTP sent to " + this.state.data.email
+      message:
+        this.props.intl.formatMessage({
+          id: "commonTextInstances.oneTimePasswordSentText"
+        }) + this.state.data.email
     });
   };
 
@@ -119,7 +123,10 @@ class OTPForm extends React.Component {
   showMessageFaliure = () => {
     openNotificationWithIcon({
       type: "error",
-      message: "Unable to send OTP to " + this.state.data.email
+      message:
+        this.props.intl.formatMessage({
+          id: "commonTextInstances.unableToSendOneTimePassword"
+        }) + this.state.data.email
     });
   };
 
@@ -127,12 +134,21 @@ class OTPForm extends React.Component {
   validate = (data, opt) => {
     const errors = {};
     if (data.email) {
-      if (!validator.isEmail(data.email)) errors.email = "Invalid email";
+      if (!validator.isEmail(data.email))
+        errors.email = this.props.intl.formatMessage({
+          id: "commonTextInstances.invalidEmail"
+        });
     }
-    if (!data.email) errors.email = "email can't be empty";
+    if (!data.email)
+      errors.email = this.props.intl.formatMessage({
+        id: "commonTextInstances.emailCantBeEmpty"
+      });
 
     if (opt === "otp") {
-      if (!data.password) errors.password = "OTP can't be empty";
+      if (!data.password)
+        errors.password = this.props.intl.formatMessage({
+          id: "commonTextInstances.OtpEmpty"
+        });
     }
 
     return errors;
@@ -217,6 +233,13 @@ class OTPForm extends React.Component {
       />
     );
 
+    if (
+      config.configuration &&
+      !_.includes(config.configuration.client_auth_backends, 3)
+    ) {
+      return <Redirect to={"/login/magic/"} />;
+    }
+
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
@@ -255,7 +278,9 @@ class OTPForm extends React.Component {
                   <FormItem
                     validateStatus={errors.message && "error"}
                     hasFeedback
-                    label="Enter the one time password to verify your account"
+                    label={
+                      <FormattedMessage id="commonTextInstances.enterOtp" />
+                    }
                     help={errors.message}
                   >
                     <Input
@@ -279,7 +304,9 @@ class OTPForm extends React.Component {
                             : "visibility_off"}{" "}
                         </i>
                       }
-                      placeholder="One-time password"
+                      placeholder={this.props.intl.formatMessage({
+                        id: "commonTextInstances.oneTimePassword"
+                      })}
                       value={data.password}
                       onChange={this.onInputChange}
                     />
@@ -288,7 +315,7 @@ class OTPForm extends React.Component {
                         onClick={this.onOptRequest}
                         className="text-secondary text-anchor"
                       >
-                        Click here to resend one-time password
+                        <FormattedMessage id="commonTextInstances.resendOneTimePasswordText" />
                       </span>
                     </div>
                   </FormItem>
@@ -308,10 +335,19 @@ class OTPForm extends React.Component {
                     {this.state.optSent ? (
                       <FormattedMessage id="commonTextInstances.submitButtonText" />
                     ) : (
-                      "Request One-time password"
+                      <FormattedMessage id="commonTextInstances.requestOneTimePasswordText" />
                     )}
                   </Button>
                 </FormItem>
+                {(this.state.error && this.state.error.OtpErr) ||
+                (this.props.error && this.props.error.OtpErr) ? (
+                  <Alert
+                    message={this.props.error.OtpErr || this.state.error.OtpErr}
+                    closable
+                    type="error"
+                    showIcon
+                  />
+                ) : null}
               </Form>
             </div>
           </Col>
@@ -378,8 +414,11 @@ class OTPForm extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const { loggingIn, error } = state.authentication;
   const { config, languageSelector } = state;
   return {
+    loggingIn,
+    error,
     config,
     languageSelector
   };
