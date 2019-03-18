@@ -33,7 +33,7 @@ export default {
       },
       inputValue: "Input value",
       selectOperator: "Select operator",
-      addFilterButtonText: "Add Filter",
+      addFilterButtonText: "Add filter",
       filterLabels: {
         status: "Status",
         business_unit: "Business Unit",
@@ -63,6 +63,18 @@ export default {
       scrollToTop: "Scroll to top",
       reloadText: "reload",
       loadingText: "loading",
+      addComments: "Add comment/question",
+      commentsText: "comments",
+      categoryText: "Category",
+      requestOneTimePasswordText: "Request One-time password",
+      resendOneTimePasswordText: "Resend One-time password",
+      oneTimePasswordSentText: "One-time password sent to",
+      unableToSendOneTimePassword: "Unable to send one time password to",
+      emailCantBeEmpty: "Email can't be empty",
+      invalidEmpty: "Invalid email",
+      OtpEmpty: "One time password can't be empty",
+      enterOtp: "Enter the one time password to verify your account",
+      oneTimePassword: "One time password",
       categoryText: "Category"
     },
     stepBodyFormInstances: {
@@ -169,6 +181,17 @@ export default {
       scrollToTop: "Hasta arriba",
       reloadText: "recargar",
       loadingText: "cargando",
+      categoryText: "categoría",
+      requestOneTimePasswordText: "Solicitar una contraseña de tiempo",
+      resendOneTimePasswordText: "volver a enviar una contraseña de tiempo",
+      oneTimePasswordSentText: "Contraseña de una sola vez enviada a",
+      unableToSendOneTimePassword:
+        "No se puede enviar una contraseña de tiempo a",
+      emailCantBeEmpty: "El correo electrónico no puede estar vacío",
+      invalidEmpty: "Email inválido",
+      OtpEmpty: "La contraseña de una sola vez no puede estar vacía",
+      enterOtp: "Ingrese la contraseña de un solo uso para verificar su cuenta",
+      oneTimePassword: "Contraseña de una sola vez",
       categoryText: "categoría"
     },
     stepBodyFormInstances: {
