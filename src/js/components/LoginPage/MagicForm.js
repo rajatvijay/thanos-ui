@@ -184,13 +184,18 @@ class MagicForm extends React.Component {
             <FormattedMessage id="loginPageInstances.orText" />
           </Divider>
           <div className="t-16">
+            {/*
+            THIS WILL CHECK WHETHER OR NOT OTP LOGIN IS ENABLED FOR CLIENT AND 
+            POINT THE LINK TO SUITED PAGE. 
+            I.E: LOGIN EMAIL PASS IF OTP IS NOT ENABLED AND TO OTP/BASE LOGIN PAGE IF ITS ENABLED
+            */}
             <Link
               to={
                 !_.includes(
-                  this.props.config.configuration.client_auth_backends,
+                  this.props.config.configuration.client_auth_backends,  
                   3
                 )
-                  ? "/login/basic/"
+                  ? "/login/basic/" 
                   : "/"
               }
             >
