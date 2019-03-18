@@ -24,6 +24,20 @@ export function authentication(state = initialState, action) {
         error: action.error
       };
 
+    case userConstants.NORMAL_FAILURE:
+      return {
+        loggingIn: false,
+        user: null,
+        error: { NormalErr: action.error }
+      };
+
+    case userConstants.OTP_FAILURE:
+      return {
+        loggingIn: false,
+        user: null,
+        error: { OtpErr: action.error }
+      };
+
     case userConstants.TOKEN_LOGIN_REQUEST:
       return {
         loggingIn: true,
