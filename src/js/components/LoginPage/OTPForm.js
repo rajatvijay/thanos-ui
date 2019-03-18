@@ -112,7 +112,10 @@ class OTPForm extends React.Component {
   showMessageSuccess = () => {
     openNotificationWithIcon({
       type: "success",
-      message: "One time password sent to " + this.state.data.email
+      message:
+        this.props.intl.formatMessage({
+          id: "commonTextInstances.oneTimePasswordSentText"
+        }) + this.state.data.email
     });
   };
 
@@ -120,7 +123,10 @@ class OTPForm extends React.Component {
   showMessageFaliure = () => {
     openNotificationWithIcon({
       type: "error",
-      message: "Unable to send one time password to " + this.state.data.email
+      message:
+        this.props.intl.formatMessage({
+          id: "commonTextInstances.unableToSendOneTimePassword"
+        }) + this.state.data.email
     });
   };
 
@@ -128,12 +134,21 @@ class OTPForm extends React.Component {
   validate = (data, opt) => {
     const errors = {};
     if (data.email) {
-      if (!validator.isEmail(data.email)) errors.email = "Invalid email";
+      if (!validator.isEmail(data.email))
+        errors.email = this.props.intl.formatMessage({
+          id: "commonTextInstances.invalidEmail"
+        });
     }
-    if (!data.email) errors.email = "email can't be empty";
+    if (!data.email)
+      errors.email = this.props.intl.formatMessage({
+        id: "commonTextInstances.emailCantBeEmpty"
+      });
 
     if (opt === "otp") {
-      if (!data.password) errors.password = "One time password can't be empty";
+      if (!data.password)
+        errors.password = this.props.intl.formatMessage({
+          id: "commonTextInstances.OtpEmpty"
+        });
     }
 
     return errors;
@@ -263,7 +278,9 @@ class OTPForm extends React.Component {
                   <FormItem
                     validateStatus={errors.message && "error"}
                     hasFeedback
-                    label="Enter the one time password to verify your account"
+                    label={
+                      <FormattedMessage id="commonTextInstances.enterOtp" />
+                    }
                     help={errors.message}
                   >
                     <Input
@@ -287,7 +304,9 @@ class OTPForm extends React.Component {
                             : "visibility_off"}{" "}
                         </i>
                       }
-                      placeholder="One-time password"
+                      placeholder={this.props.intl.formatMessage({
+                        id: "commonTextInstances.oneTimePassword"
+                      })}
                       value={data.password}
                       onChange={this.onInputChange}
                     />
@@ -296,7 +315,7 @@ class OTPForm extends React.Component {
                         onClick={this.onOptRequest}
                         className="text-secondary text-anchor"
                       >
-                        Resend one time password
+                        <FormattedMessage id="commonTextInstances.resendOneTimePasswordText" />
                       </span>
                     </div>
                   </FormItem>
@@ -316,7 +335,7 @@ class OTPForm extends React.Component {
                     {this.state.optSent ? (
                       <FormattedMessage id="commonTextInstances.submitButtonText" />
                     ) : (
-                      "Request One-time password"
+                      <FormattedMessage id="commonTextInstances.requestOneTimePasswordText" />
                     )}
                   </Button>
                 </FormItem>
