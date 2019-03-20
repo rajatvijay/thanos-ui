@@ -541,7 +541,7 @@ export const Paragraph = props => {
       key={props.field.id}
       className={
         "step-form-paragraph " +
-        (extra.font_weight === " normal " ? " text-normal " : "")
+        (extra.font_weight === "normal" ? " text-normal " : "")
       }
       style={customParaStyle}
     >
