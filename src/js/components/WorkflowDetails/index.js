@@ -42,13 +42,16 @@ class WorkflowDetails extends Component {
     this.preConstruct();
   }
 
-  componentWillMount = () => {
-    //this.preConstruct()
-  };
+  componentWillMount = () => {};
 
   preConstruct = () => {
     let params = this.props.location.search;
-    let qs = this.queryStringToObject(params);
+    let qs = this.props.location.state
+      ? this.props.location.state
+      : this.queryStringToObject(params);
+
+    console.log("qslklklklklklklklkl");
+    console.log(qs);
 
     this.props.location.search = "";
 
@@ -136,6 +139,11 @@ class WorkflowDetails extends Component {
 
   //componentDidUpdate = prevProps => {
   componentWillReceiveProps = nextProps => {
+    console.log("this.props=========");
+    console.log(this.props);
+    console.log("--------------");
+    console.log(nextProps);
+
     if (
       !_.size(nextProps.workflowDetailsHeader.error) &&
       !_.size(this.props.workflowDetailsHeader.error) &&
