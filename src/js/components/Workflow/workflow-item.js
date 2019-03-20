@@ -52,11 +52,6 @@ const SubMenu = Menu.SubMenu;
 /*workflow Head*/
 /////////////////
 
-const openWindow = url => {
-  console.log(url);
-  window.open(url, "_blank");
-};
-
 const ProcessLcData = lc => {
   let subtext_value = <span />;
 
@@ -93,7 +88,7 @@ const HeaderTitle = props => {
   return (
     <Col span={props.isChild ? 6 : 5} className="text-left ">
       <div>
-        {props.link ? (
+        {props.isChild ? (
           <a
             href={"/workflows/instances/" + props.workflow.id + "/"}
             className="text-nounderline "
@@ -1055,14 +1050,14 @@ const StepItem = props => {
   return (
     <li className={"t-14 "} title={props.stepData.name}>
       <Link
-        to={
-          "/workflows/instances/" +
-          props.workflow.id +
-          "?group=" +
-          props.group.id +
-          "&step=" +
-          props.stepData.id
-        }
+        to={{
+          pathname: "/workflows/instances/" + props.workflow.id,
+          search: "?group=" + props.group.id + "&step=" + props.stepData.id,
+          state: {
+            step: props.stepData.id,
+            group: props.group.id
+          }
+        }}
         className={
           step_complete
             ? "text-metal text-nounderline text-bold"
