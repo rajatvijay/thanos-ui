@@ -36,13 +36,12 @@ class WorkflowDetails extends Component {
       workflowId: null,
       selectedStep: null,
       selectedGroup: null,
-      printing: false
+      printing: false,
+      dont: false
     };
 
     this.preConstruct();
   }
-
-  componentWillMount = () => {};
 
   preConstruct = () => {
     let params = this.props.location.search;
@@ -76,6 +75,7 @@ class WorkflowDetails extends Component {
     }
   };
 
+  //DEFINITELY NEED TO SIMPLY THIS CODE
   currentActiveStep = wfd => {
     if (this.props.hasStepinfo.stepInfo) {
       let stepinfo = this.props.hasStepinfo.stepInfo;
@@ -134,7 +134,7 @@ class WorkflowDetails extends Component {
     }
   };
 
-  //componentDidUpdate = prevProps => {
+  //componentDidUpdate = prevProps => {// Change the following to component did mount in future.
   componentWillReceiveProps = nextProps => {
     if (
       !_.size(nextProps.workflowDetailsHeader.error) &&
@@ -144,6 +144,7 @@ class WorkflowDetails extends Component {
         nextProps.workflowDetails.workflowDetails
     ) {
       let wfd = nextProps.workflowDetails.workflowDetails;
+
       let wf_id = parseInt(this.props.match.params.id, 10);
       let stepGroup_id = null;
       let step_id = null;
@@ -173,7 +174,8 @@ class WorkflowDetails extends Component {
         this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
       }
 
-      if (!this.state.loading_sidebar) {
+      if (!this.state.loading_sidebar && !this.state.dont) {
+        this.setState({ dont: true }); //Prevent unnecessary reloading of steps
         this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
       }
     }
@@ -190,6 +192,9 @@ class WorkflowDetails extends Component {
   };
 
   componentDidUpdate = prevProps => {
+    let thisCurrent = this.props.currentStepFields;
+    let prevCurrent = prevProps.currentStepFields;
+
     if (this.props.location !== prevProps.location) {
       this.preConstruct();
       this.getInitialData();
@@ -201,6 +206,13 @@ class WorkflowDetails extends Component {
       this.props.workflowDetailsHeader.workflowDetailsHeader
     ) {
       this.syncStepCompletion();
+    }
+
+    //SET THE UPDATE PREVENTING VARIABLE TO FALSE IF STEP IS BEING
+    //SUBMITTED SO NEW DATA UPDATES IN SIDEBAR AND IN MAIN FORM
+    if (thisCurrent.isSubmitting !== prevCurrent.isSubmitting) {
+      console.log("this---");
+      this.setState({ dont: false });
     }
   };
 
