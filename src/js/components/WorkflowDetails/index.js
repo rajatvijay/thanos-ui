@@ -42,13 +42,13 @@ class WorkflowDetails extends Component {
     this.preConstruct();
   }
 
-  componentWillMount = () => {
-    //this.preConstruct()
-  };
+  componentWillMount = () => {};
 
   preConstruct = () => {
     let params = this.props.location.search;
-    let qs = this.queryStringToObject(params);
+    let qs = this.props.location.state
+      ? this.props.location.state
+      : this.queryStringToObject(params);
 
     this.props.location.search = "";
 
