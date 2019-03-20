@@ -17,6 +17,7 @@ import {
 } from "../actions";
 import { PrivateRoute } from "../components/PrivateRoute";
 import { GenericNotFound } from "../components/notfound";
+import Logout from "../components/LoginPage/Logout";
 import { LoginPage } from "../components/LoginPage";
 import { MagicLogin } from "../components/LoginPage/MagicLogin";
 import { OTPLogin } from "../components/LoginPage/OTPLogin";
@@ -140,6 +141,7 @@ class MainRoutes extends React.Component {
                     >
                       <Switch>
                         <Route path="/login" exact component={OTPLogin} />
+                        <Route path="/logout" exact component={Logout} />
                         <Route
                           path="/login/basic"
                           exact

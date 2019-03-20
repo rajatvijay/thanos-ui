@@ -32,7 +32,10 @@ class MagicLogin extends React.Component {
   render = () => {
     if (localStorage.getItem("user")) {
       let parsed = queryString.parse(this.props.location.search);
-      if (parsed.next) {
+
+      if (this.props.location.state && this.props.location.state.from) {
+        return <Redirect to={this.props.location.state.from} />;
+      } else if (parsed.next) {
         return <Redirect to={parsed.next} />;
       } else {
         return <Redirect to={"/workflows/instances/"} />;
@@ -41,10 +44,11 @@ class MagicLogin extends React.Component {
 
     let supportedLaguanges = this.props.config.supported_languages;
 
-
     return (
       <div className="login login-container container-fluid" id="login">
-        <LoginHeader showLanguage={_.isEmpty(supportedLaguanges)?false:true}/>
+        <LoginHeader
+          showLanguage={_.isEmpty(supportedLaguanges) ? false : true}
+        />
 
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
@@ -54,10 +58,7 @@ class MagicLogin extends React.Component {
                   <Icon type="loading" />
                 </div>
               ) : (
-                <MagicForm
-                  {...this.props}
-                  nextUrl={this.state.nextUrl}
-                />
+                <MagicForm {...this.props} nextUrl={this.state.nextUrl} />
               )}
             </div>
           </div>
@@ -76,9 +77,8 @@ function mapStateToProps(state) {
       loading,
       error,
       submitted
-    }, 
+    },
     config: config
-
   };
 }
 
