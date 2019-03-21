@@ -191,11 +191,12 @@ class MagicForm extends React.Component {
             */}
             <Link
               to={
+                this.props.config.configuration &&
                 !_.includes(
-                  this.props.config.configuration.client_auth_backends,  
+                  this.props.config.configuration.client_auth_backends,
                   3
                 )
-                  ? "/login/basic/" 
+                  ? "/login/basic/"
                   : "/"
               }
             >
