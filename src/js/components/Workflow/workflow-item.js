@@ -755,11 +755,8 @@ export const WorkflowBody = props => {
     <div className="lc-card-body">
       <div className="lc-card-section">
         <Row className="card-section-item">
-          <Col span={18}>
+          <Col span={24}>
             <LcData {...props} />
-          </Col>
-          <Col span={6} className="text-right">
-            <CreateRelated {...props} />
           </Col>
         </Row>
 
@@ -880,30 +877,6 @@ class MetaRow extends React.Component {
     return (
       <div>
         <Divider className="no-margin" />
-
-        <div className="lc-card-section " style={{ display: "none" }}>
-          <Row>
-            <Col span="12">{props.hasChildren ? "show child" : null}</Col>
-            <Col span="12" className="text-right">
-              {props.relatedKind ? (
-                <Dropdown
-                  overlay={childWorkflowMenu}
-                  className="child-workflow-dropdown"
-                  placement="bottomRight"
-                >
-                  <a className="ant-dropdown-link ant-btn main-btn" href="#">
-                    +{" "}
-                    <FormattedMessage id="workflowsInstances.createChildButtonText" />
-                    <i className="material-icons t-14">keyboard_arrow_down</i>
-                  </a>
-                </Dropdown>
-              ) : null}
-            </Col>
-          </Row>
-        </div>
-
-        <Divider className="no-margin" />
-
         <div className="lc-card-section">
           <Row>
             <Col span="18" className=" t-12">
