@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Layout, Icon, Tooltip, Divider, Form } from "antd";
-import { Link } from "react-router-dom";
 import { getFieldType } from "../WorkflowDetails/field-types";
 import _ from "lodash";
 import { IntlProvider, injectIntl } from "react-intl";
@@ -9,11 +8,6 @@ import { IntlProvider, injectIntl } from "react-intl";
 const FormItem = Form.Item;
 
 class StepPreview extends React.Component {
-  componentDidMount() {
-    console.log("this.props-----");
-    console.log(this.props);
-  }
-
   render() {
     let currentField = this.props.currentStepFields;
 
@@ -61,8 +55,6 @@ class StepPreview extends React.Component {
     } else {
       return (
         <div>
-          <Link to={"/workflows/instances/" + this.props.workflowId}>Edit</Link>
-          <Divider />
           <RenderField />
         </div>
       );

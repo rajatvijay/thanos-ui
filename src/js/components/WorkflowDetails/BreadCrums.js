@@ -15,6 +15,7 @@ class BreadCrums extends React.Component {
           marginTop: -15,
           borderTop: "1px solid #eee",
           borderBottom: "1px solid #eee",
+          marginBottom: "10px",
           marginLeft: -15,
           marginRight: -15,
           padding: "2px 80px",

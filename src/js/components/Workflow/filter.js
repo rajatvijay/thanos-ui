@@ -412,9 +412,7 @@ class FilterSidebar extends Component {
         collapsible
         trigger={null}
         collapsed={!this.props.showFilterMenu.show}
-        //onCollapse={this.onCollapse}
         collapsedWidth={0}
-        //defaultCollapsed={true}
       >
         <Scrollbars
           autoWidth={true}

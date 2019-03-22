@@ -16,11 +16,13 @@ const StepSidebar = props => {
       width={320}
       style={{
         overflow: "auto",
-        height: "100%",
-        position: "absolute",
         background: "#fcfdff"
       }}
       className="aux-nav aux-nav-menu aux-step-sidebar"
+      collapsible
+      trigger={null}
+      collapsed={props.showFilterMenu ? !props.showFilterMenu.show : false}
+      collapsedWidth={0}
     >
       {props.loading || props.step2 === null ? (
         <div className="text-center" style={{ fontSize: 24 }}>

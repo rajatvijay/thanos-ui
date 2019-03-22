@@ -12,10 +12,12 @@ import {
   Drawer
 } from "antd";
 import { WorkflowHeader, WorkflowBody } from "./workflow-item";
+import { Link } from "react-router-dom";
 import {
   workflowActions,
   createWorkflow,
-  workflowDetailsActions
+  workflowDetailsActions,
+  navbarActions
 } from "../../actions";
 import _ from "lodash";
 import { calculatedData } from "./calculated-data";
@@ -104,6 +106,7 @@ class WorkflowList extends Component {
             statusView={that.props.statusView}
             workflowChildren={that.props.workflowChildren}
             sortingEnabled={that.props.sortingEnabled}
+            showFilterMenu={that.props.showFilterMenu}
           />
         );
       });
@@ -288,9 +291,12 @@ class WorkflowItem extends React.Component {
       this.expandChildWorkflow();
     if (!this.state.opened) this.showQuickDetails();
     this.setState({ opened: true });
+    this.props.dispatch(navbarActions.hideFilterMenu());
   };
 
   onClose = () => {
+    console.log("closeed");
+    this.hideQuickDetails();
     this.setState({ opened: false });
   };
 
@@ -307,6 +313,20 @@ class WorkflowItem extends React.Component {
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
     const isChild = this.props.workflow.parent === null ? true : false;
+
+    let previewHeader = (
+      <div>
+        <span className="float-right mr-right-lg text-normal">
+          <Link
+            to={"/workflows/instances/" + this.props.workflow.id}
+            className="text-secondary"
+          >
+            open <i className="material-icons t-14 text-middle">open_in_new</i>
+          </Link>
+        </span>
+        {this.props.workflow.name}
+      </div>
+    );
 
     return (
       <div
@@ -375,14 +395,14 @@ class WorkflowItem extends React.Component {
 
               <Drawer
                 width={400}
-                title="Details"
+                title={previewHeader}
                 placement="right"
                 closable={true}
                 mask={false}
                 onClose={this.hideQuickDetails}
                 visible={this.state.showQuickDetails}
               >
-                <StepPreview workflowId={this.props.workflow.id} />
+                <StepPreview workflowId={this.props.workflow} />
               </Drawer>
             </div>
           </Collapsible>
@@ -425,7 +445,10 @@ const GetChildWorkflow = props => {
             });
 
             return (
-              <TabPane tab={kind.name} key={key.toString()}>
+              <TabPane
+                tab={kind.name + " (" + _.size(childGroup) + ")"}
+                key={key.toString()}
+              >
                 {_.map(childGroup, function(item, index) {
                   let proccessedData = getProcessedData(item.step_groups);
                   return (
@@ -453,11 +476,17 @@ const GetChildWorkflow = props => {
 };
 
 function mapPropsToState(state) {
-  const { workflowKind, workflowFilterType, workflowChildren } = state;
+  const {
+    workflowKind,
+    workflowFilterType,
+    workflowChildren,
+    showFilterMenu
+  } = state;
   return {
     workflowKind,
     workflowFilterType,
-    workflowChildren
+    workflowChildren,
+    showFilterMenu
   };
 }
 

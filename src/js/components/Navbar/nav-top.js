@@ -175,9 +175,11 @@ class NavTop extends Component {
                   title="Toggle filter menu"
                   onClick={this.onMenuToggle}
                 >
-                  <i className="material-icons text-middle">
-                    {this.props.showFilterMenu.show ? "close" : "reorder"}{" "}
-                  </i>
+                  <Tooltip title="Toggle sidebar menu" placement="right">
+                    <i className="material-icons text-middle">
+                      {this.props.showFilterMenu.show ? "close" : "reorder"}{" "}
+                    </i>
+                  </Tooltip>
                 </span>
 
                 <span className="logo" style={{ float: "left" }}>

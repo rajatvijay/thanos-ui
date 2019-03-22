@@ -753,13 +753,8 @@ export const WorkflowHeader = props => {
 export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
+      <MetaRow {...props} />
       <div className="lc-card-section">
-        <Row className="card-section-item">
-          <Col span={24}>
-            <LcData {...props} />
-          </Col>
-        </Row>
-
         {!props.statusView ? (
           <Row align="top">
             <Col span={24}>
@@ -770,7 +765,6 @@ export const WorkflowBody = props => {
           <StepGroupList {...props} />
         )}
       </div>
-      <MetaRow {...props} />
     </div>
   );
 };
@@ -876,7 +870,6 @@ class MetaRow extends React.Component {
 
     return (
       <div>
-        <Divider className="no-margin" />
         <div className="lc-card-section">
           <Row>
             <Col span="18" className=" t-12">
@@ -924,6 +917,7 @@ class MetaRow extends React.Component {
             </Row>
           ) : null}
         </div>
+        <Divider className="no-margin" />
       </div>
     );
   };

@@ -40,9 +40,6 @@ import { RDCEventDetails } from "./rdc_event_details.js";
 import { RDCAlertsMetadata } from "./rdc_alert_metadata.js";
 
 export const getFieldType = props => {
-  console.log("props--");
-  console.log(props);
-
   switch (props.field.definition.field_type) {
     //generic fields
     case "text":
