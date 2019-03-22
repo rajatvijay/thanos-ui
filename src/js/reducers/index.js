@@ -20,6 +20,7 @@ import { changeStatus } from "./change_status";
 import { workflowComments } from "./workflow_comments";
 import { stepVersionFields } from "./step_version";
 import { languageSelector } from "./internationalize";
+import { showFilterMenu } from "./navbar";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   hasStepinfo,
   registration,
   stepVersionFields,
+  showFilterMenu,
   users,
   workflow,
   workflowChildren,

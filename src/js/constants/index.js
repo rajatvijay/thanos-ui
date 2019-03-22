@@ -14,3 +14,4 @@ export { workflowCommentsConstants } from "./workflow_comment";
 export { dunsFieldConstants } from "./integration_field_update";
 export { stepVersionConstants } from "./step_version";
 export { languageConstants } from "./internationalize";
+export { navbarConstants } from "./navbar";

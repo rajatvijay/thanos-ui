@@ -28,6 +28,10 @@ import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 
+const { Header, Content, Footer, Sider } = Layout;
+
+const SubMenu = Menu.SubMenu;
+
 const TabPane = Tabs.TabPane;
 
 class Workflow extends Component {
@@ -41,7 +45,8 @@ class Workflow extends Component {
       statusView: true,
       visible: false,
       sortOrderAsc: false,
-      sortingEnabled: false
+      sortingEnabled: false,
+      collapsed: false
     };
 
     if (!this.props.users.me) {
@@ -197,6 +202,11 @@ class Workflow extends Component {
     }
   };
 
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    this.setState({ collapsed });
+  };
+
   render = () => {
     const { sortingEnabled } = this.state;
     // let showRisk = false;
@@ -208,122 +218,163 @@ class Workflow extends Component {
     // }
 
     return (
-      <Layout className="workflow-container inner-container" hasSider={false}>
+      <Layout
+        className="workflow-container inner-container"
+        style={{ minHeight: "100vh" }}
+      >
         <FilterSidebar />
+        <Layout>
+          <Content style={{ margin: "0 26px" }}>
+            <Row className="clear">
+              <div className="section-top">
+                <Tabs defaultActiveKey="1" size="small">
+                  <TabPane tab="Task queue" key="1">
+                    {this.state.defKind ? (
+                      <WorkflowFilterTop {...this.props} />
+                    ) : null}
+                  </TabPane>
+                  <TabPane tab="Alerts" key="2">
+                    {this.state.defKind ? (
+                      <AlertFilter {...this.props} />
+                    ) : null}
+                  </TabPane>
+                </Tabs>
 
-        <Layout
-          style={{ marginLeft: 320, minHeight: "100vh" }}
-          hasSider={false}
-        >
-          <div className="section-top">
-            <Tabs defaultActiveKey="1" size="small">
-              <TabPane tab="Task queue" key="1">
-                {this.state.defKind ? (
-                  <WorkflowFilterTop {...this.props} />
-                ) : null}
-              </TabPane>
-              <TabPane tab="Alerts" key="2">
-                {this.state.defKind ? <AlertFilter {...this.props} /> : null}
-              </TabPane>
-            </Tabs>
-
-            <br />
-          </div>
-
-          {this.props.workflow.loading ? null : this.props.workflow
-            .loadingStatus === "failed" ? null : (
-            <Row className="list-view-header t-14 ">
-              <Col span="6">
-                <div className="workflow-count text-metal">
-                  {this.props.workflow.count}{" "}
-                  <FormattedMessage id="workflowsInstances.workflowsCount" />
-                </div>
-              </Col>
-              <Col span={4} />
-              <Col span={7} className="text-metal" />
-
-              <Col span="2" className="text-secondary text-center">
-                {this.props.workflowFilters.kind.meta
-                  .is_sorting_field_enabled ? (
-                  <Tooltip
-                    title={
-                      this.state.sortOrderAsc
-                        ? "High to low risk score"
-                        : "Low to high risk score"
-                    }
-                  >
-                    <span
-                      className="text-secondary text-anchor"
-                      onClick={this.changeScoreOrder}
-                    >
-                      Risk
-                      {sortingEnabled ? (
-                        <i className="material-icons t-14  text-middle">
-                          {this.state.sortOrderAsc
-                            ? "keyboard_arrow_up"
-                            : "keyboard_arrow_down"}
-                        </i>
-                      ) : null}
-                    </span>
-                  </Tooltip>
-                ) : null}
-              </Col>
-
-              <Col span="2" className="text-metal text-center">
-                <FormattedMessage id="workflowsInstances.statusText" />
-              </Col>
-            </Row>
-          )}
-
-          {this.props.config.loading ||
-          this.props.workflow.loading ||
-          this.props.workflowKind.loading ? (
-            <div className="text-center text-bold mr-top-lg">
-              <Icon type="loading" style={{ fontSize: 24 }} />
-              <span className="text-normal pd-left">
-                {" "}
-                <FormattedMessage
-                  id={
-                    this.props.config.loading
-                      ? "workflowsInstances.loadingConfigsText"
-                      : this.props.workflowKind.loading
-                        ? "workflowsInstances.loadingFiltersText"
-                        : this.props.workflow.loading
-                          ? "workflowsInstances.fetchingDataText"
-                          : null
-                  }
-                />
-              </span>
-            </div>
-          ) : this.props.workflow.loadingStatus === "failed" ? (
-            <div className="mr-top-lg text-center text-bold text-metal">
-              <FormattedMessage id="errorMessageInstances.noWorkflowsError" />.{" "}
-              {/**<div className="text-anchor ">
-                 Click here to reload{" "}
-                 <i className="material-icons text-middle">refresh</i>
-               </div>**/}
-              <div className="mr-top-lg text-center text-bold text-metal">
-                <FormattedMessage id="errorMessageInstances.loggedOutError" />
-                <div
-                  className="text-anchor text-anchor "
-                  onClick={this.redirectLoginPage}
-                >
-                  <FormattedMessage id="commonTextInstances.clickToLogin" />
-                </div>
+                <br />
               </div>
-            </div>
-          ) : (
-            <div className="clearfix">
-              <WorkflowList
-                sortAscending={this.state.sortOrderAsc}
-                profile={this.props.match}
-                {...this.props}
-                statusView={this.state.statusView}
-                sortingEnabled={this.state.sortingEnabled}
-              />
-            </div>
-          )}
+
+              {this.props.workflow.loading ? null : this.props.workflow
+                .loadingStatus === "failed" ? null : (
+                <Row className="list-view-header t-14 ">
+                  <Col span="6">
+                    <div className="workflow-count text-metal">
+                      {this.props.workflow.count}{" "}
+                      <FormattedMessage id="workflowsInstances.workflowsCount" />
+                    </div>
+                  </Col>
+                  <Col span={4} />
+                  <Col span={7} className="text-metal" />
+
+                  <Col span="2" className="text-secondary text-center">
+                    {this.props.workflowFilters.kind.meta
+                      .is_sorting_field_enabled ? (
+                      <Tooltip
+                        title={
+                          this.state.sortOrderAsc
+                            ? "High to low risk score"
+                            : "Low to high risk score"
+                        }
+                      >
+                        <span
+                          className="text-secondary text-anchor"
+                          onClick={this.changeScoreOrder}
+                        >
+                          Risk
+                          {sortingEnabled ? (
+                            <i className="material-icons t-14  text-middle">
+                              {this.state.sortOrderAsc
+                                ? "keyboard_arrow_up"
+                                : "keyboard_arrow_down"}
+                            </i>
+                          ) : null}
+                        </span>
+                      </Tooltip>
+                    ) : null}
+                  </Col>
+
+                  <Col span="2" className="text-metal text-center">
+                    <FormattedMessage id="workflowsInstances.statusText" />
+                  </Col>
+                </Row>
+              )}
+
+              {this.props.config.loading ||
+              this.props.workflow.loading ||
+              this.props.workflowKind.loading ? (
+                <div className="text-center text-bold mr-top-lg">
+                  <Icon type="loading" style={{ fontSize: 24 }} />
+                  <span className="text-normal pd-left">
+                    {" "}
+                    <FormattedMessage
+                      id={
+                        this.props.config.loading
+                          ? "workflowsInstances.loadingConfigsText"
+                          : this.props.workflowKind.loading
+                            ? "workflowsInstances.loadingFiltersText"
+                            : this.props.workflow.loading
+                              ? "workflowsInstances.fetchingDataText"
+                              : null
+                      }
+                    />
+                  </span>
+                </div>
+              ) : this.props.workflow.loadingStatus === "failed" ? (
+                <div className="mr-top-lg text-center text-bold text-metal">
+                  <FormattedMessage id="errorMessageInstances.noWorkflowsError" />.{" "}
+                  {/**<div className="text-anchor ">
+                   Click here to reload{" "}
+                   <i className="material-icons text-middle">refresh</i>
+                 </div>**/}
+                  <div className="mr-top-lg text-center text-bold text-metal">
+                    <FormattedMessage id="errorMessageInstances.loggedOutError" />
+                    <div
+                      className="text-anchor text-anchor "
+                      onClick={this.redirectLoginPage}
+                    >
+                      <FormattedMessage id="commonTextInstances.clickToLogin" />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="clearfix">
+                  <WorkflowList
+                    sortAscending={this.state.sortOrderAsc}
+                    profile={this.props.match}
+                    {...this.props}
+                    statusView={this.state.statusView}
+                    sortingEnabled={this.state.sortingEnabled}
+                  />
+                </div>
+              )}
+            </Row>
+          </Content>
         </Layout>
+        {/*<Sider
+          collapsible
+          collapsed={this.state.collapsed}
+          onCollapse={this.onCollapse}
+          >
+          <div className="logo" />
+          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+            <Menu.Item key="1">
+              <Icon type="pie-chart" />
+              <span>Option 1</span>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Icon type="desktop" />
+              <span>Option 2</span>
+            </Menu.Item>
+            <SubMenu
+              key="sub1"
+              title={<span><Icon type="user" /><span>User</span></span>}
+            >
+              <Menu.Item key="3">Tom</Menu.Item>
+              <Menu.Item key="4">Bill</Menu.Item>
+              <Menu.Item key="5">Alex</Menu.Item>
+            </SubMenu>
+            <SubMenu
+              key="sub2"
+              title={<span><Icon type="team" /><span>Team</span></span>}
+            >
+              <Menu.Item key="6">Team 1</Menu.Item>
+              <Menu.Item key="8">Team 2</Menu.Item>
+            </SubMenu>
+            <Menu.Item key="9">
+              <Icon type="file" />
+              <span>File</span>
+            </Menu.Item>
+          </Menu>
+        </Sider>*/}
       </Layout>
     );
   };

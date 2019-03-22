@@ -12,13 +12,18 @@ import {
   Drawer
 } from "antd";
 import { WorkflowHeader, WorkflowBody } from "./workflow-item";
-import { workflowActions, createWorkflow } from "../../actions";
+import {
+  workflowActions,
+  createWorkflow,
+  workflowDetailsActions
+} from "../../actions";
 import _ from "lodash";
 import { calculatedData } from "./calculated-data";
 import Collapsible from "react-collapsible";
 import { connect } from "react-redux";
 import moment from "moment";
 import { FormattedMessage } from "react-intl";
+import StepPreview from "./StepPreview";
 
 const { Content } = Layout;
 const TabPane = Tabs.TabPane;
@@ -249,14 +254,13 @@ class WorkflowItem extends React.Component {
   showQuickDetails = () => {
     let workflow = this.props.workflow;
     let group = _.first(
-      _.map(workflow.step_groups, sg => {
-        if (sg.steps) {
-          return sg;
-        }
+      _.filter(workflow.step_groups, sg => {
+        if (sg.steps && _.size(sg.steps)) return sg;
       })
     );
+
     let step = _.first(
-      _.map(group.steps, step => {
+      _.filter(group.steps, step => {
         if (step.is_enabled) {
           return step;
         }
@@ -270,13 +274,9 @@ class WorkflowItem extends React.Component {
     };
 
     this.setState({ showQuickDetails: true });
-    console.log("this.props.workflow----");
-    console.log(this.props.workflow);
     console.log(stepTrack);
 
-    // this.props.dispatch(
-    //   this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
-    // );
+    this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
   };
 
   hideQuickDetails = () => {
@@ -286,7 +286,7 @@ class WorkflowItem extends React.Component {
   onOpen = () => {
     if (this.props.workflow.children_count && !this.state.opened)
       this.expandChildWorkflow();
-    //if(!this.state.opened)  this.showQuickDetails();
+    if (!this.state.opened) this.showQuickDetails();
     this.setState({ opened: true });
   };
 
@@ -374,7 +374,7 @@ class WorkflowItem extends React.Component {
               )}
 
               <Drawer
-                width={600}
+                width={400}
                 title="Details"
                 placement="right"
                 closable={true}
@@ -382,7 +382,7 @@ class WorkflowItem extends React.Component {
                 onClose={this.hideQuickDetails}
                 visible={this.state.showQuickDetails}
               >
-                test
+                <StepPreview workflowId={this.props.workflow.id} />
               </Drawer>
             </div>
           </Collapsible>
