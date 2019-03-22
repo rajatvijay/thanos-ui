@@ -105,6 +105,8 @@ export const getFieldType = props => {
       return Directors(props);
     case "dnb_rdc":
       return RDC(props);
+    case "dnb_rdc1":
+      return RDC(props);
     case "dnb_rdc_alerts":
       return RDCAlerts(props);
     case "dnb_cmp_ent_vw":
@@ -175,6 +177,10 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "rdc_alert_metadata":
       return RDCAlertsMetadata(props);
+    case "dnb_initiate_investigation":
+      return DnBCommon(props);
+    case "dnb_investigation_status":
+      return DnBCommon(props);
 
     default:
       return Text(props);

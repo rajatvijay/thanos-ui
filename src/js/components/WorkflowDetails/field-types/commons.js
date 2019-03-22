@@ -307,7 +307,9 @@ function getIntegrationSearchButton(props) {
     thomson_reuters_resolve_result: "Get TR resolve result",
     duplicate_check: "Get Duplicates",
     dnb_gbo: "Get GBO",
-    greylist_check: "Get Greylist"
+    greylist_check: "Get Greylist",
+    dnb_initiate_investigation: "Initiate Investigation",
+    dnb_investigation_status: "Get Investigation Status"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
