@@ -17,7 +17,8 @@ import {
   workflowActions,
   createWorkflow,
   workflowDetailsActions,
-  navbarActions
+  navbarActions,
+  stepPreviewActions
 } from "../../actions";
 import _ from "lodash";
 import { calculatedData } from "./calculated-data";
@@ -87,7 +88,11 @@ class WorkflowList extends Component {
         ...w,
         rank: that.getRank(page, i + 1, data.count)
       }));
-    var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
+    //var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
+    var result = _.groupBy(data, occurrenceDay);
+
+    console.log("result--");
+    console.log(result);
 
     var ListCompletes = _.map(result, (list, key) => {
       var listL = _.map(list, function(item, index) {
@@ -204,7 +209,7 @@ export const CreateRelated = props => {
   }
 };
 
-class WorkflowItem extends React.Component {
+export class WorkflowItem extends React.Component {
   state = {
     relatedWorkflow: null,
     showRelatedWorkflow: false,
@@ -279,7 +284,7 @@ class WorkflowItem extends React.Component {
     this.setState({ showQuickDetails: true });
     console.log(stepTrack);
 
-    this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+    this.props.dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
   };
 
   hideQuickDetails = () => {
@@ -402,7 +407,7 @@ class WorkflowItem extends React.Component {
                 onClose={this.hideQuickDetails}
                 visible={this.state.showQuickDetails}
               >
-                <StepPreview workflowId={this.props.workflow} />
+                <StepPreview workflowId={this.props.workflow.id} />
               </Drawer>
             </div>
           </Collapsible>

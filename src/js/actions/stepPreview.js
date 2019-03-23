@@ -21,11 +21,10 @@ function getStepPreviewFields(step) {
   function request(step) {
     return { type: stepPreviewConstants.PREVIEW_STEP_REQUEST, step };
   }
-  function success(stepFields, step) {
+  function success(stepFields) {
     return {
       type: stepPreviewConstants.PREVIEW_STEP_SUCCESS,
-      stepFields,
-      step
+      stepFields
     };
   }
   function failure(error) {

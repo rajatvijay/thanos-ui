@@ -22,6 +22,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { FormattedMessage, injectIntl } from "react-intl";
+import WorkflowList from "../../Workflow/workflow-list";
 
 const { getProcessedData } = calculatedData;
 const Option = Select.Option;
@@ -787,19 +788,26 @@ class ChildWorkflowField2 extends Component {
             <div className="workflow-list workflows-list-embedded">
               <div className="paper" style={{ padding: "7px" }}>
                 {_.size(this.state.filteredChildWorkflow) ? (
-                  _.map(this.state.filteredChildWorkflow, function(workflow) {
-                    return (
-                      <ChildItem
-                        key={workflow.id}
-                        workflow={workflow}
-                        field={field}
-                        currentStepFields={props.currentStepFields}
-                        workflowKind={workflowKind}
-                        addComment={props.addComment}
-                      />
-                    );
-                  })
+                  <WorkflowList
+                    sortAscending={false}
+                    {...this.props}
+                    workflow={this.state.filteredChildWorkflow}
+                    statusView={false}
+                    sortingEnabled={false}
+                  />
                 ) : (
+                  // _.map(this.state.filteredChildWorkflow, function(workflow) {
+                  //   return (
+                  //     <ChildItem
+                  //       key={workflow.id}
+                  //       workflow={workflow}
+                  //       field={field}
+                  //       currentStepFields={props.currentStepFields}
+                  //       workflowKind={workflowKind}
+                  //       addComment={props.addComment}
+                  //     />
+                  //   );
+                  // })
                   <div>No related workflows</div>
                 )}
               </div>

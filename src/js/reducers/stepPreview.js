@@ -10,19 +10,18 @@ export function stepPreviewFields(state = initialState, action) {
     /////////////////////////////////
     //GET WORKFLOW STEP FIELDS DATA//
     /////////////////////////////////
-    case stepPreviewConstants.GET_STEPFIELDS_REQUEST:
+    case stepPreviewConstants.PREVIEW_STEP_REQUEST:
       return {
         ...state,
         loading: true
       };
-    case stepPreviewConstants.GET_STEPFIELDS_SUCCESS:
+    case stepPreviewConstants.PREVIEW_STEP_SUCCESS:
       return {
-        ...state,
         loading: false,
         currentStepFields: action.stepFields,
         error: {}
       };
-    case stepPreviewConstants.GET_STEPFIELDS_FAILURE:
+    case stepPreviewConstants.PREVIEW_STEP_FAILURE:
       return {
         ...state,
         error: action.error

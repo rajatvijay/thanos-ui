@@ -9,10 +9,10 @@ const FormItem = Form.Item;
 
 class StepPreview extends React.Component {
   render() {
-    let currentField = this.props.currentStepFields;
+    let currentField = this.props.stepPreviewFields;
 
     let param = {
-      currentStepFields: this.props.currentStepFields,
+      currentStepFields: currentField,
       error: null,
       //onFieldChange: this.onFieldChange,
       workflowId: this.props.workflowId,
@@ -50,7 +50,7 @@ class StepPreview extends React.Component {
       return body;
     };
 
-    if (this.props.currentStepFields.loading) {
+    if (currentField.loading) {
       return <div className="text-center mr-top">loading...</div>;
     } else {
       return (
@@ -63,9 +63,9 @@ class StepPreview extends React.Component {
 }
 
 function mapPropsToState(state) {
-  const { currentStepFields } = state;
+  const { stepPreviewFields } = state;
   return {
-    currentStepFields
+    stepPreviewFields
   };
 }
 
