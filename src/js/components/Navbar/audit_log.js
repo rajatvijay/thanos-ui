@@ -12,7 +12,13 @@ const TabPane = Tabs.TabPane;
 
 class AuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
-    edits: ["step_submitted", "step_undo", "step_approved", "response_changed"],
+    edits: [
+      "step_submitted",
+      "step_undo",
+      "step_approved",
+      "response_changed",
+      "child_workflows"
+    ],
     emails: ["sendgrid_email"],
     views: ["step_viewed", "workflow_viewed"],
     alerts: ["alert_created", "alert_dismissed"]
