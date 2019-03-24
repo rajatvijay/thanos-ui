@@ -92,7 +92,6 @@ const HeaderTitle = props => {
           <a
             href={"/workflows/instances/" + props.workflow.id + "/"}
             className="text-nounderline "
-            target={props.isEmbedded ? "_blank" : ""}
           >
             <span
               className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
@@ -674,7 +673,7 @@ export const WorkflowHeader = props => {
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
-        {props.isChild ? null : (
+        {props.isChild || props.isEmbedded ? null : (
           <Col span={1} className=" text-anchor">
             {props.detailsPage ? (
               <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
@@ -703,9 +702,10 @@ export const WorkflowHeader = props => {
                         className="material-icons"
                         style={{ fontSize: "18px", verticalAlign: "middle" }}
                       >
-                        {props.kind === ""
+                        folder
+                        {/*props.kind === ""
                           ? "folder_open"
-                          : getIcon(props.workflow.definition.kind, props.kind)}
+                          : getIcon(props.workflow.definition.kind, props.kind)*/}
                       </i>
                     )}
                   />

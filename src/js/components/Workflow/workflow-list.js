@@ -54,6 +54,8 @@ class WorkflowList extends Component {
   };
 
   render() {
+    console.log(this.props);
+
     let that = this;
     const data = this.props.workflow;
     let page = 1;
@@ -89,10 +91,7 @@ class WorkflowList extends Component {
         rank: that.getRank(page, i + 1, data.count)
       }));
     //var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
-    var result = _.groupBy(data, occurrenceDay);
-
-    console.log("result--");
-    console.log(result);
+    var result = _.groupBy(data.workflow, occurrenceDay);
 
     var ListCompletes = _.map(result, (list, key) => {
       var listL = _.map(list, function(item, index) {
@@ -112,6 +111,10 @@ class WorkflowList extends Component {
             workflowChildren={that.props.workflowChildren}
             sortingEnabled={that.props.sortingEnabled}
             showFilterMenu={that.props.showFilterMenu}
+            field={that.props.field || null}
+            addComment={that.props.addComment || null}
+            showCommentIcon={that.props.showCommentIcon}
+            isEmbedded={that.props.isEmbedded}
           />
         );
       });
@@ -282,8 +285,6 @@ export class WorkflowItem extends React.Component {
     };
 
     this.setState({ showQuickDetails: true });
-    console.log(stepTrack);
-
     this.props.dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
   };
 
@@ -344,6 +345,7 @@ export class WorkflowItem extends React.Component {
             trigger={
               <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
                 <WorkflowHeader
+                  isEmbedded={this.props.isEmbedded}
                   sortingEnabled={this.props.sortingEnabled}
                   rank={this.props.rank}
                   workflow={this.props.workflow}
@@ -353,6 +355,9 @@ export class WorkflowItem extends React.Component {
                   dispatch={this.props.dispatch}
                   statusView={this.props.statusView}
                   hasChildren={hasChildren}
+                  field={this.props.field || null}
+                  addComment={this.props.addComment || null}
+                  showCommentIcon={this.props.showCommentIcon}
                 />
               </div>
             }

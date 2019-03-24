@@ -786,14 +786,20 @@ class ChildWorkflowField2 extends Component {
             <br />
 
             <div className="workflow-list workflows-list-embedded">
-              <div className="paper" style={{ padding: "7px" }}>
+              <div>
                 {_.size(this.state.filteredChildWorkflow) ? (
                   <WorkflowList
+                    isEmbedded={true}
                     sortAscending={false}
                     {...this.props}
-                    workflow={this.state.filteredChildWorkflow}
-                    statusView={false}
+                    workflow={{ workflow: this.state.filteredChildWorkflow }}
+                    statusView={true}
+                    kind={workflowKind}
                     sortingEnabled={false}
+                    workflowKind={workflowKind}
+                    field={field}
+                    addComment={props.addComment}
+                    showCommentIcon={true}
                   />
                 ) : (
                   // _.map(this.state.filteredChildWorkflow, function(workflow) {
@@ -808,6 +814,7 @@ class ChildWorkflowField2 extends Component {
                   //     />
                   //   );
                   // })
+
                   <div>No related workflows</div>
                 )}
               </div>
