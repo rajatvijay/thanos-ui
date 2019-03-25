@@ -13,7 +13,7 @@ function getStepPreviewFields(step) {
     stepPreviewService
       .getStepPreviewFields(step)
       .then(
-        stepFields => dispatch(success(stepFields)),
+        stepFields => dispatch(success(stepFields, step)),
         error => dispatch(failure(error))
       );
   };
@@ -21,7 +21,7 @@ function getStepPreviewFields(step) {
   function request(step) {
     return { type: stepPreviewConstants.PREVIEW_STEP_REQUEST, step };
   }
-  function success(stepFields) {
+  function success(stepFields, step) {
     return {
       type: stepPreviewConstants.PREVIEW_STEP_SUCCESS,
       stepFields

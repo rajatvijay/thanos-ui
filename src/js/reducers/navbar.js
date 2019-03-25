@@ -12,3 +12,12 @@ export function showFilterMenu(state = { show: true }, action) {
       return state;
   }
 }
+
+export function showPreviewSidebar(state = { show: false }, action) {
+  switch (action.type) {
+    case navbarConstants.TOGGLE_RIGHT_SIDEBAR:
+      return { show: action.show };
+    default:
+      return { show: false };
+  }
+}

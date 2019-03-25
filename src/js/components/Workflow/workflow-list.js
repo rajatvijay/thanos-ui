@@ -54,8 +54,6 @@ class WorkflowList extends Component {
   };
 
   render() {
-    console.log(this.props);
-
     let that = this;
     const data = this.props.workflow;
     let page = 1;
@@ -90,8 +88,11 @@ class WorkflowList extends Component {
         ...w,
         rank: that.getRank(page, i + 1, data.count)
       }));
-    //var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
-    var result = _.groupBy(data.workflow, occurrenceDay);
+
+    var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
+    if (this.props.isEmbedded) {
+      var result = _.groupBy(data.workflow, occurrenceDay);
+    }
 
     var ListCompletes = _.map(result, (list, key) => {
       var listL = _.map(list, function(item, index) {
@@ -111,7 +112,11 @@ class WorkflowList extends Component {
             workflowChildren={that.props.workflowChildren}
             sortingEnabled={that.props.sortingEnabled}
             showFilterMenu={that.props.showFilterMenu}
-            field={that.props.field || null}
+            fieldExtra={
+              that.props.field && that.props.field.definition.extra
+                ? that.props.field.definition.extra
+                : null
+            }
             addComment={that.props.addComment || null}
             showCommentIcon={that.props.showCommentIcon}
             isEmbedded={that.props.isEmbedded}
@@ -262,47 +267,64 @@ export class WorkflowItem extends React.Component {
     );
   };
 
-  showQuickDetails = () => {
+  showQuickDetails = stepData => {
+    let that = this;
     let workflow = this.props.workflow;
-    let group = _.first(
-      _.filter(workflow.step_groups, sg => {
-        if (sg.steps && _.size(sg.steps)) return sg;
-      })
-    );
-
-    let step = _.first(
-      _.filter(group.steps, step => {
-        if (step.is_enabled) {
-          return step;
-        }
-      })
-    );
-
     let stepTrack = {
       workflowId: workflow.id,
-      groupId: group.id,
-      stepId: step.id
+      groupId: null,
+      stepId: null
     };
 
-    this.setState({ showQuickDetails: true });
+    if (stepData) {
+      console.log(stepData);
+    } else {
+      let group = _.first(
+        _.filter(workflow.step_groups, sg => {
+          if (sg.steps && _.size(sg.steps)) return sg;
+        })
+      );
+
+      let step = _.first(
+        _.filter(group.steps, step => {
+          if (step.is_enabled) {
+            return step;
+          }
+        })
+      );
+
+      stepTrack = {
+        workflowId: workflow.id,
+        groupId: group.id,
+        stepId: step.id
+      };
+    }
+
+    setTimeout(() => {
+      that.setState({ showQuickDetails: true });
+    }, 1000);
+    //this.props.dispatch(navbarActions.toggleRightSidebar(true));
     this.props.dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
   };
 
   hideQuickDetails = () => {
+    //this.props.dispatch(navbarActions.toggleRightSidebar(false));
     this.setState({ showQuickDetails: false });
   };
 
   onOpen = () => {
     if (this.props.workflow.children_count && !this.state.opened)
       this.expandChildWorkflow();
-    if (!this.state.opened) this.showQuickDetails();
+
+    if (!this.state.opened) {
+      this.showQuickDetails();
+      this.props.dispatch(navbarActions.hideFilterMenu());
+    }
     this.setState({ opened: true });
-    this.props.dispatch(navbarActions.hideFilterMenu());
   };
 
   onClose = () => {
-    console.log("closeed");
-    this.hideQuickDetails();
+    if (this.state.opened) this.hideQuickDetails();
     this.setState({ opened: false });
   };
 
@@ -355,7 +377,11 @@ export class WorkflowItem extends React.Component {
                   dispatch={this.props.dispatch}
                   statusView={this.props.statusView}
                   hasChildren={hasChildren}
-                  field={this.props.field || null}
+                  fieldExtra={
+                    that.props.field && that.props.field.definition.extra
+                      ? that.props.field.definition.extra
+                      : null
+                  }
                   addComment={this.props.addComment || null}
                   showCommentIcon={this.props.showCommentIcon}
                 />
@@ -389,7 +415,10 @@ export class WorkflowItem extends React.Component {
                         onChildSelect={this.onChildSelect}
                       />
                     }
+                    isEmbedded={this.props.isEmbedded}
                     getGroupedData={this.getGroupedData}
+                    addComment={this.props.addComment || null}
+                    showCommentIcon={this.props.showCommentIcon}
                   />
                 </div>
               ) : (
@@ -411,8 +440,9 @@ export class WorkflowItem extends React.Component {
                 mask={false}
                 onClose={this.hideQuickDetails}
                 visible={this.state.showQuickDetails}
+                destroyOnClose={true}
               >
-                <StepPreview workflowId={this.props.workflow.id} />
+                <StepPreview />
               </Drawer>
             </div>
           </Collapsible>
@@ -471,6 +501,9 @@ const GetChildWorkflow = props => {
                       dispatch={props.dispatch}
                       workflowFilterType={props.workflowFilterType}
                       statusView={props.statusView}
+                      addComment={props.addComment || null}
+                      showCommentIcon={props.showCommentIcon}
+                      isEmbedded={props.isEmbedded}
                     />
                   );
                 })}

@@ -473,10 +473,7 @@ class GetMergedData extends React.Component {
     });
 
     let that = this;
-    let styling =
-      props.field && props.field.definition
-        ? props.field.definition.extra.lc_data_colorcodes
-        : {};
+    let styling = props.fieldExtra ? props.fieldExtra.lc_data_colorcodes : {};
 
     const expander = data => {
       let count = 2;

@@ -45,8 +45,7 @@ class Workflow extends Component {
       statusView: true,
       visible: false,
       sortOrderAsc: false,
-      sortingEnabled: false,
-      collapsed: false
+      sortingEnabled: false
     };
 
     if (!this.props.users.me) {
@@ -200,11 +199,6 @@ class Workflow extends Component {
         })
       );
     }
-  };
-
-  onCollapse = collapsed => {
-    console.log(collapsed);
-    this.setState({ collapsed });
   };
 
   render = () => {

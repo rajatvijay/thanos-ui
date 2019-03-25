@@ -15,7 +15,7 @@ class StepPreview extends React.Component {
       currentStepFields: currentField,
       error: null,
       //onFieldChange: this.onFieldChange,
-      workflowId: this.props.workflowId,
+      workflowId: currentField.currentStepFields.workflow,
       formProps: this.props.form,
       //completed: !!this.props.stepData.completed_at,
       is_locked: true,

@@ -3,7 +3,8 @@ import { navbarConstants } from "../constants";
 export const navbarActions = {
   toggleFilterMenu,
   showFilterMenu,
-  hideFilterMenu
+  hideFilterMenu,
+  toggleRightSidebar
 };
 
 function toggleFilterMenu(payload) {
@@ -27,6 +28,15 @@ function hideFilterMenu() {
   return dispatch => {
     dispatch({
       type: navbarConstants.HIDE_SIDEBAR
+    });
+  };
+}
+
+function toggleRightSidebar(payload) {
+  return dispatch => {
+    dispatch({
+      type: navbarConstants.TOGGLE_RIGHT_SIDEBAR,
+      show: payload
     });
   };
 }

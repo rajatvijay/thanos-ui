@@ -12,6 +12,7 @@ import {
   workflowFiltersActions,
   workflowStepActions,
   logout,
+  navbarActions,
   configActions,
   checkAuth
 } from "../../actions";
@@ -20,6 +21,7 @@ import Comments from "./comments";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import BreadCrums from "./BreadCrums";
+import StepPreview from "../Workflow/StepPreview";
 
 const requestOptions = {
   method: "GET",
@@ -190,7 +192,7 @@ class WorkflowDetails extends Component {
   componentDidMount = () => {
     this.getInitialData();
 
-    console.log(this.props.showFilterMenu);
+    this.setState({});
   };
 
   componentDidUpdate = prevProps => {
@@ -351,6 +353,16 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
 
+  onCollapse() {
+    this.setSate({ collapsed: true });
+  }
+
+  toggleRightSidebar = () => {
+    this.props.dispatch(
+      navbarActions.toggleRightSidebar(!this.props.showPreviewSidebar.show)
+    );
+  };
+
   render = () => {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
@@ -501,6 +513,30 @@ class WorkflowDetails extends Component {
                 ) : null}
               </Content>
             </Layout>
+            {/*
+                <Sider
+                  collapsible
+                  defaultCollapsed={true}
+                  collapsed={this.props.showPreviewSidebar && this.props.showPreviewSidebar.show }
+                  theme="light"
+                  width={400}
+                  trigger={null}
+                  collapsedWidth={0}
+                  style={{
+                    overflow: "auto",
+                    background: "#fcfdff",
+                    boxShadow:"0 0 4px  #ddd"
+                  }}
+                  >
+                  <div className="bg-secondary text-white pd-ard-sm">
+                    <span className="float-right pd-ard-sm text-anchor" onClick={this.toggleRightSidebar}><i className="material-icons">close</i></span>
+                    <span className="pd-ard-sm text-medium">Step Preview</span>
+                  </div>
+                  <div className="pd-ard-sm ">
+                  <StepPreview />
+                  </div>
+                </Sider>
+            */}
           </Layout>
         </div>
       );
@@ -520,7 +556,8 @@ function mapStateToProps(state) {
     hasStepinfo,
     users,
     config,
-    showFilterMenu
+    showFilterMenu,
+    showPreviewSidebar
   } = state;
 
   return {
@@ -534,7 +571,8 @@ function mapStateToProps(state) {
     hasStepinfo,
     users,
     config,
-    showFilterMenu
+    showFilterMenu,
+    showPreviewSidebar
   };
 }
 
