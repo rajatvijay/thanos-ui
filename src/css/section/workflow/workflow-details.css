@@ -85,25 +85,23 @@ h5 {
 /*Text weight*/
 .text-bold,
 .t-bld {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: bold;
+  font-weight: 700;
 }
 .text-medium,
 .t-mdm {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: medium;
+  font-weight: 500;
 }
 .text-normal,
 .t-nrml {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
-  font-style: normal;
+  font-weight: 400;
 }
 .text-thin,
 .t-thn {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: thin;
+  font-weight: 300;
 }
 /*Text size*/
 .t-12 {
@@ -134,7 +132,7 @@ h5 {
   text-transform: lowercase;
 }
 .text-capitalize,
-.t-cam {
+.t-cap {
   text-transform: capitalize;
 }
 .text-ellipsis,
@@ -211,31 +209,40 @@ h5 {
 .pd-btm {
   padding-bottom: 16px;
 }
-.pd-left-sm {
+.pd-left-sm,
+.pls {
   padding-left: 8px;
 }
-.pd-right-sm {
+.pd-right-sm,
+.prs {
   padding-right: 8px;
 }
-.pd-top-sm {
+.pd-top-sm,
+.pts {
   padding-top: 8px;
 }
-.pd-bottom-sm {
+.pd-bottom-sm,
+.pbs {
   padding-bottom: 8px;
 }
-.pd-left-lg {
+.pd-left-lg,
+.pll {
   padding-left: 24px;
 }
-.pd-right-lg {
+.pd-right-lg,
+.prl {
   padding-right: 24px;
 }
-.pd-top-lg {
+.pd-top-lg,
+.ptl {
   padding-top: 24px;
 }
-.pd-bottom-lg {
+.pd-bottom-lg,
+.pbl {
   padding-bottom: 24px;
 }
-.pd-ard-sm {
+.pd-ard-sm,
+.pas {
   padding: 8px;
 }
 .pd-ard-md {
@@ -412,6 +419,9 @@ h5 {
   font-size: 18px;
   padding-right: 10px;
 }
+.ant-form.step-form .step-form-paragraph.text-normal {
+  font-weight: 400;
+}
 .ant-form.step-form .step-form-break {
   height: 1px;
   margin-bottom: 34px;
@@ -540,13 +550,13 @@ h5 {
   padding: 10px;
   border-radius: 4px;
   border-left: 5px solid #a0a0a0;
-  margin-top: -30px;
+  margin-top: -15px;
   margin-bottom: 30px;
   position: relative;
 }
 .dnb-rdc-wrapper .match-value > span {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: medium;
+  font-weight: 500;
   display: block;
   margin-bottom: 10px;
 }
