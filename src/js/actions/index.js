@@ -16,3 +16,5 @@ export { workflowFiltersActions } from "./workflow_filters";
 export { changeStatusActions } from "./change_status";
 export { dunsFieldActions } from "./integration_step_submit";
 export { languageActions } from "./internationalize";
+export { navbarActions } from "./navbar";
+export { stepPreviewActions } from "./stepPreview";

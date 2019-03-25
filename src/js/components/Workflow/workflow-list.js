@@ -1,15 +1,35 @@
 import React, { Component, Fragment } from "react";
-import { Layout, Collapse, Pagination } from "antd";
+import {
+  Layout,
+  Collapse,
+  Pagination,
+  Tabs,
+  Row,
+  Col,
+  Menu,
+  Dropdown,
+  Divider,
+  Drawer
+} from "antd";
 import { WorkflowHeader, WorkflowBody } from "./workflow-item";
-import { workflowActions, createWorkflow } from "../../actions";
+import { Link } from "react-router-dom";
+import {
+  workflowActions,
+  createWorkflow,
+  workflowDetailsActions,
+  navbarActions,
+  stepPreviewActions
+} from "../../actions";
 import _ from "lodash";
 import { calculatedData } from "./calculated-data";
 import Collapsible from "react-collapsible";
 import { connect } from "react-redux";
 import moment from "moment";
 import { FormattedMessage } from "react-intl";
+import StepPreview from "./StepPreview";
 
 const { Content } = Layout;
+const TabPane = Tabs.TabPane;
 const { getProcessedData } = calculatedData;
 
 const Panel = Collapse.Panel;
@@ -68,7 +88,11 @@ class WorkflowList extends Component {
         ...w,
         rank: that.getRank(page, i + 1, data.count)
       }));
+
     var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
+    if (this.props.isEmbedded) {
+      var result = _.groupBy(data.workflow, occurrenceDay);
+    }
 
     var ListCompletes = _.map(result, (list, key) => {
       var listL = _.map(list, function(item, index) {
@@ -87,6 +111,15 @@ class WorkflowList extends Component {
             statusView={that.props.statusView}
             workflowChildren={that.props.workflowChildren}
             sortingEnabled={that.props.sortingEnabled}
+            showFilterMenu={that.props.showFilterMenu}
+            fieldExtra={
+              that.props.field && that.props.field.definition.extra
+                ? that.props.field.definition.extra
+                : null
+            }
+            addComment={that.props.addComment || null}
+            showCommentIcon={that.props.showCommentIcon}
+            isEmbedded={that.props.isEmbedded}
           />
         );
       });
@@ -94,7 +127,7 @@ class WorkflowList extends Component {
       return (
         <span key={key} className="month-group">
           <div className={"h6 grouping-head " + key}>{key}</div>
-          <div className="paper">{listL}</div>
+          <div className="">{listL}</div>
         </span>
       );
     });
@@ -139,16 +172,65 @@ class WorkflowList extends Component {
   }
 }
 
-class WorkflowItem extends React.Component {
+export const CreateRelated = props => {
+  const relatedKind = props.relatedKind;
+
+  const menuItems = () => {
+    let workflowKindFiltered = [];
+
+    _.map(props.relatedKind, function(item) {
+      if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+        workflowKindFiltered.push(item);
+      }
+    });
+
+    return (
+      <Menu onClick={props.onChildSelect}>
+        {!_.isEmpty(workflowKindFiltered) ? (
+          _.map(workflowKindFiltered, function(item, index) {
+            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          })
+        ) : (
+          <Menu.Item disabled>No related workflow kind</Menu.Item>
+        )}
+      </Menu>
+    );
+  };
+
+  const childWorkflowMenu = menuItems(props);
+
+  if (props.relatedKind && _.size(childWorkflowMenu)) {
+    return (
+      <Dropdown
+        overlay={childWorkflowMenu}
+        className="child-workflow-dropdown"
+        placement="bottomRight"
+      >
+        <a className="ant-dropdown-link ant-btn main-btn" href="#">
+          + <FormattedMessage id="workflowsInstances.createChildButtonText" />
+          <i className="material-icons t-14">keyboard_arrow_down</i>
+        </a>
+      </Dropdown>
+    );
+  } else {
+    return <span />;
+  }
+};
+
+export class WorkflowItem extends React.Component {
   state = {
     relatedWorkflow: null,
     showRelatedWorkflow: false,
     opened: false,
+    showQuickDetails: false,
     loadingRelatedWorkflow: false
   };
 
   componentDidMount = () => {
-    this.setState({ relatedWorkflow: this.getRelatedTypes() });
+    this.setState({
+      relatedWorkflow: this.getRelatedTypes(),
+      showRelatedWorkflow: false
+    });
   };
 
   getRelatedTypes = () => {
@@ -166,13 +248,6 @@ class WorkflowItem extends React.Component {
     return rt;
   };
 
-  // showRelatedType = () => {
-  //   this.setState({
-  //     relatedWorkflow: !this.state.relatedWorkflow,
-  //     open: this.state.relatedWorkflow
-  //   });
-  // };
-
   onChildSelect = e => {
     let payload = {
       status: 1,
@@ -185,24 +260,77 @@ class WorkflowItem extends React.Component {
   };
 
   expandChildWorkflow = () => {
-    this.setState({ showRelatedWorkflow: !this.state.showRelatedWorkflow });
+    this.setState({ showRelatedWorkflow: true });
 
     this.props.dispatch(
       workflowActions.getChildWorkflow(this.props.workflow.id)
     );
   };
 
+  showQuickDetails = stepData => {
+    let that = this;
+    let workflow = this.props.workflow;
+    let stepTrack = {
+      workflowId: workflow.id,
+      groupId: null,
+      stepId: null
+    };
+
+    if (stepData) {
+      console.log(stepData);
+    } else {
+      let group = _.first(
+        _.filter(workflow.step_groups, sg => {
+          if (sg.steps && _.size(sg.steps)) return sg;
+        })
+      );
+
+      let step = _.first(
+        _.filter(group.steps, step => {
+          if (step.is_enabled) {
+            return step;
+          }
+        })
+      );
+
+      stepTrack = {
+        workflowId: workflow.id,
+        groupId: group.id,
+        stepId: step.id
+      };
+    }
+
+    setTimeout(() => {
+      that.setState({ showQuickDetails: true });
+    }, 1000);
+    //this.props.dispatch(navbarActions.toggleRightSidebar(true));
+    this.props.dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
+  };
+
+  hideQuickDetails = () => {
+    //this.props.dispatch(navbarActions.toggleRightSidebar(false));
+    this.setState({ showQuickDetails: false });
+  };
+
   onOpen = () => {
+    if (this.props.workflow.children_count && !this.state.opened)
+      this.expandChildWorkflow();
+
+    if (!this.state.opened) {
+      this.showQuickDetails();
+      this.props.dispatch(navbarActions.hideFilterMenu());
+    }
     this.setState({ opened: true });
   };
 
   onClose = () => {
+    if (this.state.opened) this.hideQuickDetails();
     this.setState({ opened: false });
   };
 
   getGroupedData = children => {
     let grouped = _.groupBy(children, function(child) {
-      return child.definition.kind;
+      return child.definition.kind.toString();
     });
     return grouped;
   };
@@ -214,15 +342,32 @@ class WorkflowItem extends React.Component {
     const hasChildren = this.props.workflow.children_count !== 0;
     const isChild = this.props.workflow.parent === null ? true : false;
 
+    let previewHeader = (
+      <div>
+        <span className="float-right mr-right-lg text-normal">
+          <Link
+            to={"/workflows/instances/" + this.props.workflow.id}
+            className="text-secondary"
+          >
+            open <i className="material-icons t-14 text-middle">open_in_new</i>
+          </Link>
+        </span>
+        {this.props.workflow.name}
+      </div>
+    );
+
     return (
       <div
-        className={"workflow-list-item " + (this.state.opened ? " opened" : "")}
+        className={
+          "paper workflow-list-item " + (this.state.opened ? " opened" : "")
+        }
       >
         <div className="collapse-wrapper">
           <Collapsible
             trigger={
               <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
                 <WorkflowHeader
+                  isEmbedded={this.props.isEmbedded}
                   sortingEnabled={this.props.sortingEnabled}
                   rank={this.props.rank}
                   workflow={this.props.workflow}
@@ -231,6 +376,14 @@ class WorkflowItem extends React.Component {
                   onStatusChange={this.props.onStatusChange}
                   dispatch={this.props.dispatch}
                   statusView={this.props.statusView}
+                  hasChildren={hasChildren}
+                  fieldExtra={
+                    that.props.field && that.props.field.definition.extra
+                      ? that.props.field.definition.extra
+                      : null
+                  }
+                  addComment={this.props.addComment || null}
+                  showCommentIcon={this.props.showCommentIcon}
                 />
               </div>
             }
@@ -251,34 +404,49 @@ class WorkflowItem extends React.Component {
                 ondata={this.ondata}
                 statusView={this.props.statusView}
               />
+              {hasChildren && this.state.showRelatedWorkflow ? (
+                <div>
+                  <Divider className="no-margin" />
+                  <ChildWorkflow
+                    {...this.props}
+                    createButton={
+                      <CreateRelated
+                        relatedKind={this.state.relatedWorkflow}
+                        onChildSelect={this.onChildSelect}
+                      />
+                    }
+                    isEmbedded={this.props.isEmbedded}
+                    getGroupedData={this.getGroupedData}
+                    addComment={this.props.addComment || null}
+                    showCommentIcon={this.props.showCommentIcon}
+                  />
+                </div>
+              ) : (
+                <div className="lc-card-body">
+                  <div className="lc-card-section text-right">
+                    <CreateRelated
+                      relatedKind={this.state.relatedWorkflow}
+                      onChildSelect={this.onChildSelect}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <Drawer
+                width={400}
+                title={previewHeader}
+                placement="right"
+                closable={true}
+                mask={false}
+                onClose={this.hideQuickDetails}
+                visible={this.state.showQuickDetails}
+                destroyOnClose={true}
+              >
+                <StepPreview />
+              </Drawer>
             </div>
           </Collapsible>
-
-          {hasChildren ? (
-            <span
-              className="child-workflow-expander text-anchor "
-              onClick={this.expandChildWorkflow}
-              title="Show related workflow"
-            >
-              <i className="material-icons" style={{ verticalAlign: "middle" }}>
-                {this.state.showRelatedWorkflow ? "remove" : "add"}
-              </i>
-            </span>
-          ) : null}
         </div>
-
-        <div className="workflow-divider" />
-
-        {/*show kind name  here */}
-
-        {hasChildren && this.state.showRelatedWorkflow ? (
-          <div className="child-workflow-wrapper mr-top">
-            <ChildWorkflow
-              {...this.props}
-              getGroupedData={this.getGroupedData}
-            />
-          </div>
-        ) : null}
       </div>
     );
   };
@@ -288,34 +456,62 @@ const GetChildWorkflow = props => {
   let childList = null;
   let workflowId = props.workflow.id;
 
+  const cbtn = (
+    <span style={{ paddingRight: "20px" }}>{props.createButton}</span>
+  );
+
   if (props.workflowChildren[workflowId].loading) {
     return (childList = (
       <div className="text-center mr-bottom">loading...</div>
     ));
   } else {
-    childList = _.map(
-      props.getGroupedData(props.workflowChildren[workflowId].children),
-      function(childGroup) {
-        return (
-          <div className="mr-bottom">
-            {_.map(childGroup, function(item, index) {
-              let proccessedData = getProcessedData(item.step_groups);
-              return (
-                <WorkflowItem
-                  isChild={true}
-                  pData={proccessedData}
-                  workflow={item}
-                  key={index}
-                  kinds={props.kinds}
-                  dispatch={props.dispatch}
-                  workflowFilterType={props.workflowFilterType}
-                  statusView={props.statusView}
-                />
-              );
-            })}
-          </div>
-        );
-      }
+    let defaultActiveKey = _.find(props.kinds.workflowKind, kind => {
+      return (
+        props.workflowChildren[workflowId].children[0].definition.kind ===
+        kind.id
+      );
+    });
+
+    childList = (
+      <Tabs
+        defaultActiveKey={defaultActiveKey.id.toString()}
+        tabBarExtraContent={cbtn}
+      >
+        {_.map(
+          props.getGroupedData(props.workflowChildren[workflowId].children),
+          function(childGroup, key) {
+            let kind = _.find(props.kinds.workflowKind, {
+              id: parseInt(key, 10)
+            });
+
+            return (
+              <TabPane
+                tab={kind.name + " (" + _.size(childGroup) + ")"}
+                key={key.toString()}
+              >
+                {_.map(childGroup, function(item, index) {
+                  let proccessedData = getProcessedData(item.step_groups);
+                  return (
+                    <WorkflowItem
+                      isChild={true}
+                      pData={proccessedData}
+                      workflow={item}
+                      key={index}
+                      kinds={props.kinds}
+                      dispatch={props.dispatch}
+                      workflowFilterType={props.workflowFilterType}
+                      statusView={props.statusView}
+                      addComment={props.addComment || null}
+                      showCommentIcon={props.showCommentIcon}
+                      isEmbedded={props.isEmbedded}
+                    />
+                  );
+                })}
+              </TabPane>
+            );
+          }
+        )}
+      </Tabs>
     );
   }
 
@@ -323,11 +519,17 @@ const GetChildWorkflow = props => {
 };
 
 function mapPropsToState(state) {
-  const { workflowKind, workflowFilterType, workflowChildren } = state;
+  const {
+    workflowKind,
+    workflowFilterType,
+    workflowChildren,
+    showFilterMenu
+  } = state;
   return {
     workflowKind,
     workflowFilterType,
-    workflowChildren
+    workflowChildren,
+    showFilterMenu
   };
 }
 

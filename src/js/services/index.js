@@ -11,3 +11,4 @@ export { dunsFieldService } from "./integration_field_update";
 export { updateSelectedLanguageService } from "./internationalize";
 export { getChildWorkflow } from "./getChildWorkflow";
 export { requestWorflowPDF } from "./requestWorkflowPDF";
+export { stepPreviewService } from "./stepPreview";

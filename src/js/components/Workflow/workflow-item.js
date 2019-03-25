@@ -92,7 +92,6 @@ const HeaderTitle = props => {
           <a
             href={"/workflows/instances/" + props.workflow.id + "/"}
             className="text-nounderline "
-            target={props.isEmbedded ? "_blank" : ""}
           >
             <span
               className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
@@ -474,10 +473,7 @@ class GetMergedData extends React.Component {
     });
 
     let that = this;
-    let styling =
-      props.field && props.field.definition
-        ? props.field.definition.extra.lc_data_colorcodes
-        : {};
+    let styling = props.fieldExtra ? props.fieldExtra.lc_data_colorcodes : {};
 
     const expander = data => {
       let count = 2;
@@ -674,7 +670,7 @@ export const WorkflowHeader = props => {
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
-        {props.isChild ? null : (
+        {props.isChild || props.isEmbedded ? null : (
           <Col span={1} className=" text-anchor">
             {props.detailsPage ? (
               <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
@@ -703,9 +699,10 @@ export const WorkflowHeader = props => {
                         className="material-icons"
                         style={{ fontSize: "18px", verticalAlign: "middle" }}
                       >
-                        {props.kind === ""
+                        folder
+                        {/*props.kind === ""
                           ? "folder_open"
-                          : getIcon(props.workflow.definition.kind, props.kind)}
+                          : getIcon(props.workflow.definition.kind, props.kind)*/}
                       </i>
                     )}
                   />
@@ -753,16 +750,8 @@ export const WorkflowHeader = props => {
 export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
+      <MetaRow {...props} />
       <div className="lc-card-section">
-        <Row className="card-section-item">
-          <Col span={18}>
-            <LcData {...props} />
-          </Col>
-          <Col span={6} className="text-right">
-            <CreateRelated {...props} />
-          </Col>
-        </Row>
-
         {!props.statusView ? (
           <Row align="top">
             <Col span={24}>
@@ -773,7 +762,6 @@ export const WorkflowBody = props => {
           <StepGroupList {...props} />
         )}
       </div>
-      <MetaRow {...props} />
     </div>
   );
 };
@@ -879,31 +867,6 @@ class MetaRow extends React.Component {
 
     return (
       <div>
-        <Divider className="no-margin" />
-
-        <div className="lc-card-section " style={{ display: "none" }}>
-          <Row>
-            <Col span="12">{props.hasChildren ? "show child" : null}</Col>
-            <Col span="12" className="text-right">
-              {props.relatedKind ? (
-                <Dropdown
-                  overlay={childWorkflowMenu}
-                  className="child-workflow-dropdown"
-                  placement="bottomRight"
-                >
-                  <a className="ant-dropdown-link ant-btn main-btn" href="#">
-                    +{" "}
-                    <FormattedMessage id="workflowsInstances.createChildButtonText" />
-                    <i className="material-icons t-14">keyboard_arrow_down</i>
-                  </a>
-                </Dropdown>
-              ) : null}
-            </Col>
-          </Row>
-        </div>
-
-        <Divider className="no-margin" />
-
         <div className="lc-card-section">
           <Row>
             <Col span="18" className=" t-12">
@@ -951,6 +914,7 @@ class MetaRow extends React.Component {
             </Row>
           ) : null}
         </div>
+        <Divider className="no-margin" />
       </div>
     );
   };

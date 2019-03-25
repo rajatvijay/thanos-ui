@@ -16,8 +16,12 @@ import {
   Drawer,
   Tooltip
 } from "antd";
-import { logout, workflowActions, languageActions } from "../../actions";
-//import logo from "../../../images/client-logo/dnb_logo.png";
+import {
+  logout,
+  workflowActions,
+  languageActions,
+  navbarActions
+} from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { authHeader, baseUrl, baseUrl2 } from "../../_helpers";
@@ -82,6 +86,12 @@ class NavTop extends Component {
     this.setState({
       showInsights: false
     });
+  };
+
+  onMenuToggle = () => {
+    this.props.dispatch(
+      navbarActions.toggleFilterMenu(!this.props.showFilterMenu.show)
+    );
   };
 
   getExportList = () => {
@@ -160,6 +170,18 @@ class NavTop extends Component {
             <Row>
               {/*logo wrapper*/}
               <Col span={12}>
+                <span
+                  className="logo float-left text-anchor text-base mr-right-sm"
+                  title="Toggle filter menu"
+                  onClick={this.onMenuToggle}
+                >
+                  <Tooltip title="Toggle sidebar menu" placement="right">
+                    <i className="material-icons text-middle">
+                      {this.props.showFilterMenu.show ? "close" : "reorder"}{" "}
+                    </i>
+                  </Tooltip>
+                </span>
+
                 <span className="logo" style={{ float: "left" }}>
                   <a href="/">
                     {!this.props.config.loading && this.props.config.logo ? (
@@ -275,12 +297,19 @@ class NavTop extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, authentication, config, languageSelector } = state;
+  const {
+    workflowKind,
+    authentication,
+    config,
+    languageSelector,
+    showFilterMenu
+  } = state;
   return {
     workflowKind,
     authentication,
     config,
-    languageSelector
+    languageSelector,
+    showFilterMenu
   };
 }
 

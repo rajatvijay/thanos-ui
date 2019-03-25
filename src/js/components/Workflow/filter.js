@@ -403,14 +403,16 @@ class FilterSidebar extends Component {
 
     return (
       <Sider
-        width={320}
+        width={300}
         style={{
           overflow: "auto",
-          height: "100vh",
-          position: "fixed",
           background: "#ebf0fa"
         }}
         className="aux-nav aux-nav-filter "
+        collapsible
+        trigger={null}
+        collapsed={!this.props.showFilterMenu.show}
+        collapsedWidth={0}
       >
         <Scrollbars
           autoWidth={true}
@@ -520,14 +522,16 @@ function mapStateToProps(state) {
     workflowFilterType,
     workflowFilters,
     config,
-    languageSelector
+    languageSelector,
+    showFilterMenu
   } = state;
   return {
     workflowKind,
     workflowFilterType,
     workflowFilters,
     config,
-    languageSelector
+    languageSelector,
+    showFilterMenu
   };
 }
 
