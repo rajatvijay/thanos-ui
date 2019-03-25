@@ -148,6 +148,21 @@ class MagicForm extends React.Component {
                         <FormattedMessage id="commonTextInstances.submitButtonText" />
                       </Button>
                     </FormItem>
+
+                    <FormItem style={{ marginTop: -18 }}>
+                      {this.props.config.saml_url ? (
+                        <a
+                          className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                          href={this.props.config.saml_url}
+                        >
+                          <span className="text-white">
+                            <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                            {this.props.config.name} account
+                          </span>
+                          {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
+                        </a>
+                      ) : null}
+                    </FormItem>
                   </Form>
                 </div>
               </div>
@@ -189,21 +204,23 @@ class MagicForm extends React.Component {
             POINT THE LINK TO SUITED PAGE. 
             I.E: LOGIN EMAIL PASS IF OTP IS NOT ENABLED AND TO OTP/BASE LOGIN PAGE IF ITS ENABLED
             */}
-            <Link
-              to={
-                !_.includes(
-                  this.props.config.configuration.client_auth_backends,
-                  3
-                )
-                  ? "/login/basic/"
-                  : "/"
-              }
-            >
-              <FormattedMessage id="loginPageInstances.goToLoginPage" />
-              <i className="material-icons t-14 text-middle pd-left-sm">
-                arrow_forward
-              </i>
-            </Link>
+            {this.props.config.configuration ? (
+              <Link
+                to={
+                  !_.includes(
+                    this.props.config.configuration.client_auth_backends,
+                    3
+                  )
+                    ? "/login/basic/"
+                    : "/"
+                }
+              >
+                <FormattedMessage id="loginPageInstances.goToLoginPage" />
+                <i className="material-icons t-14 text-middle pd-left-sm">
+                  arrow_forward
+                </i>
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>
