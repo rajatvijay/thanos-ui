@@ -109,7 +109,7 @@ function removeCookies() {
 const logoutNav = () => {
   localStorage.removeItem("user");
   removeCookies();
-  window.location.href = "/";
+  document.location.href = baseUrl2 + "users/logout/";
 };
 
 const logoutXHR = () => async dispatch => {
