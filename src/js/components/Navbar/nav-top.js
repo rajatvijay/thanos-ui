@@ -156,7 +156,8 @@ class NavTop extends Component {
       />
     );
 
-    let showInsights = true;
+    // Initializing it to false to start with
+    let showInsights = false;
     let showExportOption =
       this.props.config.permissions &&
       this.props.config.permissions.includes("Can export workflow data");
