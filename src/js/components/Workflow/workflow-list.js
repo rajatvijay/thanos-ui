@@ -474,7 +474,7 @@ const GetChildWorkflow = props => {
 
     childList = (
       <Tabs
-        defaultActiveKey={defaultActiveKey.id.toString()}
+        //defaultActiveKey={defaultActiveKey.id.toString()}
         tabBarExtraContent={cbtn}
       >
         {_.map(
