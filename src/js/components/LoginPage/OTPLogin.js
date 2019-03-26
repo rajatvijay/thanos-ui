@@ -30,6 +30,10 @@ class OTPLogin extends React.Component {
   };
 
   render = () => {
+    const config = this.props.config;
+    let showRightBlock = true;
+    let supportedLaguanges = config.supported_languages;
+
     if (localStorage.getItem("user")) {
       let parsed = queryString.parse(this.props.location.search);
       if (parsed.next) {
@@ -39,7 +43,14 @@ class OTPLogin extends React.Component {
       }
     }
 
-    let supportedLaguanges = this.props.config.supported_languages;
+    if (
+      !config.saml_url &&
+      config.configuration &&
+      !_.includes(config.configuration.client_auth_backends, 0)
+    ) {
+      showRightBlock = false;
+    }
+
     return (
       <div className="login login-container container-fluid" id="login">
         <LoginHeader
@@ -48,13 +59,17 @@ class OTPLogin extends React.Component {
 
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
-            <div className="login-box magic">
+            <div className={"login-box " + (showRightBlock && " magic")}>
               {this.props.emailAuth.loading ? (
                 <div>
                   <Icon type="loading" />
                 </div>
               ) : (
-                <OTPForm {...this.props} nextUrl={this.state.nextUrl} />
+                <OTPForm
+                  {...this.props}
+                  showRightBlock={showRightBlock}
+                  nextUrl={this.state.nextUrl}
+                />
               )}
             </div>
           </div>
