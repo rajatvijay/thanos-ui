@@ -149,18 +149,23 @@ class MagicForm extends React.Component {
                       </Button>
                     </FormItem>
 
-                    <FormItem style={{ marginTop: -18 }}>
+                    <FormItem style={{ paddingTop: 10 }}>
                       {this.props.config.saml_url ? (
-                        <a
-                          className="ant-btn login-form-button ant-btn-primary btn-block text-white"
-                          href={this.props.config.saml_url}
-                        >
-                          <span className="text-white">
-                            <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                            {this.props.config.name} account
-                          </span>
-                          {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
-                        </a>
+                        <React.Fragment>
+                          <p style={{ color: "black" }}>
+                            Client User Login with Single Sign on
+                          </p>
+                          <a
+                            className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                            href={this.props.config.saml_url}
+                          >
+                            <span className="text-white">
+                              <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                              {this.props.config.name} account
+                            </span>
+                            {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
+                          </a>
+                        </React.Fragment>
                       ) : null}
                     </FormItem>
                   </Form>
