@@ -831,6 +831,17 @@ class AttachmentDownload extends Component {
 
   render = () => {
     let that = this;
+    let hasAttachment = null;
+    if (this.props.field) {
+      console.log("field");
+      if (this.props.field.answers[0]) {
+        console.log("ffieldanswe[0]");
+        if (this.props.field.answers[0].attachment) {
+          console.log("attachment---");
+          hasAttachment = this.props.field.answers[0].attachment;
+        }
+      }
+    }
     return (
       <div>
         <FormItem
@@ -842,14 +853,27 @@ class AttachmentDownload extends Component {
           hasFeedback
           {...field_error(this.props)}
         >
-          <Button
-            //disabled={this.props.completed}
-            icon="paper-clip"
-            onClick={this.generateFile}
-            loading={this.state.fetching}
-          >
-            Download file
-          </Button>
+          {hasAttachment ? (
+            <Button
+              //disabled={this.props.completed}
+              icon="paper-clip"
+              href={hasAttachment}
+              target="_blank"
+              className="ant-btn-primary"
+            >
+              Download file
+            </Button>
+          ) : (
+            <Button
+              //disabled={this.props.completed}
+              icon="paper-clip"
+              onClick={this.generateFile}
+              loading={this.state.fetching}
+              className="ant-btn-primary"
+            >
+              Download file
+            </Button>
+          )}
         </FormItem>
       </div>
     );
