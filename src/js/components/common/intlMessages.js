@@ -114,7 +114,8 @@ export default {
       loginErrorMessage:
         "Your contact information must be on file in order for you to complete this request.",
       goToLoginPage: "Go to login page",
-      selectPreferedLanguage: " Choose language:"
+      selectPreferedLanguage: " Choose language:",
+      goBack: "Go back"
     }
   },
   es: {
@@ -234,7 +235,8 @@ export default {
       loginErrorMessage:
         "Su información de contacto debe estar archivada para que pueda completar esta solicitud",
       goToLoginPage: "Ir a la página de inicio de sesión",
-      selectPreferedLanguage: " Elige lengua:"
+      selectPreferedLanguage: " Elige lengua:",
+      goBack: "Regresa"
     }
   },
   "es-cl": {

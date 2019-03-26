@@ -206,27 +206,41 @@ class MagicForm extends React.Component {
           <Divider>
             <FormattedMessage id="loginPageInstances.orText" />
           </Divider>
-          <div className="t-16">
-            {/*
+          {this.props.emailAuth.submitted ? (
+            <div className="t-16">
+              <span
+                className="text-secondary"
+                onClick={() => window.location.reload()}
+              >
+                <i className="material-icons t-14 text-middle pd-right-sm">
+                  arrow_back
+                </i>
+                <FormattedMessage id="loginPageInstances.goBack" />
+              </span>
+            </div>
+          ) : (
+            <div className="t-16">
+              {/*
             THIS WILL CHECK WHETHER OR NOT OTP LOGIN IS ENABLED FOR CLIENT AND 
             POINT THE LINK TO SUITED PAGE. 
             I.E: LOGIN EMAIL PASS IF OTP IS NOT ENABLED AND TO OTP/BASE LOGIN PAGE IF ITS ENABLED
             */}
-            {this.props.config.configuration ? (
-              <Link
-                to={
-                  !_.includes(authList, 3)
-                    ? _.includes(authList, 0) ? "/login/basic/" : "/"
-                    : "/"
-                }
-              >
-                <FormattedMessage id="loginPageInstances.goToLoginPage" />
-                <i className="material-icons t-14 text-middle pd-left-sm">
-                  arrow_forward
-                </i>
-              </Link>
-            ) : null}
-          </div>
+              {this.props.config.configuration ? (
+                <Link
+                  to={
+                    !_.includes(authList, 3)
+                      ? _.includes(authList, 0) ? "/login/basic/" : "/"
+                      : "/"
+                  }
+                >
+                  <FormattedMessage id="loginPageInstances.goToLoginPage" />
+                  <i className="material-icons t-14 text-middle pd-left-sm">
+                    arrow_forward
+                  </i>
+                </Link>
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
     );
