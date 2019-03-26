@@ -832,15 +832,8 @@ class AttachmentDownload extends Component {
   render = () => {
     let that = this;
     let hasAttachment = null;
-    if (this.props.field) {
-      console.log("field");
-      if (this.props.field.answers[0]) {
-        console.log("ffieldanswe[0]");
-        if (this.props.field.answers[0].attachment) {
-          console.log("attachment---");
-          hasAttachment = this.props.field.answers[0].attachment;
-        }
-      }
+    if (this.props.field.answers[0] && this.props.field.answers[0].attachment) {  
+      hasAttachment = this.props.field.answers[0].attachment;
     }
     return (
       <div>
