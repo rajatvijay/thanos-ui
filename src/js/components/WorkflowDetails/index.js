@@ -363,7 +363,7 @@ class WorkflowDetails extends Component {
     );
   };
 
-  isParentWorlkflow = () => {
+  isParentWorkflow = () => {
     return (
       this.props.workflowDetailsHeader.workflowDetailsHeader.workflow_family
         .length === 1
@@ -424,7 +424,7 @@ class WorkflowDetails extends Component {
               </div>
             ) : (
               <div>
-                {!this.isParentWorlkflow() ? (
+                {!this.isParentWorkflow() ? (
                   <BreadCrums
                     items={
                       this.props.workflowDetailsHeader.workflowDetailsHeader
