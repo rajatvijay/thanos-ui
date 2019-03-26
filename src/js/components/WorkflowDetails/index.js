@@ -363,6 +363,13 @@ class WorkflowDetails extends Component {
     );
   };
 
+  isParentWorlkflow = () => {
+    return (
+      this.props.workflowDetailsHeader.workflowDetailsHeader.workflow_family
+        .length === 1
+    );
+  };
+
   render = () => {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
@@ -417,12 +424,14 @@ class WorkflowDetails extends Component {
               </div>
             ) : (
               <div>
-                <BreadCrums
-                  items={
-                    this.props.workflowDetailsHeader.workflowDetailsHeader
-                      .workflow_family
-                  }
-                />
+                {!this.isParentWorlkflow() ? (
+                  <BreadCrums
+                    items={
+                      this.props.workflowDetailsHeader.workflowDetailsHeader
+                        .workflow_family
+                    }
+                  />
+                ) : null}
                 <WorkflowHeader
                   detailsPage={true}
                   kind={this.props.workflowKind}
