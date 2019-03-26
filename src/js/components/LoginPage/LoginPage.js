@@ -23,11 +23,19 @@ class LoginPage extends React.Component {
   };
 
   render = () => {
+    let supportedLaguanges = this.props.config.supported_languages;
+
+    if (this.props.config.configuration) {
+      if (
+        !_.includes(this.props.config.configuration.client_auth_backends, 0)
+      ) {
+        return <Redirect to={"/"} />;
+      }
+    }
+
     if (localStorage.getItem("user")) {
       return <Redirect to={"/workflows/instances/"} />;
     }
-
-    let supportedLaguanges = this.props.config.supported_languages;
 
     return (
       <div

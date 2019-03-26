@@ -100,6 +100,9 @@ class MagicForm extends React.Component {
   render() {
     const { data, errors } = this.state;
     let supportedLaguanges = this.props.config.supported_languages;
+    let authList = this.props.config.configuration
+      ? this.props.config.configuration.client_auth_backends
+      : [];
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
@@ -207,11 +210,8 @@ class MagicForm extends React.Component {
             {this.props.config.configuration ? (
               <Link
                 to={
-                  !_.includes(
-                    this.props.config.configuration.client_auth_backends,
-                    3
-                  )
-                    ? "/login/basic/"
+                  !_.includes(authList, 3)
+                    ? !_.includes(authList, 0) ? "/login/basic/" : "/"
                     : "/"
                 }
               >
