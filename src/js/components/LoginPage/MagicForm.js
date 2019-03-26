@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Row, Col } from "antd";
 import validator from "validator";
 import _ from "lodash";
@@ -103,6 +103,11 @@ class MagicForm extends React.Component {
     let authList = this.props.config.configuration
       ? this.props.config.configuration.client_auth_backends
       : [];
+
+    if (!_.includes(authList, 1)) {
+      return <Redirect to={"/"} />;
+    }
+
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
@@ -211,7 +216,7 @@ class MagicForm extends React.Component {
               <Link
                 to={
                   !_.includes(authList, 3)
-                    ? !_.includes(authList, 0) ? "/login/basic/" : "/"
+                    ? _.includes(authList, 0) ? "/login/basic/" : "/"
                     : "/"
                 }
               >
