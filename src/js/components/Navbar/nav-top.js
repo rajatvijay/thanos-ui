@@ -45,7 +45,8 @@ class NavTop extends Component {
   }
 
   onLogout(key) {
-    this.props.dispatch(logout());
+    // this.props.dispatch(logout());
+    logout();
   }
 
   onSearch = e => {
