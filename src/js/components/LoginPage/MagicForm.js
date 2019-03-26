@@ -104,9 +104,9 @@ class MagicForm extends React.Component {
       ? this.props.config.configuration.client_auth_backends
       : [];
 
-    if (!_.includes(authList, 1)) {
-      return <Redirect to={"/"} />;
-    }
+    // if (!_.includes(authList, 1)) {
+    //   return <Redirect to={"/"} />;
+    // }
 
     return (
       <div className="login-form-box magic-box">
