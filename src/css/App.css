@@ -56,34 +56,22 @@
 @font-face {
   font-family: "AvenirLTPro-Light";
   src: url("fonts/370AEC_0_0.eot");
-  src: url("fonts/370AEC_0_0.eot?#iefix") format("embedded-opentype"),
-    url("fonts/370AEC_0_0.woff2") format("woff2"),
-    url("fonts/370AEC_0_0.woff") format("woff"),
-    url("fonts/370AEC_0_0.ttf") format("truetype");
+  src: url("fonts/370AEC_0_0.eot?#iefix") format("embedded-opentype"), url("fonts/370AEC_0_0.woff2") format("woff2"), url("fonts/370AEC_0_0.woff") format("woff"), url("fonts/370AEC_0_0.ttf") format("truetype");
 }
 @font-face {
   font-family: "AvenirLTPro-Book";
   src: url("fonts/370AEC_2_0.eot");
-  src: url("fonts/370AEC_2_0.eot?#iefix") format("embedded-opentype"),
-    url("fonts/370AEC_2_0.woff2") format("woff2"),
-    url("fonts/370AEC_2_0.woff") format("woff"),
-    url("fonts/370AEC_2_0.ttf") format("truetype");
+  src: url("fonts/370AEC_2_0.eot?#iefix") format("embedded-opentype"), url("fonts/370AEC_2_0.woff2") format("woff2"), url("fonts/370AEC_2_0.woff") format("woff"), url("fonts/370AEC_2_0.ttf") format("truetype");
 }
 @font-face {
   font-family: "AvenirLTPro-Medium";
   src: url("fonts/370AEC_6_0.eot");
-  src: url("fonts/370AEC_6_0.eot?#iefix") format("embedded-opentype"),
-    url("fonts/370AEC_6_0.woff2") format("woff2"),
-    url("fonts/370AEC_6_0.woff") format("woff"),
-    url("fonts/370AEC_6_0.ttf") format("truetype");
+  src: url("fonts/370AEC_6_0.eot?#iefix") format("embedded-opentype"), url("fonts/370AEC_6_0.woff2") format("woff2"), url("fonts/370AEC_6_0.woff") format("woff"), url("fonts/370AEC_6_0.ttf") format("truetype");
 }
 @font-face {
   font-family: "AvenirLTPro-Heavy";
   src: url("fonts/370AEC_8_0.eot");
-  src: url("fonts/370AEC_8_0.eot?#iefix") format("embedded-opentype"),
-    url("fonts/370AEC_8_0.woff2") format("woff2"),
-    url("fonts/370AEC_8_0.woff") format("woff"),
-    url("fonts/370AEC_8_0.ttf") format("truetype");
+  src: url("fonts/370AEC_8_0.eot?#iefix") format("embedded-opentype"), url("fonts/370AEC_8_0.woff2") format("woff2"), url("fonts/370AEC_8_0.woff") format("woff"), url("fonts/370AEC_8_0.ttf") format("truetype");
 }
 @font-face {
   font-family: "Material Icons";
@@ -107,30 +95,25 @@
   -webkit-font-smoothing: antialiased;
 }
 .Avenir-light {
-  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-normal {
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .Avenir-medium {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .Avenir-heavy {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 h1,
 h2,
 h3,
 h4,
 h5 {
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 /*text colors*/
 .text-primary {
@@ -265,6 +248,9 @@ h5 {
 /*Background Colors*/
 .bg-primary {
   background-color: #17ead9;
+}
+.bg-secondary {
+  background-color: #305ebe;
 }
 .bg-primary-light {
   background: #e5fdfb;
@@ -1518,9 +1504,7 @@ section {
 }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -1802,8 +1786,7 @@ template {
   margin-bottom: 14px;
   color: #343b4c;
   font-size: 18px;
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .aux-nav-filter .ant-menu .ant-menu-item {
   color: #343b4c;
@@ -1977,9 +1960,7 @@ template {
   box-shadow: none;
 }
 .ant-progress-circle.ant-progress-status-success .ant-progress-text,
-.ant-progress-circle.ant-progress-status-success
-  .ant-progress-text
-  .material-icons {
+.ant-progress-circle.ant-progress-status-success .ant-progress-text .material-icons {
   color: #305ebe;
 }
 .ant-progress-status-success .ant-progress-circle-path {
@@ -2036,8 +2017,7 @@ template {
   background-color: #eee;
 }
 .ant-input {
-  font-family: Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .ant-pagination-item-active,
 .ant-pagination-item-active:focus,
@@ -2077,13 +2057,18 @@ template {
 .ant-switch-checked {
   background: #305ebe;
 }
-.ant-radio-group-solid
-  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
   background: #305ebe;
   border-color: #305ebe;
 }
 .ant-radio-group.ant-radio-group-outline {
   width: 100%;
+}
+.ant-tabs-nav .ant-tabs-tab-active {
+  color: #305ebe;
+}
+.ant-tabs-ink-bar {
+  background: #305ebe;
 }
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
@@ -2091,11 +2076,8 @@ template {
   border-color: #305ebe;
 }
 .inner-container {
-  display: block;
-  margin-left: 0px;
   position: relative;
   top: 65px;
-  min-height: 100vh;
 }
 .add_comment_btn {
   float: right;
@@ -2362,10 +2344,7 @@ template {
   background: #109f94;
 }
 .ant-menu-inline-collapsed > .ant-menu-item,
-.ant-menu-inline-collapsed
-  > .ant-menu-item-group
-  > .ant-menu-item-group-list
-  > .ant-menu-item {
+.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item {
   padding: 0 !important;
 }
 .navbar-left .ant-menu-vertical > .ant-menu-item .nav-text {
@@ -2404,8 +2383,7 @@ template {
 .workflow-container .section-top .waiting-section .waiting-filter-trigger {
   padding-bottom: 3px;
   border-bottom: 2px solid #305ebe;
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .workflow-container .section-top .ant-tabs-nav .ant-tabs-tab-active {
   color: #505050;
@@ -2429,9 +2407,9 @@ template {
 }
 .workflow-list .grouping-head {
   font-size: 14px;
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: bold;
   color: #343b4c;
+  margin-top: 12px;
   margin-bottom: 12px;
 }
 .workflow-list.ant-collapse > .ant-collapse-item {
@@ -2470,39 +2448,52 @@ template {
   padding-left: 30px;
 }
 .workflow-list .paper {
-  margin-bottom: 58px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
   padding: 4px;
   background: #fff;
 }
-.workflow-list .paper .workflow-list-item {
-  transition: margin 0.3s ease;
+.workflow-list .paper.workflow-list-item {
   border-bottom: 1px solid #ffffff;
 }
-.workflow-list .paper .workflow-list-item:last-child {
+.workflow-list .paper.workflow-list-item:last-child {
   border-bottom: none;
 }
-.workflow-list .paper .workflow-list-item .ant-collapse-header {
+.workflow-list .paper.workflow-list-item .ant-collapse-header {
   margin-bottom: 0;
   position: relative;
   border-radius: 2px;
-  transition: all 0.3s ease-in;
 }
-.workflow-list .paper .workflow-list-item .ant-collapse-header:hover {
+.workflow-list .paper.workflow-list-item .ant-collapse-header:hover {
   background: #f2f5fa;
 }
-.workflow-list .paper .workflow-list-item.opened {
-  box-shadow: none;
-  border-bottom: 1px solid #f2f5fa;
+.workflow-list .paper.workflow-list-item.opened {
+  margin: 25px -15px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
 }
-.workflow-list .paper .workflow-list-item.opened .Collapsible {
+.workflow-list .paper.workflow-list-item.opened .Collapsible {
   border: none;
 }
-.workflow-list .paper .workflow-list-item.opened > .ant-collapse-header {
+.workflow-list .paper.workflow-list-item.opened > .ant-collapse-header {
   background: #f2f5fa;
 }
 .workflow-list .paper .workflow-item:last-child .Collapsible {
   border: none;
+}
+.workflow-list .paper .ant-tabs {
+  padding-bottom: 1px;
+}
+.workflow-list .paper .ant-tabs-bar {
+  padding-top: 10px;
+}
+.workflow-list .paper .ant-tabs-nav .ant-tabs-tab {
+  padding-bottom: 20px;
+}
+.workflow-list .ant-tabs .paper.workflow-list-item {
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+  margin: 0 5px;
+}
+.workflow-list .ant-tabs .paper.workflow-list-item.opened {
+  margin: 25px 5px;
 }
 .workflow-list .workflow-divider {
   height: 1px;
@@ -2566,21 +2557,12 @@ template {
 .lc-card-head .ant-steps .ant-steps-item .ant-steps-item-content {
   white-space: normal;
 }
-.lc-card-head
-  .ant-steps
-  .ant-steps-item
-  .ant-steps-item-content
-  > .ant-steps-item-title {
+.lc-card-head .ant-steps .ant-steps-item .ant-steps-item-content > .ant-steps-item-title {
   line-height: 1.17;
   margin-top: 3px;
   vertical-align: middle;
 }
-.lc-card-head
-  .ant-steps
-  .ant-steps-item
-  .ant-steps-item-content
-  > .ant-steps-item-title
-  .title-c {
+.lc-card-head .ant-steps .ant-steps-item .ant-steps-item-content > .ant-steps-item-title .title-c {
   display: inline-block;
   width: 70px;
   overflow: hidden;
@@ -2588,11 +2570,7 @@ template {
   font-size: 14px;
   max-height: 60px;
 }
-.lc-card-head
-  .ant-steps
-  .ant-steps-item
-  .ant-steps-item-content
-  > .ant-steps-item-title:after {
+.lc-card-head .ant-steps .ant-steps-item .ant-steps-item-content > .ant-steps-item-title:after {
   background-color: #343b4c;
 }
 .lc-card-head .ant-steps .ant-steps-item-icon {
@@ -2643,26 +2621,10 @@ template {
   position: absolute;
   height: 100%;
   width: 40px;
-  background: -moz-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    #ffffff 100%
-  );
-  background: -webkit-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    #ffffff 100%
-  );
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    #ffffff 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient(
-      startColorstr="#00ffffff",
-      endColorstr="#ffffff",
-      GradientType=1
-    );
+  background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00ffffff", endColorstr="#ffffff", GradientType=1);
   right: 0;
   top: 0;
 }
@@ -2691,8 +2653,7 @@ template {
   margin-right: 20px;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .grp-class {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   display: block;
 }
 .lc-card .lc-card-body .sub-step-list .groupaz .grp-class .grp-name {
@@ -2747,11 +2708,7 @@ template {
 .lc-card .lc-card-body .step-ui .title-c {
   max-width: 100%;
 }
-.workflow-details-container
-  .ant-layout-sider
-  .ant-menu-submenu
-  > .ant-menu:not(.ant-menu-horizontal)
-  .ant-menu-item-selected {
+.workflow-details-container .ant-layout-sider .ant-menu-submenu > .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background: #ecf1fb;
   color: #343b4c;
 }
@@ -2815,8 +2772,7 @@ template {
   margin-bottom: 18px;
   font-size: 14px;
   font-weight: 500;
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #505050;
 }
 .ant-form.step-form .step-form-paragraph .material-icons {
@@ -2824,6 +2780,9 @@ template {
   line-height: 18px;
   font-size: 18px;
   padding-right: 10px;
+}
+.ant-form.step-form .step-form-paragraph.text-normal {
+  font-weight: 400;
 }
 .ant-form.step-form .step-form-break {
   height: 1px;
@@ -2875,9 +2834,7 @@ template {
   background-color: #305ebe;
 }
 .ant-form.step-form .ant-input:not(.ant-input-disabled):hover,
-.ant-form.step-form
-  .ant-input-affix-wrapper:hover
-  .ant-input:not(.ant-input-disabled),
+.ant-form.step-form .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
 .ant-form.step-form .ant-radio-wrapper:hover .ant-radio .ant-radio-inner,
 .ant-form.step-form .ant-radio:hover .ant-radio-inner,
 .ant-form.step-form .ant-radio-focused .ant-radio-inner,
@@ -2922,7 +2879,7 @@ template {
 }
 .ant-form.step-form .dropped-files ul {
   list-style: none;
-  padding: 20px 0;
+  padding: 20px 0 ;
 }
 .ant-form.step-form .dropped-files li a {
   color: #305ebe;
@@ -2963,15 +2920,13 @@ template {
   display: block;
   margin-bottom: 10px;
 }
-.financial-statement-collapse.ant-collapse
-  .ant-collapse-item
-  .ant-collapse-header {
+.financial-statement-collapse.ant-collapse .ant-collapse-item .ant-collapse-header {
   background: #f5f5f5;
 }
 #GraphContainer {
   margin-bottom: 24px;
   background-color: #fff;
-  border: 1px solid #d7e0e4;
+  border: 1px solid #D7E0E4;
   height: 600px;
   position: relative;
 }
@@ -3011,10 +2966,10 @@ template {
   background-size: contain;
 }
 .icon-custom.nobar {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgAgMAAACf9p+rAAAACVBMVEUAAAAvLy8yMjLMEW2RAAAAA3RSTlMAJkxGwkpBAAAAj0lEQVR4Ad3NMQEAIAzAMHgQgUSkVSUKYmB9e2SNbmscjavxRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlojekD4BwDq+6fm1uaaaaasuvork5cyii=);
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgAgMAAACf9p+rAAAACVBMVEUAAAAvLy8yMjLMEW2RAAAAA3RSTlMAJkxGwkpBAAAAj0lEQVR4Ad3NMQEAIAzAMHgQgUSkVSUKYmB9e2SNbmscjavxRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlIRCISkYhEJCIRiUhEIhKRiEQkIhGJSEQiEpGIRCQiEYlojekD4BwDq+6FM1UAAAAASUVORK5CYII=);
 }
 .icon-custom.bar1 {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgBAMAAAAQtmoLAAAAD1BMVEUAAAAvLy8yMjIxMTEzMzMALA1yAAAABHRSTlMAJkyTupmePwAAALVJREFUeAHtzUENAgAQA0FIHSChGirh/GtCApkXIWH/k338+7mecl46qa6qg+qgOqgOqoPqoDqoDqqD6qA6qA6qg+qgOqgOqoPqoDqoDqqD6qA6qA6qg+qgOqgOqoPqoDqoDqqD6qA6qA0+gBTBEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQTMG/r/cGklYHgGqMKJgAAAAASUVORK5CYII=);
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgBAMAAAAQtmoLAAAAD1BMVEUAAAAvLy8yMjIxMTEzMzMALA1yAAAABHRSTlMAJkyTupmePwAAALVJREFUeAHtzUENAgAQA0FIHSChGirh/GtCApkXIWH/k338+7meCl46qA6qg+qgOqgOqoPqoDqoDqqD6qA6qA6qg+qgOqgOqoPqoDqoDqqD6qA6qA6qg+qgOqgOqoPqoDqoDqqD6qA6qA0+gBTBEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQDEEOwRDkEAxBDsEQ5BAMQQ7BEOQQTMG/r/cGklYHgGqMKJgAAAAASUVORK5CYII=);
 }
 .icon-custom.bar2 {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgBAMAAAAQtmoLAAAAD1BMVEUAAAAvLy8yMjIxMTEzMzMALA1yAAAABHRSTlMAJkyTupmePwAAALVJREFUeAHtzUENAgAQA0FIHSChGirh/GvCAvMiJOx/so+f699TwUsH1UF1UB1UB9VBdVAdVAfVQXVQHVQH1UF1UB1UB9VBdVAdVAfVQXVQHVQH1UF1UB1UB/1gYCBFMAQ5BEOQQzAEOQRDkEMwBDkEQ5BDMAQ5BEOQQzAEOQRDkEMwBDkEQ5BDMAQ5BEOQQzAEOQRDkEMwBDkEQ5BDMAQ5BEOQQzAEOQRDkEMwBDkEQ/D9/r0BNNMe6EpRLNAAAAAASUVORK5CYII=);
@@ -3031,17 +2986,8 @@ template {
 .masked-input {
   position: relative;
   background-color: #f2f5fa;
-  background-image: linear-gradient(
-    45deg,
-    #d9d9d9 8.33%,
-    #f2f5fa 8.33%,
-    #f2f5fa 50%,
-    #d9d9d9 50%,
-    #d9d9d9 58.33%,
-    #f2f5fa 58.33%,
-    #f2f5fa 100%
-  );
-  background-size: 6px 6px;
+  background-image: linear-gradient(45deg, #d9d9d9 8.33%, #f2f5fa 8.33%, #f2f5fa 50%, #d9d9d9 50%, #d9d9d9 58.33%, #f2f5fa 58.33%, #f2f5fa 100%);
+  background-size: 6.00px 6.00px;
   height: 30px;
   border-radius: 3px;
   line-height: 30px;
@@ -3049,7 +2995,6 @@ template {
   padding: 0 10px;
 }
 .workflows-list-embedded .paper {
-  padding: 24px;
   background: #fff;
 }
 .workflows-list-embedded .paper .workflow-list-item {
@@ -3067,24 +3012,13 @@ template {
 .workflows-list-embedded .paper .workflow-list-item.expanded {
   background: #fff;
 }
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  > .ant-collapse-header {
+.workflows-list-embedded .paper .workflow-list-item.expanded > .ant-collapse-header {
   background: #f2f5fa;
 }
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  > .workflow-list-item
-  .company-name {
+.workflows-list-embedded .paper .workflow-list-item.expanded > .workflow-list-item .company-name {
   font-size: 12px;
 }
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  > .workflow-list-item
-  .lc1 {
+.workflows-list-embedded .paper .workflow-list-item.expanded > .workflow-list-item .lc1 {
   font-size: 10px;
   color: #d9d9d9;
 }
@@ -3093,11 +3027,7 @@ template {
   border-top: none;
   padding: 4px 4px 4px 24px;
 }
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  .child-container
-  .ant-collapse-content-box {
+.workflows-list-embedded .paper .workflow-list-item.expanded .child-container .ant-collapse-content-box {
   padding: 0;
 }
 .workflows-list-embedded .paper .workflow-list-item .child-workflow-expand {
@@ -3145,15 +3075,13 @@ template {
 }
 .aux-nav-filter .aux-lead.filter-title {
   font-size: 14px;
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
 }
 .aux-nav-filter .aux-lead.filter-title label,
 .aux-nav-filter .aux-lead.filter-title span {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 .aux-nav-filter .ant-form-item {
   margin-bottom: 8px;
@@ -3192,11 +3120,8 @@ template {
   background-color: transparent;
 }
 .filter-top .filter-top-horizontal .workflow-group-count {
-  font-family: Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: normal;
   font-style: normal;
   font-size: 30px;
@@ -3340,6 +3265,16 @@ body {
 }
 .activity-log-drawer.ant-drawer .ant-drawer-header {
   height: 65px;
+}
+.ant-drawer-header {
+  padding-top: 21px;
+  padding-bottom: 21px;
+}
+.ant-drawer-close {
+  height: 65px;
+}
+.ant-drawer-content {
+  box-shadow: -2px 0 4px #ddd;
 }
 .animated {
   -webkit-animation-duration: 0.4s;
@@ -4685,6 +4620,5 @@ body {
 }
 body,
 * {
-  font-family: Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
