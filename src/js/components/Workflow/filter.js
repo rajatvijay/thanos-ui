@@ -89,9 +89,7 @@ class WorkflowFilter extends Component {
     let placeholder = this.getPlaceHolder();
     return (
       <div>
-        <div>
-          <label>{label ? label : placeholder}</label>
-        </div>
+        <div>{/*<label>{label ? label : placeholder}</label>*/}</div>
         <FormItem>
           <Select
             showSearch
@@ -188,9 +186,7 @@ class WorkflowBUFilter extends WorkflowFilter {
 
     return (
       <div>
-        <div>
-          <label>{label ? label : placeholder}</label>
-        </div>
+        <div>{/*<label>{label ? label : placeholder}</label>*/}</div>
         <FormItem
           hasFeedback={businessData.loading ? true : false}
           validateStatus={this.state.fetching ? "validating" : null}
@@ -280,9 +276,9 @@ class WorkflowKindFilter extends Component {
     return (
       <div className="aux-item aux-lead filter-title">
         <FormItem
-          label={
-            <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
-          }
+        // label={
+        //   <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
+        // }
         >
           <Select
             mode="single"
@@ -448,7 +444,6 @@ class FilterSidebar extends Component {
             </span>
           </span>
           <br />
-          <br />
 
           <div className=" section-kind">
             {this.props.workflowKind ? (
@@ -478,12 +473,14 @@ class FilterSidebar extends Component {
               onClick={this.toggleAdvFilters}
             >
               <label>
-                <FormattedMessage id="workflowFiltersTranslated.advancedFilter" />{" "}
-                <i className="material-icons t-16 text-middle">
-                  {this.state.showAdvFilters
-                    ? "keyboard_arrow_up "
-                    : "keyboard_arrow_down  "}
-                </i>
+                <span className="advanced-filter-label">
+                  <FormattedMessage id="workflowFiltersTranslated.advancedFilter" />{" "}
+                  <i className="material-icons t-16 text-middle">
+                    {this.state.showAdvFilters
+                      ? "keyboard_arrow_up "
+                      : "keyboard_arrow_down  "}
+                  </i>
+                </span>
               </label>
             </span>
           </div>

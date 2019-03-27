@@ -214,7 +214,7 @@ class MagicForm extends React.Component {
           {this.props.emailAuth.submitted ? (
             <div className="t-16">
               <span
-                className="text-secondary"
+                className="text-secondary text-anchor"
                 onClick={() => window.location.reload()}
               >
                 <i className="material-icons t-14 text-middle pd-right-sm">

@@ -330,7 +330,7 @@ class HeaderOptions2 extends React.Component {
         <Row>
           <Col span={14}>
             <Tooltip title={this.state.current}>
-              <div className="pd-left pd-right status-text text-light t-12 text-ellipsis t-mdm">
+              <div className="pd-left pd-right status-text text-light t-12 ">
                 {this.state.current}
               </div>
             </Tooltip>
@@ -889,7 +889,7 @@ class MetaRow extends React.Component {
               ) : null}
 
               <span className="text-light">
-                <FormattedMessage id="commonTextInstances.createdText" />
+                <FormattedMessage id="commonTextInstances.createdText" />{" "}
                 <Moment fromNow>{props.workflow.created_at}</Moment>
               </span>
             </Col>
@@ -944,16 +944,18 @@ const StepGroupList = props => {
                     group.definition.status
                   }
                 >
-                  <span
-                    className={
-                      "grp-name " +
-                      (completed
-                        ? "text-metal text-medium"
-                        : od ? "text-red text-red" : "text-metal  text-normal")
-                    }
-                  >
-                    <i className="material-icons mr-right-lg ">
-                      {completed ? "check_circle" : "panorama_fish_eye"}
+                  <span className="grp-name  text-normal">
+                    <i
+                      className={
+                        "material-icons mr-right-lg " +
+                        (completed
+                          ? " text-green "
+                          : od ? " text-red " : " text-normal ")
+                      }
+                    >
+                      {completed
+                        ? "check_circle "
+                        : od ? "alarm" : "panorama_fish_eye"}
                     </i>
                     <span className=" pd-left-sm t-14">
                       {group.definition.name}
@@ -1012,7 +1014,10 @@ const StepItem = props => {
   }
 
   return (
-    <li className={"t-14 "} title={props.stepData.name}>
+    <li
+      className={"t-12 "}
+      title={props.stepData.name + (overdue ? " | overdue" : "")}
+    >
       <Link
         to={{
           pathname: "/workflows/instances/" + props.workflow.id,
@@ -1024,13 +1029,20 @@ const StepItem = props => {
         }}
         className={
           step_complete
-            ? "text-metal text-nounderline text-bold"
+            ? "text-metal text-nounderline"
             : overdue
-              ? "text-red text-nounderline text-normal"
+              ? "text-metal text-nounderline text-normal"
               : "text-metal text-nounderline text-normal"
         }
       >
-        <i className="material-icons text-middle">{icon_cls}</i>
+        <i
+          className={
+            "material-icons text-middle " +
+            (step_complete ? "text-green" : overdue ? "text-red" : "")
+          }
+        >
+          {icon_cls}
+        </i>
         <span>{props.stepData.name}</span>
         {_.size(hasAlert) ? (
           <span className="alert-dot">

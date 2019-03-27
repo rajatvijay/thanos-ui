@@ -179,7 +179,7 @@ class NavTop extends Component {
                 >
                   <Tooltip title="Toggle sidebar menu" placement="right">
                     <i className="material-icons text-middle">
-                      {this.props.showFilterMenu.show ? "close" : "reorder"}{" "}
+                      {this.props.showFilterMenu.show ? "dehaze" : "dehaze"}{" "}
                     </i>
                   </Tooltip>
                 </span>
@@ -258,11 +258,6 @@ class NavTop extends Component {
                     title={
                       user ? (
                         <span>
-                          {user.first_name ? (
-                            <Avatar>{user.first_name.charAt(0)}</Avatar>
-                          ) : (
-                            <Avatar icon="user" />
-                          )}
                           {user.first_name
                             ? " " + user.first_name + " " + user.last_name + " "
                             : " " + user.email + " "}
