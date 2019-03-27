@@ -276,7 +276,7 @@ class Workflow extends Component {
                     ) : null}
                   </Col>
 
-                  <Col span="2" className="text-metal text-center">
+                  <Col span="2" className="text-metal ">
                     <FormattedMessage id="workflowsInstances.statusText" />
                   </Col>
                 </Row>
