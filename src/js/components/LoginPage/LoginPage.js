@@ -43,11 +43,11 @@ class LoginPage extends React.Component {
         id="login"
         token={this.state.token}
       >
-        <ReCaptcha
+        {/* <ReCaptcha
           sitekey="6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8"
           action="login"
           verifyCallback={this.verifyCallback}
-        />
+        /> */}
 
         <LoginHeader
           showLanguage={_.isEmpty(supportedLaguanges) ? false : true}
