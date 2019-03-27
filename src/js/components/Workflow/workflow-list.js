@@ -318,7 +318,7 @@ export class WorkflowItem extends React.Component {
 
     if (!this.state.opened) {
       this.showQuickDetails();
-      this.props.dispatch(navbarActions.hideFilterMenu());
+      //this.props.dispatch(navbarActions.hideFilterMenu());
     }
     this.setState({ opened: true });
   };
@@ -359,7 +359,10 @@ export class WorkflowItem extends React.Component {
     return (
       <div
         className={
-          "paper workflow-list-item " + (this.state.opened ? " opened" : "")
+          "paper workflow-list-item " +
+          (this.state.opened
+            ? " opened"
+            : null + hasChildren ? " has-children " : null)
         }
       >
         <div className="collapse-wrapper">
@@ -432,7 +435,7 @@ export class WorkflowItem extends React.Component {
                 </div>
               )}
 
-              <Drawer
+              {/*<Drawer
                 width={400}
                 title={previewHeader}
                 placement="right"
@@ -443,7 +446,43 @@ export class WorkflowItem extends React.Component {
                 destroyOnClose={true}
               >
                 <StepPreview />
-              </Drawer>
+              </Drawer>*/}
+
+              {/* <Sider
+                className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
+                style={{
+                  background: "#fff",
+                  // overflow: "auto",
+                  height: "calc(100vh - 70px)",
+                  position: "fixed",
+                  right: 0,
+                  top: "65px",
+                  zIndex: 1
+                }}
+                width="570"
+                collapsed={!this.state.showQuickDetails}
+                collapsedWidth={0}
+                collapsible
+                reverseArrow={true}
+                trigger={null}
+              >
+                <div className="comment-details" style={{ width: "570px" }}>
+                  <div className="sidebar-head">
+                    <span className="sidebar-title">
+                      previewHeader
+                    </span>
+                    <Icon
+                      type="close"
+                      onClick={this.toggle}
+                      style={{ float: "right", marginTop: "4px" }}
+                    />
+                  </div>
+                  <Content style={{ padding: "15px", paddingBottom: "50px" }}>
+                    <StepPreview />
+                  </Content>
+                </div>
+              </Sider>
+*/}
             </div>
           </Collapsible>
         </div>
@@ -486,7 +525,11 @@ const GetChildWorkflow = props => {
 
             return (
               <TabPane
-                tab={kind.name + " (" + _.size(childGroup) + ")"}
+                tab={
+                  kind
+                    ? kind.name + " (" + _.size(childGroup) + ")"
+                    : _.size(childGroup)
+                }
                 key={key.toString()}
               >
                 {_.map(childGroup, function(item, index) {
