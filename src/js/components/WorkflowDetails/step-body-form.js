@@ -44,7 +44,7 @@ class StepBodyForm extends Component {
   };
 
   componentDidMount = () => {
-    this.updateAllDependentFields();
+    this.updateAllAPIFields();
   };
 
   versionToggle = () => {
@@ -158,13 +158,22 @@ class StepBodyForm extends Component {
     }
   };
 
-  updateAllDependentFields = () => {
+  updateAllAPIFields = () => {
     _.map(this.props.stepData.data_fields, field => {
       let answer = field.answers[0]
         ? field.answers[0].answer
         : field.definition.defaultValue;
       this.updateDependentFields(field, answer);
+      this.updateIndependentAPIField(field, answer);
     });
+  };
+
+  updateIndependentAPIField = (field, answer) => {
+    let extra = field.definition.extra;
+    // check if independent API field
+    if (extra && extra.api_url && !extra.trigger_field_tag) {
+      this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
+    }
   };
 
   getUserById = (id, status) => {
@@ -419,6 +428,11 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
+        if (field.definition.tag == "relation_type") {
+          field.definition.extra = {
+            api_url: "extra-json/json_1/?first_filter_key=b"
+          };
+        }
         return <FieldItem fieldParams={fieldParams} />;
       },
       getSizeFraction(field) {
