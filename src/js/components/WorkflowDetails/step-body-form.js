@@ -80,8 +80,6 @@ class StepBodyForm extends Component {
         field: payload.field.id,
         workflow: payload.workflowId
       };
-
-      console.log(data);
       this.callDispatch(data, method, payload);
 
       // console.log(e.target);

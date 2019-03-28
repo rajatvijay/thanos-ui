@@ -52,6 +52,11 @@ const SubMenu = Menu.SubMenu;
 /*workflow Head*/
 /////////////////
 
+const openWindow = url => {
+  console.log(url);
+  window.open(url, "_blank");
+};
+
 const ProcessLcData = lc => {
   let subtext_value = <span />;
 
@@ -1064,5 +1069,3 @@ const StepItem = props => {
     </li>
   );
 };
-
-//export default WorkflowItem;

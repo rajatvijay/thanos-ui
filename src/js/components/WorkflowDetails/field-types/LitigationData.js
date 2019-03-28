@@ -11,6 +11,9 @@ const LitigationData = props => {
     ] &&
     props.field.integration_json["OrderProductResponse"][
       "OrderProductResponseDetail"
+    ]["Product"]["Organization"]["Events"] &&
+    props.field.integration_json["OrderProductResponse"][
+      "OrderProductResponseDetail"
     ]["Product"]["Organization"]["Events"]["LegalEvents"]["SuitInformation"]
       ? props.field.integration_json["OrderProductResponse"][
           "OrderProductResponseDetail"

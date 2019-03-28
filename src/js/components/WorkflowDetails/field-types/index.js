@@ -181,7 +181,6 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "dnb_investigation_status":
       return DnBCommon(props);
-
     default:
       return Text(props);
   }

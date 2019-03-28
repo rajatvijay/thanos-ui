@@ -31,7 +31,6 @@ import { FormattedMessage, injectIntl } from "react-intl";
 const { Header, Content, Footer, Sider } = Layout;
 
 const SubMenu = Menu.SubMenu;
-
 const TabPane = Tabs.TabPane;
 
 class Workflow extends Component {
@@ -236,7 +235,6 @@ class Workflow extends Component {
                     ) : null}
                   </TabPane>
                 </Tabs>
-
                 <br />
               </div>
 

@@ -158,6 +158,9 @@ h5 {
 .bg-primary {
   background-color: #17ead9;
 }
+.bg-secondary {
+  background-color: #305ebe;
+}
 .bg-primary-light {
   background: #e5fdfb;
 }
@@ -443,6 +446,9 @@ h5 {
   z-index: 1;
   width: 20px;
   height: 20px;
+}
+.ant-form.step-form .ant-form-item.attachment-field .ant-form-item-children {
+  display: block;
 }
 .ant-form.step-form .react-tel-input {
   display: inline-block;
