@@ -6,6 +6,7 @@ import {
   Tabs,
   Row,
   Col,
+  Icon,
   Menu,
   Dropdown,
   Divider,
@@ -28,7 +29,7 @@ import moment from "moment";
 import { FormattedMessage } from "react-intl";
 import StepPreview from "./StepPreview";
 
-const { Content } = Layout;
+const { Content, Sider } = Layout;
 const TabPane = Tabs.TabPane;
 const { getProcessedData } = calculatedData;
 
@@ -288,7 +289,11 @@ export class WorkflowItem extends React.Component {
     };
 
     if (stepData) {
-      console.log(stepData);
+      stepTrack = {
+        workflowId: workflow.id,
+        groupId: stepData.step_group,
+        stepId: stepData.id
+      };
     } else {
       let group = _.first(
         _.filter(workflow.step_groups, sg => {
@@ -347,7 +352,7 @@ export class WorkflowItem extends React.Component {
 
     if (!this.state.opened) {
       this.showQuickDetails();
-      //this.props.dispatch(navbarActions.hideFilterMenu());
+      this.props.dispatch(navbarActions.hideFilterMenu());
       this.onWorkflowToggle("add");
     }
     this.setState({ opened: true });
@@ -377,10 +382,13 @@ export class WorkflowItem extends React.Component {
 
     let previewHeader = (
       <div>
-        <span className="float-right mr-right-lg text-normal">
+        <span
+          className="float-right text-normal"
+          style={{ marginRight: "50px" }}
+        >
           <Link
             to={"/workflows/instances/" + this.props.workflow.id}
-            className="text-secondary"
+            className="text-white"
           >
             open <i className="material-icons t-14 text-middle">open_in_new</i>
           </Link>
@@ -439,6 +447,7 @@ export class WorkflowItem extends React.Component {
                 pData={this.props.pData}
                 ondata={this.ondata}
                 statusView={this.props.statusView}
+                showQuickDetails={this.showQuickDetails}
               />
               {hasChildren && this.state.showRelatedWorkflow ? (
                 <div>
@@ -456,6 +465,7 @@ export class WorkflowItem extends React.Component {
                     addComment={this.props.addComment || null}
                     showCommentIcon={this.props.showCommentIcon}
                     expandedWorkflows={this.props.expandedWorkflows}
+                    showQuickDetails={this.showQuickDetails}
                   />
                 </div>
               ) : (
@@ -482,11 +492,11 @@ export class WorkflowItem extends React.Component {
                 <StepPreview />
               </Drawer>*/}
 
-              {/* <Sider
+              <Sider
                 className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
                 style={{
                   background: "#fff",
-                  // overflow: "auto",
+                  overflow: "auto",
                   height: "calc(100vh - 70px)",
                   position: "fixed",
                   right: 0,
@@ -497,18 +507,23 @@ export class WorkflowItem extends React.Component {
                 collapsed={!this.state.showQuickDetails}
                 collapsedWidth={0}
                 collapsible
-                reverseArrow={true}
                 trigger={null}
               >
                 <div className="comment-details" style={{ width: "570px" }}>
                   <div className="sidebar-head">
-                    <span className="sidebar-title">
-                      previewHeader
-                    </span>
+                    <span className="sidebar-title">{previewHeader}</span>
                     <Icon
                       type="close"
-                      onClick={this.toggle}
-                      style={{ float: "right", marginTop: "4px" }}
+                      onClick={this.hideQuickDetails}
+                      style={{
+                        position: "absolute",
+                        top: "0px",
+                        right: "0px",
+                        width: "48px",
+                        height: "48px",
+                        lineHeight: "48px",
+                        cursor: "pointer"
+                      }}
                     />
                   </div>
                   <Content style={{ padding: "15px", paddingBottom: "50px" }}>
@@ -516,7 +531,6 @@ export class WorkflowItem extends React.Component {
                   </Content>
                 </div>
               </Sider>
-*/}
             </div>
           </Collapsible>
         </div>

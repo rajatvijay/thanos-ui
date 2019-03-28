@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { Layout, Icon, Tooltip, Divider, Form } from "antd";
 import { getFieldType } from "../WorkflowDetails/field-types";
 import _ from "lodash";
@@ -53,8 +54,28 @@ class StepPreview extends React.Component {
     if (currentField.loading) {
       return <div className="text-center mr-top">loading...</div>;
     } else {
+      let step = currentField.currentStepFields;
       return (
         <div>
+          <div>
+            <Link
+              className="float-right"
+              to={{
+                pathname: "/workflows/instances/" + step.workflow,
+                search: "?group=" + step.step_group + "&step=" + step.id,
+                state: {
+                  step: step.id,
+                  group: step.step_group
+                }
+              }}
+            >
+              Go to step <Icon type="arrow-right" />
+            </Link>
+            <span className="text-metal text-medium">
+              {currentField.currentStepFields.name}{" "}
+            </span>
+          </div>
+          <Divider />
           <RenderField />
         </div>
       );

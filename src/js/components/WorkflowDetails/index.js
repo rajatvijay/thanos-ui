@@ -190,9 +190,8 @@ class WorkflowDetails extends Component {
   };
 
   componentDidMount = () => {
-    console.log("this.props-------");
-    console.log(this.props);
-
+    this.props.dispatch(workflowActions.expandedWorkflowsList([]));
+    this.props.dispatch(navbarActions.showFilterMenu());
     this.getInitialData();
 
     this.setState({});

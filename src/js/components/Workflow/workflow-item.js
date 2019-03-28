@@ -52,11 +52,6 @@ const SubMenu = Menu.SubMenu;
 /*workflow Head*/
 /////////////////
 
-const openWindow = url => {
-  console.log(url);
-  window.open(url, "_blank");
-};
-
 const ProcessLcData = lc => {
   let subtext_value = <span />;
 
@@ -1023,22 +1018,20 @@ const StepItem = props => {
       className={"t-12 "}
       title={props.stepData.name + (overdue ? " | overdue" : "")}
     >
-      <Link
-        to={{
-          pathname: "/workflows/instances/" + props.workflow.id,
-          search: "?group=" + props.group.id + "&step=" + props.stepData.id,
-          state: {
-            step: props.stepData.id,
-            group: props.group.id
-          }
+      <span
+        onClick={() => {
+          props.showQuickDetails(props.stepData);
         }}
-        className={
-          step_complete
-            ? "text-metal text-nounderline"
-            : overdue
-              ? "text-metal text-nounderline text-normal"
-              : "text-metal text-nounderline text-normal"
-        }
+        // to={{
+        //   pathname: "/workflows/instances/" + props.workflow.id,
+        //   search: "?group=" + props.group.id + "&step=" + props.stepData.id,
+        //   state: {
+        //     step: props.stepData.id,
+        //     group: props.group.id
+        //   }
+        // }}
+
+        className={"text-anchor text-metal text-nounderline"}
       >
         <i
           className={
@@ -1065,7 +1058,7 @@ const StepItem = props => {
             })}
           </span>
         ) : null}
-      </Link>
+      </span>
     </li>
   );
 };
