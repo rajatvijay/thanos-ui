@@ -123,8 +123,22 @@ export function users(state = initialState, action) {
         ...state,
         me: { loading: false, error: action.error }
       };
-
     default:
       return state;
+  }
+}
+
+export function nextUrl(state = { url: "" }, action) {
+  switch (action.type) {
+    case userConstants.SET_NEXT_URL:
+      return {
+        url: action.payload
+      };
+    case userConstants.REMOVE_NEXT_URL:
+      return {
+        url: ""
+      };
+    default:
+      return { url: "" };
   }
 }

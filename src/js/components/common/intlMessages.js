@@ -190,8 +190,9 @@ export default {
         "No se puede enviar una contraseña de tiempo a ",
       emailCantBeEmpty: "El correo electrónico no puede estar vacío",
       invalidEmpty: "Email inválido",
-      OtpEmpty: "La contraseña de una sola vez no puede estar vacía",
-      enterOtp: "Ingrese la contraseña de un solo uso para verificar su cuenta",
+      OtpEmpty: "La contraseña de una sola vez no puede estar vacía ",
+      enterOtp:
+        "Ingrese la contraseña de un solo uso para verificar su cuenta ",
       oneTimePassword: "Contraseña de una sola vez",
       categoryText: "categoría"
     },
