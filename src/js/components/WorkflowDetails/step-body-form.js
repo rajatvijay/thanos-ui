@@ -428,11 +428,6 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
-        if (field.definition.tag == "relation_type") {
-          field.definition.extra = {
-            api_url: "extra-json/json_1/?first_filter_key=b"
-          };
-        }
         return <FieldItem fieldParams={fieldParams} />;
       },
       getSizeFraction(field) {
