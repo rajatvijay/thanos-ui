@@ -52,8 +52,9 @@
 .workflow-list {
   .grouping-head {
     font-size: 14px;
-    .Avenir-heavy();
+    font-weight: bold;
     color: @color-text;
+    margin-top: 12px;
     margin-bottom: 12px;
   }
 
@@ -71,7 +72,7 @@
     background-color: @color-white;
     //margin-bottom: 10px;
     .ant-collapse-header {
-      padding: 18px 22px;
+      padding: 10px 20px;
     }
   }
   .collapse-wrapper {
@@ -98,12 +99,13 @@
     padding-left: 30px;
   }
   .paper {
-    margin-bottom: 58px;
+    //margin-bottom: 58px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
     padding: 4px;
     background: #fff;
-    .workflow-list-item {
-      transition: margin 0.3s ease;
+
+    &.workflow-list-item {
+      //transition: margin 0.3s ease;
       border-bottom: 1px solid lighten(@color-grey-light, 38%);
 
       &:last-child {
@@ -111,22 +113,17 @@
       }
 
       .ant-collapse-header {
-        //box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
         margin-bottom: 0;
-        //border-bottom: 1px solid #f2f5fa;
         position: relative;
         border-radius: 2px;
-        transition: all 0.3s ease-in;
+        //transition: all 0.3s ease-in;
         &:hover {
           background: #f2f5fa;
         }
       }
       &.opened {
-        //margin: 32px -20px;
-        //margin-top: 4px;
-        //margin-bottom: 4px;
-        box-shadow: none; //0 2px 6px 0 rgba(0, 0, 0, 0.15);
-        border-bottom: 1px solid #f2f5fa;
+        margin: 25px -15px;
+        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
         .Collapsible {
           border: none;
         }
@@ -139,6 +136,53 @@
       .Collapsible {
         border: none;
       }
+    }
+
+    .ant-tabs {
+      padding-bottom: 1px;
+    }
+    .ant-tabs-bar {
+      padding-top: 10px;
+    }
+    .ant-tabs-nav .ant-tabs-tab {
+      padding-bottom: 20px;
+    }
+  }
+
+  .has-children {
+    .collapse-wrapper {
+      border-right: 1px dashed #ddd;
+    }
+  }
+
+  .ant-tabs .paper {
+    &.workflow-list-item {
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+      margin: 0 5px;
+      &.opened {
+        margin: 25px 5px;
+      }
+    }
+  }
+
+  .workflow-divider {
+    height: 1px;
+    background: #f2f5fa;
+    margin: 0 22px;
+  }
+
+  //childworkflow / detail view;
+  &.details-view {
+    .paper {
+      box-shadow: none;
+    }
+    .workflow-list-item {
+      .ant-collapse-header {
+        padding: 15px;
+      }
+      border-top: 1px solid #f2f5fa;
+      border-bottom: 1px solid #f2f5fa;
+      margin-bottom: -1px;
     }
   }
 
@@ -316,12 +360,12 @@
       top: -1px;
     }
     //padding: 28px;
-    border-top: 1px solid #d9d9d9;
+    border-top: 1px solid #e8e8e8;
     .lc-card-section {
       padding: 16px 22px;
     }
     .card-section-item {
-      border-bottom: 1px solid #d9d9d9;
+      border-bottom: 1px solid #e8e8e8;
       padding: 0px 24px 18px;
       margin: 0px -24px 18px;
     }

@@ -1,7 +1,7 @@
 export default {
   en: {
     workflowsInstances: {
-      waitingDropdown: "Waiting on",
+      waitingDropdown: "Waiting on ",
       detailsViewToggle: "Details view",
       workflowViewToggle: "Workflow view",
       workflowsCount: "Workflows",
@@ -57,8 +57,8 @@ export default {
       search: "Search",
       createdText: "Created",
       submittedText: "Submitted",
-      createdByText: "Created by",
-      submittedByText: "Submitted by",
+      createdByText: "Created by ",
+      submittedByText: "Submitted by ",
       exportText: "Export",
       scrollToTop: "Scroll to top",
       reloadText: "reload",
@@ -68,17 +68,18 @@ export default {
       categoryText: "Category",
       requestOneTimePasswordText: "Request One-time password",
       resendOneTimePasswordText: "Resend One-time password",
-      oneTimePasswordSentText: "One-time password sent to",
-      unableToSendOneTimePassword: "Unable to send one time password to",
+      oneTimePasswordSentText: "One-time password sent to ",
+      unableToSendOneTimePassword: "Unable to send one time password to ",
       emailCantBeEmpty: "Email can't be empty",
       invalidEmpty: "Invalid email",
       OtpEmpty: "One time password can't be empty",
       enterOtp: "Enter the one time password to verify your account",
-      oneTimePassword: "One time password"
+      oneTimePassword: "One time password",
+      categoryText: "Category"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
-      versionSubmittedOn: "Version submitted on",
+      versionSubmittedOn: "Version submitted on ",
       printText: "Print",
       previousVersion: "Previous version",
       noOtherVersionAvailable: "No other version available",
@@ -97,10 +98,10 @@ export default {
       noWorkflowsError: "Unable to load workflow list",
       loggedOutError:
         "You have been logged out. Please Login again to continue",
-      noWorkflowsToShow: "No workflows to show. Try clearing the filters or"
+      noWorkflowsToShow: "No workflows to show. Try clearing the filters or "
     },
     loginPageInstances: {
-      oneTimeLink: "Enter your business e-mail ID",
+      oneTimeLink: "Enter your business e-mail address",
       loginEmailPassword: "Login using email and password",
       loginUsingEmailOnly: "Login using email only",
       loginText: "Login",
@@ -113,12 +114,13 @@ export default {
       loginErrorMessage:
         "Your contact information must be on file in order for you to complete this request.",
       goToLoginPage: "Go to login page",
-      selectPreferedLanguage: " Choose language:"
+      selectPreferedLanguage: " Choose language:",
+      goBack: "Go back"
     }
   },
   es: {
     workflowsInstances: {
-      waitingDropdown: "Esperando",
+      waitingDropdown: "Esperando ",
       detailsViewToggle: "Vista de detalles",
       workflowViewToggle: "Vista de flujo de trabajo",
       workflowsCount: "Flujo de trabajo",
@@ -174,27 +176,28 @@ export default {
       search: "Buscar",
       createdText: "Creado",
       submittedText: "Enviado",
-      createdByText: "Creado por",
-      submittedByText: "Enviado por",
+      createdByText: "Creado por ",
+      submittedByText: "Enviado por ",
       exportText: "Exportar",
       scrollToTop: "Hasta arriba",
       reloadText: "recargar",
       loadingText: "cargando",
       categoryText: "categoría",
-      requestOneTimePasswordText: "Solicitar una contraseña de tiempo",
-      resendOneTimePasswordText: "volver a enviar una contraseña de tiempo",
-      oneTimePasswordSentText: "Contraseña de una sola vez enviada a",
+      requestOneTimePasswordText: "Solicitar una contraseña de tiempo ",
+      resendOneTimePasswordText: "volver a enviar una contraseña de tiempo ",
+      oneTimePasswordSentText: "Contraseña de una sola vez enviada a ",
       unableToSendOneTimePassword:
-        "No se puede enviar una contraseña de tiempo a",
+        "No se puede enviar una contraseña de tiempo a ",
       emailCantBeEmpty: "El correo electrónico no puede estar vacío",
       invalidEmpty: "Email inválido",
       OtpEmpty: "La contraseña de una sola vez no puede estar vacía",
       enterOtp: "Ingrese la contraseña de un solo uso para verificar su cuenta",
-      oneTimePassword: "Contraseña de una sola vez"
+      oneTimePassword: "Contraseña de una sola vez",
+      categoryText: "categoría"
     },
     stepBodyFormInstances: {
-      submittedBy: "Sometido por",
-      versionSubmittedOn: "Versión enviada el",
+      submittedBy: "Sometido por ",
+      versionSubmittedOn: "Versión enviada el ",
       printText: "Imprimir",
       previousVersion: "Versión previa",
       noOtherVersionAvailable: "No hay otra versión disponible",
@@ -215,10 +218,10 @@ export default {
       loggedOutError:
         "Se ha desconectado. Por favor, vuelva a iniciar sesión para continuar",
       noWorkflowsToShow:
-        "No hay flujos de trabajo que mostrar. Intente borrar los filtros o"
+        "No hay flujos de trabajo que mostrar. Intente borrar los filtros o "
     },
     loginPageInstances: {
-      oneTimeLink: "Introduzca su ID de correo electrónico empresarial",
+      oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
       loginEmailPassword:
         "Iniciar sesión usando correo electrónico y contraseña",
       loginUsingEmailOnly: "Iniciar sesión usando solo el correo electrónico",
@@ -227,12 +230,13 @@ export default {
       emailText: "email",
       passwordText: "contraseña",
       orText: "o",
-      customSAMLloginText1: "Iniciar sesión a través de su",
+      customSAMLloginText1: "Iniciar sesión a través de su ",
       customSAMLloginText2: "nombre de usuario y contraseña",
       loginErrorMessage:
         "Su información de contacto debe estar archivada para que pueda completar esta solicitud",
       goToLoginPage: "Ir a la página de inicio de sesión",
-      selectPreferedLanguage: " Elige lengua:"
+      selectPreferedLanguage: " Elige lengua:",
+      goBack: "Regresa"
     }
   },
   "es-cl": {

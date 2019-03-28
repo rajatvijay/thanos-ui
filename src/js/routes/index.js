@@ -59,8 +59,7 @@ class MainRoutes extends React.Component {
     // Internet Explorer 6-11
     const isIE = /*@cc_on!@*/ false || !!document.documentMode;
     if (isIE) {
-      browserMessage =
-        "So sorry, but this website does not work on Internet Explorer yet. Please copy the URL and try open it in either Chrome, Firefox, Safari, Opera.";
+      browserMessage = `Our website is not supported by Internet Explorer or Microsoft Edge. If you are recurrently experiencing an "expired link" error, please try logging into the portal again using Google Chrome or Safari.`;
       ieDetected = true;
     } else {
       browserMessage = "";
@@ -103,7 +102,10 @@ class MainRoutes extends React.Component {
   }
   watchRouteChange = history.listen((location, action) => {
     // location is an object like window.location
-    if (_.includes(location.pathname, "/login")) {
+    if (
+      location.pathname === "/login/magic" ||
+      location.pathname === "/login"
+    ) {
       this.props.dispatch(checkAuth());
     }
   });

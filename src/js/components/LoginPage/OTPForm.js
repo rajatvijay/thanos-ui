@@ -224,7 +224,7 @@ class OTPForm extends React.Component {
 
   render() {
     const { data, errors } = this.state;
-    const { config } = this.props;
+    const { config, showRightBlock } = this.props;
 
     const suffix = (
       <Icon
@@ -243,7 +243,7 @@ class OTPForm extends React.Component {
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
-          <Col span={12} className="block-left text-left">
+          <Col span={showRightBlock ? 12 : 24} className="block-left text-left">
             <div className="login-top text-bold">Login using email only</div>
 
             <div>
@@ -352,47 +352,49 @@ class OTPForm extends React.Component {
             </div>
           </Col>
 
-          <Col span={12} className="block-right text-left">
-            <div>
-              <div style={{ height: "260px" }}>
-                <div className="login-top text-bold">
-                  Login using your {config.saml_url ? " company " : null}{" "}
-                  username and password
-                </div>
-                <div className="logo">
-                  <img src={config.logo} style={{ maxWidth: "120px" }} />
-                </div>
-                <div className="text-light t-16">
-                  Login using your {config.name} username and password
-                </div>
-              </div>
-
+          {showRightBlock ? (
+            <Col span={12} className="block-right text-left">
               <div>
-                {config.saml_url ? (
-                  <a
-                    className="ant-btn login-form-button ant-btn-primary btn-block text-white"
-                    href={this.props.config.saml_url}
-                  >
-                    <span className="text-white">
-                      <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                      {config.name} account
-                    </span>
-                    {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
-                  </a>
-                ) : (
-                  <Link
-                    to="/login/basic"
-                    className="ant-btn login-form-button ant-btn-primary btn-block text-white"
-                  >
-                    <FormattedMessage id="loginPageInstances.loginEmailPassword" />
-                    <i className="material-icons t-14 text-middle pd-left-sm">
-                      arrow_forward
-                    </i>
-                  </Link>
-                )}
+                <div style={{ height: "260px" }}>
+                  <div className="login-top text-bold">
+                    Login using your {config.saml_url ? " company " : null}{" "}
+                    username and password
+                  </div>
+                  <div className="logo">
+                    <img src={config.logo} style={{ maxWidth: "120px" }} />
+                  </div>
+                  <div className="text-light t-16">
+                    Login using your {config.name} username and password
+                  </div>
+                </div>
+
+                <div>
+                  {config.saml_url ? (
+                    <a
+                      className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                      href={this.props.config.saml_url}
+                    >
+                      <span className="text-white">
+                        <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                        {config.name} account
+                      </span>
+                      {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
+                    </a>
+                  ) : (
+                    <Link
+                      to="/login/basic"
+                      className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                    >
+                      <FormattedMessage id="loginPageInstances.loginEmailPassword" />
+                      <i className="material-icons t-14 text-middle pd-left-sm">
+                        arrow_forward
+                      </i>
+                    </Link>
+                  )}
+                </div>
               </div>
-            </div>
-          </Col>
+            </Col>
+          ) : null}
         </Row>
 
         {config.saml_url ? (

@@ -1,17 +1,13 @@
 import React, { Component } from "react";
-//import { authHeader, baseUrl } from "../../../_helpers";
 import { Form, Icon, Select, Table, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
-//import { jsonData } from "../../../constants/opensearchresults";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { Column, ColumnGroup } = Table;
-
-//const dunsResponse = JSON.parse(dunsData);
 
 const {
   getLabel,
@@ -66,8 +62,6 @@ class GoogleSrch extends Component {
     // _field.integration_json = jsonData //.data_fields[4].integration_json;
     // TODO: 1. Field override
 
-
-
     let final_html = null;
     if (this.props.currentStepFields.integration_data_loading) {
       final_html = (
@@ -117,8 +111,6 @@ const GetTable = props => {
 
     return aData - bData;
   });
-    
-
 
   const title = (
     <span className="text-metal">{`Found ${data.length} results`}</span>

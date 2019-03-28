@@ -72,13 +72,10 @@ class WorkflowFilterTop extends Component {
                       onClick={that.handleClick.bind(that, item)}
                     >
                       <Tooltip title={"Overdue: " + item.overdue_count}>
-                        <span className="ellip-small s100">{item.name}</span>{" "}
-                        <span className="ellip-small s50">
-                          ({item.count})
-                          {item.overdue_count ? (
-                            <Badge status="error" className="lc-tag-dot" />
-                          ) : null}
-                        </span>
+                        {item.name} ({item.count})
+                        {item.overdue_count ? (
+                          <Badge status="error" className="lc-tag-dot" />
+                        ) : null}
                       </Tooltip>
                     </Tag>
                   );

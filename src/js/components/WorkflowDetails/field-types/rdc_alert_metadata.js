@@ -129,60 +129,183 @@ const buildDetails = obj => {
     overflow: "hidden"
   };
 
+  const getImg = () => {
+    let imgItem = _.find(obj.NonspecificParameterDetail, item => {
+      return item.ParameterIdentificationNumber === "IMG";
+    });
+    return imgItem ? (
+      <Col span={12}>
+        <img src={imgItem.ParameterValue} style={{ maxWidth: "100%" }} />
+      </Col>
+    ) : (
+      <span />
+    );
+  };
+
+  const getBirthDate = () => {
+    if (obj.PersonalDetail && obj.PersonalDetail.BirthDate) {
+      let dates = _.map(obj.PersonalDetail.BirthDate, date => {
+        return (
+          <span key={date} className="pd-right-lg">
+            {date},
+          </span>
+        );
+      });
+      return <Column column={12} label="Date of Birth:" value={dates} />;
+    } else {
+      return <div />;
+    }
+  };
+
+  const getSex = () => {
+    let sexitem = _.find(obj.NonspecificParameterDetail, item => {
+      return item.ParameterIdentificationNumber === "SEX";
+    });
+    return sexitem ? (
+      <Column column={12} label="Sex:" value={sexitem.ParameterValue} />
+    ) : (
+      <div />
+    );
+  };
+
+  const getRisk = () => {
+    let riskItem = _.find(obj.NonspecificParameterDetail, item => {
+      return item.ParameterIdentificationNumber === "RID";
+    });
+    return riskItem ? (
+      <span className="text-uppercase">{riskItem.ParameterValue}</span>
+    ) : null;
+  };
+
+  const getPepType = () => {
+    let pepItem = _.find(obj.NonspecificParameterDetail, item => {
+      return item.ParameterIdentificationNumber === "PTY";
+    });
+    let pepDesc = _.find(obj.NonspecificParameterDetail, item => {
+      return item.ParameterIdentificationNumber === "RGP";
+    });
+    return pepItem && pepItem.ParameterValue ? (
+      <div>
+        {pepItem.ParameterValue}
+        <br />
+        {pepDesc ? pepDesc.ParameterValue : ""}
+      </div>
+    ) : null;
+  };
+
+  const getPepRating = () => {
+    let ratingItem = _.find(obj.NonspecificParameterDetail, item => {
+      return item.ParameterIdentificationNumber === "PRT";
+    });
+    return ratingItem ? ratingItem.ParameterValue : null;
+  };
+
+  const RowItem = props => {
+    return (
+      <div style={{ borderBottom: "1px solid #f6f6f6", padding: "10px" }}>
+        {props.text}
+      </div>
+    );
+  };
+
   return (
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
-        <Tabs defaultActiveKey="1">
-          <TabPane tab="Alias" key="2">
+        <Tabs
+          defaultActiveKey="1"
+          tabPosition="top"
+          //style={{ maxWidth: "75%" }}
+        >
+          <TabPane tab="Entity details & Alias" key="1">
             <Row gutter={16} className="mr-bottom-lg">
-              {_.map(obj.Alias, function(aliasItem) {
+              {getImg()}
+              <Column
+                column={12}
+                label="Entity Name:"
+                value={obj.EntityName || "-"}
+              />
+              <Column
+                column={12}
+                label="Entity id:"
+                value={obj.AlertEntityID || "-"}
+              />
+              <Column column={12} label="Risk id:" value={getRisk() || "-"} />
+              <Column
+                column={12}
+                label="PEP Rating:"
+                value={getPepRating() || "-"}
+              />
+              {getBirthDate()}
+              {getSex()}
+              <Column
+                column={12}
+                label="PEP Type:"
+                value={getPepType() || "-"}
+              />
+            </Row>
+
+            <Row gutter={16} className="mr-bottom-lg">
+              {_.map(obj.Alias, function(aliasItem, index) {
                 return (
                   <Column
-                    column={12}
+                    key={index}
+                    column={8}
                     label={aliasItem.AliasType + ":"}
                     value={aliasItem.AliasName || "-"}
                   />
                 );
               })}
-              <br />
-              <br />
-            </Row>
-          </TabPane>
-          <TabPane tab="Addresses" key="3">
-            <Row>
-              {_.map(obj.Address, function(address) {
-                let wholeAddress =
-                  address.StreetAddressLine &&
-                  address.StreetAddressLine.LineText
-                    ? address.StreetAddressLine.LineText + ","
-                    : "";
-                wholeAddress =
-                  wholeAddress +
-                  (address.CountryISOAlpha2Code
-                    ? address.CountryISOAlpha2Code + ", "
-                    : "");
-                wholeAddress =
-                  wholeAddress +
-                  (address.TerritoryName ? address.TerritoryName + ", " : "");
-                wholeAddress =
-                  wholeAddress +
-                  (address.PrimaryTownName
-                    ? address.PrimaryTownName + ", "
-                    : "");
-
-                return <Column column={12} value={wholeAddress} />;
-              })}
 
               <br />
               <br />
             </Row>
           </TabPane>
+
+          <TabPane tab="Addresses" key="2">
+            {_.map(obj.Address, function(address, index) {
+              let wholeAddress = //STREET ADDRESS
+                address.StreetAddressLine &&
+                address.StreetAddressLine[0].LineText
+                  ? address.StreetAddressLine[0].LineText + ","
+                  : "";
+
+              wholeAddress = //TERRITORY
+                wholeAddress +
+                (address.TerritoryName ? address.TerritoryName + ", " : "");
+
+              wholeAddress = //TOWN
+                wholeAddress +
+                (address.PrimaryTownName ? address.PrimaryTownName + ", " : "");
+
+              wholeAddress = //COUNTRY
+                wholeAddress +
+                (address.CountryISOAlpha2Code
+                  ? address.CountryISOAlpha2Code + ", "
+                  : "");
+
+              wholeAddress = //PIN CODE
+                wholeAddress + (address.PostalCode ? address.PostalCode : "");
+              return <RowItem key={index} text={wholeAddress} />;
+            })}
+          </TabPane>
+
+          {obj.EntityTypeText === "Person" ? (
+            <TabPane tab="Position" key="3">
+              {obj.Positions && obj.Positions.Position
+                ? _.map(obj.Positions.Position, function(position, index) {
+                    return <RowItem key={index} text={position} />;
+                  })
+                : null}
+            </TabPane>
+          ) : null}
+
           <TabPane tab="Riskography" key="4">
             <Row gutter={16} className="mr-bottom-lg">
               {_.map(obj.NonspecificParameterDetail, function(item) {
                 if (item.ParameterIdentificationNumber === "RGP") {
                   return (
                     <Column
+                      key={item.ParameterValue}
                       column={24}
                       label={item.ParameterIdentificationNumber + ":"}
                       value={item.ParameterValue}
@@ -194,10 +317,53 @@ const buildDetails = obj => {
               <br />
             </Row>
           </TabPane>
-          <TabPane tab="Source" key="5">
-            {_.map(referenceBuilder(obj), function(refItem) {
+
+          <TabPane tab="Event details" key="5">
+            <div>
+              <EventDetailComp obj={obj} />
+            </div>
+          </TabPane>
+
+          {obj.EntityTypeText === "Person" ? (
+            <TabPane tab="Relationship" key="6">
+              {_.map(obj.Relationships, function(relationship, index) {
+                return (
+                  <RowItem
+                    key={index}
+                    text={
+                      <Row>
+                        <Column
+                          column={12}
+                          label="Name:"
+                          value={relationship.EntityName}
+                        />
+                        <Column
+                          column={12}
+                          label="Relationship:"
+                          value={relationship.RelationshipType}
+                        />
+                        <Column
+                          column={12}
+                          label="Relationship Direction:"
+                          value={relationship.RelationshipDirection}
+                        />
+                        <Column
+                          column={12}
+                          label="Entity Sys ID:"
+                          value={relationship.AlertEntitySystemID}
+                        />
+                      </Row>
+                    }
+                  />
+                );
+              })}
+            </TabPane>
+          ) : null}
+
+          <TabPane tab="Source" key="7">
+            {_.map(referenceBuilder(obj), function(refItem, index) {
               return (
-                <Row className="mr-bottom-lg">
+                <Row key={index} className="mr-bottom-lg">
                   <Column
                     column={12}
                     label="SourceName:"
@@ -283,33 +449,28 @@ const buildDetails = obj => {
               </Row>
             ) : null}
           </TabPane>
-          <TabPane tab="URL" key="6">
-            <Row gutter={16} className="mr-bottom-lg">
-              {_.map(obj.NonspecificParameterDetail, function(item) {
-                if (item.ParameterIdentificationNumber !== "RGP") {
-                  return (
-                    <Column
-                      column={12}
-                      label={item.ParameterIdentificationNumber + ":"}
-                      value={
-                        item.ParameterIdentificationNumber === "URL" ? (
-                          <a href={item.ParameterValue} target="_blank">
-                            {item.ParameterValue}
-                          </a>
-                        ) : (
-                          item.ParameterValue
-                        )
-                      }
-                    />
-                  );
-                }
-              })}
-              <br />
-              <br />
-            </Row>
+
+          <TabPane tab="URL" key="8">
+            {_.map(obj.NonspecificParameterDetail, function(item, index) {
+              if (item.ParameterIdentificationNumber === "URL") {
+                return (
+                  <RowItem
+                    key={index}
+                    text={
+                      <a href={item.ParameterValue} target="_blank">
+                        {" "}
+                        {item.ParameterValue}{" "}
+                      </a>
+                    }
+                  />
+                );
+              }
+            })}
           </TabPane>
         </Tabs>
       </div>
+      <br />
+      <br />
     </div>
   );
 };

@@ -16,14 +16,18 @@ import {
   Drawer,
   Tooltip
 } from "antd";
-import { logout, workflowActions, languageActions } from "../../actions";
-//import logo from "../../../images/client-logo/dnb_logo.png";
+import {
+  logout,
+  workflowActions,
+  languageActions,
+  navbarActions
+} from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { authHeader, baseUrl, baseUrl2 } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
-import MetaGraph from "../Workflow/MetaGraph";
 import { FormattedMessage, injectIntl } from "react-intl";
+import MetaGraph from "../Workflow/MetaGraph";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -41,7 +45,8 @@ class NavTop extends Component {
   }
 
   onLogout(key) {
-    this.props.dispatch(logout());
+    // this.props.dispatch(logout());
+    logout();
   }
 
   onSearch = e => {
@@ -82,6 +87,12 @@ class NavTop extends Component {
     this.setState({
       showInsights: false
     });
+  };
+
+  onMenuToggle = () => {
+    this.props.dispatch(
+      navbarActions.toggleFilterMenu(!this.props.showFilterMenu.show)
+    );
   };
 
   getExportList = () => {
@@ -145,7 +156,8 @@ class NavTop extends Component {
       />
     );
 
-    let showInsights = true;
+    // Initializing it to false to start with
+    let showInsights = false;
     let showExportOption =
       this.props.config.permissions &&
       this.props.config.permissions.includes("Can export workflow data");
@@ -160,6 +172,18 @@ class NavTop extends Component {
             <Row>
               {/*logo wrapper*/}
               <Col span={12}>
+                <span
+                  className="logo float-left text-anchor text-base mr-right-sm"
+                  title="Toggle filter menu"
+                  onClick={this.onMenuToggle}
+                >
+                  <Tooltip title="Toggle sidebar menu" placement="right">
+                    <i className="material-icons text-middle">
+                      {this.props.showFilterMenu.show ? "dehaze" : "dehaze"}{" "}
+                    </i>
+                  </Tooltip>
+                </span>
+
                 <span className="logo" style={{ float: "left" }}>
                   <a href="/">
                     {!this.props.config.loading && this.props.config.logo ? (
@@ -178,11 +202,12 @@ class NavTop extends Component {
                 {document.location.pathname.match("/workflows/instances/") ? (
                   <div className={"search-box "}>
                     <Input
-                      placeholder="Enter your username"
                       prefix={prefix}
                       suffix={suffix}
                       value={searchInput}
-                      placeholder="Search..."
+                      placeholder={this.props.intl.formatMessage({
+                        id: "commonTextInstances.search"
+                      })}
                       onChange={this.onSearchChange}
                       ref={node => (this.searchInput = node)}
                       onKeyPress={this.handleKeyPress}
@@ -233,11 +258,6 @@ class NavTop extends Component {
                     title={
                       user ? (
                         <span>
-                          {user.first_name ? (
-                            <Avatar>{user.first_name.charAt(0)}</Avatar>
-                          ) : (
-                            <Avatar icon="user" />
-                          )}
                           {user.first_name
                             ? " " + user.first_name + " " + user.last_name + " "
                             : " " + user.email + " "}
@@ -274,12 +294,19 @@ class NavTop extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, authentication, config, languageSelector } = state;
+  const {
+    workflowKind,
+    authentication,
+    config,
+    languageSelector,
+    showFilterMenu
+  } = state;
   return {
     workflowKind,
     authentication,
     config,
-    languageSelector
+    languageSelector,
+    showFilterMenu
   };
 }
 

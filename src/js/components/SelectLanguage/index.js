@@ -15,9 +15,6 @@ class SelectLanguage extends React.Component {
     }
     window.location.reload();
   };
-  handleLanguageChangeLogin = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
-  };
   render() {
     let user = this.props.authentication.user;
     let preferredLanguage =
@@ -43,6 +40,7 @@ class SelectLanguage extends React.Component {
             float: this.props.navbar ? "right" : "",
             lineHeight: this.props.navbar ? "62px" : ""
           }}
+          className="nav-lang-select"
           onChange={this.handleLanguageChange}
         >
           {_.map(Object.keys(languages.endonyms), function(locale, index) {

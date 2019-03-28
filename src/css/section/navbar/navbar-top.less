@@ -39,10 +39,18 @@
     left: 320px;
     top: 3px;
     //margin-left: 27px;
+    .ant-input-prefix {
+      color: #ccc;
+    }
     .ant-input {
       border-radius: 0;
       border: none;
-      font-size: 18px;
+      font-size: 16px;
+      font-weight: normal;
+      &::placeholder {
+        color: #ccc;
+        font-weight: normal;
+      }
     }
     .ant-input-affix-wrapper .ant-input:not(:first-child) {
       padding-left: 40px;
@@ -81,9 +89,16 @@
     background-color: #f2f5fa;
   }
 }
+
 .activity-log-collapse-btn {
   position: absolute;
   top: 0;
   right: 12px;
   width: 16px;
+}
+
+.nav-lang-select {
+  .ant-select-selection {
+    border: none;
+  }
 }

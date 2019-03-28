@@ -275,7 +275,6 @@ function getIntegrationSearchButton(props) {
     dnb_risk_score: "Get Risk scores",
     dnb_data_reader: "Get Data",
     salesforce: "Post Salesforce data",
-    dnb_directors: "DnB Directors",
     iban_search: "Validate IBAN",
     eu_vat_check: "Validate VAT",
     us_tin_check: "Validate TIN",
@@ -308,7 +307,9 @@ function getIntegrationSearchButton(props) {
     thomson_reuters_resolve_result: "Get TR resolve result",
     duplicate_check: "Get Duplicates",
     dnb_gbo: "Get GBO",
-    greylist_check: "Get Greylist"
+    greylist_check: "Get Greylist",
+    dnb_initiate_investigation: "Initiate Investigation",
+    dnb_investigation_status: "Get Investigation Status"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];

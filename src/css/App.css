@@ -85,6 +85,27 @@
     url("fonts/370AEC_8_0.woff") format("woff"),
     url("fonts/370AEC_8_0.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Material Icons";
+  font-style: normal;
+  font-weight: 400;
+  src: url("fonts/materialicons-v46.woff2") format("woff2");
+}
+.material-icons {
+  font-family: "Material Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
 .Avenir-light {
   font-family: AvenirLTPro-Light, Roboto, "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -244,6 +265,9 @@ h5 {
 /*Background Colors*/
 .bg-primary {
   background-color: #17ead9;
+}
+.bg-secondary {
+  background-color: #305ebe;
 }
 .bg-primary-light {
   background: #e5fdfb;
@@ -2064,17 +2088,20 @@ template {
 .ant-radio-group.ant-radio-group-outline {
   width: 100%;
 }
+.ant-tabs-nav .ant-tabs-tab-active {
+  color: #305ebe;
+}
+.ant-tabs-ink-bar {
+  background: #305ebe;
+}
 .ant-checkbox-checked:not(.ant-checkbox-disabled) .ant-checkbox-inner,
 .ant-checkbox-indeterminate .ant-checkbox-inner {
   background-color: #305ebe;
   border-color: #305ebe;
 }
 .inner-container {
-  display: block;
-  margin-left: 0px;
   position: relative;
   top: 65px;
-  min-height: 100vh;
 }
 .add_comment_btn {
   float: right;
@@ -2289,10 +2316,18 @@ template {
   left: 320px;
   top: 3px;
 }
+.navbar-top .search-box .ant-input-prefix {
+  color: #ccc;
+}
 .navbar-top .search-box .ant-input {
   border-radius: 0;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: normal;
+}
+.navbar-top .search-box .ant-input::placeholder {
+  color: #ccc;
+  font-weight: normal;
 }
 .navbar-top .search-box .ant-input-affix-wrapper .ant-input:not(:first-child) {
   padding-left: 40px;
@@ -2325,6 +2360,9 @@ template {
   top: 0;
   right: 12px;
   width: 16px;
+}
+.nav-lang-select .ant-select-selection {
+  border: none;
 }
 .navbar-left .ant-menu-vertical.ant-menu-dark {
   background: #17ead9;
@@ -2408,9 +2446,9 @@ template {
 }
 .workflow-list .grouping-head {
   font-size: 14px;
-  font-family: AvenirLTPro-Heavy, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-weight: bold;
   color: #343b4c;
+  margin-top: 12px;
   margin-bottom: 12px;
 }
 .workflow-list.ant-collapse > .ant-collapse-item {
@@ -2424,7 +2462,7 @@ template {
   background-color: #fff;
 }
 .workflow-list .Collapsible .ant-collapse-header {
-  padding: 18px 22px;
+  padding: 10px 20px;
 }
 .workflow-list .collapse-wrapper {
   position: relative;
@@ -2449,39 +2487,71 @@ template {
   padding-left: 30px;
 }
 .workflow-list .paper {
-  margin-bottom: 58px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
   padding: 4px;
   background: #fff;
 }
-.workflow-list .paper .workflow-list-item {
-  transition: margin 0.3s ease;
+.workflow-list .paper.workflow-list-item {
   border-bottom: 1px solid #ffffff;
 }
-.workflow-list .paper .workflow-list-item:last-child {
+.workflow-list .paper.workflow-list-item:last-child {
   border-bottom: none;
 }
-.workflow-list .paper .workflow-list-item .ant-collapse-header {
+.workflow-list .paper.workflow-list-item .ant-collapse-header {
   margin-bottom: 0;
   position: relative;
   border-radius: 2px;
-  transition: all 0.3s ease-in;
 }
-.workflow-list .paper .workflow-list-item .ant-collapse-header:hover {
+.workflow-list .paper.workflow-list-item .ant-collapse-header:hover {
   background: #f2f5fa;
 }
-.workflow-list .paper .workflow-list-item.opened {
-  box-shadow: none;
-  border-bottom: 1px solid #f2f5fa;
+.workflow-list .paper.workflow-list-item.opened {
+  margin: 25px -15px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
 }
-.workflow-list .paper .workflow-list-item.opened .Collapsible {
+.workflow-list .paper.workflow-list-item.opened .Collapsible {
   border: none;
 }
-.workflow-list .paper .workflow-list-item.opened > .ant-collapse-header {
+.workflow-list .paper.workflow-list-item.opened > .ant-collapse-header {
   background: #f2f5fa;
 }
 .workflow-list .paper .workflow-item:last-child .Collapsible {
   border: none;
+}
+.workflow-list .paper .ant-tabs {
+  padding-bottom: 1px;
+}
+.workflow-list .paper .ant-tabs-bar {
+  padding-top: 10px;
+}
+.workflow-list .paper .ant-tabs-nav .ant-tabs-tab {
+  padding-bottom: 20px;
+}
+.workflow-list .has-children .collapse-wrapper {
+  border-right: 1px dashed #ddd;
+}
+.workflow-list .ant-tabs .paper.workflow-list-item {
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+  margin: 0 5px;
+}
+.workflow-list .ant-tabs .paper.workflow-list-item.opened {
+  margin: 25px 5px;
+}
+.workflow-list .workflow-divider {
+  height: 1px;
+  background: #f2f5fa;
+  margin: 0 22px;
+}
+.workflow-list.details-view .paper {
+  box-shadow: none;
+}
+.workflow-list.details-view .workflow-list-item {
+  border-top: 1px solid #f2f5fa;
+  border-bottom: 1px solid #f2f5fa;
+  margin-bottom: -1px;
+}
+.workflow-list.details-view .workflow-list-item .ant-collapse-header {
+  padding: 15px;
 }
 .workflow-list .workflow-divider {
   height: 1px;
@@ -2613,7 +2683,7 @@ template {
   overflow-x: auto;
 }
 .lc-card .lc-card-body {
-  border-top: 1px solid #d9d9d9;
+  border-top: 1px solid #e8e8e8;
 }
 .lc-card .lc-card-body .shadow-wrapper {
   position: relative;
@@ -2654,7 +2724,7 @@ template {
   padding: 16px 22px;
 }
 .lc-card .lc-card-body .card-section-item {
-  border-bottom: 1px solid #d9d9d9;
+  border-bottom: 1px solid #e8e8e8;
   padding: 0px 24px 18px;
   margin: 0px -24px 18px;
 }
@@ -2804,6 +2874,9 @@ template {
   font-size: 18px;
   padding-right: 10px;
 }
+.ant-form.step-form .step-form-paragraph.text-normal {
+  font-weight: 400;
+}
 .ant-form.step-form .step-form-break {
   height: 1px;
   margin-bottom: 34px;
@@ -2825,6 +2898,9 @@ template {
   z-index: 1;
   width: 20px;
   height: 20px;
+}
+.ant-form.step-form .ant-form-item.attachment-field .ant-form-item-children {
+  display: block;
 }
 .ant-form.step-form .react-tel-input {
   display: inline-block;
@@ -3028,7 +3104,6 @@ template {
   padding: 0 10px;
 }
 .workflows-list-embedded .paper {
-  padding: 24px;
   background: #fff;
 }
 .workflows-list-embedded .paper .workflow-list-item {
@@ -3124,15 +3199,11 @@ template {
 }
 .aux-nav-filter .aux-lead.filter-title {
   font-size: 14px;
-  font-family: AvenirLTPro-Book, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-weight: normal;
-  font-style: normal;
 }
-.aux-nav-filter .aux-lead.filter-title label,
-.aux-nav-filter .aux-lead.filter-title span {
-  font-family: AvenirLTPro-Medium, Roboto, "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+.aux-nav-filter .aux-lead .advanced-filter-label {
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #305ebe;
 }
 .aux-nav-filter .ant-form-item {
   margin-bottom: 8px;
@@ -3319,6 +3390,22 @@ body {
 }
 .activity-log-drawer.ant-drawer .ant-drawer-header {
   height: 65px;
+}
+.ant-drawer-header {
+  padding-top: 21px;
+  padding-bottom: 21px;
+}
+.ant-drawer-close {
+  height: 65px;
+}
+.ant-drawer-content {
+  box-shadow: -2px 0 4px #ddd;
+}
+a {
+  color: #305ebe;
+}
+a:hover {
+  color: #264a95;
 }
 .animated {
   -webkit-animation-duration: 0.4s;

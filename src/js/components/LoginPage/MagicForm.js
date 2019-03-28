@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Row, Col } from "antd";
 import validator from "validator";
 import _ from "lodash";
@@ -100,6 +100,14 @@ class MagicForm extends React.Component {
   render() {
     const { data, errors } = this.state;
     let supportedLaguanges = this.props.config.supported_languages;
+    let authList = this.props.config.configuration
+      ? this.props.config.configuration.client_auth_backends
+      : [];
+
+    // if (!_.includes(authList, 1)) {
+    //   return <Redirect to={"/"} />;
+    // }
+
     return (
       <div className="login-form-box magic-box">
         <Row gutter={32}>
@@ -148,6 +156,26 @@ class MagicForm extends React.Component {
                         <FormattedMessage id="commonTextInstances.submitButtonText" />
                       </Button>
                     </FormItem>
+
+                    <FormItem style={{ paddingTop: 10 }}>
+                      {this.props.config.saml_url ? (
+                        <React.Fragment>
+                          <p style={{ color: "black" }}>
+                            Client User Login with Single Sign on
+                          </p>
+                          <a
+                            className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                            href={this.props.config.saml_url}
+                          >
+                            <span className="text-white">
+                              <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                              {this.props.config.name} account
+                            </span>
+                            {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
+                          </a>
+                        </React.Fragment>
+                      ) : null}
+                    </FormItem>
                   </Form>
                 </div>
               </div>
@@ -183,29 +211,41 @@ class MagicForm extends React.Component {
           <Divider>
             <FormattedMessage id="loginPageInstances.orText" />
           </Divider>
-          <div className="t-16">
-            {/*
+          {this.props.emailAuth.submitted ? (
+            <div className="t-16">
+              <span
+                className="text-secondary text-anchor"
+                onClick={() => window.location.reload()}
+              >
+                <i className="material-icons t-14 text-middle pd-right-sm">
+                  arrow_back
+                </i>
+                <FormattedMessage id="loginPageInstances.goBack" />
+              </span>
+            </div>
+          ) : (
+            <div className="t-16">
+              {/*
             THIS WILL CHECK WHETHER OR NOT OTP LOGIN IS ENABLED FOR CLIENT AND 
             POINT THE LINK TO SUITED PAGE. 
             I.E: LOGIN EMAIL PASS IF OTP IS NOT ENABLED AND TO OTP/BASE LOGIN PAGE IF ITS ENABLED
             */}
-            <Link
-              to={
-                this.props.config.configuration &&
-                !_.includes(
-                  this.props.config.configuration.client_auth_backends,
-                  3
-                )
-                  ? "/login/basic/"
-                  : "/"
-              }
-            >
-              <FormattedMessage id="loginPageInstances.goToLoginPage" />
-              <i className="material-icons t-14 text-middle pd-left-sm">
-                arrow_forward
-              </i>
-            </Link>
-          </div>
+              {this.props.config.configuration ? (
+                <Link
+                  to={
+                    !_.includes(authList, 3)
+                      ? _.includes(authList, 0) ? "/login/basic/" : "/"
+                      : "/"
+                  }
+                >
+                  <FormattedMessage id="loginPageInstances.goToLoginPage" />
+                  <i className="material-icons t-14 text-middle pd-left-sm">
+                    arrow_forward
+                  </i>
+                </Link>
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
     );
