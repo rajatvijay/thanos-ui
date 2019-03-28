@@ -2553,6 +2553,22 @@ template {
 .workflow-list.details-view .workflow-list-item .ant-collapse-header {
   padding: 15px;
 }
+.workflow-list .workflow-divider {
+  height: 1px;
+  background: #f2f5fa;
+  margin: 0 22px;
+}
+.workflow-list.details-view .paper {
+  box-shadow: none;
+}
+.workflow-list.details-view .workflow-list-item {
+  border-top: 1px solid #f2f5fa;
+  border-bottom: 1px solid #f2f5fa;
+  margin-bottom: -1px;
+}
+.workflow-list.details-view .workflow-list-item .ant-collapse-header {
+  padding: 15px;
+}
 .lc-card-head {
   padding: 0px 0px;
 }

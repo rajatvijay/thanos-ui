@@ -128,7 +128,7 @@ class MainRoutes extends React.Component {
               ) : (
                 <div>
                   {localStorage.getItem("user") ||
-                  !_.includes(history.location.pathname) === "/login/" ? (
+                  !_.includes(history.location.pathname, "/login") ? (
                     <Navbar />
                   ) : null}
 

@@ -540,8 +540,8 @@ export const Paragraph = props => {
     <h2
       key={props.field.id}
       className={
-        "step-form-paragraph " +
-        (extra.font_weight === "normal" ? " text-normal " : "")
+        "step-form-paragraph" +
+        (extra.font_weight === "normal" ? "text-normal" : "")
       }
       style={customParaStyle}
     >
@@ -832,7 +832,7 @@ class AttachmentDownload extends Component {
   render = () => {
     let that = this;
     let hasAttachment = null;
-    if (this.props.field.answers[0] && this.props.field.answers[0].attachment) {  
+    if (this.props.field.answers[0] && this.props.field.answers[0].attachment) {
       hasAttachment = this.props.field.answers[0].attachment;
     }
     return (
