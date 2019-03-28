@@ -29,7 +29,8 @@ const {
   getRequired,
   feedValue,
   addCommentBtn,
-  getIntegrationSearchButton
+  getIntegrationSearchButton,
+  isDnBIntegrationDataLoadin
 } = commonFunctions;
 
 class RDCEventDetailComponent extends Component {
@@ -55,7 +56,7 @@ class RDCEventDetailComponent extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      isDnBIntegrationDataLoading(this.props)
     ) {
       final_html = (
         <div>

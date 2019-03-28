@@ -34,7 +34,8 @@ const {
   getRequired,
   feedValue,
   addCommentBtn,
-  getIntegrationSearchButton
+  getIntegrationSearchButton,
+  isDnBIntegrationDataLoading
 } = commonFunctions;
 
 //Field Type DUNS SEARCH
@@ -80,7 +81,7 @@ class TRResult extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      isDnBIntegrationDataLoading(this.props)
     ) {
       final_html = (
         <div>
