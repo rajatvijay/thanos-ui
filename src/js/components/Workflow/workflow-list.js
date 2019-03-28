@@ -120,6 +120,7 @@ class WorkflowList extends Component {
             addComment={that.props.addComment || null}
             showCommentIcon={that.props.showCommentIcon}
             isEmbedded={that.props.isEmbedded}
+            expandedWorkflows={that.props.expandedWorkflows}
           />
         );
       });
@@ -144,7 +145,17 @@ class WorkflowList extends Component {
         >
           {data.workflow && data.workflow.length > 0 ? (
             <div>
-              <div className="workflow-list">{ListCompletes}</div>
+              <div
+                className={
+                  "workflow-list " +
+                  (_.size(this.props.expandedWorkflows.list)
+                    ? "has-Open-workflow  "
+                    : " ") +
+                  (!this.props.isEmbedded ? " notEmbedded " : " ")
+                }
+              >
+                {ListCompletes}
+              </div>
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
                   pageSize={20}
@@ -312,6 +323,24 @@ export class WorkflowItem extends React.Component {
     this.setState({ showQuickDetails: false });
   };
 
+  onWorkflowToggle = action => {
+    let list = [];
+    let eList = this.props.expandedWorkflows.list;
+
+    if (action === "add") {
+      list = eList;
+      list.push(this.props.workflow.id);
+    } else if (action === "remove") {
+      list = _.forEach(eList, (id, index) => {
+        if (eList[index] === this.props.workflow.id) {
+          eList.splice(index, 1);
+        }
+      });
+    }
+
+    this.props.dispatch(workflowActions.expandedWorkflowsList(list));
+  };
+
   onOpen = () => {
     if (this.props.workflow.children_count && !this.state.opened)
       this.expandChildWorkflow();
@@ -319,12 +348,16 @@ export class WorkflowItem extends React.Component {
     if (!this.state.opened) {
       this.showQuickDetails();
       //this.props.dispatch(navbarActions.hideFilterMenu());
+      this.onWorkflowToggle("add");
     }
     this.setState({ opened: true });
   };
 
   onClose = () => {
-    if (this.state.opened) this.hideQuickDetails();
+    if (this.state.opened) {
+      this.hideQuickDetails();
+      this.onWorkflowToggle("remove");
+    }
     this.setState({ opened: false });
   };
 
@@ -422,6 +455,7 @@ export class WorkflowItem extends React.Component {
                     getGroupedData={this.getGroupedData}
                     addComment={this.props.addComment || null}
                     showCommentIcon={this.props.showCommentIcon}
+                    expandedWorkflows={this.props.expandedWorkflows}
                   />
                 </div>
               ) : (
@@ -547,6 +581,7 @@ const GetChildWorkflow = props => {
                       addComment={props.addComment || null}
                       showCommentIcon={props.showCommentIcon}
                       isEmbedded={props.isEmbedded}
+                      expandedWorkflows={props.expandedWorkflows}
                     />
                   );
                 })}
@@ -566,13 +601,15 @@ function mapPropsToState(state) {
     workflowKind,
     workflowFilterType,
     workflowChildren,
-    showFilterMenu
+    showFilterMenu,
+    expandedWorkflows
   } = state;
   return {
     workflowKind,
     workflowFilterType,
     workflowChildren,
-    showFilterMenu
+    showFilterMenu,
+    expandedWorkflows
   };
 }
 

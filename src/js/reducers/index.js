@@ -4,7 +4,7 @@ import { authentication } from "./authentication";
 import { registration } from "./registration";
 import { users, nextUrl } from "./users";
 import { config } from "./config";
-import { workflow, workflowChildren } from "./workflow_list";
+import { workflow, workflowChildren, expandedWorkflows } from "./workflow_list";
 import { workflowCreate } from "./workflow_create";
 import {
   workflowKind,
@@ -29,6 +29,7 @@ const rootReducer = combineReducers({
   changeStatus,
   config,
   currentStepFields,
+  expandedWorkflows,
   hasStepinfo,
   nextUrl,
   registration,

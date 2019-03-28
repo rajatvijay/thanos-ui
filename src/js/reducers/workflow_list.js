@@ -24,7 +24,6 @@ export function workflow(state = {}, action) {
         previous: workflow.previous
       };
     case workflowConstants.GETALL_FAILURE:
-      console.log("failed to load ");
       return {
         search: false,
         loading: false,
@@ -93,6 +92,7 @@ export function workflow(state = {}, action) {
         loadingStatus: "failed",
         error: action.error
       };
+
     default:
       return state;
   }
@@ -120,6 +120,23 @@ export function workflowChildren(state = {}, action) {
       return {
         ...state,
         ...action.response
+      };
+
+    default:
+      return state;
+  }
+}
+
+const initialStateOpen = {
+  list: []
+};
+
+export function expandedWorkflows(state = initialStateOpen, action) {
+  switch (action.type) {
+    //WORKFLOW EXPANDED IN LIST VIEW
+    case workflowConstants.EXPANDED_WORKFLOWS:
+      return {
+        list: action.payload
       };
 
     default:

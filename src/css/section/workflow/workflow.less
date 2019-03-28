@@ -50,6 +50,12 @@
 }
 
 .workflow-list {
+  &.has-Open-workflow {
+    > .month-group > div > .paper:not(.opened) {
+      opacity: 0.5;
+    }
+  }
+
   .grouping-head {
     font-size: 14px;
     font-weight: bold;
