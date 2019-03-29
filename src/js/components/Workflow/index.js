@@ -47,6 +47,9 @@ class Workflow extends Component {
       sortingEnabled: false
     };
 
+    console.log("workflowindex this.props");
+    console.log(this.props);
+
     if (!this.props.users.me) {
       this.checkAuth();
     }

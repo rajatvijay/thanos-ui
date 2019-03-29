@@ -2444,6 +2444,9 @@ template {
 .workflow-container .list-view-header .list-toggle-btn .ant-switch {
   background-color: #305ebe;
 }
+.workflow-list.has-Open-workflow > .month-group > div > .paper:not(.opened) {
+  opacity: 0.5;
+}
 .workflow-list .grouping-head {
   font-size: 14px;
   font-weight: bold;
@@ -3103,62 +3106,14 @@ template {
   vertical-align: middle;
   padding: 0 10px;
 }
-.workflows-list-embedded .paper {
+.workflow-list.workflows-list-embedded .paper {
   background: #fff;
 }
-.workflows-list-embedded .paper .workflow-list-item {
-  border-bottom: 1px solid #f2f5fa;
-  position: relative;
-  border-radius: 2px;
-  transition: all 0.3s ease-in;
+.workflow-list.workflows-list-embedded .paper.workflow-list-item {
+  transition: background 0.3s ease-in;
 }
-.workflows-list-embedded .paper .workflow-list-item:hover {
-  background: #f2f5fa;
-}
-.workflows-list-embedded .paper .workflow-list-item .ant-collapse-header {
-  padding: 10px 10px;
-}
-.workflows-list-embedded .paper .workflow-list-item.expanded {
-  background: #fff;
-}
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  > .ant-collapse-header {
-  background: #f2f5fa;
-}
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  > .workflow-list-item
-  .company-name {
-  font-size: 12px;
-}
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  > .workflow-list-item
-  .lc1 {
-  font-size: 10px;
-  color: #d9d9d9;
-}
-.workflows-list-embedded .paper .workflow-list-item.expanded .child-container {
-  border: 1px solid #d8d8d8;
-  border-top: none;
-  padding: 4px 4px 4px 24px;
-}
-.workflows-list-embedded
-  .paper
-  .workflow-list-item.expanded
-  .child-container
-  .ant-collapse-content-box {
-  padding: 0;
-}
-.workflows-list-embedded .paper .workflow-list-item .child-workflow-expand {
-  position: absolute;
-  right: 4px;
-  top: 14px;
-  color: #305ebe;
+.workflow-list.workflows-list-embedded .paper.workflow-list-item.opened {
+  margin: 25px 0px;
 }
 .aux-nav-filter .create-btn {
   margin: 30px;

@@ -6,7 +6,8 @@ export const workflowActions = {
   getById,
   delete: _delete,
   searchWorkflow,
-  getChildWorkflow
+  getChildWorkflow,
+  expandedWorkflowsList
 };
 
 function getAll(filter) {
@@ -133,5 +134,15 @@ function getChildWorkflow(parent) {
   function failure(error) {
     let response = { [parent]: { loading: false, error: error } };
     return { type: workflowConstants.GET_CHILD_FAILURE, response };
+  }
+}
+
+function expandedWorkflowsList(list) {
+  return dispatch => {
+    dispatch(request(list));
+  };
+
+  function request(list) {
+    return { type: workflowConstants.EXPANDED_WORKFLOWS, payload: list };
   }
 }

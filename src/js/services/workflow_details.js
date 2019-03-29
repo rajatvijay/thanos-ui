@@ -16,7 +16,6 @@ function getById(id) {
     credentials: "include"
   };
 
-  console.log(baseUrl + "workflows/" + id + "/");
   return fetch(baseUrl + "workflows/" + id + "/", requestOptions).then(
     handleResponse
   );

@@ -61,7 +61,6 @@ class LoginForm extends React.Component {
           action: "login"
         })
         .then(token => {
-          console.log("token", token);
           const { username, password } = this.state;
           const { dispatch } = this.props;
           if (username && password) {

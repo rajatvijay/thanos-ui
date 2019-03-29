@@ -17,6 +17,7 @@ import {
 } from "../actions";
 import { PrivateRoute } from "../components/PrivateRoute";
 import { GenericNotFound } from "../components/notfound";
+import Logout from "../components/LoginPage/Logout";
 import { LoginPage } from "../components/LoginPage";
 import { MagicLogin } from "../components/LoginPage/MagicLogin";
 import { OTPLogin } from "../components/LoginPage/OTPLogin";
@@ -30,27 +31,17 @@ import ExportList from "../components/ExportPage";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
+import queryString from "query-string";
 
 function mapStateToProps(state) {
-  const { config, users, languageSelector } = state;
+  const { config, users, languageSelector, nextUrl } = state;
   return {
     users,
     config,
+    nextUrl,
     languageSelector
   };
 }
-
-/* you'll need this CSS somewhere
-.fade-enter {
-  opacity: 0;
-  z-index: 1;
-}
-
-.fade-enter.fade-enter-active {
-  opacity: 1;
-  transition: opacity 250ms ease-in;
-}
-*/
 
 class MainRoutes extends React.Component {
   constructor(props) {
@@ -85,13 +76,11 @@ class MainRoutes extends React.Component {
       this.props.dispatch(configActions.getConfig());
     }
     //}
+
+    let parsed = queryString.parse(history.location.search);
+    if (parsed.next) this.props.dispatch(userActions.setNextUrl(parsed.next));
   };
 
-  // componentDidUpdate = prevProp => {
-  //   if (this.props.users.me !=){
-
-  //   }
-  // }
   componentDidUpdate(prevProps) {
     if (this.props.config.name !== prevProps.config.name) {
       document.title = _.upperFirst(this.props.config.name) || "Vetted";
@@ -100,6 +89,7 @@ class MainRoutes extends React.Component {
   componentWillReceiveProps(nextProps) {
     document.title = _.upperFirst(this.props.config.name) || "Vetted";
   }
+
   watchRouteChange = history.listen((location, action) => {
     // location is an object like window.location
     if (
@@ -111,7 +101,8 @@ class MainRoutes extends React.Component {
   });
 
   render() {
-    const { alert } = this.props;
+    const { alert, nextUrl } = this.props;
+
     if (this.state.showBlank) {
       return <div />;
     } else {
@@ -140,8 +131,13 @@ class MainRoutes extends React.Component {
                     >
                       <Switch>
                         <Route path="/login" exact component={OTPLogin} />
+                        <Route path="/logout" exact component={Logout} />
                         <Route
-                          path="/login/basic"
+                          path={
+                            nextUrl.url
+                              ? "/login/basic" + nextUrl.url
+                              : "/login/basic"
+                          }
                           exact
                           component={LoginPage}
                         />
@@ -155,7 +151,13 @@ class MainRoutes extends React.Component {
                           component={MagicLinkProcess}
                         />
 
-                        <Redirect from="/" exact to="/workflows/instances/" />
+                        <Redirect
+                          from="/"
+                          exact
+                          to={
+                            nextUrl.url ? nextUrl.url : "/workflows/instances/"
+                          }
+                        />
 
                         <PrivateRoute
                           path="/workflows/instances/"

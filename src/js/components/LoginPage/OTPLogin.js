@@ -18,12 +18,11 @@ class OTPLogin extends React.Component {
   }
 
   componentDidMount = () => {
-    this.processUrl();
+    //this.processUrl();
   };
 
   processUrl = () => {
     const parsed = queryString.parse(this.props.location.search);
-
     if (parsed.next) {
       this.setState({ nextUrl: parsed.next });
     }
@@ -34,12 +33,20 @@ class OTPLogin extends React.Component {
     let showRightBlock = true;
     let supportedLaguanges = config.supported_languages;
 
+    let parsed = queryString.parse(this.props.location.search);
+
     if (localStorage.getItem("user")) {
-      let parsed = queryString.parse(this.props.location.search);
-      if (parsed.next) {
+      if (this.props.location.state && this.props.location.state.from) {
+        return <Redirect to={this.props.location.state.from} />;
+      } else if (parsed.next) {
         return <Redirect to={parsed.next} />;
       } else {
-        return <Redirect to={"/workflows/instances/"} />;
+        return (
+          <Redirect
+            to={"/workflows/instances/"}
+            from={this.props.location.pathname}
+          />
+        );
       }
     }
 

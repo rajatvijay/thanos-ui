@@ -20,7 +20,6 @@ class UserFilter extends Component {
   };
 
   fetchUser = value => {
-    console.log("fetching user", value);
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });
