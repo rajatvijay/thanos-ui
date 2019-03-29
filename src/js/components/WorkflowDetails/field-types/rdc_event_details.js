@@ -29,7 +29,8 @@ const {
   getRequired,
   feedValue,
   addCommentBtn,
-  getIntegrationSearchButton
+  getIntegrationSearchButton,
+  isDnBIntegrationDataLoading
 } = commonFunctions;
 
 class RDCEventDetailComponent extends Component {
@@ -53,7 +54,10 @@ class RDCEventDetailComponent extends Component {
     };
 
     let final_html = null;
-    if (this.props.currentStepFields.integration_data_loading) {
+    if (
+      this.props.currentStepFields.integration_data_loading ||
+      isDnBIntegrationDataLoading(this.props)
+    ) {
       final_html = (
         <div>
           <div className="text-center mr-top-lg">
