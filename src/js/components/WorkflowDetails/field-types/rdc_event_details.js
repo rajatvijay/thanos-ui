@@ -30,7 +30,7 @@ const {
   feedValue,
   addCommentBtn,
   getIntegrationSearchButton,
-  isDnBIntegrationDataLoadin
+  isDnBIntegrationDataLoading
 } = commonFunctions;
 
 class RDCEventDetailComponent extends Component {
