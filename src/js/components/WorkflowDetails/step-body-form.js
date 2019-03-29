@@ -44,7 +44,7 @@ class StepBodyForm extends Component {
   };
 
   componentDidMount = () => {
-    this.updateAllDependentFields();
+    this.updateAllAPIFields();
   };
 
   versionToggle = () => {
@@ -158,13 +158,22 @@ class StepBodyForm extends Component {
     }
   };
 
-  updateAllDependentFields = () => {
+  updateAllAPIFields = () => {
     _.map(this.props.stepData.data_fields, field => {
       let answer = field.answers[0]
         ? field.answers[0].answer
         : field.definition.defaultValue;
       this.updateDependentFields(field, answer);
+      this.updateIndependentAPIField(field, answer);
     });
+  };
+
+  updateIndependentAPIField = (field, answer) => {
+    let extra = field.definition.extra;
+    // check if independent API field
+    if (extra && extra.api_url && !extra.trigger_field_tag) {
+      this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
+    }
   };
 
   getUserById = (id, status) => {
