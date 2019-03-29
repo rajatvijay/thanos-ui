@@ -175,20 +175,19 @@ class ChildWorkflowField2 extends Component {
       }
     });
 
+    if (_.isEmpty(workflowKindFiltered)) {
+      return null;
+    }
+
     let menu = (
       <Menu onClick={this.onChildSelect}>
-        {!_.isEmpty(workflowKindFiltered) ? (
-          _.map(workflowKindFiltered, function(item, index) {
-            if (
-              that.props.field.definition.extra.child_workflow_kind_id ===
-              item.id
-            ) {
-              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-            }
-          })
-        ) : (
-          <Menu.Item disabled>No related workflow kind</Menu.Item>
-        )}
+        {_.map(workflowKindFiltered, function(item, index) {
+          if (
+            that.props.field.definition.extra.child_workflow_kind_id === item.id
+          ) {
+            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          }
+        })}
       </Menu>
     );
 
@@ -196,9 +195,13 @@ class ChildWorkflowField2 extends Component {
   };
 
   getAddMenu = () => {
+    const kindMenu = this.getKindMenu();
+    if (!kindMenu) {
+      return null;
+    }
     let menu = (
       <Dropdown
-        overlay={this.getKindMenu()}
+        overlay={kindMenu}
         className="child-workflow-dropdown"
         placement="bottomRight"
         size="small"
