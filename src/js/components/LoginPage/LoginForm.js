@@ -36,13 +36,8 @@ class LoginForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount = () => {
-    console.log("this.props");
-    console.log(this.props);
   };
-
+  
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
