@@ -696,13 +696,12 @@ export const WorkflowHeader = props => {
                     width={35}
                     format={percent => (
                       <i
-                        className="material-icons"
+                        className="material-icons text-primary"
                         style={{ fontSize: "18px", verticalAlign: "middle" }}
                       >
-                        folder
-                        {/*props.kind === ""
+                        {props.kind === ""
                           ? "folder_open"
-                          : getIcon(props.workflow.definition.kind, props.kind)*/}
+                          : getIcon(props.workflow.definition.kind, props.kind)}
                       </i>
                     )}
                   />

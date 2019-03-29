@@ -361,7 +361,7 @@ class ChildWorkflowField2 extends Component {
           return (
             <span
               key={v + k}
-              className="alert-tag-item alert-metal ant-tag"
+              className="alert-tag-item alert-basic ant-tag"
               onClick={this.onFilterTagChange.bind(that, k, "category")}
             >
               <Tooltip title={k}>
@@ -706,9 +706,13 @@ class ChildWorkflowField2 extends Component {
                       Reload
                     </Button>
 
-                    {this.props.workflowDetailsHeader.workflowDetailsHeader
-                      ? this.getAddMenu()
-                      : null}
+                    {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
+                      this.getAddMenu()
+                    ) : (
+                      <span className="ant-btn disabled child-workflow-dropdown ant-btn-primary ant-btn-sm">
+                        + create new <Icon type="loading" />
+                      </span>
+                    )}
                   </Col>
                 </Row>
               ) : null}
