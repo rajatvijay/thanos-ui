@@ -152,9 +152,34 @@ class Comments extends Component {
       parent_row_uid: target.row_json.parent_row_uid,
       krypton_status: value,
       field_id: target.field,
-      row_uid: target.uid
+      row_uid: target.uid,
+      changed_key: "krypton_status",
+      display_item: "Status"
     };
 
+    this.props.changeIntegrationStatus(payload);
+  };
+
+  changeRiskCode = value => {
+    let comments = this.props.workflowComments
+      ? this.props.workflowComments.data
+      : {};
+    let target = _.size(comments.results) ? comments.results[0].target : {};
+
+    if (!target.field_details.is_integration_type) {
+      return;
+    }
+    let payload = {
+      //parent_field_id: target.row_json.parent_field_id,
+      //parent_row_uid: target.row_json.parent_row_uid,
+      krypton_risk_code: value,
+      field_id: target.field,
+      row_uid: target.uid,
+      changed_key: "krypton_risk_code",
+      display_item: "Risk Code"
+    };
+
+    console.log(payload, target);
     this.props.changeIntegrationStatus(payload);
   };
 
@@ -317,6 +342,26 @@ class Comments extends Component {
                       >
                         <Option value="open">Open</Option>
                         <Option value="closed">Closed</Option>
+                      </Select>
+                    </div>
+                  ) : null}
+
+                  {(c.target.field_details &&
+                    c.target.field_details.type == "google_search") ||
+                  c.target.field_details.type == "serp_google_search" ? (
+                    <div style={{ marginTop: "10px" }}>
+                      <div>
+                        <span style={{ color: "#575757", fontSize: "12px" }}>
+                          Risk Codes:
+                        </span>
+                      </div>
+                      <Select
+                        placeholder="Select a risk code"
+                        style={{ width: "100%" }}
+                        onChange={that.changeRiskCode}
+                      >
+                        <Option value="Legal Risk">Legal Risk</Option>
+                        <Option value="Regulatory Risk">Regulatory Risk</Option>
                       </Select>
                     </div>
                   ) : null}
