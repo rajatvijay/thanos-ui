@@ -497,19 +497,19 @@ export class WorkflowItem extends React.Component {
                 style={{
                   background: "#fff",
                   overflow: "auto",
-                  height: "calc(100vh - 70px)",
+                  height: "calc(100vh - 65px)",
                   position: "fixed",
                   right: 0,
                   top: "65px",
                   zIndex: 1
                 }}
-                width="570"
+                width="700"
                 collapsed={!this.state.showQuickDetails}
                 collapsedWidth={0}
                 collapsible
                 trigger={null}
               >
-                <div className="comment-details" style={{ width: "570px" }}>
+                <div className="comment-details" style={{ width: "700px" }}>
                   <div className="sidebar-head">
                     <span className="sidebar-title">{previewHeader}</span>
                     <Icon

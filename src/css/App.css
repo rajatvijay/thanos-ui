@@ -2091,6 +2091,9 @@ template {
 .ant-tabs-nav .ant-tabs-tab-active {
   color: #305ebe;
 }
+.ant-tabs-nav .ant-tabs-tab:hover {
+  color: #264a95;
+}
 .ant-tabs-ink-bar {
   background: #305ebe;
 }
@@ -2171,6 +2174,17 @@ template {
 .alert-tag-item.alert-metal.alert-active,
 .v-tag.alert-metal.alert-active {
   background-color: #8c9ab8;
+  color: #fff;
+}
+.alert-tag-item.alert-basic,
+.v-tag.alert-basic {
+  border-color: #505050;
+  color: #505050;
+  background: #fff;
+}
+.alert-tag-item.alert-basic.alert-active,
+.v-tag.alert-basic.alert-active {
+  background-color: #505050;
   color: #fff;
 }
 .ellip-small {
@@ -2491,7 +2505,6 @@ template {
 }
 .workflow-list .paper {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
-  padding: 4px;
   background: #fff;
 }
 .workflow-list .paper.workflow-list-item {
@@ -2526,6 +2539,7 @@ template {
 }
 .workflow-list .paper .ant-tabs-bar {
   padding-top: 10px;
+  margin-bottom: 0px;
 }
 .workflow-list .paper .ant-tabs-nav .ant-tabs-tab {
   padding-bottom: 20px;
@@ -2535,7 +2549,7 @@ template {
 }
 .workflow-list .ant-tabs .paper.workflow-list-item {
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
-  margin: 0 5px;
+  margin: 0 0px;
 }
 .workflow-list .ant-tabs .paper.workflow-list-item.opened {
   margin: 25px 5px;
@@ -3105,6 +3119,9 @@ template {
   line-height: 30px;
   vertical-align: middle;
   padding: 0 10px;
+}
+.workflow-list.workflows-list-embedded .workflow-list-wrapper {
+  padding: 0px;
 }
 .workflow-list.workflows-list-embedded .paper {
   background: #fff;

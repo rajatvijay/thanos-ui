@@ -527,22 +527,25 @@ class StepBodyForm extends Component {
               return (
                 <TabPane tab={group.label} key={"group_" + index}>
                   {_.map(group.steps, function(field, index) {
-                    let renderQueue = [];
-                    if (!rowGroup.canAccommodateField(field)) {
-                      // This field cannot be accommodated in the current group
-                      // render the current group and append this to next batch for rendering
-                      renderQueue.push(rowGroup.render());
+                    if (index !== 0) {
+                      let renderQueue = [];
+                      if (!rowGroup.canAccommodateField(field)) {
+                        // This field cannot be accommodated in the current group
+                        // render the current group and append this to next batch for rendering
+                        renderQueue.push(rowGroup.render());
+                      }
+                      rowGroup.addToRenderGroup(field);
+                      if (
+                        rowGroup.shouldRender ||
+                        (index === group.steps.length - 1 &&
+                          rowGroup.hasElements)
+                      ) {
+                        // Row is full or
+                        // this is the last field & rowGroup still has elements remaining
+                        renderQueue.push(rowGroup.render());
+                      }
+                      return renderQueue;
                     }
-                    rowGroup.addToRenderGroup(field);
-                    if (
-                      rowGroup.shouldRender ||
-                      (index === group.steps.length - 1 && rowGroup.hasElements)
-                    ) {
-                      // Row is full or
-                      // this is the last field & rowGroup still has elements remaining
-                      renderQueue.push(rowGroup.render());
-                    }
-                    return renderQueue;
                   })}
                 </TabPane>
               );
