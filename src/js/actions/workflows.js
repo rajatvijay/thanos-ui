@@ -143,8 +143,6 @@ function expandedWorkflowsList(list) {
   };
 
   function request(list) {
-    console.log("list---");
-    console.log(list);
     return { type: workflowConstants.EXPANDED_WORKFLOWS, payload: list };
   }
 }
