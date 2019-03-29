@@ -56,11 +56,6 @@ class OTPForm extends React.Component {
     }
   };
 
-  componentDidMount = () => {
-    console.log("this.props");
-    console.log(this.props);
-  };
-
   toggleShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword });
   };
