@@ -360,8 +360,19 @@ class Comments extends Component {
                         style={{ width: "100%" }}
                         onChange={that.changeRiskCode}
                       >
+                        <Option value="Association & PEP Risk">
+                          Association & PEP Risk
+                        </Option>
+                        <Option value="Criminal Risk">Criminal Risk</Option>
+                        <Option value="Financial Condition Risk">
+                          Financial Condition Risk
+                        </Option>
                         <Option value="Legal Risk">Legal Risk</Option>
+                        <Option value="Prohibited Entities Risk">
+                          Prohibited Entities Risk
+                        </Option>
                         <Option value="Regulatory Risk">Regulatory Risk</Option>
+                        <Option value="Reputation Risk">Reputation Risk</Option>
                       </Select>
                     </div>
                   ) : null}
