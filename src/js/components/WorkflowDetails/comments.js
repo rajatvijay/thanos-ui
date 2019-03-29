@@ -346,9 +346,9 @@ class Comments extends Component {
                     </div>
                   ) : null}
 
-                  {(c.target.field_details &&
-                    c.target.field_details.type == "google_search") ||
-                  c.target.field_details.type == "serp_google_search" ? (
+                  {c.target.field_details &&
+                  (c.target.field_details.type == "google_search" ||
+                    c.target.field_details.type == "serp_google_search") ? (
                     <div style={{ marginTop: "10px" }}>
                       <div>
                         <span style={{ color: "#575757", fontSize: "12px" }}>
