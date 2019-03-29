@@ -1,6 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Button, Input, Icon, Divider, Alert, Row, Col } from "antd";
+import {
+  Form,
+  Button,
+  Input,
+  Icon,
+  Divider,
+  Alert,
+  Row,
+  Col,
+  message
+} from "antd";
 import { connect } from "react-redux";
 //import validator from "validator";
 import _ from "lodash";
@@ -28,6 +38,11 @@ class LoginForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount = () => {
+    console.log("this.props");
+    console.log(this.props);
+  };
+
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -36,11 +51,30 @@ class LoginForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
+    if (
+      typeof window === "undefined" &&
+      typeof window.grecaptcha === "undefined"
+    ) {
+      message.error("Google captcha error, please reload!");
+      return;
+    }
+
     this.setState({ submitted: true });
-    const { username, password } = this.state;
-    const { dispatch, token } = this.props;
-    if (username && password) {
-      dispatch(login(username, password, token));
+    try {
+      window.grecaptcha
+        .execute("6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8", {
+          action: "login"
+        })
+        .then(token => {
+          console.log("token", token);
+          const { username, password } = this.state;
+          const { dispatch } = this.props;
+          if (username && password) {
+            dispatch(login(username, password, token));
+          }
+        });
+    } catch (err) {
+      console.log(err);
     }
   }
 

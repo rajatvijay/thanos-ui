@@ -181,6 +181,9 @@ class WorkflowBUFilter extends WorkflowFilter {
       loading: bd.loading,
       results: _.orderBy(bd.results, ["label"], ["asc"])
     };
+    const statusData = !this.props.workflowFilterType.statusType.error
+      ? _.orderBy(this.props.workflowFilterType.statusType, ["label"], ["asc"])
+      : [{ value: "empty", label: "empty" }];
     let label = this.getLabel();
     let placeholder = this.getPlaceHolder();
 

@@ -637,7 +637,6 @@ class ChildWorkflowField2 extends Component {
     let props = this.props;
     let { field, workflowKind } = props;
     let that = this;
-
     return (
       <FormItem
         label={""}

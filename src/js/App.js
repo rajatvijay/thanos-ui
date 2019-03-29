@@ -1,5 +1,4 @@
 import React from "react";
-
 import Routes from "./routes";
 
 import { loadReCaptcha } from "react-recaptcha-v3-global";
