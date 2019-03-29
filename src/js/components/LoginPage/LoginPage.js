@@ -19,7 +19,6 @@ class LoginPage extends React.Component {
   verifyCallback = recaptchaToken => {
     // Here you will get the final recaptchaToken!!!
     this.setState({ token: recaptchaToken });
-    //console.log(recaptchaToken, "<= your recaptcha token")
   };
 
   render = () => {

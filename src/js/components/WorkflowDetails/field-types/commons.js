@@ -195,7 +195,6 @@ function selectFlag(props, flag) {
     field: props.field.id,
     flag: parseInt(flag.key)
   };
-  console.log(payload);
   props.changeFlag(payload);
 }
 

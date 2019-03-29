@@ -36,8 +36,8 @@ class LoginForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  };
-  
+  }
+
   handleChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -61,7 +61,6 @@ class LoginForm extends React.Component {
           action: "login"
         })
         .then(token => {
-          console.log("token", token);
           const { username, password } = this.state;
           const { dispatch } = this.props;
           if (username && password) {

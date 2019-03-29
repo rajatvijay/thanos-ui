@@ -35,16 +35,12 @@ class OTPLogin extends React.Component {
 
     let parsed = queryString.parse(this.props.location.search);
 
-
     if (localStorage.getItem("user")) {
       if (this.props.location.state && this.props.location.state.from) {
         return <Redirect to={this.props.location.state.from} />;
       } else if (parsed.next) {
-        console.log("next");
-        console.log(parsed);
         return <Redirect to={parsed.next} />;
       } else {
-        console.log("none");
         return (
           <Redirect
             to={"/workflows/instances/"}

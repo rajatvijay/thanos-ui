@@ -404,8 +404,6 @@ class ChildWorkflowField2 extends Component {
         selected_filters: this.state.selected_filters
       });
     } else if (_type == "category") {
-      console.log("clikc-- " + tag + " " + _type);
-
       if (tag == "All Categories") {
         this.state.selected_filters["category"] = [];
         //delete this.state.selected_filters["category"];
@@ -429,9 +427,6 @@ class ChildWorkflowField2 extends Component {
     }
     this.filterWorkflows();
     this.excludeWorkflows();
-
-    console.log("this.state.selected_filters--------");
-    console.log(this.state.selected_filters);
   };
 
   filterWorkflows = () => {
@@ -537,7 +532,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   removeSelectedFilter = (k, v) => {
-    console.log(k, v);
     // remove filters from selected_filters
     let selected_filters = this.state.selected_filters;
     if ((k == "category") & (_.size(selected_filters[k]) > 1)) {

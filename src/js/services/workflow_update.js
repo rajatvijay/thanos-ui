@@ -128,8 +128,6 @@ function submitStep(payload) {
 }
 
 function approveStep(payload) {
-  console.log(payload);
-
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },
@@ -151,8 +149,6 @@ function approveStep(payload) {
 }
 
 function undoStep(payload) {
-  console.log(payload);
-
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },

@@ -230,9 +230,6 @@ class OTPForm extends React.Component {
     const { data, errors } = this.state;
     const { config, showRightBlock } = this.props;
 
-    console.log("otpformthis.props");
-    console.log(this.props);
-
     const suffix = (
       <Icon
         type={this.state.showPassword ? "eye" : "eye-invisible"}
@@ -375,32 +372,32 @@ class OTPForm extends React.Component {
                   </div>
                 </div>
                 <div>
-                {config.saml_url ? (
-                  <a
-                    className="ant-btn login-form-button ant-btn-primary btn-block text-white"
-                    href={this.props.config.saml_url}
-                  >
-                    <span className="text-white">
-                      <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                      {config.name} account
-                    </span>
-                    {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
-                  </a>
-                ) : (
-                  <Link
-                    to={
-                      this.props.nextUrl
-                        ? "/login/basic" + this.props.nextUrl
-                        : "/login/basic"
-                    }
-                    className="ant-btn login-form-button ant-btn-primary btn-block text-white"
-                  >
-                    <FormattedMessage id="loginPageInstances.loginEmailPassword" />
-                    <i className="material-icons t-14 text-middle pd-left-sm">
-                      arrow_forward
-                    </i>
-                  </Link>
-                )}
+                  {config.saml_url ? (
+                    <a
+                      className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                      href={this.props.config.saml_url}
+                    >
+                      <span className="text-white">
+                        <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                        {config.name} account
+                      </span>
+                      {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
+                    </a>
+                  ) : (
+                    <Link
+                      to={
+                        this.props.nextUrl
+                          ? "/login/basic" + this.props.nextUrl
+                          : "/login/basic"
+                      }
+                      className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                    >
+                      <FormattedMessage id="loginPageInstances.loginEmailPassword" />
+                      <i className="material-icons t-14 text-middle pd-left-sm">
+                        arrow_forward
+                      </i>
+                    </Link>
+                  )}
                 </div>
               </div>
             </Col>

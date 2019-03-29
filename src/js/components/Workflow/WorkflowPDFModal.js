@@ -149,7 +149,6 @@ class WorkflowPDFModal extends Component {
       pdfConfig,
       pdfConfigOptions: this.pdfConfigOptions
     });
-    console.log(JSON.stringify(payload, null, 4));
     this.setState({ requestingPDF: true });
     requestWorflowPDF(payload)
       .then(() => {
