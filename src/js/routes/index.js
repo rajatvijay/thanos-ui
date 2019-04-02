@@ -78,12 +78,25 @@ class MainRoutes extends React.Component {
     //}
 
     let parsed = queryString.parse(history.location.search);
-    if (parsed.next) this.props.dispatch(userActions.setNextUrl(parsed.next));
+    if (parsed.next) {
+      console.log("parsed--");
+      console.log(parsed);
+      this.props.dispatch(userActions.setNextUrl(parsed.next));
+      console.log("2222222d--");
+      //this.props.dispatch(userActions.getAll());
+    }
   };
 
   componentDidUpdate(prevProps) {
     if (this.props.config.name !== prevProps.config.name) {
       document.title = _.upperFirst(this.props.config.name) || "Vetted";
+    }
+
+    if (
+      prevProps.location !== this.props.location &&
+      _.includes(this.props.location.pathname, "login")
+    ) {
+      console.log("iupaf sudfpas nejsl se");
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -122,61 +135,46 @@ class MainRoutes extends React.Component {
                   !_.includes(history.location.pathname, "/login") ? (
                     <Navbar />
                   ) : null}
+                  <Switch>
+                    <Route path="/login" exact component={OTPLogin} />
+                    <Route path="/logout" exact component={Logout} />
+                    <Route
+                      path={
+                        nextUrl.url
+                          ? "/login/basic" + nextUrl.url
+                          : "/login/basic"
+                      }
+                      exact
+                      component={LoginPage}
+                    />
+                    <Route path="/login/magic" exact component={MagicLogin} />
+                    <Route
+                      path="/login/magicprocess"
+                      component={MagicLinkProcess}
+                    />
 
-                  <TransitionGroup>
-                    <CSSTransition
-                      key={history.location.key}
-                      classNames="fade"
-                      timeout={300}
-                    >
-                      <Switch>
-                        <Route path="/login" exact component={OTPLogin} />
-                        <Route path="/logout" exact component={Logout} />
-                        <Route
-                          path={
-                            nextUrl.url
-                              ? "/login/basic" + nextUrl.url
-                              : "/login/basic"
-                          }
-                          exact
-                          component={LoginPage}
-                        />
-                        <Route
-                          path="/login/magic"
-                          exact
-                          component={MagicLogin}
-                        />
-                        <Route
-                          path="/login/magicprocess"
-                          component={MagicLinkProcess}
-                        />
+                    <Redirect
+                      from="/"
+                      exact
+                      to={nextUrl.url ? nextUrl.url : "/workflows/instances/"}
+                    />
 
-                        <Redirect
-                          from="/"
-                          exact
-                          to={
-                            nextUrl.url ? nextUrl.url : "/workflows/instances/"
-                          }
-                        />
+                    <PrivateRoute
+                      path="/workflows/instances/"
+                      exact
+                      component={Workflow}
+                    />
 
-                        <PrivateRoute
-                          path="/workflows/instances/"
-                          exact
-                          component={Workflow}
-                        />
+                    <PrivateRoute
+                      path="/workflows/instances/:id?"
+                      component={WorkflowDetails}
+                    />
 
-                        <PrivateRoute
-                          path="/workflows/instances/:id?"
-                          component={WorkflowDetails}
-                        />
+                    <PrivateRoute path="/users/:id?" component={Users} />
+                    {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
 
-                        <PrivateRoute path="/users/:id?" component={Users} />
-                        {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
-
-                        <Route path="/" component={GenericNotFound} />
-                      </Switch>
-                    </CSSTransition>
-                  </TransitionGroup>
+                    <Route path="/" component={GenericNotFound} />
+                  </Switch>
                 </div>
               )}
             </Router>
