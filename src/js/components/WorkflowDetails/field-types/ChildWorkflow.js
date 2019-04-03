@@ -359,7 +359,7 @@ class ChildWorkflowField2 extends Component {
     let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
     let filterTags = (
       <div>
-        <span className="text-metal mr-right-sm">Categories: </span>
+        <span className="text-metal mr-right-sm">Areas of Concern: </span>
         {_.map(filter_tag_count, (v, k) => {
           return (
             <span
