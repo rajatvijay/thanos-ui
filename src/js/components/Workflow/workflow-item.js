@@ -667,12 +667,13 @@ export const WorkflowHeader = props => {
   let subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal";
   });
+
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
         {props.isChild || props.isEmbedded ? null : (
           <Col span={1} className=" text-anchor">
-            {props.detailsPage ? (
+            {props.detailsPage && !props.nextUrl.url ? (
               <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
                 <i
                   className="material-icons text-secondary"
