@@ -193,7 +193,6 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.props.dispatch(navbarActions.showFilterMenu());
     this.getInitialData();
-
     this.setState({});
   };
 
@@ -443,6 +442,7 @@ class WorkflowDetails extends Component {
                   statusType={this.props.workflowFilterType.statusType}
                   showCommentIcon={true}
                   getCommentSidebar={this.callBackCollapser}
+                  nextUrl={this.props.nextUrl}
                 />
               </div>
             )}
@@ -568,7 +568,8 @@ function mapStateToProps(state) {
     users,
     config,
     showFilterMenu,
-    showPreviewSidebar
+    showPreviewSidebar,
+    nextUrl
   } = state;
 
   return {
@@ -583,7 +584,8 @@ function mapStateToProps(state) {
     users,
     config,
     showFilterMenu,
-    showPreviewSidebar
+    showPreviewSidebar,
+    nextUrl
   };
 }
 

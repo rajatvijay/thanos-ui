@@ -128,17 +128,21 @@ export function users(state = initialState, action) {
   }
 }
 
-export function nextUrl(state = { url: "" }, action) {
+const urlState = {
+  url: ""
+};
+
+export function nextUrl(state = urlState, action) {
   switch (action.type) {
     case userConstants.SET_NEXT_URL:
       return {
-        url: action.payload
+        url: action.nextUrl
       };
     case userConstants.REMOVE_NEXT_URL:
       return {
         url: ""
       };
     default:
-      return { url: "" };
+      return state;
   }
 }

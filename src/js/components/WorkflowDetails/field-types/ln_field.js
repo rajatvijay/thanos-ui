@@ -527,7 +527,6 @@ const GetTabsFilter = props => {
       props.jsonData.Envelope.Body.SearchResponse.SearchResult.Records
         .ResultRecord.Watchlist.Matches.WLMatch;
   } catch (err) {
-    console.log("LN error ---->", props.jsonData);
     return <div className="text-center text-red">No matches found!</div>;
   }
 
