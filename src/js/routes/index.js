@@ -77,13 +77,8 @@ class MainRoutes extends React.Component {
     }
     //}
 
-    console.log(this.props.nextUrl);
-
     let parsed = queryString.parse(history.location.search);
     if (parsed.next) {
-      console.log("parsed---");
-      console.log(parsed);
-
       this.props.dispatch(userActions.setNextUrl(parsed.next));
     }
   };
