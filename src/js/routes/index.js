@@ -150,7 +150,7 @@ class MainRoutes extends React.Component {
                     />
 
                     <PrivateRoute
-                      path="/workflows/instances/:id?"
+                      path="/workflows/instances/:id?/"
                       component={WorkflowDetails}
                     />
 
