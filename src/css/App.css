@@ -3070,7 +3070,7 @@ template {
 }
 .gsearch-title .salience-icon {
   position: absolute;
-  right: 42px;
+  right: 0px;
 }
 .google-search-table .ant-table-tbody > tr:hover > td {
   background: none;
