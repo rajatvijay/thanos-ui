@@ -422,7 +422,7 @@ function google_search_html(record, search) {
       <div className="mr-bottom t-16 text-medium gsearch-title">
         <span className="salience-icon">
           <Tooltip
-            placement="left"
+            placement="topRight"
             title={"Relevance score: " + record.relevance_score}
           >
             <span>

@@ -173,7 +173,7 @@ const GetTable = props => {
         return (
           <span>
             <span
-              className="text-secondary text-anchor"
+              className="text-secondary text-anchor mr-right-sm"
               onClick={e => props.getComment(e, record)}
             >
               {props.commentCount[uid] ? (
