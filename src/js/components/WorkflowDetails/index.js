@@ -153,7 +153,12 @@ class WorkflowDetails extends Component {
       let active_step_data = this.currentActiveStep(wfd);
 
       stepGroup_id = active_step_data["activeStepGroup"].id;
-      step_id = active_step_data["activeStep"].id;
+      step_id =
+        active_step_data["activeStep"] && active_step_data["activeStep"].id;
+      if (!step_id) {
+        this.setState({ error: "errorMessageInstances.noStepInWorkflow" });
+        return;
+      }
 
       let stepTrack = {
         workflowId: wf_id,
@@ -375,7 +380,14 @@ class WorkflowDetails extends Component {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
 
-    if (_.size(this.props.workflowDetailsHeader.error)) {
+    let error = this.props.workflowDetailsHeader.error || this.state.error;
+    if (error === "Not Found") {
+      error = "errorMessageInstances.workflowNotFound";
+    }
+    // error can be an ID from intlMessages or text to be displayed.
+    // If ID is not found, it is rendered as text by default.
+
+    if (_.size(error)) {
       return (
         <Layout className="workflow-details-container inner-container">
           <StepSidebar showFilterMenu={this.props.showFilterMenu} />
@@ -393,9 +405,7 @@ class WorkflowDetails extends Component {
                   <div className="text-center text-metal mr-ard-lg">
                     <br />
                     <br />
-                    {this.props.workflowDetailsHeader.error === "Not Found"
-                      ? "Sorry! We were unable to find the workflow you requested."
-                      : this.props.workflowDetailsHeader.error}
+                    <FormattedMessage id={error} />
                     <br />
                     <br />
                     <br />
