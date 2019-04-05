@@ -122,15 +122,15 @@ class WorkflowDetails extends Component {
 
       if (activeStep) {
         return {
-          activeStepGroup: activeStepGroup,
-          activeStep: activeStep
+          activeStepGroup: activeStepGroup.id,
+          activeStep: activeStep.id
         };
       } else {
         let actStepGrp = wfd.stepGroups.results[0];
         let actStep = wfd.stepGroups.results[0].steps[0];
         return {
-          activeStepGroup: actStepGrp,
-          activeStep: actStep
+          activeStepGroup: actStepGrp && actStepGrp.id,
+          activeStep: actStep && actStep.id
         };
       }
     }
@@ -148,24 +148,8 @@ class WorkflowDetails extends Component {
       let wfd = nextProps.workflowDetails.workflowDetails;
 
       let wf_id = parseInt(this.props.match.params.id, 10);
-      let stepGroup_id = null;
-      let step_id = null;
-      let active_step_data = this.currentActiveStep(wfd);
 
-      stepGroup_id = active_step_data["activeStepGroup"].id;
-      step_id =
-        active_step_data["activeStep"] && active_step_data["activeStep"].id;
-      if (!step_id) {
-        this.setState({ error: "errorMessageInstances.noStepInWorkflow" });
-        return;
-      }
-
-      let stepTrack = {
-        workflowId: wf_id,
-        groupId: stepGroup_id,
-        stepId: step_id
-      };
-
+      let stepTrack = null;
       if (
         this.state.selectedStep &&
         this.state.selectedGroup &&
@@ -178,6 +162,23 @@ class WorkflowDetails extends Component {
         };
         this.state.from_params = false;
       } else {
+        let stepGroup_id = null;
+        let step_id = null;
+        let active_step_data = this.currentActiveStep(wfd);
+
+        stepGroup_id = active_step_data["activeStepGroup"];
+        step_id = active_step_data["activeStep"];
+        if (!step_id) {
+          this.setState({ error: "errorMessageInstances.noStepInWorkflow" });
+          return;
+        }
+
+        stepTrack = {
+          workflowId: wf_id,
+          groupId: stepGroup_id,
+          stepId: step_id
+        };
+
         this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
       }
 
