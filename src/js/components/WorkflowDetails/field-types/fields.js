@@ -730,8 +730,8 @@ class FileUpload extends Component {
                 key={"file-1"}
               >
                 <div className="ant-upload-list-item-info">
-                  <span>
-                    <i className="anticon anticon-paper-clip" />
+                  <span style={{ display: "flex" }}>
+                    <Icon type="paper-clip" />
                     <a
                       href={url}
                       target="_blank"
@@ -742,22 +742,22 @@ class FileUpload extends Component {
                         field.answers[0].attachment.lastIndexOf("?")
                       )}
                     </a>
+                    {this.props.completed ? (
+                      <i
+                        title="Remove file"
+                        className="anticon anticon-cross disabled"
+                        //onClick={this.removeFile}
+                      />
+                    ) : (
+                      <Icon type="close-circle" onClick={this.removeFile} />
+                      // <i
+                      //   title="Remove file"
+                      //   className="anticon anticon-cross"
+                      //   onClick={this.removeFile}
+                      // />
+                    )}
                   </span>
                 </div>
-
-                {this.props.completed ? (
-                  <i
-                    title="Remove file"
-                    className="anticon anticon-cross disabled"
-                    //onClick={this.removeFile}
-                  />
-                ) : (
-                  <i
-                    title="Remove file"
-                    className="anticon anticon-cross"
-                    onClick={this.removeFile}
-                  />
-                )}
               </div>
             ) : null}
 
