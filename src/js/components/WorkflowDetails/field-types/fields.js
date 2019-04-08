@@ -26,6 +26,7 @@ import Dropzone from "react-dropzone";
 import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import validator from "validator";
+import { ESign } from "./esign.js";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -868,6 +869,9 @@ class AttachmentDownload extends Component {
             </Button>
           )}
         </FormItem>
+        {this.props.field.definition.extra.esign_enabled ? (
+          <ESign {...this.props} />
+        ) : null}
       </div>
     );
   };
