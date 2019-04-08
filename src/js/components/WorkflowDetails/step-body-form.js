@@ -41,6 +41,10 @@ class StepBodyForm extends Component {
         this.setState({ version: true });
       }
     }
+    if (this.haveNewFieldsBeenAdded(prev)) {
+      console.log("new field(s) added");
+      this.updateAllAPIFields();
+    }
   };
 
   componentDidMount = () => {
@@ -142,6 +146,26 @@ class StepBodyForm extends Component {
         this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
       }
     });
+  };
+
+  haveNewFieldsBeenAdded = prev => {
+    let anythingNew = false;
+    if (this.props.stepData.data_fields != prev.stepData.data_fields) {
+      _.forEach(this.props.stepData.data_fields, field => {
+        let somethingNew = true;
+        _.forEach(prev.stepData.data_fields, oldField => {
+          if (oldField.id == field.id) {
+            somethingNew = false;
+            return false;
+          }
+        });
+        if (somethingNew) {
+          anythingNew = true;
+          return false;
+        }
+      });
+    }
+    return anythingNew;
   };
 
   clearFieldValue = field => {
