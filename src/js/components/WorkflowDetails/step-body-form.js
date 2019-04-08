@@ -152,14 +152,14 @@ class StepBodyForm extends Component {
     let anythingNew = false;
     if (this.props.stepData.data_fields != prev.stepData.data_fields) {
       _.forEach(this.props.stepData.data_fields, field => {
-        let found = false;
+        let somethingNew = true;
         _.forEach(prev.stepData.data_fields, oldField => {
           if (oldField.id == field.id) {
-            found = true;
+            somethingNew = false;
             return false;
           }
         });
-        if (found) {
+        if (somethingNew) {
           anythingNew = true;
           return false;
         }
