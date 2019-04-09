@@ -746,15 +746,9 @@ class FileUpload extends Component {
                       <i
                         title="Remove file"
                         className="anticon anticon-cross disabled"
-                        //onClick={this.removeFile}
                       />
                     ) : (
                       <Icon type="close-circle" onClick={this.removeFile} />
-                      // <i
-                      //   title="Remove file"
-                      //   className="anticon anticon-cross"
-                      //   onClick={this.removeFile}
-                      // />
                     )}
                   </span>
                 </div>
