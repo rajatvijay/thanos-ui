@@ -308,7 +308,9 @@ class Comments extends Component {
                 return null;
               }
               return (
-                <div>
+                <div
+                  style={{ height: "calc(100vh - 400px)", overflowY: "scroll" }}
+                >
                   {c.target.step_group_details ? (
                     <span style={{ width: "100%" }}>
                       <span className="text-bold">
