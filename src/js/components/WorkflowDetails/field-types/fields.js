@@ -945,8 +945,7 @@ export const RadioField = props => {
 export const IFrameField = props => {
   return (
     <iframe
-      width="300"
-      height="600"
+      style={{ minHeight: 400, width: "100%" }}
       frameBorder="0"
       src={props.field.definition.extra.iframe_url}
     />
