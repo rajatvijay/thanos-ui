@@ -349,11 +349,11 @@ export class WorkflowItem extends React.Component {
 
   // TODO - remove this quickfix, added for feature toggle / backward compat
   shouldShowQuickDetails = () => {
-    const disable_quick_qetails =
+    const show_quick_details =
       this.props.config &&
       this.props.config.custom_ui_labels &&
-      this.props.config.custom_ui_labels.disable_quick_details;
-    return !disable_quick_qetails;
+      this.props.config.custom_ui_labels.show_quick_details;
+    return show_quick_details;
   };
 
   onOpen = () => {
@@ -409,6 +409,9 @@ export class WorkflowItem extends React.Component {
       </div>
     );
 
+    const showQuickDetailsFunction =
+      this.shouldShowQuickDetails() && this.showQuickDetails;
+
     return (
       <div
         className={
@@ -459,9 +462,7 @@ export class WorkflowItem extends React.Component {
                 pData={this.props.pData}
                 ondata={this.ondata}
                 statusView={this.props.statusView}
-                showQuickDetails={
-                  this.shouldShowQuickDetails() && this.showQuickDetails
-                }
+                showQuickDetails={showQuickDetailsFunction}
               />
               {hasChildren && this.state.showRelatedWorkflow ? (
                 <div>
@@ -479,9 +480,7 @@ export class WorkflowItem extends React.Component {
                     addComment={this.props.addComment || null}
                     showCommentIcon={this.props.showCommentIcon}
                     expandedWorkflows={this.props.expandedWorkflows}
-                    showQuickDetails={
-                      this.shouldShowQuickDetails() && this.showQuickDetails
-                    }
+                    showQuickDetails={showQuickDetailsFunction}
                   />
                 </div>
               ) : (
@@ -612,6 +611,7 @@ const GetChildWorkflow = props => {
                       showCommentIcon={props.showCommentIcon}
                       isEmbedded={props.isEmbedded}
                       expandedWorkflows={props.expandedWorkflows}
+                      config={props.config}
                     />
                   );
                 })}
