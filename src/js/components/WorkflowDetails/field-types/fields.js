@@ -941,3 +941,14 @@ export const RadioField = props => {
     </FormItem>
   );
 };
+
+export const IFrameField = props => {
+  return (
+    <iframe
+      width="300"
+      height="600"
+      frameBorder="0"
+      src={props.field.definition.extra.iframe_url}
+    />
+  );
+};

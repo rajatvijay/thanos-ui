@@ -15,7 +15,8 @@ import {
   URL,
   Attachment,
   File,
-  RadioField
+  RadioField,
+  IFrameField
   //Duns
 } from "./fields";
 
@@ -182,6 +183,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "dnb_investigation_status":
       return DnBCommon(props);
+    case "iframe":
+      return IFrameField(props);
     default:
       return Text(props);
   }
