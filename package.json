@@ -69,10 +69,9 @@
   },
   "scripts": {
     "build-css": "node-less-chokidar src/ -o src/",
-    "watch-css":
-      "npm run build-css && node-less-chokidar src/ -o src/ --watch --recursive",
+    "watch-css": "node-less-chokidar src/ -o src/ --watch --recursive",
     "start-js": "node scripts/start.js",
-    "start": "npm-run-all -p watch-css start-js",
+    "start": "npm run build-css && run-p -ncr watch-css start-js",
     "build-js": "node scripts/build.js",
     "build": "npm-run-all build-css build-js",
     "test": "node scripts/test.js --env=jsdom",
