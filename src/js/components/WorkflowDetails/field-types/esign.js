@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Form, Row, Col, Input, notification } from "antd";
 import { commonFunctions } from "./commons";
+import {authHeader, baseUrl} from "../../../_helpers";
 
 const FormItem = Form.Item;
 const { onFieldChange, field_error, getRequired, isDisabled } = commonFunctions;
@@ -47,9 +48,31 @@ class Doc extends Component {
     this.setState({ [name]: value });
   }
 
-  submitUserDetails = () => {
+  generateFile = async () => {
+    const requestOptions = {
+      method: "POST",
+      headers: authHeader.post(),
+      credentials: "include",
+      body: JSON.stringify({ workflow: this.props.workflowId })
+    };
+
+    this.setState({ fetching: true });
+
+    const _response = await fetch(
+      baseUrl +
+        "fields/" +
+        this.props.field.definition.id +
+        "/download_attachment/?format=json",
+      requestOptions
+    );
+    const response = await _response.json();
+    this.setState({ fetching: false });
+    return response.object_url;
+  };
+
+  _submitUserDetails = async () => {
     const { username, useremail } = this.state;
-    let file_url = this.props.field.definition.attachment || "";
+    let file_url = await this.generateFile();
     let token = "Token e4da7a0f0711318b222aed195c3a040db068b79d";
 
     const requestOptions = {
@@ -69,32 +92,37 @@ class Doc extends Component {
     };
 
     this.setState({ fetching: true });
-    fetch("http://18.209.228.162:8000/api/v1/request_esign/", requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          console.log("response not ok" + response.statusText);
-          this.setState({ error: response.statusText, fetching: false });
-          openNotificationWithIcon({
-            type: "error",
-            message: response.statusText
-          });
-        }
-        return response;
-      })
-      .then(response => response.json())
-      .then(body => {
-        if (body.view_url === "None") {
-          openNotificationWithIcon({
-            type: "error",
-            message: "Invalid file"
-          });
-          this.setState({ fetching: false });
-        } else {
-          this.setState({ fetching: false }, function() {
-            window.open(body.view_url);
-          });
-        }
+
+    let response = await fetch("https://cyborg.slackcart.com/api/v1/request_esign/", requestOptions);
+    if (!response.ok) {
+      this.setState({ error: response.statusText, fetching: false });
+      openNotificationWithIcon({
+        type: "error",
+        message: response.statusText
       });
+    } else {
+      let body = await response.json();
+      this.setState({ fetching: false });
+      if (body.view_url === "None") {
+        openNotificationWithIcon({
+          type: "error",
+          message: "Invalid file"
+        });
+      } else {
+        return body.view_url;
+      }
+    }
+  };
+
+  submitUserDetails = () => {
+    this._submitUserDetails().then((response) => {
+      window.open(response);
+    }).catch((err) => {
+        openNotificationWithIcon({
+          type: "error",
+          message: err
+        });
+    });
   };
 
   render = () => {
