@@ -742,7 +742,7 @@ class FileUpload extends Component {
                         field.answers[0].attachment.lastIndexOf("?")
                       )}
                     </a>
-                    {!this.props.completed ? (
+                    {this.props.completed ? (
                       <i
                         title="Remove file"
                         className="anticon anticon-cross disabled"
