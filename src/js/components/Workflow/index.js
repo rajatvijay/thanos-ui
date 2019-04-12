@@ -41,7 +41,6 @@ class Workflow extends Component {
       sidebar: false,
       workflowId: null,
       showWaitingFitler: false,
-      isUserAuthenticated: false,
       statusView: true,
       visible: false,
       sortOrderAsc: false,
@@ -61,14 +60,7 @@ class Workflow extends Component {
     }
 
     if (!this.props.users.me || this.props.users.me.error) {
-      // TODO the checkAuth method only reports status text: `403 Forbidden`
-      // In future, we should relook at a better way to handle this
-      const userUnauthenticated =
-        this.props.users.me && this.props.users.me.error == "Forbidden";
-      if (
-        userUnauthenticated ||
-        !veryfiyClient(this.props.authentication.user.csrf)
-      ) {
+      if (!veryfiyClient(this.props.authentication.user.csrf)) {
         this.props.dispatch(logout());
       }
     }
@@ -221,6 +213,15 @@ class Workflow extends Component {
     // if(this.props.nextUrl.url){
     //   return <Redirect to={this.props.nextUrl.url}/>
     // }
+
+    if (this.props.workflow.loadingStatus === "failed") {
+      // TODO the checkAuth method only reports status text: `403 Forbidden`
+      // In future, we should relook at a better way to handle this
+      if (this.props.users.me && this.props.users.me.error == "Forbidden") {
+        this.props.dispatch(logout());
+        return;
+      }
+    }
 
     return (
       <Layout
