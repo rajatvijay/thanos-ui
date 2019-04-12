@@ -248,9 +248,10 @@ class WorkflowDetails extends Component {
   };
 
   navigateLevelBack = () => {
-    let wf = this.props.workflowDetailsHeader.workflowDetailsHeader;
-    if (_.size(wf.parents) !== 0) {
-      history.push("/workflows/instances/" + wf.parents[0]);
+    const wf = this.props.workflowDetailsHeader.workflowDetailsHeader;
+    const size = _.size(wf.workflow_family);
+    if (size > 1) {
+      history.push("/workflows/instances/" + wf.workflow_family[size - 1]);
     } else {
       history.push("/workflows/instances/");
     }
@@ -391,7 +392,7 @@ class WorkflowDetails extends Component {
   };
 
   onCollapse = () => {
-    this.setSate({ collapsed: true });
+    this.setState({ collapsed: true });
   };
 
   toggleRightSidebar = () => {
