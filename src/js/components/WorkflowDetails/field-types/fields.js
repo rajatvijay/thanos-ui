@@ -641,7 +641,7 @@ class FileUpload extends Component {
     this.setState({ loading: true });
     let payload = {
       workflow: this.props.workflowId,
-      field: this.props.field.definition.id,
+      field: this.props.field.id,
       responseId: this.props.field.answers[0].id
     };
 

@@ -122,6 +122,7 @@ class WorkflowList extends Component {
             showCommentIcon={that.props.showCommentIcon}
             isEmbedded={that.props.isEmbedded}
             expandedWorkflows={that.props.expandedWorkflows}
+            config={that.props.config}
           />
         );
       });
@@ -346,13 +347,24 @@ export class WorkflowItem extends React.Component {
     this.props.dispatch(workflowActions.expandedWorkflowsList(list));
   };
 
+  // TODO - remove this quickfix, added for feature toggle / backward compat
+  shouldShowQuickDetails = () => {
+    const show_quick_details =
+      this.props.config &&
+      this.props.config.custom_ui_labels &&
+      this.props.config.custom_ui_labels.show_quick_details;
+    return show_quick_details;
+  };
+
   onOpen = () => {
     if (this.props.workflow.children_count && !this.state.opened)
       this.expandChildWorkflow();
 
     if (!this.state.opened) {
-      this.showQuickDetails();
-      this.props.dispatch(navbarActions.hideFilterMenu());
+      if (this.shouldShowQuickDetails()) {
+        this.showQuickDetails();
+        this.props.dispatch(navbarActions.hideFilterMenu());
+      }
       this.onWorkflowToggle("add");
     }
     this.setState({ opened: true });
@@ -396,6 +408,9 @@ export class WorkflowItem extends React.Component {
         {this.props.workflow.name}
       </div>
     );
+
+    const showQuickDetailsFunction =
+      this.shouldShowQuickDetails() && this.showQuickDetails;
 
     return (
       <div
@@ -447,7 +462,7 @@ export class WorkflowItem extends React.Component {
                 pData={this.props.pData}
                 ondata={this.ondata}
                 statusView={this.props.statusView}
-                showQuickDetails={this.showQuickDetails}
+                showQuickDetails={showQuickDetailsFunction}
               />
               {hasChildren && this.state.showRelatedWorkflow ? (
                 <div>
@@ -465,7 +480,7 @@ export class WorkflowItem extends React.Component {
                     addComment={this.props.addComment || null}
                     showCommentIcon={this.props.showCommentIcon}
                     expandedWorkflows={this.props.expandedWorkflows}
-                    showQuickDetails={this.showQuickDetails}
+                    showQuickDetails={showQuickDetailsFunction}
                   />
                 </div>
               ) : (
@@ -596,6 +611,7 @@ const GetChildWorkflow = props => {
                       showCommentIcon={props.showCommentIcon}
                       isEmbedded={props.isEmbedded}
                       expandedWorkflows={props.expandedWorkflows}
+                      config={props.config}
                     />
                   );
                 })}
@@ -616,14 +632,16 @@ function mapPropsToState(state) {
     workflowFilterType,
     workflowChildren,
     showFilterMenu,
-    expandedWorkflows
+    expandedWorkflows,
+    config
   } = state;
   return {
     workflowKind,
     workflowFilterType,
     workflowChildren,
     showFilterMenu,
-    expandedWorkflows
+    expandedWorkflows,
+    config
   };
 }
 

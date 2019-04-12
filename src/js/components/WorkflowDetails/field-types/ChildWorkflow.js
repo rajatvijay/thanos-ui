@@ -665,15 +665,17 @@ class ChildWorkflowField2 extends Component {
         ) : (
           <div>
             <div className="">
-              <Row className="mr-bottom">
-                <Col span={24}>
-                  {/*CATEGORY FILTER*/}
-                  {this.state.filterTags}
-                </Col>
-              </Row>
-
               {field.definition.extra.show_filters ? (
                 <Row className="mr-bottom">
+                  <Col span={24}>
+                    {/*CATEGORY FILTER*/}
+                    {this.state.filterTags}
+                  </Col>
+                </Row>
+              ) : null}
+
+              <Row className="mr-bottom">
+                {field.definition.extra.show_filters ? (
                   <Col span="18">
                     <span
                       className="text-metal"
@@ -698,27 +700,29 @@ class ChildWorkflowField2 extends Component {
                       </span>
                     ) : null}
                   </Col>
+                ) : (
+                  <Col span="18" />
+                )}
 
-                  <Col span="6" className="text-right text-light small">
-                    <Button
-                      type="primary"
-                      className="btn-o mr-right-sm"
-                      onClick={this.getChildWorkflow}
-                      size="small"
-                    >
-                      Reload
-                    </Button>
+                <Col span="6" className="text-right text-light small">
+                  <Button
+                    type="primary"
+                    className="btn-o mr-right-sm"
+                    onClick={this.getChildWorkflow}
+                    size="small"
+                  >
+                    Reload
+                  </Button>
 
-                    {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
-                      this.getAddMenu()
-                    ) : (
-                      <span className="ant-btn disabled child-workflow-dropdown ant-btn-primary ant-btn-sm">
-                        + create new <Icon type="loading" />
-                      </span>
-                    )}
-                  </Col>
-                </Row>
-              ) : null}
+                  {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
+                    this.getAddMenu()
+                  ) : (
+                    <span className="ant-btn disabled child-workflow-dropdown ant-btn-primary ant-btn-sm">
+                      + create new <Icon type="loading" />
+                    </span>
+                  )}
+                </Col>
+              </Row>
 
               {/*_.size(this.state.selected_filters) ? (
               <Row>

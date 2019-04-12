@@ -299,14 +299,14 @@ class HeaderOptions2 extends React.Component {
           </span>
         </Menu.Item>
 
-        {/*<Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>*/}
-        {/*<span>*/}
-        {/*<i className="material-icons t-18 text-middle pd-right-sm">*/}
-        {/*file_copy*/}
-        {/*</i>{" "}*/}
-        {/*<FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />*/}
-        {/*</span>*/}
-        {/*</Menu.Item>*/}
+        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              file_copy
+            </i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
+          </span>
+        </Menu.Item>
       </Menu>
     );
 
@@ -1018,47 +1018,85 @@ const StepItem = props => {
       className={"t-12 "}
       title={props.stepData.name + (overdue ? " | overdue" : "")}
     >
-      <span
-        onClick={() => {
-          props.showQuickDetails(props.stepData);
-        }}
-        // to={{
-        //   pathname: "/workflows/instances/" + props.workflow.id,
-        //   search: "?group=" + props.group.id + "&step=" + props.stepData.id,
-        //   state: {
-        //     step: props.stepData.id,
-        //     group: props.group.id
-        //   }
-        // }}
-
-        className={"text-anchor text-metal text-nounderline"}
-      >
-        <i
+      {props.showQuickDetails ? (
+        /* TODO - remove this quickfix, added for feature toggle / backward compat */
+        <span
+          onClick={() => {
+            props.showQuickDetails(props.stepData);
+          }}
+          className={"text-anchor text-metal text-nounderline"}
+        >
+          <i
+            className={
+              "material-icons text-middle " +
+              (step_complete ? "text-green" : overdue ? "text-red" : "")
+            }
+          >
+            {icon_cls}
+          </i>
+          <span>{props.stepData.name}</span>
+          {_.size(hasAlert) ? (
+            <span className="alert-dot">
+              {_.map(hasAlert, alert => {
+                return (
+                  <Tooltip title={alert.label}>
+                    <i
+                      className="material-icons"
+                      style={{ fontSize: "9px", color: alert.color }}
+                    >
+                      fiber_manual_records
+                    </i>
+                  </Tooltip>
+                );
+              })}
+            </span>
+          ) : null}
+        </span>
+      ) : (
+        <Link
+          to={{
+            pathname: "/workflows/instances/" + props.workflow.id,
+            search: "?group=" + props.group.id + "&step=" + props.stepData.id,
+            state: {
+              step: props.stepData.id,
+              group: props.group.id
+            }
+          }}
           className={
-            "material-icons text-middle " +
-            (step_complete ? "text-green" : overdue ? "text-red" : "")
+            step_complete
+              ? "text-metal text-nounderline"
+              : overdue
+                ? "text-metal text-nounderline text-normal"
+                : "text-metal text-nounderline text-normal"
           }
         >
-          {icon_cls}
-        </i>
-        <span>{props.stepData.name}</span>
-        {_.size(hasAlert) ? (
-          <span className="alert-dot">
-            {_.map(hasAlert, alert => {
-              return (
-                <Tooltip title={alert.label}>
-                  <i
-                    className="material-icons"
-                    style={{ fontSize: "9px", color: alert.color }}
-                  >
-                    fiber_manual_records
-                  </i>
-                </Tooltip>
-              );
-            })}
-          </span>
-        ) : null}
-      </span>
+          <i
+            className={
+              "material-icons text-middle " +
+              (step_complete ? "text-green" : overdue ? "text-red" : "")
+            }
+          >
+            {icon_cls}
+          </i>
+          <span>{props.stepData.name}</span>
+          {_.size(hasAlert) ? (
+            <span className="alert-dot">
+              {_.map(hasAlert, alert => {
+                return (
+                  <Tooltip title={alert.label}>
+                    <i
+                      className="material-icons"
+                      style={{ fontSize: "9px", color: alert.color }}
+                    >
+                      fiber_manual_records
+                    </i>
+                  </Tooltip>
+                );
+              })}
+            </span>
+          ) : null}
+        </Link>
+      )}
     </li>
   );
 };
