@@ -53,7 +53,7 @@ class WorkflowAdvFilter extends Component {
           credentials: "include"
         };
 
-        fetch(baseUrl + "fields/export-json/", requestOptions)
+        fetch(baseUrl + "fields/export-json/?active_kind=True", requestOptions)
           .then(response => response.json())
           .then(body => {
             this.setState({ fieldOptions: body.results, fetching: false });
