@@ -61,7 +61,12 @@ class Workflow extends Component {
     }
 
     if (!this.props.users.me || this.props.users.me.error) {
-      if (!veryfiyClient(this.props.authentication.user.csrf)) {
+      // TODO the checkAuth method only reports status text: `403 Forbidden`
+      // In future, we should relook at a better way to handle this
+      if (
+        this.props.users.me.error == "Forbidden" ||
+        !veryfiyClient(this.props.authentication.user.csrf)
+      ) {
         this.props.dispatch(logout());
       }
     }
