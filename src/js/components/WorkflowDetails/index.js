@@ -22,6 +22,9 @@ import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import BreadCrums from "./BreadCrums";
 import StepPreview from "../Workflow/StepPreview";
+import { calculatedData } from "../Workflow/calculated-data";
+
+const { getProgressData } = calculatedData;
 
 const requestOptions = {
   method: "GET",
@@ -39,7 +42,8 @@ class WorkflowDetails extends Component {
       selectedStep: null,
       selectedGroup: null,
       printing: false,
-      dont: false
+      dont: false,
+      firstLoad: true
     };
 
     this.preConstruct();
@@ -224,6 +228,32 @@ class WorkflowDetails extends Component {
     if (thisCurrent.isSubmitting !== prevCurrent.isSubmitting) {
       this.setState({ dont: false });
     }
+
+    if (
+      this.props.currentStepFields.currentStepFields &&
+      this.props.workflowDetailsHeader.workflowDetailsHeader &&
+      prevProps.currentStepFields.currentStepFields !==
+        this.props.currentStepFields.currentStepFields
+    ) {
+      let progress = getProgressData(
+        this.props.workflowDetailsHeader.workflowDetailsHeader
+      );
+
+      if (progress === 100 && !this.state.firstLoad) {
+        this.navigateLevelBack();
+      }
+
+      this.setState({ firstLoad: false });
+    }
+  };
+
+  navigateLevelBack = () => {
+    let wf = this.props.workflowDetailsHeader.workflowDetailsHeader;
+    if (_.size(wf.parents) !== 0) {
+      history.push("/workflows/instances/" + wf.parents[0]);
+    } else {
+      history.push("/workflows/instances/");
+    }
   };
 
   syncStepCompletion = () => {
@@ -360,9 +390,9 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
 
-  onCollapse() {
+  onCollapse = () => {
     this.setSate({ collapsed: true });
-  }
+  };
 
   toggleRightSidebar = () => {
     this.props.dispatch(
