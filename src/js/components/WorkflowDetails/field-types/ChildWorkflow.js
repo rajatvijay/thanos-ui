@@ -665,12 +665,14 @@ class ChildWorkflowField2 extends Component {
         ) : (
           <div>
             <div className="">
-              <Row className="mr-bottom">
-                <Col span={24}>
-                  {/*CATEGORY FILTER*/}
-                  {this.state.filterTags}
-                </Col>
-              </Row>
+              {field.definition.extra.show_filters ? (
+                <Row className="mr-bottom">
+                  <Col span={24}>
+                    {/*CATEGORY FILTER*/}
+                    {this.state.filterTags}
+                  </Col>
+                </Row>
+              ) : null}
 
               <Row className="mr-bottom">
                 {field.definition.extra.show_filters ? (
