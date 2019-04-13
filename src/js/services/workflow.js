@@ -94,7 +94,7 @@ function getById(id) {
   );
 }
 
-function searchWorkflow(query) {
+function searchWorkflowGet(query) {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
@@ -102,6 +102,19 @@ function searchWorkflow(query) {
   };
 
   let url = baseUrl + "workflows/?q=" + query;
+
+  return fetch(url, requestOptions).then(handleResponse);
+}
+
+function searchWorkflow(query) {
+  const requestOptions = {
+    method: "POST",
+    headers: authHeader.post(),
+    credentials: "include",
+    body: JSON.stringify({ q: query })
+  };
+
+  let url = baseUrl + "workflows/search/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

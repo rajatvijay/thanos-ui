@@ -29,7 +29,6 @@ class MentionWithAttachments extends Component {
 
   componentDidMount() {
     document.onpaste = e => {
-      console.log("handler called", this);
       if (this.isFocussed) {
         if (
           e.clipboardData.files.length &&
@@ -79,11 +78,9 @@ class MentionWithAttachments extends Component {
         </Modal>
         <Mention
           onFocus={() => {
-            console.log("focussed");
             this.isFocussed = true;
           }}
           onBlur={() => {
-            console.log("blurred");
             this.isFocussed = false;
           }}
           style={{ width: "470px", height: 30 }}

@@ -122,15 +122,15 @@ class WorkflowDetails extends Component {
 
       if (activeStep) {
         return {
-          activeStepGroup: activeStepGroup,
-          activeStep: activeStep
+          activeStepGroup: activeStepGroup.id,
+          activeStep: activeStep.id
         };
       } else {
         let actStepGrp = wfd.stepGroups.results[0];
         let actStep = wfd.stepGroups.results[0].steps[0];
         return {
-          activeStepGroup: actStepGrp,
-          activeStep: actStep
+          activeStepGroup: actStepGrp && actStepGrp.id,
+          activeStep: actStep && actStep.id
         };
       }
     }
@@ -148,19 +148,8 @@ class WorkflowDetails extends Component {
       let wfd = nextProps.workflowDetails.workflowDetails;
 
       let wf_id = parseInt(this.props.match.params.id, 10);
-      let stepGroup_id = null;
-      let step_id = null;
-      let active_step_data = this.currentActiveStep(wfd);
 
-      stepGroup_id = active_step_data["activeStepGroup"].id;
-      step_id = active_step_data["activeStep"].id;
-
-      let stepTrack = {
-        workflowId: wf_id,
-        groupId: stepGroup_id,
-        stepId: step_id
-      };
-
+      let stepTrack = null;
       if (
         this.state.selectedStep &&
         this.state.selectedGroup &&
@@ -173,6 +162,23 @@ class WorkflowDetails extends Component {
         };
         this.state.from_params = false;
       } else {
+        let stepGroup_id = null;
+        let step_id = null;
+        let active_step_data = this.currentActiveStep(wfd);
+
+        stepGroup_id = active_step_data["activeStepGroup"];
+        step_id = active_step_data["activeStep"];
+        if (!step_id) {
+          this.setState({ error: "errorMessageInstances.noStepInWorkflow" });
+          return;
+        }
+
+        stepTrack = {
+          workflowId: wf_id,
+          groupId: stepGroup_id,
+          stepId: step_id
+        };
+
         this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
       }
 
@@ -190,8 +196,9 @@ class WorkflowDetails extends Component {
   };
 
   componentDidMount = () => {
+    this.props.dispatch(workflowActions.expandedWorkflowsList([]));
+    this.props.dispatch(navbarActions.showFilterMenu());
     this.getInitialData();
-
     this.setState({});
   };
 
@@ -374,7 +381,14 @@ class WorkflowDetails extends Component {
     let stepLoading = this.props.workflowDetails.loading;
     let comment_data = this.props.workflowComments.data;
 
-    if (_.size(this.props.workflowDetailsHeader.error)) {
+    let error = this.props.workflowDetailsHeader.error || this.state.error;
+    if (error === "Not Found") {
+      error = "errorMessageInstances.workflowNotFound";
+    }
+    // error can be an ID from intlMessages or text to be displayed.
+    // If ID is not found, it is rendered as text by default.
+
+    if (_.size(error)) {
       return (
         <Layout className="workflow-details-container inner-container">
           <StepSidebar showFilterMenu={this.props.showFilterMenu} />
@@ -392,9 +406,7 @@ class WorkflowDetails extends Component {
                   <div className="text-center text-metal mr-ard-lg">
                     <br />
                     <br />
-                    {this.props.workflowDetailsHeader.error === "Not Found"
-                      ? "Sorry! We were unable to find the workflow you requested."
-                      : this.props.workflowDetailsHeader.error}
+                    <FormattedMessage id={error} />
                     <br />
                     <br />
                     <br />
@@ -441,6 +453,7 @@ class WorkflowDetails extends Component {
                   statusType={this.props.workflowFilterType.statusType}
                   showCommentIcon={true}
                   getCommentSidebar={this.callBackCollapser}
+                  nextUrl={this.props.nextUrl}
                 />
               </div>
             )}
@@ -566,7 +579,8 @@ function mapStateToProps(state) {
     users,
     config,
     showFilterMenu,
-    showPreviewSidebar
+    showPreviewSidebar,
+    nextUrl
   } = state;
 
   return {
@@ -581,7 +595,8 @@ function mapStateToProps(state) {
     users,
     config,
     showFilterMenu,
-    showPreviewSidebar
+    showPreviewSidebar,
+    nextUrl
   };
 }
 

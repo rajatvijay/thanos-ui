@@ -52,11 +52,6 @@ const SubMenu = Menu.SubMenu;
 /*workflow Head*/
 /////////////////
 
-const openWindow = url => {
-  console.log(url);
-  window.open(url, "_blank");
-};
-
 const ProcessLcData = lc => {
   let subtext_value = <span />;
 
@@ -304,14 +299,14 @@ class HeaderOptions2 extends React.Component {
           </span>
         </Menu.Item>
 
-        {/*<Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>*/}
-        {/*<span>*/}
-        {/*<i className="material-icons t-18 text-middle pd-right-sm">*/}
-        {/*file_copy*/}
-        {/*</i>{" "}*/}
-        {/*<FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />*/}
-        {/*</span>*/}
-        {/*</Menu.Item>*/}
+        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              file_copy
+            </i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
+          </span>
+        </Menu.Item>
       </Menu>
     );
 
@@ -672,12 +667,13 @@ export const WorkflowHeader = props => {
   let subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal";
   });
+
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
         {props.isChild || props.isEmbedded ? null : (
           <Col span={1} className=" text-anchor">
-            {props.detailsPage ? (
+            {props.detailsPage && !props.nextUrl.url ? (
               <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
                 <i
                   className="material-icons text-secondary"
@@ -701,13 +697,12 @@ export const WorkflowHeader = props => {
                     width={35}
                     format={percent => (
                       <i
-                        className="material-icons"
+                        className="material-icons text-primary"
                         style={{ fontSize: "18px", verticalAlign: "middle" }}
                       >
-                        folder
-                        {/*props.kind === ""
+                        {props.kind === ""
                           ? "folder_open"
-                          : getIcon(props.workflow.definition.kind, props.kind)*/}
+                          : getIcon(props.workflow.definition.kind, props.kind)}
                       </i>
                     )}
                   />
@@ -1023,49 +1018,85 @@ const StepItem = props => {
       className={"t-12 "}
       title={props.stepData.name + (overdue ? " | overdue" : "")}
     >
-      <Link
-        to={{
-          pathname: "/workflows/instances/" + props.workflow.id,
-          search: "?group=" + props.group.id + "&step=" + props.stepData.id,
-          state: {
-            step: props.stepData.id,
-            group: props.group.id
-          }
-        }}
-        className={
-          step_complete
-            ? "text-metal text-nounderline"
-            : overdue
-              ? "text-metal text-nounderline text-normal"
-              : "text-metal text-nounderline text-normal"
-        }
-      >
-        <i
+      {props.showQuickDetails ? (
+        /* TODO - remove this quickfix, added for feature toggle / backward compat */
+        <span
+          onClick={() => {
+            props.showQuickDetails(props.stepData);
+          }}
+          className={"text-anchor text-metal text-nounderline"}
+        >
+          <i
+            className={
+              "material-icons text-middle " +
+              (step_complete ? "text-green" : overdue ? "text-red" : "")
+            }
+          >
+            {icon_cls}
+          </i>
+          <span>{props.stepData.name}</span>
+          {_.size(hasAlert) ? (
+            <span className="alert-dot">
+              {_.map(hasAlert, alert => {
+                return (
+                  <Tooltip title={alert.label}>
+                    <i
+                      className="material-icons"
+                      style={{ fontSize: "9px", color: alert.color }}
+                    >
+                      fiber_manual_records
+                    </i>
+                  </Tooltip>
+                );
+              })}
+            </span>
+          ) : null}
+        </span>
+      ) : (
+        <Link
+          to={{
+            pathname: "/workflows/instances/" + props.workflow.id,
+            search: "?group=" + props.group.id + "&step=" + props.stepData.id,
+            state: {
+              step: props.stepData.id,
+              group: props.group.id
+            }
+          }}
           className={
-            "material-icons text-middle " +
-            (step_complete ? "text-green" : overdue ? "text-red" : "")
+            step_complete
+              ? "text-metal text-nounderline"
+              : overdue
+                ? "text-metal text-nounderline text-normal"
+                : "text-metal text-nounderline text-normal"
           }
         >
-          {icon_cls}
-        </i>
-        <span>{props.stepData.name}</span>
-        {_.size(hasAlert) ? (
-          <span className="alert-dot">
-            {_.map(hasAlert, alert => {
-              return (
-                <Tooltip title={alert.label}>
-                  <i
-                    className="material-icons"
-                    style={{ fontSize: "9px", color: alert.color }}
-                  >
-                    fiber_manual_records
-                  </i>
-                </Tooltip>
-              );
-            })}
-          </span>
-        ) : null}
-      </Link>
+          <i
+            className={
+              "material-icons text-middle " +
+              (step_complete ? "text-green" : overdue ? "text-red" : "")
+            }
+          >
+            {icon_cls}
+          </i>
+          <span>{props.stepData.name}</span>
+          {_.size(hasAlert) ? (
+            <span className="alert-dot">
+              {_.map(hasAlert, alert => {
+                return (
+                  <Tooltip title={alert.label}>
+                    <i
+                      className="material-icons"
+                      style={{ fontSize: "9px", color: alert.color }}
+                    >
+                      fiber_manual_records
+                    </i>
+                  </Tooltip>
+                );
+              })}
+            </span>
+          ) : null}
+        </Link>
+      )}
     </li>
   );
 };

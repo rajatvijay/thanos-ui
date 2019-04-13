@@ -20,7 +20,8 @@ export const commonFunctions = {
   getIntegrationSearchButton,
   fieldFlagDropdown,
   isDisabled,
-  getAnsweredBy
+  getAnsweredBy,
+  isDnBIntegrationDataLoading
 };
 
 //Utility func
@@ -195,7 +196,6 @@ function selectFlag(props, flag) {
     field: props.field.id,
     flag: parseInt(flag.key)
   };
-  console.log(payload);
   props.changeFlag(payload);
 }
 
@@ -400,4 +400,13 @@ function getAnsweredBy(props) {
   } else {
     return;
   }
+}
+
+function isDnBIntegrationDataLoading(props) {
+  return (
+    props.currentStepFields.integration_data_loading ||
+    (props.integration_json &&
+      props.integration_json.status_message ==
+        "Fetching data for this field...")
+  );
 }

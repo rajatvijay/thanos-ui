@@ -11,7 +11,9 @@ export const userActions = {
   register,
   getAll,
   getById,
-  delete: _delete
+  delete: _delete,
+  setNextUrl,
+  removeNextUrl
   //checkAuth
 };
 
@@ -245,6 +247,20 @@ function getById(id) {
   function failure(error) {
     return { type: userConstants.GETALL_FAILURE, error };
   }
+}
+
+//SETNEXTURL
+function setNextUrl(nextUrl) {
+  return dispatch => {
+    dispatch({ type: userConstants.SET_NEXT_URL, nextUrl });
+  };
+}
+
+//REMOVE ENXTURL
+function removeNextUrl() {
+  return dispatch => {
+    dispatch({ type: userConstants.REMOVE_NEXT_URL });
+  };
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

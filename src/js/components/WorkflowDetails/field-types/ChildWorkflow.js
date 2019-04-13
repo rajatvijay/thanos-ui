@@ -1,3 +1,4 @@
+//NEWER
 import React, { Component } from "react";
 import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
 import Collapsible from "react-collapsible";
@@ -74,7 +75,7 @@ class ChildWorkflowField2 extends Component {
       statusView: true,
       kindChecked: false,
       showRelatedWorkflow: false,
-      selected_filters: {}
+      selected_filters: { category: [], status: "", flag: "" }
     };
   }
 
@@ -174,20 +175,19 @@ class ChildWorkflowField2 extends Component {
       }
     });
 
+    if (_.isEmpty(workflowKindFiltered)) {
+      return null;
+    }
+
     let menu = (
       <Menu onClick={this.onChildSelect}>
-        {!_.isEmpty(workflowKindFiltered) ? (
-          _.map(workflowKindFiltered, function(item, index) {
-            if (
-              that.props.field.definition.extra.child_workflow_kind_id ===
-              item.id
-            ) {
-              return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-            }
-          })
-        ) : (
-          <Menu.Item disabled>No related workflow kind</Menu.Item>
-        )}
+        {_.map(workflowKindFiltered, function(item, index) {
+          if (
+            that.props.field.definition.extra.child_workflow_kind_id === item.id
+          ) {
+            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          }
+        })}
       </Menu>
     );
 
@@ -195,20 +195,24 @@ class ChildWorkflowField2 extends Component {
   };
 
   getAddMenu = () => {
+    const kindMenu = this.getKindMenu();
+    if (!kindMenu) {
+      return null;
+    }
     let menu = (
       <Dropdown
-        overlay={this.getKindMenu()}
+        overlay={kindMenu}
         className="child-workflow-dropdown"
         placement="bottomRight"
+        size="small"
         //disabled={isDisabled(this.props)}
       >
         <Button
           type="primary"
           loading={this.props.workflowKind.loading ? true : false}
-          className="btn-o"
+          size="small"
         >
           + create new {this.state.fetching ? "loadin..." : ""}
-          <i className="material-icons t-14">keyboard_arrow_down</i>
         </Button>
       </Dropdown>
     );
@@ -224,9 +228,11 @@ class ChildWorkflowField2 extends Component {
 
     return (
       <Select
-        placeholder="Filter by Adjudication Code"
+        placeholder="Adjudication Code"
         onChange={that.onFilterTagChange.bind(that, "flag")}
         style={{ width: "150px" }}
+        size="small"
+        allowClear={true}
       >
         {_.map(that.state.childWorkflow[0].comment_flag_options, function(
           v,
@@ -286,23 +292,23 @@ class ChildWorkflowField2 extends Component {
     });
 
     let statusfilterTags = (
-      <div>
+      <Select
+        placeholder="Status"
+        onChange={that.onFilterTagChange.bind(that, "status")}
+        style={{ width: "150px" }}
+        size="small"
+        allowClear={true}
+      >
         {_.map(workflow_status_count, function(v, k) {
           return (
-            <Tag
-              key={v + k}
-              className="alert-tag-item alert-metal"
-              onClick={that.onFilterTagChange.bind(that, k, "status")}
-            >
-              <Tooltip title={k}>
-                <span className="ellip-small s50">{k} </span>
-                <span className="ellip-small s50">({v}) </span>
-              </Tooltip>
-            </Tag>
+            <Option key={k} value={k}>
+              {k} ({v})
+            </Option>
           );
         })}
-      </div>
+      </Select>
     );
+
     this.setState({
       statusfilterTags: statusfilterTags,
       status_workflow_map: status_workflow_map
@@ -353,17 +359,16 @@ class ChildWorkflowField2 extends Component {
     let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
     let filterTags = (
       <div>
-        {_.map(filter_tag_count, function(v, k) {
+        <span className="text-metal mr-right-sm">Areas of Concern: </span>
+        {_.map(filter_tag_count, (v, k) => {
           return (
-            <Tag
+            <span
               key={v + k}
-              className="alert-tag-item alert-metal"
-              onClick={that.onFilterTagChange.bind(that, k, "category")}
+              className="alert-tag-item alert-basic ant-tag"
+              onClick={this.onFilterTagChange.bind(that, k, "category")}
             >
               <Tooltip title={k}>
-                <span className="ellip-small s50">{k} </span>
-                <span className="ellip-small s50">({v}) </span>
-
+                {k} ({v})
                 {styling && styling[k] ? (
                   <i
                     style={{
@@ -378,7 +383,7 @@ class ChildWorkflowField2 extends Component {
                   </i>
                 ) : null}
               </Tooltip>
-            </Tag>
+            </span>
           );
         })}
       </div>
@@ -392,18 +397,19 @@ class ChildWorkflowField2 extends Component {
 
   onFilterTagChange = (tag, _type) => {
     let filtered_workflow = this.state.filteredChildWorkflow;
-    if (_type == "status") {
-      if (tag == "All Status") {
+    if (tag == "status") {
+      if (_type == "All Status") {
         delete this.state.selected_filters["status"];
       } else {
-        this.state.selected_filters["status"] = tag;
+        this.state.selected_filters["status"] = _type;
       }
       this.setState({
         selected_filters: this.state.selected_filters
       });
     } else if (_type == "category") {
       if (tag == "All Categories") {
-        delete this.state.selected_filters["category"];
+        this.state.selected_filters["category"] = [];
+        //delete this.state.selected_filters["category"];
       } else {
         if (_.size(this.state.selected_filters["category"])) {
           if (!_.includes(this.state.selected_filters["category"], tag)) {
@@ -451,6 +457,7 @@ class ChildWorkflowField2 extends Component {
             }
           });
         }
+
         if (key == "status" && fval) {
           // search for fvalue in cw["status"]["label"]
           if (cw["status"]["label"] != fval && fval != "All Status") {
@@ -458,6 +465,7 @@ class ChildWorkflowField2 extends Component {
             return true;
           }
         }
+
         if (key == "flag" && fval) {
           if (
             !_.size(cw.selected_flag[cw.id]) ||
@@ -601,7 +609,6 @@ class ChildWorkflowField2 extends Component {
     }
     return (
       <span>
-        {" "}
         {_.map(this.state.excluded_filters, function(v, k) {
           if (k == "category") {
             return _.map(v, function(c) {
@@ -609,8 +616,8 @@ class ChildWorkflowField2 extends Component {
                 <Tag
                   key={c + k + "selected"}
                   className="alert-tag-item alert-metal"
-                  closable
-                  onClose={that.removeExcludedFilter.bind(that, k, c)}
+                  // closable
+                  // onClose={that.removeExcludedFilter.bind(that, k, c)}
                 >
                   <Tooltip title={k}>{c}</Tooltip>
                 </Tag>
@@ -621,8 +628,8 @@ class ChildWorkflowField2 extends Component {
               <Tag
                 key={v + k + "selected"}
                 className="alert-tag-item alert-metal"
-                closable
-                onClose={that.removeExcludedFilter.bind(that, k, v)}
+                // closable
+                // onClose={that.removeExcludedFilter.bind(that, k, v)}
               >
                 <Tooltip title={k}>{v}</Tooltip>
               </Tag>
@@ -657,83 +664,69 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div>
-            {field.definition.extra.show_filters ? (
+            <div className="">
               <Row className="mr-bottom">
-                <Col span="18">
-                  <span
-                    className="text-metal small"
-                    style={{ marginRight: "10px", float: "left" }}
-                  >
-                    Status:{" "}
-                  </span>
-                  <span>{this.state.statusfilterTags}</span>
+                <Col span={24}>
+                  {/*CATEGORY FILTER*/}
+                  {this.state.filterTags}
                 </Col>
               </Row>
-            ) : null}
 
-            <Row className="mr-bottom">
-              <Col span="18">
+              <Row className="mr-bottom">
                 {field.definition.extra.show_filters ? (
-                  <span>
+                  <Col span="18">
                     <span
-                      className="text-metal small"
+                      className="text-metal"
                       style={{ marginRight: "10px", float: "left" }}
                     >
-                      Category:{" "}
+                      Filter by:{" "}
                     </span>
-                    <span>{this.state.filterTags}</span>
-                  </span>
-                ) : (
-                  <span />
-                )}
-              </Col>
-              <Col span="6" className="text-right text-light small">
-                {this.props.workflowDetailsHeader.workflowDetailsHeader
-                  ? this.getAddMenu()
-                  : null}
-              </Col>
-            </Row>
 
-            <Row>
-              <Col span="12" style={{ marginTop: "-10px" }}>
-                {field.definition.extra.show_filters ? (
-                  <span>
-                    <span
-                      className="text-metal small"
-                      style={{
-                        marginRight: "10px",
-                        float: "left",
-                        marginTop: "7px"
-                      }}
-                    >
-                      Adjudication Code:{" "}
+                    {/*STATUS FILTER*/}
+                    <span className="mr-right">
+                      {this.state.statusfilterTags}
                     </span>
-                    <span>{this.createFlagFilter()}</span>
-                  </span>
+
+                    {/*ADJUDICATION FILTER*/}
+                    <span className="mr-right">{this.createFlagFilter()}</span>
+
+                    {/*EXCLUDED FILTERS*/}
+                    {_.size(this.state.excluded_filters) ? (
+                      <span className="mr-left-lg">
+                        <span className="text-metal mr-right"> Excluded:</span>
+                        {this.excludedFilter()}
+                      </span>
+                    ) : null}
+                  </Col>
                 ) : (
-                  <span />
+                  <Col span="18" />
                 )}
-              </Col>
 
-              <Col
-                span="12"
-                className="text-right"
-                style={{ marginTop: "10px" }}
-              >
-                <span
-                  onClick={this.getChildWorkflow}
-                  className="text-anchor text-secondary"
-                >
-                  Reload
-                </span>
-              </Col>
-            </Row>
+                <Col span="6" className="text-right text-light small">
+                  <Button
+                    type="primary"
+                    className="btn-o mr-right-sm"
+                    onClick={this.getChildWorkflow}
+                    size="small"
+                  >
+                    Reload
+                  </Button>
 
-            {_.size(this.state.selected_filters) ? (
+                  {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
+                    this.getAddMenu()
+                  ) : (
+                    <span className="ant-btn disabled child-workflow-dropdown ant-btn-primary ant-btn-sm">
+                      + create new <Icon type="loading" />
+                    </span>
+                  )}
+                </Col>
+              </Row>
+
+              {/*_.size(this.state.selected_filters) ? (
               <Row>
                 <Col span="12" style={{ marginTop: "10px" }}>
                   <span
-                    className="text-metal small"
+                    className="text-metal "
                     style={{ marginRight: "10px", float: "left" }}
                   >
                     Filtered:{" "}
@@ -741,34 +734,26 @@ class ChildWorkflowField2 extends Component {
                   <span>{this.selectedFilter()}</span>
                 </Col>
               </Row>
-            ) : null}
-
-            {_.size(this.state.excluded_filters) ? (
-              <Row>
-                <Col span="12" style={{ marginTop: "10px" }}>
-                  <span
-                    className="text-metal small"
-                    style={{ marginRight: "10px", float: "left" }}
-                  >
-                    Excluded:{" "}
-                  </span>
-                  <span>{this.excludedFilter()}</span>
-                </Col>
-              </Row>
-            ) : null}
+            ) : null*/}
+            </div>
 
             <Divider />
 
-            <Row className="text-metal">
-              <Col span="10">Name</Col>
-              <Col span="9" />
-              <Col span="2">Status</Col>
-              <Col span="3" />
-            </Row>
+            {_.size(this.state.filteredChildWorkflow) ? (
+              <Row className="text-metal">
+                <Col span="10">Name</Col>
+                <Col span="8" />
+                <Col span="3">Status</Col>
+                <Col span="3" />
+              </Row>
+            ) : null}
 
             <br />
 
-            <div className="workflow-list workflows-list-embedded">
+            <div
+              className="workflow-list workflows-list-embedded "
+              style={{ margin: "2px" }}
+            >
               <div>
                 {_.size(this.state.filteredChildWorkflow) ? (
                   <WorkflowList

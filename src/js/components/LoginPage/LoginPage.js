@@ -19,7 +19,6 @@ class LoginPage extends React.Component {
   verifyCallback = recaptchaToken => {
     // Here you will get the final recaptchaToken!!!
     this.setState({ token: recaptchaToken });
-    //console.log(recaptchaToken, "<= your recaptcha token")
   };
 
   render = () => {
@@ -43,11 +42,11 @@ class LoginPage extends React.Component {
         id="login"
         token={this.state.token}
       >
-        <ReCaptcha
+        {/* <ReCaptcha
           sitekey="6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8"
           action="login"
           verifyCallback={this.verifyCallback}
-        />
+        /> */}
 
         <LoginHeader
           showLanguage={_.isEmpty(supportedLaguanges) ? false : true}

@@ -47,10 +47,10 @@ function saveField(payload) {
   return fetch(baseUrl + "responses/", requestOptions).then(handleResponse);
 }
 
-function removeAttachment(payload) {
+function removeAttachment({ workflow, field, responseId }) {
   let requestOptions = {};
 
-  let data = { attachment: null };
+  let data = { attachment: null, workflow, field };
 
   requestOptions = {
     method: "PATCH",
@@ -59,10 +59,9 @@ function removeAttachment(payload) {
     body: JSON.stringify(data)
   };
 
-  return fetch(
-    baseUrl + "responses/" + payload.responseId + "/",
-    requestOptions
-  ).then(handleResponse);
+  return fetch(baseUrl + "responses/" + responseId + "/", requestOptions).then(
+    handleResponse
+  );
 }
 
 //update fields onchange
@@ -128,8 +127,6 @@ function submitStep(payload) {
 }
 
 function approveStep(payload) {
-  console.log(payload);
-
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },
@@ -151,8 +148,6 @@ function approveStep(payload) {
 }
 
 function undoStep(payload) {
-  console.log(payload);
-
   const requestOptions = {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },

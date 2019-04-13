@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Layout,
@@ -210,6 +211,10 @@ class Workflow extends Component {
     //   showRisk = true;
     // }
 
+    // if(this.props.nextUrl.url){
+    //   return <Redirect to={this.props.nextUrl.url}/>
+    // }
+
     return (
       <Layout
         className="workflow-container inner-container"
@@ -345,6 +350,7 @@ function mapStateToProps(state) {
     workflowGroupCount,
     workflowAlertGroupCount,
     users,
+    nextUrl,
     workflowFilters
   } = state;
   return {
@@ -355,6 +361,7 @@ function mapStateToProps(state) {
     workflowAlertGroupCount,
     workflowGroupCount,
     users,
+    nextUrl,
     workflowFilters
   };
 }

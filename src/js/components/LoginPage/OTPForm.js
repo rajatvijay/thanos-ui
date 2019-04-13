@@ -73,7 +73,7 @@ class OTPForm extends React.Component {
     e.preventDefault();
     this.setState({ submitted: true });
     const { email, password } = this.state;
-    const { dispatch } = this.props;
+    const { dispatch, nextUrl } = this.props;
 
     if (email && password) {
       dispatch(loginOtp(email, password));
@@ -115,7 +115,9 @@ class OTPForm extends React.Component {
       message:
         this.props.intl.formatMessage({
           id: "commonTextInstances.oneTimePasswordSentText"
-        }) + this.state.data.email
+        }) +
+        " " +
+        this.state.data.email
     });
   };
 
@@ -126,7 +128,9 @@ class OTPForm extends React.Component {
       message:
         this.props.intl.formatMessage({
           id: "commonTextInstances.unableToSendOneTimePassword"
-        }) + this.state.data.email
+        }) +
+        " " +
+        this.state.data.email
     });
   };
 
@@ -367,7 +371,6 @@ class OTPForm extends React.Component {
                     Login using your {config.name} username and password
                   </div>
                 </div>
-
                 <div>
                   {config.saml_url ? (
                     <a
@@ -382,7 +385,11 @@ class OTPForm extends React.Component {
                     </a>
                   ) : (
                     <Link
-                      to="/login/basic"
+                      to={
+                        this.props.nextUrl
+                          ? "/login/basic" + this.props.nextUrl
+                          : "/login/basic"
+                      }
                       className="ant-btn login-form-button ant-btn-primary btn-block text-white"
                     >
                       <FormattedMessage id="loginPageInstances.loginEmailPassword" />

@@ -98,7 +98,11 @@ export default {
       noWorkflowsError: "Unable to load workflow list",
       loggedOutError:
         "You have been logged out. Please Login again to continue",
-      noWorkflowsToShow: "No workflows to show. Try clearing the filters or "
+      noWorkflowsToShow: "No workflows to show. Try clearing the filters or ",
+      workflowNotFound:
+        "Sorry! We were unable to find the workflow you requested.",
+      noStepInWorkflow:
+        "Dear user, forms are still being processed in the system. Please try again later."
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -190,8 +194,9 @@ export default {
         "No se puede enviar una contraseña de tiempo a ",
       emailCantBeEmpty: "El correo electrónico no puede estar vacío",
       invalidEmpty: "Email inválido",
-      OtpEmpty: "La contraseña de una sola vez no puede estar vacía",
-      enterOtp: "Ingrese la contraseña de un solo uso para verificar su cuenta",
+      OtpEmpty: "La contraseña de una sola vez no puede estar vacía ",
+      enterOtp:
+        "Ingrese la contraseña de un solo uso para verificar su cuenta ",
       oneTimePassword: "Contraseña de una sola vez",
       categoryText: "categoría"
     },
@@ -218,7 +223,11 @@ export default {
       loggedOutError:
         "Se ha desconectado. Por favor, vuelva a iniciar sesión para continuar",
       noWorkflowsToShow:
-        "No hay flujos de trabajo que mostrar. Intente borrar los filtros o "
+        "No hay flujos de trabajo que mostrar. Intente borrar los filtros o ",
+      workflowNotFound:
+        "¡Lo siento! No hemos podido encontrar el flujo de trabajo que ha solicitado.",
+      noStepInWorkflow:
+        "Estimado usuario, los formularios aún se están procesando en el sistema. Por favor, inténtelo de nuevo más tarde."
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",

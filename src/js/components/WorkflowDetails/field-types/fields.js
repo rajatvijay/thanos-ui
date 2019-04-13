@@ -26,6 +26,7 @@ import Dropzone from "react-dropzone";
 import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import validator from "validator";
+import { ESign } from "./esign.js";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -640,7 +641,7 @@ class FileUpload extends Component {
     this.setState({ loading: true });
     let payload = {
       workflow: this.props.workflowId,
-      field: this.props.field.definition.id,
+      field: this.props.field.id,
       responseId: this.props.field.answers[0].id
     };
 
@@ -729,8 +730,8 @@ class FileUpload extends Component {
                 key={"file-1"}
               >
                 <div className="ant-upload-list-item-info">
-                  <span>
-                    <i className="anticon anticon-paper-clip" />
+                  <span style={{ display: "flex" }}>
+                    <Icon type="paper-clip" />
                     <a
                       href={url}
                       target="_blank"
@@ -741,22 +742,16 @@ class FileUpload extends Component {
                         field.answers[0].attachment.lastIndexOf("?")
                       )}
                     </a>
+                    {this.props.completed ? (
+                      <i
+                        title="Remove file"
+                        className="anticon anticon-cross disabled"
+                      />
+                    ) : (
+                      <Icon type="close-circle" onClick={this.removeFile} />
+                    )}
                   </span>
                 </div>
-
-                {this.props.completed ? (
-                  <i
-                    title="Remove file"
-                    className="anticon anticon-cross disabled"
-                    //onClick={this.removeFile}
-                  />
-                ) : (
-                  <i
-                    title="Remove file"
-                    className="anticon anticon-cross"
-                    onClick={this.removeFile}
-                  />
-                )}
               </div>
             ) : null}
 
@@ -868,6 +863,9 @@ class AttachmentDownload extends Component {
             </Button>
           )}
         </FormItem>
+        {this.props.field.definition.extra.esign_enabled ? (
+          <ESign {...this.props} />
+        ) : null}
       </div>
     );
   };
@@ -941,5 +939,15 @@ export const RadioField = props => {
       </RadioGroup>
       <GetAnsweredBy {...props} />
     </FormItem>
+  );
+};
+
+export const IFrameField = props => {
+  return (
+    <iframe
+      style={{ minHeight: 400, width: "100%" }}
+      frameBorder="0"
+      src={props.field.definition.extra.iframe_url}
+    />
   );
 };

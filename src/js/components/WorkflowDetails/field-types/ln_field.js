@@ -77,7 +77,10 @@ class LexisNexisSearch extends Component {
     };
 
     let final_html = null;
-    if (this.props.currentStepFields.integration_data_loading) {
+    if (
+      this.props.currentStepFields.integration_data_loading ||
+      field.integration_json.status_message == "Fetching data for this field..."
+    ) {
       final_html = (
         <div>
           <div className="text-center mr-top-lg">
@@ -524,7 +527,6 @@ const GetTabsFilter = props => {
       props.jsonData.Envelope.Body.SearchResponse.SearchResult.Records
         .ResultRecord.Watchlist.Matches.WLMatch;
   } catch (err) {
-    console.log("LN error ---->", props.jsonData);
     return <div className="text-center text-red">No matches found!</div>;
   }
 

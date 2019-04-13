@@ -28,4 +28,3 @@ krypton-ui.sublime-workspace
 #extra css files not to be tracked anymore as we are using less
 *.css
 *.css.map
-!App.css

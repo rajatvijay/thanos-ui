@@ -14,10 +14,9 @@ const getSite = site => {
 const subDomainUrl = site => {
   let host = document.location.hostname;
   let hostSplit = host.split(".");
-  let domain = document.location.protocol + "//" + host + "/api/v1/";
+  let domain = document.location.protocol + "//" + host + "/api/v1/"; //props
   return domain;
 };
 
 export const baseUrl = getSite();
-
 export const baseUrl2 = subDomainUrl();

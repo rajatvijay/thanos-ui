@@ -1,48 +1,16 @@
 @import url("../../utilities/variables.less");
 @import url("../../utilities/helper.less");
 
-.workflows-list-embedded {
+.workflow-list.workflows-list-embedded {
+  .workflow-list-wrapper {
+    padding: 0px;
+  }
   .paper {
     background: #fff;
-    .workflow-list-item {
-      border-bottom: 1px solid #f2f5fa;
-      position: relative;
-      border-radius: 2px;
-      transition: all 0.3s ease-in;
-      &:hover {
-        background: #f2f5fa;
-      }
-      .ant-collapse-header {
-        padding: 10px 10px;
-      }
-      &.expanded {
-        background: #fff;
-        > .ant-collapse-header {
-          background: #f2f5fa;
-        }
-        > .workflow-list-item {
-          .company-name {
-            font-size: 12px;
-          }
-          .lc1 {
-            font-size: 10px;
-            color: @color-grey-d;
-          }
-        }
-        .child-container {
-          border: 1px solid #d8d8d8;
-          border-top: none;
-          padding: 4px 4px 4px 24px;
-          .ant-collapse-content-box {
-            padding: 0;
-          }
-        }
-      }
-      .child-workflow-expand {
-        position: absolute;
-        right: 4px;
-        top: 14px;
-        color: @color-secondary;
+    &.workflow-list-item {
+      transition: background 0.3s ease-in;
+      &.opened {
+        margin: 25px 0px;
       }
     }
   }

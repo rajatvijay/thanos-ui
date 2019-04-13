@@ -15,7 +15,8 @@ import {
   URL,
   Attachment,
   File,
-  RadioField
+  RadioField,
+  IFrameField
   //Duns
 } from "./fields";
 
@@ -38,6 +39,7 @@ import { ChildWorkflowField } from "./ChildWorkflow";
 import { DuplicateCheck } from "./duplicate_check_new.js";
 import { RDCEventDetails } from "./rdc_event_details.js";
 import { RDCAlertsMetadata } from "./rdc_alert_metadata.js";
+import { ESign } from "./esign.js";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -181,6 +183,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "dnb_investigation_status":
       return DnBCommon(props);
+    case "iframe":
+      return IFrameField(props);
     default:
       return Text(props);
   }
