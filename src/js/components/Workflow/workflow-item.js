@@ -926,58 +926,64 @@ const StepGroupList = props => {
     <div className="shadow-wrapper">
       <div className="sub-step-list">
         <ul className="groupaz-list" id="groupaz-list">
-          {_.map(props.pData, function(group, index) {
-            let completed = group.completed;
-            let od = group.overdue;
+          {_.size(visible_steps) ? (
+            _.map(props.pData, function(group, index) {
+              let completed = group.completed;
+              let od = group.overdue;
 
-            if (!_.size(group.steps)) {
-              return null;
-            }
-            if (!isLockedStepGroupEnable(group, visible_steps)) {
-              return null;
-            }
-            return (
-              <li className="groupaz" key={"group-" + index}>
-                <div
-                  className={
-                    "lc-step grp-class step-group-status text-ellipsis  " +
-                    group.definition.status
-                  }
-                >
-                  <span className="grp-name  text-normal">
-                    <i
-                      className={
-                        "material-icons mr-right-lg " +
-                        (completed
-                          ? " text-green "
-                          : od ? " text-red " : " text-normal ")
-                      }
-                    >
-                      {completed
-                        ? "check_circle "
-                        : od ? "alarm" : "panorama_fish_eye"}
-                    </i>
-                    <span className=" pd-left-sm t-14">
-                      {group.definition.name}
+              if (!_.size(group.steps)) {
+                return null;
+              }
+              if (!isLockedStepGroupEnable(group, visible_steps)) {
+                return null;
+              }
+              return (
+                <li className="groupaz" key={"group-" + index}>
+                  <div
+                    className={
+                      "lc-step grp-class step-group-status text-ellipsis  " +
+                      group.definition.status
+                    }
+                  >
+                    <span className="grp-name  text-normal">
+                      <i
+                        className={
+                          "material-icons mr-right-lg " +
+                          (completed
+                            ? " text-green "
+                            : od ? " text-red " : " text-normal ")
+                        }
+                      >
+                        {completed
+                          ? "check_circle "
+                          : od ? "alarm" : "panorama_fish_eye"}
+                      </i>
+                      <span className=" pd-left-sm t-14">
+                        {group.definition.name}
+                      </span>
                     </span>
-                  </span>
-                </div>
-                <ul>
-                  {_.map(group.steps, function(steps, index) {
-                    return (
-                      <StepItem
-                        {...props}
-                        stepData={steps}
-                        group={group}
-                        visible_steps={visible_steps}
-                        key={"step-" + index}
-                      />
-                    );
-                  })}
-                </ul>
-              </li>
-            );
-          })}
+                  </div>
+                  <ul>
+                    {_.map(group.steps, function(steps, index) {
+                      return (
+                        <StepItem
+                          {...props}
+                          stepData={steps}
+                          group={group}
+                          visible_steps={visible_steps}
+                          key={"step-" + index}
+                        />
+                      );
+                    })}
+                  </ul>
+                </li>
+              );
+            })
+          ) : (
+            <div className="text-medium text-center opacity-half ">
+              <FormattedMessage id="errorMessageInstances.noStepInWorkflow" />
+            </div>
+          )}
         </ul>
       </div>
       <div className="white-shadow" />
