@@ -258,7 +258,7 @@ function getLink(text, tag) {
   return text.replace(URL_REGEX, function(url) {
     // For S3 URLS
     if (url.includes("s3")) {
-      return `<a href="${url}" target="_blank">${
+      return `<a rel="noopener noreferrer" href="${url}" target="_blank">${
         tag ? sanitizeBackenString(tag) : url
       }</a>`;
     }
