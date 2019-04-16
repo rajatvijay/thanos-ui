@@ -715,8 +715,19 @@ export const WorkflowHeader = props => {
         <HeaderTitle {...props} />
 
         <Col span={4} className="t-12 text-light pd-right-sm">
-          <div className="text-ellipsis">
-            {_.size(subtext) >= 2 ? ProcessLcData(subtext[1]) : ""}
+          <div className="text-ellipsis" style={{ paddingTop: "6px" }}>
+            {_.size(subtext) >= 2 ? (
+              <Tooltip
+                title={subtext[1].label + ": " + (subtext[1].value || "-")}
+              >
+                <span className="t-cap">
+                  {subtext[1].show_label ? subtext[1].label + ": " : ""}
+                </span>
+                {ProcessLcData(subtext[1])}
+              </Tooltip>
+            ) : (
+              ""
+            )}
           </div>
         </Col>
 
@@ -750,8 +761,13 @@ export const WorkflowHeader = props => {
 export const WorkflowBody = props => {
   return (
     <div className="lc-card-body">
-      <MetaRow {...props} />
       <div className="lc-card-section">
+        <Row className="card-section-item">
+          <Col span={24}>
+            <LcData {...props} />
+          </Col>
+        </Row>
+
         {!props.statusView ? (
           <Row align="top">
             <Col span={24}>
@@ -762,6 +778,8 @@ export const WorkflowBody = props => {
           <StepGroupList {...props} />
         )}
       </div>
+      <Divider className="no-margin" />
+      <MetaRow {...props} />
     </div>
   );
 };
