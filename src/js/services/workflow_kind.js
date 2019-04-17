@@ -7,10 +7,6 @@ export const workflowKindService = {
   getStatusCount
 };
 
-
-
-
-
 function getAll() {
   const requestOptions = {
     method: "GET",
@@ -18,12 +14,10 @@ function getAll() {
     credentials: "include"
   };
 
-  return fetch(baseUrl + "workflow-kinds/", requestOptions).then(
+  return fetch(baseUrl + "workflow-kinds/?limit=50", requestOptions).then(
     handleResponse
   );
 }
-
-
 
 function getAlertCount(tag) {
   const requestOptions = {
