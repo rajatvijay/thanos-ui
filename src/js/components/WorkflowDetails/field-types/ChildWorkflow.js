@@ -108,13 +108,14 @@ class ChildWorkflowField2 extends Component {
 
     let parent_id = parentId;
     //let kind = this.props.field.definition.extra.child_workflow_kind_id;
-
+    let valueFilter = this.getValuefilter();
     let url =
       baseUrl +
       "workflows-list/?limit=100&parent_workflow_id=" +
       parent_id +
       "&kind=" +
-      kind;
+      kind +
+      valueFilter;
 
     this.setState({ fetching: true });
 
@@ -131,6 +132,25 @@ class ChildWorkflowField2 extends Component {
         this.filterByFlag();
         this.excludeWorkflows();
       });
+  };
+
+  getValuefilter = () => {
+    let filterList = this.props.field.definition.extra.filters;
+    let filter = "&";
+
+    if (!_.size(filterList)) {
+      return "";
+    }
+
+    _.forEach(filterList, (i, index) => {
+      filter =
+        filter + "answer=" + i.field + "__" + i.operator + "__" + i.value;
+      if (!index + 1 === _.size(filterList)) {
+        filter = filter + "&";
+      }
+    });
+
+    return filter;
   };
 
   onChildSelect = e => {
