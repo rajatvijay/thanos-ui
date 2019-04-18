@@ -2,8 +2,7 @@ import React from "react";
 import { Button, Row, Col, Icon, Tag, Menu, Dropdown, Tooltip } from "antd";
 import _ from "lodash";
 import Moment from "react-moment";
-import { URL_REGEX } from "../../../utils/contants";
-import { sanitizeBackenString } from "../../../utils/utilities";
+import { URL_REGEX, ANCHOR_TAG_REGEX } from "../../../utils/contants";
 
 export const commonFunctions = {
   getLabel,
@@ -125,10 +124,7 @@ function field_error(props) {
     help: (
       <span
         dangerouslySetInnerHTML={{
-          __html: getLink(
-            props.field.definition.help_text,
-            props.field.definition.tag
-          )
+          __html: getLink(props.field.definition.help_text)
         }}
       />
     ),
@@ -249,30 +245,29 @@ function fieldFlagDropdown(e, props) {
 //create link from text
 // TODO: Move this to utilities file
 /**
- * Converts a simple string with url to a string with hyperlink to that url
- * with a human readble name if second param is provided
+ * Converts a simple string with url but no anchor tag
+ * to a string with anchor tag
  * @param {string} text String to replace the URL from
  * @param {*} tag Human readable name for the URL
  */
-function getLink(text, tag) {
-  return text.replace(URL_REGEX, function(url) {
-    // For S3 URLS
-    if (url.includes("s3")) {
-      return `<a rel="noopener noreferrer" href="${url}" target="_blank">${
-        tag ? sanitizeBackenString(tag) : url
-      }</a>`;
-    }
+function getLink(text) {
+  // FOR BACKWARD COMPATIBILITY
+  // If it has url but no anchor tag, make it an anchor tag
+  if (URL_REGEX.test(text) && !ANCHOR_TAG_REGEX.test(text)) {
+    return text.replace(URL_REGEX, function(url) {
+      // For email URLS
+      if (url.includes("@")) {
+        return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
+      }
 
-    // For email URLS
-    if (url.includes("@")) {
-      return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
-    }
+      // For all other URLs
+      return `<a href="${
+        url
+      }" target="_blank" rel="noopener noreferrer">${url.includes("http") ? url : `http://${url}`}</a>`;
+    });
+  }
 
-    // For all other URLs
-    return `<a href="${
-      url
-    }" target="_blank">${url.includes("http") ? url : `http://${url}`}</a>`;
-  });
+  return text;
 }
 
 function getStyle(props, extra) {

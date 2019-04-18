@@ -12,7 +12,7 @@
  * Converts the first char of the string to uppercase
  * @param {string} str
  */
-export const uppcaseFirstChar = str => {
+export const upperCaseFirstChar = str => {
   if (typeof str !== "string") {
     throw new Error(`Expected string got ${typeof str}`);
   }
@@ -23,12 +23,12 @@ export const uppcaseFirstChar = str => {
 };
 
 /**
- * Make a string human readable
+ * Make a snake case string human readable
  * 1. Replaces the underscores with spaces
  * 2. Uppercases each word
  * @param {string} str
  */
-export const sanitizeBackenString = str => {
+export const convertSnakeCaseToHumanReadable = str => {
   if (typeof str !== "string") {
     throw new Error(`Expected string got ${typeof str}`);
   }
@@ -39,6 +39,6 @@ export const sanitizeBackenString = str => {
 
   return str
     .split("_")
-    .map(word => uppcaseFirstChar(word))
+    .map(word => upperCaseFirstChar(word))
     .join(" ");
 };
