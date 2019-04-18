@@ -251,7 +251,7 @@ class WorkflowDetails extends Component {
     const wf = this.props.workflowDetailsHeader.workflowDetailsHeader;
     const size = _.size(wf.workflow_family);
     if (size > 1) {
-      history.push("/workflows/instances/" + wf.workflow_family[size - 1]);
+      history.push("/workflows/instances/" + wf.workflow_family[size - 1].id);
     } else {
       history.push("/workflows/instances/");
     }
