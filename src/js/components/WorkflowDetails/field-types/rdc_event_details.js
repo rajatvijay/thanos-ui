@@ -17,6 +17,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { countries } from "./countries.js";
 import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
+import { EventDetailComp, getEventItem } from "./rdc_alert_metadata";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -112,9 +113,9 @@ const buildDetails = obj => {
   obj["id"] = obj["custom_hash"];
 
   var ref_details = obj["ReferenceDetail"] || [];
-  ref_details = _.map(ref_details, function(rd) {
+  ref_details = _.map(ref_details, function(rd, index) {
     return (
-      <span>
+      <span key={"key-" + index}>
         <span>
           &nbsp;<b>Source Name:</b> {rd["SourceName"]}
           <br />
@@ -148,11 +149,9 @@ const buildDetails = obj => {
         <div className="col-sm-12">
           <h4 className="match-label ">Event Description:</h4>
           <br />
-          <span className="match-value">{obj["EventText"]}</span>
+          {getEventItem(obj, true)}
           <br />
         </div>
-
-        <Divider />
 
         <div className="col-sm-12">
           <h4 className="match-label ">Reference Details:</h4>
@@ -171,8 +170,19 @@ const GetTable = props => {
   const columns = [
     {
       title: "Event Type",
-      dataIndex: "EventTypeText",
-      key: "EventTypeText"
+      key: "EventTypeText",
+      render: record => {
+        return (
+          <div>
+            {record.ReferenceDetail ? (
+              <div className="mr-bottom-sm">
+                <b>{record.ReferenceDetail[0].Headline}</b>
+              </div>
+            ) : null}
+            {record.EventTypeText}
+          </div>
+        );
+      }
     },
     {
       title: "Category",

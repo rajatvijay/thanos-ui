@@ -318,12 +318,6 @@ const buildDetails = obj => {
             </Row>
           </TabPane>
 
-          <TabPane tab="Event details" key="5">
-            <div>
-              <EventDetailComp obj={obj} />
-            </div>
-          </TabPane>
-
           {obj.EntityTypeText === "Person" ? (
             <TabPane tab="Relationship" key="6">
               {_.map(obj.Relationships, function(relationship, index) {
@@ -475,7 +469,137 @@ const buildDetails = obj => {
   );
 };
 
-class EventDetailComp extends Component {
+export const getEventItem = (refItem, hideHeader) => {
+  return (
+    <div>
+      {_.size(refItem.ReferenceDetail)
+        ? _.map(refItem.ReferenceDetail, function(item) {
+            return (
+              <div className="mr-bottom-lg">
+                <div>
+                  {item.Headline && !hideHeader ? (
+                    <h4 className="t-16 text-medium">{item.Headline}</h4>
+                  ) : null}
+
+                  <p className="text-light">{refItem.EventText || ""}</p>
+
+                  {item.WebPageURL ? (
+                    <div className="mr-bottom">
+                      <a href={item.WebPageURL} target="_blank">
+                        {item.WebPageURL}
+                      </a>
+                    </div>
+                  ) : null}
+                </div>
+                <div>
+                  <Row>
+                    {item.SourceName ? (
+                      <Block
+                        column={4}
+                        label="Source Name:"
+                        value={item.SourceName}
+                      />
+                    ) : null}
+
+                    {item.SourceTypeText ? (
+                      <Block
+                        column={4}
+                        label="Source type:"
+                        value={item.SourceTypeText || "-"}
+                      />
+                    ) : null}
+
+                    {item.PublisherName ? (
+                      <Block
+                        column={4}
+                        label="Publisher Name:"
+                        value={item.PublisherName || "-"}
+                      />
+                    ) : null}
+
+                    {item.PublicationSource ? (
+                      <Block
+                        column={4}
+                        label="Publication:"
+                        value={item.PublicationSource || "-"}
+                      />
+                    ) : null}
+                  </Row>
+                </div>
+              </div>
+            );
+          })
+        : null}
+
+      <Row>
+        <Block
+          column={4}
+          label="Event Date:"
+          value={refItem.EventDate || "-"}
+          className="mr-bottom-sm"
+        />
+        <Block
+          column={4}
+          label="Event Type Text:"
+          value={refItem.EventTypeText || "-"}
+          className="mr-bottom-sm"
+        />
+
+        <Block
+          column={4}
+          label="Event Type Code:"
+          value={getAbbr(refItem.EventTypeCode, refItem.EventSubTypeCode)}
+          className="mr-bottom-sm"
+        />
+
+        {refItem.krypton_category ? (
+          <Block
+            column={4}
+            label="CAR Risk Code:"
+            value={
+              <Tag className="alert-tag-item"> {refItem.krypton_category}</Tag>
+            }
+            className="mr-bottom-sm"
+          />
+        ) : null}
+
+        {refItem.krypton_status ? (
+          <Block
+            column={4}
+            label="Status:"
+            value={
+              refItem.krypton_status ? (
+                <Tag color={event_status[refItem.krypton_status]["class"]}>
+                  {event_status[refItem.krypton_status]["label"]}
+                </Tag>
+              ) : (
+                "-"
+              )
+            }
+            className="mr-bottom-sm"
+          />
+        ) : null}
+
+        <Block
+          column={4}
+          label="Event SubType Text:"
+          value={refItem.EventSubTypeText || "-"}
+          className="mr-bottom-sm"
+        />
+
+        <Block
+          column={4}
+          label="Postal Code:"
+          value={refItem.PostalCode || "-"}
+          className="mr-bottom-sm"
+        />
+      </Row>
+      <Divider />
+    </div>
+  );
+};
+
+export class EventDetailComp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -501,139 +625,6 @@ class EventDetailComp extends Component {
       list = this.props.obj.EventDetail;
     }
     this.setState({ data: list });
-  };
-
-  getEventItem = refItem => {
-    return (
-      <div>
-        {_.size(refItem.ReferenceDetail)
-          ? _.map(refItem.ReferenceDetail, function(item) {
-              return (
-                <div className="mr-bottom-lg">
-                  <div>
-                    {item.Headline ? (
-                      <h4 className="t-16 text-medium">{item.Headline}</h4>
-                    ) : null}
-
-                    <p className="text-light">{refItem.EventText || ""}</p>
-
-                    {item.WebPageURL ? (
-                      <div className="mr-bottom">
-                        <a href={item.WebPageURL} target="_blank">
-                          {item.WebPageURL}
-                        </a>
-                      </div>
-                    ) : null}
-                  </div>
-                  <div>
-                    <Row>
-                      {item.SourceName ? (
-                        <Block
-                          column={4}
-                          label="Source Name:"
-                          value={item.SourceName}
-                        />
-                      ) : null}
-
-                      {item.SourceTypeText ? (
-                        <Block
-                          column={4}
-                          label="Source type:"
-                          value={item.SourceTypeText || "-"}
-                        />
-                      ) : null}
-
-                      {item.PublisherName ? (
-                        <Block
-                          column={4}
-                          label="Publisher Name:"
-                          value={item.PublisherName || "-"}
-                        />
-                      ) : null}
-
-                      {item.PublicationSource ? (
-                        <Block
-                          column={4}
-                          label="Publication:"
-                          value={item.PublicationSource || "-"}
-                        />
-                      ) : null}
-                    </Row>
-                  </div>
-                </div>
-              );
-            })
-          : null}
-
-        <Row>
-          <Block
-            column={4}
-            label="Event Date:"
-            value={refItem.EventDate || "-"}
-            className="mr-bottom-sm"
-          />
-          <Block
-            column={4}
-            label="Event Type Text:"
-            value={refItem.EventTypeText || "-"}
-            className="mr-bottom-sm"
-          />
-
-          <Block
-            column={4}
-            label="Event Type Code:"
-            value={getAbbr(refItem.EventTypeCode, refItem.EventSubTypeCode)}
-            className="mr-bottom-sm"
-          />
-
-          {refItem.krypton_category ? (
-            <Block
-              column={4}
-              label="CAR Risk Code:"
-              value={
-                <Tag className="alert-tag-item">
-                  {" "}
-                  {refItem.krypton_category}
-                </Tag>
-              }
-              className="mr-bottom-sm"
-            />
-          ) : null}
-
-          {refItem.krypton_status ? (
-            <Block
-              column={4}
-              label="Status:"
-              value={
-                refItem.krypton_status ? (
-                  <Tag color={event_status[refItem.krypton_status]["class"]}>
-                    {event_status[refItem.krypton_status]["label"]}
-                  </Tag>
-                ) : (
-                  "-"
-                )
-              }
-              className="mr-bottom-sm"
-            />
-          ) : null}
-
-          <Block
-            column={4}
-            label="Event SubType Text:"
-            value={refItem.EventSubTypeText || "-"}
-            className="mr-bottom-sm"
-          />
-
-          <Block
-            column={4}
-            label="Postal Code:"
-            value={refItem.PostalCode || "-"}
-            className="mr-bottom-sm"
-          />
-        </Row>
-        <Divider />
-      </div>
-    );
   };
 
   render() {
@@ -667,7 +658,7 @@ class EventDetailComp extends Component {
         <Divider />
 
         {_.map(data, function(refItem) {
-          return that.getEventItem(refItem);
+          return getEventItem(refItem);
         })}
       </div>
     );
