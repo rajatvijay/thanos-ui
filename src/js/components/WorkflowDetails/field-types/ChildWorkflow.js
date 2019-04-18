@@ -190,7 +190,11 @@ class ChildWorkflowField2 extends Component {
     const relatedKind = this.getRelatedTypes();
 
     _.map(relatedKind, function(item) {
-      if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+      if (
+        item.is_related_kind &&
+        _.includes(item.features, "add_workflow") &&
+        that.props.field.definition.extra.child_workflow_kind_id === item.id
+      ) {
         workflowKindFiltered.push(item);
       }
     });
@@ -202,11 +206,7 @@ class ChildWorkflowField2 extends Component {
     let menu = (
       <Menu onClick={this.onChildSelect}>
         {_.map(workflowKindFiltered, function(item, index) {
-          if (
-            that.props.field.definition.extra.child_workflow_kind_id === item.id
-          ) {
-            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-          }
+          return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
         })}
       </Menu>
     );
