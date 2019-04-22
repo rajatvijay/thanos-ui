@@ -11,13 +11,15 @@ export const workflowFiltersService = {
   getRegionData
 };
 
-function getStatusData() {
+function getStatusData(queryParams = {}) {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
     credentials: "include"
   };
-  let url = baseUrl + "workflow-status/";
+
+  const searchParams = new URLSearchParams(queryParams);
+  const url = `${baseUrl}workflow-status/?${searchParams}`;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
