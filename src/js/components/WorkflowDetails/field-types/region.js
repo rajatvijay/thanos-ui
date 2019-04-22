@@ -53,7 +53,10 @@ class Reg extends Component {
             loading: false
           });
         } else {
-          this.setState({ data: body.results, loading: false });
+          const sortedResults = body.results.sort(
+            (a, b) => (a.label > b.label ? 1 : -1)
+          );
+          this.setState({ data: sortedResults, loading: false });
         }
       });
   };
