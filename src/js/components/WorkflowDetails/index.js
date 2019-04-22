@@ -195,7 +195,7 @@ class WorkflowDetails extends Component {
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.preConstruct();
       this.forceUpdate();
-      this.getInitialData();
+      // this.getInitialData();
     }
   };
 
