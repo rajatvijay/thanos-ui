@@ -114,7 +114,7 @@ function searchWorkflow(query) {
     body: JSON.stringify({ q: query })
   };
 
-  let url = baseUrl + "workflows-list/search/";
+  let url = baseUrl + "workflows/search/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }
