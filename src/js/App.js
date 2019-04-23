@@ -14,6 +14,16 @@ import ErrorBoundary from "./components/common/ErrorBoundary";
 class App extends React.Component {
   componentDidMount() {
     loadReCaptcha("6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8");
+
+    // Add JIRA widget if the env is UAT
+    if (process.env.REACT_APP_CERTA_ENV === "UAT") {
+      const script = document.createElement("script");
+      script.setAttribute(
+        "src",
+        "https://thevetted.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-wkhsc1/b/45/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=5fcd3be7"
+      );
+      document.body.appendChild(script);
+    }
   }
 
   render = () => {
