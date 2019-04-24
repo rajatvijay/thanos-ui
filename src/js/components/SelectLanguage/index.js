@@ -13,9 +13,15 @@ class SelectLanguage extends React.Component {
     if (this.props.authentication.user) {
       this.props.dispatch(languageActions.updateUserLanguage(value));
     }
-    window.location.reload();
   };
   render() {
+    if (this.props.languageSelector.loading) {
+      console.log(`Language change in progress, will need reload`);
+      this.languageChangeInprogress = true;
+    } else if (this.languageChangeInprogress) {
+      console.log(`Language change done, will reload`);
+      window.location.reload();
+    }
     let user = this.props.authentication.user;
     let preferredLanguage =
       this.props.languageSelector.language ||
