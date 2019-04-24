@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
 import {
   Layout,
   Collapse,
@@ -28,6 +29,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 import { FormattedMessage } from "react-intl";
 import StepPreview from "./StepPreview";
+import UserWorkflow from "./user-workflow";
 
 const { Content, Sider } = Layout;
 const TabPane = Tabs.TabPane;
@@ -179,6 +181,11 @@ class WorkflowList extends Component {
               </span>
             </div>
           )}
+          <UserWorkflow
+            visible={this.props.userWorkflowModal.visible}
+            parentWorkflowID={this.props.userWorkflowModal.workflowID}
+            {...this.props}
+          />
         </Content>
       </div>
     );
@@ -186,8 +193,6 @@ class WorkflowList extends Component {
 }
 
 export const CreateRelated = props => {
-  const relatedKind = props.relatedKind;
-
   const menuItems = () => {
     let workflowKindFiltered = [];
 
@@ -261,15 +266,23 @@ export class WorkflowItem extends React.Component {
     return rt;
   };
 
-  onChildSelect = e => {
-    let payload = {
-      status: 1,
-      kind: e.key,
-      name: "Draft",
-      parent: this.props.workflow.id
-    };
+  createChildWorkflow = e => {
+    if (e.key === "users") {
+      const payload = {
+        workflowID: this.props.workflow.id
+      };
 
-    this.props.dispatch(createWorkflow(payload));
+      this.props.dispatch(workflowActions.showUserWorkflowModal(payload));
+    } else {
+      const payload = {
+        status: 1,
+        kind: e.key,
+        name: "Draft",
+        parent: this.props.workflow.id
+      };
+
+      this.props.dispatch(createWorkflow(payload));
+    }
   };
 
   expandChildWorkflow = () => {
@@ -390,7 +403,6 @@ export class WorkflowItem extends React.Component {
 
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
-    const isChild = this.props.workflow.parent === null ? true : false;
 
     let previewHeader = (
       <div>
@@ -399,7 +411,7 @@ export class WorkflowItem extends React.Component {
           style={{ marginRight: "50px" }}
         >
           <Link
-            to={"/workflows/instances/" + this.props.workflow.id}
+            to={"/workflows/instances/" + this.props.workflow.id + "/"}
             className="text-white"
           >
             open <i className="material-icons t-14 text-middle">open_in_new</i>
@@ -457,7 +469,7 @@ export class WorkflowItem extends React.Component {
                 isChild={this.props.isChild}
                 showRelatedType={this.showRelatedType}
                 relatedKind={this.state.relatedWorkflow}
-                onChildSelect={this.onChildSelect}
+                onChildSelect={this.createChildWorkflow}
                 workflow={this.props.workflow}
                 pData={this.props.pData}
                 ondata={this.ondata}
@@ -472,7 +484,7 @@ export class WorkflowItem extends React.Component {
                     createButton={
                       <CreateRelated
                         relatedKind={this.state.relatedWorkflow}
-                        onChildSelect={this.onChildSelect}
+                        onChildSelect={this.createChildWorkflow}
                       />
                     }
                     isEmbedded={this.props.isEmbedded}
@@ -488,7 +500,7 @@ export class WorkflowItem extends React.Component {
                   <div className="lc-card-section text-right">
                     <CreateRelated
                       relatedKind={this.state.relatedWorkflow}
-                      onChildSelect={this.onChildSelect}
+                      onChildSelect={this.createChildWorkflow}
                     />
                   </div>
                 </div>
@@ -633,7 +645,8 @@ function mapPropsToState(state) {
     workflowChildren,
     showFilterMenu,
     expandedWorkflows,
-    config
+    config,
+    userWorkflowModal
   } = state;
   return {
     workflowKind,
@@ -641,7 +654,8 @@ function mapPropsToState(state) {
     workflowChildren,
     showFilterMenu,
     expandedWorkflows,
-    config
+    config,
+    userWorkflowModal
   };
 }
 
