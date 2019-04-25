@@ -44,19 +44,33 @@ class Comments extends Component {
     // call action
   }
 
-  componentDidMount() {
-    // Fetching the statuses only specific to
-    // this worflow kind
-    const workflowId = this.props.object_id;
-    const childWorkflows = this.props.workflowDetailsHeader
-      .workflowDetailsHeader.children;
-    const currentChildWorkflow = childWorkflows
-      ? childWorkflows.find(workflow => workflow.id === workflowId)
-      : null;
+  getWorkflowKind = ({ workflowComments }) => {
+    try {
+      return workflowComments.data.results[0].target.definition.kind;
+    } catch (e) {
+      return null;
+    }
+  };
 
-    if (currentChildWorkflow) {
+  componentDidMount() {
+    const workflowKind = this.getWorkflowKind(this.props);
+
+    if (workflowKind) {
       workflowFiltersService
-        .getStatusData({ workflow_kind: currentChildWorkflow.definition.kind })
+        .getStatusData({ workflow_kind: workflowKind })
+        .then(response => {
+          this.setState({ workflowStatuses: response });
+        });
+    }
+  }
+
+  componentDidUpdate(previousProps) {
+    const currentWorkflowKind = this.getWorkflowKind(this.props);
+    const previousWorkflowKind = this.getWorkflowKind(previousProps);
+
+    if (currentWorkflowKind && currentWorkflowKind !== previousWorkflowKind) {
+      workflowFiltersService
+        .getStatusData({ workflow_kind: currentWorkflowKind })
         .then(response => {
           this.setState({ workflowStatuses: response });
         });
