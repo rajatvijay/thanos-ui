@@ -243,7 +243,7 @@ class WorkflowDetails extends Component {
       }
 
       this.setState({ firstLoad: false });
-      this.updateurl();
+      this.updateURL();
     }
 
     //Update url on step change
@@ -251,16 +251,16 @@ class WorkflowDetails extends Component {
       thisCurrent.currentStepFields &&
       thisCurrent.currentStepFields.id !== prevCurrent.currentStepFields.id
     ) {
-      this.updateurl();
+      this.updateURL();
     }
   };
 
-  updateurl = () => {
+  updateURL = () => {
     let currentStep = this.props.currentStepFields.currentStepFields;
     let currentPath = document.location.pathname;
     let group = currentStep.step_group;
     let step = currentStep.id;
-    let urlPath = currentPath + "?group=" + group + "&step=" + step;
+    let urlPath = `${currentPath}?group=${group}&step=${step}`;
     window.history.pushState("", "", urlPath);
   };
 
