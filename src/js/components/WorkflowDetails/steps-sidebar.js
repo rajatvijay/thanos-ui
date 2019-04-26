@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import _ from "lodash";
 import { Layout, Menu, Icon, Affix, Badge, Tooltip } from "antd";
 import { calculatedData } from "../Workflow/calculated-data";
 import { utils } from "../Workflow/utils";
 import { history } from "../../_helpers";
+import { Link } from "react-router-dom";
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -36,19 +37,6 @@ const StepSidebar = props => {
 };
 
 class StepSidebarMenu extends Component {
-  componentDidMount() {}
-
-  onStepSelected(e) {
-    //console.log(e)
-
-    // let stepMeta = e.key.split("_");
-    // let wid = this.props.step2[0].workflow;
-    // let gid = stepMeta[0];
-    // let sid = stepMeta[1];
-    // history.push("/workflows/instances/" + wid+"/?group="+gid+"&step="+sid);
-    this.props.onStepSelected(e);
-  }
-
   getGroups(data) {
     let that = this;
     let data2 = getProcessedData(data);
@@ -85,6 +73,13 @@ class StepSidebarMenu extends Component {
           }
         >
           {that.getSteps(g.steps, g.id, visible_steps)}
+
+          {/*<Steps 
+              data={g.steps}
+              group_id={g.id}
+              visible_steps={visible_steps}
+              alerts={that.props.alerts}
+            />*/}
         </SubMenu>
       );
     });
@@ -129,54 +124,60 @@ class StepSidebarMenu extends Component {
           }
           style={{ paddingLeft: "40px" }}
         >
-          <i className="material-icons t-14 pd-right-sm">{icon_cls}</i>
-          {s.name}
+          <Link
+            to={`${history.location.pathname}?group=${group_id}&step=${s.id}`}
+          >
+            <i className="material-icons t-14 pd-right-sm">{icon_cls}</i>
+            {s.name}
 
-          {_.size(hasAlert) ? (
-            <span className="float-right pd-left">
-              {_.map(hasAlert, alert => {
-                return (
-                  <Tooltip title={alert.label}>
-                    <i
-                      className="material-icons"
-                      style={{ fontSize: "9px", color: alert.color }}
-                    >
-                      fiber_manual_records
-                    </i>
-                  </Tooltip>
-                );
-              })}
-            </span>
-          ) : null}
+            {_.size(hasAlert) ? (
+              <span className="float-right pd-left">
+                {_.map(hasAlert, alert => {
+                  return (
+                    <Tooltip title={alert.label}>
+                      <i
+                        className="material-icons"
+                        style={{ fontSize: "9px", color: alert.color }}
+                      >
+                        fiber_manual_records
+                      </i>
+                    </Tooltip>
+                  );
+                })}
+              </span>
+            ) : null}
+          </Link>
         </Menu.Item>
       );
     });
     return steps;
   }
 
-  render() {
+  getMenu() {
     let grouping = this.props.step2;
 
     return (
-      <div>
-        <Menu
-          onClick={this.onStepSelected.bind(this)}
-          style={{
-            width: "100%",
-            height: "vh100",
-            overflowX: "hidden",
-            background: "transparent"
-          }}
-          defaultSelectedKeys={[
-            this.props.defaultOpenKeys + "_" + this.props.defaultSelectedKeys
-          ]}
-          defaultOpenKeys={["sub-" + this.props.defaultOpenKeys]}
-          mode="inline"
-        >
-          {this.getGroups(grouping)}
-        </Menu>
-      </div>
+      <Menu
+        key={this.props.defaultOpenKeys + "_" + this.props.defaultSelectedKeys}
+        style={{
+          width: "100%",
+          height: "vh100",
+          overflowX: "hidden",
+          background: "transparent"
+        }}
+        defaultSelectedKeys={[
+          this.props.defaultOpenKeys + "_" + this.props.defaultSelectedKeys
+        ]}
+        defaultOpenKeys={["sub-" + this.props.defaultOpenKeys]}
+        mode="inline"
+      >
+        {this.getGroups(grouping)}
+      </Menu>
     );
+  }
+
+  render() {
+    return this.getMenu();
   }
 }
 

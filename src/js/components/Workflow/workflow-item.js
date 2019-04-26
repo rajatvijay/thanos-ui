@@ -318,7 +318,7 @@ class HeaderOptions2 extends React.Component {
     const { isWorkflowPDFModalVisible } = this.state;
     const { workflow } = this.props;
     return (
-      <Col span="5">
+      <Col span={5}>
         {this.props.detailsPage && !this.props.isEmbedded ? (
           <WorkflowPDFModal
             workflow={workflow}
@@ -887,7 +887,7 @@ class MetaRow extends React.Component {
       <div>
         <div className="lc-card-section">
           <Row>
-            <Col span="18" className=" t-12">
+            <Col span={18} className=" t-12">
               {props.workflow.lc_duedate ? (
                 <span>
                   <span className="text-bold text-primary">
@@ -912,7 +912,7 @@ class MetaRow extends React.Component {
               </span>
             </Col>
 
-            <Col span="6" className="text-right text-light small">
+            <Col span={6} className="text-right text-light small">
               <Link to={"/workflows/instances/" + props.workflow.id}>
                 <span className="pd-ard-sm text-nounderline">
                   <FormattedMessage id="workflowsInstances.viewDetails" /> ⟶
@@ -922,7 +922,7 @@ class MetaRow extends React.Component {
           </Row>
           {props.workflow.lc_message ? (
             <Row>
-              <Col span="24" className="mr-top">
+              <Col span={24} className="mr-top">
                 <Alert
                   message={props.workflow.lc_message}
                   type="info"
