@@ -50,7 +50,7 @@ class MainRoutes extends React.Component {
     // Internet Explorer 6-11
     const isIE = /*@cc_on!@*/ false || !!document.documentMode;
     if (isIE) {
-      browserMessage = `Our website is not supported by Internet Explorer or Microsoft Edge. If you are recurrently experiencing an "expired link" error, please try logging into the portal again using Google Chrome or Safari.`;
+      browserMessage = `Our website is not supported by Internet Explorer. If you are recurrently experiencing an "expired link" error, please try logging into the portal again using Google Chrome or Safari.`;
       ieDetected = true;
     } else {
       browserMessage = "";
