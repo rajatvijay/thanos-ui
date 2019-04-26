@@ -45,7 +45,14 @@ function getRegionData() {
   };
   let url = baseUrl + "fields/export-region-json/";
 
-  return fetch(url, requestOptions).then(handleResponse);
+  return fetch(url, requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      const sortedResults = response.results.sort(
+        (a, b) => (a.label > b.label ? 1 : -1)
+      );
+      return { results: sortedResults };
+    });
 }
 
 function setFilters(payload) {
