@@ -188,7 +188,7 @@ class WorkflowDetails extends Component {
 
       if (!this.state.loading_sidebar && !this.state.dont) {
         this.setState({ dont: true }); //Prevent unnecessary reloading of steps
-        this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        this.fetchStepData(stepTrack);
       }
     }
 
@@ -230,10 +230,9 @@ class WorkflowDetails extends Component {
     }
 
     if (
-      this.props.currentStepFields.currentStepFields &&
+      thisCurrent.currentStepFields &&
       this.props.workflowDetailsHeader.workflowDetailsHeader &&
-      prevProps.currentStepFields.currentStepFields !==
-        this.props.currentStepFields.currentStepFields
+      prevCurrent.currentStepFields !== thisCurrent.currentStepFields
     ) {
       let progress = getProgressData(
         this.props.workflowDetailsHeader.workflowDetailsHeader
@@ -244,7 +243,25 @@ class WorkflowDetails extends Component {
       }
 
       this.setState({ firstLoad: false });
+      this.updateURL();
     }
+
+    //Update url on step change
+    if (
+      thisCurrent.currentStepFields &&
+      thisCurrent.currentStepFields.id !== prevCurrent.currentStepFields.id
+    ) {
+      this.updateURL();
+    }
+  };
+
+  updateURL = () => {
+    let currentStep = this.props.currentStepFields.currentStepFields;
+    let currentPath = document.location.pathname;
+    let group = currentStep.step_group;
+    let step = currentStep.id;
+    let urlPath = `${currentPath}?group=${group}&step=${step}`;
+    window.history.pushState("", "", urlPath);
   };
 
   navigateLevelBack = () => {
@@ -338,7 +355,7 @@ class WorkflowDetails extends Component {
       stepId: stepMeta[1]
     };
 
-    this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+    this.fetchStepData(stepTrack);
   };
 
   selectActiveStep = (step_id, stepGroup_id) => {
@@ -387,10 +404,6 @@ class WorkflowDetails extends Component {
 
   changeIntegrationStatus = payload => {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
-  };
-
-  onCollapse = () => {
-    this.setState({ collapsed: true });
   };
 
   toggleRightSidebar = () => {
