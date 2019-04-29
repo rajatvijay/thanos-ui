@@ -15,7 +15,8 @@ export const userService = {
 //Get client name for form headers.
 let domain = window.location.hostname;
 domain = domain.split(".");
-let client = domain[0];
+// let client = domain[0];
+let client = "walmart";
 
 function login(username, password, token) {
   const requestOptions = {
