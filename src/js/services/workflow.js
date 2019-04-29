@@ -6,7 +6,9 @@ export const workflowService = {
   getAll,
   getById,
   searchWorkflow,
-  getChildWorkflow
+  getChildWorkflow,
+  searchUserWorkflowByEmail,
+  updateWorkflow
 };
 
 //FETCH THE LIST OF WORLFOWS FOR WORKFLOW LIST PAGE
@@ -114,12 +116,39 @@ function searchWorkflow(query) {
     body: JSON.stringify({ q: query })
   };
 
-  let url = baseUrl + "workflows/search/";
+  let url = baseUrl + "workflows-list/search/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }
 
-//COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
+function searchUserWorkflowByEmail({ email }) {
+  const requestOptions = {
+    method: "POST",
+    headers: authHeader.post(),
+    credentials: "include",
+    body: JSON.stringify({ email: email })
+  };
+
+  return fetch(
+    `${baseUrl}workflows/search-user-workflow/`,
+    requestOptions
+  ).then(handleResponse);
+}
+
+function updateWorkflow({ id, payload }) {
+  const requestOptions = {
+    method: "PATCH",
+    headers: authHeader.post(),
+    credentials: "include",
+    body: JSON.stringify(payload)
+  };
+
+  return fetch(`${baseUrl}workflows/${id}/`, requestOptions).then(
+    handleResponse
+  );
+}
+
+// COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
 function handleResponse(response) {
   if (!response.ok) {
     return Promise.reject(response.statusText);

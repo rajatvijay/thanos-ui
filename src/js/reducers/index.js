@@ -22,6 +22,7 @@ import { stepVersionFields } from "./step_version";
 import { languageSelector } from "./internationalize";
 import { showFilterMenu, showPreviewSidebar } from "./navbar";
 import { stepPreviewFields } from "./stepPreview";
+import { userWorkflowModal } from "./user_workflow";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -50,7 +51,8 @@ const rootReducer = combineReducers({
   workflowAlertGroupCount,
   workflowKind,
   workflowKindStatus,
-  languageSelector
+  languageSelector,
+  userWorkflowModal
 });
 
 export default rootReducer;

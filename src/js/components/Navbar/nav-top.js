@@ -57,10 +57,6 @@ class NavTop extends Component {
     }
   };
 
-  handleChange = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
-  };
-
   onSearchChange = e => {
     this.setState({ searchInput: e.target.value });
   };
