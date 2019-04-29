@@ -19,7 +19,7 @@ const LoginHeader = props => {
               <span className="text-bold t-18">{props.config.name}</span>
             )}
           </div>
-          <span className="logo-subtext">PARTNERS</span>
+          {/* <span className="logo-subtext">PARTNERS</span> */}
         </div>
 
         <div className="language-selection text-center mr-bottom-lg ">
