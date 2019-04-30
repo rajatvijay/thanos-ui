@@ -99,16 +99,18 @@ class ChildWorkflowField2 extends Component {
 
   getQueryParamForChildWorkflows = () => {
     try {
-      if (
-        this.props.currentStepFields.currentStepFields.definition.node_order &&
-        this.props.currentStepFields.currentStepFields.definition.node_order
-          .length
-      ) {
+      const kindId = this.props.field.definition.extra.child_workflow_kind_id;
+      const nodeOrder = this.props.workflowDetailsHeader.workflowDetailsHeader
+        .definition.node_order;
+      const kindTag = this.props.workflowKind.workflowKind.find(
+        kind => kind.id === kindId
+      ).tag;
+      if (nodeOrder && nodeOrder.includes(kindTag)) {
         return "root_id";
       }
       return "parent_workflow_id";
     } catch (e) {
-      return "parent_workflow_id";
+      return null;
     }
   };
 
@@ -123,6 +125,14 @@ class ChildWorkflowField2 extends Component {
 
     // decide the query param for workflowId
     const paramName = this.getQueryParamForChildWorkflows();
+
+    // No paramName means we dont know whether to call the API
+    // with parent or root query name
+    // so lets not call the API
+    // The user will have to use the reload button to load embedded workflows
+    if (!paramName) {
+      return;
+    }
 
     const valueFilter = this.getValuefilter();
     const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${
