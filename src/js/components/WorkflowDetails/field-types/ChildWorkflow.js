@@ -97,6 +97,21 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
+  getQueryParamForChildWorkflows = () => {
+    try {
+      if (
+        this.props.currentStepFields.currentStepFields.definition.node_order &&
+        this.props.currentStepFields.currentStepFields.definition.node_order
+          .length
+      ) {
+        return "root_id";
+      }
+      return "parent_workflow_id";
+    } catch (e) {
+      return "parent_workflow_id";
+    }
+  };
+
   getChildWorkflow = () => {
     let parentId = this.props.workflowId;
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
@@ -106,16 +121,13 @@ class ChildWorkflowField2 extends Component {
       credentials: "include"
     };
 
-    let parent_id = parentId;
-    //let kind = this.props.field.definition.extra.child_workflow_kind_id;
-    let valueFilter = this.getValuefilter();
-    let url =
-      baseUrl +
-      "workflows-list/?limit=100&parent_workflow_id=" +
-      parent_id +
-      "&kind=" +
-      kind +
-      valueFilter;
+    // decide the query param for workflowId
+    const paramName = this.getQueryParamForChildWorkflows();
+
+    const valueFilter = this.getValuefilter();
+    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${
+      parentId
+    }&kind=${kind}${valueFilter}`;
 
     this.setState({ fetching: true });
 
