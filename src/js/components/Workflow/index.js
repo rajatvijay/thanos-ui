@@ -28,6 +28,7 @@ import WorkflowFilterTop from "./WorkflowFilterTop";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { workflowKindService } from "../../services";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -45,7 +46,8 @@ class Workflow extends Component {
       statusView: true,
       visible: false,
       sortOrderAsc: false,
-      sortingEnabled: false
+      sortingEnabled: false,
+      isAlertVisible: false
     };
 
     if (!this.props.users.me) {
@@ -71,6 +73,14 @@ class Workflow extends Component {
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
+    workflowKindService
+      .getAlertCount("entity")
+      .then(() => this.setState({ isAlertVisible: true }))
+      .catch(() => this.setState({ isAlertVisible: false }));
+    workflowKindService
+      .getStatusCount("entity")
+      .then(() => this.setState({ isAlertVisible: true }))
+      .catch(() => this.setState({ isAlertVisible: false }));
   };
 
   componentDidUpdate = prevProps => {
@@ -203,12 +213,19 @@ class Workflow extends Component {
 
   renderTab = () => {
     const { workflow } = this.props.workflow;
-    if (workflow && workflow.some(item => item.alerts.length > 0))
-      return (
-        <TabPane tab="Alerts" key="2">
-          {this.state.defKind ? <AlertFilter {...this.props} /> : null}
-        </TabPane>
-      );
+    const { isAlertVisible } = this.state;
+
+    if (
+      workflow &&
+      workflow.some(item => item.alerts.length > 0) &&
+      isAlertVisible
+    )
+      console.log();
+    return (
+      <TabPane tab="Alerts" key="2">
+        {this.state.defKind ? <AlertFilter {...this.props} /> : null}
+      </TabPane>
+    );
   };
 
   render = () => {
