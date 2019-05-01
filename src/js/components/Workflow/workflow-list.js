@@ -134,7 +134,7 @@ class WorkflowList extends Component {
         </span>
       );
     });
-    console.log("count", data.count, data);
+
     return (
       <div>
         <Content
