@@ -201,6 +201,19 @@ class Workflow extends Component {
     }
   };
 
+
+  renderTab = ()=>{
+
+const {workflow} = this.props.workflow
+if(workflow && workflow.some((item)=>item.alerts.length>0))
+  return  <TabPane tab="Alerts" key="2">
+                  
+                    {this.state.defKind ? (
+                      <AlertFilter {...this.props} />
+                    ) : null}
+                  </TabPane>
+  }
+
   render = () => {
     const { sortingEnabled } = this.state;
     // let showRisk = false;
@@ -215,6 +228,7 @@ class Workflow extends Component {
     //   return <Redirect to={this.props.nextUrl.url}/>
     // }
 
+    console.log("log",this.state.defKind,this.props.workflowAlertGroupCount)
     return (
       <Layout
         className="workflow-container inner-container"
@@ -231,11 +245,7 @@ class Workflow extends Component {
                       <WorkflowFilterTop {...this.props} />
                     ) : null}
                   </TabPane>
-                  <TabPane tab="Alerts" key="2">
-                    {this.state.defKind ? (
-                      <AlertFilter {...this.props} />
-                    ) : null}
-                  </TabPane>
+                  {this.renderTab()}
                 </Tabs>
                 <br />
               </div>
