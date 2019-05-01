@@ -134,7 +134,7 @@ class WorkflowList extends Component {
         </span>
       );
     });
-console.log("count",data.count,data)
+
     return (
       <div>
         <Content
@@ -159,9 +159,13 @@ console.log("count",data.count,data)
                 {ListCompletes}
               </div>
               <div className="mr-top-lg text-center pd-bottom-lg">
-           
                 <Pagination
-                style={{display:data.workflow && data.workflow.length>10 ? "block":"none"}}
+                  style={{
+                    display:
+                      data.workflow && data.workflow.length > 10
+                        ? "block"
+                        : "none"
+                  }}
                   pageSize={20}
                   defaultCurrent={page ? page : 1}
                   total={data.count}
