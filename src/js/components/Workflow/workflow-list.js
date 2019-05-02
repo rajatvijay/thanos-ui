@@ -37,6 +37,8 @@ const { getProcessedData } = calculatedData;
 
 const Panel = Collapse.Panel;
 
+const PAGE_SIZE = 20;
+
 class WorkflowList extends Component {
   handlePageChange = (page, rage) => {
     let param = [{ label: "page", value: page }];
@@ -162,7 +164,13 @@ class WorkflowList extends Component {
               </div>
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
-                  pageSize={20}
+                  style={{
+                    display:
+                      data.workflow && data.workflow.length > PAGE_SIZE
+                        ? "block"
+                        : "none"
+                  }}
+                  pageSize={PAGE_SIZE}
                   defaultCurrent={page ? page : 1}
                   total={data.count}
                   onChange={this.handlePageChange.bind(this)}
