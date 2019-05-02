@@ -24,6 +24,7 @@ import {
   workflowStepActions,
   workflowDetailsActions
 } from "../../../actions";
+import { workflowDetailsService } from "../../../services";
 
 const FormItem = Form.Item;
 
@@ -69,6 +70,24 @@ class DuplicateCheckComp extends Component {
   componentDidMount = () => {
     this.getDuplicateWorkflow();
   };
+
+  componentDidUpdate() {
+    // If there is status_message => auto trigerring is still in progress
+    if (this.props.field.integration_json.status_message) {
+      const {
+        step_group: groupId,
+        workflow: workflowId,
+        id: stepId
+      } = this.props.currentStepFields.currentStepFields;
+      this.props.dispatch(
+        workflowDetailsActions.getStepFields({
+          workflowId,
+          groupId,
+          stepId
+        })
+      );
+    }
+  }
 
   componentWillReceiveProps = nextProps => {
     let that = this;

@@ -97,6 +97,23 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
+  getQueryParamForChildWorkflows = () => {
+    try {
+      const kindId = this.props.field.definition.extra.child_workflow_kind_id;
+      const nodeOrder = this.props.workflowDetailsHeader.workflowDetailsHeader
+        .definition.node_order;
+      const kindTag = this.props.workflowKind.workflowKind.find(
+        kind => kind.id === kindId
+      ).tag;
+      if (nodeOrder && nodeOrder.includes(kindTag)) {
+        return "root_id";
+      }
+      return "parent_workflow_id";
+    } catch (e) {
+      return null;
+    }
+  };
+
   getChildWorkflow = () => {
     let parentId = this.props.workflowId;
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
@@ -106,15 +123,21 @@ class ChildWorkflowField2 extends Component {
       credentials: "include"
     };
 
-    let parent_id = parentId;
-    //let kind = this.props.field.definition.extra.child_workflow_kind_id;
+    // decide the query param for workflowId
+    const paramName = this.getQueryParamForChildWorkflows();
 
-    let url =
-      baseUrl +
-      "workflows-list/?limit=100&parent_workflow_id=" +
-      parent_id +
-      "&kind=" +
-      kind;
+    // No paramName means we dont know whether to call the API
+    // with parent or root query name
+    // so lets not call the API
+    // The user will have to use the reload button to load embedded workflows
+    if (!paramName) {
+      return;
+    }
+
+    const valueFilter = this.getValuefilter();
+    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${
+      parentId
+    }&kind=${kind}${valueFilter}`;
 
     this.setState({ fetching: true });
 
@@ -131,6 +154,25 @@ class ChildWorkflowField2 extends Component {
         this.filterByFlag();
         this.excludeWorkflows();
       });
+  };
+
+  getValuefilter = () => {
+    let filterList = this.props.field.definition.extra.filters;
+    let filter = "&";
+
+    if (!_.size(filterList)) {
+      return "";
+    }
+
+    _.forEach(filterList, (i, index) => {
+      filter =
+        filter + "answer=" + i.field + "__" + i.operator + "__" + i.value;
+      if (!index + 1 === _.size(filterList)) {
+        filter = filter + "&";
+      }
+    });
+
+    return filter;
   };
 
   onChildSelect = e => {
@@ -170,7 +212,11 @@ class ChildWorkflowField2 extends Component {
     const relatedKind = this.getRelatedTypes();
 
     _.map(relatedKind, function(item) {
-      if (item.is_related_kind && _.includes(item.features, "add_workflow")) {
+      if (
+        item.is_related_kind &&
+        _.includes(item.features, "add_workflow") &&
+        that.props.field.definition.extra.child_workflow_kind_id === item.id
+      ) {
         workflowKindFiltered.push(item);
       }
     });
@@ -182,11 +228,7 @@ class ChildWorkflowField2 extends Component {
     let menu = (
       <Menu onClick={this.onChildSelect}>
         {_.map(workflowKindFiltered, function(item, index) {
-          if (
-            that.props.field.definition.extra.child_workflow_kind_id === item.id
-          ) {
-            return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-          }
+          return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
         })}
       </Menu>
     );
@@ -665,12 +707,14 @@ class ChildWorkflowField2 extends Component {
         ) : (
           <div>
             <div className="">
-              <Row className="mr-bottom">
-                <Col span={24}>
-                  {/*CATEGORY FILTER*/}
-                  {this.state.filterTags}
-                </Col>
-              </Row>
+              {field.definition.extra.show_filters ? (
+                <Row className="mr-bottom">
+                  <Col span={24}>
+                    {/*CATEGORY FILTER*/}
+                    {this.state.filterTags}
+                  </Col>
+                </Row>
+              ) : null}
 
               <Row className="mr-bottom">
                 {field.definition.extra.show_filters ? (

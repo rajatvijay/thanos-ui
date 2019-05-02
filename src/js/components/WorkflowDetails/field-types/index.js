@@ -185,6 +185,10 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "iframe":
       return IFrameField(props);
+    case "ocr":
+      return DnBCommon(props);
+    case "docusign":
+      return DnBCommon(props);
     default:
       return Text(props);
   }

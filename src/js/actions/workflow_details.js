@@ -9,6 +9,7 @@ import { workflowDetailsService } from "../services";
 import _ from "lodash";
 //import { history } from "../_helpers";
 import { notification, message } from "antd";
+import Sentry from "@sentry/browser";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -84,6 +85,14 @@ function getStepGroup(id) {
 
 //Get workflow step fileds data.
 function getStepFields(step) {
+  // For Error tracking
+  if (!step.workflowId || !step.groupId || !step.stepId) {
+    console.log("RAJAT CALLED");
+    Sentry.captureException(
+      new Error(`Get steps field called ${JSON.stringify(step)}`)
+    );
+    return () => {};
+  }
   return dispatch => {
     if (!step.doNotRefresh) {
       dispatch(request(step));

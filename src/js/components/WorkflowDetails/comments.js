@@ -25,6 +25,7 @@ import _ from "lodash";
 import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MentionWithAttachments from "./MentionWithAttachments";
+import { workflowFiltersService } from "../../services";
 
 const { toString, toContentState } = Mention;
 
@@ -37,9 +38,43 @@ class Comments extends Component {
     this.state = {
       message: toContentState(""),
       fileList: [],
-      uploading: false
+      uploading: false,
+      workflowStatuses: []
     };
     // call action
+  }
+
+  getWorkflowKind = ({ workflowComments }) => {
+    try {
+      return workflowComments.data.results[0].target.definition.kind;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  componentDidMount() {
+    const workflowKind = this.getWorkflowKind(this.props);
+
+    if (workflowKind) {
+      workflowFiltersService
+        .getStatusData({ workflow_kind: workflowKind })
+        .then(response => {
+          this.setState({ workflowStatuses: response });
+        });
+    }
+  }
+
+  componentDidUpdate(previousProps) {
+    const currentWorkflowKind = this.getWorkflowKind(this.props);
+    const previousWorkflowKind = this.getWorkflowKind(previousProps);
+
+    if (currentWorkflowKind && currentWorkflowKind !== previousWorkflowKind) {
+      workflowFiltersService
+        .getStatusData({ workflow_kind: currentWorkflowKind })
+        .then(response => {
+          this.setState({ workflowStatuses: response });
+        });
+    }
   }
 
   callback = key => {};
@@ -245,8 +280,8 @@ class Comments extends Component {
           style={{ width: "calc(100% - 80px)" }}
           onChange={that.changeWorkflowStatus}
         >
-          {_.map(that.props.workflowFilterType.statusType, function(v) {
-            return <Option value={v.value}>{v.label}</Option>;
+          {_.map(that.state.workflowStatuses, function(v) {
+            return <Option value={v.id}>{v.label}</Option>;
           })}
         </Select>
       </div>

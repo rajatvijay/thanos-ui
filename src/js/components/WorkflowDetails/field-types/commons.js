@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Row, Col, Icon, Tag, Menu, Dropdown, Tooltip } from "antd";
 import _ from "lodash";
 import Moment from "react-moment";
+import { URL_REGEX, ANCHOR_TAG_REGEX } from "../../../utils/contants";
 
 export const commonFunctions = {
   getLabel,
@@ -119,6 +120,7 @@ function field_error(props) {
     };
   }
   return {
+    // TODO: Remove dangerouslySetInnerHTML
     help: (
       <span
         dangerouslySetInnerHTML={{
@@ -241,19 +243,31 @@ function fieldFlagDropdown(e, props) {
 }
 
 //create link from text
+// TODO: Move this to utilities file
+/**
+ * Converts a simple string with url but no anchor tag
+ * to a string with anchor tag
+ * @param {string} text String to replace the URL from
+ * @param {*} tag Human readable name for the URL
+ */
 function getLink(text) {
-  var urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.()~#?&//=]*)/gi;
-
-  return text.replace(urlRegex, function(url) {
-    if (_.includes(url, "@")) {
-      return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
-    } else {
-      if (!_.includes(url, "http")) {
-        url = "http://" + url;
+  // FOR BACKWARD COMPATIBILITY
+  // If it has url but no anchor tag, make it an anchor tag
+  if (URL_REGEX.test(text) && !ANCHOR_TAG_REGEX.test(text)) {
+    return text.replace(URL_REGEX, function(url) {
+      // For email URLS
+      if (url.includes("@")) {
+        return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
       }
-      return '<a href="' + url + '" target="_blank">' + url + "</a>";
-    }
-  });
+
+      // For all other URLs
+      return `<a href="${
+        url
+      }" target="_blank" rel="noopener noreferrer">${url.includes("http") ? url : `http://${url}`}</a>`;
+    });
+  }
+
+  return text;
 }
 
 function getStyle(props, extra) {
@@ -309,7 +323,9 @@ function getIntegrationSearchButton(props) {
     dnb_gbo: "Get GBO",
     greylist_check: "Get Greylist",
     dnb_initiate_investigation: "Initiate Investigation",
-    dnb_investigation_status: "Get Investigation Status"
+    dnb_investigation_status: "Get Investigation Status",
+    ocr: "Get OCR data",
+    docusign: "Sign with Docusign"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];

@@ -49,6 +49,7 @@ export default {
       submitButtonText: "Submit",
       submittingButtonText: "Submitting",
       undoSubmissionText: "Undo submission",
+      cancel: "Cancel",
       emailSent: "Email sent.",
       clickHere: "Click here",
       clickToLogin: "Click here to Login",
@@ -74,8 +75,7 @@ export default {
       invalidEmpty: "Invalid email",
       OtpEmpty: "One time password can't be empty",
       enterOtp: "Enter the one time password to verify your account",
-      oneTimePassword: "One time password",
-      categoryText: "Category"
+      oneTimePassword: "One time password"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -120,6 +120,11 @@ export default {
       goToLoginPage: "Go to login page",
       selectPreferedLanguage: " Choose language:",
       goBack: "Go back"
+    },
+    userWorkflowInstances: {
+      searchUser: "Search User",
+      userFoundMessage: "User found, proceed to send invite to this workflow?",
+      userNotFoundMessage: "Inviting new user for this workflow, continue?"
     }
   },
   es: {
@@ -172,6 +177,7 @@ export default {
       submitButtonText: "Enviar",
       submittingButtonText: "Sumisión",
       undoSubmissionText: "Deshacer el envío",
+      cancel: "Cancelar",
       emailSent: "Email enviado.",
       clickHere: "Haga clic aquí",
       clickToLogin: "Haga clic aquí para iniciar sesión",
@@ -197,8 +203,7 @@ export default {
       OtpEmpty: "La contraseña de una sola vez no puede estar vacía ",
       enterOtp:
         "Ingrese la contraseña de un solo uso para verificar su cuenta ",
-      oneTimePassword: "Contraseña de una sola vez",
-      categoryText: "categoría"
+      oneTimePassword: "Contraseña de una sola vez"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por ",
@@ -246,6 +251,13 @@ export default {
       goToLoginPage: "Ir a la página de inicio de sesión",
       selectPreferedLanguage: " Elige lengua:",
       goBack: "Regresa"
+    },
+    userWorkflowInstances: {
+      searchUser: "Buscar usuario",
+      userFoundMessage:
+        "Usuario encontrado, proceder a enviar invitaciones a este flujo de trabajo?",
+      userNotFoundMessage:
+        "Invitando a un nuevo usuario para este flujo de trabajo, ¿continuar?"
     }
   },
   "es-cl": {

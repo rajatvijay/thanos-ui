@@ -57,10 +57,6 @@ class NavTop extends Component {
     }
   };
 
-  handleChange = value => {
-    this.props.dispatch(languageActions.updateUserLanguage(value));
-  };
-
   onSearchChange = e => {
     this.setState({ searchInput: e.target.value });
   };
@@ -199,7 +195,7 @@ class NavTop extends Component {
                   </a>
                 </span>
 
-                {document.location.pathname.match("/workflows/instances/") ? (
+                {document.location.pathname === "/workflows/instances" ? (
                   <div className={"search-box "}>
                     <Input
                       prefix={prefix}

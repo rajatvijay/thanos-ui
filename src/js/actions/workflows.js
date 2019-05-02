@@ -7,7 +7,9 @@ export const workflowActions = {
   delete: _delete,
   searchWorkflow,
   getChildWorkflow,
-  expandedWorkflowsList
+  expandedWorkflowsList,
+  showUserWorkflowModal,
+  hideUserWorkflowModal
 };
 
 function getAll(filter) {
@@ -145,4 +147,18 @@ function expandedWorkflowsList(list) {
   function request(list) {
     return { type: workflowConstants.EXPANDED_WORKFLOWS, payload: list };
   }
+}
+
+function showUserWorkflowModal({ workflowID }) {
+  return {
+    type: workflowConstants.SHOW_USER_WORKFLOW_MODAL,
+    workflowID: workflowID
+  };
+}
+
+function hideUserWorkflowModal() {
+  return {
+    type: workflowConstants.HIDE_USER_WORKFLOW_MODAL,
+    workflowID: null
+  };
 }

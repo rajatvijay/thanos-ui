@@ -11,13 +11,15 @@ export const workflowFiltersService = {
   getRegionData
 };
 
-function getStatusData() {
+function getStatusData(queryParams = {}) {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
     credentials: "include"
   };
-  let url = baseUrl + "workflow-status/";
+
+  const searchParams = new URLSearchParams(queryParams);
+  const url = `${baseUrl}workflow-status/?${searchParams}`;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -43,7 +45,14 @@ function getRegionData() {
   };
   let url = baseUrl + "fields/export-region-json/";
 
-  return fetch(url, requestOptions).then(handleResponse);
+  return fetch(url, requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      const sortedResults = response.results.sort(
+        (a, b) => (a.label > b.label ? 1 : -1)
+      );
+      return { results: sortedResults };
+    });
 }
 
 function setFilters(payload) {

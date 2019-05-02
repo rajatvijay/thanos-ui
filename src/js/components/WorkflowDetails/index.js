@@ -22,6 +22,9 @@ import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import BreadCrums from "./BreadCrums";
 import StepPreview from "../Workflow/StepPreview";
+import { calculatedData } from "../Workflow/calculated-data";
+
+const { getProgressData } = calculatedData;
 
 const requestOptions = {
   method: "GET",
@@ -39,7 +42,8 @@ class WorkflowDetails extends Component {
       selectedStep: null,
       selectedGroup: null,
       printing: false,
-      dont: false
+      dont: false,
+      firstLoad: true
     };
 
     this.preConstruct();
@@ -184,14 +188,14 @@ class WorkflowDetails extends Component {
 
       if (!this.state.loading_sidebar && !this.state.dont) {
         this.setState({ dont: true }); //Prevent unnecessary reloading of steps
-        this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+        this.fetchStepData(stepTrack);
       }
     }
 
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.preConstruct();
       this.forceUpdate();
-      this.getInitialData();
+      // this.getInitialData();
     }
   };
 
@@ -223,6 +227,48 @@ class WorkflowDetails extends Component {
     //SUBMITTED SO NEW DATA UPDATES IN SIDEBAR AND IN MAIN FORM
     if (thisCurrent.isSubmitting !== prevCurrent.isSubmitting) {
       this.setState({ dont: false });
+    }
+
+    if (
+      thisCurrent.currentStepFields &&
+      this.props.workflowDetailsHeader.workflowDetailsHeader &&
+      prevCurrent.currentStepFields !== thisCurrent.currentStepFields
+    ) {
+      let progress = getProgressData(
+        this.props.workflowDetailsHeader.workflowDetailsHeader
+      );
+
+      if (progress === 100 && !this.state.firstLoad) {
+        this.navigateLevelBack();
+      }
+
+      this.setState({ firstLoad: false });
+      this.updateURL();
+    }
+
+    //Update url on step change
+    if (
+      thisCurrent.currentStepFields &&
+      thisCurrent.currentStepFields.id !== prevCurrent.currentStepFields.id
+    ) {
+      this.updateURL();
+    }
+  };
+
+  updateURL = () => {
+    let currentStep = this.props.currentStepFields.currentStepFields;
+    let currentPath = document.location.pathname;
+    let group = currentStep.step_group;
+    let step = currentStep.id;
+    let urlPath = `${currentPath}?group=${group}&step=${step}`;
+    window.history.pushState("", "", urlPath);
+  };
+
+  navigateLevelBack = () => {
+    const wf = this.props.workflowDetailsHeader.workflowDetailsHeader;
+    const size = _.size(wf.workflow_family);
+    if (size > 1) {
+      history.push("/workflows/instances/" + wf.workflow_family[size - 2].id);
     }
   };
 
@@ -309,7 +355,7 @@ class WorkflowDetails extends Component {
       stepId: stepMeta[1]
     };
 
-    this.props.dispatch(workflowDetailsActions.getStepFields(stepTrack));
+    this.fetchStepData(stepTrack);
   };
 
   selectActiveStep = (step_id, stepGroup_id) => {
@@ -359,10 +405,6 @@ class WorkflowDetails extends Component {
   changeIntegrationStatus = payload => {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
-
-  onCollapse() {
-    this.setSate({ collapsed: true });
-  }
 
   toggleRightSidebar = () => {
     this.props.dispatch(
