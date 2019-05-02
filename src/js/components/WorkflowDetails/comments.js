@@ -469,6 +469,13 @@ class Comments extends Component {
                             >
                               <Moment fromNow>{msg.created_at}</Moment>
                             </span>
+                            <span
+                              style={{ fontSize: "11px", marginLeft: "6px" }}
+                            >
+                              (<Moment format="DD/MM/YYYY, h:mm a">
+                                {msg.created_at}
+                              </Moment>)
+                            </span>
                           </div>
                           <p style={{ fontSize: "12px", paddingLeft: "32px" }}>
                             <div
