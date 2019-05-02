@@ -162,6 +162,12 @@ class WorkflowList extends Component {
               </div>
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
+                  style={{
+                    display:
+                      data.workflow && data.workflow.length > 10
+                        ? "block"
+                        : "none"
+                  }}
                   pageSize={20}
                   defaultCurrent={page ? page : 1}
                   total={data.count}
