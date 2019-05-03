@@ -24,7 +24,7 @@ import {
   createWorkflow
 } from "../../../../actions";
 import { connect } from "react-redux";
-
+import Collapsible from "react-collapsible";
 const { Header, Content, Footer, Sider } = Layout;
 
 const { Title, Text } = Typography;
@@ -33,7 +33,9 @@ const Panel = Collapse.Panel;
 class Sidebar extends Component {
   state = {
     activeFilter: [],
-    parent: null
+    parent: null,
+    collapse:true,
+    isActive:false
   };
 
   // componentDidMount = () => {
@@ -92,6 +94,7 @@ class Sidebar extends Component {
     let that = this;
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
     const { alert_details } = this.props.workflowAlertGroupCount;
+    const {collapse,isActive} =this.state 
 
     console.log(this.onSelectTask);
     return (
@@ -105,21 +108,35 @@ class Sidebar extends Component {
         }}
       >
         <div className="logo" />
-        <Collapse bordered={false} defaultActiveKey={["1"]}>
-          <Panel style={{ padding: 0 }} header="TPI" key="1">
+        {/* <Collapse bordered={false} defaultActiveKey={["1"]}>
+          <Panel style={{ padding: 0 }} header="TPI" key="1"> */}
+<div onClick={()=>this.setState({collapse:!collapse})}
+
+style={{color:"white",padding:"25px 20px",cursor:"pointer",backgroundColor:"#0A3150",justifyContent:"space-between",display:"flex",fontSize:18}}
+
+>
+
+
+TPI
+
+<Icon type="caret-right" rotate={collapse ? 90 : 0} transition={500} />
+</div>
+      <Collapsible open={collapse}>
+      
             <div style={{ backgroundColor: "#104774", padding: "20px 0px" }}>
               <TaskQueue
                 workflowGroupCount={this.props.workflowGroupCount}
                 onSelectTask={this.onSelectTask}
               />
 
-              {/* <Alerts
+              <Alerts
                 workflowAlertGroupCount={this.props.workflowAlertGroupCount}
                 onSelectAlert={this.onSelectAlert}
-              /> */}
+              />
             </div>
-          </Panel>
-        </Collapse>
+            </Collapsible>
+          {/* </Panel>
+        </Collapse> */}
       </Sider>
     );
   }
