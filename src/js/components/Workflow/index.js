@@ -28,6 +28,7 @@ import WorkflowFilterTop from "./WorkflowFilterTop";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
+import Sidebar from "../../modules/components/common/sidebar/Sidebar";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -228,7 +229,8 @@ class Workflow extends Component {
         className="workflow-container inner-container"
         style={{ minHeight: "100vh" }}
       >
-        <FilterSidebar />
+        {/* <FilterSidebar />  */}
+        <Sidebar {...this.props} />
         <Layout>
           <Content style={{ margin: "0 26px" }}>
             <Row className="clear">
