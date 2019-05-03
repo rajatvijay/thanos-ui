@@ -351,22 +351,26 @@ function getIntegrationSearchButton(props) {
           </Button>
         </Col>
       ) : null}
-      <Col style={{ marginTop: "5px" }}>
-        {_.map(props.field.search_param_data, function(item, index) {
-          if (_.size(item.answer) && item.answer.answer)
-            return (
-              <div
-                key={index}
-                className="float-left"
-                style={{ marginRight: "15px" }}
-              >
-                <span>{item.answer.field__definition__body}</span>:{" "}
-                <span>{item.answer.answer}</span>
-                {_.size(props.field.search_param_data) === index + 1 ? "" : ","}
-              </div>
-            );
-        })}
-      </Col>
+      {!props.field.definition.extra.hide_integration_text ? (
+        <Col style={{ marginTop: "5px" }}>
+          {_.map(props.field.search_param_data, function(item, index) {
+            if (_.size(item.answer) && item.answer.answer)
+              return (
+                <div
+                  key={index}
+                  className="float-left"
+                  style={{ marginRight: "15px" }}
+                >
+                  <span>{item.answer.field__definition__body}</span>:{" "}
+                  <span>{item.answer.answer}</span>
+                  {_.size(props.field.search_param_data) === index + 1
+                    ? ""
+                    : ","}
+                </div>
+              );
+          })}
+        </Col>
+      ) : null}
     </Row>
   );
 }
