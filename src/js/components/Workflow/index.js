@@ -19,7 +19,8 @@ import {
   workflowFiltersActions,
   configActions,
   logout,
-  checkAuth
+  checkAuth,
+  workflowKindActions
 } from "../../actions";
 import FilterSidebar from "./filter";
 import { authHeader } from "../../_helpers";
@@ -68,9 +69,17 @@ class Workflow extends Component {
   }
 
   componentDidMount = () => {
+    console.log(this.props.workflowFilters);
+    let tag = this.props.workflowFilters.kind.meta.tag;
+
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
+
+    // if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+    //   this.props.dispatch(workflowKindActions.getCount(tag));
+    //   this.props.dispatch(workflowKindActions.getStatusCount(tag));
+    // }
   };
 
   componentDidUpdate = prevProps => {
@@ -131,6 +140,11 @@ class Workflow extends Component {
           meta: defKind
         })
       );
+      this.props.dispatch(workflowKindActions.getAlertCount(defKind.tag));
+      if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+        this.props.dispatch(workflowKindActions.getCount(defKind.tag));
+        this.props.dispatch(workflowKindActions.getStatusCount(defKind.tag));
+      }
     } else {
       this.reloadWorkflowList();
     }
@@ -229,12 +243,12 @@ class Workflow extends Component {
         className="workflow-container inner-container"
         style={{ minHeight: "100vh" }}
       >
-        {/* <FilterSidebar />  */}
+        <FilterSidebar />
         <Sidebar {...this.props} />
         <Layout>
           <Content style={{ margin: "0 26px" }}>
             <Row className="clear">
-              <div className="section-top">
+              {/* <div className="section-top">
                 <Tabs defaultActiveKey="1" size="small">
                   <TabPane tab="Task queue" key="1">
                     {this.state.defKind ? (
@@ -248,7 +262,7 @@ class Workflow extends Component {
                   </TabPane>
                 </Tabs>
                 <br />
-              </div>
+              </div> */}
 
               {this.props.workflow.loading ? null : this.props.workflow
                 .loadingStatus === "failed" ? null : (

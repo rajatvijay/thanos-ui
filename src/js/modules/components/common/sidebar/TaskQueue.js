@@ -13,6 +13,34 @@ import {
 import _ from "lodash";
 
 export default class TaskQueue extends Component {
+  //   renderList = () => {
+  //     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
+  //     const { onSelectTask } = this.props;
+
+  //     if (stepgroupdef_counts) {
+  //       return stepgroupdef_counts.map(item => {
+  //         if (!item.extra || !item.extra.hide) {
+  //           return (
+  //             <Menu.Item
+  //               className="ant-menu-item"
+  //               key={item.id}
+  //               style={{
+  //                 borderTop: "1px solid black",
+  //                 color: "white",
+  //                 padding: "0px 29px",
+  //                 fontSize: 17
+  //               }}
+  //               onClick={() => onSelectTask(item)}
+  //             >
+  //               {item.name} ({item.count})
+  //             </Menu.Item>
+  //           );
+  //         }
+  //       });
+  //     }
+  //     return <Menu.Item />;
+  //   };
+
   renderList = () => {
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
     const { onSelectTask } = this.props;
@@ -21,24 +49,42 @@ export default class TaskQueue extends Component {
       return stepgroupdef_counts.map(item => {
         if (!item.extra || !item.extra.hide) {
           return (
-            <Menu.Item
-              className="ant-menu-item"
-              key={item.id}
+            <li
+              onClick={() => this.props.onSelectTask(item)}
               style={{
                 borderTop: "1px solid black",
-                color: "white",
-                padding: "0px 29px",
-                fontSize: 17
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px 29px",
+                cursor: "pointer"
               }}
-              onClick={() => onSelectTask(item)}
             >
-              {item.name} ({item.count})
-            </Menu.Item>
+              <span style={{ fontSize: 16, color: "#CFDAE3" }}>
+                {item.name}
+              </span>
+              <div>
+                {item.overdue_count > 0 && (
+                  <span
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#D40000",
+                      color: "white",
+                      margin: "0px 5px",
+                      padding: 2
+                    }}
+                  >
+                    {item.overdue_count}
+                  </span>
+                )}
+                <span style={{ fontSize: 12, color: "#567C9C" }}>
+                  {item.count}
+                </span>
+              </div>
+            </li>
           );
         }
       });
     }
-    return <Menu.Item />;
   };
 
   render() {
@@ -48,14 +94,15 @@ export default class TaskQueue extends Component {
           style={{
             margin: 10,
             color: "#138BD4",
-            marginBottom: 35,
+            margin: "30px 0px 20px 15px",
             fontSize: 12
           }}
         >
           TASK QUEUES
         </div>
-
-        {this.renderList()}
+        <div>
+          <ul style={{ padding: 0, listStyle: "none" }}>{this.renderList()}</ul>
+        </div>
       </div>
     );
   }

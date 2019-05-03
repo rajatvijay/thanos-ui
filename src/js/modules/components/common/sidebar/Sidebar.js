@@ -15,6 +15,7 @@ import {
 import _ from "lodash";
 import TaskQueue from "./TaskQueue";
 import Alerts from "./Alerts";
+import "./style.css";
 
 import {
   workflowFiltersActions,
@@ -30,16 +31,47 @@ const { Title, Text } = Typography;
 const Panel = Collapse.Panel;
 
 class Sidebar extends Component {
-  componentDidMount = () => {
-    if (!this.props.workflowKind.workflowKind) {
-      this.loadWorkflowKind();
-    }
+  state = {
+    activeFilter: [],
+    parent: null
   };
 
-  loadWorkflowKind = () => {
-    this.props.dispatch(workflowKindActions.getAll());
-    this.props.dispatch(workflowActions.getAll());
-    this.props.dispatch(workflowKindActions.getAlertCount("entity"));
+  // componentDidMount = () => {
+  //   // if (!this.props.workflowKind.workflowKind) {
+  //   //   this.loadWorkflowKind();
+  //   // }
+  //   this.props.dispatch(workflowKindActions.getAlertCount("entity"));
+  // };
+
+  // loadWorkflowKind = () => {
+  //   // this.props.dispatch(workflowKindActions.getAll());
+  //   // this.props.dispatch(workflowActions.getAll());
+
+  // };
+  setFilter = () => {
+    let payload = {
+      filterType: "alert_category",
+      filterValue: this.state.activeFilter
+    };
+    console.log("apicalls");
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
+  onSelectAlert = value => {
+    // e.preventDefault();
+
+    // if (value.sub_categories) {
+    //   this.setState({ parent: value });
+    //}
+    if (this.state.activeFilter[0] === value.tag) {
+      this.setState({ activeFilter: [] }, function() {
+        this.setFilter();
+      });
+    } else {
+      this.setState({ activeFilter: [value.tag] }, function() {
+        this.setFilter();
+      });
+    }
   };
 
   onSelectTask = value => {
@@ -50,11 +82,11 @@ class Sidebar extends Component {
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
-  componentWillReceiveProps = nextProps => {
-    if (this.props.workflowFilters !== nextProps.workflowFilters) {
-      this.props.dispatch(workflowActions.getAll());
-    }
-  };
+  // componentWillReceiveProps = nextProps => {
+  //   if (this.props.workflowFilters !== nextProps.workflowFilters) {
+  //     this.props.dispatch(workflowActions.getAll());
+  //   }
+  // };
 
   render() {
     let that = this;
@@ -73,22 +105,19 @@ class Sidebar extends Component {
         }}
       >
         <div className="logo" />
-        <Collapse defaultActiveKey={["1"]}>
+        <Collapse bordered={false} defaultActiveKey={["1"]}>
           <Panel style={{ padding: 0 }} header="TPI" key="1">
-            <Menu
-              style={{ backgroundColor: "#104774", padding: "20px 0px" }}
-              mode="inline"
-            >
+            <div style={{ backgroundColor: "#104774", padding: "20px 0px" }}>
               <TaskQueue
                 workflowGroupCount={this.props.workflowGroupCount}
                 onSelectTask={this.onSelectTask}
               />
 
-              <Alerts
+              {/* <Alerts
                 workflowAlertGroupCount={this.props.workflowAlertGroupCount}
-                onSelectTask={this.onSelectTask}
-              />
-            </Menu>
+                onSelectAlert={this.onSelectAlert}
+              /> */}
+            </div>
           </Panel>
         </Collapse>
       </Sider>

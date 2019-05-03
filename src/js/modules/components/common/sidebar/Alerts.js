@@ -15,7 +15,7 @@ import _ from "lodash";
 export default class Alerts extends Component {
   renderList = () => {
     const { alert_details } = this.props.workflowAlertGroupCount;
-    const { onSelectTask } = this.props;
+    const { onSelectAlert } = this.props;
 
     if (alert_details) {
       return alert_details.map(item => {
@@ -29,7 +29,7 @@ export default class Alerts extends Component {
             }}
             key={item.id}
             className="ant-menu-item"
-            onClick={() => onSelectTask(item)}
+            onClick={() => onSelectAlert(item)}
           >
             {item.name} ({item.count})
           </Menu.Item>
