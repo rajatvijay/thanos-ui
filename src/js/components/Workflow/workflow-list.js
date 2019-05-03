@@ -166,7 +166,7 @@ class WorkflowList extends Component {
                 <Pagination
                   style={{
                     display:
-                      data.workflow && data.workflow.length > PAGE_SIZE
+                      data.workflow && data.workflow.length < data.count
                         ? "block"
                         : "none"
                   }}
