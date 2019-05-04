@@ -34,8 +34,7 @@ class Sidebar extends Component {
   state = {
     activeFilter: [],
     parent: null,
-    collapse:true,
-    isActive:false
+    collapse: true
   };
 
   // componentDidMount = () => {
@@ -65,15 +64,15 @@ class Sidebar extends Component {
     // if (value.sub_categories) {
     //   this.setState({ parent: value });
     //}
-    if (this.state.activeFilter[0] === value.tag) {
-      this.setState({ activeFilter: [] }, function() {
-        this.setFilter();
-      });
-    } else {
-      this.setState({ activeFilter: [value.tag] }, function() {
-        this.setFilter();
-      });
-    }
+    // if (this.state.activeFilter[0] === value.tag) {
+    //   this.setState({ activeFilter: [] }, function() {
+    //     this.setFilter();
+    //   });
+    // } else {
+    this.setState({ activeFilter: [value.tag] }, function() {
+      this.setFilter();
+    });
+    //}
   };
 
   onSelectTask = value => {
@@ -94,7 +93,7 @@ class Sidebar extends Component {
     let that = this;
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
     const { alert_details } = this.props.workflowAlertGroupCount;
-    const {collapse,isActive} =this.state 
+    const { collapse } = this.state;
 
     console.log(this.onSelectTask);
     return (
@@ -110,32 +109,35 @@ class Sidebar extends Component {
         <div className="logo" />
         {/* <Collapse bordered={false} defaultActiveKey={["1"]}>
           <Panel style={{ padding: 0 }} header="TPI" key="1"> */}
-<div onClick={()=>this.setState({collapse:!collapse})}
+        <div
+          onClick={() => this.setState({ collapse: !collapse })}
+          style={{
+            color: "white",
+            padding: "25px 20px",
+            cursor: "pointer",
+            backgroundColor: "#0A3150",
+            justifyContent: "space-between",
+            display: "flex",
+            fontSize: 18
+          }}
+        >
+          TPI
+          <Icon type="caret-right" rotate={collapse ? 90 : 0} />
+        </div>
+        <Collapsible open={collapse}>
+          <div style={{ backgroundColor: "#104774", padding: "20px 0px" }}>
+            <TaskQueue
+              workflowGroupCount={this.props.workflowGroupCount}
+              onSelectTask={this.onSelectTask}
+            />
 
-style={{color:"white",padding:"25px 20px",cursor:"pointer",backgroundColor:"#0A3150",justifyContent:"space-between",display:"flex",fontSize:18}}
-
->
-
-
-TPI
-
-<Icon type="caret-right" rotate={collapse ? 90 : 0} transition={500} />
-</div>
-      <Collapsible open={collapse}>
-      
-            <div style={{ backgroundColor: "#104774", padding: "20px 0px" }}>
-              <TaskQueue
-                workflowGroupCount={this.props.workflowGroupCount}
-                onSelectTask={this.onSelectTask}
-              />
-
-              <Alerts
-                workflowAlertGroupCount={this.props.workflowAlertGroupCount}
-                onSelectAlert={this.onSelectAlert}
-              />
-            </div>
-            </Collapsible>
-          {/* </Panel>
+            <Alerts
+              workflowAlertGroupCount={this.props.workflowAlertGroupCount}
+              onSelectAlert={this.onSelectAlert}
+            />
+          </div>
+        </Collapsible>
+        {/* </Panel>
         </Collapse> */}
       </Sider>
     );

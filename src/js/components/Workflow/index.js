@@ -31,6 +31,8 @@ import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../modules/components/common/sidebar/Sidebar";
 
+import Filter from "../../modules/components/common/filter/Filter";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 const SubMenu = Menu.SubMenu;
@@ -248,6 +250,7 @@ class Workflow extends Component {
         <Layout>
           <Content style={{ margin: "0 26px" }}>
             <Row className="clear">
+              <Filter />
               {/* <div className="section-top">
                 <Tabs defaultActiveKey="1" size="small">
                   <TabPane tab="Task queue" key="1">

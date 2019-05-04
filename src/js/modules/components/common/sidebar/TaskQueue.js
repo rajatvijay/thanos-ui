@@ -71,7 +71,7 @@ export default class TaskQueue extends Component {
                       color: "white",
                       margin: "0px 5px",
                       padding: 4,
-                      fontSize:12
+                      fontSize: 11
                     }}
                   >
                     {item.overdue_count}
@@ -102,7 +102,30 @@ export default class TaskQueue extends Component {
           TASK QUEUES
         </div>
         <div>
-          <ul style={{ padding: 0, listStyle: "none" }}>{this.renderList()}</ul>
+          <ul style={{ padding: 0, listStyle: "none" }}>
+            <li
+              style={{
+                borderTop: "1px solid black",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px 29px"
+              }}
+            >
+              <div>
+                <Icon
+                  style={{
+                    fontSize: 22,
+                    color: "#CFDAE3",
+                    margin: "0px 10px 0px 0px"
+                  }}
+                  type="user"
+                />
+                <span style={{ fontSize: 16, color: "#CFDAE3" }}>My Tasks</span>
+              </div>
+              <span style={{ fontSize: 12, color: "#567C9C" }}>{2}</span>
+            </li>
+            {this.renderList()}
+          </ul>
         </div>
       </div>
     );
