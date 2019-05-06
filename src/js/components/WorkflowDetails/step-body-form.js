@@ -479,7 +479,10 @@ class StepBodyForm extends Component {
               let field = this.getFieldForRender(rawField);
               let ftype = rawField.definition.field_type;
               return (
-                <Col span={Math.ceil(24 * this.getSizeFraction(rawField))}>
+                <Col
+                  key={"field-" + rawField.id}
+                  span={Math.ceil(24 * this.getSizeFraction(rawField))}
+                >
                   {field}
                   {showFieldVersion ? that.getVersionField(rawField.id) : null}
                 </Col>
@@ -508,8 +511,8 @@ class StepBodyForm extends Component {
 
     return (
       <Form
+        key="step-body-form"
         layout="vertical"
-        //hideRequiredMark={true}
         onSubmit={this.handleSubmit}
         className="step-form"
         autoComplete="off"
@@ -608,7 +611,7 @@ class StepBodyForm extends Component {
         <Divider />
         <div className="break-avoid">
           <Row>
-            <Col span="6 ant-row  ">
+            <Col span={6}>
               <FormItem>
                 {this.props.stepData.completed_at ||
                 this.props.stepData.is_locked ||
@@ -633,7 +636,7 @@ class StepBodyForm extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col span="18 ant-row " className="text-right">
+            <Col span={18} className="text-right">
               {this.getStepStatus(this.props.stepData)}
             </Col>
           </Row>

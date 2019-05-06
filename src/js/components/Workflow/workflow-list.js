@@ -411,23 +411,8 @@ export class WorkflowItem extends React.Component {
 
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
-
-    let previewHeader = (
-      <div>
-        <span
-          className="float-right text-normal"
-          style={{ marginRight: "50px" }}
-        >
-          <Link
-            to={"/workflows/instances/" + this.props.workflow.id + "/"}
-            className="text-white"
-          >
-            open <i className="material-icons t-14 text-middle">open_in_new</i>
-          </Link>
-        </span>
-        {this.props.workflow.name}
-      </div>
-    );
+    const isChild = this.props.workflow.parent === null ? true : false;
+    let previewHeader = <div>{this.props.workflow.name}</div>;
 
     const showQuickDetailsFunction =
       this.shouldShowQuickDetails() && this.showQuickDetails;

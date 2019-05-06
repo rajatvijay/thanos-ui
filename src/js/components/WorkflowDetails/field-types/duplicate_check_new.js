@@ -71,7 +71,7 @@ class DuplicateCheckComp extends Component {
     this.getDuplicateWorkflow();
   };
 
-  componentDidUpdate() {
+  componentDidUpdate = () => {
     // If there is status_message => auto trigerring is still in progress
     if (this.props.field.integration_json.status_message) {
       const {
@@ -87,7 +87,7 @@ class DuplicateCheckComp extends Component {
         })
       );
     }
-  }
+  };
 
   componentWillReceiveProps = nextProps => {
     let that = this;

@@ -24,7 +24,7 @@ import { OTPLogin } from "../components/LoginPage/OTPLogin";
 import { RegisterPage } from "../components/RegisterPage";
 import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
-import WorkflowDetails from "../components/WorkflowDetails";
+import WorkflowDetailsRoot from "../components/WorkflowDetails";
 import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import Users from "../components/Users";
 import ExportList from "../components/ExportPage";
@@ -146,7 +146,7 @@ class MainRoutes extends React.Component {
 
                     <PrivateRoute
                       path="/workflows/instances/:id?/"
-                      component={WorkflowDetails}
+                      component={WorkflowDetailsRoot}
                     />
 
                     <PrivateRoute path="/users/:id?" component={Users} />
