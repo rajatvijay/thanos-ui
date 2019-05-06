@@ -7,12 +7,15 @@ import {
   Badge,
   Tag,
   Tooltip,
-  Typography
+  Typography,
+  Spin
 } from "antd";
 //import { Icon, Divider, Badge, Tag, Tooltip } from "antd";
 import _ from "lodash";
 
 export default class TaskQueue extends Component {
+  state = { selected: "" };
+
   //   renderList = () => {
   //     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
   //     const { onSelectTask } = this.props;
@@ -41,41 +44,71 @@ export default class TaskQueue extends Component {
   //     return <Menu.Item />;
   //   };
 
+  onSelect = item => {
+    const { onSelectTask } = this.props;
+
+    if (this.state.selected == item.name) {
+      this.setState({ selected: "" });
+      onSelectTask();
+    } else {
+      this.setState({ selected: item["name"] });
+      onSelectTask(item);
+    }
+  };
+
   renderList = () => {
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
-    const { onSelectTask } = this.props;
+    //const { onSelectTask } = this.props;
+    const { selected } = this.state;
+
+    if (loading) {
+      return (
+        <div style={{ textAlign: "center" }}>
+          <Spin
+            indicator={
+              <Icon
+                type="loading"
+                style={{ fontSize: "24px", color: "white" }}
+                spin
+              />
+            }
+          />
+        </div>
+      );
+    }
 
     if (stepgroupdef_counts) {
       return stepgroupdef_counts.map(item => {
         if (!item.extra || !item.extra.hide) {
           return (
             <li
-              onClick={() => this.props.onSelectTask(item)}
+              onClick={() => this.onSelect(item)}
               style={{
                 borderTop: "1px solid black",
                 display: "flex",
                 justifyContent: "space-between",
                 padding: "10px 29px",
-                cursor: "pointer"
+                cursor: "pointer",
+                backgroundColor: item["name"] == selected && "rgb(20, 137, 210)"
               }}
             >
               <span style={{ fontSize: 16, color: "#CFDAE3" }}>
                 {item.name}
               </span>
-              <div>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 {item.overdue_count > 0 && (
-                  <span
+                  <p
                     style={{
                       borderRadius: "50%",
                       backgroundColor: "#D40000",
                       color: "white",
                       margin: "0px 5px",
                       padding: 4,
-                      fontSize: 11
+                      fontSize: 10
                     }}
                   >
                     {item.overdue_count}
-                  </span>
+                  </p>
                 )}
                 <span style={{ fontSize: 12, color: "#567C9C" }}>
                   {item.count}

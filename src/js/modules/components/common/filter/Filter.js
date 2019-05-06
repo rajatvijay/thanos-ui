@@ -24,7 +24,6 @@ class Filter extends Component {
       visible: false
     });
   };
-
   render() {
     const { visible } = this.state;
 
@@ -44,5 +43,3 @@ class Filter extends Component {
 }
 
 export default Filter;
-
-//

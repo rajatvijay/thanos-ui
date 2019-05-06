@@ -1,0 +1,19 @@
+.ant-collapse-borderless
+  .ant-collapse-item
+  .ant-collapse-content
+  .ant-collapse-content-box {
+  padding: 0px;
+  /* padding-top:0px; */
+}
+
+/* .ant-collapse  .ant-collapse-item  .ant-collapse-header{
+    background-color: #0A3150;
+    color: white;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    font-size: 19px;
+} */
+
+.anticon svg {
+  transition-duration: 500ms;
+}

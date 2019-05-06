@@ -11,14 +11,15 @@ export default class DropdownFilter extends Component {
   };
 
   render() {
-    const { name, onFilterChange } = this.props;
+    const { name, onFilterChange, value, placeholder } = this.props;
 
     return (
       // <Dropdown overlay={this.renderMenu} trigger={['click']}>
       <Select
-        placeholder={name}
+        value={value}
+        placeholder={placeholder}
         style={{ display: "block", margin: "20px 0px" }}
-        onChange={value => onFilterChange(name, value)}
+        onChange={select => onFilterChange(name, select)}
       >
         {this.renderMenu()}
       </Select>

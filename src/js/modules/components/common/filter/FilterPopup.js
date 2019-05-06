@@ -14,16 +14,39 @@ const arr = [
 ];
 
 class FilterPopup extends Component {
-  state = {};
+  state = {
+    statusValue: undefined,
+    marketValue: undefined,
+    divisionValue: undefined,
+    operatorValue: undefined,
+    textValue: undefined
+  };
 
   onFilterChange = (key, value) => {
     this.setState({ [key]: value });
+  };
+
+  onClear = () => {
+    this.setState({
+      statusValue: undefined,
+      marketValue: undefined,
+      divisionValue: undefined,
+      operatorValue: undefined,
+      textValue: undefined
+    });
   };
 
   render() {
     const { visible, workflowFilterType, handleCancel } = this.props;
     const { statusType, businessType, regionType } = workflowFilterType;
     console.log(this.state);
+    const {
+      statusValue,
+      marketValue,
+      divisionValue,
+      operatorValue,
+      textValue
+    } = this.state;
 
     return (
       <div>
@@ -37,24 +60,32 @@ class FilterPopup extends Component {
         >
           <div>
             <div style={{ justifyContent: "space-around", display: "flex" }}>
-              <span style={{ color: "#138BD6" }}>FILTER BY</span>
-              <span>CLEAR</span>
+              <span style={{ color: "#138BD6", cursor: "pointer" }}>
+                FILTER BY
+              </span>
+              <span onClick={() => this.onClear()}>CLEAR</span>
             </div>
 
             <div style={{ margin: 30 }}>
               <DropdownFilter
+                value={statusValue}
+                name="statusValue"
                 data={statusType}
-                name="Status"
+                placeholder="Status"
                 onFilterChange={this.onFilterChange}
               />
               <DropdownFilter
+                name="marketValue"
+                value={marketValue}
                 data={businessType.results}
-                name="Market"
+                placeholder="Market"
                 onFilterChange={this.onFilterChange}
               />
               <DropdownFilter
+                name="divisionValue"
+                value={divisionValue}
                 data={regionType.results}
-                name="Division"
+                placeholder="Division"
                 onFilterChange={this.onFilterChange}
               />
             </div>
@@ -68,10 +99,12 @@ class FilterPopup extends Component {
             <div style={{ margin: 30 }}>
               <DropdownFilter
                 data={arr}
-                name="Select Operator"
+                value={operatorValue}
+                placeholder="Select Operator"
+                name="operatorValue"
                 onFilterChange={this.onFilterChange}
               />
-              <InputBox />
+              {/* <InputBox /> */}
             </div>
           </div>
         </Modal>

@@ -7,13 +7,16 @@ import {
   Badge,
   Tag,
   Tooltip,
-  Typography
+  Typography,
+  Spin
 } from "antd";
 //import { Icon, Divider, Badge, Tag, Tooltip } from "antd";
 import _ from "lodash";
 import AlertList from "./AlertList";
 
 export default class Alerts extends Component {
+  state = { selected: "" };
+
   //   renderList = () => {
   //     const { alert_details } = this.props.workflowAlertGroupCount;
   //     const { onSelectAlert } = this.props;
@@ -40,14 +43,46 @@ export default class Alerts extends Component {
   //     return <Menu.Item />;
   //   };
 
-  renderList = () => {
-    const { alert_details } = this.props.workflowAlertGroupCount;
+  onSelect = item => {
     const { onSelectAlert } = this.props;
 
-    if (alert_details) {
+    if (this.state.selected == item.name) {
+      this.setState({ selected: "" });
+      //onSelectLAlert({})
+    } else {
+      this.setState({ selected: item["name"] });
+    }
+
+    onSelectAlert(item);
+  };
+
+  renderList = () => {
+    const { alert_details, loading } = this.props.workflowAlertGroupCount;
+    const { onSelectAlert } = this.props;
+
+    if (loading) {
+      return (
+        <div style={{ textAlign: "center" }}>
+          <Spin
+            indicator={
+              <Icon
+                type="loading"
+                style={{ fontSize: "24px", color: "white" }}
+                spin
+              />
+            }
+          />
+        </div>
+      );
+    } else if (alert_details) {
       return alert_details.map(item => {
         return (
-          <AlertList onSelectAlert={onSelectAlert} item={item} />
+          <AlertList
+            loading={loading}
+            selected={this.state.selected}
+            onSelect={this.onSelect}
+            item={item}
+          />
           // <li
           //   onClick={() => this.props.onSelectAlert(item)}
           //   style={{

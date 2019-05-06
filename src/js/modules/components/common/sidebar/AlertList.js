@@ -10,20 +10,21 @@ class AlerList extends Component {
   // }
 
   renderList = () => {
-    const { onSelectAlert, item } = this.props;
+    const { onSelect, item, selected } = this.props;
+    //const {selected} = this.state
 
     if (item.sub_categories) {
       return item.sub_categories.map(item => (
         <li
           onClick={e => {
             e.stopPropagation();
-            onSelectAlert(item);
+            onSelect(item);
           }}
           style={{
             display: "flex",
             justifyContent: "space-between",
-            margin: "0px 30px",
-            backgroundColor: "#2F4E67",
+            margin: "4px 30px",
+            backgroundColor: item["name"] == selected ? "#1489D2" : "#2F4E67",
             borderRadius: "10px",
             padding: "1px 2px 1px 13px",
             color: "white",

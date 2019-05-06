@@ -64,22 +64,23 @@ class Sidebar extends Component {
     // if (value.sub_categories) {
     //   this.setState({ parent: value });
     //}
-    // if (this.state.activeFilter[0] === value.tag) {
-    //   this.setState({ activeFilter: [] }, function() {
-    //     this.setFilter();
-    //   });
-    // } else {
-    this.setState({ activeFilter: [value.tag] }, function() {
-      this.setFilter();
-    });
-    //}
+    if (this.state.activeFilter[0] === value.tag) {
+      this.setState({ activeFilter: [] }, function() {
+        this.setFilter();
+      });
+    } else {
+      this.setState({ activeFilter: [value.tag] }, function() {
+        this.setFilter();
+      });
+      //}
+    }
   };
 
   onSelectTask = value => {
     console.log(value);
     let payload = {
       filterType: "stepgroupdef",
-      filterValue: [value.id]
+      filterValue: value ? [value.id] : []
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
@@ -95,7 +96,7 @@ class Sidebar extends Component {
     const { alert_details } = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
 
-    console.log(this.onSelectTask);
+    console.log(this.state);
     return (
       <Sider
         width={300}
@@ -125,7 +126,7 @@ class Sidebar extends Component {
           <Icon type="caret-right" rotate={collapse ? 90 : 0} />
         </div>
         <Collapsible open={collapse}>
-          <div style={{ backgroundColor: "#104774", padding: "20px 0px" }}>
+          <div style={{ backgroundColor: "#104774", padding: "5px 0px" }}>
             <TaskQueue
               workflowGroupCount={this.props.workflowGroupCount}
               onSelectTask={this.onSelectTask}
