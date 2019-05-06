@@ -119,11 +119,8 @@ class WorkflowDetailsRoot extends Component {
       );
     } else {
       return (
-        <div className="text-center">
-          <br />
-          <br />
-          <br />
-          <br />loading...
+        <div className="text-center" style={{ marginTop: "100px" }}>
+          loading...
         </div>
       );
     }

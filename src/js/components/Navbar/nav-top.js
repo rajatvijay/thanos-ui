@@ -161,14 +161,6 @@ class NavTop extends Component {
       showInsights = true;
     }
     let supportedLaguanges = this.props.config.supported_languages;
-    let userName = user ? (
-      <span>
-        {user.first_name
-          ? " " + user.first_name + " " + user.last_name + " "
-          : " " + user.email + " "}
-        <i className="material-icons t-14">keyboard_arrow_down</i>
-      </span>
-    ) : null;
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -257,7 +249,7 @@ class NavTop extends Component {
                   ) : null}
 
                   <SubMenu
-                    title={userName}
+                    title={user ? <UserName user={user} /> : ""}
                     onClick={this.onLogout.bind(this, "key")}
                   >
                     <Menu.Item key="setting:1">
@@ -283,6 +275,18 @@ class NavTop extends Component {
     );
   };
 }
+
+const UserName = props => {
+  const { user } = props;
+  return (
+    <span>
+      {user.first_name
+        ? " " + user.first_name + " " + (user.last_name || "") + " "
+        : " " + user.email + " "}
+      <i className="material-icons t-14">keyboard_arrow_down</i>
+    </span>
+  );
+};
 
 function mapStateToProps(state) {
   const {

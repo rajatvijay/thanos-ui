@@ -19,16 +19,9 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import BreadCrums from "./BreadCrums";
 import StepPreview from "../Workflow/StepPreview";
 import { calculatedData } from "../Workflow/calculated-data";
-import queryString from "query-string";
 import { currentActiveStep } from "./utils/active-step";
 
 const { getProgressData } = calculatedData;
-
-const requestOptions = {
-  method: "GET",
-  headers: authHeader.get(),
-  credentials: "include"
-};
 
 const { Sider, Content } = Layout;
 
@@ -139,29 +132,31 @@ class WorkflowDetails extends Component {
     // querystring to object queryparams
     //calculate step track
     //dispatch workflow step details
-    let params = this.props.location.search;
-    let qs = queryString.parse(this.props.location.search);
+    const params = new URLSearchParams(this.props.location.search);
 
-    if (qs.group && qs.step) {
-      this.state.selectedStep = qs.step;
-      this.state.selectedGroup = qs.group;
-      this.state.from_params = true;
-    }
+    if (params.has("group") && params.has("step")) {
+      let groupId = params.get("group");
+      let stepId = params.get("step");
 
-    if (qs.object_id && qs.type) {
-      this.props.dispatch(
-        workflowDetailsActions.getComment(qs.object_id, qs.type)
-      );
-    }
+      this.state.selectedGroup = groupId;
+      this.state.selectedStep = stepId;
 
-    if (qs.group && qs.step) {
       let stepTrack = {
         workflowId: parseInt(this.props.match.params.id, 10),
-        groupId: qs.group,
-        stepId: qs.step
+        groupId: groupId,
+        stepId: stepId
       };
 
       this.fetchStepData(stepTrack);
+    }
+
+    if (params.has("object_id") && params.has("type")) {
+      this.props.dispatch(
+        workflowDetailsActions.getComment(
+          params.get("object_id"),
+          params.get("type")
+        )
+      );
     }
   };
 
