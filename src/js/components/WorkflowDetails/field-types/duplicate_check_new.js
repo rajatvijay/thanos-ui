@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
-import { WorkflowHeader } from "../../Workflow/workflow-item";
+import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
 import { connect } from "react-redux";
 
 import {
@@ -73,7 +73,7 @@ class DuplicateCheckComp extends Component {
 
   componentDidUpdate = () => {
     // If there is status_message => auto trigerring is still in progress
-    if (this.props.field.integration_json.status_message) {
+    if (this.props.field.integration_json.status_code === "fetching") {
       const {
         step_group: groupId,
         workflow: workflowId,
@@ -155,7 +155,7 @@ class DuplicateCheckComp extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      field.integration_json.status_code == "fetching"
     ) {
       final_html = (
         <div>
@@ -164,6 +164,8 @@ class DuplicateCheckComp extends Component {
           </div>
         </div>
       );
+    } else if (field.integration_json.status_code == "error") {
+      final_html = <div>{field.integration_json.status_message}</div>;
     } else if (
       _.size(field.integration_json) &&
       _.size(field.integration_json.data)
