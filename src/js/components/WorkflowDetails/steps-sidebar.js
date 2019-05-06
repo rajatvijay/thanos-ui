@@ -73,13 +73,6 @@ class StepSidebarMenu extends Component {
           }
         >
           {that.getSteps(g.steps, g.id, visible_steps)}
-
-          {/*<Steps 
-              data={g.steps}
-              group_id={g.id}
-              visible_steps={visible_steps}
-              alerts={that.props.alerts}
-            />*/}
         </SubMenu>
       );
     });

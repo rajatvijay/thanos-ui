@@ -20,6 +20,7 @@ import BreadCrums from "./BreadCrums";
 import StepPreview from "../Workflow/StepPreview";
 import { calculatedData } from "../Workflow/calculated-data";
 import queryString from "query-string";
+import { currentActiveStep } from "./utils/active-step";
 
 const { getProgressData } = calculatedData;
 
@@ -85,6 +86,8 @@ class WorkflowDetails extends Component {
       this.setStepFromQuery();
     }
 
+    //IF REQUIRED DATA IS LOADED AND CURRENT STEP DATA IS NOT AVAILABLE
+    //CALCULATE CURRENT STEP DATA AND FETCH THE FEILDS.
     if (
       !this.props.location.search &&
       !this.props.workflowDetails.loading &&
@@ -93,6 +96,9 @@ class WorkflowDetails extends Component {
     ) {
       this.updateCurrentActiveStep();
     }
+
+    console.log("this.props--------");
+    console.log(this.props);
   };
 
   updateSidebar = id => {
@@ -101,10 +107,9 @@ class WorkflowDetails extends Component {
 
   updateCurrentActiveStep = () => {
     let workflowId = parseInt(this.props.match.params.id, 10);
+    const { stepGroups } = this.props.workflowDetails.workflowDetails;
     //calculate activit step
-    let act = this.currentActiveStep(
-      this.props.workflowDetails.workflowDetails.stepGroups
-    );
+    let act = currentActiveStep(stepGroups, workflowId);
     this.state.selectedGroup = act.groupId;
     this.state.selectedStep = act.stepId;
     history.replace(
@@ -120,8 +125,6 @@ class WorkflowDetails extends Component {
 
   getInitialData = () => {
     //Get workflow  basic data
-    // this.props.dispatch(workflowDetailsActions.getStepGroup(this.props.workflowId));
-    // this.props.dispatch(workflowDetailsActions.getById(this.props.workflowId));
     this.props.dispatch(workflowFiltersActions.getStatusData());
 
     if (
@@ -162,61 +165,6 @@ class WorkflowDetails extends Component {
       };
 
       this.fetchStepData(stepTrack);
-    }
-  };
-
-  currentActiveStep = stepData => {
-    let activeStepGroup = null;
-    let activeStep = null;
-
-    _.forEach(stepData.results, function(step_group) {
-      if (step_group.is_complete || _.isEmpty(step_group.steps)) {
-        return; //if empty goto next group
-      }
-
-      activeStepGroup = step_group;
-
-      _.forEach(step_group.steps, function(step) {
-        if (step.is_editable && !step.completed_at && !step.is_locked) {
-          activeStep = step;
-          return false;
-        }
-      });
-
-      if (activeStep) {
-        return false; // if active step available exit loop
-      }
-    });
-
-    // this conditions is satisfied only when all step groups are completed
-    // This will choose the last group and last step as active
-    if (!activeStepGroup) {
-      let last_sg_index = stepData.results.length - 1;
-      activeStepGroup = stepData.results[last_sg_index];
-      let last_step_index = activeStepGroup.steps.length - 1;
-      activeStep = activeStepGroup.steps[last_step_index];
-    }
-
-    // this condition will occur when step is available but steps inside are not available for edit (i.e. locked/completed)
-    if (activeStepGroup && !activeStep) {
-      let last_step_index = activeStepGroup.steps.length - 1;
-      activeStep = activeStepGroup.steps[last_step_index];
-    }
-
-    if (activeStep) {
-      return {
-        workflowId: this.props.workflowId,
-        groupId: activeStepGroup.id,
-        stepId: activeStep.id
-      };
-    } else {
-      let actStepGrp = stepData.results[0];
-      let actStep = stepData.results[0].steps[0];
-      return {
-        workflowId: this.props.workflowId,
-        groupId: actStepGrp && actStepGrp.id,
-        stepId: actStep && actStep.id
-      };
     }
   };
 
