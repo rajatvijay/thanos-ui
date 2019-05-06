@@ -15,19 +15,29 @@ class WorkflowDetailsRoot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      workflowId: null
+      workflowId: null,
+      customHistory: [{ pathname: "/workflows/instances/", search: "" }]
     };
   }
-
 
   componentDidMount = () => {
     this.verifyAuth();
     this.setWorkflowId();
   };
 
-  componentDidUpdate = pervProps => {
+  componentDidUpdate = prevProps => {
     let WFId = parseInt(this.props.match.params.id, 10);
+    const { location } = this.props;
     this.setWorkflowId();
+
+    //update custom history stack for back button purpose
+    if (location.search && location.search !== prevProps.location.search) {
+      if (location.pathname !== prevProps.location.pathname) {
+        this.updateCustomHistory(location);
+      } else {
+        this.replaceLastHistory(location);
+      }
+    }
   };
 
   componentWillUnMount = () => {
@@ -43,7 +53,6 @@ class WorkflowDetailsRoot extends Component {
       this.props.dispatch(navbarActions.showFilterMenu());
     }
   };
-
 
   verifyAuth = () => {
     if (!this.props.users.me) {
@@ -62,12 +71,49 @@ class WorkflowDetailsRoot extends Component {
     );
   };
 
+  updateCustomHistory = url => {
+    let hist = this.state.customHistory;
+    if (hist[hist.length - 1].pathname !== url.pathname) {
+      hist.push(url);
+      this.setState({ customHistory: hist });
+    }
+  };
+
+  replaceLastHistory = url => {
+    let hist = this.state.customHistory;
+    let len = hist.length;
+    hist[len - 1] = url;
+    this.setState({ customHistory: hist });
+  };
+
+  removefromHistory = () => {
+    let hist = this.state.customHistory;
+    hist.pop();
+    this.setState({ customHistory: hist });
+  };
+
+  goBack = () => {
+    const { customHistory } = this.state;
+    let len = customHistory.length,
+      last = customHistory[len - 2],
+      url = "";
+
+    if (last) {
+      url = last.pathname + last.search;
+      history.push(url);
+      this.removefromHistory();
+    } else {
+      history.push("/workflows/instances/");
+    }
+  };
+
   render = () => {
     const { workflowId } = this.state;
     if (workflowId) {
       return (
         <WorkflowDetails
           workflowId={this.state.workflowId || null}
+          goBack={this.goBack}
           {...this.props}
         />
       );

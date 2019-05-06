@@ -96,9 +96,6 @@ class WorkflowDetails extends Component {
     ) {
       this.updateCurrentActiveStep();
     }
-
-    console.log("this.props--------");
-    console.log(this.props);
   };
 
   updateSidebar = id => {
@@ -236,32 +233,9 @@ class WorkflowDetails extends Component {
     // If ID is not found, it is rendered as text by default.
 
     if (_.size(error)) {
+      // LAYOUT PLACE HOLDER
       return (
-        <Layout className="workflow-details-container inner-container">
-          <StepSidebar showFilterMenu={this.props.showFilterMenu} />
-          <Layout
-            style={{
-              background: "#FBFBFF",
-              minHeight: "100vh",
-              paddingTop: "30px"
-            }}
-          >
-            <Content>
-              <div className="printOnly ">
-                <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
-                  <div className="text-center text-metal mr-ard-lg">
-                    <br />
-                    <br />
-                    <FormattedMessage id={error} />
-                    <br />
-                    <br />
-                    <br />
-                  </div>
-                </div>
-              </div>
-            </Content>
-          </Layout>
-        </Layout>
+        <PlaceHolder error={error} showFilterMenu={this.props.showFilterMenu} />
       );
     } else {
       return (
@@ -300,6 +274,7 @@ class WorkflowDetails extends Component {
                   showCommentIcon={true}
                   getCommentSidebar={this.callBackCollapser}
                   nextUrl={this.props.nextUrl}
+                  goBack={this.props.goBack}
                 />
               </div>
             )}
@@ -394,6 +369,36 @@ class WorkflowDetails extends Component {
     }
   };
 }
+
+const PlaceHolder = props => {
+  return (
+    <Layout className="workflow-details-container inner-container">
+      <StepSidebar showFilterMenu={props.showFilterMenu} />
+      <Layout
+        style={{
+          background: "#FBFBFF",
+          minHeight: "100vh",
+          paddingTop: "30px"
+        }}
+      >
+        <Content>
+          <div className="printOnly ">
+            <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
+              <div className="text-center text-metal mr-ard-lg">
+                <br />
+                <br />
+                <FormattedMessage id={props.error} />
+                <br />
+                <br />
+                <br />
+              </div>
+            </div>
+          </div>
+        </Content>
+      </Layout>
+    </Layout>
+  );
+};
 
 function mapStateToProps(state) {
   const {

@@ -674,7 +674,7 @@ export const WorkflowHeader = props => {
         {props.isChild || props.isEmbedded ? null : (
           <Col span={1} className=" text-anchor">
             {props.detailsPage && !props.nextUrl.url ? (
-              <span onClick={history.goBack} className="text-anchor pd-ard-sm ">
+              <span onClick={props.goBack} className="text-anchor pd-ard-sm ">
                 <i
                   className="material-icons text-secondary"
                   style={{ fontSize: "18px", verticalAlign: "middle" }}
