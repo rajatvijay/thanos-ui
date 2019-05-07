@@ -53,7 +53,7 @@ class FilterPopup extends Component {
         <Modal
           style={{ maxWidth: 350 }}
           footer={null}
-          closable={false}
+          closable={true}
           visible={visible}
           // onOk={handleOk}
           onCancel={handleCancel}
