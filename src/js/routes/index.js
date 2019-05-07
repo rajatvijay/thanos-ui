@@ -27,7 +27,6 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
 import queryString from "query-string";
-import HeaderView from "../../modules/header/components/index";
 import RouteSwitch from "./RouteSwitch";
 
 function mapStateToProps(state) {

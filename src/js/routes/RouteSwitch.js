@@ -15,6 +15,7 @@ import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
 import WorkflowDetailsRoot from "../components/WorkflowDetails";
 import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
+import HeaderView from "../../modules/header/components/index";
 import { injectIntl } from "react-intl";
 import _ from "lodash";
 
