@@ -62,7 +62,7 @@ class FilterPopup extends Component {
       <div>
         <Modal
           footer={null}
-          closable={false}
+          closable={true}
           visible={visible}
           className={css`
             max-width: 320px;
