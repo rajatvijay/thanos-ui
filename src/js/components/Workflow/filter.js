@@ -405,7 +405,8 @@ class FilterSidebar extends Component {
         width={300}
         style={{
           overflow: "auto",
-          background: "#ebf0fa"
+          background: "#ebf0fa",
+          display: "none"
         }}
         className="aux-nav aux-nav-filter "
         collapsible
