@@ -474,7 +474,7 @@ class Comments extends Component {
                             >
                               <Tooltip
                                 title={
-                                  <Moment format="DD/MM/YYYY, h:mm a">
+                                  <Moment format="MM/DD/YYYY, h:mm a">
                                     {msg.created_at}
                                   </Moment>
                                 }
