@@ -15,7 +15,6 @@ import {
 import _ from "lodash";
 import TaskQueue from "./TaskQueue";
 import Alerts from "./Alerts";
-import "./style.css";
 
 import {
   workflowFiltersActions,
