@@ -32,7 +32,6 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
 import queryString from "query-string";
-import HeaderView from "../../modules/header/components/index";
 
 function mapStateToProps(state) {
   const { config, users, languageSelector, nextUrl } = state;
@@ -129,7 +128,6 @@ class MainRoutes extends React.Component {
                     <Route path="/login" exact component={OTPLogin} />
                     <Route path="/login/basic" exact component={LoginPage} />
                     <Route path="/login/magic" exact component={MagicLogin} />
-                    <Route path="/login/header" component={HeaderView} />
                     <Route
                       path="/login/magicprocess"
                       component={MagicLinkProcess}
