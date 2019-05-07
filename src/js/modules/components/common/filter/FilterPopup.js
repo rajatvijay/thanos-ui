@@ -4,6 +4,7 @@ import { Modal, Button } from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
 import InputBox from "./InputBox";
+import { css } from "emotion";
 
 const arr = [
   { label: "Equal", value: "eq" },
@@ -19,7 +20,7 @@ class FilterPopup extends Component {
     marketValue: undefined,
     divisionValue: undefined,
     operatorValue: undefined,
-    textValue: undefined
+    textValue: ""
   };
 
   onFilterChange = (key, value) => {
@@ -32,8 +33,17 @@ class FilterPopup extends Component {
       marketValue: undefined,
       divisionValue: undefined,
       operatorValue: undefined,
-      textValue: undefined
+      textValue: ""
     });
+  };
+
+  updateAdvanceFilterTextValue = e => {
+    const { value } = e.target;
+    this.setState({ textValue: value });
+  };
+
+  applyFilters = () => {
+    console.log("APPLIED FILTERS");
   };
 
   render() {
@@ -51,11 +61,21 @@ class FilterPopup extends Component {
     return (
       <div>
         <Modal
-          style={{ maxWidth: 350 }}
           footer={null}
           closable={false}
           visible={visible}
-          // onOk={handleOk}
+          className={css`
+            max-width: 320px;
+            .ant-modal-content {
+              border-radius: 0;
+              padding-left: 0;
+              padding-right: 0;
+            }
+            .ant-modal-body {
+              padding-left: 0;
+              padding-right: 0;
+            }
+          `}
           onCancel={handleCancel}
         >
           <div>
@@ -104,8 +124,22 @@ class FilterPopup extends Component {
                 name="operatorValue"
                 onFilterChange={this.onFilterChange}
               />
-              {/* <InputBox /> */}
+              <InputBox
+                placeholder="Input Value"
+                value={textValue}
+                onChange={this.updateAdvanceFilterTextValue}
+              />
             </div>
+          </div>
+
+          <div style={{ margin: 30 }}>
+            <Button
+              style={{ width: "100%" }}
+              type="primary"
+              onClick={this.applyFilters}
+            >
+              Apply
+            </Button>
           </div>
         </Modal>
       </div>

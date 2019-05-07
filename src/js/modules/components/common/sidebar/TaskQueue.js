@@ -103,8 +103,11 @@ export default class TaskQueue extends Component {
                       backgroundColor: "#D40000",
                       color: "white",
                       margin: "0px 5px",
-                      padding: 4,
-                      fontSize: 10
+                      fontSize: 10,
+                      width: 25,
+                      height: 25,
+                      lineHeight: "25px",
+                      textAlign: "center"
                     }}
                   >
                     {item.overdue_count}

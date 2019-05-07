@@ -107,39 +107,50 @@ class Sidebar extends Component {
           backgroundColor: "#104774"
         }}
       >
-        <div className="logo" />
-        {/* <Collapse bordered={false} defaultActiveKey={["1"]}>
-          <Panel style={{ padding: 0 }} header="TPI" key="1"> */}
         <div
-          onClick={() => this.setState({ collapse: !collapse })}
           style={{
-            color: "white",
-            padding: "25px 20px",
-            cursor: "pointer",
-            backgroundColor: "#0A3150",
-            justifyContent: "space-between",
-            display: "flex",
-            fontSize: 18
+            width: 300,
+            position: "fixed",
+            paddingBottom: 100,
+            height: "100%",
+            overflow: "scroll",
+            backgroundColor: "#0A3150"
           }}
         >
-          TPI
-          <Icon type="caret-right" rotate={collapse ? 90 : 0} />
-        </div>
-        <Collapsible open={collapse}>
-          <div style={{ backgroundColor: "#104774", padding: "5px 0px" }}>
-            <TaskQueue
-              workflowGroupCount={this.props.workflowGroupCount}
-              onSelectTask={this.onSelectTask}
-            />
-
-            <Alerts
-              workflowAlertGroupCount={this.props.workflowAlertGroupCount}
-              onSelectAlert={this.onSelectAlert}
-            />
+          <div className="logo" />
+          {/* <Collapse bordered={false} defaultActiveKey={["1"]}>
+          <Panel style={{ padding: 0 }} header="TPI" key="1"> */}
+          <div
+            onClick={() => this.setState({ collapse: !collapse })}
+            style={{
+              color: "white",
+              padding: "25px 20px",
+              cursor: "pointer",
+              backgroundColor: "#0A3150",
+              justifyContent: "space-between",
+              display: "flex",
+              fontSize: 18
+            }}
+          >
+            TPI
+            <Icon type="caret-right" rotate={collapse ? 90 : 0} />
           </div>
-        </Collapsible>
-        {/* </Panel>
+          <Collapsible open={collapse}>
+            <div style={{ backgroundColor: "#104774", padding: "5px 0px" }}>
+              <TaskQueue
+                workflowGroupCount={this.props.workflowGroupCount}
+                onSelectTask={this.onSelectTask}
+              />
+
+              <Alerts
+                workflowAlertGroupCount={this.props.workflowAlertGroupCount}
+                onSelectAlert={this.onSelectAlert}
+              />
+            </div>
+          </Collapsible>
+          {/* </Panel>
         </Collapse> */}
+        </div>
       </Sider>
     );
   }

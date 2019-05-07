@@ -29,9 +29,30 @@ class Filter extends Component {
 
     return (
       <div style={{ marginTop: 30 }}>
-        <ul style={{ listStyle: "none" }}>
-          <li onClick={() => this.showModal()} style={{ color: "#C2C2C2" }}>
-            filter
+        <ul
+          style={{
+            listStyle: "none",
+            fontSize: 14,
+            color: "#000",
+            cursor: "pointer"
+          }}
+        >
+          <li
+            style={{
+              display: "inline",
+              paddingRight: 10
+            }}
+          >
+            DATE CREATED
+          </li>
+          <li
+            onClick={() => this.showModal()}
+            style={{
+              display: "inline",
+              paddingRight: 10
+            }}
+          >
+            FILTER
           </li>
         </ul>
         {visible && (
