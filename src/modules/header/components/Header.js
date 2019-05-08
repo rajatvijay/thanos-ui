@@ -68,23 +68,24 @@ class Header extends Component {
           alignItems: "center"
         }}
       >
-        {!this.props.config.loading && this.props.config.logo ? (
-          <img
-            alt={this.props.config.name}
-            src={this.props.config.logo}
-            style={{
-              marginLeft: "17px",
-              marginTop: "7px",
-              marginBottom: "5px",
-              height: "42.5px"
-            }}
-          />
-        ) : !this.props.config.loading ? (
-          <h3>{this.props.config.name}</h3>
-        ) : (
-          <h3>{authHeader.getClient()}</h3>
-        )}
-
+        <a href="/">
+          {!this.props.config.loading && this.props.config.logo ? (
+            <img
+              alt={this.props.config.name}
+              src={this.props.config.logo}
+              style={{
+                marginLeft: "17px",
+                marginTop: "7px",
+                marginBottom: "5px",
+                height: "42.5px"
+              }}
+            />
+          ) : !this.props.config.loading ? (
+            <h3>{this.props.config.name}</h3>
+          ) : (
+            <h3>{authHeader.getClient()}</h3>
+          )}
+        </a>
         <div
           style={{
             marginRight: "10px",
