@@ -7,6 +7,7 @@ import { Tooltip, Menu, Dropdown, Input, Icon } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import { logout, workflowActions } from "../../../js/actions";
+import "../Header.css";
 
 class Header extends Component {
   state = {
@@ -98,13 +99,19 @@ class Header extends Component {
           {showSearchInputIcon ? (
             <div className={"search-box "}>
               <Input
-                style={{ display: "inline" }}
+                style={{
+                  display: "inline",
+                  border: "none",
+                  borderBottom: "1px solid",
+                  borderRadius: 0
+                }}
+                className={"ant-input"}
                 suffix={
                   <Icon
                     type="search"
                     onClick={() => this.onSearch(searchInput)}
                     className="text-anchor"
-                    style={{ color: "rgba(0,0,0,.25)" }}
+                    style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
                   />
                 }
                 value={searchInput}
@@ -130,7 +137,6 @@ class Header extends Component {
                   fontSize: "18px",
                   letterSpacing: "-0.03px",
                   lineHeight: "22px",
-                  textålign: "right",
                   marginRight: "8px"
                 }}
               >
