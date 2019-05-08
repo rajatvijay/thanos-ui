@@ -6,8 +6,8 @@ import { authHeader, baseUrl, baseUrl2 } from "../../../js/_helpers";
 import { Tooltip, Menu, Dropdown, Input, Icon } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
-import { logout, workflowActions } from "../../../js/actions";
-import "../Header.css";
+import { logout, workflowActions, navbarActions } from "../../../js/actions";
+import "../header.css";
 
 class Header extends Component {
   state = {
@@ -50,6 +50,12 @@ class Header extends Component {
     logout();
   };
 
+  onMenuToggle = () => {
+    this.props.dispatch(
+      navbarActions.toggleFilterMenu(!this.props.showFilterMenu.show)
+    );
+  };
+
   render() {
     const { searchInput, showSearchInputIcon } = this.state;
     let user = this.props.authentication.user;
@@ -69,24 +75,42 @@ class Header extends Component {
           alignItems: "center"
         }}
       >
-        <a href="/">
-          {!this.props.config.loading && this.props.config.logo ? (
-            <img
-              alt={this.props.config.name}
-              src={this.props.config.logo}
-              style={{
-                marginLeft: "17px",
-                marginTop: "7px",
-                marginBottom: "5px",
-                height: "42.5px"
-              }}
-            />
-          ) : !this.props.config.loading ? (
-            <h3>{this.props.config.name}</h3>
-          ) : (
-            <h3>{authHeader.getClient()}</h3>
-          )}
-        </a>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center"
+          }}
+        >
+          <span
+            className="logo float-left text-anchor text-base mr-right-sm"
+            title="Toggle filter menu"
+            onClick={this.onMenuToggle}
+          >
+            <Tooltip title="Toggle sidebar menu" placement="right">
+              <i className="material-icons text-middle">
+                {this.props.showFilterMenu.show ? "dehaze" : "dehaze"}{" "}
+              </i>
+            </Tooltip>
+          </span>
+          <a href="/">
+            {!this.props.config.loading && this.props.config.logo ? (
+              <img
+                alt={this.props.config.name}
+                src={this.props.config.logo}
+                style={{
+                  marginLeft: "17px",
+                  marginTop: "7px",
+                  marginBottom: "5px",
+                  height: "42.5px"
+                }}
+              />
+            ) : !this.props.config.loading ? (
+              <h3>{this.props.config.name}</h3>
+            ) : (
+              <h3>{authHeader.getClient()}</h3>
+            )}
+          </a>
+        </div>
         <div
           style={{
             marginRight: "10px",
