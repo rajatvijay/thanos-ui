@@ -161,6 +161,7 @@ class NavTop extends Component {
       showInsights = true;
     }
     let supportedLaguanges = this.props.config.supported_languages;
+    let regexForUrl = /\/instances\/[\d]+/;
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -195,7 +196,7 @@ class NavTop extends Component {
                   </a>
                 </span>
 
-                {document.location.pathname === "/workflows/instances" ? (
+                {!regexForUrl.test(document.location.pathname) ? (
                   <div className={"search-box "}>
                     <Input
                       prefix={prefix}
