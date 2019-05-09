@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 import { baseUrl, authHeader } from "../../../../_helpers";
 
 import FilterPopup from "./FilterPopup";
@@ -10,10 +10,10 @@ import {
   createWorkflow
 } from "../../../../actions";
 
-import CreateNew from './CreateNew';
+import CreateNew from "./CreateNew";
 
 class Filter extends Component {
-  state = { visible: false,fieldOptions:[] };
+  state = { visible: false, fieldOptions: [] };
 
   showModal = () => {
     this.setState({
@@ -35,19 +35,16 @@ class Filter extends Component {
     });
   };
 
-  applyFilters= (key,value) => {
+  applyFilters = (key, value) => {
     console.log(value);
     let payload = {
       filterType: key,
-      filterValue: [value],
-
+      filterValue: [value]
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
-
-  componentDidMount(){
-
+  componentDidMount() {
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),
@@ -57,58 +54,60 @@ class Filter extends Component {
     fetch(baseUrl + "fields/export-json/?active_kind=True", requestOptions)
       .then(response => response.json())
       .then(body => {
-        this.setState({ fieldOptions: body.results});
+        this.setState({ fieldOptions: body.results });
       });
-    
   }
 
-
-
-
   render() {
-    const { visible,fieldOptions } = this.state;
+    const { visible, fieldOptions } = this.state;
 
     return (
-      <div style={{ marginTop: 30,display:"flex",justifyContent:"space-between" }}>
-<div>
-        <ul
-          style={{
-            listStyle: "none",
-            fontSize: 14,
-            color: "#000",
-            cursor: "pointer"
-          }}
-        >
-          <li
+      <div
+        style={{
+          marginTop: 30,
+          display: "flex",
+          justifyContent: "space-between"
+        }}
+      >
+        <div>
+          <ul
             style={{
-              display: "inline",
-              paddingRight: 10
+              listStyle: "none",
+              fontSize: 14,
+              color: "#000",
+              cursor: "pointer"
             }}
           >
-            DATE CREATED
-          </li>
-          <li
-            onClick={() => this.showModal()}
-            style={{
-              display: "inline",
-              paddingRight: 10
-            }}
-          >
-            FILTER
-          </li>
-        </ul>
-        {visible && (
-          <FilterPopup  fieldOptions={fieldOptions}  applyFilters = {this.applyFilters} handleCancel={this.handleCancel} visible={visible} />
-        )}
+            <li
+              style={{
+                display: "inline",
+                paddingRight: 10
+              }}
+            >
+              DATE CREATED
+            </li>
+            <li
+              onClick={() => this.showModal()}
+              style={{
+                display: "inline",
+                paddingRight: 10
+              }}
+            >
+              FILTER
+            </li>
+          </ul>
+
+          <FilterPopup
+            fieldOptions={fieldOptions}
+            applyFilters={this.applyFilters}
+            handleCancel={this.handleCancel}
+            visible={visible}
+          />
         </div>
 
-<div>
-
-<CreateNew/>
-</div>
-
-
-
+        <div>
+          <CreateNew />
+        </div>
       </div>
     );
   }

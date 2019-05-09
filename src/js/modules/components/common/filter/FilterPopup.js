@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Modal, Button ,Input,Cascader} from "antd";
+import { Modal, Button, Input, Cascader } from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
 import InputBox from "./InputBox";
@@ -21,33 +21,27 @@ class FilterPopup extends Component {
     business_unit: undefined,
     operator: undefined,
     text: "",
-    field:undefined,
-    showError:false
+    field: undefined,
+    showError: false
   };
 
   onFilterChange = (key, value) => {
-const {applyFilters,handleCancel} = this.props
+    const { applyFilters, handleCancel } = this.props;
 
-    this.setState({ [key]: value },function(){
-      console.log("key",key)
-if(key != "operator" && key != "field" && key != "text"){
-  applyFilters(key,value)
-handleCancel()
-}
-
+    this.setState({ [key]: value }, function() {
+      console.log("key", key);
+      if (key != "operator" && key != "field" && key != "text") {
+        applyFilters(key, value);
+        handleCancel();
+      }
     });
   };
 
+  // onSelectNested = (arr)=>{
 
-// onSelectNested = (arr)=>{
+  // const
 
-// const 
-
-
-// }
-
-
-
+  // }
 
   onClear = () => {
     this.setState({
@@ -55,14 +49,15 @@ handleCancel()
       region: undefined,
       business_unit: undefined,
       operator: undefined,
-      text: ""
+      text: "",
+      field: undefined
     });
   };
 
-componentWillUnmount(){
-  console.log("dont reset")
-  console.log(this.props)
-}
+  componentWillUnmount() {
+    console.log("dont reset");
+    console.log(this.props);
+  }
 
   updateAdvanceFilterTextValue = e => {
     const { value } = e.target;
@@ -70,30 +65,29 @@ componentWillUnmount(){
   };
 
   onApply = () => {
+    const { field, text, operator } = this.state;
+    const { applyFilters, handleCancel } = this.props;
 
-    const {field,text,operator} = this.state
-    const {applyFilters,handleCancel} = this.props
+    console.log(this.state);
+    if (field && text && operator) {
+      console.log(field, operator, text);
 
-    console.log(this.state)
-if(field && text && operator){
-  console.log(field,operator,text)
-
-  applyFilters("advance",`${field}_${operator}_${text}`)
-  this.setState({showError:false})
-  handleCancel()
-}
-
-else{
-  this.setState({showError:true})
-}
-
-
+      applyFilters("advance", `${field[field.length - 1]}_${operator}_${text}`);
+      this.setState({ showError: false });
+      handleCancel();
+    } else {
+      this.setState({ showError: true });
+    }
   };
 
-
-
   render() {
-    const { visible, workflowFilterType, handleCancel,applyFilters,fieldOptions } = this.props;
+    const {
+      visible,
+      workflowFilterType,
+      handleCancel,
+      applyFilters,
+      fieldOptions
+    } = this.props;
     const { statusType, businessType, regionType } = workflowFilterType;
     console.log(this.state);
     const {
@@ -102,14 +96,14 @@ else{
       business_unit,
       operator,
       text,
-      showError
+      showError,
+      field
     } = this.state;
 
-    console.log("filed",fieldOptions)
+    console.log("filed", fieldOptions);
 
     return (
       <div>
-        
         <Modal
           footer={null}
           closable={true}
@@ -167,11 +161,11 @@ else{
             </span>
 
             <div style={{ margin: 30 }}>
-
-            <Cascader
-            style={{width:"100%"}}
+              <Cascader
+                value={field}
+                style={{ width: "100%" }}
                 options={fieldOptions}
-                onChange={(arr)=>this.onFilterChange("field",arr[arr.length-1])}
+                onChange={arr => this.onFilterChange("field", arr)}
                 placeholder="Please select field"
               />
 
@@ -187,8 +181,10 @@ else{
                 value={textValue}
                 onChange={this.updateAdvanceFilterTextValue}
               /> */}
-              <Input placeholder="InputValue"   onChange={(e)=>this.onFilterChange("text",e.target.value)}/>
-              
+              <Input
+                placeholder="InputValue"
+                onChange={e => this.onFilterChange("text", e.target.value)}
+              />
             </div>
           </div>
 
@@ -196,12 +192,20 @@ else{
             <Button
               style={{ width: "100%" }}
               type="primary"
-              onClick={()=>this.onApply()}
+              onClick={() => this.onApply()}
             >
               Apply
             </Button>
-        
-            <p style={{color:"red",display:showError?"block":"none",textAlign:"center"}}>please choose all three fields</p>
+
+            <p
+              style={{
+                color: "red",
+                display: showError ? "block" : "none",
+                textAlign: "center"
+              }}
+            >
+              please choose all three fields
+            </p>
           </div>
         </Modal>
       </div>
