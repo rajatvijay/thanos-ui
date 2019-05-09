@@ -23,6 +23,7 @@ import { MagicLogin } from "../components/LoginPage/MagicLogin";
 import { OTPLogin } from "../components/LoginPage/OTPLogin";
 import { RegisterPage } from "../components/RegisterPage";
 import Navbar from "../components/Navbar";
+import Header from "../../modules/header/components";
 import Workflow from "../components/Workflow";
 import WorkflowDetailsRoot from "../components/WorkflowDetails";
 import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
@@ -32,6 +33,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
 import queryString from "query-string";
+import HeaderView from "../../modules/header/components/index";
 
 function mapStateToProps(state) {
   const { config, users, languageSelector, nextUrl } = state;
@@ -122,12 +124,13 @@ class MainRoutes extends React.Component {
                 <div>
                   {localStorage.getItem("user") ||
                   !_.includes(history.location.pathname, "/login") ? (
-                    <Navbar />
+                    <Header />
                   ) : null}
                   <Switch>
                     <Route path="/login" exact component={OTPLogin} />
                     <Route path="/login/basic" exact component={LoginPage} />
                     <Route path="/login/magic" exact component={MagicLogin} />
+                    <Route path="/login/header" component={HeaderView} />
                     <Route
                       path="/login/magicprocess"
                       component={MagicLinkProcess}
