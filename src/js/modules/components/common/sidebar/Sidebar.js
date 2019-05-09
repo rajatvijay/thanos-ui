@@ -92,7 +92,7 @@ class Sidebar extends Component {
   render() {
     let that = this;
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
-    const { alert_details } = this.props.workflowAlertGroupCount;
+    const { alert_details ,isError} = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
 
     console.log(this.state);
@@ -113,7 +113,8 @@ class Sidebar extends Component {
             paddingBottom: 100,
             height: "100%",
             overflow: "scroll",
-            backgroundColor: "#0A3150"
+            backgroundColor: "#0A3150",
+            fontFamily:"Cabin"
           }}
         >
           <div className="logo" />
@@ -135,16 +136,21 @@ class Sidebar extends Component {
             <Icon type="caret-right" rotate={collapse ? 90 : 0} />
           </div>
           <Collapsible open={collapse}>
-            <div style={{ backgroundColor: "#104774", padding: "5px 0px" }}>
+            <div style={{ backgroundColor: "#104774", padding: "5px 0px",minHeight:"100vh" }}>
+            <div>
               <TaskQueue
                 workflowGroupCount={this.props.workflowGroupCount}
                 onSelectTask={this.onSelectTask}
               />
+              </div>
 
+<div style={{display:isError?"none":"block"}}
+>
               <Alerts
                 workflowAlertGroupCount={this.props.workflowAlertGroupCount}
                 onSelectAlert={this.onSelectAlert}
               />
+              </div>
             </div>
           </Collapsible>
           {/* </Panel>

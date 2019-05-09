@@ -237,7 +237,9 @@ class ChildWorkflowField2 extends Component {
   };
 
   getAddMenu = () => {
+    
     const kindMenu = this.getKindMenu();
+    //console.log("kind",kindMenu)
     if (!kindMenu) {
       return null;
     }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Modal, Button } from "antd";
+import { Modal, Button ,Input,Cascader} from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
 import InputBox from "./InputBox";
@@ -16,50 +16,100 @@ const arr = [
 
 class FilterPopup extends Component {
   state = {
-    statusValue: undefined,
-    marketValue: undefined,
-    divisionValue: undefined,
-    operatorValue: undefined,
-    textValue: ""
+    status: undefined,
+    region: undefined,
+    business_unit: undefined,
+    operator: undefined,
+    text: "",
+    field:undefined,
+    showError:false
   };
 
   onFilterChange = (key, value) => {
-    this.setState({ [key]: value });
-  };
+const {applyFilters,handleCancel} = this.props
 
-  onClear = () => {
-    this.setState({
-      statusValue: undefined,
-      marketValue: undefined,
-      divisionValue: undefined,
-      operatorValue: undefined,
-      textValue: ""
+    this.setState({ [key]: value },function(){
+      console.log("key",key)
+if(key != "operator" && key != "field" && key != "text"){
+  applyFilters(key,value)
+handleCancel()
+}
+
     });
   };
 
+
+// onSelectNested = (arr)=>{
+
+// const 
+
+
+// }
+
+
+
+
+  onClear = () => {
+    this.setState({
+      status: undefined,
+      region: undefined,
+      business_unit: undefined,
+      operator: undefined,
+      text: ""
+    });
+  };
+
+componentWillUnmount(){
+  console.log("dont reset")
+  console.log(this.props)
+}
+
   updateAdvanceFilterTextValue = e => {
     const { value } = e.target;
-    this.setState({ textValue: value });
+    this.setState({ text: value });
   };
 
-  applyFilters = () => {
-    console.log("APPLIED FILTERS");
+  onApply = () => {
+
+    const {field,text,operator} = this.state
+    const {applyFilters,handleCancel} = this.props
+
+    console.log(this.state)
+if(field && text && operator){
+  console.log(field,operator,text)
+
+  applyFilters("advance",`${field}_${operator}_${text}`)
+  this.setState({showError:false})
+  handleCancel()
+}
+
+else{
+  this.setState({showError:true})
+}
+
+
   };
+
+
 
   render() {
-    const { visible, workflowFilterType, handleCancel } = this.props;
+    const { visible, workflowFilterType, handleCancel,applyFilters,fieldOptions } = this.props;
     const { statusType, businessType, regionType } = workflowFilterType;
     console.log(this.state);
     const {
-      statusValue,
-      marketValue,
-      divisionValue,
-      operatorValue,
-      textValue
+      status,
+      region,
+      business_unit,
+      operator,
+      text,
+      showError
     } = this.state;
+
+    console.log("filed",fieldOptions)
 
     return (
       <div>
+        
         <Modal
           footer={null}
           closable={true}
@@ -88,23 +138,23 @@ class FilterPopup extends Component {
 
             <div style={{ margin: 30 }}>
               <DropdownFilter
-                value={statusValue}
-                name="statusValue"
+                value={status}
+                name="status"
                 data={statusType}
                 placeholder="Status"
                 onFilterChange={this.onFilterChange}
               />
               <DropdownFilter
-                name="marketValue"
-                value={marketValue}
-                data={businessType.results}
+                name="region"
+                value={region}
+                data={regionType.results}
                 placeholder="Market"
                 onFilterChange={this.onFilterChange}
               />
               <DropdownFilter
-                name="divisionValue"
-                value={divisionValue}
-                data={regionType.results}
+                name="business_unit"
+                value={business_unit}
+                data={businessType.results}
                 placeholder="Division"
                 onFilterChange={this.onFilterChange}
               />
@@ -117,18 +167,28 @@ class FilterPopup extends Component {
             </span>
 
             <div style={{ margin: 30 }}>
+
+            <Cascader
+            style={{width:"100%"}}
+                options={fieldOptions}
+                onChange={(arr)=>this.onFilterChange("field",arr[arr.length-1])}
+                placeholder="Please select field"
+              />
+
               <DropdownFilter
                 data={arr}
-                value={operatorValue}
+                value={operator}
                 placeholder="Select Operator"
-                name="operatorValue"
+                name="operator"
                 onFilterChange={this.onFilterChange}
               />
-              <InputBox
+              {/* <InputBox
                 placeholder="Input Value"
                 value={textValue}
                 onChange={this.updateAdvanceFilterTextValue}
-              />
+              /> */}
+              <Input placeholder="InputValue"   onChange={(e)=>this.onFilterChange("text",e.target.value)}/>
+              
             </div>
           </div>
 
@@ -136,10 +196,12 @@ class FilterPopup extends Component {
             <Button
               style={{ width: "100%" }}
               type="primary"
-              onClick={this.applyFilters}
+              onClick={()=>this.onApply()}
             >
               Apply
             </Button>
+        
+            <p style={{color:"red",display:showError?"block":"none",textAlign:"center"}}>please choose all three fields</p>
           </div>
         </Modal>
       </div>

@@ -6,8 +6,9 @@ const Option = Select.Option;
 export default class DropdownFilter extends Component {
   renderMenu = () => {
     const { data } = this.props;
+    console.log(data)
 
-    return data.map(item => <Option value={item.label}>{item.label}</Option>);
+    return data.map(item => <Option value={item.value}>{item.label}</Option>);
   };
 
   render() {
@@ -16,6 +17,7 @@ export default class DropdownFilter extends Component {
     return (
       // <Dropdown overlay={this.renderMenu} trigger={['click']}>
       <Select
+      //defaultValue={value}
         value={value}
         placeholder={placeholder}
         style={{ display: "block", margin: "20px 0px" }}
