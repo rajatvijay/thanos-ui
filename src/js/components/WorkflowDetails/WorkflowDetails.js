@@ -13,7 +13,7 @@ import {
   workflowStepActions,
   configActions
 } from "../../actions";
-import { WorkflowHeader } from "../Workflow/workflow-item";
+import { WorkflowHeader } from "../Workflow/WorkflowHeader";
 import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import BreadCrums from "./BreadCrums";
@@ -65,9 +65,17 @@ class WorkflowDetails extends Component {
       prevCurrent.currentStepFields.completed_by !==
         thisCurrent.currentStepFields.completed_by //CHECK IS COMPLETION HAS CHANGED
     ) {
-      if (thisCurrent.currentStepFields.completed_by) {
+      if (
+        thisCurrent.currentStepFields.completed_by &&
+        !prevCurrent.currentStepFields.completed_by
+      ) {
         //IF STEP HAS BEEN COMPLETED
-        history.replace(`/workflows/instances/${workflowId}`); //UPDATE URL TO ROOT WHICH WILL AUTOMATICALLY CALCULATE ACTIVE STEP
+        let progress = this.checkWorkflowCompetion();
+        if (progress === 100) {
+          this.setStepFromQuery();
+        } else {
+          history.replace(`/workflows/instances/${workflowId}`); //UPDATE URL TO ROOT WHICH WILL AUTOMATICALLY CALCULATE ACTIVE STEP
+        }
       } else {
         //IF STEP HAS BEEN REVERTED
         this.updateSidebar(workflowId); //UPDATED SIDEBAR TO REFLECT THE REVERSION, NO NEED TO UPDATE URL SINCE CURRENT STEP DATA IS AUTOMATICALLY LOADED
@@ -107,6 +115,14 @@ class WorkflowDetails extends Component {
         act.stepId
       }`
     );
+  };
+
+  checkWorkflowCompetion = () => {
+    let step_groups = {
+      step_groups: this.props.workflowDetails.workflowDetails.stepGroups.results
+    };
+    let prog = getProgressData(step_groups);
+    return prog;
   };
 
   reinitialize = () => {

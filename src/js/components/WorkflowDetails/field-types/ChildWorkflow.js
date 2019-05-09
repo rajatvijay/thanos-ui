@@ -2,7 +2,8 @@
 import React, { Component } from "react";
 import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
 import Collapsible from "react-collapsible";
-import { WorkflowHeader, WorkflowBody } from "../../Workflow/workflow-item";
+import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
+import { WorkflowBody } from "../../Workflow/WorkflowBody";
 import { calculatedData } from "../../Workflow/calculated-data";
 import { connect } from "react-redux";
 import {

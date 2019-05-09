@@ -9,7 +9,6 @@ import {
   workflowDetailsActions,
   navbarActions
 } from "../../actions";
-import _ from "lodash";
 
 class WorkflowDetailsRoot extends Component {
   constructor(props) {
