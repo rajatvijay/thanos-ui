@@ -28,7 +28,7 @@ function getAll(filter) {
     filterParams = getFilterParams(filters),
     url = baseUrl + "workflows-list/";
 
-  url += filterParams;
+  url += filterParams + "&lean=true";
 
   if (filter) {
     const params = pageUrl(filter);
