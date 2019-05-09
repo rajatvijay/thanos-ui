@@ -24,6 +24,8 @@ import BreadCrums from "./BreadCrums";
 import StepPreview from "../Workflow/StepPreview";
 import { calculatedData } from "../Workflow/calculated-data";
 
+import Sidebar from "../../../modules/workflows/sidebar/components";
+
 const { getProgressData } = calculatedData;
 
 const requestOptions = {
@@ -602,6 +604,7 @@ class WorkflowDetails extends Component {
                 </Sider>
             */}
           </Layout>
+          <Sidebar />
         </div>
       );
     }

@@ -38,5 +38,5 @@ function getClient() {
   domain = domain.split(".");
   let client = domain[0];
 
-  return client;
+  return "walmart";
 }

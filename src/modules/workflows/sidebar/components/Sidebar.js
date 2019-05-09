@@ -23,12 +23,8 @@ const Panel = Collapse.Panel;
 const genExtra = value => value;
 
 class Sidebar extends Component {
-  state = {
-    collapse: true
-  };
-
   render() {
-    const { collapse } = this.state;
+    const { workflowDetailsHeader, workflowDetails } = this.props;
     return (
       <Sider
         width={400}
@@ -66,7 +62,10 @@ class Sidebar extends Component {
               lineHeight: "29px"
             }}
           >
-            Guiseppestad
+            {Object.values(workflowDetailsHeader).length &&
+            workflowDetailsHeader.workflowDetailsHeader
+              ? workflowDetailsHeader.workflowDetailsHeader.name
+              : ""}
             <Icon type="more" />
           </div>
           <Divider />
@@ -191,43 +190,44 @@ class Sidebar extends Component {
               borderRight: "none",
               borderRadius: 0
             }}
-            expandIcon={({ isActive }) => (
-              <Icon
-                type="check-circle"
-                style={{ fontSize: "16px", color: "#00C89B" }}
-              />
-            )}
+            expandIcon={({ isActive }) => null}
           >
-            <Panel header="Overview" key="1" extra={genExtra("2/2")}>
-              {/* <p>{text}</p> */}hi
-            </Panel>
-            <Panel header="Add/Edit" key="2" extra={genExtra("6/6")}>
-              {/* <p>{text}</p> */}hi
-            </Panel>
-            <Panel
-              header="Additional Information"
-              key="3"
-              extra={genExtra("4/6")}
-            >
-              <p>
-                {" "}
-                <Icon
-                  type="check-circle"
-                  style={{
-                    fontSize: "12px",
-                    color: "#00C89B",
-                    marginRight: "12px"
-                  }}
-                />{" "}
-                Additional Contacts
-              </p>
-            </Panel>
-            <Panel header="Review TPI" key="4" extra={genExtra("0/4")}>
-              {/* <p>{text}</p> */}hi
-            </Panel>
-            <Panel header="CAR Operatiobns" key="5" extra={genExtra("0/4")}>
-              {/* <p>{text}</p> */}hi
-            </Panel>
+            {Object.values(workflowDetails).length &&
+            workflowDetails.workflowDetails
+              ? workflowDetails.workflowDetails.stepGroups.results.map(
+                  (stepgroup, index) => (
+                    <Panel
+                      header={
+                        <span style={{ display: "flex", alignItems: "center" }}>
+                          <i className="material-icons t-22 pd-right-sm">
+                            {stepgroup.completed
+                              ? "check_circle"
+                              : "panorama_fish_eye"}
+                          </i>{" "}
+                          {stepgroup.definition.name}
+                        </span>
+                      }
+                      key={index + 1}
+                      extra={genExtra("2/2")}
+                    >
+                      {stepgroup.steps.map(step => (
+                        <p>
+                          {" "}
+                          <Icon
+                            type="check-circle"
+                            style={{
+                              fontSize: "12px",
+                              color: "#00C89B",
+                              marginRight: "12px"
+                            }}
+                          />{" "}
+                          {step.name}
+                        </p>
+                      ))}
+                    </Panel>
+                  )
+                )
+              : null}
           </Collapse>
         </div>
       </Sider>
@@ -236,21 +236,10 @@ class Sidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const {
-    workflowKind,
-    workflowFilterType,
-    workflowFilters,
-    config,
-    languageSelector,
-    showFilterMenu
-  } = state;
+  const { workflowDetailsHeader, workflowDetails } = state;
   return {
-    workflowKind,
-    workflowFilterType,
-    workflowFilters,
-    config,
-    languageSelector,
-    showFilterMenu
+    workflowDetailsHeader,
+    workflowDetails
   };
 }
 
