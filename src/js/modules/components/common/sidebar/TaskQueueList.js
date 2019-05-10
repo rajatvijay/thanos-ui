@@ -11,7 +11,7 @@ function TaskQueueList({ item, onSelect, selected }) {
         justifyContent: "space-between",
         padding: "10px 29px",
         cursor: "pointer",
-        backgroundColor: item["name"] == selected && "rgb(20, 137, 210)"
+        backgroundColor: item["name"] === selected && "rgb(20, 137, 210)"
       }}
     >
       <span style={{ fontSize: 16, color: "#CFDAE3" }}>{item.name}</span>
