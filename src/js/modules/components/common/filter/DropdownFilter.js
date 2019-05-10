@@ -4,7 +4,7 @@ import { Select } from "antd";
 const Option = Select.Option;
 
 class DropdownFilter extends Component {
-  renderMenu = () => {
+  renderOptions = () => {
     const { data } = this.props;
     return data.map(item => <Option value={item.value}>{item.label}</Option>);
   };
@@ -19,7 +19,7 @@ class DropdownFilter extends Component {
         style={{ display: "block", margin: "20px 0px" }}
         onChange={select => onFilterChange(name, select)}
       >
-        {this.renderMenu()}
+        {this.renderOptions()}
       </Select>
     );
   }
