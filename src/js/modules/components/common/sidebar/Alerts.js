@@ -9,9 +9,8 @@ class Alerts extends Component {
   onSelect = item => {
     const { onSelectAlert } = this.props;
 
-    if (this.state.selected == item.name) {
+    if (this.state.selected === item.name) {
       this.setState({ selected: "" });
-      //onSelectLAlert({})
     } else {
       this.setState({ selected: item["name"] });
     }
@@ -21,7 +20,6 @@ class Alerts extends Component {
 
   renderList = () => {
     const { alert_details, loading } = this.props.workflowAlertGroupCount;
-    const { onSelectAlert } = this.props;
 
     if (loading) {
       return (
@@ -52,7 +50,7 @@ class Alerts extends Component {
   };
 
   render() {
-    const { alert_details, loading } = this.props.workflowAlertGroupCount;
+    const { alert_details } = this.props.workflowAlertGroupCount;
     return (
       <div>
         <div
