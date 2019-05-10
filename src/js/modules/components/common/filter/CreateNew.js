@@ -3,9 +3,10 @@ import { Menu, Dropdown, Icon } from "antd";
 import { connect } from "react-redux";
 import { workflowKindActions, createWorkflow } from "../../../../actions";
 
-import _ from "lodash";
+
 
 class CreateNew extends Component {
+
   loadWorkflowKind = () => {
     this.props.dispatch(workflowKindActions.getAll());
   };
@@ -23,21 +24,28 @@ class CreateNew extends Component {
   render() {
     //just copy paste the content before return statement and dont know how menu list is creating
 
-    let that = this;
+   
 
     const { workflowKind } = this.props.workflowKind;
 
     let workflowKindFiltered = [];
 
-    _.map(workflowKind, function(item) {
-      if (!item.is_related_kind && _.includes(item.features, "add_workflow")) {
-        workflowKindFiltered.push(item);
-      }
-    });
+    // _.map(workflowKind, function(item) {
+    //   if (!item.is_related_kind && _.includes(item.features, "add_workflow")) {
+    //     workflowKindFiltered.push(item);
+    //   }
+    // });
+    if(workflowKind){
+    workflowKind.map(function(item) {
+          if (!item.is_related_kind && item.features.includes("add_workflow")) {
+            workflowKindFiltered.push(item);
+          }
+        })
+    }
 
     const menu = (
       <Menu className="kind-menu" theme="Light">
-        {_.map(workflowKindFiltered, function(item, index) {
+        {workflowKindFiltered.map( function(item, index) {
           //////////---------------HACK---------------////////////
           //Hide users workflow kind from create button. Temporary
 
@@ -51,7 +59,7 @@ class CreateNew extends Component {
             return (
               <Menu.Item key={"key-" + index} className="">
                 <div
-                  onClick={that.clicked.bind(this, item.tag)}
+                  onClick={()=>this.clicked(item.tag)}
                   className="kind-item "
                 >
                   {item.name}
@@ -63,13 +71,13 @@ class CreateNew extends Component {
 
         {this.props.workflowKind.error ? (
           <Menu.Item key="1" className="text-primary text-medium">
-            <span onClick={that.loadWorkflowKind}>
+            <span onClick={this.loadWorkflowKind}>
               <i className="material-icons t-14 pd-right-sm">refresh</i> Reload
             </span>
           </Menu.Item>
         ) : null}
 
-        {_.isEmpty(this.props.workflowKind.workflowKind) ? (
+        {this.props.workflowKind.workflowKind && this.props.workflowKind.workflowKind .length<1 ? (
           <Menu.Item key="1" className="text-grey text-medium" disabled>
             <span>
               <i className="material-icons t-14 pd-right-sm">error</i> Empty

@@ -7,7 +7,7 @@ import { Tooltip, Menu, Dropdown, Input, Icon } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import { logout, workflowActions, navbarActions } from "../../../js/actions";
-import "../header.css";
+//import "../header.css";
 
 class Header extends Component {
   state = {
