@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Modal, Button, Input, Cascader } from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
-import InputBox from "./InputBox";
+
 import { css } from "emotion";
 
 const arr = [
@@ -176,11 +176,7 @@ class FilterPopup extends Component {
                 name="operator"
                 onFilterChange={this.onFilterChange}
               />
-              {/* <InputBox
-                placeholder="Input Value"
-                value={textValue}
-                onChange={this.updateAdvanceFilterTextValue}
-              /> */}
+             
               <Input
                 placeholder="InputValue"
                 onChange={e => this.onFilterChange("text", e.target.value)}

@@ -5,9 +5,7 @@ import { baseUrl, authHeader } from "../../../../_helpers";
 import FilterPopup from "./FilterPopup";
 import {
   workflowFiltersActions,
-  workflowActions,
-  workflowKindActions,
-  createWorkflow
+  
 } from "../../../../actions";
 
 import CreateNew from "./CreateNew";

@@ -3,16 +3,13 @@ import { Menu, Dropdown, Icon } from "antd";
 import { connect } from "react-redux";
 import { workflowKindActions, createWorkflow } from "../../../../actions";
 
-import _ from "lodash";
-
 class CreateNew extends Component {
   loadWorkflowKind = () => {
     this.props.dispatch(workflowKindActions.getAll());
   };
 
-  clicked = tag => {
-    //dispatch
-    let payload = {
+  handleWorkflowKindClick = tag => {
+    const payload = {
       status: 1,
       kind: tag,
       name: "Draft"
@@ -20,70 +17,70 @@ class CreateNew extends Component {
     this.props.dispatch(createWorkflow(payload));
   };
 
-  render() {
-    //just copy paste the content before return statement and dont know how menu list is creating
+  getFilteredWorkflowKind = workflowKind => {
+    return workflowKind.filter(
+      kind =>
+        !kind.is_related_kind &&
+        kind.features.includes("add_workflow") &&
+        !["users", "entity-id"].includes(kind.tag)
+    );
+  };
 
-    let that = this;
+  getKindMenu = () => {
+    const { workflowKind } = this.props;
 
-    const { workflowKind } = this.props.workflowKind;
-
-    let workflowKindFiltered = [];
-
-    _.map(workflowKind, function(item) {
-      if (!item.is_related_kind && _.includes(item.features, "add_workflow")) {
-        workflowKindFiltered.push(item);
-      }
-    });
-
-    const menu = (
-      <Menu className="kind-menu" theme="Light">
-        {_.map(workflowKindFiltered, function(item, index) {
-          //////////---------------HACK---------------////////////
-          //Hide users workflow kind from create button. Temporary
-
-          let showitem = false;
-
-          if (item.tag === "users") {
-            return;
-          } else if (item.tag === "entity-id") {
-            return;
-          } else {
-            return (
-              <Menu.Item key={"key-" + index} className="">
-                <div
-                  onClick={that.clicked.bind(this, item.tag)}
-                  className="kind-item "
-                >
-                  {item.name}
-                </div>
-              </Menu.Item>
-            );
-          }
-        })}
-
-        {this.props.workflowKind.error ? (
+    // Error case
+    if (workflowKind.error) {
+      return (
+        <Menu className="kind-menu" theme="Light">
           <Menu.Item key="1" className="text-primary text-medium">
-            <span onClick={that.loadWorkflowKind}>
+            <span onClick={this.loadWorkflowKind}>
               <i className="material-icons t-14 pd-right-sm">refresh</i> Reload
             </span>
           </Menu.Item>
-        ) : null}
+        </Menu>
+      );
+    }
 
-        {_.isEmpty(this.props.workflowKind.workflowKind) ? (
+    // No kind from backend case
+    if (workflowKind.workflowKind && !workflowKind.workflowKind.length) {
+      return (
+        <Menu className="kind-menu" theme="Light">
           <Menu.Item key="1" className="text-grey text-medium" disabled>
             <span>
               <i className="material-icons t-14 pd-right-sm">error</i> Empty
             </span>
           </Menu.Item>
-        ) : (
-          ""
-        )}
+        </Menu>
+      );
+    }
+
+    // Happy case, we have some kinds
+    const filteredWorkflow = this.getFilteredWorkflowKind(
+      workflowKind.workflowKind || []
+    );
+    return (
+      <Menu className="kind-menu" theme="Light">
+        {filteredWorkflow.map(function(item, index) {
+          return (
+            <Menu.Item key={"key-" + index}>
+              <div
+                onClick={() => this.handleWorkflowKindClick(item.tag)}
+                className="kind-item"
+              >
+                {item.name}
+              </div>
+            </Menu.Item>
+          );
+        })}
       </Menu>
     );
+  };
 
+  render() {
     return (
       <div style={{ paddingRight: 36 }}>
-        <Dropdown overlay={menu} placement="bottomCenter">
+        <Dropdown overlay={this.getKindMenu()} placement="bottomCenter">
           <p
             style={{
               backgroundColor: "#138BD6",
