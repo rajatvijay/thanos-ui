@@ -110,11 +110,13 @@ class WorkflowDetailsRoot extends Component {
     const { workflowId } = this.state;
     if (workflowId) {
       return (
-        <WorkflowDetails
-          workflowId={this.state.workflowId || null}
-          goBack={this.goBack}
-          {...this.props}
-        />
+        <div>
+          <WorkflowDetails
+            workflowId={this.state.workflowId || null}
+            goBack={this.goBack}
+            {...this.props}
+          />
+        </div>
       );
     } else {
       return (
