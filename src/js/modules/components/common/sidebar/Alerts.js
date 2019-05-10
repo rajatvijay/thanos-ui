@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import {
-  
-  Icon,
- 
-  Spin
-} from "antd";
-
+import { Icon, Spin } from "antd";
 
 import AlertList from "./AlertList";
 
 class Alerts extends Component {
   state = { selected: "" };
-
 
   onSelect = item => {
     const { onSelectAlert } = this.props;
@@ -53,7 +46,6 @@ class Alerts extends Component {
             onSelect={this.onSelect}
             item={item}
           />
-          
         );
       });
     }
@@ -82,6 +74,4 @@ class Alerts extends Component {
   }
 }
 
-
-
-export default Alerts
+export default Alerts;

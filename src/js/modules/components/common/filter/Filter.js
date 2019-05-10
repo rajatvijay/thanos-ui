@@ -3,10 +3,7 @@ import { connect } from "react-redux";
 import { baseUrl, authHeader } from "../../../../_helpers";
 
 import FilterPopup from "./FilterPopup";
-import {
-  workflowFiltersActions,
-  
-} from "../../../../actions";
+import { workflowFiltersActions } from "../../../../actions";
 
 import CreateNew from "./CreateNew";
 

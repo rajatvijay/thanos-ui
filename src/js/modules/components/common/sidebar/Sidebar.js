@@ -1,26 +1,14 @@
 import React, { Component } from "react";
 
-import {
-  Layout,
- 
-  Icon,
-  
-  Typography,
-  Collapse
-} from "antd";
+import { Layout, Icon, Typography, Collapse } from "antd";
 
 import TaskQueue from "./TaskQueue";
 import Alerts from "./Alerts";
 
-import {
-  workflowFiltersActions,
-  
-} from "../../../../actions";
+import { workflowFiltersActions } from "../../../../actions";
 import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
-const {  Sider } = Layout;
-
-
+const { Sider } = Layout;
 
 class Sidebar extends Component {
   state = {
@@ -29,7 +17,6 @@ class Sidebar extends Component {
     collapse: true
   };
 
- 
   setFilter = () => {
     let payload = {
       filterType: "alert_category",
@@ -40,7 +27,6 @@ class Sidebar extends Component {
   };
 
   onSelectAlert = value => {
-    
     if (this.state.activeFilter[0] === value.tag) {
       this.setState({ activeFilter: [] }, function() {
         this.setFilter();
@@ -49,7 +35,6 @@ class Sidebar extends Component {
       this.setState({ activeFilter: [value.tag] }, function() {
         this.setFilter();
       });
-      
     }
   };
 
@@ -61,10 +46,8 @@ class Sidebar extends Component {
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
-  
 
   render() {
-    
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
     const { alert_details, isError } = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
@@ -92,7 +75,7 @@ class Sidebar extends Component {
           }}
         >
           <div className="logo" />
-          
+
           <div
             onClick={() => this.setState({ collapse: !collapse })}
             style={{
@@ -131,7 +114,6 @@ class Sidebar extends Component {
               </div>
             </div>
           </Collapsible>
-         
         </div>
       </Sider>
     );

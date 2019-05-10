@@ -3,7 +3,7 @@ import { Select } from "antd";
 
 const Option = Select.Option;
 
- class DropdownFilter extends Component {
+class DropdownFilter extends Component {
   renderMenu = () => {
     const { data } = this.props;
     return data.map(item => <Option value={item.value}>{item.label}</Option>);
@@ -13,7 +13,6 @@ const Option = Select.Option;
     const { name, onFilterChange, value, placeholder } = this.props;
 
     return (
-      
       <Select
         value={value}
         placeholder={placeholder}
@@ -22,10 +21,8 @@ const Option = Select.Option;
       >
         {this.renderMenu()}
       </Select>
-      
     );
   }
 }
 
-
-export default DropdownFilter
+export default DropdownFilter;

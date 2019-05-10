@@ -1,17 +1,11 @@
 import React, { Component } from "react";
-import {
- 
-  Icon,
-  
-  Spin
-} from "antd";
+import { Icon, Spin } from "antd";
 
 import TaskQueueList from "./TaskQueueList";
 
- class TaskQueue extends Component {
+class TaskQueue extends Component {
   state = { selected: "", showMore: true };
 
-  
   onSelect = item => {
     const { onSelectTask } = this.props;
 
@@ -26,7 +20,7 @@ import TaskQueueList from "./TaskQueueList";
 
   renderList = () => {
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
-   
+
     const { selected, showMore } = this.state;
 
     if (loading) {
@@ -48,11 +42,19 @@ import TaskQueueList from "./TaskQueueList";
         if (!item.extra || !item.extra.hide) {
           if (showMore && index < 5) {
             return (
-              <TaskQueueList item={item} onSelect={this.onSelect} selected={selected} />
+              <TaskQueueList
+                item={item}
+                onSelect={this.onSelect}
+                selected={selected}
+              />
             );
           } else if (!showMore) {
             return (
-              <TaskQueueList item={item} onSelect={this.onSelect} selected={selected} />
+              <TaskQueueList
+                item={item}
+                onSelect={this.onSelect}
+                selected={selected}
+              />
             );
           }
         }
@@ -136,4 +138,4 @@ import TaskQueueList from "./TaskQueueList";
   }
 }
 
-export default TaskQueue
+export default TaskQueue;

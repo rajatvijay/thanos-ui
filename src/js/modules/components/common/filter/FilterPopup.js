@@ -176,7 +176,7 @@ class FilterPopup extends Component {
                 name="operator"
                 onFilterChange={this.onFilterChange}
               />
-             
+
               <Input
                 placeholder="InputValue"
                 onChange={e => this.onFilterChange("text", e.target.value)}

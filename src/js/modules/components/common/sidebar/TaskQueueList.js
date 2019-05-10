@@ -1,7 +1,7 @@
 import React from "react";
 import SidebarCircle from "./SidebarCircle";
 
- function TaskQueueList({ item, onSelect, selected }) {
+function TaskQueueList({ item, onSelect, selected }) {
   return (
     <li
       onClick={() => onSelect(item)}
@@ -17,7 +17,7 @@ import SidebarCircle from "./SidebarCircle";
       <span style={{ fontSize: 16, color: "#CFDAE3" }}>{item.name}</span>
       <div style={{ display: "flex", alignItems: "center" }}>
         {item.overdue_count > 0 && (
-          <SidebarCircle  value={item.overdue_count} innerColour="#D40000"  />
+          <SidebarCircle value={item.overdue_count} innerColour="#D40000" />
         )}
         <span style={{ fontSize: 12, color: "#567C9C" }}>{item.count}</span>
       </div>
@@ -25,4 +25,4 @@ import SidebarCircle from "./SidebarCircle";
   );
 }
 
-export default TaskQueueList
+export default TaskQueueList;
