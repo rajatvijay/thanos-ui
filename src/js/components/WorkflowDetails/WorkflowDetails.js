@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { Layout, Icon, Tooltip, Divider } from "antd";
-import StepSidebar from "./steps-sidebar";
+import SidebarView from "../../../modules/workflows/sidebar/components";
 import _ from "lodash";
 import StepBody from "./step-body.js";
 import { baseUrl, authHeader, history } from "../../_helpers";
@@ -251,82 +251,14 @@ class WorkflowDetails extends Component {
     } else {
       return (
         <div>
-          <div
-            className="workflow-details-top-card vertical-padder-16 side-padder-16 bg-white"
-            style={{
-              position: "relative",
-              zIndex: 1,
-              top: 63,
-              boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.06)"
-            }}
-          >
-            {HeaderLoading ||
-            !this.props.workflowDetailsHeader.workflowDetailsHeader ? (
-              <div className="text-center">
-                <Icon type="loading" />
-              </div>
-            ) : (
-              <div>
-                {!this.isParentWorkflow() ? (
-                  <BreadCrums
-                    items={
-                      this.props.workflowDetailsHeader.workflowDetailsHeader
-                        .workflow_family
-                    }
-                  />
-                ) : null}
-                <WorkflowHeader
-                  detailsPage={true}
-                  kind={this.props.workflowKind}
-                  workflow={
-                    this.props.workflowDetailsHeader.workflowDetailsHeader
-                  }
-                  statusType={this.props.workflowFilterType.statusType}
-                  showCommentIcon={true}
-                  getCommentSidebar={this.callBackCollapser}
-                  nextUrl={this.props.nextUrl}
-                  goBack={this.props.goBack}
-                />
-              </div>
-            )}
-          </div>
-
           <Layout className="workflow-details-container inner-container">
-            <StepSidebar
-              step2={
-                this.props.workflowDetails.workflowDetails
-                  ? this.props.workflowDetails.workflowDetails.stepGroups
-                      .results
-                  : null
-              }
-              defaultSelectedKeys={
-                this.state.selectedStep
-                  ? this.state.selectedStep.toString()
-                  : null
-              }
-              defaultOpenKeys={
-                this.state.selectedGroup
-                  ? this.state.selectedGroup.toString()
-                  : null
-              }
-              //onStepSelected={this.onStepSelected.bind(this)}
-              loading={stepLoading}
-              alerts={
-                this.props.workflowDetailsHeader.workflowDetailsHeader
-                  ? this.props.workflowDetailsHeader.workflowDetailsHeader
-                      .alerts
-                  : null
-              }
-              workflow={this.props.workflowId}
-              showFilterMenu={this.props.showFilterMenu}
-            />
             <Layout
               style={{
                 background: "#FBFBFF",
-                minHeight: "100vh",
-                paddingTop: "30px"
+                minHeight: "100vh"
               }}
             >
+              <SidebarView />
               <Content>
                 <div className="printOnly ">
                   <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
@@ -384,7 +316,7 @@ class WorkflowDetails extends Component {
 const PlaceHolder = props => {
   return (
     <Layout className="workflow-details-container inner-container">
-      <StepSidebar showFilterMenu={props.showFilterMenu} />
+      <SidebarView />
       <Layout
         style={{
           background: "#FBFBFF",

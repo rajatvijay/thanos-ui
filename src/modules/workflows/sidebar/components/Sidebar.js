@@ -159,13 +159,13 @@ class Sidebar extends Component {
       <Sider
         width={450}
         style={{
-          position: "fixed",
           overflow: "scroll",
           height: "100vh",
           left: 0,
           backgroundColor: "#FAFAFA",
           padding: "56px",
-          paddingTop: 0
+          paddingTop: 0,
+          zIndex: 1
         }}
       >
         <div
@@ -248,8 +248,9 @@ class Sidebar extends Component {
           >
             {Object.values(workflowDetails).length &&
             workflowDetails.workflowDetails
-              ? workflowDetails.workflowDetails.stepGroups.results.map(
-                  (stepgroup, index) => (
+              ? workflowDetails.workflowDetails.stepGroups.results
+                  .filter(group => group.steps.length)
+                  .map((stepgroup, index) => (
                     <Panel
                       showArrow={false}
                       header={
@@ -341,8 +342,7 @@ class Sidebar extends Component {
                         </Link>
                       ))}
                     </Panel>
-                  )
-                )
+                  ))
               : null}
           </Collapse>
         </div>
