@@ -260,7 +260,7 @@ class WorkflowDetails extends Component {
               <SidebarView />
               <Content>
                 <div className="printOnly ">
-                  <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
+                  <div className="mr-ard-lg   bg-white" id="StepBody">
                     <StepBody
                       toggleSidebar={this.callBackCollapser}
                       changeFlag={this.changeFlag}

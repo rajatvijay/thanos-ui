@@ -122,6 +122,7 @@ class Header extends Component {
             justifyContent: "space-between",
             alignItems: "center"
           }}
+          className="navbar-search-wrapper"
         >
           {!regexForUrl.test(document.location.pathname) ? (
             showSearchInputIcon ? (
