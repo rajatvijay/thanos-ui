@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-
-import { Layout, Icon, Typography, Collapse } from "antd";
-
+import { Layout, Icon } from "antd";
 import TaskQueue from "./TaskQueue";
 import Alerts from "./Alerts";
-
 import { workflowFiltersActions } from "../../../../actions";
 import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
@@ -18,11 +15,10 @@ class Sidebar extends Component {
   };
 
   setFilter = () => {
-    let payload = {
+    const payload = {
       filterType: "alert_category",
       filterValue: this.state.activeFilter
     };
-    console.log("apicalls");
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
@@ -39,8 +35,7 @@ class Sidebar extends Component {
   };
 
   onSelectTask = value => {
-    console.log(value);
-    let payload = {
+    const payload = {
       filterType: "stepgroupdef",
       filterValue: value ? [value.id] : []
     };
@@ -48,11 +43,8 @@ class Sidebar extends Component {
   };
 
   render() {
-    const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
-    const { alert_details, isError } = this.props.workflowAlertGroupCount;
+    const { isError } = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
-
-    console.log(this.state);
     return (
       <Sider
         width={300}
