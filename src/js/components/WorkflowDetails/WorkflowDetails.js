@@ -59,27 +59,15 @@ class WorkflowDetails extends Component {
     //CHECK IF THE STEP COMPLETION HAS CHANGED//
     //CALCULATE STEP ON SUBMISSION OR UNDO//
     if (
-      _.size(prevCurrent.currentStepFields) && //check step data for non empty
-      _.size(thisCurrent.currentStepFields) && //check step data for non empty
-      prevCurrent.currentStepFields.id === thisCurrent.currentStepFields.id && //CHECK IF PREV AND CURRENT STEP ARE SAME
+      _.size(prevCurrent.currentStepFields) && //check step data for non empty ✅
+      _.size(thisCurrent.currentStepFields) && //check step data for non empty ✅
+      //CHECK IF PREV AND CURRENT STEP ARE SAME
+      prevCurrent.currentStepFields.id === thisCurrent.currentStepFields.id &&
+      // //CHECK IS COMPLETION HAS CHANGED
       prevCurrent.currentStepFields.completed_by !==
-        thisCurrent.currentStepFields.completed_by //CHECK IS COMPLETION HAS CHANGED
+        thisCurrent.currentStepFields.completed_by
     ) {
-      if (
-        thisCurrent.currentStepFields.completed_by &&
-        !prevCurrent.currentStepFields.completed_by
-      ) {
-        //IF STEP HAS BEEN COMPLETED
-        let progress = this.checkWorkflowCompetion();
-        if (progress === 100) {
-          this.setStepFromQuery();
-        } else {
-          history.replace(`/workflows/instances/${workflowId}`); //UPDATE URL TO ROOT WHICH WILL AUTOMATICALLY CALCULATE ACTIVE STEP
-        }
-      } else {
-        //IF STEP HAS BEEN REVERTED
-        this.updateSidebar(workflowId); //UPDATED SIDEBAR TO REFLECT THE REVERSION, NO NEED TO UPDATE URL SINCE CURRENT STEP DATA IS AUTOMATICALLY LOADED
-      }
+      this.updateSidebar(workflowId);
     }
 
     //WHEN EVER SEARCH PARAMS CHANGE FETCH NEW STEP DATA
@@ -94,6 +82,17 @@ class WorkflowDetails extends Component {
       !this.props.workflowDetails.loading &&
       wd.workflowDetails.stepGroups &&
       wd.workflowDetails.stepGroups.results[0].workflow === workflowId
+    ) {
+      this.updateCurrentActiveStep();
+    }
+
+    //WHEN SIDEBAR IS UPDATED AND DATA HAS CHANGED
+    //UPDATE CURRENT ACTIVE STEP
+    if (
+      wd.workflowDetails &&
+      prevProps.workflowDetails.workflowDetails &&
+      wd.workflowDetails.stepGroups !==
+        prevProps.workflowDetails.workflowDetails.stepGroups
     ) {
       this.updateCurrentActiveStep();
     }

@@ -14,14 +14,16 @@ class WorkflowDetailsRoot extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      workflowId: null,
-      customHistory: [{ pathname: "/workflows/instances/", search: "" }]
+      workflowId: null
     };
   }
 
   componentDidMount = () => {
     this.verifyAuth();
     this.setWorkflowId();
+    this.setState({
+      customHistory: [{ pathname: "/workflows/instances/", search: "" }]
+    });
   };
 
   componentDidUpdate = prevProps => {
@@ -102,7 +104,15 @@ class WorkflowDetailsRoot extends Component {
       history.push(url);
       this.removefromHistory();
     } else {
-      history.push("/workflows/instances/");
+      let fam = this.props.workflowDetailsHeader.workflowDetailsHeader
+        .workflow_family;
+      let len = fam.length;
+
+      if (fam.length > 1) {
+        history.push(`/workflows/instances/${fam[len - 2].id}`);
+      } else {
+        history.push("/workflows/instances/");
+      }
     }
   };
 
@@ -127,10 +137,11 @@ class WorkflowDetailsRoot extends Component {
 }
 
 function mapPropsToState(state) {
-  const { authentication, users } = state;
+  const { authentication, users, workflowDetailsHeader } = state;
 
   //Send to component
   return {
+    workflowDetailsHeader,
     authentication,
     users
   };
