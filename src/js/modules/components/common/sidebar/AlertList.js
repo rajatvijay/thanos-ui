@@ -24,7 +24,7 @@ class AlerList extends Component {
             display: "flex",
             justifyContent: "space-between",
             margin: "4px 30px",
-            backgroundColor: item["name"] == selected ? "#1489D2" : "#2F4E67",
+            backgroundColor: item["name"] === selected ? "#1489D2" : "#2F4E67",
             borderRadius: "10px",
             padding: "1px 2px 1px 13px",
             color: "white",
@@ -38,8 +38,11 @@ class AlerList extends Component {
               backgroundColor: "#D40000",
               color: "white",
               margin: "0px 5px",
-              padding: 4,
-              fontSize: 11
+              width: 25,
+              height: 25,
+              lineHeight: "25px",
+              textAlign: "center",
+              fontSize: 10
             }}
           >
             {item.count}
@@ -87,8 +90,12 @@ class AlerList extends Component {
                   backgroundColor: "#D40000",
                   color: "white",
                   margin: "0px 5px",
-                  padding: 4,
-                  fontSize: 11
+                  width: 25,
+                  height: 25,
+                  lineHeight: "25px",
+                  textAlign: "center",
+                  fontSize: 10,
+                  display: "inline-block"
                 }}
               >
                 {item.count}

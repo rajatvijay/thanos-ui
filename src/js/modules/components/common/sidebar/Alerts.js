@@ -120,14 +120,16 @@ export default class Alerts extends Component {
   };
 
   render() {
+    const { alert_details, loading } = this.props.workflowAlertGroupCount;
     return (
       <div>
         <div
           style={{
-            margin: 10,
             color: "#138BD4",
             margin: "40px 0px 20px 15px",
-            fontSize: 12
+            fontSize: 12,
+            display:
+              alert_details && alert_details.length > 0 ? "block" : "none"
           }}
         >
           ALERTS

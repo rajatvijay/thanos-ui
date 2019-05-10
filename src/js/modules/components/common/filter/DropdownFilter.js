@@ -6,8 +6,7 @@ const Option = Select.Option;
 export default class DropdownFilter extends Component {
   renderMenu = () => {
     const { data } = this.props;
-
-    return data.map(item => <Option value={item.label}>{item.label}</Option>);
+    return data.map(item => <Option value={item.value}>{item.label}</Option>);
   };
 
   render() {

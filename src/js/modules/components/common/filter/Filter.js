@@ -1,9 +1,19 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { baseUrl, authHeader } from "../../../../_helpers";
 
 import FilterPopup from "./FilterPopup";
+import {
+  workflowFiltersActions,
+  workflowActions,
+  workflowKindActions,
+  createWorkflow
+} from "../../../../actions";
+
+import CreateNew from "./CreateNew";
 
 class Filter extends Component {
-  state = { visible: false };
+  state = { visible: false, fieldOptions: [] };
 
   showModal = () => {
     this.setState({
@@ -24,22 +34,100 @@ class Filter extends Component {
       visible: false
     });
   };
+
+  applyFilters = (key, value) => {
+    console.log(value);
+    let payload = {
+      filterType: key,
+      filterValue: [value]
+    };
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
+  componentDidMount() {
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
+
+    fetch(baseUrl + "fields/export-json/?active_kind=True", requestOptions)
+      .then(response => response.json())
+      .then(body => {
+        this.setState({ fieldOptions: body.results });
+      });
+  }
+
   render() {
-    const { visible } = this.state;
+    const { visible, fieldOptions } = this.state;
 
     return (
-      <div style={{ marginTop: 30 }}>
-        <ul style={{ listStyle: "none" }}>
-          <li onClick={() => this.showModal()} style={{ color: "#C2C2C2" }}>
-            filter
-          </li>
-        </ul>
-        {visible && (
-          <FilterPopup handleCancel={this.handleCancel} visible={visible} />
-        )}
+      <div
+        style={{
+          marginTop: 30,
+          display: "flex",
+          justifyContent: "space-between"
+        }}
+      >
+        <div>
+          <ul
+            style={{
+              listStyle: "none",
+              fontSize: 14,
+              color: "#000",
+              cursor: "pointer"
+            }}
+          >
+            <li
+              style={{
+                display: "inline",
+                paddingRight: 10
+              }}
+            >
+              DATE CREATED
+            </li>
+            <li
+              onClick={() => this.showModal()}
+              style={{
+                display: "inline",
+                paddingRight: 10
+              }}
+            >
+              FILTER
+            </li>
+          </ul>
+          <FilterPopup
+            fieldOptions={fieldOptions}
+            applyFilters={this.applyFilters}
+            handleCancel={this.handleCancel}
+            visible={visible}
+          />
+        </div>
+        <div>
+          <CreateNew />
+        </div>
       </div>
     );
   }
 }
 
-export default Filter;
+function mapStateToProps(state) {
+  const {
+    workflowKind,
+    workflowFilterType,
+    workflowFilters,
+    config,
+    languageSelector,
+    showFilterMenu
+  } = state;
+  return {
+    workflowKind,
+    workflowFilterType,
+    workflowFilters,
+    config,
+    languageSelector,
+    showFilterMenu
+  };
+}
+
+export default connect(mapStateToProps)(Filter);

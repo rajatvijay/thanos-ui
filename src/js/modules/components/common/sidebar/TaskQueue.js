@@ -12,9 +12,10 @@ import {
 } from "antd";
 //import { Icon, Divider, Badge, Tag, Tooltip } from "antd";
 import _ from "lodash";
+import List from "./List";
 
 export default class TaskQueue extends Component {
-  state = { selected: "" };
+  state = { selected: "", showMore: true };
 
   //   renderList = () => {
   //     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
@@ -59,7 +60,7 @@ export default class TaskQueue extends Component {
   renderList = () => {
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
     //const { onSelectTask } = this.props;
-    const { selected } = this.state;
+    const { selected, showMore } = this.state;
 
     if (loading) {
       return (
@@ -75,53 +76,27 @@ export default class TaskQueue extends Component {
           />
         </div>
       );
-    }
-
-    if (stepgroupdef_counts) {
-      return stepgroupdef_counts.map(item => {
+    } else if (stepgroupdef_counts) {
+      return stepgroupdef_counts.map((item, index) => {
         if (!item.extra || !item.extra.hide) {
-          return (
-            <li
-              onClick={() => this.onSelect(item)}
-              style={{
-                borderTop: "1px solid black",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "10px 29px",
-                cursor: "pointer",
-                backgroundColor: item["name"] == selected && "rgb(20, 137, 210)"
-              }}
-            >
-              <span style={{ fontSize: 16, color: "#CFDAE3" }}>
-                {item.name}
-              </span>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                {item.overdue_count > 0 && (
-                  <p
-                    style={{
-                      borderRadius: "50%",
-                      backgroundColor: "#D40000",
-                      color: "white",
-                      margin: "0px 5px",
-                      padding: 4,
-                      fontSize: 10
-                    }}
-                  >
-                    {item.overdue_count}
-                  </p>
-                )}
-                <span style={{ fontSize: 12, color: "#567C9C" }}>
-                  {item.count}
-                </span>
-              </div>
-            </li>
-          );
+          if (showMore && index < 5) {
+            return (
+              <List item={item} onSelect={this.onSelect} selected={selected} />
+            );
+          } else if (!showMore) {
+            return (
+              <List item={item} onSelect={this.onSelect} selected={selected} />
+            );
+          }
         }
       });
     }
   };
 
   render() {
+    const { stepgroupdef_counts } = this.props.workflowGroupCount;
+    const { showMore } = this.state;
+
     return (
       <div>
         <div
@@ -129,7 +104,11 @@ export default class TaskQueue extends Component {
             margin: 10,
             color: "#138BD4",
             margin: "30px 0px 20px 15px",
-            fontSize: 12
+            fontSize: 12,
+            display:
+              stepgroupdef_counts && stepgroupdef_counts.length > 0
+                ? "block"
+                : "none"
           }}
         >
           TASK QUEUES
@@ -141,7 +120,11 @@ export default class TaskQueue extends Component {
                 borderTop: "1px solid black",
                 display: "flex",
                 justifyContent: "space-between",
-                padding: "10px 29px"
+                padding: "10px 29px",
+                display:
+                  stepgroupdef_counts && stepgroupdef_counts.length > 0
+                    ? "flex"
+                    : "none"
               }}
             >
               <div>
@@ -158,6 +141,27 @@ export default class TaskQueue extends Component {
               <span style={{ fontSize: 12, color: "#567C9C" }}>{2}</span>
             </li>
             {this.renderList()}
+            <li
+              style={{
+                borderTop: "1px solid black",
+                borderBottom: "1px solid black",
+                justifyContent: "space-between",
+                padding: "10px 29px",
+                display:
+                  stepgroupdef_counts && stepgroupdef_counts.length > 0
+                    ? "flex"
+                    : "none"
+              }}
+            >
+              <div>
+                <span
+                  onClick={() => this.setState({ showMore: !showMore })}
+                  style={{ fontSize: 14, color: "#587D9D", cursor: "pointer" }}
+                >
+                  {showMore ? "SHOW ALL" : "SHOW LESS"}
+                </span>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
