@@ -1,17 +1,13 @@
 import React, { Component } from "react";
 import Collapsible from "react-collapsible";
 import { Icon } from "antd";
+import SidebarCircle from "./SidebarCircle";
 
 class AlerList extends Component {
   state = { collapse: false };
 
-  // onOpen = ()=>{
-
-  // }
-
   renderList = () => {
     const { onSelect, item, selected } = this.props;
-    //const {selected} = this.state
 
     if (item.sub_categories) {
       return item.sub_categories.map(item => (
@@ -32,21 +28,7 @@ class AlerList extends Component {
           }}
         >
           <span>{item.name}</span>
-          <span
-            style={{
-              borderRadius: "50%",
-              backgroundColor: "#D40000",
-              color: "white",
-              margin: "0px 5px",
-              width: 25,
-              height: 25,
-              lineHeight: "25px",
-              textAlign: "center",
-              fontSize: 10
-            }}
-          >
-            {item.count}
-          </span>
+          <SidebarCircle innerColour="#D40000" value={item.count} />
         </li>
       ));
     }
@@ -84,22 +66,7 @@ class AlerList extends Component {
           </div>
           <div>
             {item.count > 0 && (
-              <span
-                style={{
-                  borderRadius: "50%",
-                  backgroundColor: "#D40000",
-                  color: "white",
-                  margin: "0px 5px",
-                  width: 25,
-                  height: 25,
-                  lineHeight: "25px",
-                  textAlign: "center",
-                  fontSize: 10,
-                  display: "inline-block"
-                }}
-              >
-                {item.count}
-              </span>
+              <SidebarCircle innerColour="#D40000" value={item.count} />
             )}
           </div>
         </div>

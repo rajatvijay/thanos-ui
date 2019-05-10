@@ -1,33 +1,11 @@
 import React, { Component } from "react";
-
-import {
-  Layout,
-  Menu,
-  Icon,
-  Divider,
-  Badge,
-  Tag,
-  Tooltip,
-  Typography,
-  Collapse
-} from "antd";
-//import { Icon, Divider, Badge, Tag, Tooltip } from "antd";
-import _ from "lodash";
+import { Layout, Icon } from "antd";
 import TaskQueue from "./TaskQueue";
 import Alerts from "./Alerts";
-
-import {
-  workflowFiltersActions,
-  workflowActions,
-  workflowKindActions,
-  createWorkflow
-} from "../../../../actions";
+import { workflowFiltersActions } from "../../../../actions";
 import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
-const { Header, Content, Footer, Sider } = Layout;
-
-const { Title, Text } = Typography;
-const Panel = Collapse.Panel;
+const { Sider } = Layout;
 
 class Sidebar extends Component {
   state = {
@@ -36,33 +14,15 @@ class Sidebar extends Component {
     collapse: true
   };
 
-  // componentDidMount = () => {
-  //   // if (!this.props.workflowKind.workflowKind) {
-  //   //   this.loadWorkflowKind();
-  //   // }
-  //   this.props.dispatch(workflowKindActions.getAlertCount("entity"));
-  // };
-
-  // loadWorkflowKind = () => {
-  //   // this.props.dispatch(workflowKindActions.getAll());
-  //   // this.props.dispatch(workflowActions.getAll());
-
-  // };
   setFilter = () => {
-    let payload = {
+    const payload = {
       filterType: "alert_category",
       filterValue: this.state.activeFilter
     };
-    console.log("apicalls");
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
   onSelectAlert = value => {
-    // e.preventDefault();
-
-    // if (value.sub_categories) {
-    //   this.setState({ parent: value });
-    //}
     if (this.state.activeFilter[0] === value.tag) {
       this.setState({ activeFilter: [] }, function() {
         this.setFilter();
@@ -71,31 +31,20 @@ class Sidebar extends Component {
       this.setState({ activeFilter: [value.tag] }, function() {
         this.setFilter();
       });
-      //}
     }
   };
 
   onSelectTask = value => {
-    console.log(value);
-    let payload = {
+    const payload = {
       filterType: "stepgroupdef",
       filterValue: value ? [value.id] : []
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
-  // componentWillReceiveProps = nextProps => {
-  //   if (this.props.workflowFilters !== nextProps.workflowFilters) {
-  //     this.props.dispatch(workflowActions.getAll());
-  //   }
-  // };
 
   render() {
-    let that = this;
-    const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
-    const { alert_details, isError } = this.props.workflowAlertGroupCount;
+    const { isError } = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
-
-    console.log(this.state);
     return (
       <Sider
         width={300}
@@ -118,8 +67,7 @@ class Sidebar extends Component {
           }}
         >
           <div className="logo" />
-          {/* <Collapse bordered={false} defaultActiveKey={["1"]}>
-          <Panel style={{ padding: 0 }} header="TPI" key="1"> */}
+
           <div
             onClick={() => this.setState({ collapse: !collapse })}
             style={{
@@ -158,8 +106,6 @@ class Sidebar extends Component {
               </div>
             </div>
           </Collapsible>
-          {/* </Panel>
-        </Collapse> */}
         </div>
       </Sider>
     );
