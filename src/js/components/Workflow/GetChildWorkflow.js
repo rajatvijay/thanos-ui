@@ -6,79 +6,107 @@ import { Tabs } from "antd";
 
 const TabPane = Tabs.TabPane;
 
-const GetChildWorkflow = props => {
-  let childList = null;
-  let workflowId = props.workflow.id;
+class GetChildWorkflow extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { relatedKinds: [], children: [] };
+  }
 
-  const cbtn = (
-    <span style={{ paddingRight: "20px" }}>{props.createButton}</span>
-  );
+  componentDidUpdate = prevProps => {
+    const { id } = this.props.workflow;
 
-  if (
-    !props.workflowChildren[workflowId] ||
-    props.workflowChildren[workflowId].loading
-  ) {
-    return (childList = (
-      <div className="text-center mr-bottom">loading...</div>
-    ));
-  } else {
-    let defaultActiveKey = _.find(props.kinds.workflowKind, kind => {
-      return (
-        props.workflowChildren[workflowId].children[0].definition.kind ===
-        kind.id
+    if (
+      _.size(this.props.relatedKinds) &&
+      _.size(this.state.relatedKinds) === 0
+    ) {
+      this.setState({ relatedKinds: this.props.relatedKinds });
+    }
+
+    if (
+      this.props.workflowChildren[id] !== prevProps.workflowChildren[id] &&
+      _.size(this.props.workflowChildren[id].children)
+    ) {
+      this.setState(
+        { children: this.props.workflowChildren[id].children },
+        () => {
+          this.assignChilrenToKind();
+        }
       );
+    }
+  };
+
+  assignChilrenToKind = () => {
+    let rk = this.state.relatedKinds;
+    let children = this.state.children;
+
+    let workflowFilterByKind = _.map(rk, kind => {
+      let k = kind;
+      k.workflows = [];
+      _.forEach(children, child => {
+        if (child.definition.kind === kind.id) {
+          console.log("matches");
+          k.workflows.push(child);
+        }
+      });
+      return k;
     });
 
-    childList = (
-      <Tabs
-        //defaultActiveKey={defaultActiveKey.id.toString()}
-        tabBarExtraContent={cbtn}
-      >
-        {_.map(
-          props.getGroupedData(props.workflowChildren[workflowId].children),
-          function(childGroup, key) {
-            let kind = _.find(props.kinds.workflowKind, {
-              id: parseInt(key, 10)
-            });
+    this.setState({
+      relatedKinds: _.orderBy(
+        workflowFilterByKind,
+        ["workflows.length"],
+        ["desc"]
+      )
+    });
+  };
 
-            return (
-              <TabPane
-                tab={
-                  kind
-                    ? kind.name + " (" + _.size(childGroup) + ")"
-                    : _.size(childGroup)
-                }
-                key={key.toString()}
-              >
-                {_.map(childGroup, function(item, index) {
-                  return (
-                    <WorkflowItem
-                      isChild={true}
-                      workflow={item}
-                      key={index}
-                      kinds={props.kinds}
-                      dispatch={props.dispatch}
-                      workflowFilterType={props.workflowFilterType}
-                      statusView={props.statusView}
-                      addComment={props.addComment || null}
-                      showCommentIcon={props.showCommentIcon}
-                      isEmbedded={props.isEmbedded}
-                      expandedWorkflows={props.expandedWorkflows}
-                      config={props.config}
-                      workflowChildren={props.workflowChildren}
-                    />
-                  );
-                })}
-              </TabPane>
-            );
-          }
-        )}
+  render() {
+    const { props } = this;
+    const cbtn = (
+      <span style={{ paddingRight: "20px" }}>{props.createButton}</span>
+    );
+    let workflowId = props.workflow.id;
+
+    return (
+      <Tabs tabBarExtraContent={cbtn}>
+        {_.map(this.state.relatedKinds, function(kind, key) {
+          return (
+            <TabPane
+              tab={kind.name + " (" + _.size(kind.workflows) + ")"}
+              key={kind.name}
+            >
+              <div className="pd-ard-lg">
+                {_.size(kind.workflows) ? (
+                  _.map(kind.workflows, function(item, index) {
+                    return (
+                      <WorkflowItem
+                        isChild={true}
+                        workflow={item}
+                        key={index}
+                        kinds={props.kinds}
+                        dispatch={props.dispatch}
+                        workflowFilterType={props.workflowFilterType}
+                        statusView={props.statusView}
+                        addComment={props.addComment || null}
+                        showCommentIcon={props.showCommentIcon}
+                        isEmbedded={props.isEmbedded}
+                        expandedWorkflows={props.expandedWorkflows}
+                        config={props.config}
+                        workflowChildren={props.workflowChildren}
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="pd-ard-sm">No workflows</div>
+                )}
+              </div>
+            </TabPane>
+          );
+        })}
       </Tabs>
     );
   }
-
-  return childList;
-};
+}
 
 function mapPropsToState(state) {
   const { workflowKind, workflowFilterType, workflowChildren } = state;

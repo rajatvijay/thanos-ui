@@ -269,7 +269,7 @@ class WorkflowItem extends React.Component {
                 stepdataloading={this.state.stepdataloading}
                 stepGroupData={this.state.stepGroupData}
               />
-              {hasChildren && this.state.showRelatedWorkflow ? (
+              {this.state.relatedWorkflow ? (
                 <div>
                   <Divider className="no-margin" />
                   <ChildWorkflow
@@ -286,20 +286,12 @@ class WorkflowItem extends React.Component {
                     showCommentIcon={this.props.showCommentIcon}
                     expandedWorkflows={this.props.expandedWorkflows}
                     showQuickDetails={showQuickDetailsFunction}
+                    relatedKinds={this.state.relatedWorkflow}
                   />
                 </div>
-              ) : (
-                <div className="lc-card-body">
-                  <div className="lc-card-section text-right">
-                    <CreateRelated
-                      relatedKind={this.state.relatedWorkflow}
-                      onChildSelect={this.createChildWorkflow}
-                    />
-                  </div>
-                </div>
-              )}
+              ) : null}
 
-              <Sider
+              {/* <Sider
                 className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
                 style={{
                   background: "#fff",
@@ -339,7 +331,7 @@ class WorkflowItem extends React.Component {
                     <StepPreview />
                   </Content>
                 </div>
-              </Sider>
+              </Sider>*/}
             </div>
           </Collapsible>
         </div>
