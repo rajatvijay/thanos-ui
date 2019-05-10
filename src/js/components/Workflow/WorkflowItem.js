@@ -291,7 +291,7 @@ class WorkflowItem extends React.Component {
                 </div>
               ) : null}
 
-              {/* <Sider
+              <Sider
                 className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
                 style={{
                   background: "#fff",
@@ -331,7 +331,7 @@ class WorkflowItem extends React.Component {
                     <StepPreview />
                   </Content>
                 </div>
-              </Sider>*/}
+              </Sider>
             </div>
           </Collapsible>
         </div>
