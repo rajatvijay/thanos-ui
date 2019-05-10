@@ -17,22 +17,19 @@ class Filter extends Component {
   };
 
   handleOk = e => {
-    console.log(e);
     this.setState({
       visible: false
     });
   };
 
-  handleCancel = e => {
-    console.log(e);
+  handleModalClose = e => {
     this.setState({
       visible: false
     });
   };
 
   applyFilters = (key, value) => {
-    console.log(value);
-    let payload = {
+    const payload = {
       filterType: key,
       filterValue: [value]
     };
@@ -94,7 +91,7 @@ class Filter extends Component {
           <FilterPopup
             fieldOptions={fieldOptions}
             applyFilters={this.applyFilters}
-            handleCancel={this.handleCancel}
+            onModalClose={this.handleModalClose}
             visible={visible}
           />
         </div>
