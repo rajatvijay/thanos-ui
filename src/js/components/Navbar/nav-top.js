@@ -161,6 +161,7 @@ class NavTop extends Component {
       showInsights = true;
     }
     let supportedLaguanges = this.props.config.supported_languages;
+    let regexForUrl = /\/instances\/[\d]+/;
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -195,7 +196,7 @@ class NavTop extends Component {
                   </a>
                 </span>
 
-                {document.location.pathname.match("/workflows/instances/") ? (
+                {!regexForUrl.test(document.location.pathname) ? (
                   <div className={"search-box "}>
                     <Input
                       prefix={prefix}
@@ -212,10 +213,8 @@ class NavTop extends Component {
                 ) : null}
               </Col>
               <Col span={12}>
-                {_.isEmpty(supportedLaguanges) || (
-                  <div>
-                    <SelectLanguage navbar={true} />
-                  </div>
+                {_.isEmpty(supportedLaguanges) ? null : (
+                  <SelectLanguage navbar={true} />
                 )}
                 <Menu
                   theme="light"
@@ -251,18 +250,7 @@ class NavTop extends Component {
                   ) : null}
 
                   <SubMenu
-                    title={
-                      user ? (
-                        <span>
-                          {user.first_name
-                            ? " " + user.first_name + " " + user.last_name + " "
-                            : " " + user.email + " "}
-                          <i className="material-icons t-14">
-                            keyboard_arrow_down
-                          </i>
-                        </span>
-                      ) : null
-                    }
+                    title={user ? <UserName user={user} /> : ""}
                     onClick={this.onLogout.bind(this, "key")}
                   >
                     <Menu.Item key="setting:1">
@@ -288,6 +276,18 @@ class NavTop extends Component {
     );
   };
 }
+
+const UserName = props => {
+  const { user } = props;
+  return (
+    <span>
+      {user.first_name
+        ? " " + user.first_name + " " + (user.last_name || "") + " "
+        : " " + user.email + " "}
+      <i className="material-icons t-14">keyboard_arrow_down</i>
+    </span>
+  );
+};
 
 function mapStateToProps(state) {
   const {

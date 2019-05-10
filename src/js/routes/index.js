@@ -24,7 +24,7 @@ import { OTPLogin } from "../components/LoginPage/OTPLogin";
 import { RegisterPage } from "../components/RegisterPage";
 import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
-import WorkflowDetails from "../components/WorkflowDetails";
+import WorkflowDetailsRoot from "../components/WorkflowDetails";
 import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import Users from "../components/Users";
 import ExportList from "../components/ExportPage";
@@ -32,7 +32,6 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
 import queryString from "query-string";
-import SidebarView from "../../modules/workflows/sidebar/components";
 
 function mapStateToProps(state) {
   const { config, users, languageSelector, nextUrl } = state;
@@ -133,7 +132,6 @@ class MainRoutes extends React.Component {
                       path="/login/magicprocess"
                       component={MagicLinkProcess}
                     />
-                    <Route path="/sidebar" exact component={SidebarView} />
                     {this.props.nextUrl.url && localStorage.getItem("user") ? (
                       <Redirect from="/" exact to={this.props.nextUrl.url} />
                     ) : (
@@ -148,7 +146,7 @@ class MainRoutes extends React.Component {
 
                     <PrivateRoute
                       path="/workflows/instances/:id?/"
-                      component={WorkflowDetails}
+                      component={WorkflowDetailsRoot}
                     />
 
                     <PrivateRoute path="/users/:id?" component={Users} />

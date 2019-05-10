@@ -16,9 +16,10 @@ function getById(id) {
     credentials: "include"
   };
 
-  return fetch(baseUrl + "workflows/" + id + "/", requestOptions).then(
-    handleResponse
-  );
+  return fetch(
+    baseUrl + "workflows/" + id + "/?lean=true",
+    requestOptions
+  ).then(handleResponse);
 }
 
 function getStepGroup(id) {

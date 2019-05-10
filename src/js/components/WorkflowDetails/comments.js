@@ -16,7 +16,8 @@ import {
   Dropdown,
   Cascader,
   Upload,
-  Modal
+  Modal,
+  Tooltip
 } from "antd";
 import { Link } from "react-router-dom";
 import { workflowDetailsActions, changeStatusActions } from "../../actions";
@@ -465,9 +466,21 @@ class Comments extends Component {
                                 : msg.posted_by.email}
                             </b>
                             <span
-                              style={{ fontSize: "11px", marginLeft: "6px" }}
+                              style={{
+                                fontSize: "11px",
+                                marginLeft: "6px",
+                                cursor: "pointer"
+                              }}
                             >
-                              <Moment fromNow>{msg.created_at}</Moment>
+                              <Tooltip
+                                title={
+                                  <Moment format="MM/DD/YYYY, h:mm a">
+                                    {msg.created_at}
+                                  </Moment>
+                                }
+                              >
+                                <Moment fromNow>{msg.created_at}</Moment>
+                              </Tooltip>
                             </span>
                           </div>
                           <p style={{ fontSize: "12px", paddingLeft: "32px" }}>

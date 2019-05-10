@@ -26,8 +26,8 @@ function getProgressData(item) {
   let allSteps = null;
   let stepCompleted = 0;
 
-  _.map(item.step_groups, function(group) {
-    _.map(group.steps, function(step) {
+  _.forEach(item.step_groups, function(group) {
+    _.forEach(group.steps, function(step) {
       allSteps += 1;
       if (step.completed_at !== null) {
         stepCompleted += 1;
