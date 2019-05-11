@@ -2,11 +2,12 @@
 
 .workflow-container {
   .ant-layout {
-    background: #fbfcff;
+    background: #fafafa;
   }
   .workflow-list-wrapper {
-    padding: 15px 40px 40px;
+    padding: 15px 46px 40px;
   }
+
   .section-top {
     margin: 20px 40px 14px;
     .waiting-section {
@@ -20,25 +21,17 @@
         .Avenir-medium();
       }
     }
-    .ant-tabs-nav .ant-tabs-tab-active {
-      color: #505050;
-      font-weight: 500;
-    }
-    .ant-tabs-nav .ant-tabs-tab:hover {
-      color: #505050;
-    }
 
     .ant-tabs-ink-bar {
       background: @color-secondary;
     }
   }
+
   .divider-top {
     border-bottom: 1px solid @color-text;
     margin: 20px 78px 30px;
   }
-  // .workflow-count {
-  //   margin: 0 78px;
-  // }
+
   .list-view-header {
     margin: 0 40px;
     .list-toggle-btn {
@@ -59,55 +52,16 @@
   .grouping-head {
     font-size: 14px;
     font-weight: bold;
-    color: @color-text;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    color: #b2b2b2;
+    margin-top: 40px;
+    margin-bottom: 8px;
   }
 
-  &.ant-collapse {
-    > .ant-collapse-item {
-      background: @color-white;
-      transition: all 0.8s ease-in-out;
-      &:hover {
-        background: #f1f2f6;
-      }
-    }
-  }
-  .Collapsible {
-    //cursor: pointer;
-    background-color: @color-white;
-    //margin-bottom: 10px;
-    .ant-collapse-header {
-      padding: 10px 20px;
-    }
-  }
   .collapse-wrapper {
     position: relative;
   }
-  .child-workflow-expander {
-    position: absolute;
-    left: -3px;
-    z-index: 1;
-    width: 30px;
-    height: auto;
-    vertical-align: middle;
-    line-height: 89px;
-    text-align: center;
-    display: inline-block;
-    top: -9px;
-    i {
-      font-size: 16px;
-      color: @color-text;
-    }
-  }
-  .child-workflow-wrapper {
-    //border-top: 1px solid #d9d9d9;
-    padding-left: 30px;
-  }
-  .paper {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
-    background: #fff;
 
+  .paper {
     &.workflow-list-item {
       //transition: margin 0.3s ease;
       border-bottom: 1px solid lighten(@color-grey-light, 38%);
@@ -125,9 +79,11 @@
           background: #f2f5fa;
         }
       }
+
       &.opened {
-        margin: 25px -15px;
-        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+        margin: 25px -45px;
+        //box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+        box-shadow: 0 2px 284px 0 #e5e5e5;
         .Collapsible {
           border: none;
         }
@@ -145,27 +101,37 @@
     .ant-tabs {
       padding-bottom: 1px;
     }
+
     .ant-tabs-bar {
       padding-top: 10px;
       margin-bottom: 0px;
     }
     .ant-tabs-nav .ant-tabs-tab {
       padding-bottom: 20px;
+      font-weight: 500;
+      font-size: 13px;
+      color: @color-grey-light;
+      text-transform: uppercase;
+    }
+
+    .ant-tabs-nav .ant-tabs-tab-active {
+      color: @color-secondary;
+    }
+    .ant-tabs-nav .ant-tabs-tab:hover {
+      color: #505050;
     }
   }
 
-  .has-children {
-    .collapse-wrapper {
-      border-right: 1px dashed #ddd;
+  .ant-tabs {
+    .workflow-list {
+      padding: 5px 5px 15px;
     }
-  }
-
-  .ant-tabs .paper {
-    &.workflow-list-item {
-      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
-      margin: 0 0px;
-      &.opened {
-        margin: 25px 5px;
+    .paper {
+      &.workflow-list-item {
+        margin: 0 0px;
+        &.opened {
+          margin: 25px 5px;
+        }
       }
     }
   }
@@ -190,37 +156,40 @@
       margin-bottom: -1px;
     }
   }
+}
 
-  .workflow-divider {
-    height: 1px;
-    background: #f2f5fa;
-    margin: 0 22px;
-  }
+.lc-card {
+  .details-link {
+    display: block;
+    text-align: center;
+    background: @color-secondary;
+    font-size: 20px;
+    color: @color-white;
+    line-height: 70px;
 
-  //childworkflow / detaiol view;
-  &.details-view {
-    .paper {
-      box-shadow: none;
+    &,
+    &:hover {
+      text-decoration: none;
     }
-    .workflow-list-item {
-      .ant-collapse-header {
-        padding: 15px;
-      }
-      border-top: 1px solid #f2f5fa;
-      border-bottom: 1px solid #f2f5fa;
-      margin-bottom: -1px;
+    .material-icons {
+      font-size: 36px;
+      vertical-align: middle;
     }
   }
 }
 
 //LC CARD HEAR/COLLAPSED VIEW
 .lc-card-head {
-  padding: 0px 0px;
+  box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.09);
+  padding: 20px 15px 20px 37px;
+  background: @color-white;
   .company-name {
-    font-size: 14px;
+    font-size: 20px;
     padding-left: 8px;
     padding-right: 20px;
     font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
   }
   .lc1 {
     font-size: 10px;
@@ -252,41 +221,6 @@
       margin-right: 20px;
     }
   }
-  .ant-steps {
-    .ant-steps-item {
-      display: inline-block;
-      min-width: 100px;
-      -ms-flex-align: center;
-      -webkit-align-items: center;
-      -webkit-box-align: center;
-
-      align-items: center;
-      .ant-steps-item-content {
-        white-space: normal;
-        > .ant-steps-item-title {
-          line-height: 1.17;
-          margin-top: 3px;
-          vertical-align: middle;
-          .title-c {
-            display: inline-block;
-            width: 70px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 14px;
-            max-height: 60px;
-          }
-          &:after {
-            background-color: @color-text;
-          }
-        }
-      }
-    }
-    .ant-steps-item-icon {
-      margin-right: 20px;
-    }
-  }
-  .child-workflow-dropdown {
-  }
 
   .status-btn {
     position: relative;
@@ -309,19 +243,32 @@
 }
 
 //LC CARD EXPANDED VIEW
-.lc-card {
+.lc-card-wrapper {
+  margin-top: 10px;
+  box-shadow: 0 2px 284px 0 #e5e5e5;
+  background: @color-white;
   .lc-data-wrapper {
     //border-bottom: 1px solid @color-grey-d;
     padding: 0px 0px 18px;
     margin: 0px 0px -11px;
-    white-space: nowrap;
-    list-style: none;
-    overflow: auto;
+    // white-space: nowrap;
+    // list-style: none;
+    // overflow: auto;
     .lc-data-item {
-      font-weight: medium;
+      width: 250px;
       font-size: 12px;
       margin-right: 40px;
-      color: @color-metal;
+      margin-bottom: 20px;
+      display: inline-block;
+      .label {
+        font-weight: 500;
+        text-transform: uppercase;
+        color: @color-grey-light;
+        margin-bottom: 8px;
+      }
+      .value {
+        color: @color-black;
+      }
     }
   }
   .sub-step-list {
@@ -329,6 +276,10 @@
     overflow-x: auto;
   }
   .lc-card-body {
+    padding: 0 37px;
+    .ant-tabs-content {
+      margin-top: 20px;
+    }
     .shadow-wrapper {
       position: relative;
     }
@@ -364,8 +315,6 @@
       height: 90%;
       top: -1px;
     }
-    //padding: 28px;
-    border-top: 1px solid #e8e8e8;
     .lc-card-section {
       padding: 16px 22px;
     }
@@ -403,14 +352,14 @@
         .lc-step i,
         ul li i {
           font-size: 18px;
-          vertical-align: sub;
+          vertical-align: middle;
           margin-right: 5px;
           width: 16px;
           padding-right: 20px;
         }
 
         .lc-step i {
-          font-size: 20px;
+          font-size: 18px;
         }
 
         ul {

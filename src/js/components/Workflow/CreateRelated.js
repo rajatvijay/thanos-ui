@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Menu, Dropdown } from "antd";
+import { Menu, Dropdown, Button } from "antd";
 import { FormattedMessage } from "react-intl";
 import _ from "lodash";
 
@@ -35,10 +35,9 @@ export const CreateRelated = props => {
         className="child-workflow-dropdown"
         placement="bottomRight"
       >
-        <a className="ant-dropdown-link ant-btn main-btn" href="#">
-          + <FormattedMessage id="workflowsInstances.createChildButtonText" />
-          <i className="material-icons t-14">keyboard_arrow_down</i>
-        </a>
+        <span className="text-secondary pd-ard-sm text-anchor">
+          <i className="material-icons text-middle">add</i>
+        </span>
       </Dropdown>
     );
   } else {

@@ -10,14 +10,13 @@ export const ProcessLcData = lc => {
     subtext_value = <span className="t-upr">{lc.value || "-"}</span>;
   } else if (lc.format && lc.format.toLowerCase() === "icon") {
     subtext_value = lc.value ? (
-      <span
-        onClick={() => {
-          window.open(lc.value, "_blank");
-        }}
+      <a
+        href={lc.value}
+        target="_blank"
         className="text-nounderline text-anchor"
       >
         <i className="material-icons">picture_as_pdf</i>
-      </span>
+      </a>
     ) : (
       "-"
     );

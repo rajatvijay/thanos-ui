@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
 import Collapsible from "react-collapsible";
 import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
-import { WorkflowBody } from "../../Workflow/WorkflowBody";
 import { calculatedData } from "../../Workflow/calculated-data";
 import { connect } from "react-redux";
 import {
@@ -253,9 +252,10 @@ class ChildWorkflowField2 extends Component {
         <Button
           type="primary"
           loading={this.props.workflowKind.loading ? true : false}
-          size="small"
+          //size="small"
         >
-          + create new {this.state.fetching ? "loadin..." : ""}
+          <i className="material-icons">add</i>{" "}
+          {this.state.fetching ? "loadin..." : null}
         </Button>
       </Dropdown>
     );
@@ -760,8 +760,9 @@ class ChildWorkflowField2 extends Component {
                   {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
                     this.getAddMenu()
                   ) : (
-                    <span className="ant-btn disabled child-workflow-dropdown ant-btn-primary ant-btn-sm">
-                      + create new <Icon type="loading" />
+                    <span className="ant-btn disabled child-workflow-dropdown ant-btn-primary ">
+                      <i className="material-icons">add</i>{" "}
+                      <Icon type="loading" />
                     </span>
                   )}
                 </Col>

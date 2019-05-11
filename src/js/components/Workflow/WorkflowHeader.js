@@ -42,150 +42,67 @@ const { getProcessedData, getProgressData } = calculatedData;
 /*workflow Head*/
 /////////////////
 
+// title --- lc data + alerts ---- status --- rank --- go to details //
+
 export const WorkflowHeader = props => {
-  //let proccessedData = getProcessedData(props.workflow.step_groups);
-  let progressData = getProgressData(props.workflow);
-  let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type === "normal";
-  });
+  let headerData = (
+    <Row type="flex" align="middle" className="lc-card-head">
+      <Col span={9} className="text-left ">
+        <HeaderTitle {...props} />
+      </Col>
+
+      <Col span={8}>
+        <GetMergedData {...props} />
+      </Col>
+
+      <Col span={6}>
+        <HeaderOptions {...props} />
+      </Col>
+
+      <Col span={1} className="text-center">
+        {props.workflow.sorting_primary_field && props.sortingEnabled ? (
+          <Badge
+            count={<span>{props.rank}</span>}
+            style={{
+              backgroundColor: getScoreColor(
+                props.workflow.sorting_primary_field
+              )
+            }}
+          />
+        ) : null}{" "}
+      </Col>
+    </Row>
+  );
 
   return (
-    <div className="ant-collapse-header">
-      <Row type="flex" align="middle" className="lc-card-head">
-        {props.isChild || props.isEmbedded ? null : (
-          <Col span={1} className=" text-anchor">
-            {props.detailsPage && !props.nextUrl.url ? (
-              <span onClick={props.goBack} className="text-anchor pd-ard-sm ">
-                <i
-                  className="material-icons text-secondary"
-                  style={{ fontSize: "18px", verticalAlign: "middle" }}
-                >
-                  keyboard_backspace
-                </i>
-              </span>
-            ) : (
-              <span className="pd-right">
-                <Popover
-                  content={
-                    <div className="text-center">
-                      <div className="small">{progressData}% completed</div>
-                    </div>
-                  }
-                >
-                  <Progress
-                    type="circle"
-                    percent={progressData}
-                    width={35}
-                    format={percent => (
-                      <i
-                        className="material-icons text-primary"
-                        style={{ fontSize: "18px", verticalAlign: "middle" }}
-                      >
-                        {props.kind === ""
-                          ? "folder_open"
-                          : getIcon(props.workflow.definition.kind, props.kind)}
-                      </i>
-                    )}
-                  />
-                </Popover>
-              </span>
-            )}
-          </Col>
-        )}
+    <Row type="flex" align="middle">
+      <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
 
-        <HeaderTitle {...props} />
-
-        <Col span={4} className="t-12 text-light pd-right-sm">
-          <div className="text-ellipsis" style={{ paddingTop: "6px" }}>
-            {_.size(subtext) >= 2 ? (
-              <Tooltip
-                title={subtext[1].label + ": " + (subtext[1].value || "-")}
-              >
-                <span className="t-cap">
-                  {subtext[1].show_label ? subtext[1].label + ": " : ""}
-                </span>
-                {ProcessLcData(subtext[1])}
-              </Tooltip>
-            ) : (
-              ""
-            )}
-          </div>
+      {props.isExpanded ? (
+        <Col span={2}>
+          <Link
+            className="details-link"
+            to={"/workflows/instances/" + props.workflow.id + "/"}
+            title="Show details"
+          >
+            <i className="material-icons">arrow_forward</i>
+          </Link>
         </Col>
-
-        <Col span={7}>
-          <GetMergedData {...props} />
-        </Col>
-
-        <Col span={2} className="text-center">
-          {/* props.workflow.sorting_primary_field &&  */}
-          {props.workflow.sorting_primary_field && props.sortingEnabled ? (
-            <Badge
-              count={<span>{props.rank}</span>}
-              style={{
-                backgroundColor: getScoreColor(
-                  props.workflow.sorting_primary_field
-                )
-              }}
-            />
-          ) : null}{" "}
-        </Col>
-        <HeaderOptions2 {...props} />
-      </Row>
-    </div>
+      ) : null}
+    </Row>
   );
 };
 
 const HeaderTitle = props => {
-  let progressData = getProgressData(props.workflow);
-  let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type == "normal";
-  });
-
   return (
-    <Col span={props.isChild ? 6 : 5} className="text-left ">
-      <div>
-        {props.isChild ? (
-          <a
-            href={"/workflows/instances/" + props.workflow.id + "/"}
-            className="text-nounderline "
-          >
-            <span
-              className=" text-base text-bold company-name text-ellipsis display-inline-block text-middle"
-              title={props.workflow.name}
-            >
-              {props.workflow.name}
-            </span>
-          </a>
-        ) : (
-          <Link
-            to={"/workflows/instances/" + props.workflow.id + "/"}
-            className="text-nounderline "
-          >
-            <span
-              className=" text-base company-name display-inline-block text-middle text-ellipsis "
-              title={props.workflow.name}
-            >
-              {props.workflow.name}
-            </span>
-          </Link>
-        )}
-
-        <div className="lc1 text-ellipsis">
-          {_.size(subtext) ? (
-            <Tooltip
-              title={subtext[0].label + ": " + (subtext[0].value || "-")}
-            >
-              <span className="t-cap">
-                {subtext[0].show_label ? subtext[0].label + ": " : ""}
-              </span>
-              {ProcessLcData(subtext[0])}
-            </Tooltip>
-          ) : (
-            ""
-          )}
-        </div>
-      </div>
-    </Col>
+    <div>
+      <span
+        className=" text-base  company-name text-ellipsis"
+        title={props.workflow.name}
+      >
+        {props.workflow.name}
+      </span>
+    </div>
   );
 };
 
@@ -204,22 +121,22 @@ const getGroupProgress = group => {
   return progress;
 };
 
-const getAllProgress = group => {
-  let progress = 0;
-  let allSteps = group.steps.length;
-  let stepCompleted = 0;
+// const getAllProgress = group => {
+//   let progress = 0;
+//   let allSteps = group.steps.length;
+//   let stepCompleted = 0;
 
-  _.map(group.steps, function(step) {
-    if (step.completed_at !== null) {
-      stepCompleted += 1;
-    }
-  });
+//   _.map(group.steps, function(step) {
+//     if (step.completed_at !== null) {
+//       stepCompleted += 1;
+//     }
+//   });
 
-  progress = Math.trunc(stepCompleted / allSteps * 100);
-  return progress;
-};
+//   progress = Math.trunc(stepCompleted / allSteps * 100);
+//   return progress;
+// };
 
-class HeaderOptions2 extends React.Component {
+class HeaderOptions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -228,8 +145,6 @@ class HeaderOptions2 extends React.Component {
       isWorkflowPDFModalVisible: false
     };
   }
-
-  componentDidMount = () => {};
 
   onStatusChange = key => {
     let id = parseInt(key.key, 10);
@@ -328,131 +243,59 @@ class HeaderOptions2 extends React.Component {
       </Menu>
     );
 
-    const workflowActionMenu = (
-      <Menu>
-        <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              restore
-            </i>{" "}
-            <FormattedMessage id="workflowsInstances.viewActivityLog" />
-          </span>
-        </Menu.Item>
-
-        <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              chat_bubble
-            </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.addComments" />
-          </span>
-        </Menu.Item>
-
-        <Menu.Item key={"pint"} onClick={this.printDiv}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">print</i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.printText" />
-          </span>
-        </Menu.Item>
-
-        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              file_copy
-            </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
-          </span>
-        </Menu.Item>
-      </Menu>
-    );
-
     let selected_flag = null;
     if (_.size(props.workflow.selected_flag)) {
       selected_flag = props.workflow.selected_flag[props.workflow.id];
     }
     let that = this;
-    const { isWorkflowPDFModalVisible } = this.state;
     const { workflow } = this.props;
+
+    let status = (
+      <Tooltip title={this.state.current}>
+        <div className="pd-left pd-right status-text text-light t-12 ">
+          {this.state.current}
+        </div>
+      </Tooltip>
+    );
+
     return (
-      <Col span={5}>
-        {this.props.detailsPage && !this.props.isEmbedded ? (
-          <WorkflowPDFModal
-            workflow={workflow}
-            visible={isWorkflowPDFModalVisible}
-            onOk={this.toggleWorkflowPDFModal}
-            onCancel={this.toggleWorkflowPDFModal}
-          />
-        ) : null}
-        <Row>
-          <Col span={14}>
-            <Tooltip title={this.state.current}>
-              <div className="pd-left pd-right status-text text-light t-12 ">
-                {this.state.current}
-              </div>
-            </Tooltip>
-          </Col>
-          <Col span={5} className="text-right">
-            {props.showCommentIcon &&
-            props.isEmbedded &&
-            workflow.comments_allowed ? (
-              <span>
-                <div className="add_comment_btn">
-                  <span>
-                    <i
-                      className="material-icons  t-18 text-metal"
-                      onClick={that.getComment.bind(that, props.workflow.id)}
-                    >
-                      chat_bubble_outline
-                    </i>
-                  </span>
-                </div>
-              </span>
-            ) : null}
-            {selected_flag && props.isEmbedded ? (
-              <Tooltip title={selected_flag.flag_detail.label}>
-                <span style={{ marginTop: "3px" }}>
+      <Row>
+        <Col span={20}>{status}</Col>
+        <Col span={4} className="text-right">
+          {props.showCommentIcon &&
+          props.isEmbedded &&
+          workflow.comments_allowed ? (
+            <span>
+              <div className="add_comment_btn">
+                <span>
                   <i
-                    style={{
-                      color: selected_flag.flag_detail.extra.color,
-                      width: "14px"
-                    }}
-                    className="material-icons  t-12 "
+                    className="material-icons  t-18 text-metal"
+                    onClick={that.getComment.bind(that, props.workflow.id)}
                   >
-                    fiber_manual_records
+                    chat_bubble_outline
                   </i>
                 </span>
-              </Tooltip>
-            ) : null}
+              </div>
+            </span>
+          ) : null}
 
-            {this.state.showSidebar ? (
-              <Drawer
-                title="Activity log"
-                placement="right"
-                closable={true}
-                //style={{top:'64px'}}
-                onClose={this.toggleSidebar}
-                visible={this.state.showSidebar}
-                width={500}
-                className="activity-log-drawer"
-              >
-                <AuditListTabs id={props.workflow.id} />
-              </Drawer>
-            ) : null}
-          </Col>
-          <Col span={5}>
-            {this.props.detailsPage ? (
-              <Dropdown
-                overlay={workflowActionMenu}
-                className="child-workflow-dropdown"
-              >
-                <span className="pd-ard-sm text-metal text-anchor">
-                  <i className="material-icons text-middle t-18 ">more_vert</i>
-                </span>
-              </Dropdown>
-            ) : null}
-          </Col>
-        </Row>
-      </Col>
+          {selected_flag && props.isEmbedded ? (
+            <Tooltip title={selected_flag.flag_detail.label}>
+              <span style={{ marginTop: "3px" }}>
+                <i
+                  style={{
+                    color: selected_flag.flag_detail.extra.color,
+                    width: "14px"
+                  }}
+                  className="material-icons  t-12 "
+                >
+                  fiber_manual_records
+                </i>
+              </span>
+            </Tooltip>
+          ) : null}
+        </Col>
+      </Row>
     );
   };
 }
