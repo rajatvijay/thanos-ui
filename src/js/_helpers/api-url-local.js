@@ -18,5 +18,8 @@ const subDomainUrl = site => {
   return domain;
 };
 
-export const baseUrl = getSite();
-export const baseUrl2 = subDomainUrl();
+// export const baseUrl = getSite();
+// export const baseUrl2 = subDomainUrl();
+
+export const baseUrl = "https://api.slackcart.com/api/v1/";
+export const baseUrl2 = "https://walmart.slackcart.com/api/v1/";

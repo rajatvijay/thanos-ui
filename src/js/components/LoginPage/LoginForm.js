@@ -150,7 +150,7 @@ class LoginForm extends React.Component {
                 <FormItem
                   validateStatus={errors.password && "error"}
                   help={errors.password}
-                  label="Enter your password"
+                  label="Password"
                 >
                   <Input
                     id="password"
