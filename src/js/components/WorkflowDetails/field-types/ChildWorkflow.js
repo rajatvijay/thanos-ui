@@ -81,6 +81,29 @@ class ChildWorkflowField2 extends Component {
   }
 
   componentDidMount = () => {
+    if (
+      !_.size(this.props.workflowKind.workflowKind) &&
+      this.state.kindChecked === false
+    ) {
+      this.props.dispatch(workflowKindActions.getAll());
+      this.setState({ kindChecked: true });
+    } else {
+      this.prepFetchChildData();
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (
+      _.size(this.props.workflowKind.workflowKind) &&
+      !_.size(this.state.childWorkflow) &&
+      !this.state.fetching &&
+      !this.state.fetchEmpty
+    ) {
+      this.prepFetchChildData();
+    }
+  };
+
+  prepFetchChildData = () => {
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
     if (this.props.field.definition.extra["exclude_filters"]) {
       this.state.excluded_filters = this.props.field.definition.extra[
@@ -88,14 +111,6 @@ class ChildWorkflowField2 extends Component {
       ];
     }
     this.getChildWorkflow(this.props.workflowId, kind);
-
-    if (
-      !_.size(this.props.workflowKind.workflowKind) &&
-      this.state.kindChecked === false
-    ) {
-      this.props.dispatch(workflowKindActions.getAll());
-      this.setState({ kindChecked: true });
-    }
   };
 
   getQueryParamForChildWorkflows = () => {
@@ -146,6 +161,7 @@ class ChildWorkflowField2 extends Component {
       .then(response => response.json())
       .then(body => {
         this.setState({
+          fetchEmpty: _.size(body.results) ? false : true,
           childWorkflow: body.results,
           filteredChildWorkflow: body.results,
           fetching: false
@@ -828,6 +844,7 @@ class ChildWorkflowField2 extends Component {
 
 function mapPropsToState(state) {
   const { workflowDetailsHeader, workflowKind } = state;
+
   return {
     workflowDetailsHeader,
     workflowKind

@@ -70,6 +70,9 @@ class Workflow extends Component {
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
+    if (this.props.workflowKind.workflowKind) {
+      this.getDefaultKind();
+    }
   };
 
   componentDidUpdate = prevProps => {
