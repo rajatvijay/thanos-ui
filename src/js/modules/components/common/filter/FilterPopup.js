@@ -13,71 +13,40 @@ const OPERATORS_TYPES = [
 ];
 
 class FilterPopup extends Component {
-  state = {
-    status: undefined,
-    region: undefined,
-    business_unit: undefined,
-    operator: undefined,
-    text: "",
-    field: undefined,
-    showError: false
-  };
-
-  onFilterChange = (key, value) => {
-    const { applyFilters, onModalClose } = this.props;
-    this.setState({ [key]: value }, function() {
-      if (key !== "operator" && key !== "field" && key !== "text") {
-        applyFilters(key, value);
-        onModalClose();
-      }
-    });
-  };
-
-  onClear = () => {
-    this.setState({
-      status: undefined,
-      region: undefined,
-      business_unit: undefined,
-      operator: undefined,
-      text: ""
-    });
-  };
-
-  updateAdvanceFilterTextValue = e => {
-    const { value } = e.target;
-    this.setState({ text: value });
-  };
-
-  onApply = () => {
-    const { field, text, operator } = this.state;
-    const { applyFilters, handleCancel } = this.props;
-
-    if (field && text && operator) {
-      applyFilters("advance", `${field}_${operator}_${text}`);
-      this.setState({ showError: false });
-      handleCancel();
-    } else {
-      this.setState({ showError: true });
-    }
-  };
-
   render() {
     const {
-      visible,
       workflowFilterType,
-      handleCancel,
-      fieldOptions
+
+      filterState,
+
+      onFilterChange,
+      onClear,
+      onModalClose,
+      onApply
     } = this.props;
+
+    const {
+      visible,
+      fieldOptions,
+      status,
+      region,
+      business_unit,
+      operator,
+      showError,
+      text,
+      field
+    } = filterState;
+
     const { statusType, businessType, regionType } = workflowFilterType;
-    const { status, region, business_unit, operator, showError } = this.state;
+    //const { status, region, business_unit, operator, showError,text,field } = this.state;
 
     return (
       <div>
         <Modal
           footer={null}
-          closable={true}
+          //  closable={true}
           visible={visible}
-          maskClosable={false}
+          //maskClosable={false}
           className={css`
             max-width: 320px;
             .ant-modal-content {
@@ -90,14 +59,14 @@ class FilterPopup extends Component {
               padding-right: 0;
             }
           `}
-          onCancel={handleCancel}
+          onCancel={onModalClose}
         >
           <div>
             <div style={{ justifyContent: "space-around", display: "flex" }}>
               <span style={{ color: "#138BD6", cursor: "pointer" }}>
                 FILTER BY
               </span>
-              <span onClick={() => this.onClear()}>CLEAR</span>
+              <span onClick={() => onClear()}>CLEAR</span>
             </div>
 
             <div style={{ margin: 30 }}>
@@ -106,21 +75,21 @@ class FilterPopup extends Component {
                 name="status"
                 data={statusType}
                 placeholder="Status"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
               <DropdownFilter
                 name="region"
                 value={region}
                 data={regionType.results}
                 placeholder="Market"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
               <DropdownFilter
                 name="business_unit"
                 value={business_unit}
                 data={businessType.results}
                 placeholder="Division"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
             </div>
           </div>
@@ -132,11 +101,10 @@ class FilterPopup extends Component {
 
             <div style={{ margin: 30 }}>
               <Cascader
+                value={field}
                 style={{ width: "100%" }}
                 options={fieldOptions}
-                onChange={arr =>
-                  this.onFilterChange("field", arr[arr.length - 1])
-                }
+                onChange={arr => onFilterChange("field", arr)}
                 placeholder="Please select field"
               />
 
@@ -145,22 +113,19 @@ class FilterPopup extends Component {
                 value={operator}
                 placeholder="Select Operator"
                 name="operator"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
 
               <Input
                 placeholder="InputValue"
-                onChange={e => this.onFilterChange("text", e.target.value)}
+                value={text}
+                onChange={e => onFilterChange("text", e.target.value)}
               />
             </div>
           </div>
 
           <div style={{ margin: 30 }}>
-            <Button
-              style={{ width: "100%" }}
-              type="primary"
-              onClick={this.onApply}
-            >
+            <Button style={{ width: "100%" }} type="primary" onClick={onApply}>
               Apply
             </Button>
 

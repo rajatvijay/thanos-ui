@@ -8,7 +8,8 @@ export const workflowService = {
   searchWorkflow,
   getChildWorkflow,
   searchUserWorkflowByEmail,
-  updateWorkflow
+  updateWorkflow,
+  clearAll
 };
 
 //FETCH THE LIST OF WORLFOWS FOR WORKFLOW LIST PAGE
@@ -34,6 +35,22 @@ function getAll(filter) {
     const params = pageUrl(filter);
     url += params;
   }
+  return fetch(url, requestOptions).then(handleResponse);
+}
+
+function clearAll() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  let filters = store.getState().workflowFilters,
+    filterParams = getFilterParams(filters),
+    url = baseUrl + "workflows-list/";
+
+  url += filterParams + "&lean=true";
+
   return fetch(url, requestOptions).then(handleResponse);
 }
 

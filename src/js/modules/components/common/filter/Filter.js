@@ -3,12 +3,22 @@ import { connect } from "react-redux";
 import { baseUrl, authHeader } from "../../../../_helpers";
 
 import FilterPopup from "./FilterPopup";
-import { workflowFiltersActions } from "../../../../actions";
+import { workflowFiltersActions, workflowActions } from "../../../../actions";
 
 import CreateNew from "./CreateNew";
 
 class Filter extends Component {
-  state = { visible: false, fieldOptions: [] };
+  state = {
+    visible: false,
+    fieldOptions: [],
+    status: undefined,
+    region: undefined,
+    business_unit: undefined,
+    operator: undefined,
+    text: "",
+    field: undefined,
+    showError: false
+  };
 
   showModal = () => {
     this.setState({
@@ -28,12 +38,53 @@ class Filter extends Component {
     });
   };
 
+  onFilterChange = (key, value) => {
+    const { applyFilters, onModalClose } = this.props;
+    this.setState({ [key]: value }, function() {
+      if (key !== "operator" && key !== "field" && key !== "text") {
+        this.applyFilters(key, value);
+        this.handleModalClose();
+      }
+    });
+  };
+
+  onApply = () => {
+    const { field, text, operator } = this.state;
+    const { applyFilters, onModalClose } = this.props;
+
+    if (field && text && operator) {
+      this.applyFilters(
+        "advance",
+        `${field[field.length - 1]}_${operator}_${text}`
+      );
+      this.setState({ showError: false });
+      this.handleModalClose();
+    } else {
+      this.setState({ showError: true });
+    }
+  };
+
   applyFilters = (key, value) => {
     const payload = {
       filterType: key,
       filterValue: [value]
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
+  onClear = () => {
+    const { getAllWorkflow, onModalClose } = this.props;
+
+    this.setState({
+      status: undefined,
+      region: undefined,
+      business_unit: undefined,
+      operator: undefined,
+      text: "",
+      field: undefined
+    });
+    this.props.dispatch(workflowActions.clearAll());
+    this.handleModalClose();
   };
 
   componentDidMount() {
@@ -51,7 +102,7 @@ class Filter extends Component {
   }
 
   render() {
-    const { visible, fieldOptions } = this.state;
+    // const { visible, fieldOptions,status,region ,business_unit,operator,text,field,showError} = this.state;
 
     return (
       <div
@@ -89,10 +140,11 @@ class Filter extends Component {
             </li>
           </ul>
           <FilterPopup
-            fieldOptions={fieldOptions}
-            applyFilters={this.applyFilters}
+            filterState={this.state}
             onModalClose={this.handleModalClose}
-            visible={visible}
+            onClear={this.onClear}
+            onFilterChange={this.onFilterChange}
+            onApply={this.onApply}
           />
         </div>
         <div>
