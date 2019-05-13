@@ -455,6 +455,8 @@ class ChildWorkflowField2 extends Component {
   };
 
   onFilterTagChange = (tag, _type) => {
+    //debugger;
+    console.log("i am changed", tag, _type, this.state);
     let filtered_workflow = this.state.filteredChildWorkflow;
     if (tag == "status") {
       if (_type == "All Status") {
@@ -470,6 +472,7 @@ class ChildWorkflowField2 extends Component {
         this.state.selected_filters["category"] = [];
         //delete this.state.selected_filters["category"];
       } else {
+        this.state.selected_filters["category"] = [];
         if (_.size(this.state.selected_filters["category"])) {
           if (!_.includes(this.state.selected_filters["category"], tag)) {
             this.state.selected_filters["category"].push(tag);
