@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-
 import { Modal, Button, Input, Cascader } from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
-import InputBox from "./InputBox";
 import { css } from "emotion";
 
-const arr = [
+const OPERATORS_TYPES = [
   { label: "Equal", value: "eq" },
   { label: "Not equal", value: "not_eq" },
   { label: "Has value", value: "is_set" },
@@ -26,22 +24,14 @@ class FilterPopup extends Component {
   };
 
   onFilterChange = (key, value) => {
-    const { applyFilters, handleCancel } = this.props;
-
+    const { applyFilters, onModalClose } = this.props;
     this.setState({ [key]: value }, function() {
-      console.log("key", key);
-      if (key != "operator" && key != "field" && key != "text") {
+      if (key !== "operator" && key !== "field" && key !== "text") {
         applyFilters(key, value);
-        handleCancel();
+        onModalClose();
       }
     });
   };
-
-  // onSelectNested = (arr)=>{
-
-  // const
-
-  // }
 
   onClear = () => {
     this.setState({
@@ -53,11 +43,6 @@ class FilterPopup extends Component {
     });
   };
 
-  componentWillUnmount() {
-    console.log("dont reset");
-    console.log(this.props);
-  }
-
   updateAdvanceFilterTextValue = e => {
     const { value } = e.target;
     this.setState({ text: value });
@@ -65,15 +50,12 @@ class FilterPopup extends Component {
 
   onApply = () => {
     const { field, text, operator } = this.state;
-    const { applyFilters, handleCancel } = this.props;
+    const { applyFilters, onModalClose } = this.props;
 
-    console.log(this.state);
     if (field && text && operator) {
-      console.log(field, operator, text);
-
       applyFilters("advance", `${field}_${operator}_${text}`);
       this.setState({ showError: false });
-      handleCancel();
+      onModalClose();
     } else {
       this.setState({ showError: true });
     }
@@ -83,22 +65,11 @@ class FilterPopup extends Component {
     const {
       visible,
       workflowFilterType,
-      handleCancel,
-      applyFilters,
+      onModalClose,
       fieldOptions
     } = this.props;
     const { statusType, businessType, regionType } = workflowFilterType;
-    console.log(this.state);
-    const {
-      status,
-      region,
-      business_unit,
-      operator,
-      text,
-      showError
-    } = this.state;
-
-    console.log("filed", fieldOptions);
+    const { status, region, business_unit, operator, showError } = this.state;
 
     return (
       <div>
@@ -118,8 +89,11 @@ class FilterPopup extends Component {
               padding-left: 0;
               padding-right: 0;
             }
+            .ant-modal-close {
+              outline: none !important;
+            }
           `}
-          onCancel={handleCancel}
+          onCancel={onModalClose}
         >
           <div>
             <div style={{ justifyContent: "space-around", display: "flex" }}>
@@ -170,17 +144,13 @@ class FilterPopup extends Component {
               />
 
               <DropdownFilter
-                data={arr}
+                data={OPERATORS_TYPES}
                 value={operator}
                 placeholder="Select Operator"
                 name="operator"
                 onFilterChange={this.onFilterChange}
               />
-              {/* <InputBox
-                placeholder="Input Value"
-                value={textValue}
-                onChange={this.updateAdvanceFilterTextValue}
-              /> */}
+
               <Input
                 placeholder="InputValue"
                 onChange={e => this.onFilterChange("text", e.target.value)}
@@ -192,7 +162,7 @@ class FilterPopup extends Component {
             <Button
               style={{ width: "100%" }}
               type="primary"
-              onClick={() => this.onApply()}
+              onClick={this.onApply}
             >
               Apply
             </Button>

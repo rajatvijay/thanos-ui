@@ -22,6 +22,9 @@ function getProcessedData(item) {
 }
 
 function getProgressData(item) {
+  //currently not accounting for hidden steps.
+  //could cause difference in results
+
   let progress = 0;
   let allSteps = null;
   let stepCompleted = 0;

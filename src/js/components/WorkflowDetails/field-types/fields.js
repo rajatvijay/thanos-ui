@@ -704,7 +704,9 @@ class FileUpload extends Component {
                 <p className="upload-drag-icon">
                   <Icon type="loading" spin style={{ fontSize: "40px" }} />
                 </p>
-                <p className="ant-upload-text">uploading...</p>
+                <p className="ant-upload-text">
+                  <Icon type="loading" />
+                </p>
               </div>
             )}
           </div>

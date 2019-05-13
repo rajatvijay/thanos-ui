@@ -8,7 +8,8 @@ export default class InputBox extends Component {
   };
 
   render() {
-    const { name, value, onChange, ...restProps } = this.props;
-    return <Input onChange={this.onChange} {...restProps} />;
+    const { name, onFilterChange, placeholder, value } = this.props;
+
+    return <Input onChange={this.onChange} />;
   }
 }

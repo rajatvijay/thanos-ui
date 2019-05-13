@@ -52,7 +52,12 @@ class StepPreview extends React.Component {
     };
 
     if (currentField.loading) {
-      return <div className="text-center mr-top">loading...</div>;
+      return (
+        <div className="text-center mr-top">
+          {" "}
+          <Icon type="loading" />
+        </div>
+      );
     } else {
       let step = currentField.currentStepFields;
       return (
