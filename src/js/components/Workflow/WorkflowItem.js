@@ -291,47 +291,49 @@ class WorkflowItem extends React.Component {
                 </div>
               ) : null}
 
-              <Sider
-                className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
-                style={{
-                  background: "#fff",
-                  overflow: "auto",
-                  height: "calc(100vh - 65px)",
-                  position: "fixed",
-                  right: 0,
-                  top: "65px",
-                  zIndex: 1
-                }}
-                width="700"
-                collapsed={!this.state.showQuickDetails}
-                collapsedWidth={0}
-                collapsible
-                trigger={null}
-              >
-                <div className="comment-details" style={{ width: "700px" }}>
-                  <div className="sidebar-head">
-                    <span className="sidebar-title">
-                      {this.props.workflow.name}
-                    </span>
-                    <Icon
-                      type="close"
-                      onClick={this.hideQuickDetails}
-                      style={{
-                        position: "absolute",
-                        top: "0px",
-                        right: "0px",
-                        width: "48px",
-                        height: "48px",
-                        lineHeight: "48px",
-                        cursor: "pointer"
-                      }}
-                    />
+              {showQuickDetailsFunction ? (
+                <Sider
+                  className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
+                  style={{
+                    background: "#fff",
+                    overflow: "auto",
+                    height: "calc(100vh - 65px)",
+                    position: "fixed",
+                    right: 0,
+                    top: "65px",
+                    zIndex: 1
+                  }}
+                  width="700"
+                  collapsed={!this.state.showQuickDetails}
+                  collapsedWidth={0}
+                  collapsible
+                  trigger={null}
+                >
+                  <div className="comment-details" style={{ width: "700px" }}>
+                    <div className="sidebar-head">
+                      <span className="sidebar-title">
+                        {this.props.workflow.name}
+                      </span>
+                      <Icon
+                        type="close"
+                        onClick={this.hideQuickDetails}
+                        style={{
+                          position: "absolute",
+                          top: "0px",
+                          right: "0px",
+                          width: "48px",
+                          height: "48px",
+                          lineHeight: "48px",
+                          cursor: "pointer"
+                        }}
+                      />
+                    </div>
+                    <Content style={{ padding: "15px", paddingBottom: "50px" }}>
+                      <StepPreview />
+                    </Content>
                   </div>
-                  <Content style={{ padding: "15px", paddingBottom: "50px" }}>
-                    <StepPreview />
-                  </Content>
-                </div>
-              </Sider>
+                </Sider>
+              ) : null}
             </div>
           </Collapsible>
         </div>
