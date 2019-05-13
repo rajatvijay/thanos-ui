@@ -50,12 +50,12 @@ class FilterPopup extends Component {
 
   onApply = () => {
     const { field, text, operator } = this.state;
-    const { applyFilters, handleCancel } = this.props;
+    const { applyFilters, onModalClose } = this.props;
 
     if (field && text && operator) {
       applyFilters("advance", `${field}_${operator}_${text}`);
       this.setState({ showError: false });
-      handleCancel();
+      onModalClose();
     } else {
       this.setState({ showError: true });
     }
@@ -65,7 +65,7 @@ class FilterPopup extends Component {
     const {
       visible,
       workflowFilterType,
-      handleCancel,
+      onModalClose,
       fieldOptions
     } = this.props;
     const { statusType, businessType, regionType } = workflowFilterType;
@@ -89,8 +89,11 @@ class FilterPopup extends Component {
               padding-left: 0;
               padding-right: 0;
             }
+            .ant-modal-close {
+              outline: none !important;
+            }
           `}
-          onCancel={handleCancel}
+          onCancel={onModalClose}
         >
           <div>
             <div style={{ justifyContent: "space-around", display: "flex" }}>
