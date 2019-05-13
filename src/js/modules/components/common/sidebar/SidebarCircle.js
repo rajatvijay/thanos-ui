@@ -4,14 +4,15 @@ const SidebarCircle = ({ value, innerColour }) => {
   return (
     <span
       style={{
-        borderRadius: "50%",
+        borderRadius: "20px",
         backgroundColor: innerColour,
         color: "white",
-        margin: "0px 5px",
-        fontSize: 10,
-        width: 25,
-        height: 25,
-        lineHeight: "25px",
+        margin: "0px 8px",
+        padding: "0px 7px",
+        fontSize: "14px",
+        width: "auto",
+        height: "20px",
+        lineHeight: "20px",
         textAlign: "center",
         display: "inline-block"
       }}

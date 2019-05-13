@@ -49,10 +49,10 @@ class AlerList extends Component {
       >
         <div
           style={{
-            borderTop: "1px solid black",
+            borderTop: "1px solid rgba(0, 0, 0, 0.3)",
             display: "flex",
             justifyContent: "space-between",
-            padding: "10px 29px",
+            padding: "10px 20px",
             cursor: "pointer"
           }}
         >

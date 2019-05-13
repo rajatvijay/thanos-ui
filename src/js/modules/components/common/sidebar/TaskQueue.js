@@ -74,6 +74,8 @@ class TaskQueue extends Component {
             color: "#138BD4",
             margin: "30px 0px 20px 15px",
             fontSize: 12,
+            fontWeight: "bold",
+            letterSpacing: "0.8px",
             display:
               stepgroupdef_counts && stepgroupdef_counts.length > 0
                 ? "block"
@@ -86,10 +88,10 @@ class TaskQueue extends Component {
           <ul style={{ padding: 0, listStyle: "none" }}>
             <li
               style={{
-                borderTop: "1px solid black",
+                borderTop: "1px solid rgba(0, 0, 0, 0.3)",
                 display: "flex",
                 justifyContent: "space-between",
-                padding: "10px 29px",
+                padding: "10px 20px",
                 display:
                   stepgroupdef_counts && stepgroupdef_counts.length > 0
                     ? "flex"
@@ -107,15 +109,15 @@ class TaskQueue extends Component {
                 />
                 <span style={{ fontSize: 16, color: "#CFDAE3" }}>My Tasks</span>
               </div>
-              <span style={{ fontSize: 12, color: "#567C9C" }}>{2}</span>
+              <span style={{ fontSize: 14, color: "#567C9C" }}>{2}</span>
             </li>
             {this.renderList()}
             <li
               style={{
-                borderTop: "1px solid black",
-                borderBottom: "1px solid black",
+                borderTop: "1px solid rgba(0, 0, 0, 0.3)",
+                borderBottom: "1px solid rgba(0, 0, 0, 0.3)",
                 justifyContent: "space-between",
-                padding: "10px 29px",
+                padding: "10px 20px",
                 display:
                   stepgroupdef_counts && stepgroupdef_counts.length > 0
                     ? "flex"
@@ -125,7 +127,11 @@ class TaskQueue extends Component {
               <div>
                 <span
                   onClick={() => this.setState({ showMore: !showMore })}
-                  style={{ fontSize: 14, color: "#587D9D", cursor: "pointer" }}
+                  style={{
+                    fontSize: 12,
+                    color: "rgba(255, 255, 255, 0.3)",
+                    cursor: "pointer"
+                  }}
                 >
                   {showMore ? "SHOW ALL" : "SHOW LESS"}
                 </span>

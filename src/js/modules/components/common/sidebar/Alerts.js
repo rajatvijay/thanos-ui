@@ -58,6 +58,8 @@ class Alerts extends Component {
             color: "#138BD4",
             margin: "40px 0px 20px 15px",
             fontSize: 12,
+            fontWeight: "bold",
+            letterSpacing: "0.8px",
             display:
               alert_details && alert_details.length > 0 ? "block" : "none"
           }}
