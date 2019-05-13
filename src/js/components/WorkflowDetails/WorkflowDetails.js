@@ -284,7 +284,6 @@ class WorkflowDetails extends Component {
                   showCommentIcon={true}
                   getCommentSidebar={this.callBackCollapser}
                   nextUrl={this.props.nextUrl}
-                  goBack={this.props.goBack}
                 />
               </div>
             )}

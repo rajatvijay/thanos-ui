@@ -23,6 +23,7 @@ import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
 import WorkflowPDFModal from "./WorkflowPDFModal";
 import { ProcessLcData } from "./ProcessLcData";
+import { goToPrevStep } from "../../utils/customBackButton";
 
 const { getProcessedData, getProgressData } = calculatedData;
 
@@ -49,13 +50,17 @@ export const WorkflowHeader = props => {
     return item.display_type === "normal";
   });
 
+  const goBack = () => {
+    goToPrevStep();
+  };
+
   return (
     <div className="ant-collapse-header">
       <Row type="flex" align="middle" className="lc-card-head">
         {props.isChild || props.isEmbedded ? null : (
           <Col span={1} className=" text-anchor">
             {props.detailsPage && !props.nextUrl.url ? (
-              <span onClick={props.goBack} className="text-anchor pd-ard-sm ">
+              <span onClick={goBack} className="text-anchor pd-ard-sm ">
                 <i
                   className="material-icons text-secondary"
                   style={{ fontSize: "18px", verticalAlign: "middle" }}
