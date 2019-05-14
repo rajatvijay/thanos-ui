@@ -54,12 +54,16 @@ function getLabel(props, that) {
             : null}
         </span>
 
-        {props.field.definition.body}
+        {props.field.label_value
+          ? props.field.label_value
+          : props.field.definition.body}
       </span>
     );
     return label;
   } else {
-    return props.field.definition.body;
+    return props.field.label_value
+      ? props.field.label_value
+      : props.field.definition.body;
   }
 }
 
