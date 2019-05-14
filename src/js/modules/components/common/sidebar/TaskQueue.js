@@ -99,14 +99,17 @@ class TaskQueue extends Component {
               }}
             >
               <div>
-                <Icon
+                <i
+                  className="material-icons"
                   style={{
                     fontSize: 22,
                     color: "#CFDAE3",
-                    margin: "0px 10px 0px 0px"
+                    margin: "0px 10px 2px 0px",
+                    verticalAlign: "bottom"
                   }}
-                  type="user"
-                />
+                >
+                  person
+                </i>
                 <span style={{ fontSize: 16, color: "#CFDAE3" }}>My Tasks</span>
               </div>
               <span style={{ fontSize: 14, color: "#567C9C" }}>{2}</span>

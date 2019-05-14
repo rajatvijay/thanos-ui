@@ -46,7 +46,7 @@ class AlerList extends Component {
         style={{
           paddingBottom: collapse ? 30 : 0,
           backgroundColor: collapse ? "#093050" : "#104775",
-          transitionDuration: "500ms"
+          transitionDuration: "150ms"
         }}
         onClick={() => this.setState({ collapse: !collapse })}
       >
