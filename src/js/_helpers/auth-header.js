@@ -36,8 +36,7 @@ function requestOptions(method) {
 function getClient() {
   let domain = window.location.hostname;
   domain = domain.split(".");
-  // let client = domain[0];
-  let client = "walmart";
+  let client = domain[0];
 
   return client;
 }
