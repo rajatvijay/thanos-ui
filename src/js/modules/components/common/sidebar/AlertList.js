@@ -19,10 +19,13 @@ class AlerList extends Component {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            margin: "4px 30px",
-            backgroundColor: item["name"] === selected ? "#1489D2" : "#2F4E67",
-            borderRadius: "10px",
-            padding: "1px 2px 1px 13px",
+            margin: "4px 18px 4px 25px",
+            backgroundColor:
+              item["name"] === selected
+                ? "#1489D2"
+                : "rgba(255, 255, 255, 0.15)",
+            borderRadius: "30px",
+            padding: "3px 3px 0px 12px",
             color: "white",
             cursor: "pointer"
           }}
