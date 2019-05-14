@@ -43,8 +43,7 @@ const { getProcessedData, getProgressData } = calculatedData;
 /////////////////
 
 export const WorkflowHeader = props => {
-  //let proccessedData = getProcessedData(props.workflow.step_groups);
-  let progressData = getProgressData(props.workflow);
+  let progressData = props.workflow.progress;
   let subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal";
   });
