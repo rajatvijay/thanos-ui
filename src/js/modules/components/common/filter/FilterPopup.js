@@ -61,12 +61,19 @@ class FilterPopup extends Component {
     }
   };
 
+  filterStatusType = (arr, id) => {
+    if (Array.isArray(arr)) {
+      return arr.map(item => item.kind == id);
+    }
+  };
+
   render() {
     const {
       visible,
       workflowFilterType,
       onModalClose,
-      fieldOptions
+      fieldOptions,
+      workflowKindValue
     } = this.props;
     const { statusType, businessType, regionType } = workflowFilterType;
     const { status, region, business_unit, operator, showError } = this.state;
@@ -107,7 +114,7 @@ class FilterPopup extends Component {
               <DropdownFilter
                 value={status}
                 name="status"
-                data={statusType}
+                data={this.filterStatusType(statusType, workflowKindValue.id)}
                 placeholder="Status"
                 onFilterChange={this.onFilterChange}
               />
@@ -184,9 +191,10 @@ class FilterPopup extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowFilterType } = state;
+  const { workflowFilterType, workflowKindValue } = state;
   return {
-    workflowFilterType
+    workflowFilterType,
+    workflowKindValue
   };
 }
 
