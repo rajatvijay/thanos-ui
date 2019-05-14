@@ -28,3 +28,7 @@ krypton-ui.sublime-workspace
 #extra css files not to be tracked anymore as we are using less
 *.css
 *.css.map
+src/js/_helpers/api-url-local.js
+src/js/_helpers/auth-header.js
+src/js/services/user.js
+yarn.lock

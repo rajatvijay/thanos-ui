@@ -3,10 +3,11 @@
 .login-container {
   display: block;
   height: 100vh;
+  background-color: #104774;
 
   .login-header {
     min-height: 300px;
-    background: #fff;
+    background-color: white;
   }
 
   .logo-container {
@@ -29,14 +30,13 @@
   }
   .magic-box {
     .login-top {
-      border-left: 3px solid @color-secondary;
       padding-left: 22px;
       font-size: 16px;
       margin: -24px 0 24px -24px;
     }
 
     .block-left {
-      border-right: 1px solid @color-grey-lightest;
+      //border-right: 1px solid @color-grey-lightest;
       margin-right: -1px;
 
       .ant-form-item-label {
@@ -58,18 +58,24 @@
       }
     }
   }
+  .ant-input-prefix {
+    left: 0px;
+  }
+  .ant-btn {
+    height: 60px;
+    border-radius: 5px;
+  }
 }
 
 .login-overlay {
-  background-color: @color-secondary;
-  height: 100%;
+  height: calc(100% - 300px);
 }
 
 .login-box {
-  width: 400px;
+  width: 350px;
   height: auto;
   min-height: 300px;
-  border-radius: 3px;
+  border-radius: 8px;
   margin: -70px auto 100px;
   box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.19);
   background: @color-white;
