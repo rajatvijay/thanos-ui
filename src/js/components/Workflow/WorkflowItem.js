@@ -28,7 +28,8 @@ class WorkflowItem extends React.Component {
     loadingRelatedWorkflow: false,
     stepGroupData: null,
     stepdataloading: true,
-    initialLoad: true
+    initialLoad: true,
+    collapseDisabled: false
   };
 
   componentDidMount = () => {
@@ -208,6 +209,14 @@ class WorkflowItem extends React.Component {
     return grouped;
   };
 
+  disableCollapse = () => {
+    this.setState({ collapseDisabled: true });
+  };
+
+  enableCollapse = () => {
+    this.setState({ collapseDisabled: false });
+  };
+
   render = () => {
     let that = this;
 
@@ -247,6 +256,8 @@ class WorkflowItem extends React.Component {
                   }
                   addComment={this.props.addComment || null}
                   showCommentIcon={this.props.showCommentIcon}
+                  disableCollapse={this.disableCollapse}
+                  enableCollapse={this.enableCollapse}
                 />
               </div>
             }
@@ -255,6 +266,7 @@ class WorkflowItem extends React.Component {
             onOpen={this.onOpen}
             onClose={this.onClose}
             hasChildren={hasChildren}
+            triggerDisabled={this.state.collapseDisabled}
           >
             <div className="lc-card">
               <WorkflowBody

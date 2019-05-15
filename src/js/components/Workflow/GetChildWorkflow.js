@@ -44,7 +44,6 @@ class GetChildWorkflow extends Component {
       k.workflows = [];
       _.forEach(children, child => {
         if (child.definition.kind === kind.id) {
-          console.log("matches");
           k.workflows.push(child);
         }
       });

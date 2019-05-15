@@ -305,6 +305,14 @@ class HeaderOptions2 extends React.Component {
     }));
   };
 
+  onCommentHover = () => {
+    this.props.disableCollapse();
+  };
+
+  onCommentHoverOut = () => {
+    this.props.enableCollapse();
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -400,7 +408,11 @@ class HeaderOptions2 extends React.Component {
             props.isEmbedded &&
             workflow.comments_allowed ? (
               <span>
-                <div className="add_comment_btn">
+                <div
+                  className="add_comment_btn"
+                  onMouseOver={this.onCommentHover}
+                  onMouseOut={this.onCommentHoverOut}
+                >
                   <span>
                     <i
                       className="material-icons  t-18 text-metal"
