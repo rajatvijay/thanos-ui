@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 
-import {
-  Layout,
-  Icon,
-  Divider,
-  Dropdown,
-  Collapse,
-  Row,
-  Menu,
-  Col
-} from "antd";
+import { Layout, Divider, Dropdown, Collapse, Row, Menu, Col } from "antd";
 import { FormattedMessage } from "react-intl";
 import _ from "lodash";
 
@@ -34,7 +25,9 @@ class Sidebar extends Component {
         ? this.props.workflowDetailsHeader.workflowDetailsHeader.status.label
         : null,
     showSidebar: false,
-    isWorkflowPDFModalVisible: false
+    isWorkflowPDFModalVisible: false,
+    groupId: null,
+    stepId: null
   };
 
   toggleSidebar = () => {
@@ -104,6 +97,48 @@ class Sidebar extends Component {
     }));
   };
 
+  updateActiveStep = () => {
+    this.setState({
+      groupId: new URL(window.location.href).searchParams.get("group"),
+      stepId: new URL(window.location.href).searchParams.get("step")
+    });
+  };
+
+  componentDidMount() {
+    this.setState({
+      groupId: new URL(window.location.href).searchParams.get("group"),
+      stepId: new URL(window.location.href).searchParams.get("step")
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.props.currentStepFields.currentStepFields !==
+      prevProps.currentStepFields.currentStepFields
+    ) {
+      if (
+        this.props.currentStepFields.currentStepFields.id !==
+        prevProps.currentStepFields.currentStepFields.id
+      ) {
+        this.setState({
+          groupId: new URL(window.location.href).searchParams.get("group"),
+          stepId: new URL(window.location.href).searchParams.get("step")
+        });
+      }
+    }
+  }
+
+  onClickOfLink = (groupid, stepid) => {
+    this.setState({
+      groupId: groupid,
+      stepId: stepid
+    });
+  };
+
+  onChangeOfCollapse = groupid => {
+    this.setState({ groupId: groupid });
+  };
+
   render() {
     const { workflowDetailsHeader, workflowDetails } = this.props;
     let lc_data =
@@ -115,9 +150,8 @@ class Sidebar extends Component {
       (data, index) => data.display_type == "normal" && data.value
     );
 
-    let u = new URL(window.location.href);
-    let groupId = u.searchParams.get("group");
-    let stepId = u.searchParams.get("step");
+    const { groupId, stepId } = this.state;
+
     const workflowActionMenu = (
       <Menu>
         <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
@@ -157,13 +191,13 @@ class Sidebar extends Component {
     );
     return (
       <Sider
-        width={450}
+        width={400}
         style={{
           overflow: "scroll",
           height: "100vh",
           left: 0,
           backgroundColor: "#FAFAFA",
-          padding: "56px",
+          padding: "30px",
           paddingTop: 0,
           zIndex: 1
         }}
@@ -238,13 +272,17 @@ class Sidebar extends Component {
           </Row>
 
           <Collapse
+            defaultActiveKey={groupId}
+            activeKey={groupId}
             accordion
             style={{
               borderLeft: "none",
               borderRight: "none",
-              borderRadius: 0
+              borderRadius: 0,
+              marginBottom: 30
             }}
             onChange={this.onChangeOfCollapse}
+            className="ant-collapse-content"
           >
             {Object.values(workflowDetails).length &&
             workflowDetails.workflowDetails
@@ -252,13 +290,15 @@ class Sidebar extends Component {
                   .filter(group => group.steps.length)
                   .map((stepgroup, index) => (
                     <Panel
+                      key={stepgroup.id}
                       showArrow={false}
                       header={
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "space-between"
+                            justifyContent: "space-between",
+                            backgroundColor: "#fafafa"
                           }}
                         >
                           <span
@@ -269,7 +309,8 @@ class Sidebar extends Component {
                               fontSize: 14
                             }}
                           >
-                            {stepgroup.completed ? (
+                            {stepgroup.steps.filter(step => step.completed_by)
+                              .length === stepgroup.steps.length ? (
                               <i
                                 className="material-icons t-22 pd-right-sm anticon anticon-check-circle"
                                 style={{ color: "#00C89B" }}
@@ -303,7 +344,6 @@ class Sidebar extends Component {
                           </span>
                         </div>
                       }
-                      key={index + 1}
                     >
                       {stepgroup.steps.map(step => (
                         <Link
@@ -311,30 +351,64 @@ class Sidebar extends Component {
                             stepgroup.id
                           }&step=${step.id}`}
                           style={
-                            groupId === stepgroup.id && stepId === step.id
+                            groupId == stepgroup.id && stepId == step.id
                               ? {
-                                  color: "#969696",
-                                  textDecoration: "none",
-                                  backgroundColor: "#104774",
-                                  borderRadius: "16px"
+                                  color: "#fff",
+                                  textDecoration: "none"
                                 }
-                              : { color: "#969696", textDecoration: "none" }
+                              : {
+                                  color: "#969696",
+                                  textDecoration: "none"
+                                }
                           }
+                          onClick={event =>
+                            this.onClickOfLink(stepgroup.id, step.id, event)
+                          }
+                          key={step.id}
                         >
-                          <p>
+                          <p
+                            style={
+                              groupId == stepgroup.id && stepId == step.id
+                                ? {
+                                    backgroundColor: "#104774",
+                                    borderRadius: "16px",
+                                    paddingLeft: "10px",
+                                    paddingTop: "5px",
+                                    paddingBottom: "5px"
+                                  }
+                                : {
+                                    paddingLeft: "10px",
+                                    paddingTop: "5px",
+                                    paddingBottom: "5px",
+                                    backgroundColor: "#fafafa"
+                                  }
+                            }
+                          >
                             {step.completed_by ? (
                               <i
                                 className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                                style={{ color: "#00C89B" }}
+                                fill="#FFF"
+                                style={
+                                  groupId == stepgroup.id && stepId == step.id
+                                    ? { color: "#00C89B", fontSize: 18 }
+                                    : { color: "#00C89B" }
+                                }
                               >
                                 check_circle
                               </i>
                             ) : (
                               <i
                                 className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                                style={{ color: "#CCCCCC" }}
+                                fill="#FFF"
+                                style={
+                                  groupId == stepgroup.id && stepId == step.id
+                                    ? { color: "#FFFFFF", fontSize: 16 }
+                                    : { color: "#CCCCCC" }
+                                }
                               >
-                                panorama_fish_eye
+                                {groupId == stepgroup.id && stepId == step.id
+                                  ? "lens"
+                                  : "panorama_fish_eye"}
                               </i>
                             )}
                             {step.name}
@@ -351,12 +425,9 @@ class Sidebar extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { workflowDetailsHeader, workflowDetails } = state;
-  return {
-    workflowDetailsHeader,
-    workflowDetails
-  };
+function mapStateToProps(state, ownProps) {
+  const { workflowDetailsHeader, workflowDetails, currentStepFields } = state;
+  return { workflowDetailsHeader, workflowDetails, currentStepFields };
 }
 
 export default connect(mapStateToProps)(Sidebar);
