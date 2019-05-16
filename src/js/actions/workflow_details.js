@@ -87,7 +87,6 @@ function getStepGroup(id) {
 function getStepFields(step) {
   // For Error tracking
   if (!step.workflowId || !step.groupId || !step.stepId) {
-    console.log("RAJAT CALLED");
     Sentry.captureException(
       new Error(`Get steps field called ${JSON.stringify(step)}`)
     );
@@ -122,12 +121,13 @@ function getStepFields(step) {
 }
 
 // Get workflow/step/field Comments
-function getComment(object_id, content_type, addtn) {
+function getComment(object_id, content_type, addtn, isEmbedded) {
   let payload = {
     object_id: object_id,
     type: content_type,
     extra: addtn
   };
+
   return dispatch => {
     dispatch(request(payload));
     if (payload.object_id) {
@@ -151,6 +151,7 @@ function getComment(object_id, content_type, addtn) {
         message: "This feature is disabled."
       });
     }
+    data.isEmbedded = isEmbedded;
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
   }
 

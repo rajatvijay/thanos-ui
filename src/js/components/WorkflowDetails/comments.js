@@ -119,7 +119,8 @@ class Comments extends Component {
         message: message || this.state.comment,
         attachment: _.size(fileList) ? fileList[0] : ""
       },
-      step_reload_payload
+      step_reload_payload,
+      this.props.isEmbedded
     );
     this.setState({ message: toContentState(""), fileList: [] });
   };
@@ -215,7 +216,6 @@ class Comments extends Component {
       display_item: "Risk Code"
     };
 
-    console.log(payload, target);
     this.props.changeIntegrationStatus(payload);
   };
 
@@ -241,7 +241,9 @@ class Comments extends Component {
       stepId: this.props.currentStepFields.currentStepFields.id
     };
 
-    this.props.dispatch(changeStatusActions(payload, step_reload_payload));
+    this.props.dispatch(
+      changeStatusActions(payload, step_reload_payload, this.props.isEmbedded)
+    );
   };
 
   addAttachementInState = file => {
@@ -453,7 +455,7 @@ class Comments extends Component {
                     className="comments-list"
                     style={{ maxHeight: "calc(100vh - 430px)" }}
                   >
-                    {_.map(c.messages, function(msg) {
+                    {_.map(c.messages, function(msg, index) {
                       let attachment_text = null;
                       if (msg.attachment) {
                         attachment_text = msg.attachment.split("/")[
@@ -462,7 +464,7 @@ class Comments extends Component {
                         attachment_text = attachment_text.split("?")[0];
                       }
                       return (
-                        <div key={msg.id} className="mr-bottom">
+                        <div key={msg.id + "-" + index} className="mr-bottom">
                           <Avatar
                             size="small"
                             icon="user"
@@ -498,7 +500,9 @@ class Comments extends Component {
                               </Tooltip>
                             </span>
                           </div>
-                          <p style={{ fontSize: "12px", paddingLeft: "32px" }}>
+                          <div
+                            style={{ fontSize: "12px", paddingLeft: "32px" }}
+                          >
                             <div
                               className="Container"
                               dangerouslySetInnerHTML={{
@@ -508,7 +512,7 @@ class Comments extends Component {
                                 )
                               }}
                             />
-                          </p>
+                          </div>
                           {msg.attachment ? (
                             <span
                               style={{
