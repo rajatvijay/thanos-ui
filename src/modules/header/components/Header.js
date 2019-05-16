@@ -82,7 +82,7 @@ class Header extends Component {
             alignItems: "center"
           }}
         >
-          <span
+          {/* <span
             className="logo float-left text-anchor text-base mr-right-sm"
             title="Toggle filter menu"
             onClick={this.onMenuToggle}
@@ -92,7 +92,7 @@ class Header extends Component {
                 {this.props.showFilterMenu.show ? "dehaze" : "dehaze"}{" "}
               </i>
             </Tooltip>
-          </span>
+          </span> */}
           <a href="/">
             {!this.props.config.loading && this.props.config.logo ? (
               <img
