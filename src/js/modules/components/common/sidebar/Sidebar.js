@@ -50,7 +50,6 @@ class Sidebar extends Component {
     let metaValue = _.find(this.props.workflowKind.workflowKind, item => {
       return item.id === id;
     });
-    c;
     let payload = { filterType: "kind", filterValue: [id], meta: metaValue };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
     this.props.dispatch(workflowKindActions.setValue(metaValue));

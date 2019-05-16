@@ -74,7 +74,7 @@ class FilterPopup extends Component {
       onFilterChange,
       onClear,
       onModalClose,
-      fieldOptions,
+      // fieldOptions,
       workflowKindValue
     } = this.props;
 
@@ -178,7 +178,11 @@ class FilterPopup extends Component {
           </div>
 
           <div style={{ margin: 30 }}>
-            <Button style={{ width: "100%" }} type="primary" onClick={onApply}>
+            <Button
+              style={{ width: "100%" }}
+              type="primary"
+              onClick={this.onApply}
+            >
               Apply
             </Button>
 
