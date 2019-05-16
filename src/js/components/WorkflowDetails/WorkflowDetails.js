@@ -253,14 +253,18 @@ class WorkflowDetails extends Component {
           <Layout className="workflow-details-container inner-container">
             <Layout
               style={{
-                background: "#FBFBFF",
+                background: "#FAFAFA",
                 minHeight: "100vh"
               }}
             >
               <SidebarView />
               <Content>
                 <div className="printOnly ">
-                  <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
+                  <div
+                    className="mr-ard-lg"
+                    id="StepBody"
+                    style={{ background: "#FAFAFA" }}
+                  >
                     <StepBody
                       toggleSidebar={this.callBackCollapser}
                       changeFlag={this.changeFlag}

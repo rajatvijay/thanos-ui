@@ -317,7 +317,7 @@ class Comments extends Component {
           height: "calc(100vh - 70px)",
           position: "fixed",
           right: 0,
-          top: "65px",
+          top: "75px",
           zIndex: 1
         }}
         width="570"

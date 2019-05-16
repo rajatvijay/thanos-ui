@@ -23,6 +23,7 @@ import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
 import WorkflowPDFModal from "./WorkflowPDFModal";
 import { ProcessLcData } from "./ProcessLcData";
+import { goToPrevStep } from "../../utils/customBackButton";
 
 const { getProcessedData, getProgressData } = calculatedData;
 
@@ -43,7 +44,6 @@ const { getProcessedData, getProgressData } = calculatedData;
 /////////////////
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
-
 export const WorkflowHeader = props => {
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
@@ -55,21 +55,21 @@ export const WorkflowHeader = props => {
         <GetMergedData {...props} />
       </Col>
 
-      <Col span={6}>
-        <HeaderOptions {...props} />
-      </Col>
-
       <Col span={1} className="text-center">
         {props.workflow.sorting_primary_field && props.sortingEnabled ? (
-          <Badge
-            count={<span>{props.rank}</span>}
-            style={{
-              backgroundColor: getScoreColor(
-                props.workflow.sorting_primary_field
-              )
-            }}
-          />
-        ) : null}{" "}
+          <span
+            className={
+              "risk-item bg-" +
+              getScoreColor(props.workflow.sorting_primary_field)
+            }
+          >
+            {props.rank}
+          </span>
+        ) : null}
+      </Col>
+
+      <Col span={6}>
+        <HeaderOptions {...props} />
       </Col>
     </Row>
   );
@@ -79,9 +79,9 @@ export const WorkflowHeader = props => {
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
 
       {props.isExpanded ? (
-        <Col span={2}>
+        <Col span={2} className="details-link-wrapper ">
           <Link
-            className="details-link"
+            className="details-link slide-this"
             to={"/workflows/instances/" + props.workflow.id + "/"}
             title="Show details"
           >
@@ -216,6 +216,14 @@ class HeaderOptions extends React.Component {
     }));
   };
 
+  onCommentHover = () => {
+    this.props.disableCollapse();
+  };
+
+  onCommentHoverOut = () => {
+    this.props.enableCollapse();
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -266,7 +274,11 @@ class HeaderOptions extends React.Component {
           props.isEmbedded &&
           workflow.comments_allowed ? (
             <span>
-              <div className="add_comment_btn">
+              <div
+                className="add_comment_btn"
+                onMouseOver={this.onCommentHover}
+                onMouseOut={this.onCommentHoverOut}
+              >
                 <span>
                   <i
                     className="material-icons  t-18 text-metal"
@@ -485,13 +497,13 @@ class GetMergedData extends React.Component {
 const getScoreColor = riskValue => {
   let value = parseInt(riskValue, 10);
   if (value >= 7) {
-    return "#3c763d";
+    return "green";
   } else if (value >= 4 && value <= 6) {
-    return "#eebd47";
+    return "yellow";
   } else if (value <= 3) {
-    return "#f16b51";
+    return "red";
   } else {
-    return "#505050";
+    return "light";
   }
 };
 
