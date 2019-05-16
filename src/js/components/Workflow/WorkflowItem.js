@@ -346,7 +346,7 @@ class WorkflowItem extends React.Component {
                     height: "calc(100vh - 65px)",
                     position: "fixed",
                     right: 0,
-                    top: "65px",
+                    top: "75px",
                     zIndex: 1
                   }}
                   width="700"

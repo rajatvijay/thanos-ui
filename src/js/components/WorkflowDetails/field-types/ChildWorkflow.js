@@ -712,7 +712,6 @@ class ChildWorkflowField2 extends Component {
         style={{ display: "block" }}
         key={props.field.id}
         message=""
-        required={getRequired(props)}
         hasFeedback
         autoComplete="new-password"
         {...field_error(props)}

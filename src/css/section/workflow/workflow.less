@@ -159,28 +159,69 @@
 }
 
 .lc-card {
-  .details-link {
-    display: block;
-    text-align: center;
-    background: @color-secondary;
-    font-size: 20px;
-    color: @color-white;
-    line-height: 70px;
+  .details-link-wrapper {
+    overflow: hidden;
+    background: #fff;
 
-    &,
-    &:hover {
-      text-decoration: none;
+    .details-link {
+      display: block;
+      text-align: center;
+      background: @color-secondary;
+      font-size: 20px;
+      color: @color-white;
+      line-height: 70px;
+      //transition: all 0.5s ease-in;
+      //width:100%;
+
+      &,
+      &:hover {
+        text-decoration: none;
+      }
+      .material-icons {
+        font-size: 36px;
+        vertical-align: middle;
+      }
+
+      //transform: translateX(100%)
     }
-    .material-icons {
-      font-size: 36px;
-      vertical-align: middle;
+  }
+  &:hover {
+    .details-link-wrapper:not(expanded) {
+      .slide-this {
+        animation: slide 0.3s ease-in-out 0s alternate 1 none running;
+      }
     }
+  }
+
+  .slide-this {
+    animation: slide 0.3s ease-in-out 0s alternate 1 none running;
+  }
+
+  @keyframes slide {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  .risk-item {
+    display: inline-block;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: normal;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 20px;
   }
 }
 
 //LC CARD HEAR/COLLAPSED VIEW
 .lc-card-head {
-  box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.09);
+  box-shadow: 0 5px 14px 0 rgba(0, 0, 0, 0.09);
   padding: 20px 15px 20px 37px;
   background: @color-white;
   .company-name {
@@ -196,30 +237,6 @@
     color: @color-grey;
     padding-left: 8px;
     padding-right: 20px;
-  }
-
-  .group-overview {
-    max-width: 100%;
-    overflow: hidden;
-    max-height: 45px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    .ant-progress-bg {
-      background-color: @color-primary;
-      height: 4px !important;
-    }
-
-    .overflow-wrapper {
-      width: 100%;
-    }
-
-    .grp-status .material-icons {
-      width: 20px;
-    }
-    .step-item {
-      margin-right: 20px;
-    }
   }
 
   .status-btn {

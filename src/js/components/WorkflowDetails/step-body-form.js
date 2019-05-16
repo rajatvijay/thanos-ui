@@ -474,7 +474,7 @@ class StepBodyForm extends Component {
 
         this.reset();
         return (
-          <Row gutter={16}>
+          <Row gutter={60}>
             {_.map(fields, rawField => {
               let field = this.getFieldForRender(rawField);
               let ftype = rawField.definition.field_type;

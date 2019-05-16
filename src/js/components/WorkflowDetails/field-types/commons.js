@@ -31,7 +31,14 @@ function getLabel(props, that) {
     let label = (
       <span className="label-with-action">
         <span className="float-right">
-          {addCommentBtn(that, props)}
+          <span
+            className={
+              "comment-icon " +
+              (props.field.comment_count > 0 ? " has-comment" : "")
+            }
+          >
+            {addCommentBtn(that, props)}
+          </span>
           {/*fieldFlagDropdown(that, props)*/}
 
           {_.size(props.field.alerts)
@@ -53,6 +60,19 @@ function getLabel(props, that) {
               })
             : null}
         </span>
+
+        {props.field.answers.length !== 0 ? (
+          <i className="material-icons t-13 text-middle text-green pd-right-sm">
+            check_circle
+          </i>
+        ) : getRequired(props) ? (
+          <i
+            title="Answer required"
+            className="material-icons t-13 text-middle text-light pd-right-sm"
+          >
+            panorama_fish_eye
+          </i>
+        ) : null}
 
         {props.field.label_value
           ? props.field.label_value
@@ -131,8 +151,8 @@ function field_error(props) {
           __html: getLink(props.field.definition.help_text)
         }}
       />
-    ),
-    validateStatus: props.field.answers.length !== 0 ? "success" : null
+    )
+    //validateStatus: props.field.answers.length !== 0 ? "success" : null
   };
 }
 

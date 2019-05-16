@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Form, Row, Col, Input, notification } from "antd";
 import { commonFunctions } from "./commons";
-import {authHeader, baseUrl} from "../../../_helpers";
+import { authHeader, baseUrl } from "../../../_helpers";
 
 const FormItem = Form.Item;
 const { onFieldChange, field_error, getRequired, isDisabled } = commonFunctions;
@@ -93,7 +93,10 @@ class Doc extends Component {
 
     this.setState({ fetching: true });
 
-    let response = await fetch("https://cyborg.slackcart.com/api/v1/request_esign/", requestOptions);
+    let response = await fetch(
+      "https://cyborg.slackcart.com/api/v1/request_esign/",
+      requestOptions
+    );
     if (!response.ok) {
       this.setState({ error: response.statusText, fetching: false });
       openNotificationWithIcon({
@@ -115,14 +118,16 @@ class Doc extends Component {
   };
 
   submitUserDetails = () => {
-    this._submitUserDetails().then((response) => {
-      window.open(response);
-    }).catch((err) => {
+    this._submitUserDetails()
+      .then(response => {
+        window.open(response);
+      })
+      .catch(err => {
         openNotificationWithIcon({
           type: "error",
           message: err
         });
-    });
+      });
   };
 
   render = () => {
@@ -148,7 +153,6 @@ class Doc extends Component {
             style={{ display: "block" }}
             key={"doc-user-name"}
             message=""
-            required={getRequired(props)}
             validateStatus={this.state.loading ? "validating" : null}
             hasFeedback
           >
@@ -170,7 +174,6 @@ class Doc extends Component {
             style={{ display: "block" }}
             key="doc-user-email"
             message=""
-            required={getRequired(props)}
             hasFeedback
           >
             <Input
@@ -190,7 +193,6 @@ class Doc extends Component {
             style={{ display: "block" }}
             key="doc-submit"
             message=""
-            required={getRequired(props)}
             validateStatus={this.state.loading ? "validating" : null}
             hasFeedback
             {...field_error(props)}

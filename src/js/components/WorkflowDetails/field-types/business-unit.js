@@ -77,7 +77,6 @@ class BU extends Component {
         style={{ display: "block" }}
         key={props.field.id}
         message=""
-        required={getRequired(props)}
         validateStatus={this.state.loading ? "validating" : null}
         hasFeedback
         {...field_error(props)}

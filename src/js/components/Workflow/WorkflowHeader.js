@@ -55,21 +55,21 @@ export const WorkflowHeader = props => {
         <GetMergedData {...props} />
       </Col>
 
-      <Col span={6}>
-        <HeaderOptions {...props} />
-      </Col>
-
       <Col span={1} className="text-center">
         {props.workflow.sorting_primary_field && props.sortingEnabled ? (
-          <Badge
-            count={<span>{props.rank}</span>}
-            style={{
-              backgroundColor: getScoreColor(
-                props.workflow.sorting_primary_field
-              )
-            }}
-          />
-        ) : null}{" "}
+          <span
+            className={
+              "risk-item bg-" +
+              getScoreColor(props.workflow.sorting_primary_field)
+            }
+          >
+            {props.rank}
+          </span>
+        ) : null}
+      </Col>
+
+      <Col span={6}>
+        <HeaderOptions {...props} />
       </Col>
     </Row>
   );
@@ -79,9 +79,9 @@ export const WorkflowHeader = props => {
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
 
       {props.isExpanded ? (
-        <Col span={2}>
+        <Col span={2} className="details-link-wrapper ">
           <Link
-            className="details-link"
+            className="details-link slide-this"
             to={"/workflows/instances/" + props.workflow.id + "/"}
             title="Show details"
           >
@@ -497,13 +497,13 @@ class GetMergedData extends React.Component {
 const getScoreColor = riskValue => {
   let value = parseInt(riskValue, 10);
   if (value >= 7) {
-    return "#3c763d";
+    return "green";
   } else if (value >= 4 && value <= 6) {
-    return "#eebd47";
+    return "yellow";
   } else if (value <= 3) {
-    return "#f16b51";
+    return "red";
   } else {
-    return "#505050";
+    return "light";
   }
 };
 
