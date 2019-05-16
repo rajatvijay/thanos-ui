@@ -40,8 +40,11 @@ class GetChildWorkflow extends Component {
     let children = this.state.children;
 
     let workflowFilterByKind = _.map(rk, kind => {
-      let k = kind;
-      k.workflows = [];
+      let k = {
+        name: kind.name,
+        id: kind.id,
+        workflows: []
+      };
       _.forEach(children, child => {
         if (child.definition.kind === kind.id) {
           k.workflows.push(child);
