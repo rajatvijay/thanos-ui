@@ -60,6 +60,7 @@ class Header extends Component {
     const { searchInput, showSearchInputIcon } = this.state;
     let user = this.props.authentication.user;
     let supportedLaguanges = this.props.config.supported_languages;
+    let regexForUrl = /\/instances\/[\d]+/;
     return (
       <div
         style={{
@@ -114,66 +115,70 @@ class Header extends Component {
         <div
           style={{
             marginRight: "10px",
-            width: _.isEmpty(supportedLaguanges) ? "180px" : "250px",
+            width: regexForUrl.test(document.location.pathname)
+              ? _.isEmpty(supportedLaguanges) ? "180px" : "100px"
+              : "250px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center"
           }}
         >
-          {showSearchInputIcon ? (
-            <div className={"search-box "}>
-              <Input
-                style={{
-                  display: "inline",
-                  border: "none",
-                  borderBottom: "1px solid",
-                  borderRadius: 0
-                }}
-                className={"ant-input"}
-                suffix={
-                  <Icon
-                    type="search"
-                    onClick={() => this.onSearch(searchInput)}
-                    className="text-anchor"
-                    style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
-                  />
-                }
-                value={searchInput}
-                placeholder={this.props.intl.formatMessage({
-                  id: "commonTextInstances.search"
-                })}
-                onChange={this.onSearchChange}
-                ref={node => (this.searchInput = node)}
-                onKeyPress={this.handleKeyPress}
-              />
-              {/* <Icon onClick={this.toggleSearchIcon} type="close-circle" /> */}
-            </div>
-          ) : (
-            <div
-              style={{ display: "flex", alignItems: "end" }}
-              onClick={this.toggleSearchIcon}
-            >
-              <span
-                style={{
-                  opacity: 0.3,
-                  color: "#000000",
-                  fontWeight: 500,
-                  fontSize: "18px",
-                  letterSpacing: "-0.03px",
-                  lineHeight: "22px",
-                  marginRight: "8px"
-                }}
+          {!regexForUrl.test(document.location.pathname) ? (
+            showSearchInputIcon ? (
+              <div className={"search-box "}>
+                <Input
+                  style={{
+                    display: "inline",
+                    border: "none",
+                    borderBottom: "1px solid",
+                    borderRadius: 0
+                  }}
+                  className={"ant-input"}
+                  suffix={
+                    <Icon
+                      type="search"
+                      onClick={() => this.onSearch(searchInput)}
+                      className="text-anchor"
+                      style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
+                    />
+                  }
+                  value={searchInput}
+                  placeholder={this.props.intl.formatMessage({
+                    id: "commonTextInstances.search"
+                  })}
+                  onChange={this.onSearchChange}
+                  ref={node => (this.searchInput = node)}
+                  onKeyPress={this.handleKeyPress}
+                />
+                {/* <Icon onClick={this.toggleSearchIcon} type="close-circle" /> */}
+              </div>
+            ) : (
+              <div
+                style={{ display: "flex", alignItems: "end" }}
+                onClick={this.toggleSearchIcon}
               >
-                Search
-              </span>
-              <i
-                className="material-icons text-middle"
-                style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
-              >
-                search
-              </i>
-            </div>
-          )}
+                <span
+                  style={{
+                    opacity: 0.3,
+                    color: "#000000",
+                    fontWeight: 500,
+                    fontSize: "18px",
+                    letterSpacing: "-0.03px",
+                    lineHeight: "22px",
+                    marginRight: "8px"
+                  }}
+                >
+                  Search
+                </span>
+                <i
+                  className="material-icons text-middle"
+                  style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
+                >
+                  search
+                </i>
+              </div>
+            )
+          ) : null}
           {_.isEmpty(supportedLaguanges) || <SelectLanguage navbar={true} />}
           {user ? (
             <Dropdown
