@@ -103,3 +103,16 @@ export function workflowKindStatus(state = {}, action) {
       return state;
   }
 }
+
+export function workflowKindValue(state = { selectedKindValue: null }, action) {
+  switch (action.type) {
+    case workflowKindConstants.SET_VALUE:
+      return {
+        ...state,
+        selectedKindValue: action.payload
+      };
+
+    default:
+      return state;
+  }
+}

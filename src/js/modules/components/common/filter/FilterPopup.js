@@ -13,6 +13,60 @@ const OPERATORS_TYPES = [
 ];
 
 class FilterPopup extends Component {
+  state = {
+    status: undefined,
+    region: undefined,
+    business_unit: undefined,
+    operator: undefined,
+    text: "",
+    field: undefined,
+    showError: false
+  };
+
+  onFilterChange = (key, value) => {
+    const { applyFilters, onModalClose } = this.props;
+    this.setState({ [key]: value }, function() {
+      if (key !== "operator" && key !== "field" && key !== "text") {
+        applyFilters(key, value);
+        onModalClose();
+      }
+    });
+  };
+
+  onClear = () => {
+    this.setState({
+      status: undefined,
+      region: undefined,
+      business_unit: undefined,
+      operator: undefined,
+      text: ""
+    });
+  };
+
+  updateAdvanceFilterTextValue = e => {
+    const { value } = e.target;
+    this.setState({ text: value });
+  };
+
+  onApply = () => {
+    const { field, text, operator } = this.state;
+    const { applyFilters, onModalClose } = this.props;
+
+    if (field && text && operator) {
+      applyFilters("advance", `${field}_${operator}_${text}`);
+      this.setState({ showError: false });
+      onModalClose();
+    } else {
+      this.setState({ showError: true });
+    }
+  };
+
+  filterStatusType = (arr, id) => {
+    if (Array.isArray(arr)) {
+      return arr.map(item => item.kind === id);
+    }
+  };
+
   render() {
     const {
       workflowFilterType,
@@ -20,7 +74,8 @@ class FilterPopup extends Component {
       onFilterChange,
       onClear,
       onModalClose,
-      onApply
+      fieldOptions,
+      workflowKindValue
     } = this.props;
 
     const {
@@ -71,7 +126,7 @@ class FilterPopup extends Component {
               <DropdownFilter
                 value={status}
                 name="status"
-                data={statusType}
+                data={this.filterStatusType(statusType, workflowKindValue.id)}
                 placeholder="Status"
                 onFilterChange={onFilterChange}
               />
@@ -144,9 +199,10 @@ class FilterPopup extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowFilterType } = state;
+  const { workflowFilterType, workflowKindValue } = state;
   return {
-    workflowFilterType
+    workflowFilterType,
+    workflowKindValue
   };
 }
 
