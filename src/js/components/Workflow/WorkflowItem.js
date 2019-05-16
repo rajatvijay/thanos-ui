@@ -278,7 +278,10 @@ class WorkflowItem extends React.Component {
         <div className="collapse-wrapper">
           <Collapsible
             trigger={
-              <div className="lc-card">
+              <div
+                className="lc-card"
+                style={{ boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)" }}
+              >
                 <WorkflowHeader
                   isEmbedded={this.props.isEmbedded}
                   sortingEnabled={this.props.sortingEnabled}

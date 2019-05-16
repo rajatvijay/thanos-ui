@@ -51,7 +51,11 @@ export const WorkflowHeader = props => {
         <HeaderTitle {...props} />
       </Col>
 
-      <Col span={8}>
+      <Col span={4}>
+        <HeaderLcData {...props} />
+      </Col>
+
+      <Col span={6}>
         <GetMergedData {...props} />
       </Col>
 
@@ -68,7 +72,7 @@ export const WorkflowHeader = props => {
         ) : null}
       </Col>
 
-      <Col span={6}>
+      <Col span={4}>
         <HeaderOptions {...props} />
       </Col>
     </Row>
@@ -97,11 +101,44 @@ const HeaderTitle = props => {
   return (
     <div>
       <span
-        className=" text-base  company-name text-ellipsis"
         title={props.workflow.name}
+        style={{
+          color: "#000000",
+          fontSize: "20px",
+          letterSpacing: "-0.04px",
+          lineHeight: "24px"
+        }}
       >
         {props.workflow.name}
       </span>
+    </div>
+  );
+};
+
+const HeaderLcData = props => {
+  let subtext = _.filter(props.workflow.lc_data, item => {
+    return item.display_type == "normal";
+  });
+  return (
+    <div
+      style={{
+        color: "#000000",
+        fontSize: "13px",
+        letterSpacing: "-0.03px",
+        lineHeight: "16px",
+        opacity: 0.3
+      }}
+    >
+      {_.size(subtext) >= 2 ? (
+        <Tooltip title={subtext[1].label + ": " + (subtext[1].value || "-")}>
+          <span className="t-cap">
+            {subtext[1].show_label ? subtext[1].label + ": " : ""}
+          </span>
+          {ProcessLcData(subtext[1])}
+        </Tooltip>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
@@ -415,9 +452,8 @@ class GetMergedData extends React.Component {
       let tagLabel = (
         <span>
           <span
-            className={
-              is_alert ? " ellip-small s50 " : " ellip-small s100 text-middle "
-            }
+            className={" ellip-small text-middle "}
+            style={{ maxWidth: "100%" }}
           >
             <span className="t-cap">
               {item.show_label || (is_alert && item.link) ? item.label : ""}
@@ -426,7 +462,7 @@ class GetMergedData extends React.Component {
             {ProcessLcData(item) || ""}
           </span>
 
-          {item.color ? (
+          {/* {item.color ? (
             <i
               style={{ color: item.color }}
               className="material-icons  t-12 tag-dot"
@@ -440,7 +476,7 @@ class GetMergedData extends React.Component {
             >
               fiber_manual_records
             </i>
-          ) : null}
+          ) : null} */}
         </span>
       );
 
@@ -448,12 +484,37 @@ class GetMergedData extends React.Component {
 
       if (item.link) {
         tagWrapper = (
-          <Link to={item.link} className={classes}>
+          <Link
+            to={item.link}
+            className={classes}
+            style={
+              is_alert
+                ? {
+                    background: item.color,
+                    color: "#fff"
+                  }
+                : {}
+            }
+          >
             {tagLabel}
           </Link>
         );
       } else {
-        tagWrapper = <span className={classes}>{tagLabel}</span>;
+        tagWrapper = (
+          <span
+            className={classes}
+            style={
+              is_alert
+                ? {
+                    background: item.color,
+                    color: "#fff"
+                  }
+                : {}
+            }
+          >
+            {tagLabel}
+          </span>
+        );
       }
 
       return (
