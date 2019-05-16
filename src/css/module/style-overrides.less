@@ -274,3 +274,83 @@
     }
   }
 }
+
+///field type material design
+.ant-select-selection,
+.ant-input,
+.react-tel-input input[type="text"],
+.react-tel-input input[type="tel"],
+.react-tel-input .flag-dropdown {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #000;
+  font-size: 16px;
+  color: #000;
+  font-weight: 500;
+  background: transparent;
+}
+
+.ant-input[disabled],
+.step-form .ant-input-disabled,
+.step-form .ant-select-disabled .ant-select-selection,
+.step-form .react-tel-input.disabled input {
+  color: #000 !important;
+  background: transparent !important;
+  border-bottom: 1px solid #777 !important;
+}
+
+span.ant-radio + * {
+  font-size: 16px;
+  color: #000;
+  font-weight: 500;
+}
+
+.ant-radio-wrapper {
+  .ant-radio-inner {
+    width: 21px;
+    height: 21px;
+    background-color: #fff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #000;
+    &::after {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      display: table;
+      width: 13px;
+      height: 13px;
+      background-color: #1890ff;
+      border-top: 0;
+      border-left: 0;
+      border-radius: 13px;
+    }
+  }
+  .ant-radio-checked .ant-radio-inner {
+    border-color: #1890ff;
+  }
+}
+
+.ant-checkbox-wrapper + span,
+.ant-checkbox + span {
+  font-size: 16px;
+  color: #000;
+  font-weight: 500;
+}
+
+.ant-checkbox-inner {
+  width: 21px;
+  height: 21px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 2px;
+}
+
+.ant-checkbox-inner::after {
+  top: 45%;
+  left: 22%;
+  display: table;
+  width: 7.714286px;
+  height: 13.142857px;
+  border: 2px solid #fff;
+}

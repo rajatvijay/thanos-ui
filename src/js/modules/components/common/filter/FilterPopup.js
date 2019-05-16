@@ -16,9 +16,7 @@ class FilterPopup extends Component {
   render() {
     const {
       workflowFilterType,
-
       filterState,
-
       onFilterChange,
       onClear,
       onModalClose,

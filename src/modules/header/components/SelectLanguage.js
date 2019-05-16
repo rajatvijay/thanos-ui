@@ -43,6 +43,9 @@ class SelectLanguage extends React.Component {
           defaultValue={preferredLanguage}
           className="nav-lang-select"
           onChange={this.handleLanguageChange}
+          style={{
+            width: "80px"
+          }}
         >
           {_.map(Object.keys(languages.endonyms), function(locale, index) {
             return (

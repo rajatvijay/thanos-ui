@@ -1,0 +1,437 @@
+diff --git a/src/js/actions/workflows.js b/src/js/actions/workflows.js
+index a827c46..e117585 100755
+--- a/src/js/actions/workflows.js
++++ b/src/js/actions/workflows.js
+@@ -1,4 +1,4 @@
+-import { workflowConstants } from "../constants";
++import { workflowConstants, workflowFiltersConstants } from "../constants";
+ import { workflowService } from "../services";
+ 
+ export const workflowActions = {
+@@ -9,7 +9,8 @@ export const workflowActions = {
+   getChildWorkflow,
+   expandedWorkflowsList,
+   showUserWorkflowModal,
+-  hideUserWorkflowModal
++  hideUserWorkflowModal,
++  clearAll
+ };
+ 
+ function getAll(filter) {
+@@ -23,16 +24,34 @@ function getAll(filter) {
+         error => dispatch(failure(error))
+       );
+   };
++}
+ 
+-  function request(filter) {
+-    return { type: workflowConstants.GETALL_REQUEST, filter };
+-  }
+-  function success(workflow) {
+-    return { type: workflowConstants.GETALL_SUCCESS, workflow };
+-  }
+-  function failure(error) {
+-    return { type: workflowConstants.GETALL_FAILURE, error };
+-  }
++function clearAll() {
++  return dispatch => {
++    dispatch(clear());
++    dispatch(request());
++
++    workflowService
++      .clearAll()
++      .then(
++        workflow => dispatch(success(workflow)),
++        error => dispatch(failure(error))
++      );
++  };
++}
++
++function clear() {
++  return { type: workflowFiltersConstants.CLEAR_FILTERS };
++}
++
++function request(filter) {
++  return { type: workflowConstants.GETALL_REQUEST, filter };
++}
++function success(workflow) {
++  return { type: workflowConstants.GETALL_SUCCESS, workflow };
++}
++function failure(error) {
++  return { type: workflowConstants.GETALL_FAILURE, error };
+ }
+ 
+ function getById(id) {
+diff --git a/src/js/constants/workflow_filters.js b/src/js/constants/workflow_filters.js
+index 0bb9c10..c81b6c9 100755
+--- a/src/js/constants/workflow_filters.js
++++ b/src/js/constants/workflow_filters.js
+@@ -25,5 +25,6 @@ export const workflowFiltersConstants = {
+ 
+   GET_BUSINESS_UNIT_REQUEST: "BUSINESS_UNIT_FILTER_LIST_GET_REQUEST",
+   GET_BUSINESS_UNIT_SUCCESS: "BUSINESS_UNIT_FILTER_LIST_GET_SUCCESS",
+-  GET_BUSINESS_UNIT_FAILURE: "BUSINESS_UNIT_FILTER_LIST_GET_FALIURE"
++  GET_BUSINESS_UNIT_FAILURE: "BUSINESS_UNIT_FILTER_LIST_GET_FALIURE",
++  CLEAR_FILTERS: "CLEAR_FILTERS"
+ };
+diff --git a/src/js/modules/components/common/filter/Filter.js b/src/js/modules/components/common/filter/Filter.js
+index 5fe4312..60a4f17 100644
+--- a/src/js/modules/components/common/filter/Filter.js
++++ b/src/js/modules/components/common/filter/Filter.js
+@@ -3,12 +3,22 @@ import { connect } from "react-redux";
+ import { baseUrl, authHeader } from "../../../../_helpers";
+ 
+ import FilterPopup from "./FilterPopup";
+-import { workflowFiltersActions } from "../../../../actions";
++import { workflowFiltersActions, workflowActions } from "../../../../actions";
+ 
+ import CreateNew from "./CreateNew";
+ 
+ class Filter extends Component {
+-  state = { visible: false, fieldOptions: [] };
++  state = {
++    visible: false,
++    fieldOptions: [],
++    status: undefined,
++    region: undefined,
++    business_unit: undefined,
++    operator: undefined,
++    text: "",
++    field: undefined,
++    showError: false
++  };
+ 
+   showModal = () => {
+     this.setState({
+@@ -28,6 +38,32 @@ class Filter extends Component {
+     });
+   };
+ 
++  onFilterChange = (key, value) => {
++    const { applyFilters, onModalClose } = this.props;
++    this.setState({ [key]: value }, function() {
++      if (key !== "operator" && key !== "field" && key !== "text") {
++        this.applyFilters(key, value);
++        this.handleModalClose();
++      }
++    });
++  };
++
++  onApply = () => {
++    const { field, text, operator } = this.state;
++    const { applyFilters, onModalClose } = this.props;
++
++    if (field && text && operator) {
++      this.applyFilters(
++        "advance",
++        `${field[field.length - 1]}_${operator}_${text}`
++      );
++      this.setState({ showError: false });
++      this.handleModalClose();
++    } else {
++      this.setState({ showError: true });
++    }
++  };
++
+   applyFilters = (key, value) => {
+     const payload = {
+       filterType: key,
+@@ -36,6 +72,21 @@ class Filter extends Component {
+     this.props.dispatch(workflowFiltersActions.setFilters(payload));
+   };
+ 
++  onClear = () => {
++    const { getAllWorkflow, onModalClose } = this.props;
++
++    this.setState({
++      status: undefined,
++      region: undefined,
++      business_unit: undefined,
++      operator: undefined,
++      text: "",
++      field: undefined
++    });
++    this.props.dispatch(workflowActions.clearAll());
++    this.handleModalClose();
++  };
++
+   componentDidMount() {
+     const requestOptions = {
+       method: "GET",
+@@ -51,7 +102,7 @@ class Filter extends Component {
+   }
+ 
+   render() {
+-    const { visible, fieldOptions } = this.state;
++    // const { visible, fieldOptions,status,region ,business_unit,operator,text,field,showError} = this.state;
+ 
+     return (
+       <div
+@@ -89,10 +140,11 @@ class Filter extends Component {
+             </li>
+           </ul>
+           <FilterPopup
+-            fieldOptions={fieldOptions}
+-            applyFilters={this.applyFilters}
++            filterState={this.state}
+             onModalClose={this.handleModalClose}
+-            visible={visible}
++            onClear={this.onClear}
++            onFilterChange={this.onFilterChange}
++            onApply={this.onApply}
+           />
+         </div>
+         <div>
+@@ -122,4 +174,4 @@ function mapStateToProps(state) {
+   };
+ }
+ 
+-export default connect(mapStateToProps)(Filter);
+\ No newline at end of file
++export default connect(mapStateToProps)(Filter);
+diff --git a/src/js/modules/components/common/filter/FilterPopup.js b/src/js/modules/components/common/filter/FilterPopup.js
+index 0107b9d..6c62170 100644
+--- a/src/js/modules/components/common/filter/FilterPopup.js
++++ b/src/js/modules/components/common/filter/FilterPopup.js
+@@ -13,71 +13,40 @@ const OPERATORS_TYPES = [
+ ];
+ 
+ class FilterPopup extends Component {
+-  state = {
+-    status: undefined,
+-    region: undefined,
+-    business_unit: undefined,
+-    operator: undefined,
+-    text: "",
+-    field: undefined,
+-    showError: false
+-  };
+-
+-  onFilterChange = (key, value) => {
+-    const { applyFilters, onModalClose } = this.props;
+-    this.setState({ [key]: value }, function() {
+-      if (key !== "operator" && key !== "field" && key !== "text") {
+-        applyFilters(key, value);
+-        onModalClose();
+-      }
+-    });
+-  };
+-
+-  onClear = () => {
+-    this.setState({
+-      status: undefined,
+-      region: undefined,
+-      business_unit: undefined,
+-      operator: undefined,
+-      text: ""
+-    });
+-  };
++  render() {
++    const {
++      workflowFilterType,
+ 
+-  updateAdvanceFilterTextValue = e => {
+-    const { value } = e.target;
+-    this.setState({ text: value });
+-  };
++      filterState,
+ 
+-  onApply = () => {
+-    const { field, text, operator } = this.state;
+-    const { applyFilters, handleCancel } = this.props;
+-
+-    if (field && text && operator) {
+-      applyFilters("advance", `${field}_${operator}_${text}`);
+-      this.setState({ showError: false });
+-      handleCancel();
+-    } else {
+-      this.setState({ showError: true });
+-    }
+-  };
++      onFilterChange,
++      onClear,
++      onModalClose,
++      onApply
++    } = this.props;
+ 
+-  render() {
+     const {
+       visible,
+-      workflowFilterType,
+-      handleCancel,
+-      fieldOptions
+-    } = this.props;
++      fieldOptions,
++      status,
++      region,
++      business_unit,
++      operator,
++      showError,
++      text,
++      field
++    } = filterState;
++
+     const { statusType, businessType, regionType } = workflowFilterType;
+-    const { status, region, business_unit, operator, showError } = this.state;
++    //const { status, region, business_unit, operator, showError,text,field } = this.state;
+ 
+     return (
+       <div>
+         <Modal
+           footer={null}
+-          closable={true}
++          //  closable={true}
+           visible={visible}
+-          maskClosable={false}
++          //maskClosable={false}
+           className={css`
+             max-width: 320px;
+             .ant-modal-content {
+@@ -90,14 +59,14 @@ class FilterPopup extends Component {
+               padding-right: 0;
+             }
+           `}
+-          onCancel={handleCancel}
++          onCancel={onModalClose}
+         >
+           <div>
+             <div style={{ justifyContent: "space-around", display: "flex" }}>
+               <span style={{ color: "#138BD6", cursor: "pointer" }}>
+                 FILTER BY
+               </span>
+-              <span onClick={() => this.onClear()}>CLEAR</span>
++              <span onClick={() => onClear()}>CLEAR</span>
+             </div>
+ 
+             <div style={{ margin: 30 }}>
+@@ -106,21 +75,21 @@ class FilterPopup extends Component {
+                 name="status"
+                 data={statusType}
+                 placeholder="Status"
+-                onFilterChange={this.onFilterChange}
++                onFilterChange={onFilterChange}
+               />
+               <DropdownFilter
+                 name="region"
+                 value={region}
+                 data={regionType.results}
+                 placeholder="Market"
+-                onFilterChange={this.onFilterChange}
++                onFilterChange={onFilterChange}
+               />
+               <DropdownFilter
+                 name="business_unit"
+                 value={business_unit}
+                 data={businessType.results}
+                 placeholder="Division"
+-                onFilterChange={this.onFilterChange}
++                onFilterChange={onFilterChange}
+               />
+             </div>
+           </div>
+@@ -132,11 +101,10 @@ class FilterPopup extends Component {
+ 
+             <div style={{ margin: 30 }}>
+               <Cascader
++                value={field}
+                 style={{ width: "100%" }}
+                 options={fieldOptions}
+-                onChange={arr =>
+-                  this.onFilterChange("field", arr[arr.length - 1])
+-                }
++                onChange={arr => onFilterChange("field", arr)}
+                 placeholder="Please select field"
+               />
+ 
+@@ -145,22 +113,19 @@ class FilterPopup extends Component {
+                 value={operator}
+                 placeholder="Select Operator"
+                 name="operator"
+-                onFilterChange={this.onFilterChange}
++                onFilterChange={onFilterChange}
+               />
+ 
+               <Input
+                 placeholder="InputValue"
+-                onChange={e => this.onFilterChange("text", e.target.value)}
++                value={text}
++                onChange={e => onFilterChange("text", e.target.value)}
+               />
+             </div>
+           </div>
+ 
+           <div style={{ margin: 30 }}>
+-            <Button
+-              style={{ width: "100%" }}
+-              type="primary"
+-              onClick={this.onApply}
+-            >
++            <Button style={{ width: "100%" }} type="primary" onClick={onApply}>
+               Apply
+             </Button>
+ 
+@@ -187,4 +152,4 @@ function mapStateToProps(state) {
+   };
+ }
+ 
+-export default connect(mapStateToProps)(FilterPopup);
+\ No newline at end of file
++export default connect(mapStateToProps)(FilterPopup);
+diff --git a/src/js/reducers/workflow_filters.js b/src/js/reducers/workflow_filters.js
+index 770409e..8d48f2c 100755
+--- a/src/js/reducers/workflow_filters.js
++++ b/src/js/reducers/workflow_filters.js
+@@ -43,6 +43,16 @@ export function workflowFilters(state = initialState, action) {
+         workflowFilters: [{ ...action.workflowFilter }]
+       };
+ 
++    case workflowFiltersConstants.CLEAR_FILTERS:
++      return {
++        ...state,
++        status: [],
++        region: [],
++        business: [],
++        advFilter: null,
++        advance: []
++      };
++
+     default:
+       return state;
+   }
+diff --git a/src/js/services/workflow.js b/src/js/services/workflow.js
+index b9406d7..3d496e4 100755
+--- a/src/js/services/workflow.js
++++ b/src/js/services/workflow.js
+@@ -8,7 +8,8 @@ export const workflowService = {
+   searchWorkflow,
+   getChildWorkflow,
+   searchUserWorkflowByEmail,
+-  updateWorkflow
++  updateWorkflow,
++  clearAll
+ };
+ 
+ //FETCH THE LIST OF WORLFOWS FOR WORKFLOW LIST PAGE
+@@ -37,6 +38,22 @@ function getAll(filter) {
+   return fetch(url, requestOptions).then(handleResponse);
+ }
+ 
++function clearAll() {
++  const requestOptions = {
++    method: "GET",
++    headers: authHeader.get(),
++    credentials: "include"
++  };
++
++  let filters = store.getState().workflowFilters,
++    filterParams = getFilterParams(filters),
++    url = baseUrl + "workflows-list/";
++
++  url += filterParams + "&lean=true";
++
++  return fetch(url, requestOptions).then(handleResponse);
++}
++
+ //GET CHILD WORKFLOW
+ function getChildWorkflow(parent) {
+   const requestOptions = {

@@ -114,7 +114,6 @@ class FieldItem extends Component {
           }
           style={{ display: "block" }}
           key={props.field.id}
-          required={getRequired(props)}
           //hasFeedback
           autoComplete="new-password"
           {...field_error(props)}

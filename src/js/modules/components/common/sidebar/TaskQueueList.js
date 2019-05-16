@@ -6,10 +6,10 @@ function TaskQueueList({ item, onSelect, selected }) {
     <li
       onClick={() => onSelect(item)}
       style={{
-        borderTop: "1px solid black",
+        borderTop: "1px solid rgba(0, 0, 0, 0.3)",
         display: "flex",
         justifyContent: "space-between",
-        padding: "10px 29px",
+        padding: "10px 20px",
         cursor: "pointer",
         backgroundColor: item["name"] === selected && "rgb(20, 137, 210)"
       }}
@@ -19,7 +19,15 @@ function TaskQueueList({ item, onSelect, selected }) {
         {item.overdue_count > 0 && (
           <SidebarCircle value={item.overdue_count} innerColour="#D40000" />
         )}
-        <span style={{ fontSize: 12, color: "#567C9C" }}>{item.count}</span>
+        <span
+          style={{
+            fontSize: 14,
+            color: "rgba(255, 255, 255, 0.3)",
+            marginLeft: "8px"
+          }}
+        >
+          {item.count}
+        </span>
       </div>
     </li>
   );

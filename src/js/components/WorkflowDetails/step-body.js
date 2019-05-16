@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Icon, Menu, Dropdown, Button, Divider, Tooltip } from "antd";
+import { Icon, Menu, Dropdown, Button, Divider, Tooltip, Row, Col } from "antd";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
 import { workflowDetailsActions } from "../../actions";
@@ -77,11 +77,8 @@ class StepBody extends Component {
             id: "stepBodyFormInstances.previousVersion"
           })}
         >
-          <span
-            style={{ position: "relative", top: "-58px", right: "-25px" }}
-            className="text-anchor pd-ard-sm"
-          >
-            <i className="material-icons  t-16">restore</i>
+          <span className="text-anchor pd-ard-sm">
+            <i className="material-icons text-middle   t-18">restore</i>
           </span>
         </Tooltip>
       </Dropdown>
@@ -130,15 +127,8 @@ class StepBody extends Component {
         >
           {this.versionDropDown()}
           <span className="display-inline-block pd-right-sm"> </span>
-          <span
-            style={{ position: "relative", top: "-62px", right: "-25px" }}
-            onClick={this.addComment.bind(this, stepData)}
-            className="ant-btn ant-btn-sm no-print "
-          >
-            <FormattedMessage
-              id="stepBodyFormInstances.commentsButtonText"
-              values={{ count: stepData.comment_count }}
-            />
+          <span onClick={this.addComment.bind(this, stepData)}>
+            <i className="material-icons t-18 text-middle">message</i>
           </span>
         </div>
       );
@@ -151,7 +141,7 @@ class StepBody extends Component {
       : null;
 
     return (
-      <div className="pd-ard-lg">
+      <div>
         {this.state.printing ? (
           <style
             dangerouslySetInnerHTML={{
@@ -193,50 +183,63 @@ class StepBody extends Component {
             }}
           />
         )}
-        {locked_tag}
-        {locked_tag ? <br /> : null}
-        {!loading ? step_comment_btn : null}
-        {loading ? (
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
-        ) : stepData ? (
-          <div
-            className={
-              this.state.printing ? "step-printing" : "step-not-printing"
-            }
-          >
-            <div className="print-header ">
-              <img
-                alt={this.props.config.name}
-                src={this.props.config.logo}
-                className="logo"
-              />
-              <br />
-              <br />
-              <h3>{this.props.workflowHead.name}</h3>
-              <h4>Step: {stepData.name}</h4>
-              <p>
-                Printed on: <Moment format="MM/DD/YYYY">{Date.now()}</Moment>
-              </p>
-              <Divider />
+
+        <Row className="pd-ard-lg">
+          <Col span={16}>
+            <span className="t-18 text-black">{stepData.name}</span>
+          </Col>
+          <Col span={8}>
+            {locked_tag}
+            {locked_tag ? <br /> : null}
+            {!loading ? step_comment_btn : null}
+          </Col>
+        </Row>
+
+        <Divider className="no-margin" />
+
+        <div>
+          {loading ? (
+            <div className="text-center mr-top-lg">
+              <Icon type={"loading"} />
             </div>
-            <StepBodyForm
-              stepData={stepData}
-              {...this.props}
-              version={this.props.stepVersionFields}
-              showVersion={this.state.showVersion}
-              versionToggle={this.versionToggle}
-              permission={this.props.config.permissions}
-              isSubmitting={this.props.currentStepFields.isSubmitting}
-              dynamicUserPerms={dynamicUserPerms}
-            />
-          </div>
-        ) : (
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
-        )}
+          ) : stepData ? (
+            <div
+              className={
+                this.state.printing ? "step-printing" : "step-not-printing"
+              }
+            >
+              <div className="print-header ">
+                <img
+                  alt={this.props.config.name}
+                  src={this.props.config.logo}
+                  className="logo"
+                />
+                <br />
+                <br />
+                <h3>{this.props.workflowHead.name}</h3>
+                <h4>Step: {stepData.name}</h4>
+                <p>
+                  Printed on: <Moment format="MM/DD/YYYY">{Date.now()}</Moment>
+                </p>
+                <Divider />
+              </div>
+              <StepBodyForm
+                stepData={stepData}
+                {...this.props}
+                version={this.props.stepVersionFields}
+                showVersion={this.state.showVersion}
+                versionToggle={this.versionToggle}
+                permission={this.props.config.permissions}
+                isSubmitting={this.props.currentStepFields.isSubmitting}
+                dynamicUserPerms={dynamicUserPerms}
+              />
+            </div>
+          ) : (
+            <div className="text-center mr-top-lg">
+              <Icon type={"loading"} />
+            </div>
+          )}
+        </div>
       </div>
     );
   };

@@ -97,7 +97,6 @@ export const Text = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={getRequired(props)}
       hasFeedback
       autoComplete="new-password"
       {...field_error(props)}
@@ -140,7 +139,6 @@ export const Bool = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
@@ -170,7 +168,6 @@ export const Number = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
@@ -214,7 +211,6 @@ export const Date = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
@@ -274,7 +270,6 @@ class Email2 extends React.Component {
         style={{ display: "block" }}
         key={props.field.id}
         type="email"
-        required={getRequired(props)}
         hasFeedback
         autoComplete="new-password"
         help={this.state.isValidEamil === false ? "invalid email" : null}
@@ -346,7 +341,6 @@ class URL2 extends React.Component {
         className="from-label"
         style={{ display: "block" }}
         key={props.field.id}
-        required={getRequired(props)}
         hasFeedback
         {...this.fielderror(props)}
       >
@@ -413,7 +407,6 @@ export const Checkbox = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
@@ -455,7 +448,6 @@ export const Select = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
@@ -504,7 +496,6 @@ export const Phone = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
@@ -577,7 +568,6 @@ export const List = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={getRequired(props)}
       {...field_error(props)}
       hasFeedback
       validateStatus={props.field.answers.length !== 0 ? "success" : null}
@@ -668,7 +658,6 @@ class FileUpload extends Component {
         className="from-label"
         style={{ display: "block" }}
         key={field.id}
-        required={getRequired(this.props)}
         {...field_error(this.props)}
       >
         <Dropzone
@@ -839,7 +828,6 @@ class AttachmentDownload extends Component {
           className="from-label attachment-field"
           style={{ display: "block" }}
           key={this.props.field.id}
-          required={getRequired(this.props)}
           hasFeedback
           {...field_error(this.props)}
         >
@@ -886,7 +874,6 @@ export const CascaderField = props => {
       className="from-label"
       style={{ display: "block" }}
       key={props.field.id}
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
@@ -917,7 +904,6 @@ export const RadioField = props => {
       style={{ display: "block" }}
       key={props.field.id}
       message=""
-      required={getRequired(props)}
       hasFeedback
       {...field_error(props)}
     >
