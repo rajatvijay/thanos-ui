@@ -1,4 +1,4 @@
-import { workflowConstants } from "../constants";
+import { workflowConstants, workflowFiltersConstants } from "../constants";
 import { workflowService } from "../services";
 
 export const workflowActions = {
@@ -9,7 +9,8 @@ export const workflowActions = {
   getChildWorkflow,
   expandedWorkflowsList,
   showUserWorkflowModal,
-  hideUserWorkflowModal
+  hideUserWorkflowModal,
+  clearAll
 };
 
 function getAll(filter) {
@@ -23,16 +24,34 @@ function getAll(filter) {
         error => dispatch(failure(error))
       );
   };
+}
 
-  function request(filter) {
-    return { type: workflowConstants.GETALL_REQUEST, filter };
-  }
-  function success(workflow) {
-    return { type: workflowConstants.GETALL_SUCCESS, workflow };
-  }
-  function failure(error) {
-    return { type: workflowConstants.GETALL_FAILURE, error };
-  }
+function clearAll() {
+  return dispatch => {
+    dispatch(clear());
+    dispatch(request());
+
+    workflowService
+      .clearAll()
+      .then(
+        workflow => dispatch(success(workflow)),
+        error => dispatch(failure(error))
+      );
+  };
+}
+
+function clear() {
+  return { type: workflowFiltersConstants.CLEAR_FILTERS };
+}
+
+function request(filter) {
+  return { type: workflowConstants.GETALL_REQUEST, filter };
+}
+function success(workflow) {
+  return { type: workflowConstants.GETALL_SUCCESS, workflow };
+}
+function failure(error) {
+  return { type: workflowConstants.GETALL_FAILURE, error };
 }
 
 function getById(id) {
