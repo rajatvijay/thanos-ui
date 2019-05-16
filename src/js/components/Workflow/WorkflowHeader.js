@@ -23,6 +23,7 @@ import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
 import WorkflowPDFModal from "./WorkflowPDFModal";
 import { ProcessLcData } from "./ProcessLcData";
+import { goToPrevStep } from "../../utils/customBackButton";
 
 const { getProcessedData, getProgressData } = calculatedData;
 
@@ -43,7 +44,6 @@ const { getProcessedData, getProgressData } = calculatedData;
 /////////////////
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
-
 export const WorkflowHeader = props => {
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
@@ -216,6 +216,14 @@ class HeaderOptions extends React.Component {
     }));
   };
 
+  onCommentHover = () => {
+    this.props.disableCollapse();
+  };
+
+  onCommentHoverOut = () => {
+    this.props.enableCollapse();
+  };
+
   render = () => {
     const props = this.props;
     const filteredStatus = _.filter(props.statusType, function(o) {
@@ -266,7 +274,11 @@ class HeaderOptions extends React.Component {
           props.isEmbedded &&
           workflow.comments_allowed ? (
             <span>
-              <div className="add_comment_btn">
+              <div
+                className="add_comment_btn"
+                onMouseOver={this.onCommentHover}
+                onMouseOut={this.onCommentHoverOut}
+              >
                 <span>
                   <i
                     className="material-icons  t-18 text-metal"

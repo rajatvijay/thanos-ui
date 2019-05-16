@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  //BrowserRouter,
-  Router,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
+import { Router } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
 import _ from "lodash";
@@ -34,6 +28,7 @@ import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
 import queryString from "query-string";
 import HeaderView from "../../modules/header/components/index";
+import RouteSwitch from "./RouteSwitch";
 
 function mapStateToProps(state) {
   const { config, users, languageSelector, nextUrl } = state;
@@ -90,22 +85,13 @@ class MainRoutes extends React.Component {
       document.title = _.upperFirst(this.props.config.name) || "Vetted";
     }
   }
+
   componentWillReceiveProps(nextProps) {
     document.title = _.upperFirst(this.props.config.name) || "Vetted";
   }
 
-  watchRouteChange = history.listen((location, action) => {
-    // location is an object like window.location
-    if (
-      location.pathname === "/login/magic" ||
-      location.pathname === "/login"
-    ) {
-      this.props.dispatch(checkAuth());
-    }
-  });
-
   render() {
-    const { alert, nextUrl } = this.props;
+    const { alert, nextUrl, users } = this.props;
 
     if (this.state.showBlank) {
       return <div />;
@@ -118,7 +104,7 @@ class MainRoutes extends React.Component {
             </div>
           ) : (
             <Router history={history}>
-              {this.props.users.me && this.props.users.me.loading ? (
+              {users.me && users.me.loading ? (
                 <div className="text-center mr-top-lg">loading...</div>
               ) : (
                 <div>
@@ -126,37 +112,7 @@ class MainRoutes extends React.Component {
                   !_.includes(history.location.pathname, "/login") ? (
                     <Header />
                   ) : null}
-                  <Switch>
-                    <Route path="/login" exact component={OTPLogin} />
-                    <Route path="/login/basic" exact component={LoginPage} />
-                    <Route path="/login/magic" exact component={MagicLogin} />
-                    <Route path="/login/header" component={HeaderView} />
-                    <Route
-                      path="/login/magicprocess"
-                      component={MagicLinkProcess}
-                    />
-                    {this.props.nextUrl.url && localStorage.getItem("user") ? (
-                      <Redirect from="/" exact to={this.props.nextUrl.url} />
-                    ) : (
-                      <Redirect from="/" exact to="/workflows/instances/" />
-                    )}
-
-                    <PrivateRoute
-                      path="/workflows/instances/"
-                      exact
-                      component={Workflow}
-                    />
-
-                    <PrivateRoute
-                      path="/workflows/instances/:id?/"
-                      component={WorkflowDetailsRoot}
-                    />
-
-                    <PrivateRoute path="/users/:id?" component={Users} />
-                    {/*<PrivateRoute path="/export-list" component={ExportList} />*/}
-
-                    <Route path="/" component={GenericNotFound} />
-                  </Switch>
+                  <RouteSwitch {...this.props} />
                 </div>
               )}
             </Router>
