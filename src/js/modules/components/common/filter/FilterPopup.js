@@ -23,16 +23,6 @@ class FilterPopup extends Component {
     showError: false
   };
 
-  onFilterChange = (key, value) => {
-    const { applyFilters, onModalClose } = this.props;
-    this.setState({ [key]: value }, function() {
-      if (key !== "operator" && key !== "field" && key !== "text") {
-        applyFilters(key, value);
-        onModalClose();
-      }
-    });
-  };
-
   onClear = () => {
     this.setState({
       status: undefined,
