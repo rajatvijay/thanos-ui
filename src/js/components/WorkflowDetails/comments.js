@@ -248,6 +248,21 @@ class Comments extends Component {
     this.setState(state => ({ fileList: [...state.fileList, file] }));
   };
 
+  sortedCommentFlag = comment_flag_options => {
+    function sortWithLabel(arr) {
+      return arr.sort(
+        (a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1)
+      );
+    }
+
+    const sortedRisk = sortWithLabel(comment_flag_options).map(item => ({
+      ...item,
+      children: sortWithLabel(item.children)
+    }));
+
+    return sortedRisk;
+  };
+
   render() {
     const Panel = Collapse.Panel;
     let comments = this.props.workflowComments
@@ -264,7 +279,7 @@ class Comments extends Component {
         </span>
         <Cascader
           style={{ width: "calc(100% - 85px)" }}
-          options={c.target.comment_flag_options}
+          options={this.sortedCommentFlag(c.target.comment_flag_options)}
           onChange={that.selectFlag}
           placeholder="Change flag"
         />
