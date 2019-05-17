@@ -218,18 +218,6 @@ class Workflow extends Component {
 
   render = () => {
     const { sortingEnabled } = this.state;
-    // let showRisk = false;
-    // if (
-    //   _.size(this.props.workflow.workflow) &&
-    //   this.props.workflow.workflow[0].sorting_primary_field
-    // ) {
-    //   showRisk = true;
-    // }
-
-    // if(this.props.nextUrl.url){
-    //   return <Redirect to={this.props.nextUrl.url}/>
-    // }
-
     if (this.props.workflow.loadingStatus === "failed") {
       // TODO the checkAuth method only reports status text: `403 Forbidden`
       // In future, we should relook at a better way to handle this
@@ -250,66 +238,6 @@ class Workflow extends Component {
           <Content style={{ margin: "0 26px" }}>
             <Row className="clear">
               <Filter />
-              {/* <div className="section-top">
-                <Tabs defaultActiveKey="1" size="small">
-                  <TabPane tab="Task queue" key="1">
-                    {this.state.defKind ? (
-                      <WorkflowFilterTop {...this.props} />
-                    ) : null}
-                  </TabPane>
-                  <TabPane tab="Alerts" key="2">
-                    {this.state.defKind ? (
-                      <AlertFilter {...this.props} />
-                    ) : null}
-                  </TabPane>
-                </Tabs>
-                <br />
-              </div> */}
-
-              {this.props.workflow.loading ? null : this.props.workflow
-                .loadingStatus === "failed" ? null : (
-                <Row className="list-view-header t-14 ">
-                  <Col span="6">
-                    <div className="workflow-count text-metal">
-                      {this.props.workflow.count}{" "}
-                      <FormattedMessage id="workflowsInstances.workflowsCount" />
-                    </div>
-                  </Col>
-                  <Col span={4} />
-                  <Col span={7} className="text-metal" />
-
-                  <Col span="2" className="text-secondary text-center">
-                    {this.props.workflowFilters.kind.meta
-                      .is_sorting_field_enabled ? (
-                      <Tooltip
-                        title={
-                          this.state.sortOrderAsc
-                            ? "High to low risk score"
-                            : "Low to high risk score"
-                        }
-                      >
-                        <span
-                          className="text-secondary text-anchor"
-                          onClick={this.changeScoreOrder}
-                        >
-                          Risk
-                          {sortingEnabled ? (
-                            <i className="material-icons t-14  text-middle">
-                              {this.state.sortOrderAsc
-                                ? "keyboard_arrow_up"
-                                : "keyboard_arrow_down"}
-                            </i>
-                          ) : null}
-                        </span>
-                      </Tooltip>
-                    ) : null}
-                  </Col>
-
-                  <Col span="2" className="text-metal ">
-                    <FormattedMessage id="workflowsInstances.statusText" />
-                  </Col>
-                </Row>
-              )}
 
               {this.props.config.loading ||
               this.props.workflow.loading ||

@@ -5,7 +5,8 @@ export const workflowKindActions = {
   getAll,
   getCount,
   getAlertCount,
-  getStatusCount
+  getStatusCount,
+  setValue
 };
 
 function getAll() {
@@ -108,4 +109,11 @@ function getStatusCount(tag) {
   function failure(error) {
     return { type: workflowKindConstants.GET_STATUS_FAILURE, error };
   }
+}
+
+function setValue(kind) {
+  console.log("action", kind);
+  return dispatch => {
+    dispatch({ type: workflowKindConstants.SET_VALUE, payload: kind });
+  };
 }

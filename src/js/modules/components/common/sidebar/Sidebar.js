@@ -1,11 +1,18 @@
 import React, { Component } from "react";
-import { Layout, Icon } from "antd";
+import { Layout, Icon, Select } from "antd";
 import TaskQueue from "./TaskQueue";
 import Alerts from "./Alerts";
-import { workflowFiltersActions } from "../../../../actions";
+import {
+  workflowFiltersActions,
+  workflowKindActions
+} from "../../../../actions";
 import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
+import { css } from "emotion";
+import _ from "lodash";
+
 const { Sider } = Layout;
+const Option = Select.Option;
 
 class Sidebar extends Component {
   state = {
@@ -20,6 +27,51 @@ class Sidebar extends Component {
       filterValue: this.state.activeFilter
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
+  componentWillUpdate(nextProps) {
+    if (
+      nextProps.workflowKind.workflowKind !=
+      this.props.workflowKind.workflowKind
+    ) {
+      let metaValue = _.find(nextProps.workflowKind.workflowKind, item => {
+        return item.tag === "entity";
+      });
+
+      this.props.dispatch(workflowKindActions.setValue(metaValue));
+    }
+  }
+
+  handleChange = value => {
+    let id = parseInt(value, 10);
+
+    let that = this;
+    this.setState({ value });
+    let metaValue = _.find(this.props.workflowKind.workflowKind, item => {
+      return item.id === id;
+    });
+    let payload = { filterType: "kind", filterValue: [id], meta: metaValue };
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    this.props.dispatch(workflowKindActions.setValue(metaValue));
+    // setTimeout(function() {
+
+    that.fetchGroupData(metaValue.tag);
+    // }, 300);
+  };
+
+  fetchGroupData = tag => {
+    this.props.dispatch(workflowKindActions.getCount(tag));
+    this.props.dispatch(workflowKindActions.getAlertCount(tag));
+    this.props.dispatch(workflowKindActions.getStatusCount(tag));
+  };
+
+  renderDropdownList = () => {
+    const { workflowKind } = this.props.workflowKind;
+    if (workflowKind) {
+      return workflowKind.map(function(item) {
+        return <Option key={item.id}>{item.name}</Option>;
+      });
+    }
   };
 
   onSelectAlert = value => {
@@ -45,6 +97,8 @@ class Sidebar extends Component {
   render() {
     const { isError } = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
+    const { workflowKind } = this.props.workflowKind;
+
     return (
       <Sider
         width={300}
@@ -67,8 +121,30 @@ class Sidebar extends Component {
           }}
         >
           <div className="logo" />
+          <Select
+            className={css`
+              .ant-select-selection {
+                background-color: #0a3150;
+                border: none;
+                height: 65px;
+                color: white;
+                font-size: 18px;
+              }
+              .ant-select-selection-selected-value {
+                line-height: 65px;
+              }
+              .ant-select-arrow {
+                color: white;
+              }
+            `}
+            defaultValue="Entity"
+            style={{ width: "100%", display: "block" }}
+            onChange={this.handleChange}
+          >
+            {this.renderDropdownList()}
+          </Select>
 
-          <div
+          {/* <div
             onClick={() => this.setState({ collapse: !collapse })}
             style={{
               color: "white",
@@ -82,30 +158,34 @@ class Sidebar extends Component {
           >
             TPI
             <Icon type="caret-right" rotate={collapse ? 90 : 0} />
-          </div>
-          <Collapsible open={collapse}>
-            <div
-              style={{
-                backgroundColor: "#104774",
-                padding: "5px 0px",
-                minHeight: "100vh"
-              }}
-            >
-              <div>
-                <TaskQueue
-                  workflowGroupCount={this.props.workflowGroupCount}
-                  onSelectTask={this.onSelectTask}
-                />
-              </div>
+          </div> */}
 
-              <div style={{ display: isError ? "none" : "block" }}>
-                <Alerts
-                  workflowAlertGroupCount={this.props.workflowAlertGroupCount}
-                  onSelectAlert={this.onSelectAlert}
-                />
-              </div>
+          <div
+            style={{
+              backgroundColor: "#104774",
+              padding: "5px 0px",
+              minHeight: "100vh"
+            }}
+            className={css`
+              .sidebarList:hover {
+                opacity: 0.4;
+              }
+            `}
+          >
+            <div>
+              <TaskQueue
+                workflowGroupCount={this.props.workflowGroupCount}
+                onSelectTask={this.onSelectTask}
+              />
             </div>
-          </Collapsible>
+
+            <div style={{ display: isError ? "none" : "block" }}>
+              <Alerts
+                workflowAlertGroupCount={this.props.workflowAlertGroupCount}
+                onSelectAlert={this.onSelectAlert}
+              />
+            </div>
+          </div>
         </div>
       </Sider>
     );

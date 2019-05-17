@@ -114,7 +114,7 @@ class WorkflowList extends Component {
     return (
       <div>
         <Content
-          style={{ overflow: "initial" }}
+          style={{ overflow: "initial", padding: "0px 46px 15px 40px" }}
           className="workflow-list-wrapper"
         >
           {data.workflow && data.workflow.length > 0 ? (

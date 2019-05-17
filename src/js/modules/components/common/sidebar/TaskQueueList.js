@@ -4,6 +4,7 @@ import SidebarCircle from "./SidebarCircle";
 function TaskQueueList({ item, onSelect, selected }) {
   return (
     <li
+      className="sidebarList"
       onClick={() => onSelect(item)}
       style={{
         borderTop: "1px solid rgba(0, 0, 0, 0.3)",

@@ -122,7 +122,7 @@ class TaskQueue extends Component {
                 justifyContent: "space-between",
                 padding: "10px 20px",
                 display:
-                  stepgroupdef_counts && stepgroupdef_counts.length > 0
+                  stepgroupdef_counts && stepgroupdef_counts.length > 4
                     ? "flex"
                     : "none"
               }}

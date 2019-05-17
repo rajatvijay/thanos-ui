@@ -61,7 +61,7 @@ class CreateNew extends Component {
     );
     return (
       <Menu className="kind-menu" theme="Light">
-        {filteredWorkflow.map(function(item, index) {
+        {filteredWorkflow.map((item, index) => {
           return (
             <Menu.Item key={"key-" + index}>
               <div
@@ -79,7 +79,7 @@ class CreateNew extends Component {
 
   render() {
     return (
-      <div style={{ paddingRight: 36 }}>
+      <div>
         <Dropdown overlay={this.getKindMenu()} placement="bottomCenter">
           <p
             style={{

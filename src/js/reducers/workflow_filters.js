@@ -43,6 +43,16 @@ export function workflowFilters(state = initialState, action) {
         workflowFilters: [{ ...action.workflowFilter }]
       };
 
+    case workflowFiltersConstants.CLEAR_FILTERS:
+      return {
+        ...state,
+        status: [],
+        region: [],
+        business: [],
+        advFilter: null,
+        advance: []
+      };
+
     default:
       return state;
   }

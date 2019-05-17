@@ -61,15 +61,36 @@ class FilterPopup extends Component {
     }
   };
 
+  getStatusTypes = () => {
+    try {
+      const allStatuses = this.props.workflowFilterType.statusType;
+      const kindId = this.props.workflowKindValue.selectedKindValue.id;
+      return allStatuses.filter(status => status.kind === kindId);
+    } catch (e) {
+      return [];
+    }
+  };
+
   render() {
     const {
-      visible,
       workflowFilterType,
-      onModalClose,
-      fieldOptions
+      filterState,
+      onFilterChange,
+      onClear,
+      onModalClose
     } = this.props;
-    const { statusType, businessType, regionType } = workflowFilterType;
-    const { status, region, business_unit, operator, showError } = this.state;
+    const {
+      visible,
+      fieldOptions,
+      status,
+      region,
+      business_unit,
+      operator,
+      showError,
+      text,
+      field
+    } = filterState;
+    const { businessType, regionType } = workflowFilterType;
 
     return (
       <div>
@@ -89,9 +110,6 @@ class FilterPopup extends Component {
               padding-left: 0;
               padding-right: 0;
             }
-            .ant-modal-close {
-              outline: none !important;
-            }
           `}
           onCancel={onModalClose}
         >
@@ -100,30 +118,30 @@ class FilterPopup extends Component {
               <span style={{ color: "#138BD6", cursor: "pointer" }}>
                 FILTER BY
               </span>
-              <span onClick={() => this.onClear()}>CLEAR</span>
+              <span onClick={() => onClear()}>CLEAR</span>
             </div>
 
             <div style={{ margin: 30 }}>
               <DropdownFilter
                 value={status}
                 name="status"
-                data={statusType}
+                data={this.getStatusTypes()}
                 placeholder="Status"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
               <DropdownFilter
                 name="region"
                 value={region}
                 data={regionType.results}
                 placeholder="Market"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
               <DropdownFilter
                 name="business_unit"
                 value={business_unit}
                 data={businessType.results}
                 placeholder="Division"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
             </div>
           </div>
@@ -135,11 +153,10 @@ class FilterPopup extends Component {
 
             <div style={{ margin: 30 }}>
               <Cascader
+                value={field}
                 style={{ width: "100%" }}
                 options={fieldOptions}
-                onChange={arr =>
-                  this.onFilterChange("field", arr[arr.length - 1])
-                }
+                onChange={arr => onFilterChange("field", arr)}
                 placeholder="Please select field"
               />
 
@@ -148,12 +165,13 @@ class FilterPopup extends Component {
                 value={operator}
                 placeholder="Select Operator"
                 name="operator"
-                onFilterChange={this.onFilterChange}
+                onFilterChange={onFilterChange}
               />
 
               <Input
                 placeholder="InputValue"
-                onChange={e => this.onFilterChange("text", e.target.value)}
+                value={text}
+                onChange={e => onFilterChange("text", e.target.value)}
               />
             </div>
           </div>
@@ -184,9 +202,10 @@ class FilterPopup extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowFilterType } = state;
+  const { workflowFilterType, workflowKindValue } = state;
   return {
-    workflowFilterType
+    workflowFilterType,
+    workflowKindValue
   };
 }
 
