@@ -250,23 +250,8 @@ class Workflow extends Component {
           <Content style={{ margin: "0 26px" }}>
             <Row className="clear">
               <Filter />
-              {/* <div className="section-top">
-                <Tabs defaultActiveKey="1" size="small">
-                  <TabPane tab="Task queue" key="1">
-                    {this.state.defKind ? (
-                      <WorkflowFilterTop {...this.props} />
-                    ) : null}
-                  </TabPane>
-                  <TabPane tab="Alerts" key="2">
-                    {this.state.defKind ? (
-                      <AlertFilter {...this.props} />
-                    ) : null}
-                  </TabPane>
-                </Tabs>
-                <br />
-              </div> */}
 
-              {this.props.workflow.loading ? null : this.props.workflow
+              {/* {this.props.workflow.loading ? null : this.props.workflow
                 .loadingStatus === "failed" ? null : (
                 <Row className="list-view-header t-14 ">
                   <Col span="6">
@@ -309,7 +294,7 @@ class Workflow extends Component {
                     <FormattedMessage id="workflowsInstances.statusText" />
                   </Col>
                 </Row>
-              )}
+              )} */}
 
               {this.props.config.loading ||
               this.props.workflow.loading ||

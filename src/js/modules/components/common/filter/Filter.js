@@ -4,8 +4,9 @@ import { baseUrl, authHeader } from "../../../../_helpers";
 
 import FilterPopup from "./FilterPopup";
 import { workflowFiltersActions, workflowActions } from "../../../../actions";
-
+import { Tooltip, Icon } from "antd";
 import CreateNew from "./CreateNew";
+import { css } from "emotion";
 
 class Filter extends Component {
   state = {
@@ -17,7 +18,9 @@ class Filter extends Component {
     operator: undefined,
     text: "",
     field: undefined,
-    showError: false
+    showError: false,
+    sortOrderAsc: false,
+    sortingEnabled: false
   };
 
   showModal = () => {
@@ -86,6 +89,46 @@ class Filter extends Component {
     this.props.dispatch(workflowActions.clearAll());
     this.handleModalClose();
   };
+  changeScoreOrder = order => {
+    const isAscending = this.state.sortOrderAsc;
+    const isSortingEnabled = this.state.sortingEnabled;
+    if (!isSortingEnabled) {
+      // Enable the sroting in descending mode
+      this.setState({
+        sortOrderAsc: false,
+        sortingEnabled: true
+      });
+      return this.props.dispatch(
+        workflowFiltersActions.setFilters({
+          filterType: "ordering",
+          filterValue: ["-sorting_primary_field"]
+        })
+      );
+    }
+
+    if (isAscending) {
+      // Disable the sorting
+      this.setState({ sortingEnabled: false });
+      this.props.dispatch(
+        workflowFiltersActions.setFilters({
+          filterType: "ordering",
+          filterValue: []
+        })
+      );
+    } else {
+      // Enable sorting in the ascending mode
+      this.setState({
+        sortOrderAsc: true,
+        sortingEnabled: true
+      });
+      this.props.dispatch(
+        workflowFiltersActions.setFilters({
+          filterType: "ordering",
+          filterValue: ["sorting_primary_field"]
+        })
+      );
+    }
+  };
 
   componentDidMount() {
     const requestOptions = {
@@ -102,18 +145,25 @@ class Filter extends Component {
   }
 
   render() {
+    const { sortingEnabled } = this.state;
+
     // const { visible, fieldOptions,status,region ,business_unit,operator,text,field,showError} = this.state;
 
     return (
       <div
         style={{
-          marginTop: 30,
+          marginTop: 60,
           display: "flex",
           justifyContent: "space-between"
         }}
       >
         <div>
           <ul
+            className={css`
+              li {
+                display: inline-block;
+              }
+            `}
             style={{
               listStyle: "none",
               fontSize: 14,
@@ -121,22 +171,71 @@ class Filter extends Component {
               cursor: "pointer"
             }}
           >
+            {this.props.workflow.loading ? null : this.props.workflow
+              .loadingStatus === "failed" ? null : (
+              <li style={{ cursor: "auto" }}>
+                <li style={{ margin: "0px 10px 0px 0px", color: "#C8C8C8" }}>
+                  {this.props.workflow.count} Results
+                </li>
+
+                <li style={{ margin: "0px 20px 0px 10px" }}>
+                  {this.props.workflowFilters.kind.meta
+                    .is_sorting_field_enabled ? (
+                    <Tooltip
+                      title={
+                        this.state.sortOrderAsc
+                          ? "High to low risk score"
+                          : "Low to high risk score"
+                      }
+                    >
+                      <span
+                        className="text-secondary text-anchor"
+                        onClick={this.changeScoreOrder}
+                      >
+                        Risk
+                        {sortingEnabled ? (
+                          <i className="material-icons t-14  text-middle">
+                            {this.state.sortOrderAsc
+                              ? "keyboard_arrow_up"
+                              : "keyboard_arrow_down"}
+                          </i>
+                        ) : null}
+                      </span>
+                    </Tooltip>
+                  ) : null}
+                </li>
+              </li>
+            )}
+
             <li
               style={{
-                display: "inline",
-                paddingRight: 10
+                marginRight: 20
               }}
             >
               DATE CREATED
+              <Icon
+                style={{
+                  fontSize: 11,
+                  marginLeft: 5
+                }}
+                type="down"
+              />
             </li>
             <li
               onClick={() => this.showModal()}
               style={{
-                display: "inline",
-                paddingRight: 10
+                color: "#C8C8C8",
+                marginRight: 20
               }}
             >
               FILTER
+              <Icon
+                style={{
+                  fontSize: 11,
+                  marginLeft: 5
+                }}
+                type="down"
+              />
             </li>
           </ul>
           <FilterPopup
@@ -162,7 +261,8 @@ function mapStateToProps(state) {
     workflowFilters,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    workflow
   } = state;
   return {
     workflowKind,
@@ -170,8 +270,57 @@ function mapStateToProps(state) {
     workflowFilters,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    workflow
   };
 }
 
 export default connect(mapStateToProps)(Filter);
+
+// {this.props.workflow.loading ? null : this.props.workflow
+//   .loadingStatus === "failed" ? null : (
+
+//     {/* <Col span="6">
+//       <div className="workflow-count text-metal"> */}
+//       <li>
+//         {this.props.workflow.count}
+//         </li>
+//         {/* <FormattedMessage id="workflowsInstances.workflowsCount" /> */}
+//       {/* </div>
+//     </Col> */}
+
+//     // <Col span={7} className="text-metal" />
+
+//     // <Col span="2" className="text-secondary text-center">
+//     <li>
+//       {this.props.workflowFilters.kind.meta
+//         .is_sorting_field_enabled ? (
+//         <Tooltip
+//           title={
+//             this.state.sortOrderAsc
+//               ? "High to low risk score"
+//               : "Low to high risk score"
+//           }
+//         >
+//           <span
+//             className="text-secondary text-anchor"
+//             onClick={this.changeScoreOrder}
+//           >
+//             Risk
+//             {sortingEnabled ? (
+//               <i className="material-icons t-14  text-middle">
+//                 {this.state.sortOrderAsc
+//                   ? "keyboard_arrow_up"
+//                   : "keyboard_arrow_down"}
+//               </i>
+//             ) : null}
+//           </span>
+//         </Tooltip>
+//       ) : null}
+//    </li>
+
+//     // <Col span="2" className="text-metal ">
+//     //   <FormattedMessage id="workflowsInstances.statusText" />
+//     // </Col>
+
+// )}

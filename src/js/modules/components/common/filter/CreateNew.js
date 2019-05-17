@@ -61,7 +61,7 @@ class CreateNew extends Component {
     );
     return (
       <Menu className="kind-menu" theme="Light">
-        {filteredWorkflow.map(function(item, index) {
+        {filteredWorkflow.map((item, index) => {
           return (
             <Menu.Item key={"key-" + index}>
               <div

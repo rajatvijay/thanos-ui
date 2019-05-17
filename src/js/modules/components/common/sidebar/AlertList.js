@@ -43,7 +43,9 @@ class AlerList extends Component {
 
     return (
       <li
+        className="sidebarList"
         style={{
+          opacity: collapse && 1,
           paddingBottom: collapse ? 30 : 0,
           backgroundColor: collapse ? "#093050" : "#104775",
           transitionDuration: "150ms"

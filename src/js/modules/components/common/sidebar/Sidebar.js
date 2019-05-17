@@ -126,19 +126,19 @@ class Sidebar extends Component {
               .ant-select-selection {
                 background-color: #0a3150;
                 border: none;
-                height: 60px;
+                height: 65px;
                 color: white;
                 font-size: 18px;
               }
               .ant-select-selection-selected-value {
-                margin-top: 15px;
+                line-height: 65px;
               }
               .ant-select-arrow {
                 color: white;
               }
             `}
             defaultValue="Entity"
-            style={{ width: "100%", marginTop: 10 }}
+            style={{ width: "100%", display: "block" }}
             onChange={this.handleChange}
           >
             {this.renderDropdownList()}
@@ -166,6 +166,11 @@ class Sidebar extends Component {
               padding: "5px 0px",
               minHeight: "100vh"
             }}
+            className={css`
+              .sidebarList:hover {
+                opacity: 0.4;
+              }
+            `}
           >
             <div>
               <TaskQueue

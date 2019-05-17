@@ -63,7 +63,9 @@ class FilterPopup extends Component {
 
   filterStatusType = (arr, id) => {
     if (Array.isArray(arr)) {
-      return arr.map(item => item.kind === id);
+      const newArr = arr.filter(item => item.kind === id);
+      console.log("new", newArr);
+      return newArr;
     }
   };
 
