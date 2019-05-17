@@ -585,7 +585,7 @@ class ChildWorkflowField2 extends Component {
         }
 
         if (key == "kind" && fval) {
-          if (!_.size(cw.child_kinds) || !_.includes(cw.child_kinds, fval)) {
+          if (cw.child_kinds[0] == null || !cw.child_kinds.includes(fval)) {
             found = null;
             return true;
           }
@@ -637,6 +637,13 @@ class ChildWorkflowField2 extends Component {
             _.size(cw.selected_flag[cw.id]) &&
             cw.selected_flag[cw.id]["flag_detail"]["label"] == fval
           ) {
+            found = null;
+            return true;
+          }
+        }
+
+        if (key == "kind" && fval) {
+          if (cw.child_kinds[0] && cw.child_kinds.includes(fval)) {
             found = null;
             return true;
           }
@@ -782,7 +789,7 @@ class ChildWorkflowField2 extends Component {
         size="small"
         allowClear={true}
       >
-        {_.map(kindList, v => {
+        {kindList.map(v => {
           return (
             <Option key={v.id} value={v.id}>{`${v.name} (${v.count})`}</Option>
           );
@@ -827,7 +834,7 @@ class ChildWorkflowField2 extends Component {
               ) : null}
 
               <Row className="mr-bottom">
-                {!field.definition.extra.show_filters ? (
+                {field.definition.extra.show_filters ? (
                   <Col span="18">
                     <span
                       className="text-metal"
@@ -879,7 +886,7 @@ class ChildWorkflowField2 extends Component {
                 </Col>
               </Row>
 
-              {_.size(this.state.selected_filters) ? (
+              {/*_.size(this.state.selected_filters) ? (
                 <Row>
                   <Col span="12" style={{ marginTop: "10px" }}>
                     <span
@@ -891,7 +898,7 @@ class ChildWorkflowField2 extends Component {
                     <span>{this.selectedFilter()}</span>
                   </Col>
                 </Row>
-              ) : null}
+              ) : null*/}
             </div>
 
             <Divider />
