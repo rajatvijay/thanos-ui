@@ -23,16 +23,6 @@ class FilterPopup extends Component {
     showError: false
   };
 
-  onFilterChange = (key, value) => {
-    const { applyFilters, onModalClose } = this.props;
-    this.setState({ [key]: value }, function() {
-      if (key !== "operator" && key !== "field" && key !== "text") {
-        applyFilters(key, value);
-        onModalClose();
-      }
-    });
-  };
-
   onClear = () => {
     this.setState({
       status: undefined,
@@ -118,7 +108,7 @@ class FilterPopup extends Component {
               <span style={{ color: "#138BD6", cursor: "pointer" }}>
                 FILTER BY
               </span>
-              <span onClick={() => onClear()}>CLEAR</span>
+              <span onClick={this.props.onClear}>CLEAR</span>
             </div>
 
             <div style={{ margin: 30 }}>

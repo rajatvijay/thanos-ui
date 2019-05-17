@@ -53,10 +53,8 @@ class Sidebar extends Component {
     let payload = { filterType: "kind", filterValue: [id], meta: metaValue };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
     this.props.dispatch(workflowKindActions.setValue(metaValue));
-    // setTimeout(function() {
 
     that.fetchGroupData(metaValue.tag);
-    // }, 300);
   };
 
   fetchGroupData = tag => {
@@ -143,22 +141,6 @@ class Sidebar extends Component {
           >
             {this.renderDropdownList()}
           </Select>
-
-          {/* <div
-            onClick={() => this.setState({ collapse: !collapse })}
-            style={{
-              color: "white",
-              padding: "25px 20px",
-              cursor: "pointer",
-              backgroundColor: "#0A3150",
-              justifyContent: "space-between",
-              display: "flex",
-              fontSize: 18
-            }}
-          >
-            TPI
-            <Icon type="caret-right" rotate={collapse ? 90 : 0} />
-          </div> */}
 
           <div
             style={{

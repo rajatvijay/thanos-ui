@@ -20,7 +20,8 @@ class Filter extends Component {
     field: undefined,
     showError: false,
     sortOrderAsc: false,
-    sortingEnabled: false
+    sortingEnabled: false,
+    displayfilters: {}
   };
 
   showModal = () => {
@@ -42,8 +43,31 @@ class Filter extends Component {
   };
 
   onFilterChange = (key, value) => {
-    const { applyFilters, onModalClose } = this.props;
-    this.setState({ [key]: value }, function() {
+    const { displayfilters, status, region, business_unit } = this.state;
+
+    const {
+      businessType,
+      regionType,
+      statusType
+    } = this.props.workflowFilterType;
+
+    if (key == "status") {
+      let statusObj = statusType.find(item => item.value == value);
+      displayfilters.status = statusObj.label;
+    }
+    if (key == "region") {
+      let regionObj = regionType.results.find(item => item.value == value);
+
+      displayfilters.region = regionObj.label;
+    }
+    if (key == "business_unit") {
+      let business_unitObj = businessType.results.find(
+        item => item.value == value
+      );
+      displayfilters.business_unit = business_unitObj.label;
+    }
+
+    this.setState({ [key]: value, displayfilters }, function() {
       if (key !== "operator" && key !== "field" && key !== "text") {
         this.applyFilters(key, value);
         this.handleModalClose();
@@ -53,7 +77,7 @@ class Filter extends Component {
 
   onApply = () => {
     const { field, text, operator } = this.state;
-    const { applyFilters, onModalClose } = this.props;
+    // const { applyFilters, onModalClose } = this.props;
 
     if (field && text && operator) {
       this.applyFilters(
@@ -84,7 +108,8 @@ class Filter extends Component {
       business_unit: undefined,
       operator: undefined,
       text: "",
-      field: undefined
+      field: undefined,
+      displayfilters: {}
     });
     this.props.dispatch(workflowActions.clearAll());
     this.handleModalClose();
@@ -127,6 +152,17 @@ class Filter extends Component {
           filterValue: ["sorting_primary_field"]
         })
       );
+    }
+  };
+
+  evaluateFilter = () => {
+    const { displayfilters } = this.state;
+
+    const arr = Object.values(displayfilters);
+    if (arr.length) {
+      let str = arr.join(",");
+
+      return `: ${str}`;
     }
   };
 
@@ -215,11 +251,12 @@ class Filter extends Component {
             <li
               onClick={() => this.showModal()}
               style={{
-                color: "#C8C8C8",
+                // color: "#C8C8C8",
                 marginRight: 20
               }}
             >
               FILTER
+              <span>{this.evaluateFilter()}</span>
               <Icon
                 style={{
                   fontSize: 11,
