@@ -55,7 +55,7 @@ class FilterPopup extends Component {
     try {
       const allStatuses = this.props.workflowFilterType.statusType;
       const kindId = this.props.workflowKindValue.selectedKindValue.id;
-      return allStatuses.filter(status => status.kind === kindId);
+      return allStatuses.filter(status => status.workflow_kind === kindId);
     } catch (e) {
       return [];
     }
