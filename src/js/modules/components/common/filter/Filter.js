@@ -154,7 +154,10 @@ class Filter extends Component {
         style={{
           marginTop: 60,
           display: "flex",
-          justifyContent: "space-between"
+          justifyContent: "space-between",
+          borderBottom: "1px solid #DBDBDB",
+          margin: "60px 50px 0px 50px",
+          alignItems: "center"
         }}
       >
         <div>
@@ -168,7 +171,8 @@ class Filter extends Component {
               listStyle: "none",
               fontSize: 14,
               color: "#000",
-              cursor: "pointer"
+              cursor: "pointer",
+              padding: 0
             }}
           >
             {this.props.workflow.loading ? null : this.props.workflow
@@ -207,7 +211,7 @@ class Filter extends Component {
               </li>
             )}
 
-            <li
+            {/* <li
               style={{
                 marginRight: 20
               }}
@@ -220,7 +224,7 @@ class Filter extends Component {
                 }}
                 type="down"
               />
-            </li>
+            </li> */}
             <li
               onClick={() => this.showModal()}
               style={{

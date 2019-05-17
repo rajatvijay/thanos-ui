@@ -79,7 +79,7 @@ class CreateNew extends Component {
 
   render() {
     return (
-      <div style={{ paddingRight: 36 }}>
+      <div>
         <Dropdown overlay={this.getKindMenu()} placement="bottomCenter">
           <p
             style={{
