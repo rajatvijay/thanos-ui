@@ -43,7 +43,6 @@ const {
 } = commonFunctions;
 const Panel = Collapse.Panel;
 
-//MOVE TO UTILS
 const getKindID = (kindTag, workflowkind) => {
   let kind = null;
   kind = _.find(workflowkind, function(k) {
@@ -56,9 +55,8 @@ const getKindID = (kindTag, workflowkind) => {
   }
 };
 
-//MOVE TO UTILS
-const getKindName = (kindId, workflowKind) => {
-  let kind = _.find(workflowKind, function(k) {
+const getKindName = (kindId, workflowKinds) => {
+  let kind = _.find(workflowKinds, function(k) {
     return k.id === parseInt(kindId, 10);
   });
 
@@ -67,48 +65,6 @@ const getKindName = (kindId, workflowKind) => {
   } else {
     return;
   }
-};
-
-function countBy(collection, func) {
-  var object = Object.create(null);
-
-  collection.forEach(function(item) {
-    var key = func(item);
-    if (key in object) {
-      ++object[key];
-    } else {
-      object[key] = 1;
-    }
-  });
-
-  return object;
-}
-
-const getChildKinds = (workflows, kinds) => {
-  let grouped_child_kinds = [];
-
-  if (workflows) {
-    workflows.forEach(workflow => {
-      if (workflow.child_kinds[0]) {
-        grouped_child_kinds.push(workflow.child_kinds);
-      }
-    });
-  }
-
-  grouped_child_kinds = grouped_child_kinds.reduce((a, b) => a.concat(b), []); //_.flatten(grouped_child_kinds);
-
-  let kindlist = [...new Set(grouped_child_kinds)]; // _.uniq(grouped_child_kinds);
-  let count = countBy(grouped_child_kinds, Math.floor);
-
-  let filteredKind = kindlist.map(kind => {
-    let item = {};
-    item.id = kind;
-    item.name = getKindName(kind, kinds);
-    item.count = count[kind.toString()];
-    return item;
-  });
-
-  return filteredKind;
 };
 
 class ChildWorkflowField2 extends Component {
@@ -120,7 +76,7 @@ class ChildWorkflowField2 extends Component {
       statusView: true,
       kindChecked: false,
       showRelatedWorkflow: false,
-      selected_filters: { category: [], status: "", flag: "", kind: "" }
+      selected_filters: { category: [], status: "", flag: "" }
     };
   }
 
@@ -197,7 +153,7 @@ class ChildWorkflowField2 extends Component {
     const valueFilter = this.getValuefilter();
     const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${
       parentId
-    }&kind=${kind}${valueFilter}&child_kinds=true`;
+    }&kind=${kind}${valueFilter}`;
 
     this.setState({ fetching: true });
 
@@ -212,7 +168,7 @@ class ChildWorkflowField2 extends Component {
         });
         this.createStatusFilterTag();
         this.createFilterTag();
-        //this.filterByFlag();
+        this.filterByFlag();
         this.excludeWorkflows();
       });
   };
@@ -530,12 +486,7 @@ class ChildWorkflowField2 extends Component {
       this.setState({
         selected_filters: this.state.selected_filters
       });
-    } else if (tag == "kind") {
-      let { selected_filters } = this.state;
-      selected_filters.kind = _type;
-      this.setState({ selected_filters: selected_filters });
     }
-
     this.filterWorkflows();
     this.excludeWorkflows();
   };
@@ -583,15 +534,7 @@ class ChildWorkflowField2 extends Component {
             return true;
           }
         }
-
-        if (key == "kind" && fval) {
-          if (cw.child_kinds[0] == null || !cw.child_kinds.includes(fval)) {
-            found = null;
-            return true;
-          }
-        }
       });
-
       if (found) {
         filtered_workflow.push(cw);
       }
@@ -637,13 +580,6 @@ class ChildWorkflowField2 extends Component {
             _.size(cw.selected_flag[cw.id]) &&
             cw.selected_flag[cw.id]["flag_detail"]["label"] == fval
           ) {
-            found = null;
-            return true;
-          }
-        }
-
-        if (key == "kind" && fval) {
-          if (cw.child_kinds[0] && cw.child_kinds.includes(fval)) {
             found = null;
             return true;
           }
@@ -697,10 +633,6 @@ class ChildWorkflowField2 extends Component {
         {_.map(this.state.selected_filters, function(v, k) {
           if (k == "category") {
             return _.map(v, function(c) {
-              if (!c) {
-                return;
-              }
-
               return (
                 <Tag
                   key={c + k + "selected"}
@@ -713,10 +645,6 @@ class ChildWorkflowField2 extends Component {
               );
             });
           } else {
-            if (!v) {
-              return;
-            }
-
             return (
               <Tag
                 key={v + k + "selected"}
@@ -771,38 +699,10 @@ class ChildWorkflowField2 extends Component {
     );
   };
 
-  //CREATE. KIND FILTER
-  createKindFilter = () => {
-    const { props } = this;
-    const { field, workflowKind } = props;
-    let that = this;
-    let kindList = getChildKinds(
-      this.state.childWorkflow,
-      workflowKind.workflowKind
-    );
-
-    return (
-      <Select
-        placeholder="Kind"
-        onChange={this.onFilterTagChange.bind(that, "kind")}
-        style={{ width: "150px" }}
-        size="small"
-        allowClear={true}
-      >
-        {kindList.map(v => {
-          return (
-            <Option key={v.id} value={v.id}>{`${v.name} (${v.count})`}</Option>
-          );
-        })}
-      </Select>
-    );
-  };
-
   render = () => {
-    const { props } = this;
-    const { field, workflowKind } = props;
+    let props = this.props;
+    let { field, workflowKind } = props;
     let that = this;
-
     return (
       <FormItem
         label={""}
@@ -851,9 +751,6 @@ class ChildWorkflowField2 extends Component {
                     {/*ADJUDICATION FILTER*/}
                     <span className="mr-right">{this.createFlagFilter()}</span>
 
-                    {/*KIND FILTER*/}
-                    <span className="mr-right">{this.createKindFilter()}</span>
-
                     {/*EXCLUDED FILTERS*/}
                     {_.size(this.state.excluded_filters) ? (
                       <span className="mr-left-lg">
@@ -887,18 +784,18 @@ class ChildWorkflowField2 extends Component {
               </Row>
 
               {/*_.size(this.state.selected_filters) ? (
-                <Row>
-                  <Col span="12" style={{ marginTop: "10px" }}>
-                    <span
-                      className="text-metal "
-                      style={{ marginRight: "10px", float: "left" }}
-                    >
-                      Filtered:{" "}
-                    </span>
-                    <span>{this.selectedFilter()}</span>
-                  </Col>
-                </Row>
-              ) : null*/}
+              <Row>
+                <Col span="12" style={{ marginTop: "10px" }}>
+                  <span
+                    className="text-metal "
+                    style={{ marginRight: "10px", float: "left" }}
+                  >
+                    Filtered:{" "}
+                  </span>
+                  <span>{this.selectedFilter()}</span>
+                </Col>
+              </Row>
+            ) : null*/}
             </div>
 
             <Divider />
