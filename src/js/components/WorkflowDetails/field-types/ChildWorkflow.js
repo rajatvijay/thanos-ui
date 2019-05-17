@@ -69,21 +69,38 @@ const getKindName = (kindId, workflowKind) => {
   }
 };
 
-const getChildKinds = (workflows, kinds) => {
-  let grouped_child_kinds = [];
+function countBy(collection, func) {
+  var object = Object.create(null);
 
-  _.forEach(workflows, workflow => {
-    if (workflow.child_kinds[0]) {
-      grouped_child_kinds.push(workflow.child_kinds);
+  collection.forEach(function(item) {
+    var key = func(item);
+    if (key in object) {
+      ++object[key];
+    } else {
+      object[key] = 1;
     }
   });
 
-  grouped_child_kinds = _.flatten(grouped_child_kinds);
+  return object;
+}
 
-  let kindlist = _.uniq(grouped_child_kinds);
-  let count = _.countBy(grouped_child_kinds, Math.floor);
+const getChildKinds = (workflows, kinds) => {
+  let grouped_child_kinds = [];
 
-  let filteredKind = _.map(kindlist, kind => {
+  if (workflows) {
+    workflows.forEach(workflow => {
+      if (workflow.child_kinds[0]) {
+        grouped_child_kinds.push(workflow.child_kinds);
+      }
+    });
+  }
+
+  grouped_child_kinds = grouped_child_kinds.reduce((a, b) => a.concat(b), []); //_.flatten(grouped_child_kinds);
+
+  let kindlist = [...new Set(grouped_child_kinds)]; // _.uniq(grouped_child_kinds);
+  let count = countBy(grouped_child_kinds, Math.floor);
+
+  let filteredKind = kindlist.map(kind => {
     let item = {};
     item.id = kind;
     item.name = getKindName(kind, kinds);
@@ -810,7 +827,7 @@ class ChildWorkflowField2 extends Component {
               ) : null}
 
               <Row className="mr-bottom">
-                {field.definition.extra.show_filters ? (
+                {!field.definition.extra.show_filters ? (
                   <Col span="18">
                     <span
                       className="text-metal"
@@ -862,19 +879,19 @@ class ChildWorkflowField2 extends Component {
                 </Col>
               </Row>
 
-              {/*_.size(this.state.selected_filters) ? (
-              <Row>
-                <Col span="12" style={{ marginTop: "10px" }}>
-                  <span
-                    className="text-metal "
-                    style={{ marginRight: "10px", float: "left" }}
-                  >
-                    Filtered:{" "}
-                  </span>
-                  <span>{this.selectedFilter()}</span>
-                </Col>
-              </Row>
-            ) : null*/}
+              {_.size(this.state.selected_filters) ? (
+                <Row>
+                  <Col span="12" style={{ marginTop: "10px" }}>
+                    <span
+                      className="text-metal "
+                      style={{ marginRight: "10px", float: "left" }}
+                    >
+                      Filtered:{" "}
+                    </span>
+                    <span>{this.selectedFilter()}</span>
+                  </Col>
+                </Row>
+              ) : null}
             </div>
 
             <Divider />
