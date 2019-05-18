@@ -108,7 +108,9 @@ class FilterPopup extends Component {
               <span style={{ color: "#138BD6", cursor: "pointer" }}>
                 FILTER BY
               </span>
-              <span onClick={this.props.onClear}>CLEAR</span>
+              <span style={{ cursor: "pointer" }} onClick={this.props.onClear}>
+                CLEAR
+              </span>
             </div>
 
             <div style={{ margin: 30 }}>
@@ -159,7 +161,7 @@ class FilterPopup extends Component {
               />
 
               <Input
-                placeholder="InputValue"
+                placeholder="Input Value"
                 value={text}
                 onChange={e => onFilterChange("text", e.target.value)}
               />
