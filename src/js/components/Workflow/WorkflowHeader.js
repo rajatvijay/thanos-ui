@@ -97,22 +97,99 @@ export const WorkflowHeader = props => {
   );
 };
 
+// const createTitle = (args)=>{
+
+// const {workflow}  = args;
+// const {family} = workflow;
+
+// if(family.length == 1){
+// return workflow.name
+// }
+
+// else if(family.length == 2){
+//   return `${family[0].name}/${family[1].name}`
+// }
+// else{
+
+//   return `${family[0].name}/.../${workflow.name}`
+// }
+
+// }
+
+// const content = (
+//   <div>
+//     <p>Content</p>
+//     <p>Content</p>
+//   </div>
+// );
+
+const createList = family => {
+  return family.map(item => (
+    <Link style={{ color: "black" }} to={"/workflows/instances/" + item.id}>
+      {" "}
+      {item.name}/{" "}
+    </Link>
+  ));
+};
+
+//const arr = [{name:"father",id:4},{name:"father"},{name:"father"},{name:"father"},{name:"father"},{name:"father"},{name:"father"},{name:"father"}]
+
 const HeaderTitle = props => {
-  return (
-    <div>
-      <span
-        title={props.workflow.name}
-        style={{
-          color: "#000000",
-          fontSize: "20px",
-          letterSpacing: "-0.04px",
-          lineHeight: "24px"
-        }}
-      >
-        {props.workflow.name}
-      </span>
-    </div>
-  );
+  console.log(props);
+  const { workflow } = props;
+  const { family } = workflow;
+
+  if (family.length == 1) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          {workflow.name}
+        </span>
+      </div>
+    );
+  } else if (family.length == 2) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          {family[0].name}/{family[1].name}
+        </span>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Popover content={createList(family)}>
+          <span
+            title={props.workflow.name}
+            style={{
+              color: "#000000",
+              fontSize: "20px",
+              letterSpacing: "-0.04px",
+              lineHeight: "24px"
+            }}
+          >
+            {family[0].name}/.../{workflow.name}
+          </span>
+        </Popover>
+      </div>
+    );
+  }
 };
 
 const HeaderLcData = props => {
