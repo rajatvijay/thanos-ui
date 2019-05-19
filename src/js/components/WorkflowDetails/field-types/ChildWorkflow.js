@@ -500,6 +500,7 @@ class ChildWorkflowField2 extends Component {
 
   onFilterTagChange = (tag, _type) => {
     let filtered_workflow = this.state.filteredChildWorkflow;
+
     if (tag == "status") {
       if (_type == "All Status") {
         delete this.state.selected_filters["status"];
@@ -532,7 +533,11 @@ class ChildWorkflowField2 extends Component {
       });
     } else if (tag == "kind") {
       let { selected_filters } = this.state;
-      selected_filters.kind = _type;
+      if (_type == "all") {
+        selected_filters.kind = "";
+      } else {
+        selected_filters.kind = _type;
+      }
       this.setState({ selected_filters: selected_filters });
     }
 
@@ -782,19 +787,31 @@ class ChildWorkflowField2 extends Component {
     );
 
     return (
-      <Select
-        placeholder="Kind"
-        onChange={this.onFilterTagChange.bind(that, "kind")}
-        style={{ width: "150px" }}
-        size="small"
-        allowClear={true}
-      >
+      <div>
+        <span className="text-metal mr-right-sm">Type of Search: </span>
+
+        {kindList ? (
+          <span
+            key={"all"}
+            className="alert-tag-item alert-basic ant-tag"
+            onClick={this.onFilterTagChange.bind(that, "kind", "all")}
+          >
+            All searches
+          </span>
+        ) : null}
+
         {kindList.map(v => {
           return (
-            <Option key={v.id} value={v.id}>{`${v.name} (${v.count})`}</Option>
+            <span
+              key={v.id}
+              className="alert-tag-item alert-basic ant-tag"
+              onClick={this.onFilterTagChange.bind(that, "kind", v.id)}
+            >
+              {`${v.name} (${v.count})`}
+            </span>
           );
         })}
-      </Select>
+      </div>
     );
   };
 
@@ -825,12 +842,20 @@ class ChildWorkflowField2 extends Component {
           <div>
             <div className="">
               {field.definition.extra.show_filters ? (
-                <Row className="mr-bottom">
-                  <Col span={24}>
-                    {/*CATEGORY FILTER*/}
-                    {this.state.filterTags}
-                  </Col>
-                </Row>
+                <div>
+                  <Row className="mr-bottom">
+                    <Col span={24}>
+                      {/*CATEGORY FILTER*/}
+                      {this.state.filterTags}
+                    </Col>
+                  </Row>
+                  <Row className="mr-bottom">
+                    <Col span={24}>
+                      {/*KIND FILTER*/}
+                      {this.createKindFilter()}
+                    </Col>
+                  </Row>
+                </div>
               ) : null}
 
               <Row className="mr-bottom">
@@ -850,9 +875,6 @@ class ChildWorkflowField2 extends Component {
 
                     {/*ADJUDICATION FILTER*/}
                     <span className="mr-right">{this.createFlagFilter()}</span>
-
-                    {/*KIND FILTER*/}
-                    <span className="mr-right">{this.createKindFilter()}</span>
 
                     {/*EXCLUDED FILTERS*/}
                     {_.size(this.state.excluded_filters) ? (
