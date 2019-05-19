@@ -123,7 +123,7 @@ class Workflow extends Component {
     }
 
     if (kindId) {
-      _.map(kindList, function(kind) {
+      _.find(kindList, function(kind) {
         if (kind.id === parseInt(kindId, 10)) {
           defKind = kind;
         }
