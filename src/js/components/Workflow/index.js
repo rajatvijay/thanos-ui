@@ -122,15 +122,16 @@ class Workflow extends Component {
       kindId = kindList[0].id;
     }
 
-    if (kindId) {
-      _.map(kindList, function(kind) {
-        if (kind.id === parseInt(kindId, 10)) {
-          defKind = kind;
-        }
-      });
-    } else {
-      defKind = kindList[0];
-    }
+    // if (kindId) {
+    //   _.find(kindList, function(kind) {
+    //     if (kind.id === parseInt(kindId, 10)) {
+    //       defKind = kind;
+    //     }
+    //   });
+    // } else {
+    //
+    // }
+    defKind = kindList[0];
 
     if (defKind) {
       this.setState({ defKind: defKind });
