@@ -89,7 +89,7 @@ const getChildKinds = (workflows, kinds) => {
 
   if (workflows) {
     workflows.forEach(workflow => {
-      if (workflow.child_kinds[0]) {
+      if (workflow.child_kinds && workflow.child_kinds[0]) {
         grouped_child_kinds.push(workflow.child_kinds);
       }
     });
