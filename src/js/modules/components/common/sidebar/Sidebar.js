@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
 import { css } from "emotion";
 import _ from "lodash";
+import { workflow } from "../../../../reducers/workflow_list";
 
 const { Sider } = Layout;
 const Option = Select.Option;
@@ -21,6 +22,36 @@ class Sidebar extends Component {
     collapse: true
   };
 
+  componentDidMount() {
+    const { workflowKind } = this.props.workflowKind;
+
+    if (this.props.workflowKind.workflowKind) {
+      this.props.dispatch(
+        workflowKindActions.getAlertCount(workflowKind[0].tag)
+      );
+      this.props.dispatch(workflowKindActions.getCount(workflowKind[0].tag));
+      this.props.dispatch(
+        workflowKindActions.getStatusCount(workflowKind[0].tag)
+      );
+    }
+  }
+
+  componentWillUpdate(nextProps) {
+    const { workflowKind } = nextProps.workflowKind;
+
+    if (workflowKind) {
+      if (this.props.workflowKind.workflowKind != workflowKind) {
+        this.props.dispatch(
+          workflowKindActions.getAlertCount(workflowKind[0].tag)
+        );
+        this.props.dispatch(workflowKindActions.getCount(workflowKind[0].tag));
+        this.props.dispatch(
+          workflowKindActions.getStatusCount(workflowKind[0].tag)
+        );
+      }
+    }
+  }
+
   setFilter = () => {
     const payload = {
       filterType: "alert_category",
@@ -28,19 +59,6 @@ class Sidebar extends Component {
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
-
-  componentWillUpdate(nextProps) {
-    if (
-      nextProps.workflowKind.workflowKind !=
-      this.props.workflowKind.workflowKind
-    ) {
-      let metaValue = _.find(nextProps.workflowKind.workflowKind, item => {
-        return item.tag === "entity";
-      });
-
-      this.props.dispatch(workflowKindActions.setValue(metaValue));
-    }
-  }
 
   handleChange = value => {
     let id = parseInt(value, 10);
@@ -96,6 +114,8 @@ class Sidebar extends Component {
     const { isError } = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
     const { workflowKind } = this.props.workflowKind;
+
+    //console.log("props",this.props)
 
     return (
       <Sider
