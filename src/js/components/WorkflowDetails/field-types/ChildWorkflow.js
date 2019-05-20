@@ -89,7 +89,7 @@ const getChildKinds = (workflows, kinds) => {
 
   if (workflows) {
     workflows.forEach(workflow => {
-      if (workflow.child_kinds[0]) {
+      if (workflow.child_kinds && workflow.child_kinds[0]) {
         grouped_child_kinds.push(workflow.child_kinds);
       }
     });
@@ -786,11 +786,15 @@ class ChildWorkflowField2 extends Component {
       workflowKind.workflowKind
     );
 
+    if (kindList.length === 0) {
+      return <span />;
+    }
+
     return (
       <div>
         <span className="text-metal mr-right-sm">Type of Search: </span>
 
-        {kindList ? (
+        {kindList.length > 0 ? (
           <span
             key={"all"}
             className="alert-tag-item alert-basic ant-tag"
