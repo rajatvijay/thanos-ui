@@ -786,11 +786,15 @@ class ChildWorkflowField2 extends Component {
       workflowKind.workflowKind
     );
 
+    if (kindList.length === 0) {
+      return <span />;
+    }
+
     return (
       <div>
         <span className="text-metal mr-right-sm">Type of Search: </span>
 
-        {kindList ? (
+        {kindList.length > 0 ? (
           <span
             key={"all"}
             className="alert-tag-item alert-basic ant-tag"
