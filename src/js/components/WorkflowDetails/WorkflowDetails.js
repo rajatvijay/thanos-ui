@@ -56,6 +56,8 @@ class WorkflowDetails extends Component {
     let thisCurrent = currentStepFields;
     let prevCurrent = prevProps.currentStepFields;
 
+    const params = new URLSearchParams(this.props.location.search);
+
     //CHECK IF THE STEP COMPLETION HAS CHANGED//
     //CALCULATE STEP ON SUBMISSION OR UNDO//
     if (
@@ -92,7 +94,8 @@ class WorkflowDetails extends Component {
       wd.workflowDetails &&
       prevProps.workflowDetails.workflowDetails &&
       wd.workflowDetails.stepGroups !==
-        prevProps.workflowDetails.workflowDetails.stepGroups
+        prevProps.workflowDetails.workflowDetails.stepGroups &&
+      !params.has("backing")
     ) {
       this.updateCurrentActiveStep();
     }
