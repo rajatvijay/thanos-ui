@@ -131,6 +131,7 @@ class Workflow extends Component {
     // } else {
     //   defKind = kindList[0];
     // }
+    defKind = kindList[0];
 
     if (defKind) {
       this.setState({ defKind: defKind });
