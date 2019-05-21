@@ -362,7 +362,8 @@ class WorkflowDetails extends Component {
                   </Tooltip>
                 </div>
                 {comment_data &&
-                _.size(comment_data.results) &&
+                comment_data.results &&
+                comment_data.results.length > 0 &&
                 !comment_data.isEmbedded ? (
                   <div>
                     <Comments
