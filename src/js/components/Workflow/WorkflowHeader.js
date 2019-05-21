@@ -24,6 +24,7 @@ import AuditListTabs from "../Navbar/audit_log";
 import WorkflowPDFModal from "./WorkflowPDFModal";
 import { ProcessLcData } from "./ProcessLcData";
 import { goToPrevStep } from "../../utils/customBackButton";
+import { css } from "emotion";
 
 const { getProcessedData, getProgressData } = calculatedData;
 
@@ -110,7 +111,6 @@ const createFamilyListForBreadcrums = family => {
 };
 
 const HeaderTitle = props => {
-  console.log(props);
   const { workflow } = props;
   const { family } = workflow;
 
@@ -137,13 +137,23 @@ const HeaderTitle = props => {
           title={props.workflow.name}
           style={{
             color: "#000000",
-            fontSize: "20px",
+            fontSize: "16px",
             letterSpacing: "-0.04px",
             lineHeight: "24px"
           }}
         >
-          <span style={{ color: "#b5b5b5" }}>{family[0].name}</span> /{" "}
-          {family[1].name}
+          <Link
+            className={css`
+              color: #b5b5b5;
+              &:hover {
+                color: black;
+              }
+            `}
+            to={"/workflows/instances/" + family[0].id}
+          >
+            {family[0].name}
+          </Link>{" "}
+          / {family[1].name}
         </span>
       </div>
     );
@@ -160,7 +170,18 @@ const HeaderTitle = props => {
               lineHeight: "24px"
             }}
           >
-            <span style={{ color: "#b5b5b5" }}>{family[0].name} /... /</span>{" "}
+            <Link
+              className={css`
+                color: #b5b5b5;
+                &:hover {
+                  color: black;
+                }
+              `}
+              to={"/workflows/instances/" + family[0].id}
+            >
+              {family[0].name}
+            </Link>
+            <span style={{ color: "#b5b5b5" }}> /... / </span>
             {workflow.name}
           </span>
         </Popover>
