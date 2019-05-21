@@ -195,15 +195,15 @@ class WorkflowDetails extends Component {
 
   ////Comment functions begins///////
   /// this will be moved to another component///
-  callBackCollapser = (object_id, content_type) => {
+  callBackCollapser = (object_id, content_type, isEmbeddedDetails) => {
     this.state.loading_sidebar = true;
     this.state.object_id = object_id;
     this.props.dispatch(
-      workflowDetailsActions.getComment(object_id, content_type)
+      workflowDetailsActions.getComment(object_id, content_type, "", false)
     );
   };
 
-  addComment = (payload, step_reload_payload) => {
+  addComment = (payload, step_reload_payload, isEmbeddedDetails) => {
     this.state.adding_comment = true;
     this.state.object_id = payload.object_id;
     this.props.dispatch(
@@ -361,17 +361,22 @@ class WorkflowDetails extends Component {
                     </span>
                   </Tooltip>
                 </div>
-                {comment_data && _.size(comment_data.results) ? (
-                  <Comments
-                    object_id={this.state.object_id}
-                    toggleSidebar={this.callBackCollapser}
-                    addComment={this.addComment}
-                    gotoStep={this.fetchStepData}
-                    selectActiveStep={this.selectActiveStep}
-                    changeFlag={this.changeFlag}
-                    changeIntegrationStatus={this.changeIntegrationStatus}
-                    {...this.props}
-                  />
+                {comment_data &&
+                comment_data.results &&
+                comment_data.results.length > 0 &&
+                !comment_data.isEmbedded ? (
+                  <div>
+                    <Comments
+                      object_id={this.state.object_id}
+                      toggleSidebar={this.callBackCollapser}
+                      addComment={this.addComment}
+                      gotoStep={this.fetchStepData}
+                      selectActiveStep={this.selectActiveStep}
+                      changeFlag={this.changeFlag}
+                      changeIntegrationStatus={this.changeIntegrationStatus}
+                      {...this.props}
+                    />
+                  </div>
                 ) : null}
               </Content>
             </Layout>
