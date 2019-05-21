@@ -139,24 +139,24 @@ class GetChildWorkflow extends Component {
       kind.is_related_checkmarking_enabled &&
       this.props.config.permissions.includes("Can checkmark related workflows")
     ) {
-      return <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>;
+      return (
+        <div>
+          <Checkbox
+            checked={kind.is_checkbox_checked}
+            onChange={e =>
+              this.onChildCheckboxClick(
+                this.props.workflow.id,
+                kind.tag,
+                kind.is_checkbox_checked,
+                kind
+              )
+            }
+          />
+          <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>
+        </div>
+      );
     }
-    return (
-      <div>
-        <Checkbox
-          checked={kind.is_checkbox_checked}
-          onChange={e =>
-            this.onChildCheckboxClick(
-              this.props.workflow.id,
-              kind.tag,
-              kind.is_checkbox_checked,
-              kind
-            )
-          }
-        />
-        <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>
-      </div>
-    );
+    return <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>;
   };
 
   render() {
