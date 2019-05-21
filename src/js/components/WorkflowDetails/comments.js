@@ -455,80 +455,88 @@ class Comments extends Component {
                     className="comments-list"
                     style={{ maxHeight: "calc(100vh - 430px)" }}
                   >
-                    {_.map(c.messages, function(msg, index) {
-                      let attachment_text = null;
-                      if (msg.attachment) {
-                        attachment_text = msg.attachment.split("/")[
-                          msg.attachment.split("/").length - 1
-                        ];
-                        attachment_text = attachment_text.split("?")[0];
-                      }
-                      return (
-                        <div key={msg.id + "-" + index} className="mr-bottom">
-                          <Avatar
-                            size="small"
-                            icon="user"
-                            style={{ float: "left" }}
-                          />
-                          <div
-                            style={{
-                              marginLeft: "30px",
-                              fontSize: "12px",
-                              padding: "2px 0px 3px"
-                            }}
-                          >
-                            <b style={{ color: "#162c5b" }}>
-                              {msg.posted_by.first_name !== ""
-                                ? msg.posted_by.first_name
-                                : msg.posted_by.email}
-                            </b>
-                            <span
-                              style={{
-                                fontSize: "11px",
-                                marginLeft: "6px",
-                                cursor: "pointer"
-                              }}
-                            >
-                              <Tooltip
-                                title={
-                                  <Moment format="MM/DD/YYYY, h:mm a">
-                                    {msg.created_at}
-                                  </Moment>
-                                }
-                              >
-                                <Moment fromNow>{msg.created_at}</Moment>
-                              </Tooltip>
-                            </span>
-                          </div>
-                          <div
-                            style={{ fontSize: "12px", paddingLeft: "32px" }}
-                          >
+                    {c.messages
+                      ? c.messages.map(function(msg, index) {
+                          let attachment_text = null;
+                          if (msg.attachment) {
+                            attachment_text = msg.attachment.split("/")[
+                              msg.attachment.split("/").length - 1
+                            ];
+                            attachment_text = attachment_text.split("?")[0];
+                          }
+                          return (
                             <div
-                              className="Container"
-                              dangerouslySetInnerHTML={{
-                                __html: msg.message.replace(
-                                  /@([a-z\d_]+)/gi,
-                                  '<a class="mentions" href="/users/">@$1</a>'
-                                )
-                              }}
-                            />
-                          </div>
-                          {msg.attachment ? (
-                            <span
-                              style={{
-                                fontSize: "12px",
-                                paddingLeft: "32px",
-                                position: "relative",
-                                top: "-17px"
-                              }}
+                              key={msg.id + "-" + index}
+                              className="mr-bottom"
                             >
-                              <i class="anticon anticon-paper-clip" />&nbsp;
-                              <a href={msg.attachment}>{attachment_text}</a>
-                            </span>
-                          ) : null}
-                        </div>
-                      );
-                    })}
+                              <Avatar
+                                size="small"
+                                icon="user"
+                                style={{ float: "left" }}
+                              />
+                              <div
+                                style={{
+                                  marginLeft: "30px",
+                                  fontSize: "12px",
+                                  padding: "2px 0px 3px"
+                                }}
+                              >
+                                <b style={{ color: "#162c5b" }}>
+                                  {msg.posted_by.first_name !== ""
+                                    ? msg.posted_by.first_name
+                                    : msg.posted_by.email}
+                                </b>
+                                <span
+                                  style={{
+                                    fontSize: "11px",
+                                    marginLeft: "6px",
+                                    cursor: "pointer"
+                                  }}
+                                >
+                                  <Tooltip
+                                    title={
+                                      <Moment format="MM/DD/YYYY, h:mm a">
+                                        {msg.created_at}
+                                      </Moment>
+                                    }
+                                  >
+                                    <Moment fromNow>{msg.created_at}</Moment>
+                                  </Tooltip>
+                                </span>
+                              </div>
+                              <div
+                                style={{
+                                  fontSize: "12px",
+                                  paddingLeft: "32px"
+                                }}
+                              >
+                                <div
+                                  className="Container"
+                                  dangerouslySetInnerHTML={{
+                                    __html: msg.message.replace(
+                                      /@([a-z\d_]+)/gi,
+                                      '<a class="mentions" href="/users/">@$1</a>'
+                                    )
+                                  }}
+                                />
+                              </div>
+                              {msg.attachment ? (
+                                <span
+                                  style={{
+                                    fontSize: "12px",
+                                    paddingLeft: "32px",
+                                    position: "relative",
+                                    top: "-17px"
+                                  }}
+                                >
+                                  <i class="anticon anticon-paper-clip" />&nbsp;
+                                  <a href={msg.attachment}>{attachment_text}</a>
+                                </span>
+                              ) : null}
+                            </div>
+                          );
+                        })
+                      : null}
                   </div>
 
                   {single_comments ? (

@@ -174,7 +174,9 @@ class StepPreview extends React.Component {
             </div>
           </Sider>
 
-          {comment_data && _.size(comment_data.results) ? (
+          {comment_data &&
+          comment_data.results &&
+          comment_data.results.length > 0 ? (
             <Comments
               object_id={this.state.object_id}
               toggleSidebar={this.toggleSidebar}
