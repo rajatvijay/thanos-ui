@@ -155,7 +155,7 @@ const HeaderTitle = props => {
             title={props.workflow.name}
             style={{
               color: "#000000",
-              fontSize: "20px",
+              fontSize: "16px",
               letterSpacing: "-0.04px",
               lineHeight: "24px"
             }}
