@@ -113,13 +113,14 @@ class Sidebar extends Component {
             position: "fixed",
             paddingBottom: 100,
             height: "100%",
-            overflow: "scroll",
             fontFamily: "Cabin",
-            minHeight: "110vh"
+            minHeight: "110vh",
+            background: "#104775"
           }}
         >
           <div className="logo" />
           <Select
+            dropdownStyle={{ position: "fixed" }}
             className={css`
               .ant-select-selection {
                 background-color: #0a3150;
@@ -146,7 +147,9 @@ class Sidebar extends Component {
             style={{
               backgroundColor: "#104774",
               padding: "5px 0px",
-              minHeight: "100vh"
+              // minHeight: "100vh"
+              maxHeight: "80vh",
+              overflow: "scroll"
             }}
             className={css`
               .sidebarList:hover {
