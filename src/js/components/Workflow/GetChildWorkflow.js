@@ -2,9 +2,18 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { connect } from "react-redux";
 import WorkflowItem from "./WorkflowItem";
-import { Tabs } from "antd";
+import { Tabs, Checkbox, notification } from "antd";
+import { authHeader, baseUrl } from "../../_helpers";
 
 const TabPane = Tabs.TabPane;
+
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
 
 class GetChildWorkflow extends Component {
   constructor(props) {
@@ -43,11 +52,17 @@ class GetChildWorkflow extends Component {
       let k = {
         name: kind.name,
         id: kind.id,
+        is_related_checkmarking_enabled: kind.is_related_checkmarking_enabled,
+        tag: kind.tag,
+        is_checkbox_checked: false,
         workflows: []
       };
       _.forEach(children, child => {
         if (child.definition.kind === kind.id) {
           k.workflows.push(child);
+        }
+        if (child.checkmarked_types.includes(kind.tag)) {
+          k.is_checkbox_checked = true;
         }
       });
       return k;
@@ -62,21 +77,99 @@ class GetChildWorkflow extends Component {
     });
   };
 
+  onChildCheckboxClick = (
+    workflowId,
+    kindTag,
+    is_checkbox_checked,
+    kindDetail
+  ) => {
+    const requestOptions = {
+      method: "POST",
+      headers: authHeader.post(),
+      credentials: "include",
+      body: JSON.stringify({
+        related_type: kindTag,
+        action: !is_checkbox_checked ? "add" : "remove"
+      })
+    };
+    return fetch(
+      baseUrl + "workflows/" + workflowId + "/checkmark-related-type/",
+      requestOptions
+    ).then(response => {
+      if (!response.ok) {
+        return openNotificationWithIcon({
+          type: "error",
+          message: "Failed!"
+        });
+      }
+      let rk = this.state.relatedKinds;
+      let children = this.state.children;
+
+      let workflowFilterByKind = _.map(rk, kind => {
+        let k = {
+          name: kind.name,
+          id: kind.id,
+          is_related_checkmarking_enabled: kind.is_related_checkmarking_enabled,
+          tag: kind.tag,
+          is_checkbox_checked: false,
+          workflows: kind.workflows
+        };
+        _.forEach(children, child => {
+          if (response.json().checkmarked_types.includes(kindDetail.tag)) {
+            k.is_checkbox_checked = true;
+          }
+        });
+        return k;
+      });
+
+      this.setState({
+        relatedKinds: _.orderBy(
+          workflowFilterByKind,
+          ["workflows.length"],
+          ["desc"]
+        )
+      });
+      console.log(response.json());
+      return response.json();
+    });
+  };
+
+  getChildCheckbox = kind => {
+    if (
+      kind.is_related_checkmarking_enabled &&
+      this.props.config.permissions.includes("Can checkmark related workflows")
+    ) {
+      return <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>;
+    }
+    return (
+      <div>
+        <Checkbox
+          checked={kind.is_checkbox_checked}
+          onChange={e =>
+            this.onChildCheckboxClick(
+              this.props.workflow.id,
+              kind.tag,
+              kind.is_checkbox_checked,
+              kind
+            )
+          }
+        />
+        <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>
+      </div>
+    );
+  };
+
   render() {
     const { props } = this;
     const cbtn = (
       <span style={{ paddingRight: "20px" }}>{props.createButton}</span>
     );
     let workflowId = props.workflow.id;
-
     return (
       <Tabs tabBarExtraContent={cbtn}>
-        {_.map(this.state.relatedKinds, function(kind, key) {
+        {_.map(this.state.relatedKinds, (kind, key) => {
           return (
-            <TabPane
-              tab={kind.name + " (" + _.size(kind.workflows) + ")"}
-              key={kind.name}
-            >
+            <TabPane tab={this.getChildCheckbox(kind)} key={kind.name}>
               <div className="pd-ard-lg">
                 {_.size(kind.workflows) ? (
                   _.map(kind.workflows, function(item, index) {
