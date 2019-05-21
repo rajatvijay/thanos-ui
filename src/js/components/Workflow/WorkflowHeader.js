@@ -97,22 +97,76 @@ export const WorkflowHeader = props => {
   );
 };
 
+const createFamilyListForBreadcrums = family => {
+  return family.map(item => (
+    <React.Fragment>
+      <Link style={{ color: "black" }} to={"/workflows/instances/" + item.id}>
+        {" "}
+        {item.name}
+      </Link>
+      <span> /</span>
+    </React.Fragment>
+  ));
+};
+
 const HeaderTitle = props => {
-  return (
-    <div>
-      <span
-        title={props.workflow.name}
-        style={{
-          color: "#000000",
-          fontSize: "20px",
-          letterSpacing: "-0.04px",
-          lineHeight: "24px"
-        }}
-      >
-        {props.workflow.name}
-      </span>
-    </div>
-  );
+  console.log(props);
+  const { workflow } = props;
+  const { family } = workflow;
+
+  if (family.length === 1) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          {workflow.name}
+        </span>
+      </div>
+    );
+  } else if (family.length === 2) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          <span style={{ color: "#b5b5b5" }}>{family[0].name}</span> /{" "}
+          {family[1].name}
+        </span>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Popover content={createFamilyListForBreadcrums(family)}>
+          <span
+            title={props.workflow.name}
+            style={{
+              color: "#000000",
+              fontSize: "20px",
+              letterSpacing: "-0.04px",
+              lineHeight: "24px"
+            }}
+          >
+            <span style={{ color: "#b5b5b5" }}>{family[0].name} /... /</span>{" "}
+            {workflow.name}
+          </span>
+        </Popover>
+      </div>
+    );
+  }
 };
 
 const HeaderLcData = props => {
