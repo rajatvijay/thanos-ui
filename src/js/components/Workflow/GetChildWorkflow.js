@@ -90,45 +90,51 @@ class GetChildWorkflow extends Component {
     return fetch(
       baseUrl + "workflows/" + workflowId + "/checkmark-related-type/",
       requestOptions
-    ).then(response => {
-      if (!response.ok) {
-        return openNotificationWithIcon({
-          type: "error",
-          message: "Failed!"
-        });
-      }
-      console.log(response.json());
+    )
+      .then(response => {
+        if (!response.ok) {
+          return openNotificationWithIcon({
+            type: "error",
+            message: "Failed!"
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        // login successful if there's a jwt token in the response
+        if (data) {
+          console.log(data);
 
-      let rk = this.state.relatedKinds;
-      let children = this.state.children;
+          let rk = this.state.relatedKinds;
+          let children = this.state.children;
 
-      let workflowFilterByKind = _.map(rk, kind => {
-        let k = {
-          name: kind.name,
-          id: kind.id,
-          is_related_checkmarking_enabled: kind.is_related_checkmarking_enabled,
-          tag: kind.tag,
-          is_checkbox_checked: false,
-          workflows: kind.workflows
-        };
-        _.forEach(children, child => {
-          if (response.json().checkmarked_types.includes(child.tag)) {
-            k.is_checkbox_checked = true;
-          }
-        });
-        return k;
+          let workflowFilterByKind = _.map(rk, kind => {
+            let k = {
+              name: kind.name,
+              id: kind.id,
+              is_related_checkmarking_enabled:
+                kind.is_related_checkmarking_enabled,
+              tag: kind.tag,
+              is_checkbox_checked: false,
+              workflows: kind.workflows
+            };
+            _.forEach(children, child => {
+              if (data.checkmarked_types.includes(child.tag)) {
+                k.is_checkbox_checked = true;
+              }
+            });
+            return k;
+          });
+
+          this.setState({
+            relatedKinds: _.orderBy(
+              workflowFilterByKind,
+              ["workflows.length"],
+              ["desc"]
+            )
+          });
+        }
       });
-
-      this.setState({
-        relatedKinds: _.orderBy(
-          workflowFilterByKind,
-          ["workflows.length"],
-          ["desc"]
-        )
-      });
-      console.log(response.json());
-      return response.json();
-    });
   };
 
   getChildCheckbox = kind => {
