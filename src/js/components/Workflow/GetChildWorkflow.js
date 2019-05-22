@@ -137,6 +137,7 @@ class GetChildWorkflow extends Component {
   };
 
   getChildCheckbox = kind => {
+    let regexForUrl = /\/instances\/[\d]+/;
     if (kind.is_related_checkmarking_enabled) {
       return (
         <div>
@@ -152,7 +153,7 @@ class GetChildWorkflow extends Component {
             disabled={
               !this.props.config.permissions.includes(
                 "Can checkmark related workflows"
-              )
+              ) || !regexForUrl.test(document.location.pathname)
             }
           />
           <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>
