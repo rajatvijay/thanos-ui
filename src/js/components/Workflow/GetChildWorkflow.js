@@ -47,6 +47,7 @@ class GetChildWorkflow extends Component {
   assignChilrenToKind = () => {
     let rk = this.state.relatedKinds;
     let children = this.state.children;
+    let workFlowDetail = this.props.workflow;
 
     let workflowFilterByKind = _.map(rk, kind => {
       let k = {
@@ -61,7 +62,7 @@ class GetChildWorkflow extends Component {
         if (child.definition.kind === kind.id) {
           k.workflows.push(child);
         }
-        if (child.checkmarked_types.includes(kind.tag)) {
+        if (workFlowDetail.checkmarked_types.includes(kind.tag)) {
           k.is_checkbox_checked = true;
         }
       });

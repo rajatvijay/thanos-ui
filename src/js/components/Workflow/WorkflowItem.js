@@ -300,6 +300,7 @@ class WorkflowItem extends React.Component {
                     showQuickDetails={showQuickDetailsFunction}
                     relatedKinds={this.state.relatedWorkflow}
                     config={this.props.config}
+                    workflow={this.props.workflow}
                   />
                 </div>
               ) : null}
