@@ -77,12 +77,7 @@ class GetChildWorkflow extends Component {
     });
   };
 
-  onChildCheckboxClick = (
-    workflowId,
-    kindTag,
-    is_checkbox_checked,
-    kindDetail
-  ) => {
+  onChildCheckboxClick = (workflowId, kindTag, is_checkbox_checked) => {
     const requestOptions = {
       method: "POST",
       headers: authHeader.post(),
@@ -102,6 +97,8 @@ class GetChildWorkflow extends Component {
           message: "Failed!"
         });
       }
+      console.log(response.json());
+
       let rk = this.state.relatedKinds;
       let children = this.state.children;
 
@@ -115,7 +112,7 @@ class GetChildWorkflow extends Component {
           workflows: kind.workflows
         };
         _.forEach(children, child => {
-          if (response.json().checkmarked_types.includes(kindDetail.tag)) {
+          if (response.json().checkmarked_types.includes(child.tag)) {
             k.is_checkbox_checked = true;
           }
         });
@@ -135,10 +132,7 @@ class GetChildWorkflow extends Component {
   };
 
   getChildCheckbox = kind => {
-    if (
-      kind.is_related_checkmarking_enabled &&
-      this.props.config.permissions.includes("Can checkmark related workflows")
-    ) {
+    if (kind.is_related_checkmarking_enabled) {
       return (
         <div>
           <Checkbox
@@ -147,8 +141,12 @@ class GetChildWorkflow extends Component {
               this.onChildCheckboxClick(
                 this.props.workflow.id,
                 kind.tag,
-                kind.is_checkbox_checked,
-                kind
+                kind.is_checkbox_checked
+              )
+            }
+            disabled={
+              !this.props.config.permissions.includes(
+                "Can checkmark related workflows"
               )
             }
           />
