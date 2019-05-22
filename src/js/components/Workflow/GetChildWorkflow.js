@@ -105,23 +105,17 @@ class GetChildWorkflow extends Component {
         // login successful if there's a jwt token in the response
         if (data) {
           let rk = this.state.relatedKinds;
-          let children = this.state.children;
 
-          let workflowFilterByKind = _.map(rk, kind => {
+          let workflowFilterByKind = rk.map(kind => {
             let k = {
               name: kind.name,
               id: kind.id,
               is_related_checkmarking_enabled:
                 kind.is_related_checkmarking_enabled,
               tag: kind.tag,
-              is_checkbox_checked: false,
+              is_checkbox_checked: data.checkmarked_types.includes(kind.tag),
               workflows: kind.workflows
             };
-            _.forEach(children, child => {
-              if (data.checkmarked_types.includes(k.tag)) {
-                k.is_checkbox_checked = true;
-              }
-            });
             return k;
           });
 
