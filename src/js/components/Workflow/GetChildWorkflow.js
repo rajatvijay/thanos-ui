@@ -18,7 +18,7 @@ const openNotificationWithIcon = data => {
 class GetChildWorkflow extends Component {
   constructor(props) {
     super(props);
-    this.state = { relatedKinds: [], children: [] };
+    this.state = { relatedKinds: [], children: [], isLoading: false };
   }
 
   componentDidUpdate = prevProps => {
@@ -79,6 +79,9 @@ class GetChildWorkflow extends Component {
   };
 
   onChildCheckboxClick = (workflowId, kindTag, is_checkbox_checked) => {
+    this.setState({
+      isLoading: true
+    });
     const requestOptions = {
       method: "POST",
       headers: authHeader.post(),
@@ -94,6 +97,9 @@ class GetChildWorkflow extends Component {
     )
       .then(response => {
         if (!response.ok) {
+          this.setState({
+            isLoading: false
+          });
           return openNotificationWithIcon({
             type: "error",
             message: "Failed!"
@@ -124,7 +130,8 @@ class GetChildWorkflow extends Component {
               workflowFilterByKind,
               ["workflows.length"],
               ["desc"]
-            )
+            ),
+            isLoading: false
           });
         }
       });
@@ -147,7 +154,9 @@ class GetChildWorkflow extends Component {
             disabled={
               !this.props.config.permissions.includes(
                 "Can checkmark related workflows"
-              ) || !regexForUrl.test(document.location.pathname)
+              ) ||
+              !regexForUrl.test(document.location.pathname) ||
+              this.state.isLoading
             }
           />
           <span>{kind.name + " (" + _.size(kind.workflows) + ")"}</span>
