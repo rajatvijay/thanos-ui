@@ -109,6 +109,8 @@ export const getFieldType = props => {
       return RDC(props);
     case "dnb_rdc1":
       return RDC(props);
+    case "rdc_stop_inq":
+      return DnBCommon(props);
     case "dnb_rdc_alerts":
       return RDCAlerts(props);
     case "dnb_cmp_ent_vw":
