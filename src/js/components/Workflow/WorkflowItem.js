@@ -196,7 +196,6 @@ class WorkflowItem extends React.Component {
         }
       });
     }
-
     this.props.dispatch(workflowActions.expandedWorkflowsList(list));
   };
 
@@ -220,9 +219,8 @@ class WorkflowItem extends React.Component {
       }
       this.onWorkflowToggle("add");
     }
-    this.setState({ opened: true });
 
-    if (!this.state.stepGroupData) {
+    if (!this.state.opened && !this.state.stepGroupData) {
       workflowDetailsService
         .getStepGroup(this.props.workflow.id)
         .then(response => {
@@ -233,6 +231,8 @@ class WorkflowItem extends React.Component {
           });
         });
     }
+
+    this.setState({ opened: true });
   };
 
   onClose = () => {
@@ -340,48 +340,36 @@ class WorkflowItem extends React.Component {
                 }
               />
 
-              {showQuickDetailsFunction ? (
-                <Sider
-                  className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
-                  style={{
-                    background: "#fff",
-                    overflow: "auto",
-                    height: "calc(100vh - 65px)",
-                    position: "fixed",
-                    right: 0,
-                    top: "75px",
-                    zIndex: 1
-                  }}
-                  width="700"
-                  collapsed={!this.state.showQuickDetails}
-                  collapsedWidth={0}
-                  collapsible
-                  trigger={null}
-                >
-                  <div className="comment-details" style={{ width: "700px" }}>
-                    <div className="sidebar-head">
-                      <span className="sidebar-title">
-                        {this.props.workflow.name}
-                      </span>
-                      <Icon
-                        type="close"
-                        onClick={this.hideQuickDetails}
-                        style={{
-                          position: "absolute",
-                          top: "0px",
-                          right: "0px",
-                          width: "48px",
-                          height: "48px",
-                          lineHeight: "48px",
-                          cursor: "pointer"
-                        }}
+              {this.state.relatedWorkflow ? (
+                <div>
+                  <Divider className="no-margin" />
+                  <ChildWorkflow
+                    {...this.props}
+                    createButton={
+                      <CreateRelated
+                        relatedKind={this.state.relatedWorkflow}
+                        onChildSelect={this.createChildWorkflow}
                       />
-                    </div>
-                    <Content style={{ padding: "15px", paddingBottom: "50px" }}>
-                      <StepPreview />
-                    </Content>
-                  </div>
-                </Sider>
+                    }
+                    isEmbedded={this.props.isEmbedded}
+                    getGroupedData={this.getGroupedData}
+                    addComment={this.props.addComment || null}
+                    showCommentIcon={this.props.showCommentIcon}
+                    expandedWorkflows={this.props.expandedWorkflows}
+                    showQuickDetails={showQuickDetailsFunction}
+                    relatedKinds={this.state.relatedWorkflow}
+                    config={this.props.config}
+                    workflow={this.props.workflow}
+                  />
+                </div>
+              ) : null}
+
+              {showQuickDetailsFunction ? (
+                <StepPreview
+                  workflowName={this.props.workflow.name}
+                  hideQuickDetails={this.hideQuickDetails}
+                  showQuickDetails={this.state.showQuickDetails}
+                />
               ) : null}
             </div>
           </Collapsible>

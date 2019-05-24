@@ -44,7 +44,11 @@ class RDCEventDetailComponent extends Component {
   }
 
   getComment = (e, data) => {
-    this.props.getIntegrationComments(data.custom_hash, this.props.field.id);
+    this.props.getIntegrationComments(
+      data.custom_hash,
+      this.props.field.id,
+      this.props.isEmbedded
+    );
   };
 
   render = () => {

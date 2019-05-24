@@ -9,7 +9,8 @@ import _ from "lodash";
 import {
   workflowDetailsActions,
   workflowActions,
-  workflowFiltersActions
+  workflowFiltersActions,
+  stepPreviewActions
 } from "../actions";
 
 const openNotificationWithIcon = data => {
@@ -329,7 +330,7 @@ function undoStep(payload) {
 ////////////////////
 //Adding a Commnt //
 ////////////////////
-function addComment(payload, step_reload_payload) {
+function addComment(payload, step_reload_payload, isEmbedded) {
   return dispatch => {
     //dispatch(request(payload));
 
@@ -339,6 +340,7 @@ function addComment(payload, step_reload_payload) {
           dispatch(failure(commentData));
           return;
         }
+        commentData.isEmbedded = isEmbedded;
         dispatch(success(commentData));
         if (
           _.size(commentData.results) &&
@@ -350,9 +352,20 @@ function addComment(payload, step_reload_payload) {
             stepId: commentData.results[0].target.step_details.id,
             doNotRefresh: true
           };
-          dispatch(workflowDetailsActions.getStepFields(stepTrack));
+
+          if (isEmbedded) {
+            dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
+          } else {
+            dispatch(workflowDetailsActions.getStepFields(stepTrack));
+          }
         } else if (_.size(step_reload_payload)) {
-          dispatch(workflowDetailsActions.getStepFields(step_reload_payload));
+          if (isEmbedded) {
+            dispatch(
+              stepPreviewActions.getStepPreviewFields(step_reload_payload)
+            );
+          } else {
+            dispatch(workflowDetailsActions.getStepFields(step_reload_payload));
+          }
         }
       },
       error => dispatch(failure(error))
@@ -386,12 +399,13 @@ function addComment(payload, step_reload_payload) {
 ////////////////////
 //Updating Flag //
 ////////////////////
-function updateFlag(payload) {
+function updateFlag(payload, isEmbedded) {
   return dispatch => {
     //dispatch(request(payload));
 
     workflowStepService.updateFlag(payload).then(
       commentData => {
+        commentData.isEmbedded = isEmbedded;
         dispatch(success(commentData));
         if (
           _.size(commentData.results) &&
@@ -403,7 +417,12 @@ function updateFlag(payload) {
             stepId: commentData.results[0].target.step_details.id,
             doNotRefresh: true
           };
-          dispatch(workflowDetailsActions.getStepFields(stepTrack));
+
+          if (isEmbedded) {
+            dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
+          } else {
+            dispatch(workflowDetailsActions.getStepFields(stepTrack));
+          }
         }
       },
       error => dispatch(failure(error))
@@ -437,12 +456,13 @@ function updateFlag(payload) {
 ////////////////////
 //Updating status //
 ////////////////////
-function updateIntegrationStatus(payload) {
+function updateIntegrationStatus(payload, isEmbedded) {
   return dispatch => {
     //dispatch(request(payload));
 
     workflowStepService.updateIntegrationStatus(payload).then(
       commentData => {
+        commentData.isEmbedded = isEmbedded;
         dispatch(success(commentData));
         if (_.size(commentData.results)) {
           let stepTrack = {
@@ -451,7 +471,12 @@ function updateIntegrationStatus(payload) {
             stepId: commentData.results[0].target.step_details.id,
             doNotRefresh: true
           };
-          dispatch(workflowDetailsActions.getStepFields(stepTrack));
+
+          if (isEmbedded) {
+            dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
+          } else {
+            dispatch(workflowDetailsActions.getStepFields(stepTrack));
+          }
         }
       },
       error => dispatch(failure(error))

@@ -42,7 +42,6 @@ class StepBodyForm extends Component {
       }
     }
     if (this.haveNewFieldsBeenAdded(prev)) {
-      console.log("new field(s) added");
       this.updateAllAPIFields();
     }
   };
@@ -417,7 +416,9 @@ class StepBodyForm extends Component {
       currentStepFields: this.props.currentStepFields,
       error: this.props.currentStepFields.error,
       onFieldChange: this.onFieldChange,
-      workflowId: this.getWorkflowId(),
+      workflowId: this.props.currentStepFields.currentStepFields
+        ? this.props.currentStepFields.currentStepFields.workflow
+        : this.getWorkflowId(),
       formProps: this.props.form,
       completed: !!this.props.stepData.completed_at,
       is_locked: this.props.stepData.is_locked,

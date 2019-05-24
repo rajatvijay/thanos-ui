@@ -171,7 +171,7 @@ function feedValue(props) {
 }
 
 function addComment(props) {
-  props.addComment(props.field.id, "field");
+  props.addComment(props.field.id, "field", props.isEmbedded);
 }
 
 function addCommentBtn(e, props) {
