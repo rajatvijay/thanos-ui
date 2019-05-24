@@ -20,6 +20,7 @@ import BreadCrums from "./BreadCrums";
 import StepPreview from "../Workflow/StepPreview";
 import { calculatedData } from "../Workflow/calculated-data";
 import { currentActiveStep } from "./utils/active-step";
+import { goToPrevStep } from "../../utils/customBackButton";
 
 const { getProgressData } = calculatedData;
 
@@ -257,8 +258,32 @@ class WorkflowDetails extends Component {
                 minHeight: "100vh"
               }}
             >
+              <div
+                style={{
+                  backgroundColor: "#104774",
+                  width: "75px",
+                  paddingTop: "28px"
+                }}
+              >
+                <span
+                  onClick={goToPrevStep}
+                  className="text-anchor pd-ard-sm "
+                  style={{ padding: 15 }}
+                >
+                  <i
+                    className="material-icons text-secondary"
+                    style={{
+                      fontSize: "40px",
+                      verticalAlign: "middle",
+                      color: "#fff"
+                    }}
+                  >
+                    keyboard_backspace
+                  </i>
+                </span>
+              </div>
               <SidebarView />
-              <Content>
+              <Content style={{ width: "50%" }}>
                 <div className="printOnly ">
                   <div
                     className="mr-ard-lg"
