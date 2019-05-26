@@ -1,5 +1,5 @@
 //NEWER
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
 import Collapsible from "react-collapsible";
 import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
@@ -110,6 +110,19 @@ const getChildKinds = (workflows, kinds) => {
   return filteredKind;
 };
 
+const VTag = props => {
+  let tag = (
+    <span
+      className={"vet-tag " + (props.selected ? "vet-tag-selected" : "")}
+      onClick={props.onClick}
+    >
+      {props.label}
+    </span>
+  );
+
+  return tag;
+};
+
 class ChildWorkflowField2 extends Component {
   constructor() {
     super();
@@ -119,7 +132,8 @@ class ChildWorkflowField2 extends Component {
       statusView: true,
       kindChecked: false,
       showRelatedWorkflow: false,
-      selected_filters: { category: [], status: "", flag: "", kind: "" }
+      selected_filters: { category: [], status: "", flag: "", kind: "" },
+      showFilters: false
     };
   }
 
@@ -309,14 +323,10 @@ class ChildWorkflowField2 extends Component {
         size="small"
         //disabled={isDisabled(this.props)}
       >
-        <Button
-          type="primary"
-          loading={this.props.workflowKind.loading ? true : false}
-          //size="small"
-        >
+        <span className="pd-ard-sm text-secondary text-anchor">
           <i className="material-icons">add</i>{" "}
           {this.state.fetching ? "loadin..." : null}
-        </Button>
+        </span>
       </Dropdown>
     );
 
@@ -374,10 +384,11 @@ class ChildWorkflowField2 extends Component {
 
   createStatusFilterTag = () => {
     let that = this;
-    let status_workflow_map = { "All Status": that.state.childWorkflow };
+    let status_workflow_map = { All: that.state.childWorkflow };
     let workflow_status_count = {
-      "All Status": _.size(that.state.childWorkflow)
+      All: _.size(that.state.childWorkflow)
     };
+    let selected = this.state.selected_filters.status;
 
     // getting workflow status count
     _.map(that.state.childWorkflow, function(v, k) {
@@ -394,28 +405,25 @@ class ChildWorkflowField2 extends Component {
       }
     });
 
-    let statusfilterTags = (
-      <Select
-        placeholder="Status"
-        onChange={that.onFilterTagChange.bind(that, "status")}
-        style={{ width: "150px" }}
-        size="small"
-        allowClear={true}
-      >
-        {_.map(workflow_status_count, function(v, k) {
-          return (
-            <Option key={k} value={k}>
-              {k} ({v})
-            </Option>
-          );
-        })}
-      </Select>
-    );
-
-    this.setState({
-      statusfilterTags: statusfilterTags,
-      status_workflow_map: status_workflow_map
+    return _.map(workflow_status_count, function(v, k) {
+      return (
+        <VTag
+          label={k + " (" + v + ")"}
+          key={k}
+          onClick={that.onFilterTagChange.bind(that, "status", k)}
+          selected={
+            k === "All" && selected === ""
+              ? true
+              : selected === k ? true : false
+          }
+        />
+      );
     });
+
+    // this.setState({
+    //   statusfilterTags: statusfilterTags,
+    //   status_workflow_map: status_workflow_map
+    // });
   };
 
   createFilterTag = () => {
@@ -430,10 +438,10 @@ class ChildWorkflowField2 extends Component {
     }
 
     let filter_tag_count = {
-      "All Categories": _.size(that.state.filteredChildWorkflow)
+      All: _.size(that.state.filteredChildWorkflow)
     };
     let tag_workflow_map = {
-      "All Categories": that.state.filteredChildWorkflow
+      All: that.state.filteredChildWorkflow
     };
 
     // getting lc data alerts count
@@ -460,33 +468,34 @@ class ChildWorkflowField2 extends Component {
     });
 
     let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
+
     let filterTags = (
       <div>
-        <span className="text-metal mr-right-sm">Areas of Concern: </span>
+        <span className="text-lighter mr-right-sm">Concerns: </span>
         {_.map(filter_tag_count, (v, k) => {
           return (
-            <span
+            <VTag
+              label={
+                <Tooltip title={k}>
+                  {k} ({v})
+                  {styling && styling[k] ? (
+                    <i
+                      style={{
+                        color: styling[k].color,
+                        position: "relative",
+                        top: "-7px",
+                        right: "-23px"
+                      }}
+                      className="material-icons ellip-small s50 t-12 text-middle"
+                    >
+                      fiber_manual_records
+                    </i>
+                  ) : null}
+                </Tooltip>
+              }
               key={v + k}
-              className="alert-tag-item alert-basic ant-tag"
               onClick={this.onFilterTagChange.bind(that, k, "category")}
-            >
-              <Tooltip title={k}>
-                {k} ({v})
-                {styling && styling[k] ? (
-                  <i
-                    style={{
-                      color: styling[k].color,
-                      position: "relative",
-                      top: "-7px",
-                      right: "-23px"
-                    }}
-                    className="material-icons ellip-small s50 t-12 text-middle"
-                  >
-                    fiber_manual_records
-                  </i>
-                ) : null}
-              </Tooltip>
-            </span>
+            />
           );
         })}
       </div>
@@ -502,7 +511,7 @@ class ChildWorkflowField2 extends Component {
     let filtered_workflow = this.state.filteredChildWorkflow;
 
     if (tag == "status") {
-      if (_type == "All Status") {
+      if (_type == "All") {
         delete this.state.selected_filters["status"];
       } else {
         this.state.selected_filters["status"] = _type;
@@ -511,7 +520,7 @@ class ChildWorkflowField2 extends Component {
         selected_filters: this.state.selected_filters
       });
     } else if (_type == "category") {
-      if (tag == "All Categories") {
+      if (tag == "All") {
         this.state.selected_filters["category"] = [];
         //delete this.state.selected_filters["category"];
       } else {
@@ -574,7 +583,7 @@ class ChildWorkflowField2 extends Component {
 
         if (key == "status" && fval) {
           // search for fvalue in cw["status"]["label"]
-          if (cw["status"]["label"] != fval && fval != "All Status") {
+          if (cw["status"]["label"] != fval && fval != "All") {
             found = null;
             return true;
           }
@@ -633,7 +642,7 @@ class ChildWorkflowField2 extends Component {
         }
         if (key == "status" && fval) {
           // search for fvalue in cw["status"]["label"]
-          if (cw["status"]["label"] == fval && fval != "All Status") {
+          if (cw["status"]["label"] == fval && fval != "All") {
             found = null;
             return true;
           }
@@ -708,14 +717,12 @@ class ChildWorkflowField2 extends Component {
               }
 
               return (
-                <Tag
+                <VTag
+                  label={<Tooltip title={k}>{c}</Tooltip>}
+                  selected={true}
+                  onClick={that.removeSelectedFilter.bind(that, k, c)}
                   key={c + k + "selected"}
-                  className="alert-tag-item alert-metal"
-                  closable
-                  onClose={that.removeSelectedFilter.bind(that, k, c)}
-                >
-                  <Tooltip title={k}>{c}</Tooltip>
-                </Tag>
+                />
               );
             });
           } else {
@@ -724,14 +731,12 @@ class ChildWorkflowField2 extends Component {
             }
 
             return (
-              <Tag
+              <VTag
+                label={<Tooltip title={k}>{v}</Tooltip>}
                 key={v + k + "selected"}
-                className="alert-tag-item alert-metal"
-                closable
-                onClose={that.removeSelectedFilter.bind(that, k, v)}
-              >
-                <Tooltip title={k}>{v}</Tooltip>
-              </Tag>
+                onClick={that.removeSelectedFilter.bind(that, k, v)}
+                selected={true}
+              />
             );
           }
         })}
@@ -787,37 +792,41 @@ class ChildWorkflowField2 extends Component {
       workflowKind.workflowKind
     );
 
+    let selected = this.state.selected_filters.kind;
+
     if (kindList.length === 0) {
       return <span />;
     }
 
     return (
       <div>
-        <span className="text-metal mr-right-sm">Type of Search: </span>
+        <span className="text-lighter mr-right-sm">Type: </span>
 
         {kindList.length > 0 ? (
-          <span
+          <VTag
+            label="All"
             key={"all"}
-            className="alert-tag-item alert-basic ant-tag"
             onClick={this.onFilterTagChange.bind(that, "kind", "all")}
-          >
-            All searches
-          </span>
+            selected={selected === "" ? true : false}
+          />
         ) : null}
 
         {kindList.map(v => {
           return (
-            <span
+            <VTag
+              label={`${v.name} (${v.count})`}
               key={v.id}
-              className="alert-tag-item alert-basic ant-tag"
               onClick={this.onFilterTagChange.bind(that, "kind", v.id)}
-            >
-              {`${v.name} (${v.count})`}
-            </span>
+              selected={selected === v.id ? true : false}
+            />
           );
         })}
       </div>
     );
+  };
+
+  onToggleFilters = () => {
+    this.setState({ showFilters: !this.state.showFilters });
   };
 
   render = () => {
@@ -829,9 +838,10 @@ class ChildWorkflowField2 extends Component {
       <FormItem
         label={""}
         className={
-          "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
+          "childworkflow-field-item from-label " +
+          (_.size(props.field.selected_flag) ? " has-flag" : "")
         }
-        style={{ display: "block" }}
+        style={{ display: "block", margin: "0 -24px" }}
         key={props.field.id}
         message=""
         hasFeedback
@@ -844,126 +854,166 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div>
-            <div className="">
-              {field.definition.extra.show_filters ? (
-                <div>
-                  <Row className="mr-bottom">
-                    <Col span={24}>
-                      {/*CATEGORY FILTER*/}
-                      {this.state.filterTags}
-                    </Col>
-                  </Row>
-                  <Row className="mr-bottom">
-                    <Col span={24}>
-                      {/*KIND FILTER*/}
-                      {this.createKindFilter()}
-                    </Col>
-                  </Row>
-                </div>
-              ) : null}
+            {/*show filters top*/}
+            <Row>
+              <Col span={12} className="pd-left-lg">
+                <span className="text-lighter">
+                  {this.state.childWorkflow
+                    ? this.state.childWorkflow.length
+                    : 0}{" "}
+                  results{" "}
+                </span>
 
-              <Row className="mr-bottom">
                 {field.definition.extra.show_filters ? (
-                  <Col span="18">
-                    <span
-                      className="text-metal"
-                      style={{ marginRight: "10px", float: "left" }}
-                    >
-                      Filter by:{" "}
-                    </span>
-
-                    {/*STATUS FILTER*/}
-                    <span className="mr-right">
-                      {this.state.statusfilterTags}
-                    </span>
-
-                    {/*ADJUDICATION FILTER*/}
-                    <span className="mr-right">{this.createFlagFilter()}</span>
-
-                    {/*EXCLUDED FILTERS*/}
-                    {_.size(this.state.excluded_filters) ? (
-                      <span className="mr-left-lg">
-                        <span className="text-metal mr-right"> Excluded:</span>
-                        {this.excludedFilter()}
-                      </span>
-                    ) : null}
-                  </Col>
-                ) : (
-                  <Col span="18" />
-                )}
-
-                <Col span="6" className="text-right text-light small">
-                  <Button
-                    type="primary"
-                    className="btn-o mr-right-sm"
-                    onClick={this.getChildWorkflow}
-                    size="small"
+                  <span
+                    className="mr-left-lg text-lighter text-anchor"
+                    onClick={this.onToggleFilters}
                   >
-                    Reload
-                  </Button>
+                    Filters{" "}
+                    <i className=" t-14 text-middle material-icons">
+                      keyboard_arrow_down
+                    </i>
+                  </span>
+                ) : null}
+              </Col>
 
-                  {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
-                    this.getAddMenu()
-                  ) : (
-                    <span className="ant-btn disabled child-workflow-dropdown ant-btn-primary ">
-                      <i className="material-icons">add</i>{" "}
-                      <Icon type="loading" />
-                    </span>
-                  )}
-                </Col>
-              </Row>
+              <Col span={12} className="text-right small pd-right-lg">
+                <span
+                  onClick={this.getChildWorkflow}
+                  title="Reload"
+                  className="child-workflow-dropdown pd-ard-sm mr-right-sm text-secondary text-anchor"
+                >
+                  <i className="material-icons">refresh</i>
+                </span>
 
-              {/*_.size(this.state.selected_filters) ? (
-                <Row>
-                  <Col span="12" style={{ marginTop: "10px" }}>
-                    <span
-                      className="text-metal "
-                      style={{ marginRight: "10px", float: "left" }}
-                    >
-                      Filtered:{" "}
-                    </span>
-                    <span>{this.selectedFilter()}</span>
-                  </Col>
-                </Row>
-              ) : null*/}
-            </div>
-
-            <Divider />
-
-            {_.size(this.state.filteredChildWorkflow) ? (
-              <Row className="text-metal">
-                <Col span="10">Name</Col>
-                <Col span="8" />
-                <Col span="3">Status</Col>
-                <Col span="3" />
-              </Row>
-            ) : null}
-
+                {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
+                  this.getAddMenu()
+                ) : (
+                  <span className="disabled child-workflow-dropdown pd-ard-sm text-lighter">
+                    <i className="material-icons">add</i>{" "}
+                    <Icon type="loading" />
+                  </span>
+                )}
+              </Col>
+            </Row>
             <br />
 
+            {/*FILTERS BEGINS */}
+
+            {this.state.showFilters ? (
+              <Fragment>
+                <Divider className="no-margin" />
+
+                <div
+                  style={{
+                    background: "#FAFAFA",
+                    padding: "24px",
+                    overflow: "hidden"
+                  }}
+                  className="animated pd-bottom"
+                >
+                  {field.definition.extra.show_filters ? (
+                    <div>
+                      <Row className="mr-bottom">
+                        <Col span={24}>
+                          {/*ADJUDICATION FILTER*/}
+                          <span className="mr-right">
+                            {this.createFlagFilter()}
+                          </span>
+                          <br />
+                        </Col>
+                      </Row>
+
+                      <Row className="mr-bottom">
+                        <Col span={24}>
+                          {/*CATEGORY FILTER*/}
+                          {this.state.filterTags}
+                        </Col>
+                      </Row>
+                      <Row className="mr-bottom">
+                        <Col span={24}>
+                          {/*KIND FILTER*/}
+                          {this.createKindFilter()}
+                        </Col>
+                      </Row>
+                    </div>
+                  ) : null}
+
+                  <Row className="mr-bottom">
+                    {field.definition.extra.show_filters ? (
+                      <Col span="18">
+                        <div>
+                          <span
+                            className="text-lighter"
+                            style={{ marginRight: "10px", float: "left" }}
+                          >
+                            Status:{" "}
+                          </span>
+
+                          {/*STATUS FILTER*/}
+                          <span className="mr-right">
+                            {this.createStatusFilterTag()}
+                          </span>
+                        </div>
+
+                        {/*EXCLUDED FILTERS*/}
+                        {_.size(this.state.excluded_filters) ? (
+                          <span className="mr-left-lg">
+                            <span className="text-lighter mr-right">
+                              {" "}
+                              Excluded:
+                            </span>
+                            {this.excludedFilter()}
+                          </span>
+                        ) : null}
+                      </Col>
+                    ) : (
+                      <Col span="18" />
+                    )}
+                  </Row>
+
+                  {_.size(this.state.selected_filters) ? (
+                    <Row>
+                      <Col span="12" style={{ marginTop: "10px" }}>
+                        <span
+                          className="text-lighter "
+                          style={{ marginRight: "10px", float: "left" }}
+                        >
+                          Filtered:{" "}
+                        </span>
+                        <span>{this.selectedFilter()}</span>
+                      </Col>
+                    </Row>
+                  ) : null}
+                </div>
+                <Divider className="no-margin" />
+              </Fragment>
+            ) : null}
+
+            {/*FILTERS ENDS */}
+
+            {/*WROKFLOW LIST*/}
             <div
               className="workflow-list workflows-list-embedded "
               style={{ margin: "2px" }}
             >
-              <div>
-                {_.size(this.state.filteredChildWorkflow) ? (
-                  <WorkflowList
-                    isEmbedded={true}
-                    sortAscending={false}
-                    {...this.props}
-                    workflow={{ workflow: this.state.filteredChildWorkflow }}
-                    statusView={true}
-                    kind={workflowKind}
-                    sortingEnabled={false}
-                    workflowKind={workflowKind}
-                    fieldExtra={field.definition.extra || null}
-                    addComment={props.addComment}
-                    showCommentIcon={true}
-                  />
-                ) : (
-                  <div>No related workflows</div>
-                )}
-              </div>
+              {_.size(this.state.filteredChildWorkflow) ? (
+                <WorkflowList
+                  isEmbedded={true}
+                  sortAscending={false}
+                  {...this.props}
+                  workflow={{ workflow: this.state.filteredChildWorkflow }}
+                  statusView={true}
+                  kind={workflowKind}
+                  sortingEnabled={false}
+                  workflowKind={workflowKind}
+                  fieldExtra={field.definition.extra || null}
+                  addComment={props.addComment}
+                  showCommentIcon={true}
+                />
+              ) : (
+                <div>No related workflows</div>
+              )}
             </div>
           </div>
         )}

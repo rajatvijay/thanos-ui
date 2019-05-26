@@ -264,7 +264,7 @@ class WorkflowItem extends React.Component {
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
     const showQuickDetailsFunction =
-      this.shouldShowQuickDetails() && this.showQuickDetails;
+      this.shouldShowQuickDetails() && this.showQuickDetails && false;
 
     return (
       <div
@@ -339,30 +339,6 @@ class WorkflowItem extends React.Component {
                     : this.state.relatedWorkflow
                 }
               />
-
-              {this.state.relatedWorkflow ? (
-                <div>
-                  <Divider className="no-margin" />
-                  <ChildWorkflow
-                    {...this.props}
-                    createButton={
-                      <CreateRelated
-                        relatedKind={this.state.relatedWorkflow}
-                        onChildSelect={this.createChildWorkflow}
-                      />
-                    }
-                    isEmbedded={this.props.isEmbedded}
-                    getGroupedData={this.getGroupedData}
-                    addComment={this.props.addComment || null}
-                    showCommentIcon={this.props.showCommentIcon}
-                    expandedWorkflows={this.props.expandedWorkflows}
-                    showQuickDetails={showQuickDetailsFunction}
-                    relatedKinds={this.state.relatedWorkflow}
-                    config={this.props.config}
-                    workflow={this.props.workflow}
-                  />
-                </div>
-              ) : null}
 
               {showQuickDetailsFunction ? (
                 <StepPreview

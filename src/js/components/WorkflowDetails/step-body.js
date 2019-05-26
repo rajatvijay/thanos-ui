@@ -141,7 +141,7 @@ class StepBody extends Component {
       : null;
 
     return (
-      <div>
+      <div style={{ background: "#FFFFFF" }}>
         {this.state.printing ? (
           <style
             dangerouslySetInnerHTML={{

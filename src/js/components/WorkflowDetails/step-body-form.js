@@ -621,13 +621,18 @@ class StepBodyForm extends Component {
               this.props.stepData.is_locked ||
               !_.includes(this.props.permission, "Can submit a step") ||
               !editable ? (
-                <Button type="primary " className="no-print  disabled">
+                <Button
+                  type="primary "
+                  className="no-print  disabled"
+                  size="large"
+                >
                   <FormattedMessage id="commonTextInstances.submitButtonText" />
                 </Button>
               ) : (
                 <Button
                   type="primary"
-                  className="no-print"
+                  size="large"
+                  className="no-print pd-ard"
                   htmlType="submit"
                   disabled={this.props.isSubmitting}
                 >
