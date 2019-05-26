@@ -1,13 +1,18 @@
 import React, { Component } from "react";
-
-import { Layout, Divider, Dropdown, Collapse, Row, Menu, Col } from "antd";
+import {
+  Layout,
+  Divider,
+  Dropdown,
+  Collapse,
+  Row,
+  Menu,
+  Col,
+  Drawer
+} from "antd";
 import { FormattedMessage } from "react-intl";
-import _ from "lodash";
-
 import { connect } from "react-redux";
-
 import { Link } from "react-router-dom";
-
+import AuditListTabs from "../../../../js/components/Navbar/audit_log";
 import {
   workflowDetailsActions,
   workflowStepActions
@@ -210,6 +215,22 @@ class Sidebar extends Component {
             backgroundColor: "#FAFAFA"
           }}
         >
+          {this.state.showSidebar ? (
+            <Drawer
+              title="Activity log"
+              placement="right"
+              closable={true}
+              //style={{top:'64px'}}
+              onClose={this.toggleSidebar}
+              visible={this.state.showSidebar}
+              width={500}
+              className="activity-log-drawer"
+            >
+              <AuditListTabs
+                id={this.props.workflowDetailsHeader.workflowDetailsHeader.id}
+              />
+            </Drawer>
+          ) : null}
           <div
             style={{
               color: "#000",
