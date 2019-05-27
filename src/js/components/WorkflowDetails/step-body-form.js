@@ -42,7 +42,6 @@ class StepBodyForm extends Component {
       }
     }
     if (this.haveNewFieldsBeenAdded(prev)) {
-      console.log("new field(s) added");
       this.updateAllAPIFields();
     }
   };
@@ -417,7 +416,9 @@ class StepBodyForm extends Component {
       currentStepFields: this.props.currentStepFields,
       error: this.props.currentStepFields.error,
       onFieldChange: this.onFieldChange,
-      workflowId: this.getWorkflowId(),
+      workflowId: this.props.currentStepFields.currentStepFields
+        ? this.props.currentStepFields.currentStepFields.workflow
+        : this.getWorkflowId(),
       formProps: this.props.form,
       completed: !!this.props.stepData.completed_at,
       is_locked: this.props.stepData.is_locked,
@@ -620,13 +621,18 @@ class StepBodyForm extends Component {
               this.props.stepData.is_locked ||
               !_.includes(this.props.permission, "Can submit a step") ||
               !editable ? (
-                <Button type="primary " className="no-print  disabled">
+                <Button
+                  type="primary "
+                  className="no-print  disabled"
+                  size="large"
+                >
                   <FormattedMessage id="commonTextInstances.submitButtonText" />
                 </Button>
               ) : (
                 <Button
                   type="primary"
-                  className="no-print"
+                  size="large"
+                  className="no-print pd-ard"
                   htmlType="submit"
                   disabled={this.props.isSubmitting}
                 >

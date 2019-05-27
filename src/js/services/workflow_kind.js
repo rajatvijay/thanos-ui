@@ -63,7 +63,6 @@ function getStatusCount(tag) {
 //     return Promise.reject(response.statusText);
 //   }
 //   let l = response.json();
-//   console.log("l lag gaye ahai ahai ");
 //   console.log(l);
 //   return l;
 // }

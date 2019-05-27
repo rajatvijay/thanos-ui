@@ -80,7 +80,7 @@ export const WorkflowHeader = props => {
   );
 
   return (
-    <Row type="flex" align="middle">
+    <Row type="flex" align="middle" className="header-opened">
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
 
       {props.isExpanded ? (
@@ -121,7 +121,7 @@ const HeaderTitle = props => {
           title={props.workflow.name}
           style={{
             color: "#000000",
-            fontSize: "16px",
+            fontSize: "20px",
             letterSpacing: "-0.04px",
             lineHeight: "24px"
           }}
@@ -137,7 +137,7 @@ const HeaderTitle = props => {
           title={props.workflow.name}
           style={{
             color: "#000000",
-            fontSize: "16px",
+            fontSize: "20px",
             letterSpacing: "-0.04px",
             lineHeight: "24px"
           }}
@@ -372,7 +372,7 @@ class HeaderOptions extends React.Component {
 
     let status = (
       <Tooltip title={this.state.current}>
-        <div className="pd-left pd-right status-text text-light t-12 ">
+        <div className="pd-left pd-right status-text text-black t-12 text-right">
           {this.state.current}
         </div>
       </Tooltip>

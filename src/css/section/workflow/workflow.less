@@ -18,7 +18,6 @@
       .waiting-filter-trigger {
         padding-bottom: 3px;
         border-bottom: 2px solid @color-secondary;
-        .Avenir-medium();
       }
     }
 
@@ -169,7 +168,7 @@
       background: @color-secondary;
       font-size: 20px;
       color: @color-white;
-      line-height: 70px;
+      line-height: 64px;
       //transition: all 0.5s ease-in;
       //width:100%;
 
@@ -219,11 +218,17 @@
   }
 }
 
+//
+.header-opened {
+  background: @color-secondary;
+}
+
 //LC CARD HEAR/COLLAPSED VIEW
 .lc-card-head {
   box-shadow: 0 5px 14px 0 rgba(0, 0, 0, 0.09);
-  padding: 20px 15px 20px 37px;
+  padding: 13px 15px 13px 37px;
   background: @color-white;
+  min-height: 64px;
   .company-name {
     font-size: 20px;
     padding-left: 8px;
@@ -354,7 +359,6 @@
         margin-right: 20px;
 
         .grp-class {
-          .Avenir-medium();
           display: block;
           .grp-name {
             display: inline-block;
