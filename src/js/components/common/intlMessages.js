@@ -69,7 +69,7 @@ export default {
       categoryText: "Category",
       requestOneTimePasswordText: "Request One-time password",
       resendOneTimePasswordText: "Resend One-time password",
-      oneTimePasswordSentText: "One-time password sent to ",
+      oneTimePasswordSentText: "Email sent to ",
       unableToSendOneTimePassword: "Unable to send one time password to ",
       emailCantBeEmpty: "Email can't be empty",
       invalidEmpty: "Invalid email",
