@@ -50,10 +50,12 @@ class NavTop extends Component {
   }
 
   onSearch = e => {
-    if (e) {
-      this.props.dispatch(workflowActions.searchWorkflow(e));
-    } else {
-      this.props.dispatch(workflowActions.getAll());
+    if (this.state.searchInput.length >= 3) {
+      if (e) {
+        this.props.dispatch(workflowActions.searchWorkflow(e));
+      } else {
+        this.props.dispatch(workflowActions.getAll());
+      }
     }
   };
 
