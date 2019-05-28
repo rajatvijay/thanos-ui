@@ -14,7 +14,8 @@ import {
   Col,
   Select,
   Drawer,
-  Tooltip
+  Tooltip,
+  notification
 } from "antd";
 import {
   logout,
@@ -34,6 +35,14 @@ const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const Search = Input.Search;
 const Option = Select.Option;
+
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
 
 class NavTop extends Component {
   constructor(props) {
@@ -56,6 +65,11 @@ class NavTop extends Component {
       } else {
         this.props.dispatch(workflowActions.getAll());
       }
+    } else {
+      openNotificationWithIcon({
+        type: "error",
+        message: "Please enter atleast 3 characters!"
+      });
     }
   };
 
