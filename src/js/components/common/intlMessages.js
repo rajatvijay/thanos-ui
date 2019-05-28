@@ -69,7 +69,8 @@ export default {
       categoryText: "Category",
       requestOneTimePasswordText: "Request One-time password",
       resendOneTimePasswordText: "Resend One-time password",
-      oneTimePasswordSentText: "Email sent to ",
+      oneTimePasswordSentText:
+        "We have sent you an email. If you are a registered user, you will also find your one time password in the email sent to",
       unableToSendOneTimePassword: "Unable to send one time password to ",
       emailCantBeEmpty: "Email can't be empty",
       invalidEmpty: "Invalid email",
@@ -195,7 +196,8 @@ export default {
       categoryText: "categoría",
       requestOneTimePasswordText: "Solicitar una contraseña de tiempo ",
       resendOneTimePasswordText: "volver a enviar una contraseña de tiempo ",
-      oneTimePasswordSentText: "Contraseña de una sola vez enviada a ",
+      oneTimePasswordSentText:
+        "Te hemos enviado un correo electrónico. Si es un usuario registrado, también encontrará su contraseña única en el correo electrónico enviado a",
       unableToSendOneTimePassword:
         "No se puede enviar una contraseña de tiempo a ",
       emailCantBeEmpty: "El correo electrónico no puede estar vacío",
