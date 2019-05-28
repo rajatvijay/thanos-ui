@@ -342,14 +342,16 @@ class HeaderOptions2 extends React.Component {
 
     const workflowActionMenu = (
       <Menu>
-        <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              restore
-            </i>{" "}
-            <FormattedMessage id="workflowsInstances.viewActivityLog" />
-          </span>
-        </Menu.Item>
+        {this.props.config.permissions.includes("Can View Activity Log") ? (
+          <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
+            <span>
+              <i className="material-icons t-18 text-middle pd-right-sm">
+                restore
+              </i>{" "}
+              <FormattedMessage id="workflowsInstances.viewActivityLog" />
+            </span>
+          </Menu.Item>
+        ) : null}
 
         <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
           <span>
@@ -440,8 +442,7 @@ class HeaderOptions2 extends React.Component {
               </Tooltip>
             ) : null}
 
-            {this.state.showSidebar &&
-            this.props.config.permissions.includes("Can View Activity Log") ? (
+            {this.state.showSidebar ? (
               <Drawer
                 title="Activity log"
                 placement="right"
