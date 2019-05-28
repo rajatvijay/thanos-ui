@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - export AWS_DEFAULT_REGION=us-east-1
+  pre_build:
+    commands:
+      - echo Installing yarn...
+      - yarn install --pure
+  build:
+    commands:
+      - CI=false yarn build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - apt-get install awscli -y
+      - aws s3 sync --acl public-read build/ s3://$DEPLOYMENT_BUCKET
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths '/*'
