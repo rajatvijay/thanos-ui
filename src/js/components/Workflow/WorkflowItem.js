@@ -258,6 +258,7 @@ class WorkflowItem extends React.Component {
                   showCommentIcon={this.props.showCommentIcon}
                   disableCollapse={this.disableCollapse}
                   enableCollapse={this.enableCollapse}
+                  config={this.props.config}
                 />
               </div>
             }

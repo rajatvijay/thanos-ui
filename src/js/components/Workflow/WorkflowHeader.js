@@ -440,7 +440,8 @@ class HeaderOptions2 extends React.Component {
               </Tooltip>
             ) : null}
 
-            {this.state.showSidebar ? (
+            {this.state.showSidebar &&
+            this.props.config.permissions.includes("Can View Activity Log") ? (
               <Drawer
                 title="Activity log"
                 placement="right"
