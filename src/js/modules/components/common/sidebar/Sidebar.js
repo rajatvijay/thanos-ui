@@ -149,7 +149,7 @@ class Sidebar extends Component {
               padding: "5px 0px",
               // minHeight: "100vh"
               maxHeight: "80vh",
-              overflow: "scroll"
+              overflowY: "scroll"
             }}
             className={css`
               .sidebarList:hover {

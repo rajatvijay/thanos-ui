@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Divider, Collapse } from "antd";
 import _ from "lodash";
-import NumberFormat from "../../../_helpers/NumberFormat";
+import { NumberFormat } from "../../../_helpers/NumberFormat";
 
 const Panel = Collapse.Panel;
 const FinancialData = props => {

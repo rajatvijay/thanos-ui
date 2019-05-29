@@ -1,7 +1,7 @@
 import React from "react";
 import numeral from "numeral";
 
-const NumberFormat = props => {
+export const NumberFormat = props => {
   //For format type reffer to http://numeraljs.com/
   let format = "0,0";
 
@@ -13,5 +13,3 @@ const NumberFormat = props => {
 
   return number;
 };
-
-export default NumberFormat;
