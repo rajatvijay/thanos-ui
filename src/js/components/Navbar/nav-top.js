@@ -178,6 +178,7 @@ class NavTop extends Component {
     }
     let supportedLaguanges = this.props.config.supported_languages;
     let regexForUrl = /\/instances\/[\d]+/;
+
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -198,7 +199,7 @@ class NavTop extends Component {
                 </span>
 
                 <span className="logo" style={{ float: "left" }}>
-                  <a href="/">
+                  <a href={localStorage.getItem("magicLogin") ? "#" : "/"}>
                     {!this.props.config.loading && this.props.config.logo ? (
                       <img
                         alt={this.props.config.name}

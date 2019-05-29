@@ -110,6 +110,8 @@ function removeCookies() {
 
 const logoutNav = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("magicLogin");
+  localStorage.removeItem("customHistory");
   removeCookies();
   document.location.href = baseUrl2 + "users/logout/";
 };
