@@ -189,7 +189,7 @@ class DuplicateCheckComp extends Component {
             <div className="workflow-list">
               <div className="paper">
                 {_.size(this.state.childWorkflow) ? (
-                  _.map(this.state.childWorkflow, function(workflow) {
+                  _.map(this.state.childWorkflow, workflow => {
                     return (
                       <div className="workflow-list-item ">
                         <div className="collapse-wrapper">
