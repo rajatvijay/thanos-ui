@@ -20,6 +20,7 @@ import BreadCrums from "./BreadCrums";
 import StepPreview from "../Workflow/StepPreview";
 import { calculatedData } from "../Workflow/calculated-data";
 import { currentActiveStep } from "./utils/active-step";
+import { goToPrevStep } from "../../utils/customBackButton";
 
 const { getProgressData } = calculatedData;
 
@@ -55,6 +56,8 @@ class WorkflowDetails extends Component {
     let workflowId = parseInt(this.props.match.params.id, 10);
     let thisCurrent = currentStepFields;
     let prevCurrent = prevProps.currentStepFields;
+
+    const params = new URLSearchParams(this.props.location.search);
 
     //CHECK IF THE STEP COMPLETION HAS CHANGED//
     //CALCULATE STEP ON SUBMISSION OR UNDO//
@@ -92,7 +95,8 @@ class WorkflowDetails extends Component {
       wd.workflowDetails &&
       prevProps.workflowDetails.workflowDetails &&
       wd.workflowDetails.stepGroups !==
-        prevProps.workflowDetails.workflowDetails.stepGroups
+        prevProps.workflowDetails.workflowDetails.stepGroups &&
+      !params.has("backing")
     ) {
       this.updateCurrentActiveStep();
     }
@@ -192,15 +196,15 @@ class WorkflowDetails extends Component {
 
   ////Comment functions begins///////
   /// this will be moved to another component///
-  callBackCollapser = (object_id, content_type) => {
+  callBackCollapser = (object_id, content_type, isEmbeddedDetails) => {
     this.state.loading_sidebar = true;
     this.state.object_id = object_id;
     this.props.dispatch(
-      workflowDetailsActions.getComment(object_id, content_type)
+      workflowDetailsActions.getComment(object_id, content_type, "", false)
     );
   };
 
-  addComment = (payload, step_reload_payload) => {
+  addComment = (payload, step_reload_payload, isEmbeddedDetails) => {
     this.state.adding_comment = true;
     this.state.object_id = payload.object_id;
     this.props.dispatch(
@@ -253,14 +257,42 @@ class WorkflowDetails extends Component {
           <Layout className="workflow-details-container inner-container">
             <Layout
               style={{
-                background: "#FBFBFF",
+                background: "#FAFAFA",
                 minHeight: "100vh"
               }}
             >
+              <div
+                style={{
+                  backgroundColor: "#104774",
+                  width: "75px",
+                  paddingTop: "28px"
+                }}
+              >
+                <span
+                  onClick={goToPrevStep}
+                  className="text-anchor pd-ard-sm "
+                  style={{ padding: 15 }}
+                >
+                  <i
+                    className="material-icons text-secondary"
+                    style={{
+                      fontSize: "40px",
+                      verticalAlign: "middle",
+                      color: "#fff"
+                    }}
+                  >
+                    keyboard_backspace
+                  </i>
+                </span>
+              </div>
               <SidebarView />
-              <Content>
+              <Content style={{ width: "50%" }}>
                 <div className="printOnly ">
-                  <div className="mr-ard-lg  shadow-1 bg-white" id="StepBody">
+                  <div
+                    className="mr-ard-lg"
+                    id="StepBody"
+                    style={{ background: "#FAFAFA" }}
+                  >
                     <StepBody
                       toggleSidebar={this.callBackCollapser}
                       changeFlag={this.changeFlag}
@@ -291,17 +323,22 @@ class WorkflowDetails extends Component {
                     </span>
                   </Tooltip>
                 </div>
-                {comment_data && _.size(comment_data.results) ? (
-                  <Comments
-                    object_id={this.state.object_id}
-                    toggleSidebar={this.callBackCollapser}
-                    addComment={this.addComment}
-                    gotoStep={this.fetchStepData}
-                    selectActiveStep={this.selectActiveStep}
-                    changeFlag={this.changeFlag}
-                    changeIntegrationStatus={this.changeIntegrationStatus}
-                    {...this.props}
-                  />
+                {comment_data &&
+                comment_data.results &&
+                comment_data.results.length > 0 &&
+                !comment_data.isEmbedded ? (
+                  <div>
+                    <Comments
+                      object_id={this.state.object_id}
+                      toggleSidebar={this.callBackCollapser}
+                      addComment={this.addComment}
+                      gotoStep={this.fetchStepData}
+                      selectActiveStep={this.selectActiveStep}
+                      changeFlag={this.changeFlag}
+                      changeIntegrationStatus={this.changeIntegrationStatus}
+                      {...this.props}
+                    />
+                  </div>
                 ) : null}
               </Content>
             </Layout>

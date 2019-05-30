@@ -10,7 +10,8 @@ import {
   workflowKind,
   workflowGroupCount,
   workflowAlertGroupCount,
-  workflowKindStatus
+  workflowKindStatus,
+  workflowKindValue
 } from "./workflow_kind";
 import { workflowDetails, hasStepinfo } from "./workflow_details";
 import { workflowDetailsHeader } from "./workflow_details_header";
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
   workflowAlertGroupCount,
   workflowKind,
   workflowKindStatus,
+  workflowKindValue,
   languageSelector,
   userWorkflowModal
 });

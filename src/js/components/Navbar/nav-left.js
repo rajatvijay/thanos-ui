@@ -62,7 +62,7 @@ class NavLeft extends Component {
             height: "100vh",
             position: "fixed",
             left: 0,
-            top: "65px",
+            top: "75px",
             width: "90px"
           }}
           width={"90px"}

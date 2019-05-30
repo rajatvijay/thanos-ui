@@ -42,7 +42,6 @@ class StepBodyForm extends Component {
       }
     }
     if (this.haveNewFieldsBeenAdded(prev)) {
-      console.log("new field(s) added");
       this.updateAllAPIFields();
     }
   };
@@ -417,7 +416,9 @@ class StepBodyForm extends Component {
       currentStepFields: this.props.currentStepFields,
       error: this.props.currentStepFields.error,
       onFieldChange: this.onFieldChange,
-      workflowId: this.getWorkflowId(),
+      workflowId: this.props.currentStepFields.currentStepFields
+        ? this.props.currentStepFields.currentStepFields.workflow
+        : this.getWorkflowId(),
       formProps: this.props.form,
       completed: !!this.props.stepData.completed_at,
       is_locked: this.props.stepData.is_locked,
@@ -474,7 +475,7 @@ class StepBodyForm extends Component {
 
         this.reset();
         return (
-          <Row gutter={16}>
+          <Row gutter={60}>
             {_.map(fields, rawField => {
               let field = this.getFieldForRender(rawField);
               let ftype = rawField.definition.field_type;
@@ -495,7 +496,7 @@ class StepBodyForm extends Component {
 
     let groupedField = [];
 
-    _.map(orderedStep, function(step) {
+    _.forEach(orderedStep, function(step) {
       if (
         step.definition.field_type === "paragraph" &&
         _.size(step.definition.extra) &&
@@ -517,124 +518,131 @@ class StepBodyForm extends Component {
         className="step-form"
         autoComplete="off"
       >
-        {showFieldVersion ? (
-          <div className=" mr-bottom">
-            <div className="version-item">
-              <span className="float-right">
-                <Tooltip placement="topRight" title={"Hide version"}>
-                  <span
-                    className="text-anchor"
-                    onClick={this.props.versionToggle}
-                  >
-                    <i className="material-icons t-14 text-middle text-light ">
-                      close
-                    </i>
-                  </span>
-                </Tooltip>
-              </span>
-              <div className="text-medium mr-bottom-sm">
-                Version submitted on{" "}
-                <Moment format="MM/DD/YYYY">
-                  <b>
-                    {" "}
-                    {
-                      this.props.stepVersionFields.stepVersionFields
-                        .completed_at
-                    }
-                  </b>
-                </Moment>{" "}
-                {this.props.stepVersionFields.stepVersionFields.completed_by ? (
-                  <span>
-                    by {"  "}
-                    {
-                      this.props.stepVersionFields.stepVersionFields
-                        .completed_by.email
-                    }
-                  </span>
-                ) : null}
+        <div className="pd-ard-lg">
+          {showFieldVersion ? (
+            <div className=" mr-bottom">
+              <div className="version-item">
+                <span className="float-right">
+                  <Tooltip placement="topRight" title={"Hide version"}>
+                    <span
+                      className="text-anchor"
+                      onClick={this.props.versionToggle}
+                    >
+                      <i className="material-icons t-14 text-middle text-light ">
+                        close
+                      </i>
+                    </span>
+                  </Tooltip>
+                </span>
+                <div className="text-medium mr-bottom-sm">
+                  Version submitted on{" "}
+                  <Moment format="MM/DD/YYYY">
+                    <b>
+                      {" "}
+                      {
+                        this.props.stepVersionFields.stepVersionFields
+                          .completed_at
+                      }
+                    </b>
+                  </Moment>{" "}
+                  {this.props.stepVersionFields.stepVersionFields
+                    .completed_by ? (
+                    <span>
+                      by {"  "}
+                      {
+                        this.props.stepVersionFields.stepVersionFields
+                          .completed_by.email
+                      }
+                    </span>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        {_.size(groupedField) ? (
-          <Tabs defaultActiveKey="group_0" onChange={this.callback}>
-            {_.map(groupedField, function(group, index) {
-              return (
-                <TabPane tab={group.label} key={"group_" + index}>
-                  {_.map(group.steps, function(field, index) {
-                    if (index !== 0) {
-                      let renderQueue = [];
-                      if (!rowGroup.canAccommodateField(field)) {
-                        // This field cannot be accommodated in the current group
-                        // render the current group and append this to next batch for rendering
-                        renderQueue.push(rowGroup.render());
+          {_.size(groupedField) ? (
+            <Tabs defaultActiveKey="group_0" onChange={this.callback}>
+              {_.map(groupedField, function(group, index) {
+                return (
+                  <TabPane tab={group.label} key={"group_" + index}>
+                    {_.map(group.steps, function(field, index) {
+                      if (index !== 0) {
+                        let renderQueue = [];
+                        if (!rowGroup.canAccommodateField(field)) {
+                          // This field cannot be accommodated in the current group
+                          // render the current group and append this to next batch for rendering
+                          renderQueue.push(rowGroup.render());
+                        }
+                        rowGroup.addToRenderGroup(field);
+                        if (
+                          rowGroup.shouldRender ||
+                          (index === group.steps.length - 1 &&
+                            rowGroup.hasElements)
+                        ) {
+                          // Row is full or
+                          // this is the last field & rowGroup still has elements remaining
+                          renderQueue.push(rowGroup.render());
+                        }
+                        return renderQueue;
                       }
-                      rowGroup.addToRenderGroup(field);
-                      if (
-                        rowGroup.shouldRender ||
-                        (index === group.steps.length - 1 &&
-                          rowGroup.hasElements)
-                      ) {
-                        // Row is full or
-                        // this is the last field & rowGroup still has elements remaining
-                        renderQueue.push(rowGroup.render());
-                      }
-                      return renderQueue;
-                    }
-                  })}
-                </TabPane>
-              );
-            })}
-          </Tabs>
-        ) : (
-          _.map(orderedStep, function(field, index) {
-            let renderQueue = [];
-            if (!rowGroup.canAccommodateField(field)) {
-              // This field cannot be accommodated in the current group
-              // render the current group and append this to next batch for rendering
-              renderQueue.push(rowGroup.render());
-            }
-            rowGroup.addToRenderGroup(field);
-            if (
-              rowGroup.shouldRender ||
-              (index === orderedStep.length - 1 && rowGroup.hasElements)
-            ) {
-              // Row is full or
-              // this is the last field & rowGroup still has elements remaining
-              renderQueue.push(rowGroup.render());
-            }
-            return renderQueue;
-          })
-        )}
+                    })}
+                  </TabPane>
+                );
+              })}
+            </Tabs>
+          ) : (
+            _.map(orderedStep, function(field, index) {
+              let renderQueue = [];
+              if (!rowGroup.canAccommodateField(field)) {
+                // This field cannot be accommodated in the current group
+                // render the current group and append this to next batch for rendering
+                renderQueue.push(rowGroup.render());
+              }
+              rowGroup.addToRenderGroup(field);
+              if (
+                rowGroup.shouldRender ||
+                (index === orderedStep.length - 1 && rowGroup.hasElements)
+              ) {
+                // Row is full or
+                // this is the last field & rowGroup still has elements remaining
+                renderQueue.push(rowGroup.render());
+              }
+              return renderQueue;
+            })
+          )}
+        </div>
 
-        <Divider />
-        <div className="break-avoid">
+        <Divider className="no-margin" />
+
+        <div className="pd-ard-lg">
           <Row>
             <Col span={6}>
-              <FormItem>
-                {this.props.stepData.completed_at ||
-                this.props.stepData.is_locked ||
-                !_.includes(this.props.permission, "Can submit a step") ||
-                !editable ? (
-                  <Button type="primary " className="no-print  disabled">
+              {this.props.stepData.completed_at ||
+              this.props.stepData.is_locked ||
+              !_.includes(this.props.permission, "Can submit a step") ||
+              !editable ? (
+                <Button
+                  type="primary "
+                  className="no-print  disabled"
+                  size="large"
+                >
+                  <FormattedMessage id="commonTextInstances.submitButtonText" />
+                </Button>
+              ) : (
+                <Button
+                  type="primary"
+                  size="large"
+                  className="no-print pd-ard"
+                  htmlType="submit"
+                  disabled={this.props.isSubmitting}
+                >
+                  {this.props.isSubmitting ? (
+                    <FormattedMessage id="commonTextInstances.submittingButtonText" />
+                  ) : (
                     <FormattedMessage id="commonTextInstances.submitButtonText" />
-                  </Button>
-                ) : (
-                  <Button
-                    type="primary"
-                    className="no-print"
-                    htmlType="submit"
-                    disabled={this.props.isSubmitting}
-                  >
-                    {this.props.isSubmitting ? (
-                      <FormattedMessage id="commonTextInstances.submittingButtonText" />
-                    ) : (
-                      <FormattedMessage id="commonTextInstances.submitButtonText" />
-                    )}
-                  </Button>
-                )}
-              </FormItem>
+                  )}
+                </Button>
+              )}
             </Col>
             <Col span={18} className="text-right">
               {this.getStepStatus(this.props.stepData)}

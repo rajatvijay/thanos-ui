@@ -6,6 +6,10 @@
   //color: @color-text;
 }
 
+#StepBody {
+  box-shadow: 0 2px 14px 0 rgba(0,0,0,0.09);
+}
+
 .workflow-details-container
   .ant-layout-sider
   .ant-menu-submenu
@@ -72,21 +76,46 @@
   .label-with-action {
     display: inline-block;
     width: 100%;
-  }
+    color:@color-grey-light;
+    font-size:16px;
 
-  .ant-form-item-required {
-    .label-with-action {
-      &:before{
-        display: inline-block;
-        margin-right: 4px;
-        content: "*";
-        font-family: SimSun;
-        line-height: 1;
-        font-size: 14px;
-        color: #f5222d;
+    
+
+
+    .comment-icon .material-icons {
+      transition: opacity 0.3s ease;
+      opacity: 0 ;
+
+      &.has-comment .material-icons{
+        opacity: 1;
+      }
+
+    }
+
+    &:hover{
+      .comment-icon .material-icons{
+        opacity: 1;
       }
     }
+
+
   }
+
+
+
+  // .ant-form-item-required {
+  //   .label-with-action {
+  //     &:before{
+  //       display: inline-block;
+  //       margin-right: 4px;
+  //       content: "*";
+  //       font-family: SimSun;
+  //       line-height: 1;
+  //       font-size: 14px;
+  //       color: #f5222d;
+  //     }
+  //   }
+  // }
 
 
 
@@ -103,7 +132,6 @@
     margin-bottom: 18px;
     font-size: 14px;
     font-weight: 500;
-    .Avenir-medium();
     color: @color-grey-dark;
     .material-icons {
       vertical-align: text-bottom;
