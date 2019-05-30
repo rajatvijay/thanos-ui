@@ -352,7 +352,8 @@ class HeaderOptions2 extends React.Component {
 
     const workflowActionMenu = (
       <Menu>
-        {this.props.config.permissions.includes("Can View Activity Log") ? (
+        {this.props.config.permissions &&
+        this.props.config.permissions.includes("Can View Activity Log") ? (
           <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
             <span>
               <i className="material-icons t-18 text-middle pd-right-sm">
