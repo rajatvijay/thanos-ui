@@ -1,4 +1,5 @@
 import { getValueFromCookie } from "../utils/request";
+import { tenant } from "../../config";
 
 export const authHeader = {
   get,
@@ -34,9 +35,5 @@ function requestOptions(method) {
 }
 
 function getClient() {
-  let domain = window.location.hostname;
-  domain = domain.split(".");
-  let client = domain[0];
-
-  return client;
+  return tenant;
 }

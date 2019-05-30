@@ -1,4 +1,5 @@
 import { authHeader, baseUrl, baseUrl2 } from "../_helpers";
+import { tenant } from "../../config";
 
 export const userService = {
   login,
@@ -13,9 +14,10 @@ export const userService = {
 };
 
 //Get client name for form headers.
-let domain = window.location.hostname;
-domain = domain.split(".");
-let client = domain[0];
+// let domain = window.location.hostname;
+// domain = domain.split(".");
+//let client = domain[0];
+let client = "tenant";
 
 function login(username, password, token) {
   const requestOptions = {
