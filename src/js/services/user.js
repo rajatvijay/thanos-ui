@@ -17,7 +17,7 @@ export const userService = {
 // let domain = window.location.hostname;
 // domain = domain.split(".");
 //let client = domain[0];
-let client = "tenant";
+let client = tenant;
 
 function login(username, password, token) {
   const requestOptions = {
