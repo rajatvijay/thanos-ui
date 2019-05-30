@@ -13,18 +13,12 @@ export const userService = {
   checkAuth
 };
 
-//Get client name for form headers.
-// let domain = window.location.hostname;
-// domain = domain.split(".");
-//let client = domain[0];
-let client = tenant;
-
 function login(username, password, token) {
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
+      "X-DTS-SCHEMA": tenant !== "test" ? tenant : "vetted"
     },
     credentials: "include",
     body: JSON.stringify({ email: username, password: password, token: token })
@@ -42,7 +36,7 @@ function login(username, password, token) {
       // login successful if there's a jwt token in the response
       if (user) {
         let userData = user;
-        userData.client = client;
+        userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(userData));
@@ -57,7 +51,7 @@ function loginOtp(username, password) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-DTS-SCHEMA": client !== "test" ? client : "vetted"
+      "X-DTS-SCHEMA": tenant !== "test" ? tenant : "vetted"
     },
     credentials: "include",
     body: JSON.stringify({ email: username, token: password })
@@ -76,7 +70,7 @@ function loginOtp(username, password) {
       // login successful if there's a jwt token in the response
       if (user) {
         let userData = user;
-        userData.client = client;
+        userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(userData));
@@ -110,7 +104,7 @@ function tokenLogin(token, next) {
       // login successful if there's a jwt token in the response
       if (user) {
         let userData = user;
-        userData.client = client;
+        userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(userData));
@@ -174,7 +168,7 @@ function checkAuth() {
 
       if (user) {
         let userData = user;
-        userData.client = client;
+        userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(userData));

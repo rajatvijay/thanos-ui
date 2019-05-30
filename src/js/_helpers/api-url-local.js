@@ -1,4 +1,4 @@
-import { env } from "../../config.js";
+export { baseUrl } from "../../config.js";
 
 const subDomainUrl = site => {
   let host = document.location.hostname;
@@ -8,5 +8,5 @@ const subDomainUrl = site => {
 };
 
 //export const baseUrl = "https://api.slackcart.com/api/v1/";
-export const baseUrl = env;
+
 export const baseUrl2 = subDomainUrl();

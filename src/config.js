@@ -1,29 +1,25 @@
-function getSite() {
-  let host = document.location.hostname;
-  let hostSplit = host.split(".");
-  let domain =
-    document.location.protocol +
-    "//api." +
-    hostSplit[1] +
-    "." +
-    hostSplit[2] +
-    "/api/v1/";
-  return domain;
+const url = new URL(window.location.href);
+
+function getAPIBaseURL() {
+  const { hostname, protocol } = url;
+
+  const host = hostname.split(".");
+
+  return protocol + "//api." + host[1] + "." + host[2] + "/api/v1/";
 }
 
-function getClient() {
-  let domain = window.location.hostname;
-  domain = domain.split(".");
-  let client = domain[0];
-  return client;
+function getTenant() {
+  const { hostname } = url;
+  return hostname.split(".")[0];
 }
 
-const baseUrl =
-  process.env.NODE_ENV === "production"
-    ? getSite()
-    : "https://api.slackcart.com/api/v1/";
+const DEFAULT_TENANT = "walmart";
+const DEFAULT_BASE_URL = "https://api.slackcart.com/api/v1/";
 
-const client = process.env.NODE_ENV === "production" ? getClient() : "walmart";
+function isProductionEnv() {
+  return process.env.NODE_ENV === "production" ? true : false;
+}
 
-export const env = baseUrl;
-export const tenant = client;
+export const baseUrl = isProductionEnv() ? getAPIBaseURL() : DEFAULT_BASE_URL;
+
+export const tenant = isProductionEnv() ? getAPIBaseURL() : DEFAULT_TENANT;

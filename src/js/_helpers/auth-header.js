@@ -5,23 +5,21 @@ export const authHeader = {
   get,
   post,
   requestOptions,
-  getClient
+  tenant
 };
 
 function get() {
-  let client = getClient();
   return {
     //"Content-Type": "application/json",
-    "X-DTS-SCHEMA": client
+    "X-DTS-SCHEMA": tenant
   };
 }
 
 function post() {
-  let client = getClient();
   return {
     "Content-Type": "application/json",
     "X-CSRFToken": getValueFromCookie("csrftoken"),
-    "X-DTS-SCHEMA": client
+    "X-DTS-SCHEMA": tenant
   };
 }
 
@@ -32,8 +30,4 @@ function requestOptions(method) {
     credentials: "include",
     mode: "cors"
   };
-}
-
-function getClient() {
-  return tenant;
 }

@@ -191,7 +191,7 @@ class NavTop extends Component {
                     ) : !this.props.config.loading ? (
                       <h3>{this.props.config.name}</h3>
                     ) : (
-                      <h3>{authHeader.getClient()}</h3>
+                      <h3>{authHeader.tenant}</h3>
                     )}
                   </a>
                 </span>
