@@ -49,6 +49,16 @@ export const WorkflowHeader = props => {
     return item.display_type === "normal";
   });
 
+  let showBackButtom = true;
+
+  if (
+    localStorage.getItem("magicLogin") &&
+    props.workflow.workflow_family &&
+    props.workflow.workflow_family.length <= 1
+  ) {
+    showBackButtom = false;
+  }
+
   const goBack = () => {
     goToPrevStep();
   };
@@ -58,7 +68,7 @@ export const WorkflowHeader = props => {
       <Row type="flex" align="middle" className="lc-card-head">
         {props.isChild || props.isEmbedded ? null : (
           <Col span={1} className=" text-anchor">
-            {props.detailsPage && !props.nextUrl.url ? (
+            {props.detailsPage && !props.nextUrl.url && showBackButtom ? (
               <span onClick={goBack} className="text-anchor pd-ard-sm ">
                 <i
                   className="material-icons text-secondary"
