@@ -201,6 +201,7 @@ class DuplicateCheckComp extends Component {
                                   link={true}
                                   kind={""}
                                   statusView={true}
+                                  config={this.props.config}
                                 />
                               </div>
                             </span>
@@ -228,9 +229,10 @@ class DuplicateCheckComp extends Component {
 }
 
 function mapPropsToState(state) {
-  const { currentStepFields } = state;
+  const { currentStepFields, config } = state;
   return {
-    currentStepFields
+    currentStepFields,
+    config
   };
 }
 
