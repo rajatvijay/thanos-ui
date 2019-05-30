@@ -99,7 +99,7 @@ export default {
       noWorkflowsError: "Unable to load workflow list",
       loggedOutError:
         "You have been logged out. Please Login again to continue",
-      noWorkflowsToShow: "No workflows to show. Try clearing the filters or ",
+      noWorkflowsToShow: "No Results Found. Try clearing the filters or ",
       workflowNotFound:
         "Sorry! We were unable to find the workflow you requested.",
       noStepInWorkflow:
