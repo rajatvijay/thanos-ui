@@ -199,7 +199,7 @@ class GetChildWorkflow extends Component {
                     );
                   })
                 ) : (
-                  <div className="pd-ard-sm">No Results Found</div>
+                  <div className="pd-ard-sm">No results found</div>
                 )}
               </div>
             </TabPane>
