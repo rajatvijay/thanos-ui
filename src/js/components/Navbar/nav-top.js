@@ -68,7 +68,7 @@ class NavTop extends Component {
     } else {
       openNotificationWithIcon({
         type: "error",
-        message: "Please enter atleast 3 characters!"
+        message: "Please enter at least 3 characters to initiate search"
       });
     }
   };
