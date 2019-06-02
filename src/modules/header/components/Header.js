@@ -108,7 +108,7 @@ class Header extends Component {
             ) : !this.props.config.loading ? (
               <h3>{this.props.config.name}</h3>
             ) : (
-              <h3>{authHeader.getClient()}</h3>
+              <h3>{authHeader.tenant}</h3>
             )}
           </a>
         </div>
@@ -116,7 +116,9 @@ class Header extends Component {
           style={{
             marginRight: "10px",
             width: regexForUrl.test(document.location.pathname)
-              ? _.isEmpty(supportedLaguanges) ? "180px" : "100px"
+              ? _.isEmpty(supportedLaguanges)
+                ? "180px"
+                : "100px"
               : "250px",
             display: "flex",
             justifyContent: "space-between",
