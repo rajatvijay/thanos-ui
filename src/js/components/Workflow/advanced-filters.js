@@ -36,7 +36,7 @@ class WorkflowAdvFilter extends Component {
         break;
     }
 
-    this.setState({ filterBuilder: fb }, function() {});
+    this.setState({ filterBuilder: fb });
   };
 
   componentDidMount = () => {
@@ -68,7 +68,7 @@ class WorkflowAdvFilter extends Component {
     if (_.some(this.state.filterBuilder, _.isEmpty)) {
       this.setState({ advFilterErr: true });
     } else {
-      filterList.push(this.state.filterBuilder);
+      filterList.push({ ...this.state.filterBuilder });
 
       //dispatch filter code here
 
