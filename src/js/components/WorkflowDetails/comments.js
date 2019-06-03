@@ -383,25 +383,6 @@ class Comments extends Component {
                   </span>
 
                   {c.target.field_details &&
-                  c.target.field_details.is_integration_type ? (
-                    <div style={{ marginTop: "10px" }}>
-                      <div>
-                        <span style={{ color: "#575757", fontSize: "12px" }}>
-                          Status:
-                        </span>
-                      </div>
-                      <Select
-                        placeholder="Select a status"
-                        style={{ width: "100%" }}
-                        onChange={that.changeStatus}
-                      >
-                        <Option value="open">Open</Option>
-                        <Option value="closed">Closed</Option>
-                      </Select>
-                    </div>
-                  ) : null}
-
-                  {c.target.field_details &&
                   (c.target.field_details.type == "google_search" ||
                     c.target.field_details.type == "serp_google_search") ? (
                     <div style={{ marginTop: "10px" }}>
@@ -550,7 +531,41 @@ class Comments extends Component {
                                 : null}
                             </Col>
                           ) : null}
-                          <Col span={c.target.workflow_details ? 14 : 24}>
+
+                          {c.target.field_details &&
+                          c.target.field_details.is_integration_type ? (
+                            <Col span={10}>
+                              <div>
+                                <span className="text-metal text-medium t-12 pd-right-sm">
+                                  Status:
+                                </span>
+
+                                <Select
+                                  placeholder="Select a status"
+                                  style={{ width: "calc(100% - 80px)" }}
+                                  onChange={that.changeStatus}
+                                >
+                                  <Option value="in_progress">
+                                    In Progress
+                                  </Option>
+                                  <Option value="reviewed">Reviewed</Option>
+                                  <Option value="not_reviewed">
+                                    Not Reviewed
+                                  </Option>
+                                </Select>
+                              </div>
+                            </Col>
+                          ) : null}
+
+                          <Col
+                            span={
+                              c.target.workflow_details ||
+                              (c.target.field_details &&
+                                c.target.field_details.is_integration_type)
+                                ? 14
+                                : 24
+                            }
+                          >
                             {(c.target.field_details ||
                               c.target.workflow_details) &&
                             comments.results
