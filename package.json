@@ -59,7 +59,7 @@
     "start": "npm run build-css && run-p -ncr watch-css start-js",
     "build-js": "node scripts/build.js",
     "build": "npm-run-all build-css build-js",
-    "test": "node scripts/test.js --env=jsdom",
+    "test": "jest --watch",
     "precommit": "node scripts/check.js"
   },
   "eslintConfig": {
