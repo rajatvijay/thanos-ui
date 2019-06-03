@@ -19,14 +19,14 @@ class TaskQueueList extends Component {
   };
 
   renderList = () => {
-    const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
-
+    const { taskQueues, loading } = this.props;
     const { selected, showMore } = this.state;
 
     if (loading) {
       return (
         <div style={{ textAlign: "center" }}>
           <Spin
+            data-testid="loader"
             indicator={
               <Icon
                 type="loading"
@@ -37,8 +37,8 @@ class TaskQueueList extends Component {
           />
         </div>
       );
-    } else if (stepgroupdef_counts) {
-      return stepgroupdef_counts.map((item, index) => {
+    } else if (taskQueues) {
+      return taskQueues.map((item, index) => {
         if (!item.extra || !item.extra.hide) {
           if (showMore && index < 5) {
             return (
@@ -63,27 +63,25 @@ class TaskQueueList extends Component {
   };
 
   render() {
-    const { stepgroupdef_counts } = this.props.workflowGroupCount;
+    const { taskQueues } = this.props;
     const { showMore } = this.state;
 
     return (
       <div>
-        <div
-          style={{
-            margin: 10,
-            color: "#138BD4",
-            margin: "30px 0px 20px 15px",
-            fontSize: 12,
-            fontWeight: "bold",
-            letterSpacing: "0.8px",
-            display:
-              stepgroupdef_counts && stepgroupdef_counts.length > 0
-                ? "block"
-                : "none"
-          }}
-        >
-          TASK QUEUES
-        </div>
+        {taskQueues && taskQueues.length ? (
+          <div
+            style={{
+              margin: 10,
+              color: "#138BD4",
+              margin: "30px 0px 20px 15px",
+              fontSize: 12,
+              fontWeight: "bold",
+              letterSpacing: "0.8px"
+            }}
+          >
+            TASK QUEUES
+          </div>
+        ) : null}
         <div>
           <ul style={{ padding: 0, listStyle: "none" }}>
             <li
@@ -92,10 +90,7 @@ class TaskQueueList extends Component {
                 display: "flex",
                 justifyContent: "space-between",
                 padding: "10px 20px",
-                display:
-                  stepgroupdef_counts && stepgroupdef_counts.length > 0
-                    ? "flex"
-                    : "none"
+                display: taskQueues && taskQueues.length > 0 ? "flex" : "none"
               }}
             >
               <div>
@@ -121,10 +116,7 @@ class TaskQueueList extends Component {
                 borderBottom: "1px solid rgba(0, 0, 0, 0.3)",
                 justifyContent: "space-between",
                 padding: "10px 20px",
-                display:
-                  stepgroupdef_counts && stepgroupdef_counts.length > 4
-                    ? "flex"
-                    : "none"
+                display: taskQueues && taskQueues.length > 4 ? "flex" : "none"
               }}
             >
               <div>

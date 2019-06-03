@@ -3,7 +3,7 @@ import { Icon, Spin } from "antd";
 
 import AlertList from "./AlertList";
 
-class Alerts extends Component {
+class Alert extends Component {
   state = { selected: "" };
 
   onSelect = item => {
@@ -74,4 +74,4 @@ class Alerts extends Component {
   }
 }
 
-export default Alerts;
+export default Alert;
