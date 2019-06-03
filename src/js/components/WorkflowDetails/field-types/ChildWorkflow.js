@@ -308,12 +308,13 @@ class ChildWorkflowField2 extends Component {
         className="child-workflow-dropdown"
         placement="bottomRight"
         size="small"
-        //disabled={isDisabled(this.props)}
+          disabled={this.props.currentStepFields.isSubmitting}
       >
         <Button
           type="primary"
           loading={this.props.workflowKind.loading ? true : false}
           size="small"
+
         >
           + create new {this.state.fetching ? "loadin..." : ""}
         </Button>
