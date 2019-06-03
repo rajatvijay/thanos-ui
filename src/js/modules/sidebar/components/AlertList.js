@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Collapsible from "react-collapsible";
 import { Icon } from "antd";
-import SidebarCircle from "./SidebarCircle";
+import CountWidget from "./CountWidget";
 
 class AlerList extends Component {
   state = { collapse: false };
@@ -31,7 +31,7 @@ class AlerList extends Component {
           }}
         >
           <span>{item.name}</span>
-          <SidebarCircle innerColour="#D40000" value={item.count} />
+          <CountWidget innerColour="#D40000" value={item.count} />
         </li>
       ));
     }
@@ -71,7 +71,7 @@ class AlerList extends Component {
           </div>
           <div>
             {item.count > 0 && (
-              <SidebarCircle innerColour="#D40000" value={item.count} />
+              <CountWidget innerColour="#D40000" value={item.count} />
             )}
           </div>
         </div>

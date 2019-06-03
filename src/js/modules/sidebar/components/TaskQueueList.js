@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Icon, Spin } from "antd";
 
-import TaskQueueList from "./TaskQueueList";
+import TaskQueue from "./TaskQueue";
 
-class TaskQueue extends Component {
+class TaskQueueList extends Component {
   state = { selected: "", showMore: true };
 
   onSelect = item => {
@@ -42,7 +42,7 @@ class TaskQueue extends Component {
         if (!item.extra || !item.extra.hide) {
           if (showMore && index < 5) {
             return (
-              <TaskQueueList
+              <TaskQueue
                 item={item}
                 onSelect={this.onSelect}
                 selected={selected}
@@ -50,7 +50,7 @@ class TaskQueue extends Component {
             );
           } else if (!showMore) {
             return (
-              <TaskQueueList
+              <TaskQueue
                 item={item}
                 onSelect={this.onSelect}
                 selected={selected}
@@ -147,4 +147,4 @@ class TaskQueue extends Component {
   }
 }
 
-export default TaskQueue;
+export default TaskQueueList;
