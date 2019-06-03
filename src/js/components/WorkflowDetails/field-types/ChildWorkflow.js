@@ -302,26 +302,36 @@ class ChildWorkflowField2 extends Component {
     if (!kindMenu) {
       return null;
     }
-    let menu = (
+
+    return this.props.stepData.completed_at || this.props.stepData.is_locked ? (
       <Dropdown
         overlay={kindMenu}
         className="child-workflow-dropdown"
         placement="bottomRight"
         size="small"
-          disabled={this.props.currentStepFields.isSubmitting}
+        disabled={true}
+      >
+        <Button type="primary" size="small">
+          + create new
+        </Button>
+      </Dropdown>
+    ) : (
+      <Dropdown
+        overlay={kindMenu}
+        className="child-workflow-dropdown"
+        placement="bottomRight"
+        size="small"
+        disabled={this.props.currentStepFields.isSubmitting}
       >
         <Button
           type="primary"
           loading={this.props.workflowKind.loading ? true : false}
           size="small"
-
         >
           + create new {this.state.fetching ? "loadin..." : ""}
         </Button>
       </Dropdown>
     );
-
-    return menu;
   };
 
   createFlagFilter = () => {

@@ -453,7 +453,10 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
-        return <FieldItem fieldParams={fieldParams} />;
+
+        return (
+          <FieldItem stepData={that.props.stepData} fieldParams={fieldParams} />
+        );
       },
       getSizeFraction(field) {
         // Get the current field size in fraction

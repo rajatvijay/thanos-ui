@@ -79,6 +79,7 @@ class FieldItem extends Component {
     fieldParams["decryptData"] = this.decryptData;
     fieldParams["decryptError"] = this.state.error;
     fieldParams["decryptedData"] = this.state.decrypted;
+    fieldParams["stepData"] = this.props.stepData;
 
     let dynamicUserPerm = this.props.fieldParams.dynamicUserPerms;
 
