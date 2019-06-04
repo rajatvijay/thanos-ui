@@ -64,14 +64,28 @@
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "test": "react-scripts test",
-    "precommit": "node scripts/check.js"
+    "test:coverage": "react-scripts test --coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "devDependencies": {
+    "husky": "^2.3.0",
     "less": "^2.7.3",
-    "less-loader": "^4.0.5"
+    "less-loader": "^4.0.5",
+    "lint-staged": "^8.1.7",
+    "prettier": "^1.17.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,td,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "browserslist": {
     "production": [
