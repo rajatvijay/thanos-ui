@@ -199,11 +199,14 @@ class OTPForm extends React.Component {
     fetch(baseUrl + "users/generate_otp/", requestOptions)
       .then(function(response) {
         if (!response.ok) {
-          that.setState({
-            error: response.statusText,
-            loading: false
+          response.json().then(data => {
+            that.setState(state => ({
+              errors: { ...state.errors, OtpErr: data.detail },
+              loading: false
+            }));
+            // that.showMessageFaliure();
+            // console.log(response.json());
           });
-          that.showMessageFaliure();
           throw Error(response.statusText);
         } else {
           that.setState({ optSent: true });
@@ -343,15 +346,23 @@ class OTPForm extends React.Component {
                     )}
                   </Button>
                 </FormItem>
-                {(this.state.error && this.state.error.OtpErr) ||
-                (this.props.error && this.props.error.OtpErr) ? (
+                {this.props.error && this.props.error.OtpErr ? (
                   <Alert
-                    message={this.props.error.OtpErr || this.state.error.OtpErr}
+                    message={this.props.error.OtpErr}
                     closable
                     type="error"
                     showIcon
                   />
                 ) : null}
+                {this.state.errors && this.state.errors.OtpErr ? (
+                  <Alert
+                    message={this.state.errors.OtpErr}
+                    closable
+                    type="error"
+                    showIcon
+                  />
+                ) : null}
+                {this.state.error}
               </Form>
             </div>
           </Col>

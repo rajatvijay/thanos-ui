@@ -34,7 +34,7 @@ function getLabel(props, that) {
           <span
             className={
               "comment-icon " +
-              (props.field.comment_count > 0 ? " has-comment" : "")
+              (props.field.comment_count > 0 ? " has-comment " : "")
             }
           >
             {addCommentBtn(that, props)}
@@ -66,12 +66,14 @@ function getLabel(props, that) {
             check_circle
           </i>
         ) : getRequired(props) ? (
-          <i
-            title="Answer required"
-            className="material-icons t-13 text-middle text-light pd-right-sm"
-          >
-            panorama_fish_eye
-          </i>
+          <Tooltip title="Answer is required">
+            <i
+              title="Answer required"
+              className="material-icons t-13 text-middle text-light pd-right-sm"
+            >
+              panorama_fish_eye
+            </i>
+          </Tooltip>
         ) : null}
 
         {props.field.label_value
@@ -193,23 +195,20 @@ function addCommentBtn(e, props) {
         <span>
           {" "}
           {props.field.comment_count > 0 ? (
-            <span
-              className="display-inline-block text-secondary"
-              style={{ position: "relative", top: "-4px" }}
-            >
-              {props.field.comment_count}
+            <span>
+              <span
+                className="display-inline-block text-secondary"
+                style={{ position: "relative", top: "-4px" }}
+              >
+                {props.field.comment_count}
+              </span>{" "}
+              <i className="material-icons  t-18 text-secondary">chat_bubble</i>
             </span>
-          ) : null}{" "}
-          <i
-            className={
-              "material-icons  t-18 " +
-              (props.field.comment_count > 0 ? "text-secondary" : "text-metal")
-            }
-          >
-            {props.field.comment_count > 0
-              ? "chat_bubble"
-              : "chat_bubble_outline"}
-          </i>
+          ) : (
+            <i className="material-icons  t-18 text-secondary">
+              chat_bubble_outline
+            </i>
+          )}
         </span>
       </Tooltip>
     </div>

@@ -110,6 +110,8 @@ function removeCookies() {
 
 const logoutNav = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("magicLogin");
+  localStorage.removeItem("customHistory");
   removeCookies();
   document.location.href = baseUrl2 + "users/logout/";
 };
@@ -141,11 +143,14 @@ export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
     if (response.ok) {
       history.push("/");
     } else {
-      openNotificationWithIcon({
-        type: "error",
-        message: "Something went wrong.",
-        body:
-          "There was an error while submitting the form, please try again. If the problem still persists please contact our team "
+      response.json().then(data => {
+        const genericMessage =
+          "There was an error while submitting the form, please try again. If the problem still persists please contact our team ";
+        openNotificationWithIcon({
+          type: "error",
+          message: "Something went wrong.",
+          body: data.detail || genericMessage
+        });
       });
     }
   } catch (error) {

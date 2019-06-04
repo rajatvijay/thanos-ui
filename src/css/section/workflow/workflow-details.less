@@ -82,14 +82,15 @@
     
 
 
-    .comment-icon .material-icons {
-      transition: opacity 0.3s ease;
-      opacity: 0 ;
+    .comment-icon {
+      .material-icons {
+        transition: opacity 0.3s ease;
+        opacity: 0 ;
+      }
 
       &.has-comment .material-icons{
         opacity: 1;
       }
-
     }
 
     &:hover{
@@ -129,10 +130,11 @@
   }
 
   .step-form-paragraph {
-    margin-bottom: 18px;
-    font-size: 14px;
+    margin-bottom: 30px;
+    font-size: 18px;
     font-weight: 500;
-    color: @color-grey-dark;
+    color: @color-black;
+    border-bottom: 2px solid @color-black;
     .material-icons {
       vertical-align: text-bottom;
       line-height: 18px;

@@ -246,6 +246,49 @@ class WorkflowDetails extends Component {
     // error can be an ID from intlMessages or text to be displayed.
     // If ID is not found, it is rendered as text by default.
 
+    let showBackButtom = true;
+
+    if (
+      localStorage.getItem("magicLogin") &&
+      this.props.workflow.workflow_family &&
+      this.props.workflow.workflow_family.length <= 1
+    ) {
+      showBackButtom = false;
+    }
+
+    const BackButton = () => {
+      if (showBackButtom) {
+        return (
+          <div
+            style={{
+              backgroundColor: "#104774",
+              width: "75px",
+              paddingTop: "28px"
+            }}
+          >
+            <span
+              onClick={goToPrevStep}
+              className="text-anchor pd-ard-sm "
+              style={{ padding: 15 }}
+            >
+              <i
+                className="material-icons text-secondary"
+                style={{
+                  fontSize: "40px",
+                  verticalAlign: "middle",
+                  color: "#fff"
+                }}
+              >
+                keyboard_backspace
+              </i>
+            </span>
+          </div>
+        );
+      } else {
+        return <span />;
+      }
+    };
+
     if (_.size(error)) {
       // LAYOUT PLACE HOLDER
       return (
@@ -261,30 +304,8 @@ class WorkflowDetails extends Component {
                 minHeight: "100vh"
               }}
             >
-              <div
-                style={{
-                  backgroundColor: "#104774",
-                  width: "75px",
-                  paddingTop: "28px"
-                }}
-              >
-                <span
-                  onClick={goToPrevStep}
-                  className="text-anchor pd-ard-sm "
-                  style={{ padding: 15 }}
-                >
-                  <i
-                    className="material-icons text-secondary"
-                    style={{
-                      fontSize: "40px",
-                      verticalAlign: "middle",
-                      color: "#fff"
-                    }}
-                  >
-                    keyboard_backspace
-                  </i>
-                </span>
-              </div>
+              <BackButton />
+
               <SidebarView />
               <Content style={{ width: "50%" }}>
                 <div className="printOnly ">

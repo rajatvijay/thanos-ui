@@ -303,6 +303,7 @@ class WorkflowItem extends React.Component {
                   isExpanded={this.state.opened}
                   disableCollapse={this.disableCollapse}
                   enableCollapse={this.enableCollapse}
+                  config={this.props.config}
                 />
               </div>
             }
