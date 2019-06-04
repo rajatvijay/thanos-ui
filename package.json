@@ -61,7 +61,7 @@
     "watch-css": "node-less-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm run build-css && run-p -ncr watch-css start-js",
-    "build-js": "node scripts/build.js",
+    "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "test": "react-scripts test",
     "precommit": "node scripts/check.js"

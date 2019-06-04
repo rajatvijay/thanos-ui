@@ -2,10 +2,10 @@ import React from "react";
 import CountWidget from "./CountWidget";
 import styled from "@emotion/styled";
 
-function TaskQueue({ item, onSelect, selected }) {
+function TaskQueue({ item, onSelect, isSelected }) {
   return (
-    <StyledListItem
-      selected={selected}
+    <StyledTaskQueueContainer
+      isSelected={isSelected}
       data-testid="task-queue-list-item"
       onClick={() => onSelect(item)}
     >
@@ -14,7 +14,7 @@ function TaskQueue({ item, onSelect, selected }) {
         workflowCount={item.count}
         overdueCount={item.overdue_count}
       />
-    </StyledListItem>
+    </StyledTaskQueueContainer>
   );
 }
 
@@ -31,14 +31,14 @@ function WorkflowCounts({ workflowCount, overdueCount }) {
   );
 }
 
-const StyledListItem = styled.li`
+const StyledTaskQueueContainer = styled.li`
   border-top: 1px solid rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
   cursor: pointer;
-  background-color: ${({ selected }) =>
-    selected ? "rgb(20, 137, 210)" : "none"};
+  background-color: ${({ isSelected }) =>
+    isSelected ? "rgb(20, 137, 210)" : "none"};
 
   .name {
     font-size: 16px;
