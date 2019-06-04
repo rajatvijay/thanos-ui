@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Layout, Icon, Select } from "antd";
 import TaskQueueList from "./TaskQueueList";
-import Alert from "./Alert";
+import AlertList from "./AlertList";
 import { workflowFiltersActions, workflowKindActions } from "../../../actions";
 import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
@@ -164,7 +164,7 @@ class Sidebar extends Component {
             </div>
 
             <div style={{ display: isError ? "none" : "block" }}>
-              <Alert
+              <AlertList
                 workflowAlertGroupCount={this.props.workflowAlertGroupCount}
                 onSelectAlert={this.onSelectAlert}
               />

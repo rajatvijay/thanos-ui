@@ -1,87 +1,77 @@
 import React, { Component } from "react";
-import Collapsible from "react-collapsible";
-import { Icon } from "antd";
-import CountWidget from "./CountWidget";
+import { Icon, Spin } from "antd";
 
-class AlerList extends Component {
-  state = { collapse: false };
+import Alerts from "./Alerts";
+
+class AlertList extends Component {
+  state = { selected: "" };
+
+  onSelect = item => {
+    const { onSelectAlert } = this.props;
+
+    if (this.state.selected === item.name) {
+      this.setState({ selected: "" });
+    } else {
+      this.setState({ selected: item["name"] });
+    }
+
+    onSelectAlert(item);
+  };
 
   renderList = () => {
-    const { onSelect, item, selected } = this.props;
+    const { alert_details, loading } = this.props.workflowAlertGroupCount;
 
-    if (item.sub_categories) {
-      return item.sub_categories.map(item => (
-        <li
-          onClick={e => {
-            e.stopPropagation();
-            onSelect(item);
-          }}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            margin: "4px 18px 4px 25px",
-            backgroundColor:
-              item["name"] === selected
-                ? "#1489D2"
-                : "rgba(255, 255, 255, 0.15)",
-            borderRadius: "30px",
-            padding: "3px 3px 0px 12px",
-            color: "white",
-            cursor: "pointer"
-          }}
-        >
-          <span>{item.name}</span>
-          <CountWidget innerColour="#D40000" value={item.count} />
-        </li>
-      ));
+    if (loading) {
+      return (
+        <div style={{ textAlign: "center" }}>
+          <Spin
+            indicator={
+              <Icon
+                type="loading"
+                style={{ fontSize: "24px", color: "white" }}
+                spin
+              />
+            }
+          />
+        </div>
+      );
+    } else if (alert_details) {
+      return alert_details.map(item => {
+        return (
+          <Alerts
+            loading={loading}
+            selected={this.state.selected}
+            onSelect={this.onSelect}
+            item={item}
+          />
+        );
+      });
     }
   };
 
   render() {
-    const { collapse } = this.state;
-    const { item } = this.props;
-
+    const { alert_details } = this.props.workflowAlertGroupCount;
     return (
-      <li
-        className="sidebarList"
-        style={{
-          opacity: collapse && 1,
-          paddingBottom: collapse ? 30 : 0,
-          backgroundColor: collapse ? "#093050" : "#104775",
-          transitionDuration: "150ms"
-        }}
-        onClick={() => this.setState({ collapse: !collapse })}
-      >
+      <div>
         <div
           style={{
-            borderTop: "1px solid rgba(0, 0, 0, 0.3)",
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "10px 20px",
-            cursor: "pointer"
+            color: "#138BD4",
+            margin: "40px 0px 20px 15px",
+            fontSize: 12,
+            fontWeight: "bold",
+            letterSpacing: "0.8px",
+            display:
+              alert_details && alert_details.length > 0 ? "block" : "none"
           }}
         >
-          <div>
-            <Icon
-              style={{ margin: "0px 5px 0px -5px", color: "white" }}
-              type="caret-right"
-              rotate={collapse ? 90 : 0}
-            />
-            <span style={{ fontSize: 16, color: "#CFDAE3" }}>{item.name}</span>
-          </div>
-          <div>
-            {item.count > 0 && (
-              <CountWidget innerColour="#D40000" value={item.count} />
-            )}
-          </div>
+          ALERTS
         </div>
-
-        <Collapsible open={collapse}>
-          <ul style={{ padding: 0 }}>{this.renderList()}</ul>
-        </Collapsible>
-      </li>
+        <div>
+          <ul style={{ padding: 0, listStyle: "none" }}>{this.renderList()}</ul>
+        </div>
+      </div>
     );
   }
 }
 
-export default AlerList;
+export default AlertList;
