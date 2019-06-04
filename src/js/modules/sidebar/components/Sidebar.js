@@ -165,7 +165,8 @@ class Sidebar extends Component {
 
             <div style={{ display: isError ? "none" : "block" }}>
               <AlertList
-                workflowAlertGroupCount={this.props.workflowAlertGroupCount}
+                alerts={this.props.workflowAlertGroupCount.alert_details}
+                loading={this.props.workflowAlertGroupCount.loading}
                 onSelectAlert={this.onSelectAlert}
               />
             </div>

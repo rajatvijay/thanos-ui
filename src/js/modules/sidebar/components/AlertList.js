@@ -1,73 +1,83 @@
 import React, { Component } from "react";
 import { Icon, Spin } from "antd";
-
+import styled from "@emotion/styled";
+import { css } from "emotion";
 import Alerts from "./Alerts";
 
 class AlertList extends Component {
-  state = { selected: "" };
+  state = { selected: null };
 
-  onSelect = item => {
+  onSelect = alert => {
     const { onSelectAlert } = this.props;
+    const { selected } = this.state;
 
-    if (this.state.selected === item.name) {
-      this.setState({ selected: "" });
+    if (selected === alert.name) {
+      this.setState({ selected: null });
     } else {
-      this.setState({ selected: item["name"] });
+      this.setState({ selected: alert.name });
     }
 
-    onSelectAlert(item);
+    onSelectAlert(alert);
   };
 
   renderList = () => {
-    const { alert_details, loading } = this.props.workflowAlertGroupCount;
+    const { alerts, loading } = this.props;
+    return alerts.map(item => {
+      return (
+        <Alerts
+          key={item.id}
+          loading={loading}
+          selected={this.state.selected}
+          onSelect={this.onSelect}
+          item={item}
+        />
+      );
+    });
+  };
+
+  render() {
+    const { alerts, loading } = this.props;
 
     if (loading) {
       return (
-        <div style={{ textAlign: "center" }}>
+        <div
+          className={css`
+            text-align: center;
+          `}
+        >
           <Spin
+            data-testid="loader"
             indicator={
               <Icon
                 type="loading"
-                style={{ fontSize: "24px", color: "white" }}
+                className={css`
+                  font-size: 24px;
+                  color: white;
+                `}
                 spin
               />
             }
           />
         </div>
       );
-    } else if (alert_details) {
-      return alert_details.map(item => {
-        return (
-          <Alerts
-            loading={loading}
-            selected={this.state.selected}
-            onSelect={this.onSelect}
-            item={item}
-          />
-        );
-      });
     }
-  };
 
-  render() {
-    const { alert_details } = this.props.workflowAlertGroupCount;
+    if (!alerts || !alerts.length) {
+      return null;
+    }
+
     return (
       <div>
-        <div
-          style={{
-            color: "#138BD4",
-            margin: "40px 0px 20px 15px",
-            fontSize: 12,
-            fontWeight: "bold",
-            letterSpacing: "0.8px",
-            display:
-              alert_details && alert_details.length > 0 ? "block" : "none"
-          }}
-        >
-          ALERTS
-        </div>
+        <StyledAlertsHeading>ALERTS</StyledAlertsHeading>
         <div>
-          <ul style={{ padding: 0, listStyle: "none" }}>{this.renderList()}</ul>
+          <ul
+            className={css`
+              padding: 0;
+              list-style: none;
+            `}
+          >
+            {this.renderList()}
+          </ul>
         </div>
       </div>
     );
@@ -75,3 +85,11 @@ class AlertList extends Component {
 }
 
 export default AlertList;
+
+const StyledAlertsHeading = styled.h1`
+  color: #138bd4;
+  margin: 40px 0px 20px 15px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.8px;
+`;
