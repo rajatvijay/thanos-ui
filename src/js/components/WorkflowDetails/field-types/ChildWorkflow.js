@@ -303,7 +303,8 @@ class ChildWorkflowField2 extends Component {
       return null;
     }
 
-    return this.props.stepData.completed_at || this.props.stepData.is_locked ? (
+    return (this.props.stepData && this.props.stepData.completed_at) ||
+      this.props.stepData.is_locked ? (
       <Dropdown
         overlay={kindMenu}
         className="child-workflow-dropdown"

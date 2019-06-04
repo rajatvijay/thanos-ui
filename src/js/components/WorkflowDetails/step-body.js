@@ -52,7 +52,8 @@ class StepBody extends Component {
   versionDropDown = () => {
     const versionList = (
       <Menu onClick={this.onVersionChange}>
-        {this.props.currentStepFields.currentStepFields.versions.length > 0 ? (
+        {this.props.currentStepFields.currentStepFields.versions &&
+        this.props.currentStepFields.currentStepFields.versions.length > 0 ? (
           _.map(
             this.props.currentStepFields.currentStepFields.versions,
             function(i) {
