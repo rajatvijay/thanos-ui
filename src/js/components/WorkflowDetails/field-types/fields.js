@@ -525,7 +525,8 @@ export const Paragraph = props => {
   const customParaStyle = {
     fontSize: extra.font_size || "",
     textDecoration: extra.underline ? "underline" : "",
-    color: extra.font_color || ""
+    color: extra.font_color || "",
+    paddingBottom: 4
   };
 
   return (

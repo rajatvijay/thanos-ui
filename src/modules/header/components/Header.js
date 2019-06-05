@@ -70,10 +70,10 @@ class Header extends Component {
           left: 0,
           zIndex: 2,
           boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.07)",
-          padding: "10px",
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center"
+          alignItems: "center",
+          height: "60px"
         }}
       >
         <div
@@ -99,10 +99,8 @@ class Header extends Component {
                 alt={this.props.config.name}
                 src={this.props.config.logo}
                 style={{
-                  marginLeft: "17px",
-                  marginTop: "7px",
-                  marginBottom: "5px",
-                  height: "42.5px"
+                  marginLeft: "27px",
+                  height: "34px"
                 }}
               />
             ) : !this.props.config.loading ? (
@@ -114,10 +112,10 @@ class Header extends Component {
         </div>
         <div
           style={{
-            marginRight: "10px",
+            marginRight: "29.66px",
             width: regexForUrl.test(document.location.pathname)
-              ? _.isEmpty(supportedLaguanges) ? "180px" : "100px"
-              : "250px",
+              ? _.isEmpty(supportedLaguanges) ? "170px" : "150px"
+              : "230px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center"
@@ -130,7 +128,6 @@ class Header extends Component {
                   style={{
                     display: "inline",
                     border: "none",
-                    borderBottom: "1px solid",
                     borderRadius: 0
                   }}
                   className={"ant-input"}
@@ -182,6 +179,7 @@ class Header extends Component {
           {_.isEmpty(supportedLaguanges) || <SelectLanguage navbar={true} />}
           {user ? (
             <Dropdown
+              icon={<Icon />}
               overlay={
                 <Menu>
                   <Menu.Item
@@ -198,7 +196,7 @@ class Header extends Component {
                 <i
                   className="material-icons text-middle"
                   style={{
-                    fontSize: 36,
+                    fontSize: 32,
                     color: "#000000",
                     opacity: 0.3,
                     cursor: "pointer"

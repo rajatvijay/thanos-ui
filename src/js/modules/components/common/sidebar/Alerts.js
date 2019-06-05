@@ -55,8 +55,9 @@ class Alerts extends Component {
       <div>
         <div
           style={{
-            color: "#138BD4",
-            margin: "40px 0px 20px 15px",
+            margin: 10,
+            color: "#148CD6",
+            margin: "41px 0px 19px 20px",
             fontSize: 12,
             fontWeight: "bold",
             letterSpacing: "0.8px",

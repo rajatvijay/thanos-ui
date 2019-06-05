@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Select } from "antd";
+import { css } from "emotion";
 
 const Option = Select.Option;
 
@@ -18,6 +19,11 @@ class DropdownFilter extends Component {
         placeholder={placeholder}
         style={{ display: "block", margin: "20px 0px" }}
         onChange={select => onFilterChange(name, select)}
+        className={css`
+          .ant-select-selection__rendered {
+            margin-left: 0;
+          }
+        `}
       >
         {this.renderOptions()}
       </Select>

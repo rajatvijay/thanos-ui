@@ -80,7 +80,7 @@ export const WorkflowHeader = props => {
   );
 
   return (
-    <Row type="flex" align="middle" className="header-opened">
+    <Row type="flex" align="middle">
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
 
       {props.isExpanded ? (
@@ -89,6 +89,10 @@ export const WorkflowHeader = props => {
             className="details-link slide-this"
             to={"/workflows/instances/" + props.workflow.id + "/"}
             title="Show details"
+            style={{
+              width: "75px",
+              float: "right"
+            }}
           >
             <i className="material-icons">arrow_forward</i>
           </Link>
@@ -372,7 +376,7 @@ class HeaderOptions extends React.Component {
 
     let status = (
       <Tooltip title={this.state.current}>
-        <div className="pd-left pd-right status-text text-black t-12 text-right">
+        <div className="pd-left status-text text-black t-12 text-right">
           {this.state.current}
         </div>
       </Tooltip>

@@ -307,7 +307,7 @@ class WorkflowDetails extends Component {
               <BackButton />
 
               <SidebarView />
-              <Content style={{ width: "50%" }}>
+              <Content style={{ width: "50%", marginTop: "12px" }}>
                 <div className="printOnly ">
                   <div
                     className="mr-ard-lg"

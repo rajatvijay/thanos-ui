@@ -188,11 +188,9 @@ class Filter extends Component {
     return (
       <div
         style={{
-          marginTop: 60,
           display: "flex",
           justifyContent: "space-between",
           borderBottom: "1px solid #DBDBDB",
-          margin: "20px 40px 0px 40px",
           alignItems: "center"
         }}
       >
@@ -205,22 +203,38 @@ class Filter extends Component {
             `}
             style={{
               listStyle: "none",
-              fontSize: 14,
               color: "#000",
               cursor: "pointer",
-              padding: 0
+              padding: 0,
+              marginBottom: 0
             }}
           >
             {this.props.workflow.count || this.props.workflow.count === 0 ? (
-              <li style={{ margin: "0px 10px 0px 0px", color: "#C8C8C8" }}>
-                {this.props.workflow.count} Results
+              <li
+                style={{
+                  margin: "0px 30px 0px 0px",
+                  color: "#000000",
+                  opacity: 0.3,
+                  letterSpacing: "0.38px",
+                  lineHeight: "15px",
+                  fontSize: 13
+                }}
+              >
+                {this.props.workflow.count} RESULTS
               </li>
             ) : null}
 
             {/* TODO: Separate as a private component */}
             {this.props.workflow.loading ? null : this.props.workflow
               .loadingStatus === "failed" ? null : (
-              <li style={{ margin: "0px 20px 0px 10px" }}>
+              <li
+                style={{
+                  margin: "0px 40px 0px 10px",
+                  letterSpacing: "0.38px",
+                  lineHeight: "15px",
+                  fontSize: 13
+                }}
+              >
                 {this.props.workflowFilters.kind.meta
                   .is_sorting_field_enabled ? (
                   <Tooltip
@@ -235,7 +249,7 @@ class Filter extends Component {
                       className="text-secondary text-anchor"
                       onClick={this.changeScoreOrder}
                     >
-                      Risk
+                      RISK
                       {sortingEnabled ? (
                         <i className="material-icons t-14  text-middle">
                           {this.state.sortOrderAsc
@@ -251,7 +265,11 @@ class Filter extends Component {
             <li
               onClick={() => this.showModal()}
               style={{
-                // color: "#C8C8C8",
+                color: "#000000",
+                opacity: 0.3,
+                letterSpacing: "0.38px",
+                lineHeight: "15px",
+                fontSize: 13,
                 marginRight: 20
               }}
             >
@@ -259,8 +277,8 @@ class Filter extends Component {
               <span>{this.evaluateFilter()}</span>
               <Icon
                 style={{
-                  fontSize: 11,
-                  marginLeft: 5
+                  fontSize: 10,
+                  marginLeft: 6
                 }}
                 type="down"
               />

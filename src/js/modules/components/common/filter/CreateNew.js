@@ -85,8 +85,8 @@ class CreateNew extends Component {
             style={{
               backgroundColor: "#138BD6",
               borderRadius: "50%",
-              height: 40,
-              width: 40,
+              height: 39,
+              width: 39,
               lineHeight: "40px",
               textAlign: "center",
               fontSize: 24,

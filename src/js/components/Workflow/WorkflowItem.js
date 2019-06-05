@@ -280,7 +280,9 @@ class WorkflowItem extends React.Component {
             trigger={
               <div
                 className="lc-card"
-                style={{ boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)" }}
+                style={{
+                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)"
+                }}
               >
                 <WorkflowHeader
                   isEmbedded={this.props.isEmbedded}

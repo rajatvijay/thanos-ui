@@ -102,7 +102,13 @@ export const StepGroupList = props => {
                       </span>
                     </span>
                   </div>
-                  <ul>
+                  <ul
+                    style={{
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      borderRight: "none"
+                    }}
+                  >
                     {_.map(group.steps, function(steps, index) {
                       return (
                         <StepItem
