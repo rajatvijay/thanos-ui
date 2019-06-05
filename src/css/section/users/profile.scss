@@ -1,0 +1,44 @@
+@import "../../utilities/variables.scss";
+
+.profile-sidebar .user-profile-top {
+  position: relative;
+  padding-left: 76px;
+}
+
+.profile-sidebar .user-profile-top .avatar-wrapper {
+  position: absolute;
+  left: 16px;
+}
+
+.profile-sidebar .user-profile-top .user-name-wrap .name {
+  margin-bottom: 0;
+}
+
+.profile-sidebar .user-profile-top .user-name-wrap .company {
+}
+
+.profile-sidebar .user-profile-details {
+  position: relative;
+  padding-left: 76px;
+}
+
+.profile-sidebar .user-profile-details ul {
+  list-style-type: none;
+  padding: 0px;
+}
+.profile-sidebar .user-profile-details ul li {
+  margin-bottom: 8px;
+}
+.profile-sidebar .user-profile-details ul .anticon {
+  width: 16px;
+  margin-right: 20px;
+  color: $color-primary;
+}
+
+.profile-sidebar .collapser {
+  margin-top: 30px;
+}
+.profile-sidebar .collapser .ant-collapse-header {
+  color: $color-metal !important;
+  font-weight: bold;
+}

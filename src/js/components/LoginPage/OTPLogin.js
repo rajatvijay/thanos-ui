@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import OTPForm from "./OTPForm";
 import { Icon } from "antd";
-import "../../../css/section/login/login.css";
+import "../../../css/section/login/login.scss";
 import { Redirect } from "react-router-dom";
 import { logout } from "../../actions";
 import _ from "lodash";

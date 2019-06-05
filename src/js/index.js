@@ -5,7 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { Provider } from "react-redux";
 import { store } from "./_helpers";
-import "../css/App.css";
+import "../css/App.scss";
+
 import "antd/dist/antd.css";
 import * as Sentry from "@sentry/browser";
 

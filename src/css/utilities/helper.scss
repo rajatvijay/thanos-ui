@@ -1,0 +1,361 @@
+@import "variables.scss";
+@import "font-classes.scss";
+
+/*text colors*/
+.text-primary {
+  color: $color-primary;
+}
+.text-primary-light {
+  color: $color-primary-light;
+}
+.text-red {
+  color: $color-red;
+}
+.text-orange {
+  color: $color-orange;
+}
+.text-yellow {
+  color: $color-yellow;
+}
+.text-green {
+  color: $color-green;
+}
+.text-grey-dark {
+  color: $color-grey-dark;
+}
+.text-metal {
+  color: $color-metal;
+}
+.text-light {
+  color: $color-grey;
+}
+.text-white {
+  color: $color-white;
+}
+//new colors
+.text-base {
+  color: $color-text;
+}
+
+.text-secondary {
+  color: $color-secondary;
+}
+
+/*Text aligmnet*/
+.text-center,
+.t-cntr {
+  text-align: center;
+}
+.text-left,
+.t-lt {
+  text-align: left;
+}
+.text-right,
+.t-rt {
+  text-align: right;
+}
+
+.text-middle,
+.t-mdl {
+  vertical-align: middle;
+}
+
+.text-bottom,
+.t-btm {
+  vertical-align: bottom;
+}
+
+/*Text weight*/
+.text-bold,
+.t-bld {
+  // @include Avenir-heavy();
+  font-weight: bold;
+  font-weight: 700;
+}
+.text-medium,
+.t-mdm {
+  //@include Avenir-medium();
+  font-weight: medium;
+  font-weight: 500;
+}
+.text-normal,
+.t-nrml {
+  //@include Avenir-normal();
+  font-weight: normal;
+  font-weight: 400;
+}
+.text-thin,
+.t-thn {
+  //@include Avenir-light();
+  font-weight: thin;
+  font-weight: 300;
+}
+
+/*Text size*/
+.t-12 {
+  font-size: 12px;
+}
+.t-14 {
+  font-size: 14px;
+}
+.t-16 {
+  font-size: 16px;
+}
+.t-18 {
+  font-size: 18px;
+}
+.t-22 {
+  font-size: 22px;
+}
+.t-24 {
+  font-size: 24px;
+}
+
+/*Text case*/
+.text-uppercase,
+.t-upr {
+  text-transform: uppercase;
+}
+.text-lowercase,
+.t-lwr {
+  text-transform: lowercase;
+}
+.text-capitalize,
+.t-cap {
+  text-transform: capitalize;
+}
+
+.text-ellipsis,
+.t-ell {
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.text-anchor,
+.t-ancr {
+  cursor: pointer;
+}
+
+.text-underline,
+.t-undr {
+  text-decoration: underline;
+}
+
+.text-nounderline,
+.text-nounderline:hover {
+  text-decoration: none;
+}
+
+/*Background Colors*/
+.bg-primary {
+  background-color: $color-primary;
+}
+.bg-secondary {
+  background-color: $color-secondary;
+}
+.bg-primary-light {
+  background: $color-primary-light;
+}
+.bg-red {
+  background-color: $color-red;
+}
+.bg-orange {
+  background-color: $color-orange;
+}
+.bg-yellow {
+  background-color: $color-yellow;
+}
+.bg-green {
+  background-color: $color-green;
+}
+.bg-grey-dark {
+  background-color: $color-grey-dark;
+}
+.bg-metal {
+  background-color: $color-metal;
+}
+.bg-light {
+  background-color: $color-grey;
+}
+.bg-white {
+  background-color: $color-white;
+}
+
+/*Padding*/
+.side-padder-16 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.vertical-padder-16 {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.pd-left,
+.pd-lft {
+  padding-left: 16px;
+}
+.pd-right,
+.pd-rt {
+  padding-right: 16px;
+}
+.pd-top {
+  padding-top: 16px;
+}
+.pd-bottom,
+.pd-btm {
+  padding-bottom: 16px;
+}
+
+.pd-left-sm,
+.pls {
+  padding-left: 8px;
+}
+.pd-right-sm,
+.prs {
+  padding-right: 8px;
+}
+.pd-top-sm,
+.pts {
+  padding-top: 8px;
+}
+.pd-bottom-sm,
+.pbs {
+  padding-bottom: 8px;
+}
+
+.pd-left-lg,
+.pll {
+  padding-left: 24px;
+}
+.pd-right-lg,
+.prl {
+  padding-right: 24px;
+}
+.pd-top-lg,
+.ptl {
+  padding-top: 24px;
+}
+.pd-bottom-lg,
+.pbl {
+  padding-bottom: 24px;
+}
+
+.pd-ard-sm,
+.pas {
+  padding: 8px;
+}
+
+.pd-ard-md {
+  padding: 16px;
+}
+
+.pd-ard-lg {
+  padding: 24px;
+}
+
+/*Margin*/
+.mr-ard-sm {
+  margin: 8px;
+}
+
+.mr-ard-md {
+  margin: 16px;
+}
+
+.mr-ard-lg {
+  margin: 24px;
+}
+
+.mr-left {
+  margin-left: 16px;
+}
+.mr-right {
+  margin-right: 16px;
+}
+.mr-top {
+  margin-top: 16px;
+}
+.mr-bottom {
+  margin-bottom: 16px;
+}
+
+.mr-left-sm {
+  margin-left: 8px;
+}
+.mr-right-sm {
+  margin-right: 8px;
+}
+.mr-top-sm {
+  margin-top: 8px;
+}
+.mr-bottom-sm {
+  margin-bottom: 8px;
+}
+
+.mr-left-lg {
+  margin-left: 24px;
+}
+.mr-right-lg {
+  margin-right: 24px;
+}
+.mr-top-lg {
+  margin-top: 24px;
+}
+.mr-bottom-lg {
+  margin-bottom: 24px;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+/*Float and clear*/
+.float-left {
+  float: left;
+}
+.float-right {
+  float: right;
+}
+.color-grey-dark-fix {
+  clear: both;
+}
+
+/* box shadow */
+.shadow-1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.shadow-2 {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.shadow-3 {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+.shadow-4 {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.shadow-5 {
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.small {
+  font-size: 80%;
+}
+
+.opacity-half {
+  opacity: 0.5;
+}
+
+.display-inline-block {
+  display: inline-block;
+}
+//hide
+.hidden {
+  display: none;
+}
+.disabled {
+  cursor: not-allowed;
+}

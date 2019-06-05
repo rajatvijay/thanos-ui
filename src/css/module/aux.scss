@@ -1,0 +1,137 @@
+@import "../utilities/variables.scss";
+
+.aux-nav {
+  background-color: $color-white;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12);
+}
+
+.aux-item {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.aux-lead {
+  margin-top: 14px;
+  margin-bottom: 14px;
+  //color: rgba(48, 94, 190, 0.5);
+  color: $color-text;
+  font-size: 18px;
+  //@include Avenir-medium();
+}
+
+.aux-nav-filter {
+  .ant-menu {
+    .ant-menu-item {
+      color: $color-text;
+    }
+    .ant-menu-item-active,
+    .ant-menu-item-selected {
+      color: $color-text;
+    }
+  }
+}
+
+// .aux-nav {
+//   .ant-menu {
+//     .ant-menu-submenu,
+//     .ant-menu-submenu:hover,
+//     .ant-menu-submenu-title:hover,
+//     .ant-menu-submenu-active,
+//     .ant-menu-item-selected,
+//     .ant-menu-submenu-selected,
+//     .ant-menu-item-active {
+//       color: $color-primary;
+//     }
+
+//   }
+// }
+
+// .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title:hover,
+// .aux-nav .ant-menu .ant-menu-submenu.completed .ant-menu-submenu-title {
+//   color: $color-primary;
+// }
+
+// .aux-nav .ant-menu .ant-menu-submenu.overdue .ant-menu-submenu-title:hover,
+// .aux-nav .ant-menu .ant-menu-submenu.overdue .ant-menu-submenu-title {
+//   color: $color-red;
+// }
+
+// .aux-nav .ant-menu .ant-menu-submenu {
+//   &.completed {
+//     color: $color-primary;
+//     &:hover {
+//       color: $color-primary;
+//     }
+//   }
+// }
+
+// .aux-nav {
+//   //.ant-menu-submenu-arrow,
+//   .ant-menu-submenu {
+//     .ant-menu-submenu-title,
+//     .ant-menu-submenu-title:hover {
+//       .ant-menu-submenu-arrow:after,
+//       .ant-menu-submenu-arrow:before {
+//         background: linear-gradient(to right, $color-metal, $color-metal);
+//       }
+//     }
+//     &.completed {
+//       .ant-menu-submenu-title,
+//       .ant-menu-submenu-title:hover {
+//         .ant-menu-submenu-arrow:after,
+//         .ant-menu-submenu-arrow:before {
+//           background: linear-gradient(to right, $color-primary, $color-primary);
+//         }
+//       }
+//     }
+//   }
+// }
+
+// .aux-nav .ant-menu .ant-menu-submenu-title:hover,
+// .aux-nav .ant-menu .ant-menu-submenu {
+//   font-weight: 500;
+//   //margin-bottom: 14px;
+// }
+
+// .aux-nav .ant-menu .ant-menu-submenu {
+//   margin-bottom: 14px;
+// }
+// .aux-nav .ant-menu .ant-menu-item {
+//   font-weight: normal;
+//   color: $color-metal;
+//   &:hover {
+//     color: $color-primary;
+//     //background-color:$color-primary-light;
+//   }
+//   &.text-primary {
+//     color: $color-primary;
+//   }
+//   &.overdue {
+//     color: $color-red;
+//   }
+// }
+
+// .aux-nav .ant-menu .ant-menu-item:not(.text-green),
+// .aux-nav .ant-menu .ant-menu-item-active:not(.text-green):hover,
+// .aux-nav .ant-menu .ant-menu-item-active:not(.text-green) {
+//   font-weight: normal;
+// }
+
+// .aux-nav .ant-menu .ant-menu-item-selected {
+//   color: $color-primary;
+//   background-color: $color-primary-light-detone;
+// }
+
+// .aux-nav .ant-menu-vertical .ant-menu-item:after,
+// .aux-nav .ant-menu-vertical-left .ant-menu-item:after,
+// .aux-nav .ant-menu-vertical-right .ant-menu-item:after,
+// .aux-nav .ant-menu-inline .ant-menu-item:after {
+//   border-right: 3px solid $color-primary;
+// }
+
+// .ant-menu-horizontal > .ant-menu-item:hover,
+// .ant-menu-horizontal > .ant-menu-item-active,
+// .ant-menu-horizontal > .ant-menu-item-selected {
+//   border-bottom-color: $color-primary;
+//   color: $color-primary;
+// }

@@ -1,0 +1,99 @@
+@import "../../utilities/variables.scss";
+
+.login-container {
+  display: block;
+  height: 100vh;
+
+  .login-header {
+    min-height: 300px;
+    background: #fff;
+  }
+
+  .logo-container {
+    margin-top: 60px;
+    margin-bottom: 10px;
+  }
+
+  .logo {
+    max-width: 200px;
+    max-height: 40px;
+  }
+
+  .logo-subtext {
+    color: #a0a0a0;
+    letter-spacing: 3px;
+    display: inline-block;
+    font-weight: 300;
+    margin-top: 5px;
+    font-size: 12px;
+  }
+  .magic-box {
+    .login-top {
+      border-left: 3px solid $color-secondary;
+      padding-left: 22px;
+      font-size: 16px;
+      margin: -24px 0 24px -24px;
+    }
+
+    .block-left {
+      border-right: 1px solid $color-grey-lightest;
+      margin-right: -1px;
+
+      .ant-form-item-label {
+        padding: 0;
+      }
+      &.noborder {
+        border: none;
+      }
+    }
+    .block-right {
+      border-left: 1px solid $color-grey-lightest;
+      .login-top {
+        margin-left: -16px;
+        padding-left: 12px;
+      }
+      .logo {
+        margin-top: 50px;
+        margin-bottom: 30px;
+      }
+    }
+  }
+}
+
+.login-overlay {
+  background-color: $color-secondary;
+  height: 100%;
+}
+
+.login-box {
+  width: 400px;
+  height: auto;
+  min-height: 300px;
+  border-radius: 3px;
+  margin: -70px auto 100px;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.19);
+  background: $color-white;
+  text-align: center;
+  padding: 50px 24px;
+  position: relative;
+  top: -70px;
+  &.magic {
+    width: 840px;
+  }
+}
+
+.login-box .btn-login {
+  margin-top: 100px;
+}
+
+/*magiclink*/
+
+.magic--submitted {
+  padding-top: 40px;
+}
+
+.magic--submitted .icon .material-icons {
+  font-size: 60px;
+  color: $color-green;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,17 @@
+@import "../../utilities/variables.scss";
+@import "../../utilities/helper.scss";
+
+.workflow-list.workflows-list-embedded {
+  .workflow-list-wrapper {
+    padding: 0px;
+  }
+  .paper {
+    background: #fff;
+    &.workflow-list-item {
+      transition: background 0.3s ease-in;
+      &.opened {
+        margin: 25px 0px;
+      }
+    }
+  }
+}

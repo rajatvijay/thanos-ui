@@ -1,0 +1,21 @@
+@import "../utilities/variables.scss";
+
+.sidebar-right {
+  background-color: $color-white;
+  box-shadow: -30px 0 38px 0 rgba(0, 0, 0, 0.07);
+}
+
+.sidebar-head {
+  background: $color-secondary;
+  padding: 14px;
+  color: $color-white;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.close-trigger {
+  float: right;
+  color: $color-white;
+  font-size: 14px;
+}

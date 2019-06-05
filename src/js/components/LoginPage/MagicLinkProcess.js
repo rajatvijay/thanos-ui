@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Icon } from "antd";
 import _ from "lodash";
-import "../../../css/section/login/login.css";
+import "../../../css/section/login/login.scss";
 import { Redirect } from "react-router-dom";
 import { tokenLogin } from "../../actions";
 import queryString from "query-string";

@@ -1,0 +1,32 @@
+@import "AvenirFont.scss";
+@import "MaterialIcons.scss";
+@import "utilities/variables.scss";
+@import "utilities/helper.scss";
+@import "utilities/flags16.scss";
+@import "framework/bootstrap-reboot.min.scss";
+@import "module/sidebar-right.scss";
+@import "module/aux.scss";
+@import "module/data-table.scss";
+@import "module/style-overrides.scss";
+@import "module/checkbox.scss";
+@import "module/layout-main.scss";
+@import "module/add-comment.scss";
+@import "module/alert-tag.scss";
+@import "section/users/users.scss";
+@import "section/users/profile.scss";
+@import "section/navbar/navbar-top.scss";
+@import "section/navbar/navbar-left.scss";
+@import "section/workflow/workflow.scss";
+@import "section/workflow/workflow-details.scss";
+@import "section/workflow/embedded-workflow.scss";
+@import "section/workflow/workflow-filters.scss";
+@import "section/workflow/status-filter-top.scss";
+@import "utilities/common.scss";
+@import "utilities/animate-selective.scss";
+@import "utilities/print.scss";
+@import "module/footer-link.scss";
+
+body,
+* {
+  font-family: $base-font;
+}

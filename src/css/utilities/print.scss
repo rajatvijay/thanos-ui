@@ -1,0 +1,54 @@
+@import "variables.scss";
+
+@media print {
+  .no-print {
+    display: none;
+  }
+  // $page {
+  //  size: A4;
+  //   margin: 0;
+  // }
+  body {
+    margin: 0;
+  }
+
+  .step-form .ant-row,
+  .ant-form-item,
+  .page-break {
+    page-break-before: auto;
+  }
+  .break-avoid {
+    page-break-inside: avoid;
+  }
+  .ant-radio.ant-radio-checked {
+    .ant-radio-inner {
+      background: $color-secondary;
+      border-color: $color-secondary;
+      border-width: 7px;
+      overflow: hidden;
+    }
+  }
+}
+
+.printOnly {
+  .hide-print {
+    display: none;
+  }
+}
+
+.print-header {
+  .logo {
+    max-width: 150px;
+  }
+}
+
+.step-printing {
+  .add_comment_btn,
+  .right-actions {
+    display: none;
+  }
+
+  .has-flag textarea {
+    border-left-width: 10px !important;
+  }
+}

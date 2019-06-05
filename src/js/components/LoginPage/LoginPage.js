@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import LoginForm from "./LoginForm";
 import { Icon } from "antd";
-import "../../../css/section/login/login.css";
+import "../../../css/section/login/login.scss";
 import { Redirect } from "react-router-dom";
 import { ReCaptcha } from "react-recaptcha-v3-global";
 import LoginHeader from "./LoginHeader";

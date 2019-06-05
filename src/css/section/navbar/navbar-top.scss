@@ -1,0 +1,104 @@
+@import "../../utilities/variables.scss";
+
+.navbar {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
+}
+
+.navbar-top {
+  .ant-nav {
+    background: #fff;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    z-index: 2;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
+  }
+  .ant-menu-item:first-child {
+    margin-top: 0px;
+  }
+  .ant-layout-header {
+    padding-left: 28px;
+    padding-right: 40px;
+  }
+  .logo {
+    max-width: 200px;
+    height: 30px;
+    display: inline-block;
+
+    img {
+      max-width: 200px;
+      max-height: 25px;
+      height: auto;
+    }
+  }
+
+  .search-box {
+    display: inline-block;
+    position: absolute;
+    max-width: 300px;
+    left: 320px;
+    top: 3px;
+    //margin-left: 27px;
+    .ant-input-prefix {
+      color: #ccc;
+    }
+    .ant-input {
+      border-radius: 0;
+      border: none;
+      font-size: 16px;
+      font-weight: normal;
+      &::placeholder {
+        color: #ccc;
+        font-weight: normal;
+      }
+    }
+    .ant-input-affix-wrapper .ant-input:not(:first-child) {
+      padding-left: 40px;
+    }
+    .anticon {
+      font-size: 18px;
+      //  color: $color-text;
+    }
+  }
+
+  .ant-menu-horizontal > {
+    .ant-menu-submenu:hover,
+    .ant-menu-submenu-selected,
+    .ant-menu-submenu-active {
+      //color: $color-primary;
+      border-color: $color-secondary;
+    }
+    .ant-menu-item:hover,
+    .ant-menu-item-selected,
+    .ant-menu-item-active {
+      border-color: $color-secondary;
+      color: $color-text;
+      border-background: #f2f5fa;
+    }
+  }
+}
+
+.navbar-top .ant-menu-item .anticon {
+  font-size: 24px;
+  color: $color-primary;
+}
+
+.ant-menu-submenu-popup {
+  .ant-menu-item-active {
+    color: $color-text;
+    background-color: #f2f5fa;
+  }
+}
+
+.activity-log-collapse-btn {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  width: 16px;
+}
+
+.nav-lang-select {
+  .ant-select-selection {
+    border: none;
+  }
+}

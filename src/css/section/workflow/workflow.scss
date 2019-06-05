@@ -1,0 +1,457 @@
+@import "../../utilities/variables.scss";
+
+.workflow-container {
+  .ant-layout {
+    background: #fbfcff;
+  }
+  .workflow-list-wrapper {
+    padding: 15px 40px 40px;
+  }
+  .section-top {
+    margin: 20px 40px 14px;
+    .waiting-section {
+      i {
+        font-size: 16px;
+        vertical-align: middle;
+      }
+      .waiting-filter-trigger {
+        padding-bottom: 3px;
+        border-bottom: 2px solid $color-secondary;
+        // $mixin Avenir-medium(),
+      }
+    }
+    .ant-tabs-nav .ant-tabs-tab-active {
+      color: #505050;
+      font-weight: 500;
+    }
+    .ant-tabs-nav .ant-tabs-tab:hover {
+      color: #505050;
+    }
+
+    .ant-tabs-ink-bar {
+      background: $color-secondary;
+    }
+  }
+  .divider-top {
+    border-bottom: 1px solid $color-text;
+    margin: 20px 78px 30px;
+  }
+  // .workflow-count {
+  //   margin: 0 78px,
+  // }
+  .list-view-header {
+    margin: 0 40px;
+    .list-toggle-btn {
+      .ant-switch {
+        background-color: $color-secondary;
+      }
+    }
+  }
+}
+
+.workflow-list {
+  &.has-Open-workflow {
+    > .month-group > div > .paper:not(.opened) {
+      opacity: 0.5;
+    }
+  }
+
+  .grouping-head {
+    font-size: 14px;
+    font-weight: bold;
+    color: $color-text;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  &.ant-collapse {
+    > .ant-collapse-item {
+      background: $color-white;
+      transition: all 0.8s ease-in-out;
+      &:hover {
+        background: #f1f2f6;
+      }
+    }
+  }
+  .Collapsible {
+    //cursor: pointer;
+    background-color: $color-white;
+    //margin-bottom: 10px;
+    .ant-collapse-header {
+      padding: 10px 20px;
+    }
+  }
+  .collapse-wrapper {
+    position: relative;
+  }
+  .child-workflow-expander {
+    position: absolute;
+    left: -3px;
+    z-index: 1;
+    width: 30px;
+    height: auto;
+    vertical-align: middle;
+    line-height: 89px;
+    text-align: center;
+    display: inline-block;
+    top: -9px;
+    i {
+      font-size: 16px;
+      color: $color-text;
+    }
+  }
+  .child-workflow-wrapper {
+    //border-top: 1px solid #d9d9d9;
+    padding-left: 30px;
+  }
+  .paper {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
+    background: #fff;
+
+    &.workflow-list-item {
+      //transition: margin 0.3s ease;
+      border-bottom: 1px solid lighten($color-grey-light, 38%);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .ant-collapse-header {
+        margin-bottom: 0;
+        position: relative;
+        border-radius: 2px;
+        //transition: all 0.3s ease-in;
+        &:hover {
+          background: #f2f5fa;
+        }
+      }
+      &.opened {
+        margin: 25px -15px;
+        box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+        .Collapsible {
+          border: none;
+        }
+        > .ant-collapse-header {
+          background: #f2f5fa;
+        }
+      }
+    }
+    .workflow-item:last-child {
+      .Collapsible {
+        border: none;
+      }
+    }
+
+    .ant-tabs {
+      padding-bottom: 1px;
+    }
+    .ant-tabs-bar {
+      padding-top: 10px;
+      margin-bottom: 0px;
+    }
+    .ant-tabs-nav .ant-tabs-tab {
+      padding-bottom: 20px;
+    }
+  }
+
+  .has-children {
+    .collapse-wrapper {
+      border-right: 1px dashed #ddd;
+    }
+  }
+
+  .ant-tabs .paper {
+    &.workflow-list-item {
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+      margin: 0 0px;
+      &.opened {
+        margin: 25px 5px;
+      }
+    }
+  }
+
+  .workflow-divider {
+    height: 1px;
+    background: #f2f5fa;
+    margin: 0 22px;
+  }
+
+  //childworkflow / detail view;
+  &.details-view {
+    .paper {
+      box-shadow: none;
+    }
+    .workflow-list-item {
+      .ant-collapse-header {
+        padding: 15px;
+      }
+      border-top: 1px solid #f2f5fa;
+      border-bottom: 1px solid #f2f5fa;
+      margin-bottom: -1px;
+    }
+  }
+
+  .workflow-divider {
+    height: 1px;
+    background: #f2f5fa;
+    margin: 0 22px;
+  }
+
+  //childworkflow / detaiol view;
+  &.details-view {
+    .paper {
+      box-shadow: none;
+    }
+    .workflow-list-item {
+      .ant-collapse-header {
+        padding: 15px;
+      }
+      border-top: 1px solid #f2f5fa;
+      border-bottom: 1px solid #f2f5fa;
+      margin-bottom: -1px;
+    }
+  }
+}
+
+//LC CARD HEAR/COLLAPSED VIEW
+.lc-card-head {
+  padding: 0px 0px;
+  .company-name {
+    font-size: 14px;
+    padding-left: 8px;
+    padding-right: 20px;
+    font-weight: bold;
+  }
+  .lc1 {
+    font-size: 10px;
+    color: $color-grey;
+    padding-left: 8px;
+    padding-right: 20px;
+  }
+
+  .group-overview {
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 45px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .ant-progress-bg {
+      background-color: $color-primary;
+      height: 4px !important;
+    }
+
+    .overflow-wrapper {
+      width: 100%;
+    }
+
+    .grp-status .material-icons {
+      width: 20px;
+    }
+    .step-item {
+      margin-right: 20px;
+    }
+  }
+  .ant-steps {
+    .ant-steps-item {
+      display: inline-block;
+      min-width: 100px;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      -webkit-box-align: center;
+
+      align-items: center;
+      .ant-steps-item-content {
+        white-space: normal;
+        > .ant-steps-item-title {
+          line-height: 1.17;
+          margin-top: 3px;
+          vertical-align: middle;
+          .title-c {
+            display: inline-block;
+            width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+            max-height: 60px;
+          }
+          &:after {
+            background-color: $color-text;
+          }
+        }
+      }
+    }
+    .ant-steps-item-icon {
+      margin-right: 20px;
+    }
+  }
+  // .child-workflow-dropdown {
+  // }
+
+  .status-btn {
+    position: relative;
+    width: 120px;
+    .status-text {
+      max-width: 90px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      padding-right: 5px;
+      line-height: 32px;
+    }
+    .icon {
+      position: absolute;
+      top: 11px;
+      right: 6px;
+    }
+  }
+}
+
+//LC CARD EXPANDED VIEW
+.lc-card {
+  .lc-data-wrapper {
+    //border-bottom: 1px solid $color-grey-d;
+    padding: 0px 0px 18px;
+    margin: 0px 0px -11px;
+    white-space: nowrap;
+    list-style: none;
+    overflow: auto;
+    .lc-data-item {
+      font-weight: medium;
+      font-size: 12px;
+      margin-right: 40px;
+      color: $color-metal;
+    }
+  }
+  .sub-step-list {
+    display: block;
+    overflow-x: auto;
+  }
+  .lc-card-body {
+    .shadow-wrapper {
+      position: relative;
+    }
+    .white-shadow {
+      position: absolute;
+      height: 100%;
+      width: 40px;
+      background: -moz-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+      );
+      background: -webkit-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+      );
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 1) 100%
+      );
+      filter: progid:DXImageTransform.Microsoft.gradient(
+          startColorstr="#00ffffff",
+          endColorstr="#ffffff",
+          GradientType=1
+        );
+      right: 0;
+      top: 0;
+    }
+    .shadow-lc .white-shadow {
+      right: -24px;
+      height: 90%;
+      top: -1px;
+    }
+    //padding: 28px;
+    border-top: 1px solid #e8e8e8;
+    .lc-card-section {
+      padding: 16px 22px;
+    }
+    .card-section-item {
+      border-bottom: 1px solid #e8e8e8;
+      padding: 0px 24px 18px;
+      margin: 0px -24px 18px;
+    }
+    .sub-step-list {
+      .groupaz-list {
+        padding: 0;
+        white-space: nowrap;
+        list-style: none;
+      }
+
+      .groupaz {
+        display: inline-block;
+        vertical-align: top;
+        max-width: 250px;
+        margin-right: 20px;
+
+        .grp-class {
+          //$include Avenir-medium();
+          display: block;
+          .grp-name {
+            display: inline-block;
+            width: 80%;
+            //border-bottom: 1px solid #f3f5fa;*/
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+            //text-decoration: underline;
+          }
+        }
+
+        .lc-step i,
+        ul li i {
+          font-size: 18px;
+          vertical-align: sub;
+          margin-right: 5px;
+          width: 16px;
+          padding-right: 20px;
+        }
+
+        .lc-step i {
+          font-size: 20px;
+        }
+
+        ul {
+          list-style: none;
+          padding-left: 25px;
+          padding-right: 25px;
+          margin-top: 24px;
+          border-right: 1px solid #eee;
+          li {
+            height: 40px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            a:hover {
+              text-decoration: none;
+              color: $color-text;
+            }
+          }
+        }
+      }
+    }
+
+    .step-ui {
+      column-count: 3;
+      column-gap: 55px;
+      column-rule-style: solid;
+      column-rule-width: 1px;
+      column-rule-color: #d9d9d9;
+      margin-bottom: 20px;
+    }
+
+    .step-item {
+      display: block;
+      padding-bottom: 20px;
+      margin-left: 10px;
+      font-size: 14px;
+    }
+
+    .step-ui .title-c {
+      max-width: 100%;
+    }
+  }
+}

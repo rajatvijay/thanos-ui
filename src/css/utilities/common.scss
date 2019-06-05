@@ -1,0 +1,99 @@
+@import "variables.scss";
+
+//ANT DEFAULT OVER RIDES
+/*
+a {
+  color: $color-primary;
+  &:hover {
+    color: $color-primary-dark;
+  }
+}
+
+.ant-dropdown-menu-item {
+  padding: 8px 10px;
+  &:hover {
+    background-color: $color-primary-light;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.ant-input:hover,
+.ant-input:focus,
+.ant-select-focused .ant-select-selection:hover,
+.ant-select-focused .ant-select-selection,
+.ant-select-open .ant-select-selection,
+.ant-select-selection:hover,
+.ant-select-selection:focus,
+.ant-select-selection:active,
+.ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled) {
+  border-color: $color-primary;
+  box-shadow: 0 0 0 2px fade($color-primary, 10%);
+}
+
+.ant-select-dropdown-menu-item-active,
+.ant-select-dropdown-menu-item:hover {
+  background-color: $color-primary-light;
+}
+
+.ant-pagination-item-active,
+.ant-pagination-item-link,
+.ant-pagination-item:hover,
+.ant-pagination-item:focus {
+  border-color: $color-primary;
+}*/
+
+//overrides//
+body {
+  color: $color-text;
+}
+
+.ant-layout {
+  background-color: #f6f7f9;
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+.ant-divider-horizontal.thin {
+  margin: 12px 0;
+}
+
+.activity-log-drawer.ant-drawer {
+  z-index: 1000;
+  .ant-drawer-header {
+    height: 65px;
+  }
+}
+
+.ant-drawer-header {
+  padding-top: 21px;
+  padding-bottom: 21px;
+}
+
+.ant-drawer-close {
+  height: 65px;
+}
+
+.ant-drawer-content {
+  box-shadow: -2px 0 4px #ddd;
+}
+
+a {
+  color: $color-secondary;
+  &:hover {
+    color: darken($color-secondary, 10%);
+  }
+}
+
+//to align textarea and sucess check
+.has-feedback > span.ant-form-item-children {
+  display: flex;
+}
+
+//to fix material icon issue for ms edge
+.material-icons {
+  font-feature-settings: "liga";
+}

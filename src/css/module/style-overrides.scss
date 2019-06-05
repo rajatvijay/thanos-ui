@@ -1,0 +1,342 @@
+@import "../utilities/variables.scss";
+
+.ant-btn {
+  border-radius: 2px;
+}
+
+.ant-btn:hover,
+.ant-btn:focus {
+  // border-color: $color-primary;
+  // color: $color-primary;
+}
+
+.ant-btn-primary {
+  background-color: $color-secondary;
+  border-color: $color-secondary;
+  color: $color-white;
+  &:hover,
+  &:focus {
+  }
+  &.btn-o {
+    background: transparent;
+    color: $color-secondary;
+  }
+}
+
+.ant-btn-primary:focus,
+.ant-btn-primary:hover,
+.ant-btn-primary:active {
+  background-color: $color-secondary-light;
+  border-color: $color-secondary-light;
+  color: $color-white;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.main-btn {
+  background: $color-secondary;
+  color: $color-white;
+  border: none;
+  &:focus,
+  &:hover,
+  &:active {
+    border-color: none;
+    box-shadow: none;
+  }
+}
+
+.secondary-btn {
+  background: lighten($color-secondary, 25%);
+  color: $color-text;
+  border: none;
+  &:focus,
+  &:hover,
+  &:active {
+    border-color: none;
+    box-shadow: none;
+  }
+}
+
+.btn-grey {
+  background-color: transparent;
+  color: $color-grey-light;
+  border: 1px solid $color-grey-light;
+  &:hover,
+  &:active,
+  &:focus {
+    box-shadow: none;
+    color: $color-grey-light;
+    border: 1px solid $color-grey-light;
+  }
+}
+
+.ant-btn {
+  &.main-btn {
+    //@include main-btn();
+  }
+  &.btn-grey {
+    // @include btn-grey();
+  }
+  &.secondary-btn {
+    //  @include secondary-btn();
+  }
+}
+
+.ant-btn.btn-create {
+  font-size: 18px;
+  background: $color-secondary; /* Old browsers */
+  border: none;
+  &:focus,
+  &:hover,
+  &:active {
+    border-color: none;
+    box-shadow: none;
+  }
+}
+
+.ant-btn.btn-cyan {
+  background-color: $color-cyan;
+  color: $color-text;
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: $color-cyan;
+  }
+}
+
+.ant-dropdown-button {
+  button {
+    &,
+    &:hover {
+      //@include main-btn();
+      color: inherit;
+    }
+  }
+}
+
+//make this override module for all the ant style
+
+//override color for progressbar  circle
+
+.ant-progress-circle.ant-progress-status-success .ant-progress-text {
+  &,
+  .material-icons {
+    color: $color-secondary;
+  }
+}
+
+.ant-progress-status-success .ant-progress-circle-path {
+  stroke: $color-secondary;
+}
+
+.ant-progress-text {
+  .material-icons {
+    color: $color-primary-dark;
+  }
+}
+
+.ant-progress-circle-path {
+  stroke: $color-secondary;
+}
+
+.ant-progress-circle-trail {
+  stroke: $color-grey-lightest;
+}
+
+//Dropdown <a> override
+.ant-dropdown {
+  .ant-dropdown-menu-item {
+    color: $color-text;
+    padding: 5px 18px;
+    a:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+    &-active {
+      background-color: $color-grey-lightest;
+    }
+  }
+}
+
+//step group list icons ui
+.step-ui {
+  .ant-steps-item {
+    .material-icons {
+      vertical-align: middle;
+    }
+    .ant-steps-item-icon {
+      display: none;
+    }
+  }
+
+  .title-c {
+    max-width: 150px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
+  .dash {
+    display: inline-block;
+    padding-left: 18px;
+    padding-right: 18px;
+    //height: 40px;
+    vertical-align: middle;
+    color: $color-text;
+    font-weight: 700;
+  }
+
+  // .ant-steps-item-finish {
+  //   .ant-progress-status-success .ant-progress-circle-path {
+  //     stroke: $color-primary;
+  //   }
+  //   //color: $color-metal;
+  // }
+
+  // .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+  //   color: $color-primary;
+  // }
+
+  // .ant-steps-item-finish
+  //   > .ant-steps-item-content
+  //   > .ant-steps-item-title:after {
+  //   background-color: $color-primary-light;
+  // }
+
+  // .ant-steps-item-error
+  //   > .ant-steps-item-content
+  //   > .ant-steps-item-title:after {
+  //   background-color: $color-red;
+  // }
+
+  // .ant-steps-item-error {
+  //   .material-icons {
+  //     color: $color-red;
+  //   }
+  // }
+
+  // .ant-steps-item-wait > .ant-steps-item-content > .ant-steps-item-title:after {
+  //   background-color: $color-primary;
+  // }
+
+  // .ant-steps-item-title:after {
+  //   height: 2px;
+  // }
+}
+
+.ant-menu {
+  .ant-menu-item {
+    &:after {
+      border-color: $color-secondary;
+      border-right-width: 4px;
+    }
+  }
+}
+
+.ant-select-dropdown-menu-item:hover,
+.ant-select-dropdown-menu-item-active,
+.ant-cascader-menu-item:hover {
+  background-color: $color-grey-lightest;
+}
+
+// input font over ride
+.ant-input {
+  font-family: $base-font;
+}
+
+// pagination color override
+.ant-pagination-item-active,
+.ant-pagination-item-active:focus,
+.ant-pagination-item-active:hover {
+  border-color: $color-secondary;
+}
+
+.ant-menu-horizontal {
+  border-bottom: none;
+}
+
+.ant-dropdown-menu-item,
+.ant-select-dropdown-menu-item {
+  white-space: normal;
+}
+
+.ant-timeline-item-head-custom {
+  left: 6px;
+}
+
+///carousel
+
+.ant-carousel .slick-slide {
+  // text-align: center;
+  // height: 160px;
+  // line-height: 160px;
+  // //background: #364d79;
+  // overflow: hidden;
+}
+
+.ant-carousel .slick-slide h3 {
+  //color: $color-secondary;
+}
+
+.ant-carousel .slick-dots li button {
+  border: 0;
+  cursor: pointer;
+  background: $color-secondary;
+  //background: #fff;
+  opacity: 1;
+  display: block;
+  width: 20px;
+  height: 5px;
+  border-radius: 1px;
+  outline: none;
+  font-size: 0;
+  color: transparent;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  padding: 0;
+}
+
+.ant-carousel .slick-dots li.slick-active button {
+  background: $color-grey-light;
+}
+
+.ant-switch-checked {
+  background: $color-secondary;
+}
+
+.ant-radio-group-solid {
+  .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background: $color-secondary;
+    border-color: $color-secondary;
+  }
+}
+
+.ant-radio-group.ant-radio-group-outline {
+  width: 100%;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active {
+  color: $color-secondary;
+}
+
+.ant-tabs-nav .ant-tabs-tab:hover {
+  color: darken($color-secondary, 10%);
+}
+
+.ant-tabs-ink-bar {
+  background: $color-secondary;
+}
+
+.aux-step-sidebar {
+  .ant-menu-item-selected,
+  .ant-menu-item {
+    a,
+    a:hover {
+      color: $color-grey-dark;
+      text-decoration: none;
+    }
+  }
+}
