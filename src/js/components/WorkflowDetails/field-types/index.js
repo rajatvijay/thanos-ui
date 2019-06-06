@@ -191,6 +191,10 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "docusign":
       return DnBCommon(props);
+    case "csi":
+      return DnBCommon(props);
+    case "amberroad":
+      return DnBCommon(props);
     default:
       return Text(props);
   }
