@@ -195,6 +195,10 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "amberroad":
       return DnBCommon(props);
+    case "boeing_screening_status":
+      return DnBCommon(props);
+    case "boeing_adjudication_status":
+      return DnBCommon(props);
     default:
       return Text(props);
   }
