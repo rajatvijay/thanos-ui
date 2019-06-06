@@ -196,20 +196,22 @@ class Sidebar extends Component {
     );
     return (
       <Sider
-        width={400}
+        width={330}
         style={{
           overflow: "scroll",
-          height: "100vh",
           left: 0,
           backgroundColor: "#FAFAFA",
           padding: "30px",
           paddingTop: 0,
-          zIndex: 1
+          paddingLeft: "50px",
+          zIndex: 1,
+          marginRight: "20px",
+          paddingRight: 0
         }}
       >
         <div
           style={{
-            width: 350,
+            width: 280,
             paddingBottom: 100,
             height: "100%",
             backgroundColor: "#FAFAFA"
@@ -261,8 +263,8 @@ class Sidebar extends Component {
               </span>
             </Dropdown>
           </div>
-          <Divider />
-          <Row style={{ marginBottom: 25 }}>
+          <Divider style={{ margin: "10px 0" }} />
+          <Row style={{ marginBottom: 15 }}>
             {lc_data.map(data => (
               <Col span={12}>
                 <span
@@ -283,7 +285,8 @@ class Sidebar extends Component {
                     color: "#000000",
                     fontSize: "12px",
                     letterSpacing: "-0.02px",
-                    lineHeight: "29px"
+                    lineHeight: "29px",
+                    wordWrap: "break-word"
                   }}
                 >
                   {data.value}
@@ -300,7 +303,8 @@ class Sidebar extends Component {
               borderLeft: "none",
               borderRight: "none",
               borderRadius: 0,
-              marginBottom: 30
+              marginBottom: 30,
+              marginTop: 41
             }}
             onChange={this.onChangeOfCollapse}
             className="ant-collapse-content"
@@ -319,7 +323,8 @@ class Sidebar extends Component {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
-                            backgroundColor: "#fafafa"
+                            backgroundColor: "#fafafa",
+                            marginLeft: "-14px"
                           }}
                         >
                           <span
@@ -333,14 +338,14 @@ class Sidebar extends Component {
                             {stepgroup.steps.filter(step => step.completed_by)
                               .length === stepgroup.steps.length ? (
                               <i
-                                className="material-icons t-22 pd-right-sm anticon anticon-check-circle"
+                                className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
                                 style={{ color: "#00C89B" }}
                               >
                                 check_circle
                               </i>
                             ) : (
                               <i
-                                className="material-icons t-22 pd-right-sm anticon anticon-check-circle"
+                                className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
                                 style={{ color: "#CCCCCC" }}
                               >
                                 panorama_fish_eye
@@ -361,7 +366,8 @@ class Sidebar extends Component {
                             {
                               stepgroup.steps.filter(step => step.completed_by)
                                 .length
-                            }/{stepgroup.steps.length}
+                            }
+                            /{stepgroup.steps.length}
                           </span>
                         </div>
                       }
@@ -395,13 +401,13 @@ class Sidebar extends Component {
                                     borderRadius: "16px",
                                     paddingLeft: "10px",
                                     paddingTop: "5px",
-                                    paddingBottom: "5px"
+                                    paddingBottom: "5px",
+                                    marginLeft: "-12px",
+                                    marginLeft: "-14px"
                                   }
                                 : {
-                                    paddingLeft: "10px",
-                                    paddingTop: "5px",
-                                    paddingBottom: "5px",
-                                    backgroundColor: "#fafafa"
+                                    backgroundColor: "#fafafa",
+                                    marginLeft: "-14px"
                                   }
                             }
                           >

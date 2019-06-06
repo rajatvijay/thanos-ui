@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Button, Input, Cascader } from "antd";
+import { Modal, Button, Input, Cascader, Divider } from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
 import { css } from "emotion";
@@ -86,9 +86,9 @@ class FilterPopup extends Component {
       <div>
         <Modal
           footer={null}
-          closable={true}
+          closable={false}
           visible={visible}
-          maskClosable={false}
+          maskClosable={true}
           className={css`
             max-width: 320px;
             .ant-modal-content {
@@ -104,16 +104,27 @@ class FilterPopup extends Component {
           onCancel={onModalClose}
         >
           <div>
-            <div style={{ justifyContent: "space-around", display: "flex" }}>
+            <div
+              style={{
+                justifyContent: "space-between",
+                display: "flex",
+                marginLeft: "28px"
+              }}
+            >
               <span style={{ color: "#138BD6", cursor: "pointer" }}>
                 FILTER BY
               </span>
-              <span style={{ cursor: "pointer" }} onClick={this.props.onClear}>
+              <span
+                style={{ cursor: "pointer", marginRight: "38px" }}
+                onClick={this.props.onClear}
+              >
                 CLEAR
               </span>
             </div>
 
-            <div style={{ margin: 30 }}>
+            <Divider />
+
+            <div style={{ margin: 28 }}>
               <DropdownFilter
                 value={status}
                 name="status"
@@ -138,18 +149,25 @@ class FilterPopup extends Component {
             </div>
           </div>
 
-          <div>
-            <span style={{ marginLeft: 45, color: "#138BD6" }}>
+          <div style={{ marginTop: "46px" }}>
+            <span style={{ marginLeft: 28, color: "#138BD6" }}>
               ADVANCED FILTERS
             </span>
 
-            <div style={{ margin: 30 }}>
+            <Divider />
+
+            <div style={{ margin: 28 }}>
               <Cascader
                 value={field}
                 style={{ width: "100%" }}
                 options={fieldOptions}
                 onChange={arr => onFilterChange("field", arr)}
                 placeholder="Please select field"
+                className={css`
+                  .ant-input {
+                    padding-left: 0;
+                  }
+                `}
               />
 
               <DropdownFilter
@@ -164,13 +182,14 @@ class FilterPopup extends Component {
                 placeholder="Input Value"
                 value={text}
                 onChange={e => onFilterChange("text", e.target.value)}
+                style={{ paddingLeft: 0 }}
               />
             </div>
           </div>
 
-          <div style={{ margin: 30 }}>
+          <div style={{ margin: 30, marginBottom: 12 }}>
             <Button
-              style={{ width: "100%" }}
+              style={{ width: "100%", borderRadius: 3 }}
               type="primary"
               onClick={this.onApply}
             >

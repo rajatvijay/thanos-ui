@@ -184,7 +184,7 @@ class StepBody extends Component {
           />
         )}
 
-        <Row className="pd-ard-lg">
+        <Row style={{ padding: "29px 44px 27px 37px" }}>
           <Col span={16}>
             <span className="t-18 text-black">{stepData.name}</span>
           </Col>

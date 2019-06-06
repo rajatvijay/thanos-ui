@@ -272,7 +272,9 @@ class WorkflowItem extends React.Component {
           "paper workflow-list-item " +
           (this.state.opened
             ? " opened"
-            : null + hasChildren ? " has-children " : null)
+            : null + hasChildren
+            ? " has-children "
+            : null)
         }
       >
         <div className="collapse-wrapper">
@@ -280,7 +282,9 @@ class WorkflowItem extends React.Component {
             trigger={
               <div
                 className="lc-card"
-                style={{ boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)" }}
+                style={{
+                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)"
+                }}
               >
                 <WorkflowHeader
                   isEmbedded={this.props.isEmbedded}
@@ -303,6 +307,7 @@ class WorkflowItem extends React.Component {
                   isExpanded={this.state.opened}
                   disableCollapse={this.disableCollapse}
                   enableCollapse={this.enableCollapse}
+                  config={this.props.config}
                 />
               </div>
             }

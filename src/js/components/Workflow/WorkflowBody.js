@@ -21,7 +21,7 @@ const WorkflowBodyContainer = props => {
   finalHtml = (
     <div className="lc-card-body">
       <Tabs tabBarExtraContent={cbtn}>
-        <TabPane tab={"STATUS"} key={1}>
+        <TabPane tab={"STATUS"} key={1} style={{ marginLeft: "8px" }}>
           {props.stepdataloading ? (
             <div className="text-center mr-top-lg">
               {" "}

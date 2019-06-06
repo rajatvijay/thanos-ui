@@ -517,8 +517,9 @@ class StepBodyForm extends Component {
         onSubmit={this.handleSubmit}
         className="step-form"
         autoComplete="off"
+        style={{ padding: "29px 44px 27px 37px" }}
       >
-        <div className="pd-ard-lg">
+        <div>
           {showFieldVersion ? (
             <div className=" mr-bottom">
               <div className="version-item">
@@ -611,10 +612,9 @@ class StepBodyForm extends Component {
             })
           )}
         </div>
-
         <Divider className="no-margin" />
 
-        <div className="pd-ard-lg">
+        <div style={{ paddingTop: 30 }}>
           <Row>
             <Col span={6}>
               {this.props.stepData.completed_at ||
