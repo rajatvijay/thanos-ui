@@ -96,7 +96,7 @@ class Sidebar extends Component {
 
     return (
       <Sider
-        width={314}
+        width={300}
         style={{
           overflow: "auto",
           height: "100vh",
@@ -106,7 +106,7 @@ class Sidebar extends Component {
       >
         <div
           style={{
-            width: 314,
+            width: 300,
             position: "fixed",
             paddingBottom: 100,
             height: "100%",
