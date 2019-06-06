@@ -332,7 +332,9 @@ function getIntegrationSearchButton(props) {
     ocr: "Get OCR data",
     docusign: "Sign with Docusign",
     csi: "Get CSI data",
-    amberroad: "Get Amberroad Data"
+    amberroad: "Get Amberroad Data",
+    boeing_screening_status: "Update Screening Status",
+    boeing_adjudication_status: "Update Adjudication Status"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
