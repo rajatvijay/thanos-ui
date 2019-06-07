@@ -120,7 +120,10 @@ class ChildWorkflowField2 extends Component {
       statusView: true,
       kindChecked: false,
       showRelatedWorkflow: false,
-      selected_filters: { category: [], status: "", flag: "", kind: "" }
+      selected_filters: { category: [], status: "", flag: "", kind: "" },
+      sortOrderAsc: false,
+      sortingEnabled: false,
+      sortBy: undefined
     };
   }
 
@@ -154,7 +157,7 @@ class ChildWorkflowField2 extends Component {
         "exclude_filters"
       ];
     }
-    this.getChildWorkflow(this.props.workflowId, kind);
+    this.getChildWorkflow();
   };
 
   getQueryParamForChildWorkflows = () => {
@@ -174,6 +177,17 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
+  objToParam = query => {
+    const searchParams = new URLSearchParams();
+
+    Object.keys(query).forEach(key => {
+      if (query[key]) {
+        return searchParams.append(key, query[key]);
+      }
+    });
+    return searchParams.toString();
+  };
+
   getChildWorkflow = () => {
     let parentId = this.props.workflowId;
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
@@ -182,6 +196,7 @@ class ChildWorkflowField2 extends Component {
       headers: authHeader.get(),
       credentials: "include"
     };
+    const { sortBy } = this.state;
 
     // decide the query param for workflowId
     const paramName = this.getQueryParamForChildWorkflows();
@@ -194,10 +209,15 @@ class ChildWorkflowField2 extends Component {
       return;
     }
 
+    const param = this.objToParam({
+      limit: 100,
+      [paramName]: parentId,
+      kind: kind,
+      ordering: sortBy
+    });
+
     const valueFilter = this.getValuefilter();
-    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${
-      parentId
-    }&kind=${kind}${valueFilter}&child_kinds=true`;
+    const url = `${baseUrl}workflows-list/?${param}`;
 
     this.setState({ fetching: true });
 
@@ -215,6 +235,41 @@ class ChildWorkflowField2 extends Component {
         //this.filterByFlag();
         this.excludeWorkflows();
       });
+  };
+
+  changeScoreOrder = order => {
+    const isAscending = this.state.sortOrderAsc;
+    const isSortingEnabled = this.state.sortingEnabled;
+    if (!isSortingEnabled) {
+      // Enable the sroting in descending mode
+      this.setState(
+        {
+          sortOrderAsc: false,
+          sortingEnabled: true,
+          sortBy: "-sorting_primary_field"
+        },
+        function() {
+          this.getChildWorkflow();
+        }
+      );
+    } else if (isAscending) {
+      // Disable the sorting
+      this.setState({ sortingEnabled: false, sortBy: undefined }, function() {
+        this.getChildWorkflow();
+      });
+    } else {
+      // Enable sorting in the ascending mode
+      this.setState(
+        {
+          sortOrderAsc: true,
+          sortingEnabled: true,
+          sortBy: "sorting_primary_field"
+        },
+        function() {
+          this.getChildWorkflow();
+        }
+      );
+    }
   };
 
   getValuefilter = () => {
@@ -946,7 +1001,31 @@ class ChildWorkflowField2 extends Component {
               <Row className="text-metal">
                 <Col span="10">Name</Col>
                 <Col span="8" />
-                <Col span="3">Status</Col>
+                <Col span="3">
+                  <Tooltip
+                    title={
+                      this.state.sortOrderAsc
+                        ? "High to low risk score"
+                        : "Low to high risk score"
+                    }
+                  >
+                    <span
+                      style={{ marginRight: 15 }}
+                      className="text-secondary text-anchor"
+                      onClick={this.changeScoreOrder}
+                    >
+                      Risk
+                      {this.state.sortingEnabled ? (
+                        <i className="material-icons t-14  text-middle">
+                          {this.state.sortOrderAsc
+                            ? "keyboard_arrow_up"
+                            : "keyboard_arrow_down"}
+                        </i>
+                      ) : null}
+                    </span>
+                  </Tooltip>
+                  Status
+                </Col>
                 <Col span="3" />
               </Row>
             ) : null}
