@@ -233,7 +233,7 @@ const getGroupProgress = group => {
     }
   });
 
-  progress = Math.trunc(stepCompleted / allSteps * 100);
+  progress = Math.trunc((stepCompleted / allSteps) * 100);
   return progress;
 };
 

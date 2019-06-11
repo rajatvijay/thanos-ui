@@ -272,7 +272,9 @@ class WorkflowItem extends React.Component {
           "paper workflow-list-item " +
           (this.state.opened
             ? " opened"
-            : null + hasChildren ? " has-children " : null)
+            : null + hasChildren
+            ? " has-children "
+            : null)
         }
       >
         <div className="collapse-wrapper">

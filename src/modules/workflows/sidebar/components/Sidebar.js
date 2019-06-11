@@ -366,7 +366,8 @@ class Sidebar extends Component {
                             {
                               stepgroup.steps.filter(step => step.completed_by)
                                 .length
-                            }/{stepgroup.steps.length}
+                            }
+                            /{stepgroup.steps.length}
                           </span>
                         </div>
                       }

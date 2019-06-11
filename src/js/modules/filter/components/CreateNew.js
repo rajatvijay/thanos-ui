@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Menu, Dropdown, Icon } from "antd";
 import { connect } from "react-redux";
-import { workflowKindActions, createWorkflow } from "../../../../actions";
+import { workflowKindActions, createWorkflow } from "../../../actions";
 
 class CreateNew extends Component {
   loadWorkflowKind = () => {

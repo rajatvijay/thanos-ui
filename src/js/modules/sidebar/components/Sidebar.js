@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import { Layout, Icon, Select } from "antd";
-import TaskQueue from "./TaskQueue";
-import Alerts from "./Alerts";
-import {
-  workflowFiltersActions,
-  workflowKindActions
-} from "../../../../actions";
+import TaskQueueList from "./TaskQueueList";
+import AlertList from "./AlertList";
+import { workflowFiltersActions, workflowKindActions } from "../../../actions";
 import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
 import { css } from "emotion";
@@ -99,7 +96,7 @@ class Sidebar extends Component {
 
     return (
       <Sider
-        width={314}
+        width={300}
         style={{
           overflow: "auto",
           height: "100vh",
@@ -109,7 +106,7 @@ class Sidebar extends Component {
       >
         <div
           style={{
-            width: 314,
+            width: 300,
             position: "fixed",
             paddingBottom: 100,
             height: "100%",
@@ -149,7 +146,7 @@ class Sidebar extends Component {
               padding: "5px 0px",
               // minHeight: "100vh"
               maxHeight: "80vh",
-              overflow: "scroll"
+              overflowY: "scroll"
             }}
             className={css`
               .sidebarList:hover {
@@ -158,15 +155,18 @@ class Sidebar extends Component {
             `}
           >
             <div>
-              <TaskQueue
-                workflowGroupCount={this.props.workflowGroupCount}
+              <TaskQueueList
+                taskQueues={this.props.workflowGroupCount.stepgroupdef_counts}
+                loading={this.props.workflowAlertGroupCount.loading}
+                // workflowGroupCount={this.props.workflowGroupCount}
                 onSelectTask={this.onSelectTask}
               />
             </div>
 
             <div style={{ display: isError ? "none" : "block" }}>
-              <Alerts
-                workflowAlertGroupCount={this.props.workflowAlertGroupCount}
+              <AlertList
+                alerts={this.props.workflowAlertGroupCount.alert_details}
+                loading={this.props.workflowAlertGroupCount.loading}
                 onSelectAlert={this.onSelectAlert}
               />
             </div>

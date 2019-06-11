@@ -29,9 +29,9 @@ import WorkflowFilterTop from "./WorkflowFilterTop";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
-import Sidebar from "../../modules/components/common/sidebar/Sidebar";
+import Sidebar from "../../modules/sidebar/components/Sidebar";
 
-import Filter from "../../modules/components/common/filter/Filter";
+import Filter from "../../modules/filter/components/Filter";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -252,17 +252,18 @@ class Workflow extends Component {
                         this.props.config.loading
                           ? "workflowsInstances.loadingConfigsText"
                           : this.props.workflowKind.loading
-                            ? "workflowsInstances.loadingFiltersText"
-                            : this.props.workflow.loading
-                              ? "workflowsInstances.fetchingDataText"
-                              : null
+                          ? "workflowsInstances.loadingFiltersText"
+                          : this.props.workflow.loading
+                          ? "workflowsInstances.fetchingDataText"
+                          : null
                       }
                     />
                   </span>
                 </div>
               ) : this.props.workflow.loadingStatus === "failed" ? (
                 <div className="mr-top-lg text-center text-bold text-metal">
-                  <FormattedMessage id="errorMessageInstances.noWorkflowsError" />.{" "}
+                  <FormattedMessage id="errorMessageInstances.noWorkflowsError" />
+                  .{" "}
                   {/**<div className="text-anchor ">
                    Click here to reload{" "}
                    <i className="material-icons text-middle">refresh</i>

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { baseUrl, authHeader } from "../../../../_helpers";
+import { baseUrl, authHeader } from "../../../_helpers";
 
 import FilterPopup from "./FilterPopup";
-import { workflowFiltersActions, workflowActions } from "../../../../actions";
+import { workflowFiltersActions, workflowActions } from "../../../actions";
 import { Tooltip, Icon } from "antd";
 import CreateNew from "./CreateNew";
 import { css } from "emotion";
@@ -226,7 +226,7 @@ class Filter extends Component {
 
             {/* TODO: Separate as a private component */}
             {this.props.workflow.loading ? null : this.props.workflow
-              .loadingStatus === "failed" ? null : (
+                .loadingStatus === "failed" ? null : (
               <li
                 style={{
                   margin: "0px 40px 0px 10px",

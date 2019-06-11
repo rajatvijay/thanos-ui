@@ -109,8 +109,8 @@ export const Text = props => {
           props.decryptedData
             ? props.decryptedData.answer
             : props.field.answers[0]
-              ? props.field.answers[0].answer
-              : props.field.definition.defaultValue
+            ? props.field.answers[0].answer
+            : props.field.definition.defaultValue
         }
         {...feedValue(props)}
         autoComplete="new-password"
@@ -129,8 +129,8 @@ export const Bool = props => {
   let defVal = props.field.answers[0]
     ? props.field.answers[0].answer
     : props.field.definition.defaultValue !== ""
-      ? props.field.definition.defaultValue
-      : null;
+    ? props.field.definition.defaultValue
+    : null;
 
   let that = this;
   return (

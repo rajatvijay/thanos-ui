@@ -85,12 +85,16 @@ export const StepGroupList = props => {
                           "material-icons mr-right-lg " +
                           (completed
                             ? " text-green "
-                            : od ? " text-red " : " text-light ")
+                            : od
+                            ? " text-red "
+                            : " text-light ")
                         }
                       >
                         {completed
                           ? "check_circle "
-                          : od ? "error" : "panorama_fish_eye"}
+                          : od
+                          ? "error"
+                          : "panorama_fish_eye"}
                       </i>
                       <span
                         className={
@@ -182,7 +186,9 @@ const StepItem = props => {
               "material-icons text-middle " +
               (step_complete
                 ? "text-green "
-                : overdue ? "text-red " : " text-light")
+                : overdue
+                ? "text-red "
+                : " text-light")
             }
           >
             {icon_cls}
@@ -219,8 +225,8 @@ const StepItem = props => {
             step_complete
               ? "text-light text-nounderline"
               : overdue
-                ? "text-black text-nounderline text-normal"
-                : "text-black text-nounderline text-normal"
+              ? "text-black text-nounderline text-normal"
+              : "text-black text-nounderline text-normal"
           }
         >
           <i
@@ -228,7 +234,9 @@ const StepItem = props => {
               "material-icons text-middle " +
               (step_complete
                 ? "text-green"
-                : overdue ? "text-red" : "text-light")
+                : overdue
+                ? "text-red"
+                : "text-light")
             }
           >
             {icon_cls}
