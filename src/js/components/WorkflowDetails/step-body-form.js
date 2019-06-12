@@ -621,13 +621,30 @@ class StepBodyForm extends Component {
               this.props.stepData.is_locked ||
               !_.includes(this.props.permission, "Can submit a step") ||
               !editable ? (
-                <Button
-                  type="primary "
-                  className="no-print  disabled"
-                  size="large"
-                >
-                  <FormattedMessage id="commonTextInstances.submitButtonText" />
-                </Button>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Button
+                    type="primary "
+                    className="no-print  disabled"
+                    size="large"
+                    style={{ marginRight: "29px" }}
+                  >
+                    <FormattedMessage id="commonTextInstances.submitButtonText" />
+                  </Button>
+                  <p
+                    style={{
+                      color: "#D40000",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      letterSpacing: "-0.02px",
+                      lineHeight: "15px"
+                    }}
+                  >
+                    {this.props.currentStepFields.error &&
+                    Object.values(this.props.currentStepFields.error)
+                      ? "Please fill out required fields"
+                      : ""}
+                  </p>
+                </div>
               ) : (
                 <Button
                   type="primary"
