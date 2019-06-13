@@ -205,7 +205,6 @@ class Sidebar extends Component {
           paddingTop: 0,
           paddingLeft: "50px",
           zIndex: 1,
-          marginRight: "20px",
           paddingRight: 0
         }}
       >

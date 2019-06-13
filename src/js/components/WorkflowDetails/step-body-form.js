@@ -616,7 +616,7 @@ class StepBodyForm extends Component {
 
         <div style={{ paddingTop: 30 }}>
           <Row>
-            <Col span={7}>
+            <Col span={8}>
               {this.props.stepData.completed_at ||
               this.props.stepData.is_locked ||
               !_.includes(this.props.permission, "Can submit a step") ||
@@ -662,7 +662,7 @@ class StepBodyForm extends Component {
                 </div>
               )}
             </Col>
-            <Col span={17} className="text-right">
+            <Col span={16} className="text-right">
               {this.getStepStatus(this.props.stepData)}
             </Col>
           </Row>
