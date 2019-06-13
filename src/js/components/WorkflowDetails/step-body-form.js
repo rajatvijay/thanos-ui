@@ -616,7 +616,7 @@ class StepBodyForm extends Component {
 
         <div style={{ paddingTop: 30 }}>
           <Row>
-            <Col span={6}>
+            <Col span={7}>
               {this.props.stepData.completed_at ||
               this.props.stepData.is_locked ||
               !_.includes(this.props.permission, "Can submit a step") ||
@@ -625,7 +625,6 @@ class StepBodyForm extends Component {
                   type="primary "
                   className="no-print  disabled"
                   size="large"
-                  style={{ marginRight: "29px" }}
                 >
                   <FormattedMessage id="commonTextInstances.submitButtonText" />
                 </Button>
@@ -650,7 +649,9 @@ class StepBodyForm extends Component {
                       fontSize: "12px",
                       fontWeight: "bold",
                       letterSpacing: "-0.02px",
-                      lineHeight: "15px"
+                      lineHeight: "15px",
+                      marginLeft: "30px",
+                      marginTop: "10px"
                     }}
                   >
                     {this.props.currentStepFields.error &&
@@ -661,7 +662,7 @@ class StepBodyForm extends Component {
                 </div>
               )}
             </Col>
-            <Col span={18} className="text-right">
+            <Col span={17} className="text-right">
               {this.getStepStatus(this.props.stepData)}
             </Col>
           </Row>
