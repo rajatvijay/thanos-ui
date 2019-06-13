@@ -654,7 +654,7 @@ class StepBodyForm extends Component {
                     }}
                   >
                     {this.props.currentStepFields.error &&
-                    Object.values(this.props.currentStepFields.error)
+                    Object.values(this.props.currentStepFields.error).length
                       ? "Please fill out required fields"
                       : ""}
                   </p>
