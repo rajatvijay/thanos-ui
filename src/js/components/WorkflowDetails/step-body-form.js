@@ -621,14 +621,28 @@ class StepBodyForm extends Component {
               this.props.stepData.is_locked ||
               !_.includes(this.props.permission, "Can submit a step") ||
               !editable ? (
+                <Button
+                  type="primary "
+                  className="no-print  disabled"
+                  size="large"
+                  style={{ marginRight: "29px" }}
+                >
+                  <FormattedMessage id="commonTextInstances.submitButtonText" />
+                </Button>
+              ) : (
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <Button
-                    type="primary "
-                    className="no-print  disabled"
+                    type="primary"
                     size="large"
-                    style={{ marginRight: "29px" }}
+                    className="no-print pd-ard"
+                    htmlType="submit"
+                    disabled={this.props.isSubmitting}
                   >
-                    <FormattedMessage id="commonTextInstances.submitButtonText" />
+                    {this.props.isSubmitting ? (
+                      <FormattedMessage id="commonTextInstances.submittingButtonText" />
+                    ) : (
+                      <FormattedMessage id="commonTextInstances.submitButtonText" />
+                    )}
                   </Button>
                   <p
                     style={{
@@ -645,20 +659,6 @@ class StepBodyForm extends Component {
                       : ""}
                   </p>
                 </div>
-              ) : (
-                <Button
-                  type="primary"
-                  size="large"
-                  className="no-print pd-ard"
-                  htmlType="submit"
-                  disabled={this.props.isSubmitting}
-                >
-                  {this.props.isSubmitting ? (
-                    <FormattedMessage id="commonTextInstances.submittingButtonText" />
-                  ) : (
-                    <FormattedMessage id="commonTextInstances.submitButtonText" />
-                  )}
-                </Button>
               )}
             </Col>
             <Col span={18} className="text-right">
