@@ -198,7 +198,6 @@ class Sidebar extends Component {
       <Sider
         width={350}
         style={{
-          overflow: "scroll",
           left: 0,
           backgroundColor: "#FAFAFA",
           padding: "30px",
