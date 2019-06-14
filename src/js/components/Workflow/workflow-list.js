@@ -117,7 +117,7 @@ class WorkflowList extends Component {
           style={{
             overflow: "initial",
             padding: this.props.isEmbedded
-              ? "0px 26px 15px 20px"
+              ? "0px 20px 15px 20px"
               : "0px 46px 15px 40px"
           }}
           className="workflow-list-wrapper"

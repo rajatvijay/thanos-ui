@@ -841,7 +841,7 @@ class ChildWorkflowField2 extends Component {
           "childworkflow-field-item from-label " +
           (_.size(props.field.selected_flag) ? " has-flag" : "")
         }
-        style={{ display: "block", margin: "0 -24px" }}
+        style={{ display: "block", margin: "0 -20px" }}
         key={props.field.id}
         message=""
         hasFeedback
