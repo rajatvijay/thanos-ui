@@ -81,25 +81,31 @@ export const WorkflowHeader = props => {
   );
 
   return (
-    <Row type="flex" align="middle">
+    <Row
+      style={{ cursor: "pointer" }}
+      onClick={() => props.showModal(props.workflow.id)}
+      type="flex"
+      align="middle"
+    >
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
 
-      {props.isExpanded ? (
+      {/* {props.isExpanded ? (
         <Col span={2} className="details-link-wrapper ">
-          <span
-            onClick={() => props.showModal(props.workflow.id)}
+          {/* <span
+          //onClick={()=>props.showModal(props.workflow.id)}
             className="details-link slide-this"
-            //to={"/workflows/instances/" + props.workflow.id + "/"}
+           //to={"/workflows/instances/" + props.workflow.id + "/"}
             title="Show details"
             style={{
               width: "75px",
-              float: "right"
+              float: "right",
+              //pointer:"cursor"
             }}
           >
             <i className="material-icons">arrow_forward</i>
-          </span>
-        </Col>
-      ) : null}
+          </span> */}
+      {/* </Col> */}
+      {/* // ) : null} */}
     </Row>
   );
 };

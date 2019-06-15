@@ -313,10 +313,11 @@ class WorkflowItem extends React.Component {
             : null)
         }
       >
-        <div className="collapse-wrapper">
+        <div>
           {this.state.visible && (
             <Modal
-              style={{ left: 150, top: 270 }}
+              // destroyOnClose={true}
+              style={{ left: 150 }}
               closable={false}
               footer={null}
               bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
@@ -336,84 +337,79 @@ class WorkflowItem extends React.Component {
             </Modal>
           )}
 
-          <Collapsible
+          {/* <Collapsible
             trigger={
               <div
                 className="lc-card"
                 style={{
                   boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)"
                 }}
-              >
-                <WorkflowHeader
-                  visibleModal={this.state.modal}
-                  showModal={this.showModal}
-                  isEmbedded={this.props.isEmbedded}
-                  sortingEnabled={this.props.sortingEnabled}
-                  rank={this.props.rank}
-                  workflow={this.props.workflow}
-                  statusType={statusType}
-                  kind={this.props.kinds}
-                  onStatusChange={this.props.onStatusChange}
-                  dispatch={this.props.dispatch}
-                  statusView={this.props.statusView}
-                  hasChildren={hasChildren}
-                  fieldExtra={
-                    that.props.field && that.props.field.definition.extra
-                      ? that.props.field.definition.extra
-                      : null
-                  }
-                  addComment={this.props.addComment || null}
-                  showCommentIcon={this.props.showCommentIcon}
-                  isExpanded={this.state.opened}
-                  disableCollapse={this.disableCollapse}
-                  enableCollapse={this.enableCollapse}
-                  config={this.props.config}
-                />
-              </div>
-            }
-            lazyRender={true}
-            transitionTime={200}
-            onOpen={this.onOpen}
-            onClose={this.onClose}
+              > */}
+          <WorkflowHeader
+            visibleModal={this.state.modal}
+            showModal={this.showModal}
+            isEmbedded={this.props.isEmbedded}
+            sortingEnabled={this.props.sortingEnabled}
+            rank={this.props.rank}
+            workflow={this.props.workflow}
+            statusType={statusType}
+            kind={this.props.kinds}
+            onStatusChange={this.props.onStatusChange}
+            dispatch={this.props.dispatch}
+            statusView={this.props.statusView}
             hasChildren={hasChildren}
-            triggerDisabled={this.state.collapseDisabled}
-          >
-            <div className="lc-card-wrapper">
-              <WorkflowBody
-                {...this.props}
-                createButton={
-                  <CreateRelated
-                    relatedKind={this.state.relatedWorkflow}
-                    onChildSelect={this.createChildWorkflow}
-                  />
-                }
-                isEmbedded={this.props.isEmbedded}
-                getGroupedData={this.getGroupedData}
-                addComment={this.props.addComment || null}
-                showCommentIcon={this.props.showCommentIcon}
-                expandedWorkflows={this.props.expandedWorkflows}
-                showQuickDetails={showQuickDetailsFunction}
-                showRelatedWorkflow={this.state.showRelatedWorkflow}
-                workflow={this.props.workflow}
-                statusView={this.props.statusView}
-                stepdataloading={this.state.stepdataloading}
-                stepGroupData={this.state.stepGroupData}
-                relatedKinds={
-                  _.size(this.state.relatedKinds)
-                    ? this.state.relatedKinds
-                    : this.state.relatedWorkflow
-                }
-              />
+            fieldExtra={
+              that.props.field && that.props.field.definition.extra
+                ? that.props.field.definition.extra
+                : null
+            }
+            addComment={this.props.addComment || null}
+            showCommentIcon={this.props.showCommentIcon}
+            isExpanded={this.state.opened}
+            disableCollapse={this.disableCollapse}
+            enableCollapse={this.enableCollapse}
+            config={this.props.config}
+          />
+          {/* </div> */}
+          {/* } */}
 
-              {showQuickDetailsFunction ? (
-                <StepPreview
-                  workflowName={this.props.workflow.name}
-                  hideQuickDetails={this.hideQuickDetails}
-                  showQuickDetails={this.state.showQuickDetails}
+          {/* // > */}
+          <div>
+            <WorkflowBody
+              {...this.props}
+              createButton={
+                <CreateRelated
+                  relatedKind={this.state.relatedWorkflow}
+                  onChildSelect={this.createChildWorkflow}
                 />
-              ) : null}
-            </div>
-          </Collapsible>
+              }
+              isEmbedded={this.props.isEmbedded}
+              getGroupedData={this.getGroupedData}
+              addComment={this.props.addComment || null}
+              showCommentIcon={this.props.showCommentIcon}
+              expandedWorkflows={this.props.expandedWorkflows}
+              showQuickDetails={showQuickDetailsFunction}
+              showRelatedWorkflow={this.state.showRelatedWorkflow}
+              workflow={this.props.workflow}
+              statusView={this.props.statusView}
+              stepdataloading={this.state.stepdataloading}
+              stepGroupData={this.state.stepGroupData}
+              relatedKinds={
+                _.size(this.state.relatedKinds)
+                  ? this.state.relatedKinds
+                  : this.state.relatedWorkflow
+              }
+            />
+
+            {showQuickDetailsFunction ? (
+              <StepPreview
+                workflowName={this.props.workflow.name}
+                hideQuickDetails={this.hideQuickDetails}
+                showQuickDetails={this.state.showQuickDetails}
+              />
+            ) : null}
+          </div>
+          {/* </Collapsible> */}
         </div>
       </div>
     );

@@ -45,10 +45,8 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.getInitialData();
 
-    if (this.props.location) {
-      if (this.props.location.search) {
-        this.setStepFromQuery();
-      }
+    if (this.props.location.search) {
+      this.setStepFromQuery();
     }
   };
 
@@ -325,7 +323,8 @@ class WorkflowDetails extends Component {
               style={{
                 background: "#FAFAFA",
                 minHeight: "100vh",
-                paddingTop: minimalUI ? 30 : 0
+                padding: minimalUI ? "30px 0px" : 0,
+                marginTop: minimalUI ? 80 : 0
               }}
             >
               <BackButton />

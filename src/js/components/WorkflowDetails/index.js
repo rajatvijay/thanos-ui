@@ -34,13 +34,12 @@ class WorkflowDetailsRoot extends Component {
     this.setWorkflowId();
 
     //update custom history stack for back button purpose
-    if (location) {
-      if (location.search && location.search !== prevProps.location.search) {
-        if (location.pathname !== prevProps.location.pathname) {
-          this.updateCustomHistory(location);
-        } else {
-          this.replaceLastHistory(location);
-        }
+
+    if (location.search && location.search !== prevProps.location.search) {
+      if (location.pathname !== prevProps.location.pathname) {
+        this.updateCustomHistory(location);
+      } else {
+        this.replaceLastHistory(location);
       }
     }
   };
