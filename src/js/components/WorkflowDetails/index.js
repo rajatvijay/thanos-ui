@@ -27,16 +27,20 @@ class WorkflowDetailsRoot extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    let WFId = parseInt(this.props.match.params.id, 10);
+    const { wfID } = this.props;
+
+    let WFId = wfID || parseInt(this.props.match.params.id, 10);
     const { location } = this.props;
     this.setWorkflowId();
 
     //update custom history stack for back button purpose
-    if (location.search && location.search !== prevProps.location.search) {
-      if (location.pathname !== prevProps.location.pathname) {
-        this.updateCustomHistory(location);
-      } else {
-        this.replaceLastHistory(location);
+    if (location) {
+      if (location.search && location.search !== prevProps.location.search) {
+        if (location.pathname !== prevProps.location.pathname) {
+          this.updateCustomHistory(location);
+        } else {
+          this.replaceLastHistory(location);
+        }
       }
     }
   };
@@ -46,7 +50,10 @@ class WorkflowDetailsRoot extends Component {
   };
 
   setWorkflowId = () => {
-    let WFId = parseInt(this.props.match.params.id, 10);
+    const { wfID } = this.props;
+    console.log("id", wfID, this.props);
+
+    let WFId = wfID || parseInt(this.props.match.params.id, 10);
     if (this.state.workflowId !== WFId) {
       this.setState({ workflowId: WFId }, () => {
         this.fetchWorkflowData();
@@ -118,10 +125,13 @@ class WorkflowDetailsRoot extends Component {
 
   render = () => {
     const { workflowId } = this.state;
+    const { minimalUI, wfID } = this.props;
     if (workflowId) {
       return (
         <div>
           <WorkflowDetails
+            wfID={wfID}
+            minimalUI={minimalUI}
             workflowId={this.state.workflowId || null}
             goBack={this.goBack}
             {...this.props}

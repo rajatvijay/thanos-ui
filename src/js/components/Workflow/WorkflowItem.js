@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Icon, Divider } from "antd";
+import { Layout, Icon, Divider, Modal } from "antd";
 import { connect } from "react-redux";
 import {
   createWorkflow,
@@ -16,6 +16,13 @@ import WorkflowBody from "./WorkflowBody";
 import { WorkflowHeader } from "./WorkflowHeader";
 import { workflowDetailsService } from "../../services";
 import { calculatedData } from "./calculated-data";
+import WorkflowDetails from "../WorkflowDetails";
+import SidebarView from "../../../modules/workflows/sidebar/components";
+import ModalHeader from "./ModalHeader";
+import ModalFooter from "./ModalFooter";
+import { css } from "emotion";
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
+import { withRouter } from "react-router-dom";
 
 const { getProcessedData } = calculatedData;
 const { Content, Sider } = Layout;
@@ -31,7 +38,8 @@ class WorkflowItem extends React.Component {
     stepGroupData: null,
     stepdataloading: true,
     initialLoad: true,
-    collapseDisabled: false
+    collapseDisabled: false,
+    visible: false
   };
 
   componentDidMount = () => {
@@ -63,6 +71,32 @@ class WorkflowItem extends React.Component {
         }
       );
     }
+  };
+
+  showModal = id => {
+    this.setState({
+      visible: true,
+      workflowId: id
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  handleCancel = e => {
+    this.props.history.push("/workflows/instances");
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  setWorkflowId = id => {
+    this.setState({ workflowId: id });
   };
 
   assignChilrenToKind = () => {
@@ -260,7 +294,9 @@ class WorkflowItem extends React.Component {
 
   render = () => {
     let that = this;
-
+    //console.log("work",this.props.workflow)
+    //const {location}
+    //console.log("workflow",this.props)
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
     const showQuickDetailsFunction =
@@ -278,6 +314,28 @@ class WorkflowItem extends React.Component {
         }
       >
         <div className="collapse-wrapper">
+          {this.state.visible && (
+            <Modal
+              style={{ left: 150, top: 270 }}
+              closable={false}
+              footer={null}
+              bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
+              width={1100}
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <ModalHeader workflow={this.props.workflow} />
+              <WorkflowDetails
+                location={this.props.location}
+                minimalUI={true}
+                wfID={this.props.workflow.id}
+              />
+
+              <ModalFooter wfID={this.props.workflow.id} />
+            </Modal>
+          )}
+
           <Collapsible
             trigger={
               <div
@@ -287,6 +345,8 @@ class WorkflowItem extends React.Component {
                 }}
               >
                 <WorkflowHeader
+                  visibleModal={this.state.modal}
+                  showModal={this.showModal}
                   isEmbedded={this.props.isEmbedded}
                   sortingEnabled={this.props.sortingEnabled}
                   rank={this.props.rank}
@@ -367,4 +427,4 @@ function mapPropsToState(state) {
   };
 }
 
-export default connect(mapPropsToState)(WorkflowItem);
+export default withRouter(connect(mapPropsToState)(WorkflowItem));

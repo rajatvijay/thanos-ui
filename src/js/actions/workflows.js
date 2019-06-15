@@ -10,8 +10,16 @@ export const workflowActions = {
   expandedWorkflowsList,
   showUserWorkflowModal,
   hideUserWorkflowModal,
-  clearAll
+  clearAll,
+  setWorkflowId
 };
+
+function setWorkflowId(id) {
+  console.log(id);
+  return dispatch => {
+    dispatch({ type: workflowConstants.SET_WORKFLOW_ID, payload: id });
+  };
+}
 
 function getAll(filter) {
   return dispatch => {

@@ -145,7 +145,8 @@ class Sidebar extends Component {
   };
 
   render() {
-    const { workflowDetailsHeader, workflowDetails } = this.props;
+    const { workflowDetailsHeader, workflowDetails, minimalUI } = this.props;
+    console.log("min", minimalUI);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
       workflowDetailsHeader.workflowDetailsHeader
@@ -203,7 +204,7 @@ class Sidebar extends Component {
           backgroundColor: "#FAFAFA",
           padding: "30px",
           paddingTop: 0,
-          paddingLeft: "50px",
+          paddingLeft: minimalUI ? "30px" : "50px",
           zIndex: 1,
           marginRight: "20px",
           paddingRight: 0
@@ -233,67 +234,73 @@ class Sidebar extends Component {
               />
             </Drawer>
           ) : null}
-          <div
-            style={{
-              color: "#000",
-              padding: "25px 20px",
-              cursor: "pointer",
-              backgroundColor: "#fafafa",
-              justifyContent: "space-between",
-              display: "flex",
-              fontSize: 24,
-              paddingBottom: 0,
-              paddingLeft: 0,
-              paddingRight: 0,
-              letterSpacing: "-0.05px",
-              lineHeight: "29px",
-              alignItems: "center"
-            }}
-          >
-            {Object.values(workflowDetailsHeader).length &&
-            workflowDetailsHeader.workflowDetailsHeader
-              ? workflowDetailsHeader.workflowDetailsHeader.name
-              : ""}
-            <Dropdown
-              overlay={workflowActionMenu}
-              className="child-workflow-dropdown"
-            >
-              <span className="pd-ard-sm text-metal text-anchor">
-                <i className="material-icons text-middle t-18 ">more_vert</i>
-              </span>
-            </Dropdown>
-          </div>
-          <Divider style={{ margin: "10px 0" }} />
-          <Row style={{ marginBottom: 15 }}>
-            {lc_data.map(data => (
-              <Col span={12}>
-                <span
-                  style={{
-                    opacity: 0.3,
-                    color: "#000000",
-                    fontSize: "12px",
-                    fontWeight: "bold",
-                    letterSpacing: "-0.02px",
-                    lineHeight: "15px"
-                  }}
+          {!minimalUI && (
+            <div>
+              <div
+                style={{
+                  color: "#000",
+                  padding: "25px 20px",
+                  cursor: "pointer",
+                  backgroundColor: "#fafafa",
+                  justifyContent: "space-between",
+                  display: "flex",
+                  fontSize: 24,
+                  paddingBottom: 0,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  letterSpacing: "-0.05px",
+                  lineHeight: "29px",
+                  alignItems: "center"
+                }}
+              >
+                {Object.values(workflowDetailsHeader).length &&
+                workflowDetailsHeader.workflowDetailsHeader
+                  ? workflowDetailsHeader.workflowDetailsHeader.name
+                  : ""}
+                <Dropdown
+                  overlay={workflowActionMenu}
+                  className="child-workflow-dropdown"
                 >
-                  {data.label}
-                </span>
-                <br />
-                <span
-                  style={{
-                    color: "#000000",
-                    fontSize: "12px",
-                    letterSpacing: "-0.02px",
-                    lineHeight: "29px",
-                    wordWrap: "break-word"
-                  }}
-                >
-                  {data.value}
-                </span>
-              </Col>
-            ))}
-          </Row>
+                  <span className="pd-ard-sm text-metal text-anchor">
+                    <i className="material-icons text-middle t-18 ">
+                      more_vert
+                    </i>
+                  </span>
+                </Dropdown>
+              </div>
+              <Divider style={{ margin: "10px 0" }} />
+              <Row style={{ marginBottom: 15 }}>
+                {lc_data.map(data => (
+                  <Col span={12}>
+                    <span
+                      style={{
+                        opacity: 0.3,
+                        color: "#000000",
+                        fontSize: "12px",
+                        fontWeight: "bold",
+                        letterSpacing: "-0.02px",
+                        lineHeight: "15px"
+                      }}
+                    >
+                      {data.label}
+                    </span>
+                    <br />
+                    <span
+                      style={{
+                        color: "#000000",
+                        fontSize: "12px",
+                        letterSpacing: "-0.02px",
+                        lineHeight: "29px",
+                        wordWrap: "break-word"
+                      }}
+                    >
+                      {data.value}
+                    </span>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          )}
 
           <Collapse
             defaultActiveKey={groupId}
@@ -304,7 +311,7 @@ class Sidebar extends Component {
               borderRight: "none",
               borderRadius: 0,
               marginBottom: 30,
-              marginTop: 41
+              marginTop: minimalUI ? 0 : 41
             }}
             onChange={this.onChangeOfCollapse}
             className="ant-collapse-content"

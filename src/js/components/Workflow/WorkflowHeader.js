@@ -18,7 +18,7 @@ import {
 } from "antd";
 import { calculatedData } from "./calculated-data";
 import { history } from "../../_helpers";
-import { changeStatusActions } from "../../actions";
+import { changeStatusActions, workflowActions } from "../../actions";
 import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
 import WorkflowPDFModal from "./WorkflowPDFModal";
@@ -45,6 +45,7 @@ const { getProcessedData, getProgressData } = calculatedData;
 /////////////////
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
+
 export const WorkflowHeader = props => {
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
@@ -85,9 +86,10 @@ export const WorkflowHeader = props => {
 
       {props.isExpanded ? (
         <Col span={2} className="details-link-wrapper ">
-          <Link
+          <span
+            onClick={() => props.showModal(props.workflow.id)}
             className="details-link slide-this"
-            to={"/workflows/instances/" + props.workflow.id + "/"}
+            //to={"/workflows/instances/" + props.workflow.id + "/"}
             title="Show details"
             style={{
               width: "75px",
@@ -95,7 +97,7 @@ export const WorkflowHeader = props => {
             }}
           >
             <i className="material-icons">arrow_forward</i>
-          </Link>
+          </span>
         </Col>
       ) : null}
     </Row>
