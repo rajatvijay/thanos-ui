@@ -78,7 +78,7 @@ const WorkflowBodyContainer = props => {
   // );
 
   //return finalHtml;
-  return <div />;
+  return null;
 };
 
 function mapPropsToState(state) {

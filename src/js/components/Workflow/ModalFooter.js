@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
+import FullScreen from "../../../images/fullScreenWhite.svg";
 
 function ModalFooter(props) {
   return (
@@ -18,9 +19,10 @@ function ModalFooter(props) {
     >
       <Link
         style={{ color: "white", textDecoration: "none" }}
-        to={"/workflows/instances/" + props.wfID + "/"}
+        to={"/workflows/instances/" + props.workflowIdFromPropsForModal + "/"}
       >
         Expand View
+        <img style={{ width: 20, marginLeft: 20 }} src={FullScreen} />
       </Link>
     </div>
   );

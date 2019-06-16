@@ -27,9 +27,10 @@ class WorkflowDetailsRoot extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    const { wfID } = this.props;
+    const { workflowIdFromPropsForModal } = this.props;
 
-    let WFId = wfID || parseInt(this.props.match.params.id, 10);
+    let WFId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     const { location } = this.props;
     this.setWorkflowId();
 
@@ -49,10 +50,10 @@ class WorkflowDetailsRoot extends Component {
   };
 
   setWorkflowId = () => {
-    const { wfID } = this.props;
-    console.log("id", wfID, this.props);
+    const { workflowIdFromPropsForModal } = this.props;
 
-    let WFId = wfID || parseInt(this.props.match.params.id, 10);
+    let WFId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     if (this.state.workflowId !== WFId) {
       this.setState({ workflowId: WFId }, () => {
         this.fetchWorkflowData();
@@ -124,12 +125,12 @@ class WorkflowDetailsRoot extends Component {
 
   render = () => {
     const { workflowId } = this.state;
-    const { minimalUI, wfID } = this.props;
+    const { minimalUI, workflowIdFromPropsForModal } = this.props;
     if (workflowId) {
       return (
         <div>
           <WorkflowDetails
-            wfID={wfID}
+            workflowIdFromPropsForModal={workflowIdFromPropsForModal}
             minimalUI={minimalUI}
             workflowId={this.state.workflowId || null}
             goBack={this.goBack}

@@ -41,7 +41,6 @@ class WorkflowDetails extends Component {
   }
 
   componentDidMount = () => {
-    console.log("props", this.props);
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.getInitialData();
 
@@ -51,12 +50,17 @@ class WorkflowDetails extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    const { location, workflowDetails, currentStepFields, wfID } = this.props;
-    console.log("location", location);
+    const {
+      location,
+      workflowDetails,
+      currentStepFields,
+      workflowIdFromPropsForModal
+    } = this.props;
 
     let wd = workflowDetails;
     //SET WORKFLOW ID FROM ROUTER
-    let workflowId = wfID || parseInt(this.props.match.params.id, 10);
+    let workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     let thisCurrent = currentStepFields;
     let prevCurrent = prevProps.currentStepFields;
 
@@ -73,7 +77,7 @@ class WorkflowDetails extends Component {
       prevCurrent.currentStepFields.completed_by !==
         thisCurrent.currentStepFields.completed_by
     ) {
-      this.updateSidebar(wfID || workflowId);
+      this.updateSidebar(workflowIdFromPropsForModal || workflowId);
     }
 
     //WHEN EVER SEARCH PARAMS CHANGE FETCH NEW STEP DATA
@@ -113,16 +117,17 @@ class WorkflowDetails extends Component {
   };
 
   updateCurrentActiveStep = () => {
-    const { wfID } = this.props;
+    const { workflowIdFromPropsForModal } = this.props;
 
-    let workflowId = wfID || parseInt(this.props.match.params.id, 10);
+    let workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     const { stepGroups } = this.props.workflowDetails.workflowDetails;
     //calculate activit step
     let act = currentActiveStep(stepGroups, workflowId);
     this.state.selectedGroup = act.groupId;
     this.state.selectedStep = act.stepId;
 
-    if (!wfID) {
+    if (!workflowIdFromPropsForModal) {
       history.replace(
         `/workflows/instances/${workflowId}?group=${act.groupId}&step=${
           act.stepId
@@ -167,7 +172,7 @@ class WorkflowDetails extends Component {
     //calculate step track
     //dispatch workflow step details
     const params = new URLSearchParams(this.props.location.search);
-    const { wfID } = this.props;
+    const { workflowIdFromPropsForModal } = this.props;
 
     if (params.has("group") && params.has("step")) {
       let groupId = params.get("group");
@@ -177,7 +182,9 @@ class WorkflowDetails extends Component {
       this.state.selectedStep = stepId;
 
       let stepTrack = {
-        workflowId: wfID || parseInt(this.props.match.params.id, 10),
+        workflowId:
+          workflowIdFromPropsForModal ||
+          parseInt(this.props.match.params.id, 10),
         groupId: groupId,
         stepId: stepId
       };
@@ -250,7 +257,13 @@ class WorkflowDetails extends Component {
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI } = this.props;
+    const { minimalUI, workflowIdFromPropsForModal } = this.props;
+
+    //     const workflowId = workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+    //   //const { stepGroups } = workflowDetails.workflowDetails;
+    //   //calculate activit step
+    //  // const act = currentActiveStep(stepGroups, workflowId);
+    //   const act = workflowDetails.workflowDetails ? currentActiveStep(workflowDetails.workflowDetails, workflowId) : {}
 
     let stepLoading = this.props.workflowDetails.loading;
     let HeaderLoading = this.props.workflowDetailsHeader.loading;
@@ -330,12 +343,15 @@ class WorkflowDetails extends Component {
               <BackButton />
 
               <SidebarView minimalUI={minimalUI} />
-              <Content style={{ width: "50%", marginTop: "12px" }}>
+              <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
                 <div className="printOnly ">
                   <div
                     className="mr-ard-lg"
                     id="StepBody"
-                    style={{ background: "#FAFAFA" }}
+                    style={{
+                      background: "#FAFAFA",
+                      margin: minimalUI ? "0px 24px 0px 0px" : "24px"
+                    }}
                   >
                     <StepBody
                       toggleSidebar={this.callBackCollapser}

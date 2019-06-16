@@ -12,7 +12,7 @@ import Collapsible from "react-collapsible";
 import { Link } from "react-router-dom";
 import StepPreview from "./StepPreview";
 import { CreateRelated } from "./CreateRelated";
-import WorkflowBody from "./WorkflowBody";
+// import WorkflowBody from "./WorkflowBody";
 import { WorkflowHeader } from "./WorkflowHeader";
 import { workflowDetailsService } from "../../services";
 import { calculatedData } from "./calculated-data";
@@ -88,7 +88,7 @@ class WorkflowItem extends React.Component {
   };
 
   handleCancel = e => {
-    this.props.history.push("/workflows/instances");
+    this.props.history.replace("/workflows/instances");
     console.log(e);
     this.setState({
       visible: false
@@ -330,10 +330,12 @@ class WorkflowItem extends React.Component {
               <WorkflowDetails
                 location={this.props.location}
                 minimalUI={true}
-                wfID={this.props.workflow.id}
+                workflowIdFromPropsForModal={this.props.workflow.id}
               />
 
-              <ModalFooter wfID={this.props.workflow.id} />
+              <ModalFooter
+                workflowIdFromPropsForModal={this.props.workflow.id}
+              />
             </Modal>
           )}
 
@@ -375,7 +377,7 @@ class WorkflowItem extends React.Component {
 
           {/* // > */}
           <div>
-            <WorkflowBody
+            {/* <WorkflowBody
               {...this.props}
               createButton={
                 <CreateRelated
@@ -399,7 +401,7 @@ class WorkflowItem extends React.Component {
                   ? this.state.relatedKinds
                   : this.state.relatedWorkflow
               }
-            />
+            /> */}
 
             {showQuickDetailsFunction ? (
               <StepPreview

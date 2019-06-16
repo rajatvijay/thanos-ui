@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { HeaderLcData, GetMergedData } from "./WorkflowHeader";
+import FullScreen from "../../../images/fullScreenBlack.svg";
+import { Link } from "react-router-dom";
 
 class ModalHeader extends Component {
   render() {
@@ -12,7 +15,7 @@ class ModalHeader extends Component {
           padding: "20px 30px",
           alignItems: "center",
           position: "fixed",
-          zIndex: 999,
+          zIndex: 1,
           width: 1100,
           backgroundColor: "white"
         }}
@@ -26,13 +29,17 @@ class ModalHeader extends Component {
             flexBasis: "50%"
           }}
         >
-          <span style={{ color: "#C3C3C3" }}>United kingdom</span>
+          {/* <span style={{ color: "#C3C3C3" }}>United kingdom</span> */}
+          <HeaderLcData {...this.props} />
 
-          <span>2</span>
+          {/* <span>2</span> */}
+          <GetMergedData {...this.props} />
 
           <span>{workflow.status.label}</span>
 
-          <span>Design</span>
+          <Link to={"/workflows/instances/" + workflow.id + "/"}>
+            <img style={{ width: 20 }} src={FullScreen} />
+          </Link>
         </div>
       </div>
     );

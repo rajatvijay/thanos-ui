@@ -202,7 +202,7 @@ const HeaderTitle = props => {
   }
 };
 
-const HeaderLcData = props => {
+export const HeaderLcData = props => {
   let subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type == "normal";
   });
@@ -455,7 +455,7 @@ const CheckData = props => {
   }
 };
 
-class GetMergedData extends React.Component {
+export class GetMergedData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
