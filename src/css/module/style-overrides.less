@@ -17,9 +17,10 @@
   &:hover,
   &:focus {
   }
-  &.btn-o {
+  &.btn-o, &.btn-o:hover {
     background: transparent;
     color: @color-secondary;
+    border-color:@color-secondary;
   }
 }
 
@@ -372,3 +373,16 @@ span.ant-radio + * {
   height: 13.142857px;
   border: 2px solid #fff;
 }
+
+
+
+//BTN EXTENSION
+.btn-sm {
+  height: 29px;
+  padding: 4 10px;
+  font-size: 13px;
+  line-height:29px;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+

@@ -27,6 +27,8 @@ import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MentionWithAttachments from "./MentionWithAttachments";
 import { workflowFiltersService } from "../../services";
+import styled from "@emotion/styled";
+import { css } from "emotion";
 
 const { toString, toContentState } = Mention;
 
@@ -252,8 +254,8 @@ class Comments extends Component {
 
   sortedCommentFlag = comment_flag_options => {
     function sortWithLabel(arr) {
-      return arr.sort(
-        (a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1)
+      return arr.sort((a, b) =>
+        a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1
       );
     }
 
@@ -276,32 +278,38 @@ class Comments extends Component {
 
     let adjudication = (
       <div>
-        <span className="text-metal text-medium t-12 pd-right-sm">
-          Adjudication:{" "}
-        </span>
+        <div className="  t-16 text-light">Adjudication:</div>
         <Cascader
-          style={{ width: "calc(100% - 85px)" }}
+          style={{ width: "100%", marginTop: "6px" }}
           options={this.sortedCommentFlag(c.target.comment_flag_options)}
           onChange={that.selectFlag}
           placeholder="Change flag"
+          className="comment-select"
         />
       </div>
     );
 
+    let workflow_status_dropdown_options = (
+      <Menu onClick={that.changeWorkflowStatus}>
+        {that.state.workflowStatuses.length > 0 ? (
+          that.state.workflowStatuses.map(v => {
+            return <Menu.Item key={v.id}>{v.label}</Menu.Item>;
+          })
+        ) : (
+          <Menu.Item key="na" disabled>
+            <span className="text-lighter">No Result</span>
+          </Menu.Item>
+        )}
+      </Menu>
+    );
+
     let workflow_status_dropdown = (
       <div>
-        <span className="text-metal text-medium t-12 pd-right-sm">
-          Status:{" "}
-        </span>
-        <Select
-          placeholder="Select a status"
-          style={{ width: "calc(100% - 80px)" }}
-          onChange={that.changeWorkflowStatus}
-        >
-          {_.map(that.state.workflowStatuses, function(v) {
-            return <Option value={v.id}>{v.label}</Option>;
-          })}
-        </Select>
+        <Dropdown overlay={workflow_status_dropdown_options}>
+          <span className="text-lighter t-12 text-ellipsis text-bold">
+            STATUS <Icon type="down" />
+          </span>
+        </Dropdown>
       </div>
     );
 
@@ -334,7 +342,7 @@ class Comments extends Component {
           height: "calc(100vh - 70px)",
           position: "fixed",
           right: 0,
-          top: "75px",
+          top: "60px",
           zIndex: 1
         }}
         width="570"
@@ -345,204 +353,55 @@ class Comments extends Component {
         trigger={null}
       >
         <div className="comment-details" style={{ width: "570px" }}>
-          <div className="sidebar-head">
-            <span className="sidebar-title">
-              <FormattedMessage id="stepBodyFormInstances.addComments" />
-            </span>
-            <Icon
-              type="close"
-              onClick={this.toggle}
-              style={{ float: "right", marginTop: "4px" }}
-            />
-          </div>
-          <Content style={{ padding: "15px", paddingBottom: "50px" }}>
-            {_.map(comments.results, function(c) {
-              if (!single_comments && !_.size(c.messages)) {
-                return null;
-              }
-              return (
-                <div
-                  style={{ height: "calc(100vh - 400px)", overflowY: "scroll" }}
-                >
-                  {c.target.step_group_details ? (
-                    <span style={{ width: "100%" }}>
-                      <span className="text-bold">
-                        {c.target.step_group_details.name}{" "}
-                      </span>:{" "}
-                      <span
-                        className="text-bold text-grey"
-                        onClick={that.selectStep.bind(this, c.target)}
-                      >
-                        {c.target.step_details.name}
-                      </span>
-                    </span>
-                  ) : null}
+          <Content style={{ background: "#fdfdfd", paddingBottom: "50px" }}>
+            {comments.results.length > 0 &&
+              comments.results.map(c => {
+                if (!single_comments && !_.size(c.messages)) {
+                  return null;
+                }
 
-                  <span style={{ fontWeight: "bold" }}>
-                    {integrationCommonFunctions.comment_answer_body(c)}
-                  </span>
-
-                  {c.target.field_details &&
-                  c.target.field_details.is_integration_type ? (
-                    <div style={{ marginTop: "10px" }}>
-                      <div>
-                        <span style={{ color: "#575757", fontSize: "12px" }}>
-                          Status:
-                        </span>
-                      </div>
-                      <Select
-                        placeholder="Select a status"
-                        style={{ width: "100%" }}
-                        onChange={that.changeStatus}
-                      >
-                        <Option value="open">Open</Option>
-                        <Option value="closed">Closed</Option>
-                      </Select>
-                    </div>
-                  ) : null}
-
-                  {c.target.field_details &&
-                  (c.target.field_details.type == "google_search" ||
-                    c.target.field_details.type == "serp_google_search") ? (
-                    <div style={{ marginTop: "10px" }}>
-                      <div>
-                        <span style={{ color: "#575757", fontSize: "12px" }}>
-                          Risk Codes:
-                        </span>
-                      </div>
-                      <Select
-                        placeholder="Select a risk code"
-                        style={{ width: "100%" }}
-                        onChange={that.changeRiskCode}
-                      >
-                        <Option value="Association & PEP Risk">
-                          Association & PEP Risk
-                        </Option>
-                        <Option value="Criminal Risk">Criminal Risk</Option>
-                        <Option value="Financial Condition Risk">
-                          Financial Condition Risk
-                        </Option>
-                        <Option value="Legal Risk">Legal Risk</Option>
-                        <Option value="Prohibited Entities Risk">
-                          Prohibited Entities Risk
-                        </Option>
-                        <Option value="Regulatory Risk">Regulatory Risk</Option>
-                        <Option value="Reputation Risk">Reputation Risk</Option>
-                      </Select>
-                    </div>
-                  ) : null}
-
-                  <Divider className="thin" />
-
-                  {/*single_comments || c.messages.length  ? (
-                    <div>
-                      <span
-                        style={{
-                          position: "relative",
-                          top: "-39px",
-                          fontSize: "12px",
-                          backgroundColor: "#fff",
-                          paddingRight: "10px",
-                          color: "#575757"
-                        }}
-                      >
-                        <FormattedMessage id="stepBodyFormInstances.commentsQuetions" />
-                      </span>
-                    </div>
-                  ) : null*/}
-
+                return (
                   <div
-                    className="comments-list"
-                    style={{ maxHeight: "calc(100vh - 430px)" }}
+                    style={{
+                      height: "calc(100vh - 400px)",
+                      overflowY: "scroll"
+                    }}
                   >
-                    {c.messages
-                      ? c.messages.map(function(msg, index) {
-                          let attachment_text = null;
-                          if (msg.attachment) {
-                            attachment_text = msg.attachment.split("/")[
-                              msg.attachment.split("/").length - 1
-                            ];
-                            attachment_text = attachment_text.split("?")[0];
-                          }
-                          return (
-                            <div
-                              key={msg.id + "-" + index}
-                              className="mr-bottom"
-                            >
-                              <Avatar
-                                size="small"
-                                icon="user"
-                                style={{ float: "left" }}
-                              />
-                              <div
-                                style={{
-                                  marginLeft: "30px",
-                                  fontSize: "12px",
-                                  padding: "2px 0px 3px"
-                                }}
-                              >
-                                <b style={{ color: "#162c5b" }}>
-                                  {msg.posted_by.first_name !== ""
-                                    ? msg.posted_by.first_name
-                                    : msg.posted_by.email}
-                                </b>
-                                <span
-                                  style={{
-                                    fontSize: "11px",
-                                    marginLeft: "6px",
-                                    cursor: "pointer"
-                                  }}
-                                >
-                                  <Tooltip
-                                    title={
-                                      <Moment format="MM/DD/YYYY, h:mm a">
-                                        {msg.created_at}
-                                      </Moment>
-                                    }
-                                  >
-                                    <Moment fromNow>{msg.created_at}</Moment>
-                                  </Tooltip>
-                                </span>
-                              </div>
-                              <div
-                                style={{
-                                  fontSize: "12px",
-                                  paddingLeft: "32px"
-                                }}
-                              >
-                                <div
-                                  className="Container"
-                                  dangerouslySetInnerHTML={{
-                                    __html: msg.message.replace(
-                                      /@([a-z\d_]+)/gi,
-                                      '<a class="mentions" href="/users/">@$1</a>'
-                                    )
-                                  }}
-                                />
-                              </div>
-                              {msg.attachment ? (
-                                <span
-                                  style={{
-                                    fontSize: "12px",
-                                    paddingLeft: "32px",
-                                    position: "relative",
-                                    top: "-17px"
-                                  }}
-                                >
-                                  <i class="anticon anticon-paper-clip" />&nbsp;
-                                  <a href={msg.attachment}>{attachment_text}</a>
-                                </span>
-                              ) : null}
-                            </div>
-                          );
-                        })
-                      : null}
-                  </div>
+                    {/*///////HEADER///////*/}
+                    <StyledHeadContainer>
+                      <Row>
+                        <Col span={18}>
+                          <Icon
+                            type="close"
+                            onClick={this.toggle}
+                            className={css`
+                              font-size: 21px;
+                              margin-right: 21px;
+                              float: left;
+                            `}
+                          />
 
-                  {single_comments ? (
-                    <div className="affix-bottom">
-                      <div className="comment-actions">
-                        <Row>
+                          {c.target.step_group_details ? (
+                            <span>
+                              <span className="text-bold">
+                                {c.target.step_group_details.name} ...{" "}
+                              </span>
+                              :{" "}
+                              <span
+                                className="text-bold text-grey"
+                                onClick={that.selectStep.bind(this, c.target)}
+                              >
+                                {c.target.step_details.name} ....
+                              </span>
+                            </span>
+                          ) : null}
+
+                          <StyledHeadText>
+                            {integrationCommonFunctions.comment_answer_body(c)}
+                          </StyledHeadText>
+                        </Col>
+
+                        <Col span={6}>
                           {c.target.workflow_details ? (
                             <Col span={10}>
                               {c.target.workflow_details
@@ -550,73 +409,251 @@ class Comments extends Component {
                                 : null}
                             </Col>
                           ) : null}
-                          <Col span={c.target.workflow_details ? 14 : 24}>
+                        </Col>
+                      </Row>
+
+                      {c.target.field_details &&
+                      c.target.field_details.is_integration_type ? (
+                        <div style={{ marginTop: "10px" }}>
+                          <div>
+                            <span
+                              style={{ color: "#575757", fontSize: "12px" }}
+                            >
+                              Status:
+                            </span>
+                          </div>
+                          <Select
+                            placeholder="Select a status"
+                            style={{ width: "100%" }}
+                            onChange={that.changeStatus}
+                            className="comment-select"
+                          >
+                            <Option value="open">Open</Option>
+                            <Option value="closed">Closed</Option>
+                          </Select>
+                        </div>
+                      ) : null}
+
+                      {c.target.field_details &&
+                      (c.target.field_details.type == "google_search" ||
+                        c.target.field_details.type == "serp_google_search") ? (
+                        <div style={{ marginTop: "10px" }}>
+                          <div>
+                            <span
+                              style={{ color: "#575757", fontSize: "12px" }}
+                            >
+                              Risk Codes:
+                            </span>
+                          </div>
+                          <Select
+                            placeholder="Select a risk code"
+                            style={{ width: "100%" }}
+                            onChange={that.changeRiskCode}
+                            className="comment-select"
+                          >
+                            <Option value="Association & PEP Risk">
+                              Association & PEP Risk
+                            </Option>
+                            <Option value="Criminal Risk">Criminal Risk</Option>
+                            <Option value="Financial Condition Risk">
+                              Financial Condition Risk
+                            </Option>
+                            <Option value="Legal Risk">Legal Risk</Option>
+                            <Option value="Prohibited Entities Risk">
+                              Prohibited Entities Risk
+                            </Option>
+                            <Option value="Regulatory Risk">
+                              Regulatory Risk
+                            </Option>
+                            <Option value="Reputation Risk">
+                              Reputation Risk
+                            </Option>
+                          </Select>
+                        </div>
+                      ) : null}
+                    </StyledHeadContainer>
+
+                    {/*///////Comments List Body///////*/}
+                    <StyledCommentContainer>
+                      {c.messages
+                        ? c.messages.map(function(msg, index) {
+                            let attachment_text = null;
+                            if (msg.attachment) {
+                              attachment_text = msg.attachment.split("/")[
+                                msg.attachment.split("/").length - 1
+                              ];
+                              attachment_text = attachment_text.split("?")[0];
+                            }
+                            return (
+                              <div
+                                key={msg.id + "-" + index}
+                                className="mr-bottom"
+                              >
+                                <Avatar
+                                  size="small"
+                                  icon="user"
+                                  style={{ float: "left" }}
+                                />
+                                <div
+                                  style={{
+                                    marginLeft: "30px",
+                                    fontSize: "12px",
+                                    padding: "2px 0px 3px"
+                                  }}
+                                >
+                                  <b style={{ color: "#162c5b" }}>
+                                    {msg.posted_by.first_name !== ""
+                                      ? msg.posted_by.first_name
+                                      : msg.posted_by.email}
+                                  </b>
+                                  <span
+                                    style={{
+                                      fontSize: "11px",
+                                      marginLeft: "6px",
+                                      cursor: "pointer"
+                                    }}
+                                  >
+                                    <Tooltip
+                                      title={
+                                        <Moment format="MM/DD/YYYY, h:mm a">
+                                          {msg.created_at}
+                                        </Moment>
+                                      }
+                                    >
+                                      <Moment fromNow>{msg.created_at}</Moment>
+                                    </Tooltip>
+                                  </span>
+                                </div>
+                                <div
+                                  style={{
+                                    fontSize: "12px",
+                                    paddingLeft: "32px"
+                                  }}
+                                >
+                                  <div
+                                    className="Container"
+                                    dangerouslySetInnerHTML={{
+                                      __html: msg.message.replace(
+                                        /@([a-z\d_]+)/gi,
+                                        '<a class="mentions" href="/users/">@$1</a>'
+                                      )
+                                    }}
+                                  />
+                                </div>
+                                {msg.attachment ? (
+                                  <span
+                                    style={{
+                                      fontSize: "12px",
+                                      paddingLeft: "32px",
+                                      position: "relative",
+                                      top: "-17px"
+                                    }}
+                                  >
+                                    <i class="anticon anticon-paper-clip" />
+                                    &nbsp;
+                                    <a href={msg.attachment}>
+                                      {attachment_text}
+                                    </a>
+                                  </span>
+                                ) : null}
+                              </div>
+                            );
+                          })
+                        : null}
+                    </StyledCommentContainer>
+
+                    {single_comments ? (
+                      <div className="affix-bottom" style={{ width: "100%" }}>
+                        <StyledAddCommentContainer>
+                          {c.target.workflow_details ? (
+                            <Col span={10}>
+                              {c.target.workflow_details
+                                ? workflow_status_dropdown
+                                : null}
+                            </Col>
+                          ) : null}
+                          <div>
                             {(c.target.field_details ||
                               c.target.workflow_details) &&
                             comments.results
                               ? adjudication
                               : null}
-                          </Col>
-                        </Row>
+                          </div>
 
-                        <div className="mr-top mr-bottom">
-                          <span className="text-metal text-medium t-12 pd-right-sm">
-                            Comment:{" "}
-                          </span>
-                          <MentionWithAttachments
-                            comment={c}
-                            addComment={that.addComment}
-                            placeholder={that.props.intl.formatMessage({
-                              id: "stepBodyFormInstances.enterComment"
-                            })}
-                            onChange={that.onChange}
-                            message={that.state.message}
-                            addAttachement={that.addAttachementInState}
-                          />
-                          {/* <Mention
-                            ref={el => that.addRefAndData(el, c)}
-                            style={{ width: "470px", height: 30 }}
-                            suggestions={c.mentions}
-                            placeholder={that.props.intl.formatMessage({
-                              id: "stepBodyFormInstances.enterComment"
-                            })}
-                            multiLines
-                            onChange={that.onChange}
-                            value={that.state.message}
-                            notFoundContent={"user not found"}
-                          /> */}
-                        </div>
+                          <div className="mr-top mr-bottom">
+                            <MentionWithAttachments
+                              comment={c}
+                              addComment={that.addComment}
+                              placeholder={that.props.intl.formatMessage({
+                                id: "stepBodyFormInstances.enterComment"
+                              })}
+                              onChange={that.onChange}
+                              message={that.state.message}
+                              addAttachement={that.addAttachementInState}
+                            />
+                          </div>
 
-                        <div>
-                          <Upload
-                            {...props}
-                            style={{ position: "relative", left: "68px" }}
+                          <Row
+                            className={css`
+                              margin-top: 30px;
+                            `}
                           >
-                            <Button>
-                              <Icon type="upload" /> Add attachment
-                            </Button>
-                          </Upload>
-                        </div>
+                            <Col span={20} className="text-right">
+                              <Upload {...props}>
+                                <Icon
+                                  type="paper-clip"
+                                  style={{
+                                    fontSize: "20px",
+                                    verticalAlign: "middle"
+                                  }}
+                                />
+                              </Upload>
+                            </Col>
 
-                        <div className="text-right">
-                          <Button
-                            onClick={() => that.addComment.bind(this)(c)}
-                            style={{ position: "relative", top: "-31px" }}
-                          >
-                            <FormattedMessage id="stepBodyFormInstances.postButtonText" />
-                          </Button>
-                        </div>
+                            <Col span={4} className="">
+                              <Button
+                                type="primary"
+                                onClick={() => that.addComment.bind(this)(c)}
+                                style={{ float: "right" }}
+                              >
+                                <FormattedMessage id="stepBodyFormInstances.postButtonText" />
+                              </Button>
+                            </Col>
+                          </Row>
+                        </StyledAddCommentContainer>
                       </div>
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
+                    ) : null}
+                  </div>
+                );
+              })}
           </Content>
         </div>
       </Sider>
     );
   }
 }
+
+const StyledHeadContainer = styled.div`
+  padding: 54px 45px 41px 45px;
+  border-bottom: 1px solid #979797;
+`;
+
+const StyledHeadText = styled.span`
+  font-size: 20px;
+  letter-spacing: -0.04px;
+  line-height: 24px;
+  font-weight: bold;
+`;
+
+const StyledCommentContainer = styled.div`
+  padding: 32px 54px;
+  max-height: calc(100vh - 430px);
+`;
+
+const StyledAddCommentContainer = styled.div`
+  padding: 30px 46px 30px 30px;
+  border-top: 1px solid #979797;
+  background: #fafafa;
+`;
 
 export default injectIntl(Comments);

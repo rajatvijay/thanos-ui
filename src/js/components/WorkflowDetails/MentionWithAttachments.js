@@ -83,7 +83,14 @@ class MentionWithAttachments extends Component {
           onBlur={() => {
             this.isFocussed = false;
           }}
-          style={{ width: "470px", height: 30 }}
+          style={{
+            width: "100%",
+            height: 110,
+            marginTop: "5px",
+            border: "none",
+            padding: "3px",
+            fontSize: "16px"
+          }}
           suggestions={comment.mentions}
           placeholder={placeholder}
           multiLines

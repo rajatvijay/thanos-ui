@@ -56,7 +56,7 @@ export const WorkflowHeader = props => {
         <HeaderLcData {...props} />
       </Col>
 
-      <Col span={6}>
+      <Col span={5}>
         <GetMergedData {...props} />
       </Col>
 
@@ -73,7 +73,7 @@ export const WorkflowHeader = props => {
         ) : null}
       </Col>
 
-      <Col span={4}>
+      <Col span={5}>
         <HeaderOptions {...props} />
       </Col>
     </Row>
@@ -384,8 +384,8 @@ class HeaderOptions extends React.Component {
 
     return (
       <Row>
-        <Col span={20}>{status}</Col>
-        <Col span={4} className="text-right">
+        <Col span={8}>{status}</Col>
+        <Col span={16} className="text-right">
           {props.showCommentIcon &&
           props.isEmbedded &&
           workflow.comments_allowed ? (
@@ -395,13 +395,11 @@ class HeaderOptions extends React.Component {
                 onMouseOver={this.onCommentHover}
                 onMouseOut={this.onCommentHoverOut}
               >
-                <span>
-                  <i
-                    className="material-icons  t-18 text-metal"
-                    onClick={that.getComment.bind(that, props.workflow.id)}
-                  >
-                    chat_bubble_outline
-                  </i>
+                <span
+                  className="ant-btn ant-btn-primary btn-o btn-sm"
+                  onClick={that.getComment.bind(that, props.workflow.id)}
+                >
+                  Adjudicate
                 </span>
               </div>
             </span>

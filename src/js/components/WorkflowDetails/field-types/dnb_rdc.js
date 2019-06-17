@@ -297,7 +297,7 @@ const buildDetails = obj => {
   return (
     <div
       //ref="rdcTable"
-      ref={el => (this.container = el)}
+      //ref={el => (this.container = el)}
       id="rdc-table"
       className="dnb-rdc-wrapper"
       style={{ marginLeft: "-50px", marginTop: "-16px" }}

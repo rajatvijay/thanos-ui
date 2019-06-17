@@ -569,8 +569,16 @@ export const getEventItem = (refItem, hideHeader) => {
             label="Status:"
             value={
               refItem.krypton_status ? (
-                <Tag color={event_status[refItem.krypton_status]["class"]}>
-                  {event_status[refItem.krypton_status]["label"]}
+                <Tag
+                  color={
+                    event_status[refItem.krypton_status]
+                      ? event_status[refItem.krypton_status]["class"]
+                      : "grey"
+                  }
+                >
+                  {event_status[refItem.krypton_status]
+                    ? event_status[refItem.krypton_status]["label"]
+                    : "N/A"}
                 </Tag>
               ) : (
                 "-"
