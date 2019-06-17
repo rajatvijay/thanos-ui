@@ -112,27 +112,42 @@ class Sidebar extends Component {
   };
 
   componentDidMount() {
+    const { act } = this.props;
+
     this.setState({
-      groupId: new URL(window.location.href).searchParams.get("group"),
-      stepId: new URL(window.location.href).searchParams.get("step")
+      groupId: act.groupId,
+      stepId: act.stepId
     });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      this.props.currentStepFields.currentStepFields !==
-      prevProps.currentStepFields.currentStepFields
-    ) {
-      if (
-        this.props.currentStepFields.currentStepFields.id !==
-        prevProps.currentStepFields.currentStepFields.id
-      ) {
-        this.setState({
-          groupId: new URL(window.location.href).searchParams.get("group"),
-          stepId: new URL(window.location.href).searchParams.get("step")
-        });
-      }
+    const { act } = prevProps;
+    const { stepId, groupId } = this.state;
+    console.log("prev", act);
+    // if (
+    //   this.props.currentStepFields.currentStepFields !==
+    //   prevProps.currentStepFields.currentStepFields
+    // ) {
+    //   if (
+    //     this.props.currentStepFields.currentStepFields.id !==
+    //     prevProps.currentStepFields.currentStepFields.id
+    //   ) {
+    //     this.setState({
+    //       groupId: act.groupId,
+    //       stepId: act.stepId
+    //     });
+    //   }
+    // }
+    //if(this.state.groupId )
+    if (this.props.act !== prevProps.act) {
+      this.setState({
+        groupId: act.groupId,
+        stepId: act.stepId
+      });
     }
+    // if(stepId !== prevState.stepId|| groupId !== prevState.groupId){
+    //   this.setState({stepId:prevState.StepId,groupId:prevState.groupId})
+    // }
   }
 
   onClickOfLink = (groupid, stepid) => {
@@ -150,10 +165,10 @@ class Sidebar extends Component {
     const {
       workflowDetailsHeader,
       workflowDetails,
-      minimalUI,
-      act
+      minimalUI
+      // act
     } = this.props;
-    console.log("min", minimalUI);
+    //console.log("min", minimalUI,act);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
       workflowDetailsHeader.workflowDetailsHeader
@@ -164,6 +179,7 @@ class Sidebar extends Component {
     );
 
     const { groupId, stepId } = this.state;
+    //console.log(groupId,stepId)
 
     const workflowActionMenu = (
       <Menu>

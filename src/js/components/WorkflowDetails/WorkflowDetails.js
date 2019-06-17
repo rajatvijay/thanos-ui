@@ -257,13 +257,19 @@ class WorkflowDetails extends Component {
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal } = this.props;
+    const {
+      minimalUI,
+      workflowIdFromPropsForModal,
+      workflowDetails
+    } = this.props;
 
-    //     const workflowId = workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    //   //const { stepGroups } = workflowDetails.workflowDetails;
-    //   //calculate activit step
-    //  // const act = currentActiveStep(stepGroups, workflowId);
-    //   const act = workflowDetails.workflowDetails ? currentActiveStep(workflowDetails.workflowDetails, workflowId) : {}
+    const { selectedGroup, selectedStep } = this.state;
+    const workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+    //const { stepGroups } = workflowDetails.workflowDetails;
+    //calculate activit step
+    // const act = currentActiveStep(stepGroups, workflowId);
+    // const act = workflowDetails.workflowDetails ? currentActiveStep(workflowDetails.workflowDetails, workflowId) : {}
 
     let stepLoading = this.props.workflowDetails.loading;
     let HeaderLoading = this.props.workflowDetailsHeader.loading;
@@ -342,7 +348,10 @@ class WorkflowDetails extends Component {
             >
               <BackButton />
 
-              <SidebarView minimalUI={minimalUI} />
+              <SidebarView
+                act={{ groupId: selectedGroup, stepId: selectedStep }}
+                minimalUI={minimalUI}
+              />
               <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
                 <div className="printOnly ">
                   <div
