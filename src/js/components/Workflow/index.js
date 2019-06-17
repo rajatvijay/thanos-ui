@@ -281,6 +281,7 @@ class Workflow extends Component {
               ) : (
                 <div className="clearfix">
                   <WorkflowList
+                    location={this.props.location}
                     sortAscending={this.state.sortOrderAsc}
                     profile={this.props.match}
                     {...this.props}

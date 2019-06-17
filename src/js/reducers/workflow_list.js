@@ -5,7 +5,7 @@ const initialState = {
   count: 0
 };
 
-export function workflow(state = {}, action) {
+export function workflow(state = { workflowId: null }, action) {
   switch (action.type) {
     //GET ALL THE WORKFLOWS
     case workflowConstants.GETALL_REQUEST:
@@ -91,6 +91,11 @@ export function workflow(state = {}, action) {
         loading: false,
         loadingStatus: "failed",
         error: action.error
+      };
+    case workflowConstants.SET_WORKFLOW_ID:
+      console.log("reducer");
+      return {
+        workflowId: action.payload.id
       };
 
     default:
