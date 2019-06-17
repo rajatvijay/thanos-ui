@@ -27,6 +27,8 @@ export function workflowDetails(state = {}, action) {
 
     //WORKFLOW STEPS AND GROUPS LIST DATA
     case workflowDetailsConstants.GET_STEPGROUPS_REQUEST:
+      console.log("state", state);
+      state = {};
       return {
         ...state,
         loading: true

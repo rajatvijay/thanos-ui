@@ -115,9 +115,9 @@ class Header extends Component {
             marginRight: "29.66px",
             width: regexForUrl.test(document.location.pathname)
               ? _.isEmpty(supportedLaguanges)
-                ? "170px"
-                : "150px"
-              : "230px",
+                ? "180px"
+                : "100px"
+              : "250px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center"

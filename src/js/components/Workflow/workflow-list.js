@@ -78,6 +78,7 @@ class WorkflowList extends Component {
       var listL = _.map(list, function(item, index) {
         return (
           <WorkflowItem
+            location={that.props.location}
             rank={item.rank}
             workflow={item}
             key={index}

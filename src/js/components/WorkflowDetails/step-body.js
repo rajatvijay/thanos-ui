@@ -127,7 +127,10 @@ class StepBody extends Component {
         >
           {this.versionDropDown()}
           <span className="display-inline-block pd-right-sm"> </span>
-          <span onClick={this.addComment.bind(this, stepData)}>
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={this.addComment.bind(this, stepData)}
+          >
             <i className="material-icons t-18 text-middle">message</i>
           </span>
         </div>
