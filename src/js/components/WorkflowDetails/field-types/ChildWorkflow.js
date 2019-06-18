@@ -208,9 +208,7 @@ class ChildWorkflowField2 extends Component {
     }
 
     const valueFilter = this.getValuefilter();
-    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${
-      parentId
-    }&kind=${kind}${valueFilter}&child_kinds=true`;
+    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${parentId}&kind=${kind}${valueFilter}&child_kinds=true`;
 
     this.setState({ fetching: true });
 
@@ -414,7 +412,9 @@ class ChildWorkflowField2 extends Component {
           selected={
             k === "All" && selected === ""
               ? true
-              : selected === k ? true : false
+              : selected === k
+              ? true
+              : false
           }
         />
       );
@@ -841,7 +841,7 @@ class ChildWorkflowField2 extends Component {
           "childworkflow-field-item from-label " +
           (_.size(props.field.selected_flag) ? " has-flag" : "")
         }
-        style={{ display: "block", margin: "0 -24px" }}
+        style={{ display: "block", margin: "0" }}
         key={props.field.id}
         message=""
         hasFeedback
@@ -856,7 +856,7 @@ class ChildWorkflowField2 extends Component {
           <div>
             {/*show filters top*/}
             <Row>
-              <Col span={12} className="pd-left-lg">
+              <Col span={12}>
                 <span className="text-lighter">
                   {this.state.childWorkflow
                     ? this.state.childWorkflow.length
@@ -877,7 +877,7 @@ class ChildWorkflowField2 extends Component {
                 ) : null}
               </Col>
 
-              <Col span={12} className="text-right small pd-right-lg">
+              <Col span={12} className="text-right small">
                 <span
                   onClick={this.getChildWorkflow}
                   title="Reload"

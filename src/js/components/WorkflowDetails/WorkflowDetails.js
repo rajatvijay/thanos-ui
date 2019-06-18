@@ -166,7 +166,12 @@ class WorkflowDetails extends Component {
       this.props.dispatch(configActions.getConfig());
     }
 
-    window.scrollTo(0, 0);
+    //window.scrollTo(0, 0);
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
   };
 
   setStepFromQuery = () => {
@@ -372,6 +377,7 @@ class WorkflowDetails extends Component {
                     />
                   </div>
                 </div>
+
                 {!minimalUI && (
                   <div className="text-right pd-ard mr-ard-md">
                     <Tooltip
@@ -383,7 +389,11 @@ class WorkflowDetails extends Component {
                       <span
                         className="text-anchor"
                         onClick={() => {
-                          window.scrollTo(0, 0);
+                          window.scroll({
+                            top: 0,
+                            left: 0,
+                            behavior: "smooth"
+                          });
                         }}
                       >
                         <i className="material-icons">arrow_upward</i>
