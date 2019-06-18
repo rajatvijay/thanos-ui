@@ -59,28 +59,17 @@ function comment_answer_body(c) {
     }
   } else {
     return (
-      <div className="ant-row ant-form-item ant-form-item-with-help from-label mr-top">
-        <div className="ant-form-item-label">
-          <label className="">{c.target.field_details.name}</label>
-        </div>
-        <div className="ant-form-item-control-wrapper">
-          <div className="ant-form-item-control ">
-            <span className="ant-form-item-children">
-              <span
-                className="ant-input ant-input-disabled"
-                style={
-                  c.target.selected_flag[c.target.id]
-                    ? c.target.selected_flag[c.target.id].flag_detail.extra
-                    : null
-                }
-              >
-                {_.size(c.target.field_details.answer)
-                  ? c.target.field_details.answer[0].answer
-                  : "-"}
-              </span>
-            </span>
-          </div>
-        </div>
+      <div
+        className="ant-input ant-input-disabled"
+        style={
+          c.target.selected_flag[c.target.id]
+            ? c.target.selected_flag[c.target.id].flag_detail.extra
+            : null
+        }
+      >
+        {_.size(c.target.field_details.answer)
+          ? c.target.field_details.answer[0].answer
+          : "-"}
       </div>
     );
   }

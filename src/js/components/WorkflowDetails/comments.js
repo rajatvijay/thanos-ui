@@ -55,7 +55,7 @@ class Comments extends Component {
     }
   };
 
-  componentDidMount() {
+  componentDidMount = () => {
     const workflowKind = this.getWorkflowKind(this.props);
 
     if (workflowKind) {
@@ -65,9 +65,9 @@ class Comments extends Component {
           this.setState({ workflowStatuses: response });
         });
     }
-  }
+  };
 
-  componentDidUpdate(previousProps) {
+  componentDidUpdate = previousProps => {
     const currentWorkflowKind = this.getWorkflowKind(this.props);
     const previousWorkflowKind = this.getWorkflowKind(previousProps);
 
@@ -78,9 +78,7 @@ class Comments extends Component {
           this.setState({ workflowStatuses: response });
         });
     }
-  }
-
-  callback = key => {};
+  };
 
   toggle = () => {
     this.props.toggleSidebar();
@@ -276,7 +274,8 @@ class Comments extends Component {
     let single_comments = _.size(comments.results) <= 1 ? true : false;
     let c = _.size(comments.results) ? comments.results[0] : [];
 
-    let adjudication = (
+    //ADJUDICATION SELECTION
+    const adjudication = (
       <div>
         <div className="  t-16 text-light">Adjudication:</div>
         <Cascader
@@ -289,28 +288,55 @@ class Comments extends Component {
       </div>
     );
 
-    let workflow_status_dropdown_options = (
-      <Menu onClick={that.changeWorkflowStatus}>
-        {that.state.workflowStatuses.length > 0 ? (
-          that.state.workflowStatuses.map(v => {
-            return <Menu.Item key={v.id}>{v.label}</Menu.Item>;
-          })
-        ) : (
-          <Menu.Item key="na" disabled>
-            <span className="text-lighter">No Result</span>
-          </Menu.Item>
-        )}
-      </Menu>
+    //WORJKFLOW STATUS SELECT
+    const workflow_status_dropdown = (
+      <Select
+        placeholder="STATUS"
+        style={{ width: "100%" }}
+        onChange={that.changeWorkflowStatus}
+        className="comment-select"
+      >
+        {that.state.workflowStatuses.length > 0
+          ? that.state.workflowStatuses.map(v => {
+              return <Option value={v.id}>{v.label}</Option>;
+            })
+          : null}
+      </Select>
     );
 
-    let workflow_status_dropdown = (
-      <div>
-        <Dropdown overlay={workflow_status_dropdown_options}>
-          <span className="text-lighter t-12 text-ellipsis text-bold">
-            STATUS <Icon type="down" />
-          </span>
-        </Dropdown>
-      </div>
+    //RISK CODES DROPDOWN
+    const risk_codes_dropdown = (
+      <Select
+        placeholder="RISK CODES"
+        style={{ width: "100%" }}
+        onChange={that.changeRiskCode}
+        className="comment-select"
+      >
+        <Option value="Association & PEP Risk">Association & PEP Risk</Option>
+        <Option value="Criminal Risk">Criminal Risk</Option>
+        <Option value="Financial Condition Risk">
+          Financial Condition Risk
+        </Option>
+        <Option value="Legal Risk">Legal Risk</Option>
+        <Option value="Prohibited Entities Risk">
+          Prohibited Entities Risk
+        </Option>
+        <Option value="Regulatory Risk">Regulatory Risk</Option>
+        <Option value="Reputation Risk">Reputation Risk</Option>
+      </Select>
+    );
+
+    //INTEGRATIONM STATUS DROPWORN
+    const integration_status_dropdown = (
+      <Select
+        placeholder="STATUS"
+        style={{ width: "100%" }}
+        onChange={that.changeStatus}
+        className="comment-select"
+      >
+        <Option value="open">Open</Option>
+        <Option value="closed">Closed</Option>
+      </Select>
     );
 
     // for comment attachments
@@ -338,12 +364,11 @@ class Comments extends Component {
         className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
         style={{
           background: "#fff",
-          // overflow: "auto",
           height: "calc(100vh - 70px)",
           position: "fixed",
           right: 0,
           top: "60px",
-          zIndex: 1
+          zIndex: 2
         }}
         width="570"
         collapsed={false}
@@ -370,30 +395,45 @@ class Comments extends Component {
                     {/*///////HEADER///////*/}
                     <StyledHeadContainer>
                       <Row>
-                        <Col span={18}>
+                        <Col span={2}>
                           <Icon
                             type="close"
                             onClick={this.toggle}
                             className={css`
                               font-size: 21px;
-                              margin-right: 21px;
                               float: left;
                             `}
                           />
+                        </Col>
 
+                        <Col span={16}>
                           {c.target.step_group_details ? (
-                            <span>
-                              <span className="text-bold">
-                                {c.target.step_group_details.name} ...{" "}
-                              </span>
-                              :{" "}
-                              <span
-                                className="text-bold text-grey"
-                                onClick={that.selectStep.bind(this, c.target)}
-                              >
-                                {c.target.step_details.name} ....
-                              </span>
-                            </span>
+                            <div>
+                              <div className="t-22">
+                                {
+                                  this.props.workflowDetailsHeader
+                                    .workflowDetailsHeader.name
+                                }
+                              </div>
+
+                              <div className="text-lighter mr-top-sm">
+                                {c.target.step_group_details.name}
+                                <Icon
+                                  type="right"
+                                  className="small pd-left-sm pd-right-sm"
+                                />
+                                <span
+                                  onClick={that.selectStep.bind(this, c.target)}
+                                >
+                                  {c.target.step_details.name}
+                                </span>
+                                <Icon
+                                  type="right"
+                                  className=" small pd-left-sm pd-right-sm"
+                                />
+                                {c.target.field_details.name}
+                              </div>
+                            </div>
                           ) : null}
 
                           <StyledHeadText>
@@ -402,75 +442,24 @@ class Comments extends Component {
                         </Col>
 
                         <Col span={6}>
-                          {c.target.workflow_details ? (
-                            <Col span={10}>
-                              {c.target.workflow_details
-                                ? workflow_status_dropdown
-                                : null}
-                            </Col>
-                          ) : null}
+                          {c.target.workflow_details
+                            ? c.target.workflow_details
+                              ? workflow_status_dropdown
+                              : null
+                            : null}
+
+                          {c.target.field_details &&
+                          c.target.field_details.is_integration_type
+                            ? integration_status_dropdown
+                            : null}
+
+                          {c.target.field_details &&
+                          (c.target.field_details.type == "google_search" ||
+                            c.target.field_details.type == "serp_google_search")
+                            ? risk_codes_dropdown
+                            : null}
                         </Col>
                       </Row>
-
-                      {c.target.field_details &&
-                      c.target.field_details.is_integration_type ? (
-                        <div style={{ marginTop: "10px" }}>
-                          <div>
-                            <span
-                              style={{ color: "#575757", fontSize: "12px" }}
-                            >
-                              Status:
-                            </span>
-                          </div>
-                          <Select
-                            placeholder="Select a status"
-                            style={{ width: "100%" }}
-                            onChange={that.changeStatus}
-                            className="comment-select"
-                          >
-                            <Option value="open">Open</Option>
-                            <Option value="closed">Closed</Option>
-                          </Select>
-                        </div>
-                      ) : null}
-
-                      {c.target.field_details &&
-                      (c.target.field_details.type == "google_search" ||
-                        c.target.field_details.type == "serp_google_search") ? (
-                        <div style={{ marginTop: "10px" }}>
-                          <div>
-                            <span
-                              style={{ color: "#575757", fontSize: "12px" }}
-                            >
-                              Risk Codes:
-                            </span>
-                          </div>
-                          <Select
-                            placeholder="Select a risk code"
-                            style={{ width: "100%" }}
-                            onChange={that.changeRiskCode}
-                            className="comment-select"
-                          >
-                            <Option value="Association & PEP Risk">
-                              Association & PEP Risk
-                            </Option>
-                            <Option value="Criminal Risk">Criminal Risk</Option>
-                            <Option value="Financial Condition Risk">
-                              Financial Condition Risk
-                            </Option>
-                            <Option value="Legal Risk">Legal Risk</Option>
-                            <Option value="Prohibited Entities Risk">
-                              Prohibited Entities Risk
-                            </Option>
-                            <Option value="Regulatory Risk">
-                              Regulatory Risk
-                            </Option>
-                            <Option value="Reputation Risk">
-                              Reputation Risk
-                            </Option>
-                          </Select>
-                        </div>
-                      ) : null}
                     </StyledHeadContainer>
 
                     {/*///////Comments List Body///////*/}
@@ -565,13 +554,14 @@ class Comments extends Component {
                     {single_comments ? (
                       <div className="affix-bottom" style={{ width: "100%" }}>
                         <StyledAddCommentContainer>
-                          {c.target.workflow_details ? (
+                          {/*c.target.workflow_details ? (
                             <Col span={10}>
                               {c.target.workflow_details
                                 ? workflow_status_dropdown
                                 : null}
                             </Col>
-                          ) : null}
+                          ) : null*/}
+
                           <div>
                             {(c.target.field_details ||
                               c.target.workflow_details) &&
