@@ -179,34 +179,42 @@ const GetTable = props => {
         return (
           <div>
             {record.ReferenceDetail ? (
-              <div className="mr-bottom-sm">
+              <div className="mr-bottom-sm text-black">
                 <b>{record.ReferenceDetail[0].Headline}</b>
               </div>
             ) : null}
-            {record.EventTypeText}
+            <span className="text-lighter">{record.EventTypeText}</span>
           </div>
         );
       }
     },
     {
       title: "Category",
-      dataIndex: "EventTypeCode",
-      key: "EventTypeCode"
+      key: "EventTypeCode",
+      render: record => {
+        return <span className="text-lighter">{record.EventTypeCode}</span>;
+      }
     },
     {
       title: "Event Date",
-      dataIndex: "EventDate",
-      key: "EventDate"
+      key: "EventDate",
+      render: record => {
+        return <span className="text-lighter">{record.EventDate}</span>;
+      }
     },
     {
       title: "Event Sub Type",
-      dataIndex: "EventSubTypeText",
-      key: "EventSubTypeText"
+      key: "EventSubTypeText",
+      render: record => {
+        return <span className="text-lighter">{record.EventSubTypeText}</span>;
+      }
     },
     {
       title: "Event Sub Type Code",
-      dataIndex: "EventSubTypeCode",
-      key: "EventSubTypeCode"
+      key: "EventSubTypeCode",
+      render: record => {
+        return <span className="text-lighter">{record.EventSubTypeCode}</span>;
+      }
     },
     {
       title: "Status",
@@ -227,8 +235,16 @@ const GetTable = props => {
         return (
           <div>
             {record.krypton_status ? (
-              <Tag color={options[record.krypton_status]["class"]}>
-                {options[record.krypton_status]["label"]}
+              <Tag
+                color={
+                  options[record.krypton_status]
+                    ? options[record.krypton_status]["class"]
+                    : "grey"
+                }
+              >
+                {options[record.krypton_status]
+                  ? options[record.krypton_status]["label"]
+                  : "N/A"}
               </Tag>
             ) : null}
           </div>
@@ -249,12 +265,12 @@ const GetTable = props => {
         return (
           <span>
             <span
-              className="text-secondary text-anchor"
+              className="ant-btn ant-btn-primary btn-o btn-sm"
               onClick={e => props.getComment(e, record)}
             >
               {props.commentCount[uid]
                 ? props.commentCount[uid] + " comment(s)"
-                : "Add comment"}
+                : "Adjudicate"}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
@@ -271,6 +287,7 @@ const GetTable = props => {
         pagination={false}
         columns={columns}
         rowKey="uid"
+        showHeader={false}
         expandedRowRender={record => buildDetails(record)}
       />
     </div>

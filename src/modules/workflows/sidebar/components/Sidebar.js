@@ -142,7 +142,6 @@ class Sidebar extends Component {
       this.props.selectedGroup !== prevProps.selectedGroup ||
       this.props.selectedStep !== prevProps.selectedStep
     ) {
-      console.log("updating");
       this.setState({
         groupId: String(this.props.selectedGroup),
         stepId: String(this.props.selectedStep)
