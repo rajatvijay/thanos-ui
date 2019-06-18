@@ -36,7 +36,12 @@ export const CreateRelated = props => {
         placement="bottomRight"
       >
         <span className="text-secondary pd-ard-sm text-anchor">
-          <i className="material-icons text-middle">add</i>
+          <i
+            className="material-icons text-middle"
+            style={{ fontWeight: "bold" }}
+          >
+            add
+          </i>
         </span>
       </Dropdown>
     );

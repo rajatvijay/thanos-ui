@@ -50,10 +50,17 @@ class WorkflowDetails extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    const { location, workflowDetails, currentStepFields } = this.props;
+    const {
+      location,
+      workflowDetails,
+      currentStepFields,
+      workflowIdFromPropsForModal
+    } = this.props;
+
     let wd = workflowDetails;
     //SET WORKFLOW ID FROM ROUTER
-    let workflowId = parseInt(this.props.match.params.id, 10);
+    let workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     let thisCurrent = currentStepFields;
     let prevCurrent = prevProps.currentStepFields;
 
@@ -70,11 +77,14 @@ class WorkflowDetails extends Component {
       prevCurrent.currentStepFields.completed_by !==
         thisCurrent.currentStepFields.completed_by
     ) {
-      this.updateSidebar(workflowId);
+      this.updateSidebar(workflowIdFromPropsForModal || workflowId);
     }
 
     //WHEN EVER SEARCH PARAMS CHANGE FETCH NEW STEP DATA
-    if (this.props.location.search !== prevProps.location.search) {
+
+    //todo .search
+
+    if (location.search !== prevProps.location.search) {
       this.setStepFromQuery();
     }
 
@@ -107,17 +117,29 @@ class WorkflowDetails extends Component {
   };
 
   updateCurrentActiveStep = () => {
-    let workflowId = parseInt(this.props.match.params.id, 10);
+    const { workflowIdFromPropsForModal } = this.props;
+
+    let workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     const { stepGroups } = this.props.workflowDetails.workflowDetails;
     //calculate activit step
     let act = currentActiveStep(stepGroups, workflowId);
-    this.state.selectedGroup = act.groupId;
-    this.state.selectedStep = act.stepId;
-    history.replace(
-      `/workflows/instances/${workflowId}?group=${act.groupId}&step=${
-        act.stepId
-      }`
-    );
+    this.setState({
+      selectedGroup: act.groupId,
+      selectedStep: act.stepId
+    });
+
+    if (!workflowIdFromPropsForModal) {
+      history.replace(
+        `/workflows/instances/${workflowId}?group=${act.groupId}&step=${
+          act.stepId
+        }`
+      );
+    } else {
+      history.replace(
+        `/workflows/instances/?group=${act.groupId}&step=${act.stepId}`
+      );
+    }
   };
 
   checkWorkflowCompetion = () => {
@@ -157,6 +179,7 @@ class WorkflowDetails extends Component {
     //calculate step track
     //dispatch workflow step details
     const params = new URLSearchParams(this.props.location.search);
+    const { workflowIdFromPropsForModal } = this.props;
 
     if (params.has("group") && params.has("step")) {
       let groupId = params.get("group");
@@ -166,7 +189,9 @@ class WorkflowDetails extends Component {
       this.state.selectedStep = stepId;
 
       let stepTrack = {
-        workflowId: parseInt(this.props.match.params.id, 10),
+        workflowId:
+          workflowIdFromPropsForModal ||
+          parseInt(this.props.match.params.id, 10),
         groupId: groupId,
         stepId: stepId
       };
@@ -239,6 +264,14 @@ class WorkflowDetails extends Component {
   ////Comment functions ends///////
 
   render = () => {
+    const { minimalUI, workflowIdFromPropsForModal } = this.props;
+
+    //     const workflowId = workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+    //   //const { stepGroups } = workflowDetails.workflowDetails;
+    //   //calculate activit step
+    //  // const act = currentActiveStep(stepGroups, workflowId);
+    //   const act = workflowDetails.workflowDetails ? currentActiveStep(workflowDetails.workflowDetails, workflowId) : {}
+
     let stepLoading = this.props.workflowDetails.loading;
     let HeaderLoading = this.props.workflowDetailsHeader.loading;
     let formLoading = this.props.currentStepFields.loading;
@@ -262,7 +295,7 @@ class WorkflowDetails extends Component {
     }
 
     const BackButton = () => {
-      if (showBackButtom) {
+      if (showBackButtom && !minimalUI) {
         return (
           <div
             style={{
@@ -302,22 +335,34 @@ class WorkflowDetails extends Component {
     } else {
       return (
         <div>
-          <Layout className="workflow-details-container inner-container">
+          <Layout
+            className="workflow-details-container inner-container"
+            style={{ top: minimalUI ? 0 : 60 }}
+          >
             <Layout
               style={{
                 background: "#FAFAFA",
-                minHeight: "100vh"
+                minHeight: "100vh",
+                padding: minimalUI ? "30px 0px" : 0,
+                marginTop: minimalUI ? 80 : 0
               }}
             >
               <BackButton />
 
-              <SidebarView />
-              <Content style={{ width: "50%" }}>
+              <SidebarView
+                selectedGroup={this.state.selectedGroup}
+                selectedStep={this.state.selectedStep}
+                minimalUI={minimalUI}
+              />
+              <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
                 <div className="printOnly ">
                   <div
                     className="mr-ard-lg"
                     id="StepBody"
-                    style={{ background: "#FAFAFA" }}
+                    style={{
+                      background: "#FAFAFA",
+                      margin: minimalUI ? "0px 24px 0px 0px" : "24px"
+                    }}
                   >
                     <StepBody
                       toggleSidebar={this.callBackCollapser}
@@ -332,27 +377,30 @@ class WorkflowDetails extends Component {
                     />
                   </div>
                 </div>
-                <div className="text-right pd-ard mr-ard-md">
-                  <Tooltip
-                    title={this.props.intl.formatMessage({
-                      id: "commonTextInstances.scrollToTop"
-                    })}
-                    placement="topRight"
-                  >
-                    <span
-                      className="text-anchor"
-                      onClick={() => {
-                        window.scroll({
-                          top: 0,
-                          left: 0,
-                          behavior: "smooth"
-                        });
-                      }}
+
+                {!minimalUI && (
+                  <div className="text-right pd-ard mr-ard-md">
+                    <Tooltip
+                      title={this.props.intl.formatMessage({
+                        id: "commonTextInstances.scrollToTop"
+                      })}
+                      placement="topRight"
                     >
-                      <i className="material-icons">arrow_upward</i>
-                    </span>
-                  </Tooltip>
-                </div>
+                      <span
+                        className="text-anchor"
+                        onClick={() => {
+                          window.scroll({
+                            top: 0,
+                            left: 0,
+                            behavior: "smooth"
+                          });
+                        }}
+                      >
+                        <i className="material-icons">arrow_upward</i>
+                      </span>
+                    </Tooltip>
+                  </div>
+                )}
                 {comment_data &&
                 comment_data.results &&
                 comment_data.results.length > 0 &&

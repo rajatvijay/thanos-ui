@@ -172,6 +172,11 @@ class LoginForm extends React.Component {
                     type="primary"
                     htmlType="submit"
                     className="login-form-button btn-block"
+                    style={{
+                      height: "40px",
+                      verticalAlign: "middle",
+                      lineHeight: "40px"
+                    }}
                   >
                     {" "}
                     <FormattedMessage id="loginPageInstances.loginText" />
@@ -193,7 +198,7 @@ class LoginForm extends React.Component {
         </Row>
 
         <div>
-          <Divider>
+          <Divider style={{ marginTop: 0 }}>
             <FormattedMessage id="loginPageInstances.orText" />
           </Divider>
           <div className="t-16">

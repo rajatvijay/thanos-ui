@@ -284,9 +284,7 @@ function getLink(text) {
       }
 
       // For all other URLs
-      return `<a href="${
-        url
-      }" target="_blank" rel="noopener noreferrer">${url.includes("http") ? url : `http://${url}`}</a>`;
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url.includes("http") ? url : `http://${url}`}</a>`;
     });
   }
 

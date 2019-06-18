@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Icon, Divider } from "antd";
+import { Layout, Icon, Divider, Modal } from "antd";
 import { connect } from "react-redux";
 import {
   createWorkflow,
@@ -12,10 +12,17 @@ import Collapsible from "react-collapsible";
 import { Link } from "react-router-dom";
 import StepPreview from "./StepPreview";
 import { CreateRelated } from "./CreateRelated";
-import WorkflowBody from "./WorkflowBody";
+// import WorkflowBody from "./WorkflowBody";
 import { WorkflowHeader } from "./WorkflowHeader";
 import { workflowDetailsService } from "../../services";
 import { calculatedData } from "./calculated-data";
+import WorkflowDetails from "../WorkflowDetails";
+import SidebarView from "../../../modules/workflows/sidebar/components";
+import ModalHeader from "./ModalHeader";
+import ModalFooter from "./ModalFooter";
+import { css } from "emotion";
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
+import { withRouter } from "react-router-dom";
 
 const { getProcessedData } = calculatedData;
 const { Content, Sider } = Layout;
@@ -31,7 +38,8 @@ class WorkflowItem extends React.Component {
     stepGroupData: null,
     stepdataloading: true,
     initialLoad: true,
-    collapseDisabled: false
+    collapseDisabled: false,
+    visible: false
   };
 
   componentDidMount = () => {
@@ -63,6 +71,32 @@ class WorkflowItem extends React.Component {
         }
       );
     }
+  };
+
+  showModal = id => {
+    this.setState({
+      visible: true,
+      workflowId: id
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  handleCancel = e => {
+    this.props.history.replace("/workflows/instances");
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
+  setWorkflowId = id => {
+    this.setState({ workflowId: id });
   };
 
   assignChilrenToKind = () => {
@@ -260,7 +294,9 @@ class WorkflowItem extends React.Component {
 
   render = () => {
     let that = this;
-
+    //console.log("work",this.props.workflow)
+    //const {location}
+    //console.log("workflow",this.props)
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
     const showQuickDetailsFunction =
@@ -272,84 +308,110 @@ class WorkflowItem extends React.Component {
           "paper workflow-list-item " +
           (this.state.opened
             ? " opened"
-            : null + hasChildren ? " has-children " : null)
+            : null + hasChildren
+            ? " has-children "
+            : null)
         }
       >
-        <div className="collapse-wrapper">
-          <Collapsible
+        <div>
+          {this.state.visible && (
+            <Modal
+              // destroyOnClose={true}
+              style={{ left: 150 }}
+              closable={false}
+              footer={null}
+              bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
+              width={1100}
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <ModalHeader workflow={this.props.workflow} />
+              <WorkflowDetails
+                location={this.props.location}
+                minimalUI={true}
+                workflowIdFromPropsForModal={this.props.workflow.id}
+              />
+
+              <ModalFooter
+                workflowIdFromPropsForModal={this.props.workflow.id}
+              />
+            </Modal>
+          )}
+
+          {/* <Collapsible
             trigger={
               <div
                 className="lc-card"
-                style={{ boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)" }}
-              >
-                <WorkflowHeader
-                  isEmbedded={this.props.isEmbedded}
-                  sortingEnabled={this.props.sortingEnabled}
-                  rank={this.props.rank}
-                  workflow={this.props.workflow}
-                  statusType={statusType}
-                  kind={this.props.kinds}
-                  onStatusChange={this.props.onStatusChange}
-                  dispatch={this.props.dispatch}
-                  statusView={this.props.statusView}
-                  hasChildren={hasChildren}
-                  fieldExtra={
-                    that.props.field && that.props.field.definition.extra
-                      ? that.props.field.definition.extra
-                      : null
-                  }
-                  addComment={this.props.addComment || null}
-                  showCommentIcon={this.props.showCommentIcon}
-                  isExpanded={this.state.opened}
-                  disableCollapse={this.disableCollapse}
-                  enableCollapse={this.enableCollapse}
-                  config={this.props.config}
-                />
-              </div>
-            }
-            lazyRender={true}
-            transitionTime={200}
-            onOpen={this.onOpen}
-            onClose={this.onClose}
+                style={{
+                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)"
+                }}
+              > */}
+          <WorkflowHeader
+            visibleModal={this.state.modal}
+            showModal={this.showModal}
+            isEmbedded={this.props.isEmbedded}
+            sortingEnabled={this.props.sortingEnabled}
+            rank={this.props.rank}
+            workflow={this.props.workflow}
+            statusType={statusType}
+            kind={this.props.kinds}
+            onStatusChange={this.props.onStatusChange}
+            dispatch={this.props.dispatch}
+            statusView={this.props.statusView}
             hasChildren={hasChildren}
-            triggerDisabled={this.state.collapseDisabled}
-          >
-            <div className="lc-card-wrapper">
-              <WorkflowBody
-                {...this.props}
-                createButton={
-                  <CreateRelated
-                    relatedKind={this.state.relatedWorkflow}
-                    onChildSelect={this.createChildWorkflow}
-                  />
-                }
-                isEmbedded={this.props.isEmbedded}
-                getGroupedData={this.getGroupedData}
-                addComment={this.props.addComment || null}
-                showCommentIcon={this.props.showCommentIcon}
-                expandedWorkflows={this.props.expandedWorkflows}
-                showQuickDetails={showQuickDetailsFunction}
-                showRelatedWorkflow={this.state.showRelatedWorkflow}
-                workflow={this.props.workflow}
-                statusView={this.props.statusView}
-                stepdataloading={this.state.stepdataloading}
-                stepGroupData={this.state.stepGroupData}
-                relatedKinds={
-                  _.size(this.state.relatedKinds)
-                    ? this.state.relatedKinds
-                    : this.state.relatedWorkflow
-                }
-              />
+            fieldExtra={
+              that.props.field && that.props.field.definition.extra
+                ? that.props.field.definition.extra
+                : null
+            }
+            addComment={this.props.addComment || null}
+            showCommentIcon={this.props.showCommentIcon}
+            isExpanded={this.state.opened}
+            disableCollapse={this.disableCollapse}
+            enableCollapse={this.enableCollapse}
+            config={this.props.config}
+          />
+          {/* </div> */}
+          {/* } */}
 
-              {showQuickDetailsFunction ? (
-                <StepPreview
-                  workflowName={this.props.workflow.name}
-                  hideQuickDetails={this.hideQuickDetails}
-                  showQuickDetails={this.state.showQuickDetails}
+          {/* // > */}
+          <div>
+            {/* <WorkflowBody
+              {...this.props}
+              createButton={
+                <CreateRelated
+                  relatedKind={this.state.relatedWorkflow}
+                  onChildSelect={this.createChildWorkflow}
                 />
-              ) : null}
-            </div>
-          </Collapsible>
+              }
+              isEmbedded={this.props.isEmbedded}
+              getGroupedData={this.getGroupedData}
+              addComment={this.props.addComment || null}
+              showCommentIcon={this.props.showCommentIcon}
+              expandedWorkflows={this.props.expandedWorkflows}
+              showQuickDetails={showQuickDetailsFunction}
+              showRelatedWorkflow={this.state.showRelatedWorkflow}
+              workflow={this.props.workflow}
+              statusView={this.props.statusView}
+              stepdataloading={this.state.stepdataloading}
+              stepGroupData={this.state.stepGroupData}
+              relatedKinds={
+                _.size(this.state.relatedKinds)
+                  ? this.state.relatedKinds
+                  : this.state.relatedWorkflow
+              }
+            /> */}
+
+            {showQuickDetailsFunction ? (
+              <StepPreview
+                workflowName={this.props.workflow.name}
+                hideQuickDetails={this.hideQuickDetails}
+                showQuickDetails={this.state.showQuickDetails}
+              />
+            ) : null}
+          </div>
+          {/* </Collapsible> */}
         </div>
       </div>
     );
@@ -363,4 +425,4 @@ function mapPropsToState(state) {
   };
 }
 
-export default connect(mapPropsToState)(WorkflowItem);
+export default withRouter(connect(mapPropsToState)(WorkflowItem));

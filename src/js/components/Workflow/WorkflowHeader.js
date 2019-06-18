@@ -18,7 +18,7 @@ import {
 } from "antd";
 import { calculatedData } from "./calculated-data";
 import { history } from "../../_helpers";
-import { changeStatusActions } from "../../actions";
+import { changeStatusActions, workflowActions } from "../../actions";
 import { FormattedMessage } from "react-intl";
 import AuditListTabs from "../Navbar/audit_log";
 import WorkflowPDFModal from "./WorkflowPDFModal";
@@ -45,6 +45,7 @@ const { getProcessedData, getProgressData } = calculatedData;
 /////////////////
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
+
 export const WorkflowHeader = props => {
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
@@ -80,20 +81,31 @@ export const WorkflowHeader = props => {
   );
 
   return (
-    <Row type="flex" align="middle" className="header-opened">
+    <Row
+      style={{ cursor: "pointer" }}
+      onClick={() => props.showModal(props.workflow.id)}
+      type="flex"
+      align="middle"
+    >
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
 
-      {props.isExpanded ? (
+      {/* {props.isExpanded ? (
         <Col span={2} className="details-link-wrapper ">
-          <Link
+          {/* <span
+          //onClick={()=>props.showModal(props.workflow.id)}
             className="details-link slide-this"
-            to={"/workflows/instances/" + props.workflow.id + "/"}
+           //to={"/workflows/instances/" + props.workflow.id + "/"}
             title="Show details"
+            style={{
+              width: "75px",
+              float: "right",
+              //pointer:"cursor"
+            }}
           >
             <i className="material-icons">arrow_forward</i>
-          </Link>
-        </Col>
-      ) : null}
+          </span> */}
+      {/* </Col> */}
+      {/* // ) : null} */}
     </Row>
   );
 };
@@ -190,7 +202,7 @@ const HeaderTitle = props => {
   }
 };
 
-const HeaderLcData = props => {
+export const HeaderLcData = props => {
   let subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type == "normal";
   });
@@ -229,7 +241,7 @@ const getGroupProgress = group => {
     }
   });
 
-  progress = Math.trunc(stepCompleted / allSteps * 100);
+  progress = Math.trunc((stepCompleted / allSteps) * 100);
   return progress;
 };
 
@@ -372,7 +384,7 @@ class HeaderOptions extends React.Component {
 
     let status = (
       <Tooltip title={this.state.current}>
-        <div className="pd-left pd-right status-text text-black t-12 text-right">
+        <div className="pd-left status-text text-black t-12 text-right">
           {this.state.current}
         </div>
       </Tooltip>
@@ -443,7 +455,7 @@ const CheckData = props => {
   }
 };
 
-class GetMergedData extends React.Component {
+export class GetMergedData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -338,6 +338,11 @@ class OTPForm extends React.Component {
                     onClick={
                       this.state.optSent ? this.onSubmit : this.onOptRequest
                     }
+                    style={{
+                      height: "40px",
+                      verticalAlign: "middle",
+                      lineHeight: "40px"
+                    }}
                   >
                     {this.state.optSent ? (
                       <FormattedMessage id="commonTextInstances.submitButtonText" />
@@ -387,6 +392,11 @@ class OTPForm extends React.Component {
                     <a
                       className="ant-btn login-form-button ant-btn-primary btn-block text-white"
                       href={this.props.config.saml_url}
+                      style={{
+                        height: "40px",
+                        verticalAlign: "middle",
+                        lineHeight: "40px"
+                      }}
                     >
                       <span className="text-white">
                         <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
@@ -402,6 +412,11 @@ class OTPForm extends React.Component {
                           : "/login/basic"
                       }
                       className="ant-btn login-form-button ant-btn-primary btn-block text-white"
+                      style={{
+                        height: "40px",
+                        verticalAlign: "middle",
+                        lineHeight: "40px"
+                      }}
                     >
                       <FormattedMessage id="loginPageInstances.loginEmailPassword" />
                       <i className="material-icons t-14 text-middle pd-left-sm">
