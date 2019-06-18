@@ -182,14 +182,16 @@ class Sidebar extends Component {
 
     const workflowActionMenu = (
       <Menu>
-        <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              restore
-            </i>{" "}
-            <FormattedMessage id="workflowsInstances.viewActivityLog" />
-          </span>
-        </Menu.Item>
+        {this.props.config.permissions.includes("Can View Activity Log") ? (
+          <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
+            <span>
+              <i className="material-icons t-18 text-middle pd-right-sm">
+                restore
+              </i>{" "}
+              <FormattedMessage id="workflowsInstances.viewActivityLog" />
+            </span>
+          </Menu.Item>
+        ) : null}
 
         <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
           <span>
@@ -493,7 +495,12 @@ class Sidebar extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { workflowDetailsHeader, workflowDetails, currentStepFields } = state;
+  const {
+    workflowDetailsHeader,
+    workflowDetails,
+    currentStepFields,
+    config
+  } = state;
   return { workflowDetailsHeader, workflowDetails, currentStepFields };
 }
 
