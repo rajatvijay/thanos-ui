@@ -517,8 +517,9 @@ class StepBodyForm extends Component {
         onSubmit={this.handleSubmit}
         className="step-form"
         autoComplete="off"
+        style={{ padding: "29px 44px 27px 37px" }}
       >
-        <div className="pd-ard-lg">
+        <div>
           {showFieldVersion ? (
             <div className=" mr-bottom">
               <div className="version-item">
@@ -611,12 +612,11 @@ class StepBodyForm extends Component {
             })
           )}
         </div>
-
         <Divider className="no-margin" />
 
-        <div className="pd-ard-lg">
+        <div style={{ paddingTop: 30 }}>
           <Row>
-            <Col span={6}>
+            <Col span={8}>
               {this.props.stepData.completed_at ||
               this.props.stepData.is_locked ||
               !_.includes(this.props.permission, "Can submit a step") ||
@@ -629,22 +629,40 @@ class StepBodyForm extends Component {
                   <FormattedMessage id="commonTextInstances.submitButtonText" />
                 </Button>
               ) : (
-                <Button
-                  type="primary"
-                  size="large"
-                  className="no-print pd-ard"
-                  htmlType="submit"
-                  disabled={this.props.isSubmitting}
-                >
-                  {this.props.isSubmitting ? (
-                    <FormattedMessage id="commonTextInstances.submittingButtonText" />
-                  ) : (
-                    <FormattedMessage id="commonTextInstances.submitButtonText" />
-                  )}
-                </Button>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Button
+                    type="primary"
+                    size="large"
+                    className="no-print pd-ard"
+                    htmlType="submit"
+                    disabled={this.props.isSubmitting}
+                  >
+                    {this.props.isSubmitting ? (
+                      <FormattedMessage id="commonTextInstances.submittingButtonText" />
+                    ) : (
+                      <FormattedMessage id="commonTextInstances.submitButtonText" />
+                    )}
+                  </Button>
+                  <p
+                    style={{
+                      color: "#D40000",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      letterSpacing: "-0.02px",
+                      lineHeight: "15px",
+                      marginLeft: "30px",
+                      marginTop: "10px"
+                    }}
+                  >
+                    {this.props.currentStepFields.error &&
+                    Object.values(this.props.currentStepFields.error).length
+                      ? "Please fill out required fields"
+                      : ""}
+                  </p>
+                </div>
               )}
             </Col>
-            <Col span={18} className="text-right">
+            <Col span={16} className="text-right">
               {this.getStepStatus(this.props.stepData)}
             </Col>
           </Row>

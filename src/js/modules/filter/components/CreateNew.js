@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Menu, Dropdown, Icon } from "antd";
 import { connect } from "react-redux";
-import { workflowKindActions, createWorkflow } from "../../../../actions";
+import { workflowKindActions, createWorkflow } from "../../../actions";
 
 class CreateNew extends Component {
   loadWorkflowKind = () => {
@@ -85,8 +85,8 @@ class CreateNew extends Component {
             style={{
               backgroundColor: "#138BD6",
               borderRadius: "50%",
-              height: 40,
-              width: 40,
+              height: 39,
+              width: 39,
               lineHeight: "40px",
               textAlign: "center",
               fontSize: 24,

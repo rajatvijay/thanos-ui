@@ -280,7 +280,8 @@
 .ant-input,
 .react-tel-input input[type="text"],
 .react-tel-input input[type="tel"],
-.react-tel-input .flag-dropdown {
+.react-tel-input .flag-dropdown,
+.ant-input-number {
   border-radius: 0;
   border: none;
   border-bottom: 1px solid #000;
@@ -288,15 +289,32 @@
   color: #000;
   font-weight: 500;
   background: transparent;
+  &:focus,
+  &:active {
+    border-bottom-color: #000;
+    box-shadow: none;
+  }
+}
+
+.ant-select-focused .ant-select-selection,
+.ant-select-selection:focus,
+.ant-select-selection:active {
+  border-bottom-color: #000;
+  box-shadow: none;
 }
 
 .ant-input[disabled],
 .step-form .ant-input-disabled,
+.step-form .ant-input-number-disabled,
 .step-form .ant-select-disabled .ant-select-selection,
 .step-form .react-tel-input.disabled input {
   color: #000 !important;
   background: transparent !important;
   border-bottom: 1px solid #777 !important;
+}
+
+.ant-input-number:hover .ant-input-number-handler-wrap {
+  border-left: none;
 }
 
 span.ant-radio + * {

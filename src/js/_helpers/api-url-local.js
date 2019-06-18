@@ -1,15 +1,4 @@
-const getSite = site => {
-  let host = document.location.hostname;
-  let hostSplit = host.split(".");
-  let domain =
-    document.location.protocol +
-    "//api." +
-    hostSplit[1] +
-    "." +
-    hostSplit[2] +
-    "/api/v1/";
-  return domain;
-};
+export { baseUrl } from "../../config.js";
 
 const subDomainUrl = site => {
   let host = document.location.hostname;
@@ -18,5 +7,6 @@ const subDomainUrl = site => {
   return domain;
 };
 
-export const baseUrl = getSite();
+//export const baseUrl = "https://api.slackcart.com/api/v1/";
+
 export const baseUrl2 = subDomainUrl();

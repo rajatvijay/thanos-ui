@@ -14,7 +14,8 @@ import {
   Col,
   Select,
   Drawer,
-  Tooltip
+  Tooltip,
+  notification
 } from "antd";
 import {
   logout,
@@ -35,6 +36,14 @@ const MenuItemGroup = Menu.ItemGroup;
 const Search = Input.Search;
 const Option = Select.Option;
 
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
+
 class NavTop extends Component {
   constructor(props) {
     super(props);
@@ -50,10 +59,17 @@ class NavTop extends Component {
   }
 
   onSearch = e => {
-    if (e) {
-      this.props.dispatch(workflowActions.searchWorkflow(e));
+    if (this.state.searchInput.length >= 3) {
+      if (e) {
+        this.props.dispatch(workflowActions.searchWorkflow(e));
+      } else {
+        this.props.dispatch(workflowActions.getAll());
+      }
     } else {
-      this.props.dispatch(workflowActions.getAll());
+      openNotificationWithIcon({
+        type: "error",
+        message: "Please enter at least 3 characters to initiate search"
+      });
     }
   };
 
@@ -162,6 +178,7 @@ class NavTop extends Component {
     }
     let supportedLaguanges = this.props.config.supported_languages;
     let regexForUrl = /\/instances\/[\d]+/;
+
     return (
       <div>
         <div className="container navbar-top" id="navbar-top">
@@ -182,7 +199,7 @@ class NavTop extends Component {
                 </span>
 
                 <span className="logo" style={{ float: "left" }}>
-                  <a href="/">
+                  <a href={localStorage.getItem("magicLogin") ? "#" : "/"}>
                     {!this.props.config.loading && this.props.config.logo ? (
                       <img
                         alt={this.props.config.name}
@@ -191,7 +208,7 @@ class NavTop extends Component {
                     ) : !this.props.config.loading ? (
                       <h3>{this.props.config.name}</h3>
                     ) : (
-                      <h3>{authHeader.getClient()}</h3>
+                      <h3>{authHeader.tenant}</h3>
                     )}
                   </a>
                 </span>

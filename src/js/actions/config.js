@@ -7,7 +7,8 @@ export const configActions = {
 
 function getConfig() {
   return dispatch => {
-    dispatch(request());
+    //return {type:"hello"}
+    // dispatch(request());  to prevent reloading of page
 
     configService
       .getConfig()
