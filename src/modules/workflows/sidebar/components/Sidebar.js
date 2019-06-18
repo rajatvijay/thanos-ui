@@ -441,12 +441,11 @@ class Sidebar extends Component {
                                       paddingLeft: "10px",
                                       paddingTop: "5px",
                                       paddingBottom: "5px",
-                                      marginLeft: "-12px",
-                                      marginLeft: "-14px"
+                                      marginLeft: "-12px"
                                     }
                                   : {
-                                      backgroundColor: "#fafafa",
-                                      marginLeft: "-14px"
+                                      backgroundColor: "#fafafa"
+                                      // marginLeft: "-14px"
                                     }
                               }
                             >
