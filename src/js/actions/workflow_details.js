@@ -96,15 +96,15 @@ function getStepFields(step) {
   }
   return dispatch => {
     if (!step.doNotRefresh) {
-      // dispatch(request(step));
+      dispatch(request(step));
     }
 
     workflowDetailsService
       .getStepFields(step)
-      .then(
-        stepFields => dispatch(success(stepFields)),
-        error => dispatch(failure(error))
-      );
+      .then(stepFields => dispatch(success({ ...stepFields })))
+      .catch(e => {
+        dispatch(failure(e, step));
+      });
   };
 
   function request(step) {
@@ -117,8 +117,8 @@ function getStepFields(step) {
       step
     };
   }
-  function failure(error) {
-    return { type: workflowStepConstants.GET_STEPFIELDS_FAILURE, error };
+  function failure(error, step) {
+    return { type: workflowStepConstants.GET_STEPFIELDS_FAILURE, error, step };
   }
 }
 

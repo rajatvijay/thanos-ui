@@ -113,18 +113,7 @@ class Sidebar extends Component {
     }));
   };
 
-  updateActiveStep = () => {
-    this.setState({
-      groupId: new URL(window.location.href).searchParams.get("group"),
-      stepId: new URL(window.location.href).searchParams.get("step")
-    });
-  };
-
   componentDidMount() {
-    this.setState({
-      groupId: new URL(window.location.href).searchParams.get("group"),
-      stepId: new URL(window.location.href).searchParams.get("step")
-    });
     this.setState({
       groupId: String(this.props.selectedGroup),
       stepId: String(this.props.selectedStep)
@@ -133,25 +122,9 @@ class Sidebar extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      this.props.currentStepFields.currentStepFields !==
-      prevProps.currentStepFields.currentStepFields
-    ) {
-      if (
-        this.props.currentStepFields.currentStepFields.id !==
-        prevProps.currentStepFields.currentStepFields.id
-      ) {
-        this.setState({
-          groupId: new URL(window.location.href).searchParams.get("group"),
-          stepId: new URL(window.location.href).searchParams.get("step")
-        });
-      }
-    }
-
-    if (
       this.props.selectedGroup !== prevProps.selectedGroup ||
       this.props.selectedStep !== prevProps.selectedStep
     ) {
-      console.log("updating");
       this.setState({
         groupId: String(this.props.selectedGroup),
         stepId: String(this.props.selectedStep)
@@ -159,11 +132,12 @@ class Sidebar extends Component {
     }
   }
 
-  onClickOfLink = (groupid, stepid) => {
+  handleStepClick = (groupid, stepid) => {
     this.setState({
       groupId: String(groupid),
       stepId: String(stepid)
     });
+    this.props.onUpdateOfActiveStep(groupid, stepid);
   };
 
   onChangeOfCollapse = groupid => {
@@ -431,23 +405,25 @@ class Sidebar extends Component {
                         }
                       >
                         {stepgroup.steps.map(step => (
-                          <Link
-                            to={`${history.location.pathname}?group=${
-                              stepgroup.id
-                            }&step=${step.id}`}
+                          <span
+                            // to={`${history.location.pathname}?group=${
+                            //   stepgroup.id
+                            // }&step=${step.id}`}
                             style={
-                              groupId == stepgroup.id && stepId == step.id
+                              groupId === stepgroup.id && stepId === step.id
                                 ? {
                                     color: "#fff",
-                                    textDecoration: "none"
+                                    textDecoration: "none",
+                                    cursor: "pointer"
                                   }
                                 : {
                                     color: "#969696",
-                                    textDecoration: "none"
+                                    textDecoration: "none",
+                                    cursor: "pointer"
                                   }
                             }
                             onClick={event =>
-                              this.onClickOfLink(stepgroup.id, step.id, event)
+                              this.handleStepClick(stepgroup.id, step.id, event)
                             }
                             key={step.id}
                           >
@@ -498,7 +474,7 @@ class Sidebar extends Component {
                               )}
                               {step.name}
                             </p>
-                          </Link>
+                          </span>
                         ))}
                       </Panel>
                     ))

@@ -396,6 +396,9 @@ class StepBodyForm extends Component {
   };
 
   render = () => {
+    if (!this.props.currentStepFields) {
+      return null;
+    }
     let that = this;
     let row = [];
     let showFieldVersion =

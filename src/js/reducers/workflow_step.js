@@ -17,19 +17,27 @@ export function currentStepFields(state = initialState, action) {
     case stepConstants.GET_STEPFIELDS_REQUEST:
       return {
         ...state,
-        loading: true
+        [action.step.stepId]: {
+          loading: true
+        }
       };
     case stepConstants.GET_STEPFIELDS_SUCCESS:
       return {
         ...state,
-        loading: false,
-        currentStepFields: action.stepFields,
-        error: {}
+        [action.stepFields.id]: {
+          loading: false,
+          currentStepFields: action.stepFields,
+          error: {}
+        }
       };
+
     case stepConstants.GET_STEPFIELDS_FAILURE:
       return {
         ...state,
-        error: action.error
+        [action.step.stepId]: {
+          loading: false,
+          error: action.error
+        }
       };
 
     //////////////////////////////////
