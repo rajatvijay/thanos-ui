@@ -181,7 +181,7 @@ class Sidebar extends Component {
 
     const workflowActionMenu = (
       <Menu>
-        {this.props.config &&
+        {this.props.config.permissions &&
         this.props.config.permissions.includes("Can View Activity Log") ? (
           <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
             <span>
