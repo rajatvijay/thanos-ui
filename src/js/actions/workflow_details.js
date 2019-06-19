@@ -64,7 +64,7 @@ function getStepGroup(id) {
     workflowDetailsService
       .getStepGroup(id)
       .then(
-        stepGroups => dispatch(success(stepGroups)),
+        stepGroups => dispatch(success(stepGroups, id)),
         error => dispatch(failure(error))
       );
   };
@@ -72,10 +72,12 @@ function getStepGroup(id) {
   function request() {
     return { type: workflowDetailsConstants.GET_STEPGROUPS_REQUEST, id };
   }
-  function success(stepGroups) {
+  function success(stepGroups, id) {
+    console.log("step", id);
     return {
       type: workflowDetailsConstants.GET_STEPGROUPS_SUCCESS,
-      stepGroups
+      stepGroups,
+      id
     };
   }
   function failure(error) {
@@ -94,7 +96,7 @@ function getStepFields(step) {
   }
   return dispatch => {
     if (!step.doNotRefresh) {
-      dispatch(request(step));
+      // dispatch(request(step));
     }
 
     workflowDetailsService
@@ -163,9 +165,9 @@ function getComment(object_id, content_type, addtn, isEmbedded) {
 //Get workflow step  Version fileds data.
 function getStepVersionFields(step) {
   return dispatch => {
-    // if (!step.doNotRefresh) {
-    //   dispatch(request(step));
-    // }
+    if (!step.doNotRefresh) {
+      dispatch(request(step));
+    }
 
     workflowDetailsService
       .getStepVersionFields(step)

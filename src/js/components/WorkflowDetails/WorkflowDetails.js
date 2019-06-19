@@ -43,6 +43,7 @@ class WorkflowDetails extends Component {
   componentDidMount = () => {
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.getInitialData();
+    // this.setStepFromQuery()
 
     if (this.props.location.search) {
       this.setStepFromQuery();
@@ -87,28 +88,65 @@ class WorkflowDetails extends Component {
     if (location.search !== prevProps.location.search) {
       this.setStepFromQuery();
     }
+    // if(this.props.workflowIdFromPropsForModal && this.props.workflowDetails[workflowId] !== prevProps.workflowDetails[workflowId])
+    //     {
+    //       this.setStepFromQuery()
+    //     }
 
     //IF REQUIRED DATA IS LOADED AND CURRENT STEP DATA IS NOT AVAILABLE
     //CALCULATE CURRENT STEP DATA AND FETCH THE FEILDS.
-    if (
-      !this.props.location.search &&
-      !this.props.workflowDetails.loading &&
-      wd.workflowDetails.stepGroups &&
-      wd.workflowDetails.stepGroups.results[0].workflow === workflowId
-    ) {
-      this.updateCurrentActiveStep();
-    }
 
-    //WHEN SIDEBAR IS UPDATED AND DATA HAS CHANGED
-    //UPDATE CURRENT ACTIVE STEP
+    //before
+    // if (
+    //   !this.props.location.search &&
+    //   !this.props.workflowDetails.loading &&
+    //   wd.workflowDetails.stepGroups &&
+    //   wd.workflowDetails.stepGroups.results[0].workflow === workflowId
+    // ) {
+    //   this.updateCurrentActiveStep();
+    // }
+
+    // //WHEN SIDEBAR IS UPDATED AND DATA HAS CHANGED
+    // //UPDATE CURRENT ACTIVE STEP
+    // if (
+    //   wd.workflowDetails &&
+    //   prevProps.workflowDetails.workflowDetails &&
+    //   wd.workflowDetails.stepGroups !==
+    //     prevProps.workflowDetails.workflowDetails.stepGroups &&
+    //   !params.has("backing")
+    // ) {
+    //   this.updateCurrentActiveStep();
+    // }
+    console.log("work", this.props, prevProps, workflowId);
     if (
-      wd.workflowDetails &&
-      prevProps.workflowDetails.workflowDetails &&
-      wd.workflowDetails.stepGroups !==
-        prevProps.workflowDetails.workflowDetails.stepGroups &&
-      !params.has("backing")
+      this.props.workflowDetails[workflowId] &&
+      this.props.workflowDetails[workflowId].workflowDetails
     ) {
-      this.updateCurrentActiveStep();
+      if (
+        !this.props.location.search &&
+        !this.props.workflowDetails[workflowId].workflowDetails.loading &&
+        this.props.workflowDetails[workflowId].workflowDetails.stepGroups &&
+        this.props.workflowDetails[workflowId].workflowDetails.stepGroups
+          .results[0].workflow === workflowId
+      ) {
+        console.log("21st");
+        this.updateCurrentActiveStep();
+      }
+
+      //WHEN SIDEBAR IS UPDATED AND DATA HAS CHANGED
+      //UPDATE CURRENT ACTIVE STEP
+      if (
+        //this.props.workflowDetails &&
+        prevProps.workflowDetails[workflowId].workflowDetails &&
+        this.props.workflowDetails[workflowId].workflowDetails.stepGroups !==
+          prevProps.workflowDetails[workflowId].workflowDetails.stepGroups
+        //    &&
+        // !params.has("backing")
+      ) {
+        console.log("2nd");
+        this.updateCurrentActiveStep();
+        this.setStepFromQuery();
+      }
     }
   };
 
@@ -117,11 +155,14 @@ class WorkflowDetails extends Component {
   };
 
   updateCurrentActiveStep = () => {
+    console.log("update");
     const { workflowIdFromPropsForModal } = this.props;
 
     let workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    const { stepGroups } = this.props.workflowDetails.workflowDetails;
+    const { stepGroups } = this.props.workflowDetails[
+      workflowId
+    ].workflowDetails;
     //calculate activit step
     let act = currentActiveStep(stepGroups, workflowId);
     this.setState({
@@ -156,6 +197,10 @@ class WorkflowDetails extends Component {
 
   getInitialData = () => {
     //Get workflow  basic data
+    //console.log("id",this.props)
+
+    //const {workflowId} = this.props
+
     this.props.dispatch(workflowFiltersActions.getStatusData());
 
     if (
@@ -173,20 +218,45 @@ class WorkflowDetails extends Component {
     // querystring to object queryparams
     //calculate step track
     //dispatch workflow step details
+    console.log("step");
     const params = new URLSearchParams(this.props.location.search);
     const { workflowIdFromPropsForModal } = this.props;
 
+    const workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+
+    // if(this.props.workflowDetails[workflowId] && this.props.workflowDetails[workflowId].workflowDetails ){
+    //   const { stepGroups } = this.props.workflowDetails[workflowId].workflowDetails;
+    //   const act = currentActiveStep(stepGroups, workflowId);
+    //       const groupId = act.groupId;
+    //       const stepId = act.stepId
+
+    //       this.state.selectedGroup = groupId;
+    //       this.state.selectedStep = stepId;
+
+    //       let stepTrack = {
+    //         workflowId,
+    //         groupId: groupId,
+    //         stepId: stepId
+    //       };
+
+    //       this.fetchStepData(stepTrack);
+    // }
+
     if (params.has("group") && params.has("step")) {
+      //const { stepGroups } = this.props.workflowDetails[workflowId].workflowDetails;
+      //calculate activit step
+      // const act = currentActiveStep(stepGroups, workflowId);
       let groupId = params.get("group");
       let stepId = params.get("step");
+      // const groupId = act.groupId;
+      // const stepId = act.stepId
 
       this.state.selectedGroup = groupId;
       this.state.selectedStep = stepId;
 
       let stepTrack = {
-        workflowId:
-          workflowIdFromPropsForModal ||
-          parseInt(this.props.match.params.id, 10),
+        workflowId,
         groupId: groupId,
         stepId: stepId
       };
@@ -259,7 +329,7 @@ class WorkflowDetails extends Component {
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal } = this.props;
+    const { minimalUI, workflowIdFromPropsForModal, workflowId } = this.props;
 
     //     const workflowId = workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     //   //const { stepGroups } = workflowDetails.workflowDetails;
@@ -348,6 +418,7 @@ class WorkflowDetails extends Component {
                 selectedGroup={this.state.selectedGroup}
                 selectedStep={this.state.selectedStep}
                 minimalUI={minimalUI}
+                workflowIdFromDetailsToSidebar={workflowId}
               />
               <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
                 <div className="printOnly ">
@@ -360,6 +431,7 @@ class WorkflowDetails extends Component {
                     }}
                   >
                     <StepBody
+                      workflowIdFromPropsForModal={workflowIdFromPropsForModal}
                       toggleSidebar={this.callBackCollapser}
                       changeFlag={this.changeFlag}
                       getIntegrationComments={this.getIntegrationComments}

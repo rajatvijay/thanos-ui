@@ -453,6 +453,10 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
+        fieldParams.workflowId = that.props.workflowIdFromPropsForModal
+          ? that.props.workflowIdFromPropsForModal
+          : fieldParams.workflowId;
+        console.log("field", fieldParams, that.props);
         return <FieldItem fieldParams={fieldParams} />;
       },
       getSizeFraction(field) {

@@ -25,17 +25,23 @@ const { Sider } = Layout;
 const Panel = Collapse.Panel;
 
 class Sidebar extends Component {
-  state = {
-    current:
-      Object.values(this.props.workflowDetailsHeader).length &&
-      this.props.workflowDetailsHeader.workflowDetailsHeader
-        ? this.props.workflowDetailsHeader.workflowDetailsHeader.status.label
-        : null,
-    showSidebar: false,
-    isWorkflowPDFModalVisible: false,
-    groupId: null,
-    stepId: null
-  };
+  constructor(props) {
+    const { workflowIdFromDetailsToSidebar } = props;
+    super();
+
+    this.state = {
+      current:
+        Object.values(props.workflowDetailsHeader).length &&
+        props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+          ? props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
+              .label
+          : null,
+      showSidebar: false,
+      isWorkflowPDFModalVisible: false,
+      groupId: null,
+      stepId: null
+    };
+  }
 
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
@@ -50,7 +56,10 @@ class Sidebar extends Component {
   };
 
   openCommentSidebar = () => {
-    let object_id = this.props.workflowDetailsHeader.workflowDetailsHeader.id;
+    const { workflowIdFromDetailsToSidebar } = this.props;
+    let object_id = this.props.workflowDetailsHeader[
+      workflowIdFromDetailsToSidebar
+    ].id;
     this.callBackCollapser(object_id, "all_data");
   };
 
@@ -166,13 +175,14 @@ class Sidebar extends Component {
       workflowDetailsHeader,
       workflowDetails,
       minimalUI,
-      act
+      act,
+      workflowIdFromDetailsToSidebar
     } = this.props;
     console.log("min", minimalUI);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
-      workflowDetailsHeader.workflowDetailsHeader
-        ? workflowDetailsHeader.workflowDetailsHeader.lc_data
+      workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+        ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
         : [];
     lc_data = lc_data.filter(
       (data, index) => data.display_type == "normal" && data.value
@@ -254,7 +264,11 @@ class Sidebar extends Component {
               className="activity-log-drawer"
             >
               <AuditListTabs
-                id={this.props.workflowDetailsHeader.workflowDetailsHeader.id}
+                id={
+                  this.props.workflowDetailsHeader[
+                    workflowIdFromDetailsToSidebar
+                  ].id
+                }
               />
             </Drawer>
           ) : null}
@@ -278,8 +292,8 @@ class Sidebar extends Component {
                 }}
               >
                 {Object.values(workflowDetailsHeader).length &&
-                workflowDetailsHeader.workflowDetailsHeader
-                  ? workflowDetailsHeader.workflowDetailsHeader.name
+                workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+                  ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].name
                   : ""}
                 <Dropdown
                   overlay={workflowActionMenu}
@@ -326,7 +340,9 @@ class Sidebar extends Component {
             </div>
           )}
 
-          {workflowDetails.loading && minimalUI ? (
+          {workflowDetails[workflowIdFromDetailsToSidebar] &&
+          workflowDetails[workflowIdFromDetailsToSidebar].loading &&
+          minimalUI ? (
             <Icon
               type="loading"
               spin
@@ -347,9 +363,12 @@ class Sidebar extends Component {
               onChange={this.onChangeOfCollapse}
               className="ant-collapse-content"
             >
-              {Object.values(workflowDetails).length &&
-              workflowDetails.workflowDetails
-                ? workflowDetails.workflowDetails.stepGroups.results
+              {workflowDetails[workflowIdFromDetailsToSidebar] &&
+              Object.values(workflowDetails).length &&
+              workflowDetails[workflowIdFromDetailsToSidebar].workflowDetails
+                ? workflowDetails[
+                    workflowIdFromDetailsToSidebar
+                  ].workflowDetails.stepGroups.results
                     .filter(group => group.steps.length)
                     .map((stepgroup, index) => (
                       <Panel
