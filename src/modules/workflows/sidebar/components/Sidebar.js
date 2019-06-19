@@ -500,7 +500,7 @@ function mapStateToProps(state, ownProps) {
     currentStepFields,
     config
   } = state;
-  return { workflowDetailsHeader, workflowDetails, currentStepFields };
+  return { workflowDetailsHeader, workflowDetails, currentStepFields, config };
 }
 
 export default connect(mapStateToProps)(Sidebar);
