@@ -326,7 +326,7 @@ class WorkflowItem extends React.Component {
             <Modal
               // destroyOnClose={true}
               style={{ left: 150 }}
-              closable={false}
+              closable={true}
               footer={null}
               bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
               width={1100}
