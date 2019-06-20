@@ -312,7 +312,7 @@ class WorkflowDetails extends Component {
                   color: "#fff"
                 }}
               >
-                keyboard_backspace
+                chevron_left
               </i>
             </span>
           </div>
