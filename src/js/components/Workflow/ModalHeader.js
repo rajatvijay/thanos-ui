@@ -16,8 +16,9 @@ class ModalHeader extends Component {
           alignItems: "center",
           position: "fixed",
           zIndex: 1,
-          width: 1100,
-          backgroundColor: "white"
+          width: "77vw",
+          backgroundColor: "white",
+          paddingRight: "60px"
         }}
       >
         <h2>{workflow.name}</h2>

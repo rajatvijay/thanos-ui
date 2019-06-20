@@ -87,16 +87,16 @@ class WorkflowItem extends React.Component {
   };
 
   handleOk = e => {
-    console.log(e);
+    // console.log(e);
     this.setState({
       visible: false
     });
   };
 
   handleCancel = e => {
-    console.log(this.props);
+    // console.log(this.props);
     //this.props.history.replace("/workflows/instances");
-    console.log(e);
+    // console.log(e);
     this.setState({
       visible: false
     });
@@ -322,30 +322,27 @@ class WorkflowItem extends React.Component {
         }
       >
         <div>
-          {this.state.visible && (
-            <Modal
-              // destroyOnClose={true}
-              style={{ left: 150 }}
-              closable={true}
-              footer={null}
-              bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
-              width={1100}
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              <ModalHeader workflow={this.props.workflow} />
-              <WorkflowDetails
-                location={this.props.location}
-                minimalUI={true}
-                workflowIdFromPropsForModal={this.props.workflow.id}
-              />
+          {/* {this.state.visible && ( */}
+          <Modal
+            style={{ left: "22vw", margin: 0 }}
+            footer={null}
+            bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
+            width="77vw"
+            destroyOnClose={true}
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <ModalHeader workflow={this.props.workflow} />
+            <WorkflowDetails
+              location={this.props.location}
+              minimalUI={true}
+              workflowIdFromPropsForModal={this.props.workflow.id}
+            />
 
-              <ModalFooter
-                workflowIdFromPropsForModal={this.props.workflow.id}
-              />
-            </Modal>
-          )}
+            <ModalFooter workflowIdFromPropsForModal={this.props.workflow.id} />
+          </Modal>
+          {/* )} */}
 
           {/* <Collapsible
             trigger={

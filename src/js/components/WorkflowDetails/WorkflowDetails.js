@@ -430,7 +430,8 @@ class WorkflowDetails extends Component {
                     id="StepBody"
                     style={{
                       background: "#FAFAFA",
-                      margin: minimalUI ? "0px 24px 0px 0px" : "24px"
+                      margin: minimalUI ? "0px 24px 0px 0px" : "24px",
+                      marginLeft: 0
                     }}
                   >
                     <StepBody
