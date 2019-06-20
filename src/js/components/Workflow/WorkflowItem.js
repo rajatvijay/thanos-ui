@@ -74,6 +74,12 @@ class WorkflowItem extends React.Component {
   };
 
   showModal = id => {
+    //this.props.history.replace("/workflows/instances"+this.props.location.search.params.id);
+    //this.props.location.search = ""
+    //  if(this.props.match.params.id){
+    //   this.props.history.replace("/workflows/instances/"+this.props.match.params.id+"/");
+    //  }
+
     this.setState({
       visible: true,
       workflowId: id
@@ -88,7 +94,8 @@ class WorkflowItem extends React.Component {
   };
 
   handleCancel = e => {
-    this.props.history.replace("/workflows/instances");
+    console.log(this.props);
+    //this.props.history.replace("/workflows/instances");
     console.log(e);
     this.setState({
       visible: false
@@ -296,6 +303,7 @@ class WorkflowItem extends React.Component {
     let that = this;
     //console.log("work",this.props.workflow)
     //const {location}
+    console.log("location", this.props);
     //console.log("workflow",this.props)
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;

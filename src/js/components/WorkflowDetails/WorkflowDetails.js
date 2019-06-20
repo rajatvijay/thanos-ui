@@ -30,7 +30,7 @@ class WorkflowDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      workflowId: null,
+      // workflowId: null,
       selectedStep: null,
       selectedGroup: null,
       printing: false,
@@ -41,12 +41,10 @@ class WorkflowDetails extends Component {
   }
 
   componentDidMount = () => {
+    // TODO: Why??
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.getInitialData();
-
-    if (this.props.location.search) {
-      this.setStepFromQuery();
-    }
+    // this.setStepFromQuery()
   };
 
   componentDidUpdate = prevProps => {
@@ -57,14 +55,42 @@ class WorkflowDetails extends Component {
       workflowIdFromPropsForModal
     } = this.props;
 
-    let wd = workflowDetails;
+    // let wd = workflowDetails;
     //SET WORKFLOW ID FROM ROUTER
     let workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     let thisCurrent = currentStepFields;
     let prevCurrent = prevProps.currentStepFields;
 
-    const params = new URLSearchParams(this.props.location.search);
+    const newWorflowId =
+      this.props.workflowIdFromPropsForModal ||
+      Number(this.props.match.params.id);
+    const oldWorkflowId =
+      prevProps.workflowIdFromPropsForModal ||
+      Number(prevProps.match.params.id);
+
+    if (newWorflowId !== oldWorkflowId) {
+      this.updateCurrentActiveStep();
+    }
+
+    try {
+      if (
+        prevProps.workflowDetails[oldWorkflowId].loading &&
+        !this.props.workflowDetails[newWorflowId].loading
+      ) {
+        this.updateCurrentActiveStep();
+      }
+    } catch (e) {
+      console.log(
+        "Making first API call for step fields",
+        "Error",
+        e,
+        prevProps.workflowDetails[oldWorkflowId],
+        this.props.workflowDetails[newWorflowId]
+      );
+    }
+
+    // const params = new URLSearchParams(this.props.location.search);
 
     //CHECK IF THE STEP COMPLETION HAS CHANGED//
     //CALCULATE STEP ON SUBMISSION OR UNDO//
@@ -84,32 +110,73 @@ class WorkflowDetails extends Component {
 
     //todo .search
 
-    if (location.search !== prevProps.location.search) {
-      this.setStepFromQuery();
-    }
+    // if (location.search !== prevProps.location.search) {
+    //   this.setStepFromQuery();
+    // }
+    // if(this.props.workflowIdFromPropsForModal && this.props.workflowDetails[workflowId] !== prevProps.workflowDetails[workflowId])
+    //     {
+    //       this.setStepFromQuery()
+    //     }
 
     //IF REQUIRED DATA IS LOADED AND CURRENT STEP DATA IS NOT AVAILABLE
     //CALCULATE CURRENT STEP DATA AND FETCH THE FEILDS.
-    if (
-      !this.props.location.search &&
-      !this.props.workflowDetails.loading &&
-      wd.workflowDetails.stepGroups &&
-      wd.workflowDetails.stepGroups.results[0].workflow === workflowId
-    ) {
-      this.updateCurrentActiveStep();
-    }
 
-    //WHEN SIDEBAR IS UPDATED AND DATA HAS CHANGED
-    //UPDATE CURRENT ACTIVE STEP
-    if (
-      wd.workflowDetails &&
-      prevProps.workflowDetails.workflowDetails &&
-      wd.workflowDetails.stepGroups !==
-        prevProps.workflowDetails.workflowDetails.stepGroups &&
-      !params.has("backing")
-    ) {
-      this.updateCurrentActiveStep();
-    }
+    //before
+    // if (
+    //   !this.props.location.search &&
+    //   !this.props.workflowDetails.loading &&
+    //   wd.workflowDetails.stepGroups &&
+    //   wd.workflowDetails.stepGroups.results[0].workflow === workflowId
+    // ) {
+    //   this.updateCurrentActiveStep();
+    // }
+
+    // //WHEN SIDEBAR IS UPDATED AND DATA HAS CHANGED
+    // //UPDATE CURRENT ACTIVE STEP
+    // if (
+    //   wd.workflowDetails &&
+    //   prevProps.workflowDetails.workflowDetails &&
+    //   wd.workflowDetails.stepGroups !==
+    //     prevProps.workflowDetails.workflowDetails.stepGroups &&
+    //   !params.has("backing")
+    // ) {
+    //   this.updateCurrentActiveStep();
+    // }
+    // console.log("work", this.props, prevProps, workflowId);
+    // if (
+    //   this.props.workflowDetails[workflowId] &&
+    //   this.props.workflowDetails[workflowId].workflowDetails
+    // ) {
+    //   if (
+    //     !this.props.location.search &&
+    //     !this.props.workflowDetails[workflowId].workflowDetails.loading &&
+    //     this.props.workflowDetails[workflowId].workflowDetails.stepGroups &&
+    //     this.props.workflowDetails[workflowId].workflowDetails.stepGroups
+    //       .results[0].workflow === workflowId
+    //   ) {
+    //     console.log("21st");
+    //     // TODO: Why?? [Rajat]
+    //     // this.updateCurrentActiveStep();
+    //   }
+
+    //   //WHEN SIDEBAR IS UPDATED AND DATA HAS CHANGED
+    //   //UPDATE CURRENT ACTIVE STEP
+    //   if (
+    //     //this.props.workflowDetails &&
+    //     prevProps.workflowDetails[workflowId].workflowDetails &&
+    //     this.props.workflowDetails[workflowId].workflowDetails.stepGroups !==
+    //       prevProps.workflowDetails[workflowId].workflowDetails.stepGroups
+    //     //    &&
+    //     // !params.has("backing")
+    //   ) {
+    //     console.log("2nd");
+    //     this.updateCurrentActiveStep();
+    //     // this.setStepFromQuery();
+    //   }
+    // }
+    // if () {
+
+    // }
   };
 
   updateSidebar = id => {
@@ -117,29 +184,31 @@ class WorkflowDetails extends Component {
   };
 
   updateCurrentActiveStep = () => {
+    console.log("update");
     const { workflowIdFromPropsForModal } = this.props;
 
     let workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    const { stepGroups } = this.props.workflowDetails.workflowDetails;
+    const { stepGroups } = this.props.workflowDetails[
+      workflowId
+    ].workflowDetails;
     //calculate activit step
     let act = currentActiveStep(stepGroups, workflowId);
-    this.setState({
-      selectedGroup: act.groupId,
-      selectedStep: act.stepId
-    });
+    this.setState(
+      {
+        selectedGroup: act.groupId,
+        selectedStep: act.stepId
+      },
+      () => {
+        let stepTrack = {
+          workflowId,
+          groupId: this.state.selectedGroup,
+          stepId: this.state.selectedStep
+        };
 
-    if (!workflowIdFromPropsForModal) {
-      history.replace(
-        `/workflows/instances/${workflowId}?group=${act.groupId}&step=${
-          act.stepId
-        }`
-      );
-    } else {
-      history.replace(
-        `/workflows/instances/?group=${act.groupId}&step=${act.stepId}`
-      );
-    }
+        this.fetchStepData(stepTrack);
+      }
+    );
   };
 
   checkWorkflowCompetion = () => {
@@ -156,6 +225,10 @@ class WorkflowDetails extends Component {
 
   getInitialData = () => {
     //Get workflow  basic data
+    //console.log("id",this.props)
+
+    //const {workflowId} = this.props
+
     this.props.dispatch(workflowFiltersActions.getStatusData());
 
     if (
@@ -174,47 +247,16 @@ class WorkflowDetails extends Component {
     });
   };
 
-  setStepFromQuery = () => {
-    // querystring to object queryparams
-    //calculate step track
-    //dispatch workflow step details
-    const params = new URLSearchParams(this.props.location.search);
-    const { workflowIdFromPropsForModal } = this.props;
-
-    if (params.has("group") && params.has("step")) {
-      let groupId = params.get("group");
-      let stepId = params.get("step");
-
-      this.state.selectedGroup = groupId;
-      this.state.selectedStep = stepId;
-
-      let stepTrack = {
-        workflowId:
-          workflowIdFromPropsForModal ||
-          parseInt(this.props.match.params.id, 10),
-        groupId: groupId,
-        stepId: stepId
-      };
-
-      this.fetchStepData(stepTrack);
-    }
-
-    if (params.has("object_id") && params.has("type")) {
-      this.props.dispatch(
-        workflowDetailsActions.getComment(
-          params.get("object_id"),
-          params.get("type")
-        )
-      );
-    }
-  };
-
   selectActiveStep = (step_id, stepGroup_id) => {
     this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
   };
 
   fetchStepData = payload => {
-    this.props.dispatch(workflowDetailsActions.getStepFields(payload));
+    const payloadWithMeta = {
+      ...payload,
+      fromEmbedded: this.props.fromEmbedded
+    };
+    this.props.dispatch(workflowDetailsActions.getStepFields(payloadWithMeta));
   };
 
   isParentWorkflow = () => {
@@ -261,10 +303,35 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
 
+  getStepDetailsData = workflowId => {
+    const stepTrack = {
+      workflowId,
+      groupId: this.state.selectedGroup,
+      stepId: this.state.selectedStep
+    };
+
+    this.fetchStepData(stepTrack);
+  };
+
+  handleUpdateOfActiveStep = (groupId, stepId) => {
+    this.setState(
+      {
+        selectedGroup: groupId,
+        selectedStep: stepId
+      },
+      () => {
+        this.getStepDetailsData(
+          this.props.workflowIdFromPropsForModal ||
+            Number(this.props.match.params.id)
+        );
+      }
+    );
+  };
+
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal } = this.props;
+    const { minimalUI, workflowIdFromPropsForModal, workflowId } = this.props;
 
     //     const workflowId = workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     //   //const { stepGroups } = workflowDetails.workflowDetails;
@@ -353,6 +420,8 @@ class WorkflowDetails extends Component {
                 selectedGroup={this.state.selectedGroup}
                 selectedStep={this.state.selectedStep}
                 minimalUI={minimalUI}
+                workflowIdFromDetailsToSidebar={workflowId}
+                onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
               />
               <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
                 <div className="printOnly ">
@@ -365,6 +434,8 @@ class WorkflowDetails extends Component {
                     }}
                   >
                     <StepBody
+                      stepId={this.state.selectedStep}
+                      workflowIdFromPropsForModal={workflowIdFromPropsForModal}
                       toggleSidebar={this.callBackCollapser}
                       changeFlag={this.changeFlag}
                       getIntegrationComments={this.getIntegrationComments}

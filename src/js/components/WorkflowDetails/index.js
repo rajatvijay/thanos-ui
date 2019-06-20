@@ -52,6 +52,7 @@ class WorkflowDetailsRoot extends Component {
   setWorkflowId = () => {
     const { workflowIdFromPropsForModal } = this.props;
 
+    //if(!workflowIdFromPropsForModal){
     let WFId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     if (this.state.workflowId !== WFId) {
@@ -60,6 +61,7 @@ class WorkflowDetailsRoot extends Component {
       });
       this.props.dispatch(navbarActions.showFilterMenu());
     }
+    //}
   };
 
   verifyAuth = () => {
@@ -73,6 +75,7 @@ class WorkflowDetailsRoot extends Component {
 
   fetchWorkflowData = () => {
     //Get workflow  basic data
+
     this.props.dispatch(workflowDetailsActions.getById(this.state.workflowId));
     this.props.dispatch(
       workflowDetailsActions.getStepGroup(this.state.workflowId)

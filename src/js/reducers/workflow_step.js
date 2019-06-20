@@ -17,19 +17,27 @@ export function currentStepFields(state = initialState, action) {
     case stepConstants.GET_STEPFIELDS_REQUEST:
       return {
         ...state,
-        loading: true
+        [action.step.stepId]: {
+          loading: true
+        }
       };
     case stepConstants.GET_STEPFIELDS_SUCCESS:
       return {
         ...state,
-        loading: false,
-        currentStepFields: action.stepFields,
-        error: {}
+        [action.stepFields.id]: {
+          loading: false,
+          currentStepFields: action.stepFields,
+          error: {}
+        }
       };
+
     case stepConstants.GET_STEPFIELDS_FAILURE:
       return {
         ...state,
-        error: action.error
+        [action.step.stepId]: {
+          loading: false,
+          error: action.error
+        }
       };
 
     //////////////////////////////////
@@ -38,22 +46,30 @@ export function currentStepFields(state = initialState, action) {
     case stepConstants.SUBMIT_REQUEST:
       return {
         ...state,
-        isSubmitting: true,
-        loading: true
+        [action.payload.id]: {
+          isSubmitting: true,
+          loading: true
+        }
       };
     case stepConstants.SUBMIT_SUCCESS:
       return {
         ...state,
-        loading: false,
-        isSubmitting: false,
-        currentStepFields: action.stepData
+        [action.stepData.id]: {
+          loading: false,
+          isSubmitting: false,
+          currentStepFields: action.stepData
+        }
       };
     case stepConstants.SUBMIT_FAILURE:
       return {
         ...state,
-        isSubmitting: false,
-        error: action.error
+        [action.payload.id]: {
+          isSubmitting: false,
+          error: action.error
+        }
       };
+
+    // TODO: Fix the actions below this, when cleaning!
 
     ////////////////////////////////////////////////////////////
     //Update step data on first/initial answer OR POST REQUEST//

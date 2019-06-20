@@ -17,28 +17,18 @@ class StepBody extends Component {
     };
   }
 
-  shouldComponentUpdated = nextProps => {
-    if (
-      this.props.currentStepFields.currentStepFields !== {} &&
-      this.props.currentStepFields.currentStepFields !==
-        nextProps.currentStepFields.currentStepFields
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   addComment = stepData => {
     this.props.toggleSidebar(stepData.id, "step");
   };
 
   onVersionChange = e => {
     this.versionToggle();
+    const currentStepFields = this.props.currentStepFields[this.props.stepId]
+      .currentStepFields;
     let stepTrack = {
-      workflowId: this.props.currentStepFields.currentStepFields.workflow,
-      groupId: this.props.currentStepFields.currentStepFields.step_group,
-      stepId: this.props.currentStepFields.currentStepFields.id,
+      workflowId: currentStepFields.workflow,
+      groupId: currentStepFields.step_group,
+      stepId: currentStepFields.id,
       versionId: e.key
     };
 
@@ -50,17 +40,16 @@ class StepBody extends Component {
   };
 
   versionDropDown = () => {
+    const currentStepFields = this.props.currentStepFields[this.props.stepId]
+      .currentStepFields;
     const versionList = (
       <Menu onClick={this.onVersionChange}>
-        {this.props.currentStepFields.currentStepFields.versions.length > 0 ? (
-          _.map(
-            this.props.currentStepFields.currentStepFields.versions,
-            function(i) {
-              let str = i.label;
-              let strMod = str.replace(/Created/g, "Submitted");
-              return <Menu.Item key={i.value}> {strMod}</Menu.Item>;
-            }
-          )
+        {currentStepFields.versions.length > 0 ? (
+          _.map(currentStepFields.versions, function(i) {
+            let str = i.label;
+            let strMod = str.replace(/Created/g, "Submitted");
+            return <Menu.Item key={i.value}> {strMod}</Menu.Item>;
+          })
         ) : (
           <Menu.Item key={0} disabled>
             {" "}
@@ -87,13 +76,15 @@ class StepBody extends Component {
 
   render = () => {
     const loading =
-      this.props.currentStepFields.loading ||
+      (this.props.currentStepFields[this.props.stepId] &&
+        this.props.currentStepFields[this.props.stepId].loading) ||
       this.props.workflowDetails.loading;
 
     var stepData = null;
 
-    if (!loading && this.props.currentStepFields) {
-      stepData = this.props.currentStepFields.currentStepFields;
+    if (!loading && this.props.currentStepFields[this.props.stepId]) {
+      stepData = this.props.currentStepFields[this.props.stepId]
+        .currentStepFields;
     } else {
       stepData = {};
     }
@@ -233,8 +224,14 @@ class StepBody extends Component {
                 showVersion={this.state.showVersion}
                 versionToggle={this.versionToggle}
                 permission={this.props.config.permissions}
-                isSubmitting={this.props.currentStepFields.isSubmitting}
+                isSubmitting={
+                  this.props.currentStepFields[this.props.stepId] &&
+                  this.props.currentStepFields[this.props.stepId].isSubmitting
+                }
                 dynamicUserPerms={dynamicUserPerms}
+                currentStepFields={
+                  this.props.currentStepFields[this.props.stepId]
+                }
               />
             </div>
           ) : (

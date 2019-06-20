@@ -396,6 +396,9 @@ class StepBodyForm extends Component {
   };
 
   render = () => {
+    if (!this.props.currentStepFields) {
+      return null;
+    }
     let that = this;
     let row = [];
     let showFieldVersion =
@@ -453,6 +456,10 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
+        fieldParams.workflowId = that.props.workflowIdFromPropsForModal
+          ? that.props.workflowIdFromPropsForModal
+          : fieldParams.workflowId;
+        console.log("field", fieldParams, that.props);
         return <FieldItem fieldParams={fieldParams} />;
       },
       getSizeFraction(field) {
