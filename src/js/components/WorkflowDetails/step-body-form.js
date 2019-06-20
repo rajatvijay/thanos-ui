@@ -517,7 +517,10 @@ class StepBodyForm extends Component {
         onSubmit={this.handleSubmit}
         className="step-form"
         autoComplete="off"
-        style={{ padding: "29px 44px 27px 37px" }}
+        style={{
+          padding: "29px 44px 27px 37px",
+          marginBottom: "100px"
+        }}
       >
         <div>
           {showFieldVersion ? (

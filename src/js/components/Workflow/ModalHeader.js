@@ -17,7 +17,8 @@ class ModalHeader extends Component {
           position: "fixed",
           zIndex: 1,
           width: 1100,
-          backgroundColor: "white"
+          backgroundColor: "white",
+          boxShadow: "rgba(0,0,0,0.05) 0px 5px 10px"
         }}
       >
         <h2>{workflow.name}</h2>
