@@ -139,7 +139,8 @@ class ChildWorkflowField2 extends Component {
       showFilters: false,
       bulkActionWorkflowChecked: [],
       isBulkActionModalOpen: false,
-      actionSelected: null
+      actionSelected: null,
+      childWorkflow: null
     };
   }
 
@@ -954,7 +955,7 @@ class ChildWorkflowField2 extends Component {
       workflowDetailsHeader,
       currentStepFields
     } = props;
-    const { bulkActionWorkflowChecked } = this.state;
+    const { bulkActionWorkflowChecked, childWorkflow } = this.state;
     let that = this;
 
     const u = new URL(window.location.href);
@@ -964,9 +965,7 @@ class ChildWorkflowField2 extends Component {
       : null;
 
     let kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
-    let workflowHeaderChild = selectedWorkflow
-      ? workflowDetailsHeader[selectedWorkflow].children
-      : [];
+    let workflowHeaderChild = childWorkflow ? childWorkflow : [];
     const bulkActionChilren = workflowHeaderChild;
     workflowHeaderChild.forEach((child, index) => {
       kindList.forEach(kind => {
