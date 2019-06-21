@@ -31,9 +31,7 @@ function getField(fieldDetail, OnFieldChange, fieldList, getFieldDecorator) {
           )(
             <Input
               disabled={fieldDetail.disabled}
-              onChange={event =>
-                OnFieldChange(event, fieldDetail.tag, fieldDetail.field_type)
-              }
+              onChange={event => OnFieldChange(event, fieldDetail.tag)}
             />
           )}
         </Form.Item>
@@ -57,9 +55,7 @@ function getField(fieldDetail, OnFieldChange, fieldList, getFieldDecorator) {
             }
           )(
             <Radio.Group
-              onChange={event =>
-                OnFieldChange(event, fieldDetail.tag, fieldDetail.field_type)
-              }
+              onChange={event => OnFieldChange(event, fieldDetail.tag)}
             >
               <Radio.Button value="true">Yes</Radio.Button>
               <Radio.Button value="false">NO</Radio.Button>
@@ -93,16 +89,11 @@ class BulkActionFields extends Component {
     }
   }
 
-  onFieldChange = (event, fieldName, type) => {
+  onFieldChange = (event, fieldName) => {
     this.setState({
       fieldList: {
         ...this.state.fieldList,
-        [fieldName]:
-          type === "bool"
-            ? event.target.value
-              ? true
-              : false
-            : event.target.value
+        [fieldName]: event.target.value
       }
     });
   };
@@ -145,8 +136,7 @@ class BulkActionFields extends Component {
               this.props.onCloseBulkActionModal();
               return openNotificationWithIcon({
                 type: "success",
-                message:
-                  "Your request has been submitted, action will be performed shortly."
+                message: "Action successfully performed!"
               });
             }
           }
