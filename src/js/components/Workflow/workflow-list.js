@@ -108,21 +108,24 @@ class WorkflowList extends Component {
 
       return (
         <span key={key} className="month-group">
-          <div
-            // className={"h6 grouping-head " + key}
-            style={{
-              marginTop: "38px",
-              marginBottom: "11px",
-              fontSize: "12px",
-              opacity: 0.3,
-              color: "#00000",
-              fontWeight: "bold",
-              letterSpacing: "-0.02px",
-              lineHeight: "15px"
-            }}
-          >
-            {key.toUpperCase()}
-          </div>
+          {!this.props.isEmbedded ? (
+            <div
+              // className={"h6 grouping-head " + key}
+              style={{
+                marginTop: "38px",
+                marginBottom: "11px",
+                fontSize: "12px",
+                opacity: 0.3,
+                color: "#00000",
+                fontWeight: "bold",
+                letterSpacing: "-0.02px",
+                lineHeight: "15px"
+              }}
+            >
+              {key.toUpperCase()}
+            </div>
+          ) : null}
+
           <div className="">{listL}</div>
         </span>
       );
