@@ -958,12 +958,6 @@ class ChildWorkflowField2 extends Component {
     const { bulkActionWorkflowChecked, childWorkflow } = this.state;
     let that = this;
 
-    const u = new URL(window.location.href);
-    const step = u.searchParams.get("step");
-    const selectedWorkflow = currentStepFields[step]
-      ? currentStepFields[step].currentStepFields.workflow
-      : null;
-
     let kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
     let workflowHeaderChild = childWorkflow ? childWorkflow : [];
     const bulkActionChilren = workflowHeaderChild;
@@ -1009,7 +1003,14 @@ class ChildWorkflowField2 extends Component {
             />
             {/*show filters top*/}
             <Row>
-              <Col span={12} style={{ display: "flex", alignItems: "center" }}>
+              <Col
+                span={12}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "40px"
+                }}
+              >
                 {_.size(this.state.filteredChildWorkflow) ? (
                   <span style={{ marginRight: "10.5px" }}>
                     <Checkbox
