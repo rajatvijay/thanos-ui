@@ -1009,7 +1009,14 @@ class ChildWorkflowField2 extends Component {
             />
             {/*show filters top*/}
             <Row>
-              <Col span={12} style={{ display: "flex", alignItems: "center" }}>
+              <Col
+                span={12}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "40px"
+                }}
+              >
                 {_.size(this.state.filteredChildWorkflow) ? (
                   <span style={{ marginRight: "10.5px" }}>
                     <Checkbox
