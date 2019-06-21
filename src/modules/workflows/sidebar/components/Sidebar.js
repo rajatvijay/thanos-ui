@@ -229,7 +229,8 @@ class Sidebar extends Component {
           zIndex: 0,
           marginRight: minimalUI ? 0 : 20,
           paddingRight: 0,
-          position: "relative"
+          position: "relative",
+          marginTop: minimalUI ? 0 : 35
         }}
       >
         <div
@@ -260,7 +261,7 @@ class Sidebar extends Component {
               />
             </Drawer>
           ) : null}
-          {!minimalUI && (
+          {/* {!minimalUI && (
             <div>
               <div
                 style={{
@@ -326,7 +327,7 @@ class Sidebar extends Component {
                 ))}
               </Row>
             </div>
-          )}
+          )} */}
 
           {workflowDetails[workflowIdFromDetailsToSidebar] &&
           workflowDetails[workflowIdFromDetailsToSidebar].loading &&
@@ -486,7 +487,9 @@ class Sidebar extends Component {
                             >
                               <p
                                 style={
-                                  groupId == stepgroup.id && stepId == step.id
+                                  groupId == stepgroup.id &&
+                                  stepId == step.id &&
+                                  !displayProfile
                                     ? {
                                         backgroundColor: "#104774",
                                         borderRadius: "16px",

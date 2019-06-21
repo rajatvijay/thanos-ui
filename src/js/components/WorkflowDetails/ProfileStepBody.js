@@ -11,13 +11,13 @@ class ProfileStepBody extends Component {
     );
 
     return lc_data.map(data => (
-      <Col span={12}>
+      <Col style={{ margin: "0px 0px 25px 0px" }} span={12}>
         <span
           style={{
             opacity: 0.3,
             color: "#000000",
-            fontSize: "12px",
-            fontWeight: "bold",
+            fontSize: "20px",
+            //fontWeight: "bold",
             letterSpacing: "-0.02px",
             lineHeight: "15px"
           }}
@@ -28,7 +28,7 @@ class ProfileStepBody extends Component {
         <span
           style={{
             color: "#000000",
-            fontSize: "12px",
+            fontSize: "16px",
             letterSpacing: "-0.02px",
             lineHeight: "29px",
             wordWrap: "break-word"
@@ -48,7 +48,7 @@ class ProfileStepBody extends Component {
     }
 
     return (
-      <div style={{ margin: 50, height: "100vh" }}>
+      <div style={{ margin: "40px 50px", height: "100vh" }}>
         <Row>{this.renderDetails()}</Row>
       </div>
     );
