@@ -115,7 +115,7 @@ class WorkflowItem extends React.Component {
       k.workflows = [];
       _.forEach(children, child => {
         if (child.definition.kind === kind.id) {
-          console.log("matches");
+          // console.log("matches");
           k.workflows.push(child);
         }
       });
@@ -303,7 +303,7 @@ class WorkflowItem extends React.Component {
     let that = this;
     //console.log("work",this.props.workflow)
     //const {location}
-    console.log("location", this.props);
+    // console.log("location", this.props);
     //console.log("workflow",this.props)
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
@@ -376,6 +376,8 @@ class WorkflowItem extends React.Component {
             disableCollapse={this.disableCollapse}
             enableCollapse={this.enableCollapse}
             config={this.props.config}
+            bulkActionWorkflowChecked={this.props.bulkActionWorkflowChecked}
+            handleChildWorkflowCheckbox={this.props.handleChildWorkflowCheckbox}
           />
           {/* </div> */}
           {/* } */}

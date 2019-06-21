@@ -71,7 +71,6 @@ class Workflow extends Component {
   }
 
   componentDidMount = () => {
-    console.log(this.props.workflowFilters);
     let tag = this.props.workflowFilters.kind.meta.tag;
 
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {

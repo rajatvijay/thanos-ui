@@ -184,7 +184,7 @@ class WorkflowDetails extends Component {
   };
 
   updateCurrentActiveStep = () => {
-    console.log("update");
+    // console.log("update");
     const { workflowIdFromPropsForModal } = this.props;
 
     let workflowId =

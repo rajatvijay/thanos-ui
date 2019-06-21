@@ -39,7 +39,6 @@ export const changeStatusActions = (
       });
     }
   } catch (error) {
-    console.log(error);
     dispatch({ type: changeStatusConstants.CHANGE_FAILURE, error });
     openNotificationWithIcon({
       type: "error",

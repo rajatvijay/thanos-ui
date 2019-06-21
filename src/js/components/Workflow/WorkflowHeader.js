@@ -3,19 +3,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import moment from "moment";
 import _ from "lodash";
-import {
-  Badge,
-  Icon,
-  Progress,
-  Dropdown,
-  Menu,
-  Row,
-  Col,
-  Tooltip,
-  Tag,
-  Popover,
-  Drawer
-} from "antd";
+import { Row, Col, Tooltip, Tag, Checkbox } from "antd";
 import { calculatedData } from "./calculated-data";
 import { history } from "../../_helpers";
 import { changeStatusActions, workflowActions } from "../../actions";
@@ -49,7 +37,32 @@ const { getProcessedData, getProgressData } = calculatedData;
 export const WorkflowHeader = props => {
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
-      <Col span={9} className="text-left ">
+      {props.isEmbedded ? (
+        <Col span={1} className="text-left">
+          <Checkbox
+            checked={
+              props.bulkActionWorkflowChecked.filter(
+                item => item.id === props.workflow.id
+              ).length
+            }
+            className={css`
+              .ant-checkbox-inner {
+                width: 16px;
+                height: 16px;
+              }
+            `}
+            onChange={event =>
+              props.handleChildWorkflowCheckbox(
+                event,
+                props.workflow.id,
+                props.workflow.definition.kind
+              )
+            }
+            onClick={event => event.stopPropagation()}
+          />
+        </Col>
+      ) : null}
+      <Col span={props.isEmbedded ? 8 : 9} className="text-left ">
         <HeaderTitle {...props} />
       </Col>
 

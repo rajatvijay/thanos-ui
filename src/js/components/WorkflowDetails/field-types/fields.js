@@ -637,7 +637,6 @@ class FileUpload extends Component {
     };
 
     this.props.dispatch(workflowStepActions.removeAttachment(payload));
-    console.log("file removed");
   };
 
   showDecryptURL = () => {

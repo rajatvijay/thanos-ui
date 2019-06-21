@@ -100,6 +100,8 @@ class WorkflowList extends Component {
             isEmbedded={that.props.isEmbedded}
             expandedWorkflows={that.props.expandedWorkflows}
             config={that.props.config}
+            bulkActionWorkflowChecked={that.props.bulkActionWorkflowChecked}
+            handleChildWorkflowCheckbox={that.props.handleChildWorkflowCheckbox}
           />
         );
       });

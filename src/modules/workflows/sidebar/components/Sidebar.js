@@ -152,7 +152,7 @@ class Sidebar extends Component {
       act,
       workflowIdFromDetailsToSidebar
     } = this.props;
-    console.log("min", minimalUI);
+    // console.log("min", minimalUI);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
       workflowDetailsHeader[workflowIdFromDetailsToSidebar]

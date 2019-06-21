@@ -73,7 +73,6 @@ function getStepGroup(id) {
     return { type: workflowDetailsConstants.GET_STEPGROUPS_REQUEST, id };
   }
   function success(stepGroups, id) {
-    console.log("step", id);
     return {
       type: workflowDetailsConstants.GET_STEPGROUPS_SUCCESS,
       stepGroups,

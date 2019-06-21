@@ -9,7 +9,6 @@ class ExportList extends Component {
   constructor(props) {
     super();
 
-    console.log(this.props);
     //this.state = { sidebar: false, userId: null };
   }
 
