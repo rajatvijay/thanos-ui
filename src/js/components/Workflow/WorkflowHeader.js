@@ -264,7 +264,10 @@ class HeaderOptions extends React.Component {
 
     let status = (
       <Tooltip title={this.state.current}>
-        <div className="pd-left status-text text-black t-12 text-right">
+        <div
+          className="pd-left status-text text-black t-12 text-right"
+          style={{ wordBreak: "break-word" }}
+        >
           {this.state.current}
         </div>
       </Tooltip>
