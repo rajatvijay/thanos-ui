@@ -229,9 +229,10 @@ class StepBody extends Component {
                   this.props.currentStepFields[this.props.stepId].isSubmitting
                 }
                 dynamicUserPerms={dynamicUserPerms}
-                currentStepFields={
-                  this.props.currentStepFields[this.props.stepId]
-                }
+                currentStepFields={{
+                  ...this.props.currentStepFields[this.props.stepId],
+                  ...this.props.currentStepFields
+                }}
               />
             </div>
           ) : (

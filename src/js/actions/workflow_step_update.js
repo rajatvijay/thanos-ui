@@ -204,6 +204,7 @@ function updateField(payload) {
 ////////////////////////////////////////
 function submitStepData(payload) {
   return dispatch => {
+    const workflowId = payload.id;
     dispatch(request(payload));
     dispatch(remove_errors({}));
 
@@ -216,7 +217,7 @@ function submitStepData(payload) {
           dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
-      error => dispatch(failure(error, payload))
+      error => dispatch(failure(error, { id: workflowId }))
     );
   };
 
