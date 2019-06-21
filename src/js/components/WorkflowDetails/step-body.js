@@ -6,6 +6,7 @@ import { workflowDetailsActions } from "../../actions";
 import _ from "lodash";
 import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
+import ProfileStepBody from "./ProfileStepBody";
 
 class StepBody extends Component {
   constructor(props) {
@@ -75,6 +76,7 @@ class StepBody extends Component {
   };
 
   render = () => {
+    const { displayProfile, workflowHead } = this.props;
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
@@ -180,7 +182,13 @@ class StepBody extends Component {
 
         <Row style={{ padding: "29px 44px 27px 37px" }}>
           <Col span={16}>
-            <span className="t-18 text-black">{stepData.name}</span>
+            <span className="t-18 text-black">
+              {displayProfile
+                ? workflowHead
+                  ? workflowHead.name
+                  : null
+                : stepData.name}
+            </span>
           </Col>
           <Col span={8}>
             {locked_tag}
@@ -192,7 +200,9 @@ class StepBody extends Component {
         <Divider className="no-margin" />
 
         <div>
-          {loading ? (
+          {displayProfile ? (
+            <ProfileStepBody workflowHead={this.props.workflowHead} />
+          ) : loading ? (
             <div className="text-center mr-top-lg">
               <Icon type={"loading"} />
             </div>

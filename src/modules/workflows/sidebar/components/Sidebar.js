@@ -40,6 +40,7 @@ class Sidebar extends Component {
       isWorkflowPDFModalVisible: false,
       groupId: null,
       stepId: null
+      //defaultSelected:true
     };
   }
 
@@ -113,12 +114,13 @@ class Sidebar extends Component {
     }));
   };
 
-  componentDidMount() {
-    this.setState({
-      groupId: String(this.props.selectedGroup),
-      stepId: String(this.props.selectedStep)
-    });
-  }
+  // componentDidMount() {
+  //   // this.setState({
+  //   //   groupId: String(this.props.selectedGroup),
+  //   //   stepId: String(this.props.selectedStep)
+  //   // });
+  //   this.setState({groupId:null,stepId:null})
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (
@@ -144,13 +146,22 @@ class Sidebar extends Component {
     this.setState({ groupId: String(groupid) });
   };
 
+  onProfileClick = () => {
+    if (this.state.stepId) {
+      this.setState({ stepId: null });
+      this.props.changeProfileDisplay(true);
+    }
+  };
+
   render() {
     const {
       workflowDetailsHeader,
       workflowDetails,
       minimalUI,
       act,
-      workflowIdFromDetailsToSidebar
+      workflowIdFromDetailsToSidebar,
+      displayProfile,
+      changeProfileDisplay
     } = this.props;
     console.log("min", minimalUI);
     let lc_data =
@@ -162,7 +173,7 @@ class Sidebar extends Component {
       (data, index) => data.display_type == "normal" && data.value
     );
 
-    const { groupId, stepId } = this.state;
+    const { groupId, stepId, defaultSelected } = this.state;
 
     const workflowActionMenu = (
       <Menu>
@@ -326,163 +337,210 @@ class Sidebar extends Component {
               style={{ position: "absolute", top: "12%", left: "50%" }}
             />
           ) : (
-            <Collapse
-              defaultActiveKey={groupId}
-              activeKey={groupId}
-              accordion
-              style={{
-                borderLeft: "none",
-                borderRight: "none",
-                borderRadius: 0,
-                marginBottom: 30,
-                marginTop: minimalUI ? 0 : 41
-              }}
-              onChange={this.onChangeOfCollapse}
-              className="ant-collapse-content"
-            >
-              {workflowDetails[workflowIdFromDetailsToSidebar] &&
-              Object.values(workflowDetails).length &&
-              workflowDetails[workflowIdFromDetailsToSidebar].workflowDetails
-                ? workflowDetails[
-                    workflowIdFromDetailsToSidebar
-                  ].workflowDetails.stepGroups.results
-                    .filter(group => group.steps.length)
-                    .map((stepgroup, index) => (
-                      <Panel
-                        key={stepgroup.id}
-                        showArrow={false}
-                        header={
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              backgroundColor: "#fafafa",
-                              marginLeft: "-14px"
-                            }}
-                          >
-                            <span
+            <div>
+              <span
+                // to={`${history.location.pathname}?group=${
+                //   stepgroup.id
+                // }&step=${step.id}`}
+                style={{
+                  color: displayProfile ? "white" : "#969696",
+                  textDecoration: "none",
+                  cursor: "pointer"
+                }}
+                onClick={event => this.onProfileClick()}
+                // key={step.id}
+              >
+                <p
+                  style={{
+                    backgroundColor: displayProfile ? "#104774" : "#FAFAFA",
+                    borderRadius: "16px",
+                    paddingLeft: "10px",
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    marginLeft: "-12px",
+                    marginLeft: "-14px",
+                    marginBottom: 2,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
+                >
+                  <i
+                    className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+                    fill="#FFF"
+                    style={{ color: "#CCCCCC", fontSize: 24 }}
+                  >
+                    {"panorama_fish_eye"}
+                  </i>
+                  Profile
+                </p>
+              </span>
+
+              <Collapse
+                defaultActiveKey={groupId}
+                activeKey={groupId}
+                // accordion
+                style={{
+                  borderLeft: "none",
+                  borderRight: "none",
+                  borderRadius: 0,
+                  marginBottom: 30
+                  //marginTop: minimalUI ? 0 : 41
+                }}
+                onChange={this.onChangeOfCollapse}
+                className="ant-collapse-content"
+              >
+                {workflowDetails[workflowIdFromDetailsToSidebar] &&
+                Object.values(workflowDetails).length &&
+                workflowDetails[workflowIdFromDetailsToSidebar].workflowDetails
+                  ? workflowDetails[
+                      workflowIdFromDetailsToSidebar
+                    ].workflowDetails.stepGroups.results
+                      .filter(group => group.steps.length)
+                      .map((stepgroup, index) => (
+                        <Panel
+                          key={stepgroup.id}
+                          showArrow={false}
+                          header={
+                            <div
                               style={{
                                 display: "flex",
                                 alignItems: "center",
-                                fontWeight: 500,
-                                fontSize: 14
+                                justifyContent: "space-between",
+                                backgroundColor: "#fafafa",
+                                marginLeft: "-14px"
                               }}
                             >
-                              {stepgroup.steps.filter(step => step.completed_by)
-                                .length === stepgroup.steps.length ? (
-                                <i
-                                  className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-                                  style={{ color: "#00C89B" }}
-                                >
-                                  check_circle
-                                </i>
-                              ) : (
-                                <i
-                                  className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-                                  style={{ color: "#CCCCCC" }}
-                                >
-                                  panorama_fish_eye
-                                </i>
-                              )}
-                              {stepgroup.definition.name}
-                            </span>
-                            <span
-                              style={{
-                                fontWeight: 500,
-                                fontSize: "14px",
-                                opacity: 0.2,
-                                color: "#000000",
-                                letterSpacing: "-0.03px",
-                                lineHeight: "18px"
-                              }}
-                            >
-                              {
-                                stepgroup.steps.filter(
+                              <span
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  fontWeight: 500,
+                                  fontSize: 14
+                                }}
+                              >
+                                {stepgroup.steps.filter(
                                   step => step.completed_by
-                                ).length
-                              }
-                              /{stepgroup.steps.length}
-                            </span>
-                          </div>
-                        }
-                      >
-                        {stepgroup.steps.map(step => (
-                          <span
-                            // to={`${history.location.pathname}?group=${
-                            //   stepgroup.id
-                            // }&step=${step.id}`}
-                            style={
-                              groupId === stepgroup.id && stepId === step.id
-                                ? {
-                                    color: "#fff",
-                                    textDecoration: "none",
-                                    cursor: "pointer"
-                                  }
-                                : {
-                                    color: "#969696",
-                                    textDecoration: "none",
-                                    cursor: "pointer"
-                                  }
-                            }
-                            onClick={event =>
-                              this.handleStepClick(stepgroup.id, step.id, event)
-                            }
-                            key={step.id}
-                          >
-                            <p
+                                ).length === stepgroup.steps.length ? (
+                                  <i
+                                    className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
+                                    style={{ color: "#00C89B" }}
+                                  >
+                                    check_circle
+                                  </i>
+                                ) : (
+                                  <i
+                                    className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
+                                    style={{ color: "#CCCCCC" }}
+                                  >
+                                    panorama_fish_eye
+                                  </i>
+                                )}
+                                {stepgroup.definition.name}
+                              </span>
+                              <span
+                                style={{
+                                  fontWeight: 500,
+                                  fontSize: "14px",
+                                  opacity: 0.2,
+                                  color: "#000000",
+                                  letterSpacing: "-0.03px",
+                                  lineHeight: "18px"
+                                }}
+                              >
+                                {
+                                  stepgroup.steps.filter(
+                                    step => step.completed_by
+                                  ).length
+                                }
+                                /{stepgroup.steps.length}
+                              </span>
+                            </div>
+                          }
+                        >
+                          {stepgroup.steps.map(step => (
+                            <span
+                              // to={`${history.location.pathname}?group=${
+                              //   stepgroup.id
+                              // }&step=${step.id}`}
                               style={
-                                groupId == stepgroup.id && stepId == step.id
+                                groupId === stepgroup.id && stepId === step.id
                                   ? {
-                                      backgroundColor: "#104774",
-                                      borderRadius: "16px",
-                                      paddingLeft: "10px",
-                                      paddingTop: "5px",
-                                      paddingBottom: "5px",
-                                      marginLeft: "-12px",
-                                      marginLeft: "-14px"
+                                      color: "#fff",
+                                      textDecoration: "none",
+                                      cursor: "pointer"
                                     }
                                   : {
-                                      backgroundColor: "#fafafa",
-                                      marginLeft: "-14px"
+                                      color: "#969696",
+                                      textDecoration: "none",
+                                      cursor: "pointer"
                                     }
                               }
+                              onClick={event =>
+                                this.handleStepClick(
+                                  stepgroup.id,
+                                  step.id,
+                                  event
+                                )
+                              }
+                              key={step.id}
                             >
-                              {step.completed_by ? (
-                                <i
-                                  className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                                  fill="#FFF"
-                                  style={
-                                    groupId == stepgroup.id && stepId == step.id
-                                      ? { color: "#00C89B", fontSize: 18 }
-                                      : { color: "#00C89B" }
-                                  }
-                                >
-                                  check_circle
-                                </i>
-                              ) : (
-                                <i
-                                  className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                                  fill="#FFF"
-                                  style={
-                                    groupId == stepgroup.id && stepId == step.id
-                                      ? { color: "#FFFFFF", fontSize: 16 }
-                                      : { color: "#CCCCCC" }
-                                  }
-                                >
-                                  {groupId == stepgroup.id && stepId == step.id
-                                    ? "lens"
-                                    : "panorama_fish_eye"}
-                                </i>
-                              )}
-                              {step.name}
-                            </p>
-                          </span>
-                        ))}
-                      </Panel>
-                    ))
-                : null}
-            </Collapse>
+                              <p
+                                style={
+                                  groupId == stepgroup.id && stepId == step.id
+                                    ? {
+                                        backgroundColor: "#104774",
+                                        borderRadius: "16px",
+                                        paddingLeft: "10px",
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                        marginLeft: "-12px",
+                                        marginLeft: "-14px"
+                                      }
+                                    : {
+                                        backgroundColor: "#fafafa",
+                                        marginLeft: "-14px"
+                                      }
+                                }
+                              >
+                                {step.completed_by ? (
+                                  <i
+                                    className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+                                    fill="#FFF"
+                                    style={
+                                      groupId == stepgroup.id &&
+                                      stepId == step.id
+                                        ? { color: "#00C89B", fontSize: 18 }
+                                        : { color: "#00C89B" }
+                                    }
+                                  >
+                                    check_circle
+                                  </i>
+                                ) : (
+                                  <i
+                                    className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+                                    fill="#FFF"
+                                    style={
+                                      groupId == stepgroup.id &&
+                                      stepId == step.id
+                                        ? { color: "#FFFFFF", fontSize: 16 }
+                                        : { color: "#CCCCCC" }
+                                    }
+                                  >
+                                    {groupId == stepgroup.id &&
+                                    stepId == step.id
+                                      ? "lens"
+                                      : "panorama_fish_eye"}
+                                  </i>
+                                )}
+                                {step.name}
+                              </p>
+                            </span>
+                          ))}
+                        </Panel>
+                      ))
+                  : null}
+              </Collapse>
+            </div>
           )}
         </div>
       </Sider>

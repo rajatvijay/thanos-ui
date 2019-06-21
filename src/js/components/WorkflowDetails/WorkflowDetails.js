@@ -36,7 +36,8 @@ class WorkflowDetails extends Component {
       printing: false,
       dont: false,
       firstLoad: true,
-      currentStep: null
+      currentStep: null,
+      displayProfile: true
     };
   }
 
@@ -317,7 +318,8 @@ class WorkflowDetails extends Component {
     this.setState(
       {
         selectedGroup: groupId,
-        selectedStep: stepId
+        selectedStep: stepId,
+        displayProfile: false
       },
       () => {
         this.getStepDetailsData(
@@ -328,12 +330,18 @@ class WorkflowDetails extends Component {
     );
   };
 
+  changeProfileDisplay = displayProfile => {
+    this.setState({ displayProfile });
+  };
+
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal, workflowId } = this.props;
+    const { minimalUI, workflowIdFromPropsForModal } = this.props;
+    const { displayProfile } = this.state;
 
-    //     const workflowId = workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+    const workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     //   //const { stepGroups } = workflowDetails.workflowDetails;
     //   //calculate activit step
     //  // const act = currentActiveStep(stepGroups, workflowId);
@@ -422,6 +430,8 @@ class WorkflowDetails extends Component {
                 minimalUI={minimalUI}
                 workflowIdFromDetailsToSidebar={workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
+                displayProfile={displayProfile}
+                changeProfileDisplay={this.changeProfileDisplay}
               />
               <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
                 <div className="printOnly ">
@@ -441,11 +451,11 @@ class WorkflowDetails extends Component {
                       changeFlag={this.changeFlag}
                       getIntegrationComments={this.getIntegrationComments}
                       workflowHead={
-                        this.props.workflowDetailsHeader.workflowDetailsHeader
-                          ? this.props.workflowDetailsHeader
-                              .workflowDetailsHeader
-                          : "loading"
+                        this.props.workflowDetailsHeader[workflowId]
+                          ? this.props.workflowDetailsHeader[workflowId]
+                          : null
                       }
+                      displayProfile={this.state.displayProfile}
                     />
                   </div>
                 </div>
