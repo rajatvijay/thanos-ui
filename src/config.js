@@ -1,4 +1,4 @@
-const DEFAULT_TENANT = "walmart";
+const DEFAULT_TENANT = "fb";
 const DEFAULT_BASE_URL = "https://api.slackcart.com/api/v1/";
 
 function getAPIBaseURL() {
