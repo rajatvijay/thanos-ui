@@ -90,6 +90,13 @@ class StepBody extends Component {
     } else {
       stepData = {};
     }
+    console.log(
+      "step",
+      workflowHead,
+      stepData,
+      this.props.currentStepFields,
+      this.props.stepId
+    );
 
     var locked_tag = null;
 

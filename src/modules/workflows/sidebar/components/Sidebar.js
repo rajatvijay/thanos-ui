@@ -328,10 +328,45 @@ class Sidebar extends Component {
               </Row>
             </div>
           )} */}
+          <span
+            // to={`${history.location.pathname}?group=${
+            //   stepgroup.id
+            // }&step=${step.id}`}
+            style={{
+              color: displayProfile ? "white" : "#969696",
+              textDecoration: "none",
+              cursor: "pointer"
+            }}
+            onClick={event => this.onProfileClick()}
+            // key={step.id}
+          >
+            <p
+              style={{
+                backgroundColor: displayProfile ? "#104774" : "#FAFAFA",
+                borderRadius: "16px",
+                paddingLeft: "10px",
+                paddingTop: "5px",
+                paddingBottom: "5px",
+                marginLeft: "-12px",
+                marginLeft: "-14px",
+                marginBottom: 2,
+                display: "flex",
+                alignItems: "center"
+              }}
+            >
+              <i
+                className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+                fill="#FFF"
+                style={{ color: "#CCCCCC", fontSize: 24 }}
+              >
+                {"panorama_fish_eye"}
+              </i>
+              Profile
+            </p>
+          </span>
 
           {workflowDetails[workflowIdFromDetailsToSidebar] &&
-          workflowDetails[workflowIdFromDetailsToSidebar].loading &&
-          minimalUI ? (
+          workflowDetails[workflowIdFromDetailsToSidebar].loading ? (
             <Icon
               type="loading"
               spin
@@ -339,47 +374,10 @@ class Sidebar extends Component {
             />
           ) : (
             <div>
-              <span
-                // to={`${history.location.pathname}?group=${
-                //   stepgroup.id
-                // }&step=${step.id}`}
-                style={{
-                  color: displayProfile ? "white" : "#969696",
-                  textDecoration: "none",
-                  cursor: "pointer"
-                }}
-                onClick={event => this.onProfileClick()}
-                // key={step.id}
-              >
-                <p
-                  style={{
-                    backgroundColor: displayProfile ? "#104774" : "#FAFAFA",
-                    borderRadius: "16px",
-                    paddingLeft: "10px",
-                    paddingTop: "5px",
-                    paddingBottom: "5px",
-                    marginLeft: "-12px",
-                    marginLeft: "-14px",
-                    marginBottom: 2,
-                    display: "flex",
-                    alignItems: "center"
-                  }}
-                >
-                  <i
-                    className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                    fill="#FFF"
-                    style={{ color: "#CCCCCC", fontSize: 24 }}
-                  >
-                    {"panorama_fish_eye"}
-                  </i>
-                  Profile
-                </p>
-              </span>
-
               <Collapse
                 defaultActiveKey={groupId}
                 activeKey={groupId}
-                // accordion
+                accordion
                 style={{
                   borderLeft: "none",
                   borderRight: "none",

@@ -337,8 +337,9 @@ class WorkflowDetails extends Component {
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal } = this.props;
+    const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
     const { displayProfile } = this.state;
+    console.log("wo", this.props.workflow);
 
     const workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
@@ -451,7 +452,9 @@ class WorkflowDetails extends Component {
                       changeFlag={this.changeFlag}
                       getIntegrationComments={this.getIntegrationComments}
                       workflowHead={
-                        this.props.workflowDetailsHeader[workflowId]
+                        minimalUI
+                          ? workflowItem
+                          : this.props.workflowDetailsHeader[workflowId]
                           ? this.props.workflowDetailsHeader[workflowId]
                           : null
                       }
