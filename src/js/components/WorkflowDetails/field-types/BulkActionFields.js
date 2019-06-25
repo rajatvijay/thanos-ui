@@ -136,7 +136,8 @@ class BulkActionFields extends Component {
               this.props.onCloseBulkActionModal();
               return openNotificationWithIcon({
                 type: "success",
-                message: "Action successfully performed!"
+                message:
+                  "Your request has been submitted, action will be performed shortly."
               });
             }
           }
