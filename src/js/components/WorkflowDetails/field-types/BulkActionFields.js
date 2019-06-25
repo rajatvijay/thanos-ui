@@ -57,8 +57,8 @@ function getField(fieldDetail, OnFieldChange, fieldList, getFieldDecorator) {
             <Radio.Group
               onChange={event => OnFieldChange(event, fieldDetail.tag)}
             >
-              <Radio value="true">Yes</Radio>
-              <Radio value="false">No</Radio>
+              <Radio value="True">Yes</Radio>
+              <Radio value="False">No</Radio>
             </Radio.Group>
           )}
         </Form.Item>
