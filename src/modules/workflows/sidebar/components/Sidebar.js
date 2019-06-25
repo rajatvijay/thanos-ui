@@ -214,9 +214,9 @@ class Sidebar extends Component {
           backgroundColor: "#FAFAFA",
           padding: "30px",
           paddingTop: 0,
-          paddingLeft: minimalUI ? "30px" : "20px",
+          paddingLeft: minimalUI ? "30px" : "40px",
           zIndex: 0,
-          marginRight: minimalUI ? 0 : 20,
+          marginRight: minimalUI ? 0 : 10,
           paddingRight: 0,
           position: "relative"
         }}

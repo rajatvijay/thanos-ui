@@ -423,7 +423,13 @@ class WorkflowDetails extends Component {
                 workflowIdFromDetailsToSidebar={workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
               />
-              <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
+              <Content
+                style={{
+                  width: "50%",
+                  marginTop: minimalUI ? 0 : 12,
+                  paddingLeft: "10px"
+                }}
+              >
                 <div className="printOnly ">
                   <div
                     className="mr-ard-lg"
