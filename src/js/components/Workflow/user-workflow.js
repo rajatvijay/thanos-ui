@@ -126,7 +126,6 @@ class UserWorkflow extends React.Component {
         });
       })
       .catch(error => {
-        console.log(error);
         this.setState({
           searchState: this.SEARCH_STATE_SEARCHED
         });

@@ -71,7 +71,6 @@ class Workflow extends Component {
   }
 
   componentDidMount = () => {
-    console.log(this.props.workflowFilters);
     let tag = this.props.workflowFilters.kind.meta.tag;
 
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
@@ -236,7 +235,7 @@ class Workflow extends Component {
         <FilterSidebar />
         <Sidebar {...this.props} />
         <Layout>
-          <Content style={{ margin: "35px 79px 40px 72px" }}>
+          <Content style={{ margin: "15px 20px 40px 20px" }}>
             <Row className="clear">
               <Filter />
 

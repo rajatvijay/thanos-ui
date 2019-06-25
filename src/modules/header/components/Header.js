@@ -3,11 +3,19 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { authHeader, baseUrl, baseUrl2 } from "../../../js/_helpers";
-import { Tooltip, Menu, Dropdown, Input, Icon } from "antd";
+import { Tooltip, Menu, Dropdown, Input, Icon, notification } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import { logout, workflowActions, navbarActions } from "../../../js/actions";
 import "../header.css";
+
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
 
 class Header extends Component {
   state = {
@@ -16,10 +24,17 @@ class Header extends Component {
   };
 
   onSearch = e => {
-    if (e) {
-      this.props.dispatch(workflowActions.searchWorkflow(e));
+    if (this.state.searchInput.length >= 3) {
+      if (e) {
+        this.props.dispatch(workflowActions.searchWorkflow(e));
+      } else {
+        this.props.dispatch(workflowActions.getAll());
+      }
     } else {
-      this.props.dispatch(workflowActions.getAll());
+      openNotificationWithIcon({
+        type: "error",
+        message: "Please enter at least 3 characters to initiate search"
+      });
     }
   };
 

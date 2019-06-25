@@ -74,6 +74,12 @@ class WorkflowItem extends React.Component {
   };
 
   showModal = id => {
+    //this.props.history.replace("/workflows/instances"+this.props.location.search.params.id);
+    //this.props.location.search = ""
+    //  if(this.props.match.params.id){
+    //   this.props.history.replace("/workflows/instances/"+this.props.match.params.id+"/");
+    //  }
+
     this.setState({
       visible: true,
       workflowId: id
@@ -81,15 +87,16 @@ class WorkflowItem extends React.Component {
   };
 
   handleOk = e => {
-    console.log(e);
+    // console.log(e);
     this.setState({
       visible: false
     });
   };
 
   handleCancel = e => {
-    this.props.history.replace("/workflows/instances");
-    console.log(e);
+    // console.log(this.props);
+    //this.props.history.replace("/workflows/instances");
+    // console.log(e);
     this.setState({
       visible: false
     });
@@ -108,7 +115,7 @@ class WorkflowItem extends React.Component {
       k.workflows = [];
       _.forEach(children, child => {
         if (child.definition.kind === kind.id) {
-          console.log("matches");
+          // console.log("matches");
           k.workflows.push(child);
         }
       });
@@ -296,6 +303,7 @@ class WorkflowItem extends React.Component {
     let that = this;
     //console.log("work",this.props.workflow)
     //const {location}
+    // console.log("location", this.props);
     //console.log("workflow",this.props)
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
@@ -314,30 +322,27 @@ class WorkflowItem extends React.Component {
         }
       >
         <div>
-          {this.state.visible && (
-            <Modal
-              // destroyOnClose={true}
-              style={{ left: 150 }}
-              closable={false}
-              footer={null}
-              bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
-              width={1100}
-              visible={this.state.visible}
-              onOk={this.handleOk}
-              onCancel={this.handleCancel}
-            >
-              <ModalHeader workflow={this.props.workflow} />
-              <WorkflowDetails
-                location={this.props.location}
-                minimalUI={true}
-                workflowIdFromPropsForModal={this.props.workflow.id}
-              />
+          {/* {this.state.visible && ( */}
+          <Modal
+            style={{ left: "22vw", margin: 0 }}
+            footer={null}
+            bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
+            width="77vw"
+            destroyOnClose={true}
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <ModalHeader workflow={this.props.workflow} />
+            <WorkflowDetails
+              location={this.props.location}
+              minimalUI={true}
+              workflowIdFromPropsForModal={this.props.workflow.id}
+            />
 
-              <ModalFooter
-                workflowIdFromPropsForModal={this.props.workflow.id}
-              />
-            </Modal>
-          )}
+            <ModalFooter workflowIdFromPropsForModal={this.props.workflow.id} />
+          </Modal>
+          {/* )} */}
 
           {/* <Collapsible
             trigger={
@@ -371,6 +376,8 @@ class WorkflowItem extends React.Component {
             disableCollapse={this.disableCollapse}
             enableCollapse={this.enableCollapse}
             config={this.props.config}
+            bulkActionWorkflowChecked={this.props.bulkActionWorkflowChecked}
+            handleChildWorkflowCheckbox={this.props.handleChildWorkflowCheckbox}
           />
           {/* </div> */}
           {/* } */}

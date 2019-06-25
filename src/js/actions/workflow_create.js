@@ -14,7 +14,6 @@ export const createWorkflow = payload => async dispatch => {
     history.push("/workflows/instances/" + response.id);
     dispatch(workflowActions.getAll());
   } catch (error) {
-    console.log(error);
     dispatch({ type: workflowCreateConstants.CREATE_FAILURE, error });
   }
 };

@@ -48,7 +48,7 @@ export function workflow(state = { workflowId: null }, action) {
         previous: workflow.previous
       };
     case workflowConstants.SEARCH_FAILURE:
-      console.log("failed to load ");
+      // console.log("failed to load ");
       return {
         search: true,
         loading: false,
@@ -93,7 +93,7 @@ export function workflow(state = { workflowId: null }, action) {
         error: action.error
       };
     case workflowConstants.SET_WORKFLOW_ID:
-      console.log("reducer");
+      // console.log("reducer");
       return {
         workflowId: action.payload.id
       };
@@ -121,7 +121,7 @@ export function workflowChildren(state = {}, action) {
         ...action.response
       };
     case workflowConstants.GET_CHILD_FAILURE:
-      console.log("failed to load ");
+      // console.log("failed to load ");
       return {
         ...state,
         ...action.response

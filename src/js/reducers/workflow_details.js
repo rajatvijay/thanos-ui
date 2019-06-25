@@ -27,15 +27,21 @@ export function workflowDetails(state = {}, action) {
 
     //WORKFLOW STEPS AND GROUPS LIST DATA
     case workflowDetailsConstants.GET_STEPGROUPS_REQUEST:
-      console.log("state", state);
-      state = {};
+      // console.log("action id", action);
+
+      //state = {};
       return {
         ...state,
-        loading: true
+        [action.id]: { loading: true }
+        //loading: true
       };
     case workflowDetailsConstants.GET_STEPGROUPS_SUCCESS:
       return {
         ...state,
+        [action.id]: {
+          loading: false,
+          workflowDetails: { stepGroups: action.stepGroups }
+        },
         loading: false,
         workflowDetails: { stepGroups: action.stepGroups }
       };

@@ -25,17 +25,23 @@ const { Sider } = Layout;
 const Panel = Collapse.Panel;
 
 class Sidebar extends Component {
-  state = {
-    current:
-      Object.values(this.props.workflowDetailsHeader).length &&
-      this.props.workflowDetailsHeader.workflowDetailsHeader
-        ? this.props.workflowDetailsHeader.workflowDetailsHeader.status.label
-        : null,
-    showSidebar: false,
-    isWorkflowPDFModalVisible: false,
-    groupId: null,
-    stepId: null
-  };
+  constructor(props) {
+    const { workflowIdFromDetailsToSidebar } = props;
+    super();
+
+    this.state = {
+      current:
+        Object.values(props.workflowDetailsHeader).length &&
+        props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+          ? props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
+              .label
+          : null,
+      showSidebar: false,
+      isWorkflowPDFModalVisible: false,
+      groupId: null,
+      stepId: null
+    };
+  }
 
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
@@ -50,7 +56,10 @@ class Sidebar extends Component {
   };
 
   openCommentSidebar = () => {
-    let object_id = this.props.workflowDetailsHeader.workflowDetailsHeader.id;
+    const { workflowIdFromDetailsToSidebar } = this.props;
+    let object_id = this.props.workflowDetailsHeader[
+      workflowIdFromDetailsToSidebar
+    ].id;
     this.callBackCollapser(object_id, "all_data");
   };
 
@@ -104,18 +113,7 @@ class Sidebar extends Component {
     }));
   };
 
-  updateActiveStep = () => {
-    this.setState({
-      groupId: new URL(window.location.href).searchParams.get("group"),
-      stepId: new URL(window.location.href).searchParams.get("step")
-    });
-  };
-
   componentDidMount() {
-    this.setState({
-      groupId: new URL(window.location.href).searchParams.get("group"),
-      stepId: new URL(window.location.href).searchParams.get("step")
-    });
     this.setState({
       groupId: String(this.props.selectedGroup),
       stepId: String(this.props.selectedStep)
@@ -124,25 +122,9 @@ class Sidebar extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      this.props.currentStepFields.currentStepFields !==
-      prevProps.currentStepFields.currentStepFields
-    ) {
-      if (
-        this.props.currentStepFields.currentStepFields.id !==
-        prevProps.currentStepFields.currentStepFields.id
-      ) {
-        this.setState({
-          groupId: new URL(window.location.href).searchParams.get("group"),
-          stepId: new URL(window.location.href).searchParams.get("step")
-        });
-      }
-    }
-
-    if (
       this.props.selectedGroup !== prevProps.selectedGroup ||
       this.props.selectedStep !== prevProps.selectedStep
     ) {
-      console.log("updating");
       this.setState({
         groupId: String(this.props.selectedGroup),
         stepId: String(this.props.selectedStep)
@@ -150,11 +132,12 @@ class Sidebar extends Component {
     }
   }
 
-  onClickOfLink = (groupid, stepid) => {
+  handleStepClick = (groupid, stepid) => {
     this.setState({
       groupId: String(groupid),
       stepId: String(stepid)
     });
+    this.props.onUpdateOfActiveStep(groupid, stepid);
   };
 
   onChangeOfCollapse = groupid => {
@@ -166,13 +149,14 @@ class Sidebar extends Component {
       workflowDetailsHeader,
       workflowDetails,
       minimalUI,
-      act
+      act,
+      workflowIdFromDetailsToSidebar
     } = this.props;
-    console.log("min", minimalUI);
+    // console.log("min", minimalUI);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
-      workflowDetailsHeader.workflowDetailsHeader
-        ? workflowDetailsHeader.workflowDetailsHeader.lc_data
+      workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+        ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
         : [];
     lc_data = lc_data.filter(
       (data, index) => data.display_type == "normal" && data.value
@@ -182,14 +166,17 @@ class Sidebar extends Component {
 
     const workflowActionMenu = (
       <Menu>
-        <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              restore
-            </i>{" "}
-            <FormattedMessage id="workflowsInstances.viewActivityLog" />
-          </span>
-        </Menu.Item>
+        {this.props.config.permissions &&
+        this.props.config.permissions.includes("Can View Activity Log") ? (
+          <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
+            <span>
+              <i className="material-icons t-18 text-middle pd-right-sm">
+                restore
+              </i>{" "}
+              <FormattedMessage id="workflowsInstances.viewActivityLog" />
+            </span>
+          </Menu.Item>
+        ) : null}
 
         <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
           <span>
@@ -227,7 +214,7 @@ class Sidebar extends Component {
           backgroundColor: "#FAFAFA",
           padding: "30px",
           paddingTop: 0,
-          paddingLeft: minimalUI ? "30px" : "50px",
+          paddingLeft: minimalUI ? "30px" : "20px",
           zIndex: 0,
           marginRight: minimalUI ? 0 : 20,
           paddingRight: 0,
@@ -236,7 +223,7 @@ class Sidebar extends Component {
       >
         <div
           style={{
-            width: 280,
+            width: minimalUI ? 280 : NaN,
             paddingBottom: 100,
             height: "100%",
             backgroundColor: "#FAFAFA"
@@ -254,7 +241,11 @@ class Sidebar extends Component {
               className="activity-log-drawer"
             >
               <AuditListTabs
-                id={this.props.workflowDetailsHeader.workflowDetailsHeader.id}
+                id={
+                  this.props.workflowDetailsHeader[
+                    workflowIdFromDetailsToSidebar
+                  ].id
+                }
               />
             </Drawer>
           ) : null}
@@ -278,8 +269,8 @@ class Sidebar extends Component {
                 }}
               >
                 {Object.values(workflowDetailsHeader).length &&
-                workflowDetailsHeader.workflowDetailsHeader
-                  ? workflowDetailsHeader.workflowDetailsHeader.name
+                workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+                  ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].name
                   : ""}
                 <Dropdown
                   overlay={workflowActionMenu}
@@ -326,7 +317,9 @@ class Sidebar extends Component {
             </div>
           )}
 
-          {workflowDetails.loading && minimalUI ? (
+          {workflowDetails[workflowIdFromDetailsToSidebar] &&
+          workflowDetails[workflowIdFromDetailsToSidebar].loading &&
+          minimalUI ? (
             <Icon
               type="loading"
               spin
@@ -347,9 +340,12 @@ class Sidebar extends Component {
               onChange={this.onChangeOfCollapse}
               className="ant-collapse-content"
             >
-              {Object.values(workflowDetails).length &&
-              workflowDetails.workflowDetails
-                ? workflowDetails.workflowDetails.stepGroups.results
+              {workflowDetails[workflowIdFromDetailsToSidebar] &&
+              Object.values(workflowDetails).length &&
+              workflowDetails[workflowIdFromDetailsToSidebar].workflowDetails
+                ? workflowDetails[
+                    workflowIdFromDetailsToSidebar
+                  ].workflowDetails.stepGroups.results
                     .filter(group => group.steps.length)
                     .map((stepgroup, index) => (
                       <Panel
@@ -412,23 +408,25 @@ class Sidebar extends Component {
                         }
                       >
                         {stepgroup.steps.map(step => (
-                          <Link
-                            to={`${history.location.pathname}?group=${
-                              stepgroup.id
-                            }&step=${step.id}`}
+                          <span
+                            // to={`${history.location.pathname}?group=${
+                            //   stepgroup.id
+                            // }&step=${step.id}`}
                             style={
-                              groupId == stepgroup.id && stepId == step.id
+                              groupId === stepgroup.id && stepId === step.id
                                 ? {
                                     color: "#fff",
-                                    textDecoration: "none"
+                                    textDecoration: "none",
+                                    cursor: "pointer"
                                   }
                                 : {
                                     color: "#969696",
-                                    textDecoration: "none"
+                                    textDecoration: "none",
+                                    cursor: "pointer"
                                   }
                             }
                             onClick={event =>
-                              this.onClickOfLink(stepgroup.id, step.id, event)
+                              this.handleStepClick(stepgroup.id, step.id, event)
                             }
                             key={step.id}
                           >
@@ -478,7 +476,7 @@ class Sidebar extends Component {
                               )}
                               {step.name}
                             </p>
-                          </Link>
+                          </span>
                         ))}
                       </Panel>
                     ))
@@ -492,8 +490,13 @@ class Sidebar extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { workflowDetailsHeader, workflowDetails, currentStepFields } = state;
-  return { workflowDetailsHeader, workflowDetails, currentStepFields };
+  const {
+    workflowDetailsHeader,
+    workflowDetails,
+    currentStepFields,
+    config
+  } = state;
+  return { workflowDetailsHeader, workflowDetails, currentStepFields, config };
 }
 
 export default connect(mapStateToProps)(Sidebar);

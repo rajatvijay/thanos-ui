@@ -17,10 +17,10 @@ export const integrationCommonFunctions = {
 };
 
 function comment_answer_body(c) {
-  let classes = "text-bold t-16 mr-top";
+  let classes = "";
 
   if (_.size(c.target.workflow_details)) {
-    return <div className={classes}>{workflow_comment_html(c.target)}</div>;
+    return <span className={classes}>{workflow_comment_html(c.target)}</span>;
   }
 
   if (!_.size(c.target.field_details)) {
@@ -30,55 +30,46 @@ function comment_answer_body(c) {
   if (c.target.field_details.is_integration_type) {
     if (c.target.field_details.type == "dnb_livingstone") {
       return (
-        <div className={classes}>{dnb_livingston_html(c.target.row_json)}</div>
+        <span className={classes}>
+          {dnb_livingston_html(c.target.row_json)}
+        </span>
       );
     } else if (c.target.field_details.type == "dnb_ubo") {
-      return <div className={classes}>{dnb_ubo_html(c.target.row_json)}</div>;
+      return <span className={classes}>{dnb_ubo_html(c.target.row_json)}</span>;
     } else if (c.target.field_details.type == "dnb_directors") {
       return (
-        <div className={classes}>{dnb_directors_html(c.target.row_json)}</div>
+        <span className={classes}>{dnb_directors_html(c.target.row_json)}</span>
       );
     } else if (c.target.field_details.type == "google_search") {
       return (
-        <div className={classes}>{google_search_html(c.target.row_json)}</div>
+        <span className={classes}>{google_search_html(c.target.row_json)}</span>
       );
     } else if (c.target.field_details.type == "ln_search") {
       return (
-        <div className={classes}>{lexisnexis_html(c.target.row_json)}</div>
+        <span className={classes}>{lexisnexis_html(c.target.row_json)}</span>
       );
     } else if (c.target.field_details.type == "thomson_reuters_screenresult") {
       return (
-        <div className={classes}>{tr_results_html(c.target.row_json)}</div>
+        <span className={classes}>{tr_results_html(c.target.row_json)}</span>
       );
     } else if (c.target.field_details.type == "rdc_event_details") {
       return (
-        <div className={classes}>{rdc_event_details(c.target.row_json)}</div>
+        <span className={classes}>{rdc_event_details(c.target.row_json)}</span>
       );
     }
   } else {
     return (
-      <div className="ant-row ant-form-item ant-form-item-with-help from-label mr-top">
-        <div className="ant-form-item-label">
-          <label className="">{c.target.field_details.name}</label>
-        </div>
-        <div className="ant-form-item-control-wrapper">
-          <div className="ant-form-item-control ">
-            <span className="ant-form-item-children">
-              <span
-                className="ant-input ant-input-disabled"
-                style={
-                  c.target.selected_flag[c.target.id]
-                    ? c.target.selected_flag[c.target.id].flag_detail.extra
-                    : null
-                }
-              >
-                {_.size(c.target.field_details.answer)
-                  ? c.target.field_details.answer[0].answer
-                  : "-"}
-              </span>
-            </span>
-          </div>
-        </div>
+      <div
+        className="ant-input ant-input-disabled"
+        style={
+          c.target.selected_flag[c.target.id]
+            ? c.target.selected_flag[c.target.id].flag_detail.extra
+            : null
+        }
+      >
+        {_.size(c.target.field_details.answer)
+          ? c.target.field_details.answer[0].answer
+          : "-"}
       </div>
     );
   }
@@ -121,7 +112,9 @@ function lexisnexis_html(record) {
       <br />
       False Positive:{" "}
       {record.FalsePositive
-        ? record.FalsePositive.$ == true ? "True" : "False"
+        ? record.FalsePositive.$ == true
+          ? "True"
+          : "False"
         : "-"}
       <br />
       True Match:{" "}
@@ -129,7 +122,9 @@ function lexisnexis_html(record) {
       <br />
       Added To Accept List:{" "}
       {record.AddedToAcceptList
-        ? record.AddedToAcceptList.$ == true ? "True" : "False"
+        ? record.AddedToAcceptList.$ == true
+          ? "True"
+          : "False"
         : "-"}
       <br />
       Address: {addr}
@@ -283,7 +278,7 @@ const getProgressPercent = ({ score }) => {
    * Finally dividing this by 2 will give us the actual percentage
    */
   const normalized_score = score + 1;
-  return normalized_score * 100 / 2;
+  return (normalized_score * 100) / 2;
 };
 
 //Get color according to score
@@ -663,8 +658,8 @@ function dnb_livingston_html(record) {
                   <td>{c.EffectiveDate}</td>
                   <td>{c.ExpirationDate}</td>
                   <td>
-                    {c.DocumentVolumeReferenceIdentifier || ""}:{c.DocumentPageReferenceIdentifier ||
-                      ""}
+                    {c.DocumentVolumeReferenceIdentifier || ""}:
+                    {c.DocumentPageReferenceIdentifier || ""}
                   </td>
                 </tr>
               );

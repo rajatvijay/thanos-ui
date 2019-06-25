@@ -204,6 +204,7 @@ function updateField(payload) {
 ////////////////////////////////////////
 function submitStepData(payload) {
   return dispatch => {
+    const workflowId = payload.id;
     dispatch(request(payload));
     dispatch(remove_errors({}));
 
@@ -216,7 +217,7 @@ function submitStepData(payload) {
           dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
-      error => dispatch(failure(error))
+      error => dispatch(failure(error, { id: workflowId }))
     );
   };
 
@@ -231,7 +232,7 @@ function submitStepData(payload) {
   function success(stepData) {
     // hack for to avoid response.json promise in case of failure
     if (!stepData.id) {
-      return failure(stepData);
+      return failure("error", stepData);
     }
     openNotificationWithIcon({
       type: "success",
@@ -241,13 +242,13 @@ function submitStepData(payload) {
     return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData };
   }
 
-  function failure(error) {
+  function failure(error, payload) {
     openNotificationWithIcon({
       type: "error",
       message: "Failed to submit step."
     });
 
-    return { type: workflowStepConstants.SUBMIT_FAILURE, error };
+    return { type: workflowStepConstants.SUBMIT_FAILURE, error, payload };
   }
 }
 
@@ -303,7 +304,7 @@ function undoStep(payload) {
           //dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
-      error => dispatch(failure(error))
+      error => dispatch(failure(error, payload))
     );
   };
 
@@ -317,13 +318,13 @@ function undoStep(payload) {
     });
     return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData }; //{type: workflowStepConstants.UNDO_SUCCESS,stepData};
   }
-  function failure(error) {
+  function failure(error, payload) {
     openNotificationWithIcon({
       type: "error",
       message: "Failed to revert completion"
     });
 
-    return { type: workflowStepConstants.SUBMIT_FAILURE, error }; //{ type: workflowStepConstants.UNDO_FAILURE, error };
+    return { type: workflowStepConstants.SUBMIT_FAILURE, error, payload }; //{ type: workflowStepConstants.UNDO_FAILURE, error };
   }
 }
 

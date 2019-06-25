@@ -5,6 +5,7 @@ import Collapsible from "react-collapsible";
 import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
 import { calculatedData } from "../../Workflow/calculated-data";
 import { connect } from "react-redux";
+import { css } from "emotion";
 import {
   Form,
   Button,
@@ -17,13 +18,15 @@ import {
   Divider,
   Tag,
   Select,
-  Collapse
+  Collapse,
+  Checkbox
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { FormattedMessage, injectIntl } from "react-intl";
 import WorkflowList from "../../Workflow/workflow-list";
+import WrappedBulkActionFields from "./BulkActionFields";
 
 const { getProcessedData } = calculatedData;
 const Option = Select.Option;
@@ -133,7 +136,11 @@ class ChildWorkflowField2 extends Component {
       kindChecked: false,
       showRelatedWorkflow: false,
       selected_filters: { category: [], status: "", flag: "", kind: "" },
-      showFilters: false
+      showFilters: false,
+      bulkActionWorkflowChecked: [],
+      isBulkActionModalOpen: false,
+      actionSelected: null,
+      childWorkflow: null
     };
   }
 
@@ -208,9 +215,7 @@ class ChildWorkflowField2 extends Component {
     }
 
     const valueFilter = this.getValuefilter();
-    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${
-      parentId
-    }&kind=${kind}${valueFilter}&child_kinds=true`;
+    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${parentId}&kind=${kind}${valueFilter}&child_kinds=true`;
 
     this.setState({ fetching: true });
 
@@ -414,7 +419,9 @@ class ChildWorkflowField2 extends Component {
           selected={
             k === "All" && selected === ""
               ? true
-              : selected === k ? true : false
+              : selected === k
+              ? true
+              : false
           }
         />
       );
@@ -829,11 +836,151 @@ class ChildWorkflowField2 extends Component {
     this.setState({ showFilters: !this.state.showFilters });
   };
 
+  handleBulkActionCheck = (event, bulkActionChilren) => {
+    if (event.target.checked) {
+      let checkedItems = [];
+      bulkActionChilren.forEach(item => {
+        checkedItems = [
+          ...checkedItems,
+          {
+            id: item.id,
+            kindDetail: item.kindDetail
+          }
+        ];
+      });
+      this.setState({
+        bulkActionWorkflowChecked: checkedItems
+      });
+    } else {
+      this.setState({
+        bulkActionWorkflowChecked: []
+      });
+    }
+  };
+
+  handleChildWorkflowCheckbox = (event, id, kindId) => {
+    let kindDetail = this.props.workflowKind.workflowKind.filter(
+      item => item.id === kindId
+    );
+    if (event.target.checked) {
+      this.setState({
+        bulkActionWorkflowChecked: [
+          ...this.state.bulkActionWorkflowChecked,
+          {
+            id: id,
+            kindDetail: {
+              bulk_actions: kindDetail.length ? kindDetail[0].bulk_actions : []
+            }
+          }
+        ]
+      });
+    } else {
+      let checkedChildren = this.state.bulkActionWorkflowChecked.filter(
+        item => item.id != id
+      );
+      this.setState({
+        bulkActionWorkflowChecked: checkedChildren
+      });
+    }
+  };
+
+  onOpenBulkActionModal = action => {
+    this.setState({
+      isBulkActionModalOpen: true,
+      actionSelected: action
+    });
+  };
+
+  onCloseBulkActionModal = () => {
+    this.setState({
+      isBulkActionModalOpen: false,
+      actionSelected: null
+    });
+  };
+
+  getBulkAction = workflows => {
+    const allBulkActions = workflows.flatMap(
+      workflow => workflow.kindDetail.bulk_actions
+    );
+    // const uniqueBulkActions = Array.from(new Set(allBulkActions))
+    const uniqueBulkActions = [];
+    allBulkActions.forEach(bulkAction => {
+      if (
+        !uniqueBulkActions.find(
+          ({ action_tag }) => action_tag === bulkAction.action_tag
+        )
+      ) {
+        uniqueBulkActions.push(bulkAction);
+      }
+    });
+
+    const commonBulkActions = [];
+    uniqueBulkActions.forEach(bulkAction => {
+      const filteredWorkflows = workflows.filter(workflow =>
+        workflow.kindDetail.bulk_actions
+          .map(({ action_tag }) => action_tag)
+          .includes(bulkAction.action_tag)
+      );
+      if (filteredWorkflows.length === workflows.length) {
+        commonBulkActions.push(bulkAction);
+      }
+    });
+
+    if (!commonBulkActions.length) {
+      return "No Bulk Action Available";
+    } else {
+      return (
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {commonBulkActions.map(action => (
+            <Button
+              onClick={event => this.onOpenBulkActionModal(action)}
+              style={{
+                border: "1px solid #148CD6",
+                color: "#148CD6"
+              }}
+            >
+              {action.name}
+            </Button>
+          ))}
+        </div>
+      );
+    }
+  };
+
   render = () => {
     const { props } = this;
-    const { field, workflowKind } = props;
+    const {
+      field,
+      workflowKind,
+      workflowDetailsHeader,
+      currentStepFields
+    } = props;
+    const { bulkActionWorkflowChecked, childWorkflow } = this.state;
     let that = this;
 
+    const u = new URL(window.location.href);
+    const step = u.searchParams.get("step");
+    const selectedWorkflow = currentStepFields[step]
+      ? currentStepFields[step].currentStepFields.workflow
+      : null;
+
+    let kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
+    let workflowHeaderChild = childWorkflow ? childWorkflow : [];
+    const bulkActionChilren = workflowHeaderChild;
+    workflowHeaderChild.forEach((child, index) => {
+      kindList.forEach(kind => {
+        if (child.definition.kind === kind.id) {
+          bulkActionChilren[index].kindDetail = {
+            bulk_actions: kind.bulk_actions
+          };
+        }
+      });
+    });
+
+    let isBulkCheck =
+      bulkActionChilren.length &&
+      bulkActionWorkflowChecked.length &&
+      bulkActionChilren.length === bulkActionWorkflowChecked.length;
     return (
       <FormItem
         label={""}
@@ -841,7 +988,7 @@ class ChildWorkflowField2 extends Component {
           "childworkflow-field-item from-label " +
           (_.size(props.field.selected_flag) ? " has-flag" : "")
         }
-        style={{ display: "block", margin: "0 -24px" }}
+        style={{ display: "block", margin: "0" }}
         key={props.field.id}
         message=""
         hasFeedback
@@ -854,30 +1001,65 @@ class ChildWorkflowField2 extends Component {
           </div>
         ) : (
           <div>
+            <WrappedBulkActionFields
+              actionDetail={this.state.actionSelected}
+              open={this.state.isBulkActionModalOpen}
+              onCloseBulkActionModal={this.onCloseBulkActionModal}
+              bulkActionWorkflowChecked={this.state.bulkActionWorkflowChecked}
+            />
             {/*show filters top*/}
             <Row>
-              <Col span={12} className="pd-left-lg">
-                <span className="text-lighter">
-                  {this.state.childWorkflow
-                    ? this.state.childWorkflow.length
-                    : 0}{" "}
-                  results{" "}
-                </span>
-
-                {field.definition.extra.show_filters ? (
-                  <span
-                    className="mr-left-lg text-lighter text-anchor"
-                    onClick={this.onToggleFilters}
-                  >
-                    Filters{" "}
-                    <i className=" t-14 text-middle material-icons">
-                      keyboard_arrow_down
-                    </i>
+              <Col
+                span={12}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "40px"
+                }}
+              >
+                {_.size(this.state.filteredChildWorkflow) ? (
+                  <span style={{ marginRight: "10.5px" }}>
+                    <Checkbox
+                      className={css`
+                        .ant-checkbox-inner {
+                          width: 20px;
+                          height: 20px;
+                        }
+                      `}
+                      checked={isBulkCheck}
+                      onChange={event =>
+                        this.handleBulkActionCheck(event, bulkActionChilren)
+                      }
+                    />
                   </span>
                 ) : null}
+                {!this.state.bulkActionWorkflowChecked.length ? (
+                  <span className="text-lighter">
+                    {this.state.childWorkflow
+                      ? this.state.childWorkflow.length
+                      : 0}{" "}
+                    results{" "}
+                  </span>
+                ) : null}
+                {!this.state.bulkActionWorkflowChecked.length ? (
+                  field.definition.extra.show_filters ? (
+                    <span
+                      className="mr-left-lg text-lighter text-anchor"
+                      onClick={this.onToggleFilters}
+                    >
+                      Filters{" "}
+                      <i className=" t-14 text-middle material-icons">
+                        keyboard_arrow_down
+                      </i>
+                    </span>
+                  ) : null
+                ) : null}
+                {this.state.bulkActionWorkflowChecked.length
+                  ? this.getBulkAction(this.state.bulkActionWorkflowChecked)
+                  : null}
               </Col>
 
-              <Col span={12} className="text-right small pd-right-lg">
+              <Col span={12} className="text-right small">
                 <span
                   onClick={this.getChildWorkflow}
                   title="Reload"
@@ -1010,6 +1192,10 @@ class ChildWorkflowField2 extends Component {
                   fieldExtra={field.definition.extra || null}
                   addComment={props.addComment}
                   showCommentIcon={true}
+                  bulkActionWorkflowChecked={
+                    this.state.bulkActionWorkflowChecked
+                  }
+                  handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
                 />
               ) : (
                 <div>No related workflows</div>
@@ -1023,11 +1209,12 @@ class ChildWorkflowField2 extends Component {
 }
 
 function mapPropsToState(state) {
-  const { workflowDetailsHeader, workflowKind } = state;
+  const { workflowDetailsHeader, workflowKind, currentStepFields } = state;
 
   return {
     workflowDetailsHeader,
-    workflowKind
+    workflowKind,
+    currentStepFields
   };
 }
 

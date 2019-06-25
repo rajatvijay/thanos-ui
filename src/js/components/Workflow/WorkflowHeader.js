@@ -3,19 +3,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import moment from "moment";
 import _ from "lodash";
-import {
-  Badge,
-  Icon,
-  Progress,
-  Dropdown,
-  Menu,
-  Row,
-  Col,
-  Tooltip,
-  Tag,
-  Popover,
-  Drawer
-} from "antd";
+import { Row, Col, Tooltip, Tag, Checkbox } from "antd";
 import { calculatedData } from "./calculated-data";
 import { history } from "../../_helpers";
 import { changeStatusActions, workflowActions } from "../../actions";
@@ -49,7 +37,32 @@ const { getProcessedData, getProgressData } = calculatedData;
 export const WorkflowHeader = props => {
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
-      <Col span={9} className="text-left ">
+      {props.isEmbedded ? (
+        <Col span={1} className="text-left">
+          <Checkbox
+            checked={
+              props.bulkActionWorkflowChecked.filter(
+                item => item.id === props.workflow.id
+              ).length
+            }
+            className={css`
+              .ant-checkbox-inner {
+                width: 20px;
+                height: 20px;
+              }
+            `}
+            onChange={event =>
+              props.handleChildWorkflowCheckbox(
+                event,
+                props.workflow.id,
+                props.workflow.definition.kind
+              )
+            }
+            onClick={event => event.stopPropagation()}
+          />
+        </Col>
+      ) : null}
+      <Col span={props.isEmbedded ? 8 : 9} className="text-left ">
         <HeaderTitle {...props} />
       </Col>
 
@@ -57,7 +70,7 @@ export const WorkflowHeader = props => {
         <HeaderLcData {...props} />
       </Col>
 
-      <Col span={6}>
+      <Col span={5}>
         <GetMergedData {...props} />
       </Col>
 
@@ -74,7 +87,7 @@ export const WorkflowHeader = props => {
         ) : null}
       </Col>
 
-      <Col span={4}>
+      <Col span={5}>
         <HeaderOptions {...props} />
       </Col>
     </Row>
@@ -124,82 +137,22 @@ const createFamilyListForBreadcrums = family => {
 
 const HeaderTitle = props => {
   const { workflow } = props;
-  const { family } = workflow;
 
-  if (family.length === 1) {
-    return (
-      <div>
-        <span
-          title={props.workflow.name}
-          style={{
-            color: "#000000",
-            fontSize: "20px",
-            letterSpacing: "-0.04px",
-            lineHeight: "24px"
-          }}
-        >
-          {workflow.name}
-        </span>
-      </div>
-    );
-  } else if (family.length === 2) {
-    return (
-      <div>
-        <span
-          title={props.workflow.name}
-          style={{
-            color: "#000000",
-            fontSize: "20px",
-            letterSpacing: "-0.04px",
-            lineHeight: "24px"
-          }}
-        >
-          <Link
-            className={css`
-              color: #b5b5b5;
-              &:hover {
-                color: black;
-              }
-            `}
-            to={"/workflows/instances/" + family[0].id}
-          >
-            {family[0].name}
-          </Link>{" "}
-          / {family[1].name}
-        </span>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <Popover content={createFamilyListForBreadcrums(family)}>
-          <span
-            title={props.workflow.name}
-            style={{
-              color: "#000000",
-              fontSize: "16px",
-              letterSpacing: "-0.04px",
-              lineHeight: "24px"
-            }}
-          >
-            <Link
-              className={css`
-                color: #b5b5b5;
-                &:hover {
-                  color: black;
-                }
-              `}
-              to={"/workflows/instances/" + family[0].id}
-            >
-              {family[0].name}
-            </Link>
-            <span style={{ color: "#b5b5b5" }}> /... / </span>
-            {workflow.name}
-          </span>
-        </Popover>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <span
+        title={props.workflow.name}
+        style={{
+          color: "#000000",
+          fontSize: "20px",
+          letterSpacing: "-0.04px",
+          lineHeight: "24px"
+        }}
+      >
+        {workflow.name}
+      </span>
+    </div>
+  );
 };
 
 export const HeaderLcData = props => {
@@ -270,62 +223,8 @@ class HeaderOptions extends React.Component {
     };
   }
 
-  onStatusChange = key => {
-    let id = parseInt(key.key, 10);
-    let selected = {};
-    _.map(this.props.statusType, function(i) {
-      if (i.id === id) {
-        selected = i;
-      }
-    });
-
-    this.setState({ current: selected.label });
-
-    let payload = {
-      workflowId: this.props.workflow.id,
-      statusId: id
-    };
-
-    this.props.dispatch(changeStatusActions(payload));
-  };
-
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
-  };
-
-  openCommentSidebar = () => {
-    let object_id = this.props.workflow.id;
-    this.props.getCommentSidebar(object_id, "all_data");
-  };
-
-  printDiv = () => {
-    var that = this;
-    this.setState({ printing: true });
-
-    setTimeout(function() {
-      var printContents = document.getElementById("StepBody").innerHTML;
-      var docHead = document.querySelector("head").innerHTML;
-
-      var body =
-        "<!DOCTYPE html><html><head>" +
-        "<title>" +
-        //that.props.currentStepFields.currentStepFields.definition.name +
-        "</title>" +
-        docHead +
-        "</head><body>" +
-        printContents +
-        "</body></html>";
-      var myWindow = window.open();
-      myWindow.document.write(body);
-      myWindow.document.close();
-      myWindow.focus();
-
-      setTimeout(function() {
-        myWindow.print();
-        myWindow.close();
-      }, 1000);
-      that.setState({ printing: false });
-    }, 500);
   };
 
   getComment = object_id => {
@@ -356,25 +255,6 @@ class HeaderOptions extends React.Component {
       }
     });
 
-    const menu = (
-      <Menu onClick={this.onStatusChange}>
-        {props.statusType
-          ? _.map(filteredStatus, function(status) {
-              return (
-                <Menu.Item
-                  key={status.id}
-                  disabled={
-                    status.label === props.workflow.status.label ? true : false
-                  }
-                >
-                  {status.label}
-                </Menu.Item>
-              );
-            })
-          : null}
-      </Menu>
-    );
-
     let selected_flag = null;
     if (_.size(props.workflow.selected_flag)) {
       selected_flag = props.workflow.selected_flag[props.workflow.id];
@@ -384,7 +264,10 @@ class HeaderOptions extends React.Component {
 
     let status = (
       <Tooltip title={this.state.current}>
-        <div className="pd-left status-text text-black t-12 text-right">
+        <div
+          className="pd-left status-text text-black t-12 text-right"
+          style={{ wordBreak: "break-word" }}
+        >
           {this.state.current}
         </div>
       </Tooltip>
@@ -392,45 +275,45 @@ class HeaderOptions extends React.Component {
 
     return (
       <Row>
-        <Col span={20}>{status}</Col>
-        <Col span={4} className="text-right">
-          {props.showCommentIcon &&
-          props.isEmbedded &&
-          workflow.comments_allowed ? (
-            <span>
-              <div
-                className="add_comment_btn"
-                onMouseOver={this.onCommentHover}
-                onMouseOut={this.onCommentHoverOut}
-              >
-                <span>
-                  <i
-                    className="material-icons  t-18 text-metal"
+        <Col span={props.isEmbedded ? 8 : 24}>{status}</Col>
+        {props.isEmbedded ? (
+          <Col span={16} className="text-right">
+            {props.showCommentIcon &&
+            props.isEmbedded &&
+            workflow.comments_allowed ? (
+              <span>
+                <div
+                  className="add_comment_btn"
+                  onMouseOver={this.onCommentHover}
+                  onMouseOut={this.onCommentHoverOut}
+                >
+                  <span
+                    className="ant-btn ant-btn-primary btn-o btn-sm"
                     onClick={that.getComment.bind(that, props.workflow.id)}
                   >
-                    chat_bubble_outline
+                    Adjudicate
+                  </span>
+                </div>
+              </span>
+            ) : null}
+
+            {selected_flag && props.isEmbedded ? (
+              <Tooltip title={selected_flag.flag_detail.label}>
+                <span style={{ marginTop: "3px" }}>
+                  <i
+                    style={{
+                      color: selected_flag.flag_detail.extra.color,
+                      width: "14px"
+                    }}
+                    className="material-icons  t-12 "
+                  >
+                    fiber_manual_records
                   </i>
                 </span>
-              </div>
-            </span>
-          ) : null}
-
-          {selected_flag && props.isEmbedded ? (
-            <Tooltip title={selected_flag.flag_detail.label}>
-              <span style={{ marginTop: "3px" }}>
-                <i
-                  style={{
-                    color: selected_flag.flag_detail.extra.color,
-                    width: "14px"
-                  }}
-                  className="material-icons  t-12 "
-                >
-                  fiber_manual_records
-                </i>
-              </span>
-            </Tooltip>
-          ) : null}
-        </Col>
+              </Tooltip>
+            ) : null}
+          </Col>
+        ) : null}
       </Row>
     );
   };

@@ -112,7 +112,6 @@ function getStatusCount(tag) {
 }
 
 function setValue(kind) {
-  console.log("action", kind);
   return dispatch => {
     dispatch({ type: workflowKindConstants.SET_VALUE, payload: kind });
   };

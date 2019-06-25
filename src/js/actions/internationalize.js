@@ -17,7 +17,6 @@ const updateUserLanguage = payload => async dispatch => {
       response: response
     });
   } catch (error) {
-    console.log(error);
     dispatch({ type: languageConstants.CHANGE_LANGUAGE_FAILURE, error });
     dispatch(setLanguage(payload));
   }
