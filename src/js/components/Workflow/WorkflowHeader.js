@@ -264,10 +264,7 @@ class HeaderOptions extends React.Component {
 
     let status = (
       <Tooltip title={this.state.current}>
-        <div
-          className="pd-left status-text text-black t-12 text-right"
-          style={{ wordBreak: "break-word" }}
-        >
+        <div className="pd-left-sm status-text text-black t-12 text-right text-ellipsis">
           {this.state.current}
         </div>
       </Tooltip>
@@ -275,7 +272,18 @@ class HeaderOptions extends React.Component {
 
     return (
       <Row>
-        <Col span={props.isEmbedded ? 8 : 24}>{status}</Col>
+        <Col
+          span={
+            props.showCommentIcon &&
+            props.isEmbedded &&
+            workflow.comments_allowed
+              ? 8
+              : 24
+          }
+          style={{ lineHeight: "33px" }}
+        >
+          {status}
+        </Col>
         {props.isEmbedded ? (
           <Col span={16} className="text-right">
             {props.showCommentIcon &&
@@ -283,6 +291,7 @@ class HeaderOptions extends React.Component {
             workflow.comments_allowed ? (
               <span>
                 <div
+                  title="Adjudicate"
                   className="add_comment_btn"
                   onMouseOver={this.onCommentHover}
                   onMouseOut={this.onCommentHoverOut}
@@ -398,8 +407,9 @@ export class GetMergedData extends React.Component {
       if (_.size(data) > count) {
         return (
           <span
-            className="text-anchor text-middle text-right text-light t-12"
+            className="ant-tag v-tag pd-right "
             onClick={this.toggleExpand}
+            style={{ background: "#B2B2B2", color: "#fff" }}
           >
             {this.state.expanded ? "-" : "+"}
             {_.size(data) - count}
@@ -458,7 +468,7 @@ export class GetMergedData extends React.Component {
             to={item.link}
             className={classes}
             style={
-              is_alert
+              is_alert && item.color
                 ? {
                     background: item.color,
                     color: "#fff"
@@ -474,7 +484,7 @@ export class GetMergedData extends React.Component {
           <span
             className={classes}
             style={
-              is_alert
+              is_alert && item.color
                 ? {
                     background: item.color,
                     color: "#fff"
@@ -499,24 +509,22 @@ export class GetMergedData extends React.Component {
         <div className="overflow-wrapper">
           <div className="step-ui">
             <Row type="flex" align="middle">
-              <Col span={22}>
-                {_.size(alert_data)
-                  ? _.map(alert_data, function(item, index) {
-                      let count = index + 1;
-                      if (count < 3) {
-                        return TagItem(item, index, true);
-                      } else if (that.state.expanded) {
-                        return TagItem(item, index, true);
-                      }
-                    })
-                  : _.map(lc_data_filtered, function(item, index) {
-                      let count = index + 1;
-                      if (count < 2) {
-                        return TagItem(item, index, false);
-                      }
-                    })}
-              </Col>
-              <Col span={2}>{expander(alert_data)}</Col>
+              {_.size(alert_data)
+                ? _.map(alert_data, function(item, index) {
+                    let count = index + 1;
+                    if (count < 3) {
+                      return TagItem(item, index, true);
+                    } else if (that.state.expanded) {
+                      return TagItem(item, index, true);
+                    }
+                  })
+                : _.map(lc_data_filtered, function(item, index) {
+                    let count = index + 1;
+                    if (count < 2) {
+                      return TagItem(item, index, false);
+                    }
+                  })}
+              {expander(alert_data)}
             </Row>
           </div>
         </div>
@@ -558,7 +566,8 @@ const GetAlertData = props => {
                   key={item.alert.id}
                   className={
                     "alert-tag-item " + item.alert.category.color_label ||
-                    "alert-primary"
+                    "alert-primary" +
+                      (item.alert.category.color_label ? "" : "text-grey")
                   }
                   color={item.alert.category.color_label || null}
                 >
