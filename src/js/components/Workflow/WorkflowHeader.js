@@ -227,7 +227,10 @@ class HeaderOptions extends React.Component {
     this.setState({ showSidebar: !this.state.showSidebar });
   };
 
-  getComment = object_id => {
+  getComment = (object_id, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     this.state.loading_sidebar = true;
     this.state.object_id = object_id;
     this.props.addComment(object_id, "workflow");
@@ -237,14 +240,6 @@ class HeaderOptions extends React.Component {
     this.setState(state => ({
       isWorkflowPDFModalVisible: !state.isWorkflowPDFModalVisible
     }));
-  };
-
-  onCommentHover = () => {
-    this.props.disableCollapse();
-  };
-
-  onCommentHoverOut = () => {
-    this.props.enableCollapse();
   };
 
   render = () => {
@@ -289,20 +284,18 @@ class HeaderOptions extends React.Component {
             {props.showCommentIcon &&
             props.isEmbedded &&
             workflow.comments_allowed ? (
-              <span>
-                <div
-                  title="Adjudicate"
-                  className="add_comment_btn"
-                  onMouseOver={this.onCommentHover}
-                  onMouseOut={this.onCommentHoverOut}
-                >
+              <span
+                title="Adjudicate"
+                className="add_comment_btn text-ellipsis"
+              >
+                <Tooltip title="Adjudicate">
                   <span
-                    className="ant-btn ant-btn-primary btn-o btn-sm"
+                    className="ant-btn ant-btn-primary btn-o btn-sm text-ellipsis"
                     onClick={that.getComment.bind(that, props.workflow.id)}
                   >
                     Adjudicate
                   </span>
-                </div>
+                </Tooltip>
               </span>
             ) : null}
 
@@ -355,7 +348,9 @@ export class GetMergedData extends React.Component {
     };
   }
 
-  toggleExpand = () => {
+  toggleExpand = e => {
+    e.preventDefault();
+    e.stopPropagation();
     this.setState({ expanded: !this.state.expanded });
   };
 
