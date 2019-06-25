@@ -460,7 +460,9 @@ class StepBodyForm extends Component {
           ? that.props.workflowIdFromPropsForModal
           : fieldParams.workflowId;
         // console.log("field", fieldParams, that.props);
-        return <FieldItem fieldParams={fieldParams} />;
+        return (
+          <FieldItem stepData={that.props.stepData} fieldParams={fieldParams} />
+        );
       },
       getSizeFraction(field) {
         // Get the current field size in fraction
