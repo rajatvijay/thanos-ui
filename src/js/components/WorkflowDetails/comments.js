@@ -431,7 +431,7 @@ class Comments extends Component {
                                   type="right"
                                   className=" small pd-left-sm pd-right-sm"
                                 />
-                                {c.target.field_details.name}
+                                {c.target.step_details.name}
                               </div>
                             </div>
                           ) : null}
@@ -503,11 +503,9 @@ class Comments extends Component {
                                     }}
                                   >
                                     <Tooltip
-                                      title={
-                                        <Moment format="MM/DD/YYYY, h:mm a">
-                                          {msg.created_at}
-                                        </Moment>
-                                      }
+                                      title={new Date(
+                                        msg.created_at
+                                      ).toISOString()}
                                     >
                                       <Moment fromNow>{msg.created_at}</Moment>
                                     </Tooltip>
