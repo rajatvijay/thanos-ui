@@ -106,6 +106,16 @@ class WorkflowDetails extends Component {
       this.updateSidebar(workflowIdFromPropsForModal || workflowId);
     }
 
+    if (prevCurrent.currentStepFields.id !== thisCurrent.currentStepFields.id) {
+      console.log("should scorll ✅✅✅✅✅✅✅");
+
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth"
+      });
+    }
+
     //WHEN EVER SEARCH PARAMS CHANGE FETCH NEW STEP DATA
 
     //todo .search
