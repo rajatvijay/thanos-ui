@@ -303,8 +303,9 @@ class WorkflowItem extends React.Component {
     let that = this;
     //console.log("work",this.props.workflow)
     //const {location}
-    // console.log("location", this.props);
+    // console.log("location", this.props.workflow);
     //console.log("workflow",this.props)
+    const { workflow } = this.props;
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
     const showQuickDetailsFunction =
@@ -333,8 +334,9 @@ class WorkflowItem extends React.Component {
             onOk={this.handleOk}
             onCancel={this.handleCancel}
           >
-            <ModalHeader workflow={this.props.workflow} />
+            <ModalHeader workflow={workflow} />
             <WorkflowDetails
+              workflowItem={this.props.workflow}
               location={this.props.location}
               minimalUI={true}
               workflowIdFromPropsForModal={this.props.workflow.id}
