@@ -472,14 +472,12 @@ class Sidebar extends Component {
                                       marginLeft: "-12px",
                                       textDecoration: "none",
                                       cursor: "pointer",
-                                      color: "#fff",
+                                      color: "#FFFFFF"
                                     }
                                   : {
-                                      backgroundColor: "#fafafa"
+                                      backgroundColor: "#fafafa",
                                       textDecoration: "none",
-                                      cursor: "pointer",
-                                      color: "#969696",
-                                      // marginLeft: "-14px"
+                                      cursor: "pointer"
                                     }
                               }
                               onClick={event =>
@@ -503,7 +501,8 @@ class Sidebar extends Component {
                                         paddingTop: "5px",
                                         paddingBottom: "5px",
                                         marginLeft: "-12px",
-                                        marginLeft: "-14px"
+                                        marginLeft: "-14px",
+                                        color: "#FFFFFF"
                                       }
                                     : {
                                         backgroundColor: "#fafafa",
