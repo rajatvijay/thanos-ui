@@ -140,7 +140,10 @@ class ChildWorkflowField2 extends Component {
       bulkActionWorkflowChecked: [],
       isBulkActionModalOpen: false,
       actionSelected: null,
-      childWorkflow: null
+      childWorkflow: null,
+      sortOrderAsc: false,
+      sortingEnabled: false,
+      sortBy: undefined
     };
   }
 
@@ -174,7 +177,7 @@ class ChildWorkflowField2 extends Component {
         "exclude_filters"
       ];
     }
-    this.getChildWorkflow(this.props.workflowId, kind);
+    this.getChildWorkflow();
   };
 
   getQueryParamForChildWorkflows = () => {
@@ -194,6 +197,17 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
+  objToParam = query => {
+    const searchParams = new URLSearchParams();
+
+    Object.keys(query).forEach(key => {
+      if (query[key]) {
+        return searchParams.append(key, query[key]);
+      }
+    });
+    return searchParams.toString();
+  };
+
   getChildWorkflow = () => {
     let parentId = this.props.workflowId;
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
@@ -202,6 +216,7 @@ class ChildWorkflowField2 extends Component {
       headers: authHeader.get(),
       credentials: "include"
     };
+    const { sortBy } = this.state;
 
     // decide the query param for workflowId
     const paramName = this.getQueryParamForChildWorkflows();
@@ -215,7 +230,15 @@ class ChildWorkflowField2 extends Component {
     }
 
     const valueFilter = this.getValuefilter();
-    const url = `${baseUrl}workflows-list/?limit=100&${paramName}=${parentId}&kind=${kind}${valueFilter}&child_kinds=true`;
+    const param = this.objToParam({
+      limit: 100,
+      [paramName]: parentId,
+      kind: `${kind}${valueFilter}`,
+      ordering: sortBy,
+      child_kinds: true
+    });
+
+    const url = `${baseUrl}workflows-list/?${param}`;
 
     this.setState({ fetching: true });
 
@@ -233,6 +256,41 @@ class ChildWorkflowField2 extends Component {
         //this.filterByFlag();
         this.excludeWorkflows();
       });
+  };
+
+  changeScoreOrder = order => {
+    const isAscending = this.state.sortOrderAsc;
+    const isSortingEnabled = this.state.sortingEnabled;
+    if (!isSortingEnabled) {
+      // Enable the sroting in descending mode
+      this.setState(
+        {
+          sortOrderAsc: false,
+          sortingEnabled: true,
+          sortBy: "-sorting_primary_field"
+        },
+        function() {
+          this.getChildWorkflow();
+        }
+      );
+    } else if (isAscending) {
+      // Disable the sorting
+      this.setState({ sortingEnabled: false, sortBy: undefined }, function() {
+        this.getChildWorkflow();
+      });
+    } else {
+      // Enable sorting in the ascending mode
+      this.setState(
+        {
+          sortOrderAsc: true,
+          sortingEnabled: true,
+          sortBy: "sorting_primary_field"
+        },
+        function() {
+          this.getChildWorkflow();
+        }
+      );
+    }
   };
 
   getValuefilter = () => {
@@ -320,13 +378,15 @@ class ChildWorkflowField2 extends Component {
     if (!kindMenu) {
       return null;
     }
-    let menu = (
+    // let menu = (
+    return this.props.stepData.completed_at ||
+      this.props.stepData.is_locked ? null : (
       <Dropdown
         overlay={kindMenu}
         className="child-workflow-dropdown"
         placement="bottomRight"
         size="small"
-        //disabled={isDisabled(this.props)}
+        disabled={this.props.currentStepFields.isSubmitting}
       >
         <span className="pd-ard-sm text-secondary text-anchor">
           <i className="material-icons">add</i>{" "}
@@ -334,8 +394,6 @@ class ChildWorkflowField2 extends Component {
         </span>
       </Dropdown>
     );
-
-    return menu;
   };
 
   createFlagFilter = () => {
@@ -1010,7 +1068,7 @@ class ChildWorkflowField2 extends Component {
             {/*show filters top*/}
             <Row>
               <Col
-                span={12}
+                span={4}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -1054,10 +1112,38 @@ class ChildWorkflowField2 extends Component {
                     </span>
                   ) : null
                 ) : null}
+
                 {this.state.bulkActionWorkflowChecked.length
                   ? this.getBulkAction(this.state.bulkActionWorkflowChecked)
                   : null}
               </Col>
+
+              {_.size(this.state.filteredChildWorkflow) ? (
+                <Col span={8}>
+                  <Tooltip
+                    title={
+                      this.state.sortOrderAsc
+                        ? "High to low risk score"
+                        : "Low to high risk score"
+                    }
+                  >
+                    <span
+                      style={{ marginRight: 15 }}
+                      className="text-secondary text-anchor"
+                      onClick={this.changeScoreOrder}
+                    >
+                      Risk
+                      {this.state.sortingEnabled ? (
+                        <i className="material-icons t-14  text-middle">
+                          {this.state.sortOrderAsc
+                            ? "keyboard_arrow_up"
+                            : "keyboard_arrow_down"}
+                        </i>
+                      ) : null}
+                    </span>
+                  </Tooltip>
+                </Col>
+              ) : null}
 
               <Col span={12} className="text-right small">
                 <span
