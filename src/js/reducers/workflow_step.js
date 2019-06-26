@@ -68,6 +68,18 @@ export function currentStepFields(state = initialState, action) {
           error: action.error
         }
       };
+    case fieldConstants.POST_FIELD_SUCCESS:
+      return {
+        ...state,
+        // loading: false,
+        [action.field.id]: {
+          loading: false,
+          isSubmitting: false,
+          currentStepFields: action.field,
+          error: null
+        }
+        // currentStepFields: { ...action.field }
+      };
 
     // TODO: Fix the actions below this, when cleaning!
 
@@ -79,13 +91,8 @@ export function currentStepFields(state = initialState, action) {
         ...state,
         loading: false
       };
-    case fieldConstants.POST_FIELD_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        currentStepFields: { ...action.field }
-      };
     case fieldConstants.POST_FIELD_FAILURE:
+      console.log("POST_FIELD_FAILURE", action);
       return {
         ...state,
         loading: false,
