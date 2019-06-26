@@ -47,6 +47,7 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         [action.payload.id]: {
+          ...state[action.payload.id],
           isSubmitting: true,
           loading: true
         }
