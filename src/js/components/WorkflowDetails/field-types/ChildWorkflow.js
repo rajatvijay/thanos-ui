@@ -229,14 +229,15 @@ class ChildWorkflowField2 extends Component {
       return;
     }
 
+    const valueFilter = this.getValuefilter();
     const param = this.objToParam({
       limit: 100,
       [paramName]: parentId,
-      kind: kind,
-      ordering: sortBy
+      kind: `${kind}${valueFilter}`,
+      ordering: sortBy,
+      child_kinds: true
     });
 
-    const valueFilter = this.getValuefilter();
     const url = `${baseUrl}workflows-list/?${param}`;
 
     this.setState({ fetching: true });
@@ -378,25 +379,13 @@ class ChildWorkflowField2 extends Component {
       return null;
     }
     // let menu = (
-    return this.props.stepData.completed_at || this.props.stepData.is_locked ? (
+    return this.props.stepData.completed_at ||
+      this.props.stepData.is_locked ? null : (
       <Dropdown
         overlay={kindMenu}
         className="child-workflow-dropdown"
         placement="bottomRight"
         size="small"
-        disabled={true}
-      >
-        <Button type="primary" size="small">
-          + create new
-        </Button>
-      </Dropdown>
-    ) : (
-      <Dropdown
-        overlay={kindMenu}
-        className="child-workflow-dropdown"
-        placement="bottomRight"
-        size="small"
-        //disabled={isDisabled(this.props)}
         disabled={this.props.currentStepFields.isSubmitting}
       >
         <span className="pd-ard-sm text-secondary text-anchor">
@@ -405,8 +394,6 @@ class ChildWorkflowField2 extends Component {
         </span>
       </Dropdown>
     );
-
-    //return menu;
   };
 
   createFlagFilter = () => {
@@ -1081,7 +1068,7 @@ class ChildWorkflowField2 extends Component {
             {/*show filters top*/}
             <Row>
               <Col
-                span={12}
+                span={4}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -1132,7 +1119,7 @@ class ChildWorkflowField2 extends Component {
               </Col>
 
               {_.size(this.state.filteredChildWorkflow) ? (
-                <Col span="3">
+                <Col span={8}>
                   <Tooltip
                     title={
                       this.state.sortOrderAsc
@@ -1158,7 +1145,7 @@ class ChildWorkflowField2 extends Component {
                 </Col>
               ) : null}
 
-              <Col span={9} className="text-right small">
+              <Col span={12} className="text-right small">
                 <span
                   onClick={this.getChildWorkflow}
                   title="Reload"
