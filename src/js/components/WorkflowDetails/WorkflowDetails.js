@@ -403,7 +403,7 @@ class WorkflowDetails extends Component {
                   color: "#fff"
                 }}
               >
-                keyboard_backspace
+                chevron_left
               </i>
             </span>
           </div>
@@ -444,15 +444,20 @@ class WorkflowDetails extends Component {
                 displayProfile={displayProfile}
                 changeProfileDisplay={this.changeProfileDisplay}
               />
-              <Content style={{ width: "50%", marginTop: minimalUI ? 0 : 12 }}>
+              <Content
+                style={{
+                  width: "50%",
+                  marginTop: minimalUI ? 0 : 12,
+                  paddingLeft: "10px"
+                }}
+              >
                 <div className="printOnly ">
                   <div
                     className="mr-ard-lg"
                     id="StepBody"
                     style={{
                       background: "#FAFAFA",
-                      margin: minimalUI ? "0px 24px 0px 0px" : "24px",
-                      marginLeft: 0
+                      margin: minimalUI ? "0px 24px 0px 0px" : "24px"
                     }}
                   >
                     <StepBody

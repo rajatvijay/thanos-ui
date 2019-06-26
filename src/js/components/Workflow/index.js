@@ -235,7 +235,7 @@ class Workflow extends Component {
         <FilterSidebar />
         <Sidebar {...this.props} />
         <Layout>
-          <Content style={{ margin: "15px 20px 40px 20px" }}>
+          <Content style={{ margin: "4vh 4vw" }}>
             <Row className="clear">
               <Filter />
 

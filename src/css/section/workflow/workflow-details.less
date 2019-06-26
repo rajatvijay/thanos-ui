@@ -73,13 +73,24 @@
     content: "";
   }
 
+  h2.step-form-paragraph{
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+
+  .ant-row:first-child {
+    h2.step-form-paragraph{
+      margin-top: 0;
+    }
+  }
+
   .label-with-action {
     display: inline-block;
     width: 100%;
     color:@color-grey-light;
     font-size:16px;
 
-    
+
 
 
     .comment-icon {
@@ -123,6 +134,8 @@
   .ant-form-item-label label {
     //text-transform: uppercase;
     white-space: normal;
+    color: rgba(0,0,0,0.5);
+    font-size: 16px;
   }
 
   .has-success.has-feedback:after {
@@ -174,13 +187,14 @@
     }
   }
 
-  //phone input style 
+  //phone input style
   .react-tel-input {
     display: inline-block;
     width: 100%;
     input {
       box-shadow: none;
       height: 30px;
+      padding-left: 40px;
       &:focus, &:hover{
         border-color: @color-secondary;
       }
@@ -205,14 +219,14 @@
 
   .ant-input:not(.ant-input-disabled):hover,
   .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled),
-  .ant-radio-wrapper:hover .ant-radio .ant-radio-inner, 
-  .ant-radio:hover .ant-radio-inner, 
+  .ant-radio-wrapper:hover .ant-radio .ant-radio-inner,
+  .ant-radio:hover .ant-radio-inner,
   .ant-radio-focused .ant-radio-inner,
   .ant-upload.ant-upload-drag:not(.ant-upload-disabled):hover,
   .ant-input-number-focused,
   .ant-input-number:not(.ant-input-number-disabled):hover,
   .ant-select-enabled .ant-select-selection:hover{
-    border-color: @color-secondary;    
+    border-color: @color-secondary;
   }
 
   .url-field {
@@ -225,8 +239,12 @@
   .ant-input-disabled,
   .ant-select-disabled,
   .ant-select-disabled .ant-select-selection{
-    color: rgba(0, 0, 0, 0.55);
-    //background-color:#f2f5fa; 
+    color: rgba(0, 0, 0, 0.5);
+    //background-color:#f2f5fa;
+  }
+
+  .ant-select-selection__rendered {
+    margin: 0;
   }
 
   .file-upload-field {
@@ -277,12 +295,12 @@
 .aux-nav {
   .ant-menu {
     .ant-menu-submenu ,
-    .ant-menu-submenu:hover, 
-    .ant-menu-submenu-title:hover, 
-    .ant-menu-submenu-active, 
-    //.ant-menu-item-selected, 
-    //.ant-menu-submenu-selected, 
-    //.ant-menu-item-active 
+    .ant-menu-submenu:hover,
+    .ant-menu-submenu-title:hover,
+    .ant-menu-submenu-active,
+    //.ant-menu-item-selected,
+    //.ant-menu-submenu-selected,
+    //.ant-menu-item-active
     {
       color: @color-text;
 
@@ -344,7 +362,7 @@
     > span {
       .text-medium();
       display: block;
-      margin-bottom: 10px; 
+      margin-bottom: 10px;
     }
   }
 }
@@ -369,9 +387,9 @@
 
 @media print {
   .step-form .ant-row,
-  .ant-form-item, 
-  .page-break { 
-    page-break-before: auto; 
+  .ant-form-item,
+  .page-break {
+    page-break-before: auto;
   }
   .break-avoid{
     page-break-inside: avoid;

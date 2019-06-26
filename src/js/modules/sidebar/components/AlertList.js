@@ -88,7 +88,7 @@ export default AlertList;
 
 const StyledAlertsHeading = styled.h1`
   color: #138bd4;
-  margin: 40px 0px 20px 15px;
+  margin: 40px 0px 20px 20px;
   font-size: 12px;
   font-weight: bold;
   letter-spacing: 0.8px;

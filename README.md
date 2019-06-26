@@ -37,3 +37,4 @@ export const baseUrl2 = subDomainUrl();
 ```
 
 * `yarn start` will start development server, and you're done!
+* Make sure to run `yarn build-css` after amending any less files.
