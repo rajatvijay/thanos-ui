@@ -39,7 +39,9 @@ class WorkflowItem extends React.Component {
     stepdataloading: true,
     initialLoad: true,
     collapseDisabled: false,
-    visible: false
+    visible: false,
+    selectedStep: null,
+    selectedGroup: null
   };
 
   componentDidMount = () => {
@@ -71,6 +73,11 @@ class WorkflowItem extends React.Component {
         }
       );
     }
+  };
+
+  setParameter = (selectedStep, selectedGroup) => {
+    console.log("parameter");
+    this.setState({ selectedGroup, selectedStep });
   };
 
   showModal = id => {
@@ -310,6 +317,7 @@ class WorkflowItem extends React.Component {
     const hasChildren = this.props.workflow.children_count !== 0;
     const showQuickDetailsFunction =
       this.shouldShowQuickDetails() && this.showQuickDetails && false;
+    console.log("state", this.state);
 
     return (
       <div
@@ -334,13 +342,18 @@ class WorkflowItem extends React.Component {
             onOk={this.handleOk}
             onCancel={this.handleCancel}
           >
-            <ModalHeader workflow={workflow} />
+            <ModalHeader
+              workflow={workflow}
+              stepId={this.state.selectedStep}
+              groupId={this.state.selectedGroup}
+            />
             <div style={{ maxHeight: 600, overflowY: "scroll" }}>
               <WorkflowDetails
                 workflowItem={this.props.workflow}
                 location={this.props.location}
                 minimalUI={true}
                 workflowIdFromPropsForModal={this.props.workflow.id}
+                setParameter={this.setParameter}
               />
             </div>
 

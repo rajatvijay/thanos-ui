@@ -338,6 +338,8 @@ class WorkflowDetails extends Component {
         );
       }
     );
+    console.log("check", groupId, this.state);
+    this.props.setParameter(stepId, groupId);
   };
 
   changeProfileDisplay = displayProfile => {
