@@ -325,9 +325,9 @@ class WorkflowItem extends React.Component {
         <div>
           {/* {this.state.visible && ( */}
           <Modal
-            style={{ left: "22vw", margin: 0 }}
+            style={{ left: "21vw", margin: 0 }}
             footer={null}
-            bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
+            bodyStyle={{ padding: 0, maxHeight: 600 }}
             width="77vw"
             destroyOnClose={true}
             visible={this.state.visible}
@@ -335,12 +335,14 @@ class WorkflowItem extends React.Component {
             onCancel={this.handleCancel}
           >
             <ModalHeader workflow={workflow} />
-            <WorkflowDetails
-              workflowItem={this.props.workflow}
-              location={this.props.location}
-              minimalUI={true}
-              workflowIdFromPropsForModal={this.props.workflow.id}
-            />
+            <div style={{ maxHeight: 600, overflowY: "scroll" }}>
+              <WorkflowDetails
+                workflowItem={this.props.workflow}
+                location={this.props.location}
+                minimalUI={true}
+                workflowIdFromPropsForModal={this.props.workflow.id}
+              />
+            </div>
 
             <ModalFooter workflowIdFromPropsForModal={this.props.workflow.id} />
           </Modal>

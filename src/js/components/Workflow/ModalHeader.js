@@ -14,7 +14,7 @@ class ModalHeader extends Component {
           justifyContent: "space-between",
           padding: "20px 30px",
           alignItems: "center",
-          position: "fixed",
+          position: "absolute",
           zIndex: 1,
           width: "77vw",
           backgroundColor: "white",
