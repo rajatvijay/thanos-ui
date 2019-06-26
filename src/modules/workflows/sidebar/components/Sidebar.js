@@ -225,9 +225,9 @@ class Sidebar extends Component {
           backgroundColor: "#FAFAFA",
           padding: "30px",
           paddingTop: 0,
-          paddingLeft: minimalUI ? "30px" : "20px",
+          paddingLeft: minimalUI ? "30px" : "40px",
           zIndex: 0,
-          marginRight: minimalUI ? 0 : 20,
+          marginRight: minimalUI ? 0 : 10,
           paddingRight: 0,
           position: "relative",
           marginTop: minimalUI ? 0 : 35
@@ -464,12 +464,18 @@ class Sidebar extends Component {
                               style={
                                 groupId === stepgroup.id && stepId === step.id
                                   ? {
-                                      color: "#fff",
+                                      backgroundColor: "#104774",
+                                      borderRadius: "16px",
+                                      paddingLeft: "10px",
+                                      paddingTop: "5px",
+                                      paddingBottom: "5px",
+                                      marginLeft: "-12px",
                                       textDecoration: "none",
-                                      cursor: "pointer"
+                                      cursor: "pointer",
+                                      color: "#FFFFFF"
                                     }
                                   : {
-                                      color: "#969696",
+                                      backgroundColor: "#fafafa",
                                       textDecoration: "none",
                                       cursor: "pointer"
                                     }
@@ -495,7 +501,8 @@ class Sidebar extends Component {
                                         paddingTop: "5px",
                                         paddingBottom: "5px",
                                         marginLeft: "-12px",
-                                        marginLeft: "-14px"
+                                        marginLeft: "-14px",
+                                        color: "#FFFFFF"
                                       }
                                     : {
                                         backgroundColor: "#fafafa",
