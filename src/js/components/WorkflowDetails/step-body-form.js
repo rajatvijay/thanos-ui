@@ -241,8 +241,9 @@ class StepBodyForm extends Component {
         <i className="material-icons pd-right-sm t-20 text-bottom">
           check_circle_outline
         </i>
-        Submitted by <span className="text-medium ">{completed_by}</span> on{" "}
-        <Moment format="MM/DD/YYYY">{step.completed_at}</Moment>
+        Submitted by <span className="text-medium ">{completed_by}</span> on
+        {"  "}
+        {new Date(step.completed_at).toISOString()}
       </span>
     );
   };

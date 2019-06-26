@@ -36,7 +36,8 @@ class WorkflowDetails extends Component {
       printing: false,
       dont: false,
       firstLoad: true,
-      currentStep: null
+      currentStep: null,
+      displayProfile: true
     };
   }
 
@@ -104,6 +105,16 @@ class WorkflowDetails extends Component {
         thisCurrent.currentStepFields.completed_by
     ) {
       this.updateSidebar(workflowIdFromPropsForModal || workflowId);
+    }
+
+    if (prevCurrent.currentStepFields.id !== thisCurrent.currentStepFields.id) {
+      console.log("should scorll ✅✅✅✅✅✅✅");
+
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth"
+      });
     }
 
     //WHEN EVER SEARCH PARAMS CHANGE FETCH NEW STEP DATA
@@ -317,7 +328,8 @@ class WorkflowDetails extends Component {
     this.setState(
       {
         selectedGroup: groupId,
-        selectedStep: stepId
+        selectedStep: stepId,
+        displayProfile: false
       },
       () => {
         this.getStepDetailsData(
@@ -328,12 +340,19 @@ class WorkflowDetails extends Component {
     );
   };
 
+  changeProfileDisplay = displayProfile => {
+    this.setState({ displayProfile });
+  };
+
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal, workflowId } = this.props;
+    const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
+    const { displayProfile } = this.state;
+    console.log("wo", this.props.workflow);
 
-    //     const workflowId = workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+    const workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     //   //const { stepGroups } = workflowDetails.workflowDetails;
     //   //calculate activit step
     //  // const act = currentActiveStep(stepGroups, workflowId);
@@ -422,6 +441,8 @@ class WorkflowDetails extends Component {
                 minimalUI={minimalUI}
                 workflowIdFromDetailsToSidebar={workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
+                displayProfile={displayProfile}
+                changeProfileDisplay={this.changeProfileDisplay}
               />
               <Content
                 style={{
@@ -446,11 +467,13 @@ class WorkflowDetails extends Component {
                       changeFlag={this.changeFlag}
                       getIntegrationComments={this.getIntegrationComments}
                       workflowHead={
-                        this.props.workflowDetailsHeader.workflowDetailsHeader
-                          ? this.props.workflowDetailsHeader
-                              .workflowDetailsHeader
-                          : "loading"
+                        minimalUI
+                          ? workflowItem
+                          : this.props.workflowDetailsHeader[workflowId]
+                          ? this.props.workflowDetailsHeader[workflowId]
+                          : null
                       }
+                      displayProfile={this.state.displayProfile}
                     />
                   </div>
                 </div>
