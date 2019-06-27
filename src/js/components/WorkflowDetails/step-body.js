@@ -216,7 +216,7 @@ class StepBody extends Component {
             <div className="text-center mr-top-lg">
               <Icon type={"loading"} />
             </div>
-          ) : stepData ? (
+          ) : stepData && this.props.workflowHead ? (
             <div
               className={
                 this.state.printing ? "step-printing" : "step-not-printing"

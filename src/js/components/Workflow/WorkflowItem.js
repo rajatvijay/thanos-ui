@@ -357,7 +357,11 @@ class WorkflowItem extends React.Component {
               />
             </div>
 
-            <ModalFooter workflowIdFromPropsForModal={this.props.workflow.id} />
+            <ModalFooter
+              workflowIdFromPropsForModal={this.props.workflow.id}
+              stepId={this.state.selectedStep}
+              groupId={this.state.selectedGroup}
+            />
           </Modal>
           {/* )} */}
 
