@@ -28,16 +28,21 @@ const { Sider, Content } = Layout;
 
 class WorkflowDetails extends Component {
   constructor(props) {
+    const params = new URL(document.location).searchParams;
+    //console.log("params",params)
+    const groupId = params.get("group");
+    const stepId = params.get("step");
+
     super(props);
     this.state = {
       // workflowId: null,
-      selectedStep: null,
-      selectedGroup: null,
+      selectedStep: stepId || null,
+      selectedGroup: groupId || null,
       printing: false,
       dont: false,
       firstLoad: true,
       currentStep: null,
-      displayProfile: true
+      displayProfile: groupId ? false : true
     };
   }
 
@@ -71,6 +76,7 @@ class WorkflowDetails extends Component {
       Number(prevProps.match.params.id);
 
     if (newWorflowId !== oldWorkflowId) {
+      console.log("run");
       this.updateCurrentActiveStep();
     }
 
@@ -204,22 +210,24 @@ class WorkflowDetails extends Component {
       workflowId
     ].workflowDetails;
     //calculate activit step
-    let act = currentActiveStep(stepGroups, workflowId);
-    this.setState(
-      {
-        selectedGroup: act.groupId,
-        selectedStep: act.stepId
-      },
-      () => {
-        let stepTrack = {
-          workflowId,
-          groupId: this.state.selectedGroup,
-          stepId: this.state.selectedStep
-        };
+    //let act = currentActiveStep(stepGroups, workflowId);
+    // this.setState(
+    //   {
+    //     selectedGroup: act.groupId,
+    //     selectedStep: act.stepId
+    //   },
+    //   () => {
 
-        this.fetchStepData(stepTrack);
-      }
-    );
+    //   }
+    // );
+    const stepTrack = {
+      workflowId,
+      groupId: this.state.selectedGroup,
+      stepId: this.state.selectedStep
+    };
+    console.log("trck", stepTrack);
+
+    this.fetchStepData(stepTrack);
   };
 
   checkWorkflowCompetion = () => {
@@ -325,6 +333,15 @@ class WorkflowDetails extends Component {
   };
 
   handleUpdateOfActiveStep = (groupId, stepId) => {
+    const workflowId =
+      this.props.workflowIdFromPropsForModal ||
+      parseInt(this.props.match.params.id, 10);
+
+    if (!this.props.minimalUI) {
+      history.replace(
+        `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
+      );
+    }
     this.setState(
       {
         selectedGroup: groupId,
@@ -339,7 +356,7 @@ class WorkflowDetails extends Component {
       }
     );
     console.log("check", groupId, this.state);
-    this.props.setParameter(stepId, groupId);
+    if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
   };
 
   changeProfileDisplay = displayProfile => {
@@ -352,6 +369,7 @@ class WorkflowDetails extends Component {
     const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
     const { displayProfile } = this.state;
     console.log("wo", this.props.workflow);
+    const params = new URL(document.location).searchParams;
 
     const workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
@@ -417,6 +435,7 @@ class WorkflowDetails extends Component {
 
     if (_.size(error)) {
       // LAYOUT PLACE HOLDER
+      console.log("e");
       return (
         <PlaceHolder error={error} showFilterMenu={this.props.showFilterMenu} />
       );
@@ -473,7 +492,7 @@ class WorkflowDetails extends Component {
                           ? workflowItem
                           : this.props.workflowDetailsHeader[workflowId]
                           ? this.props.workflowDetailsHeader[workflowId]
-                          : null
+                          : {}
                       }
                       displayProfile={this.state.displayProfile}
                     />
