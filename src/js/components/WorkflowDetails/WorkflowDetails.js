@@ -28,6 +28,7 @@ const { Sider, Content } = Layout;
 
 class WorkflowDetails extends Component {
   constructor(props) {
+    const { minimalUI } = props;
     const params = new URL(document.location).searchParams;
     //console.log("params",params)
     const groupId = params.get("group");
@@ -42,7 +43,8 @@ class WorkflowDetails extends Component {
       dont: false,
       firstLoad: true,
       currentStep: null,
-      displayProfile: groupId ? false : true
+      //displayProfile: !minimalUI ? false : true
+      displayProfile: minimalUI ? true : groupId ? false : true
     };
   }
 
@@ -65,8 +67,8 @@ class WorkflowDetails extends Component {
     //SET WORKFLOW ID FROM ROUTER
     let workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    let thisCurrent = currentStepFields;
-    let prevCurrent = prevProps.currentStepFields;
+    // let thisCurrent = currentStepFields;
+    // let prevCurrent = prevProps.currentStepFields;
 
     const newWorflowId =
       this.props.workflowIdFromPropsForModal ||
@@ -101,27 +103,30 @@ class WorkflowDetails extends Component {
 
     //CHECK IF THE STEP COMPLETION HAS CHANGED//
     //CALCULATE STEP ON SUBMISSION OR UNDO//
-    if (
-      _.size(prevCurrent.currentStepFields) && //check step data for non empty ✅
-      _.size(thisCurrent.currentStepFields) && //check step data for non empty ✅
-      //CHECK IF PREV AND CURRENT STEP ARE SAME
-      prevCurrent.currentStepFields.id === thisCurrent.currentStepFields.id &&
-      // //CHECK IS COMPLETION HAS CHANGED
-      prevCurrent.currentStepFields.completed_by !==
-        thisCurrent.currentStepFields.completed_by
-    ) {
-      this.updateSidebar(workflowIdFromPropsForModal || workflowId);
-    }
+    //console.log("current",prevCurrent.currentStepFields)
 
-    if (prevCurrent.currentStepFields.id !== thisCurrent.currentStepFields.id) {
-      console.log("should scorll ✅✅✅✅✅✅✅");
+    //TODO (uncomment)=>pankaj
+    // if (
+    //   _.size(prevCurrent.currentStepFields) && //check step data for non empty ✅
+    //   _.size(thisCurrent.currentStepFields) && //check step data for non empty ✅
+    //   //CHECK IF PREV AND CURRENT STEP ARE SAME
+    //   prevCurrent.currentStepFields.id === thisCurrent.currentStepFields.id &&
+    //   // //CHECK IS COMPLETION HAS CHANGED
+    //   prevCurrent.currentStepFields.completed_by !==
+    //     thisCurrent.currentStepFields.completed_by
+    // ) {
+    //   this.updateSidebar(workflowIdFromPropsForModal || workflowId);
+    // }
 
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: "smooth"
-      });
-    }
+    // if (prevCurrent.currentStepFields.id !== thisCurrent.currentStepFields.id) {
+    //   console.log("should scorll ✅✅✅✅✅✅✅");
+
+    //   window.scroll({
+    //     top: 0,
+    //     left: 0,
+    //     behavior: "smooth"
+    //   });
+    // }
 
     //WHEN EVER SEARCH PARAMS CHANGE FETCH NEW STEP DATA
 
@@ -202,7 +207,11 @@ class WorkflowDetails extends Component {
 
   updateCurrentActiveStep = () => {
     // console.log("update");
-    const { workflowIdFromPropsForModal } = this.props;
+    const {
+      workflowIdFromPropsForModal,
+      minimalUI,
+      displayProfile
+    } = this.props;
 
     let workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
@@ -227,7 +236,9 @@ class WorkflowDetails extends Component {
     };
     console.log("trck", stepTrack);
 
-    this.fetchStepData(stepTrack);
+    if (!displayProfile && !minimalUI) {
+      this.fetchStepData(stepTrack);
+    }
   };
 
   checkWorkflowCompetion = () => {
@@ -342,6 +353,7 @@ class WorkflowDetails extends Component {
         `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
       );
     }
+
     this.setState(
       {
         selectedGroup: groupId,
@@ -360,6 +372,14 @@ class WorkflowDetails extends Component {
   };
 
   changeProfileDisplay = displayProfile => {
+    const workflowId =
+      this.props.workflowIdFromPropsForModal ||
+      parseInt(this.props.match.params.id, 10);
+
+    if (!this.props.minimalUI) {
+      history.replace(`/workflows/instances/${workflowId}`);
+    }
+
     this.setState({ displayProfile });
   };
 
@@ -492,7 +512,7 @@ class WorkflowDetails extends Component {
                           ? workflowItem
                           : this.props.workflowDetailsHeader[workflowId]
                           ? this.props.workflowDetailsHeader[workflowId]
-                          : {}
+                          : null
                       }
                       displayProfile={this.state.displayProfile}
                     />
