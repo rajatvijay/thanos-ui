@@ -44,8 +44,13 @@ class WorkflowAdvFilter extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    if (prevProps.showAdvFilters !== this.props.showAdvFilters) {
+    if (
+      prevProps.showAdvFilters !== this.props.showAdvFilters ||
+      prevProps.workflowFilters.kind !== this.props.workflowFilters.kind
+    ) {
       if (this.props.showAdvFilters) {
+        const kindName = this.props.workflowFilters.kind.meta.tag;
+
         this.setState({ fetching: true });
         const requestOptions = {
           method: "GET",
@@ -53,7 +58,10 @@ class WorkflowAdvFilter extends Component {
           credentials: "include"
         };
 
-        fetch(baseUrl + "fields/export-json/?active_kind=True", requestOptions)
+        fetch(
+          `${baseUrl}fields/export-json/?active_kind=${kindName}`,
+          requestOptions
+        )
           .then(response => response.json())
           .then(body => {
             this.setState({ fieldOptions: body.results, fetching: false });
@@ -85,13 +93,20 @@ class WorkflowAdvFilter extends Component {
 
   setFilter = filterList => {
     let a = [];
+    let stringifyFilter = "";
 
     _.map(filterList, function(i) {
       let f = i.field + "__" + i.operator + "__" + i.value;
       a.push(f);
     });
 
-    let payload = { filterType: "answer", filterValue: a };
+    if (a.length > 0) {
+      a.map((filterItem, index) => {
+        stringifyFilter += filterItem + (index !== a.length - 1 ? "|" : "");
+      });
+    }
+
+    let payload = { filterType: "answer", filterValue: [stringifyFilter] };
 
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
@@ -122,8 +137,8 @@ class WorkflowAdvFilter extends Component {
                   ? "validating"
                   : this.state.advFilterErr &&
                     this.state.filterBuilder.field === null
-                    ? "error"
-                    : ""
+                  ? "error"
+                  : ""
               }
               help={
                 this.state.fetching

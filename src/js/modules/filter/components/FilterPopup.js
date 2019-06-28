@@ -43,7 +43,9 @@ class FilterPopup extends Component {
     const { applyFilters, onModalClose } = this.props;
 
     if (field && text && operator) {
-      applyFilters("advance", `${field}_${operator}_${text}`);
+      const fieldValue = field[field.length - 1];
+
+      applyFilters("advance", `${fieldValue}_${operator}_${text}`);
       this.setState({ showError: false });
       onModalClose();
     } else {
@@ -61,6 +63,22 @@ class FilterPopup extends Component {
     }
   };
 
+  onFilterChange = (key, value) => {
+    const { operator, text, field } = this.state;
+
+    if (key == "field") {
+      this.setState({ field: value });
+    }
+
+    if (key == "operator") {
+      this.setState({ operator: value });
+    }
+
+    if (key == "text") {
+      this.setState({ text: value });
+    }
+  };
+
   render() {
     const {
       workflowFilterType,
@@ -69,17 +87,18 @@ class FilterPopup extends Component {
       onClear,
       onModalClose
     } = this.props;
+
     const {
       visible,
       fieldOptions,
       status,
       region,
       business_unit,
-      operator,
-      showError,
-      text,
-      field
+      showError
     } = filterState;
+
+    const { operator, text, field } = this.state;
+
     const { businessType, regionType } = workflowFilterType;
 
     return (
@@ -161,7 +180,7 @@ class FilterPopup extends Component {
                 value={field}
                 style={{ width: "100%" }}
                 options={fieldOptions}
-                onChange={arr => onFilterChange("field", arr)}
+                onChange={arr => this.onFilterChange("field", arr)}
                 placeholder="Please select field"
                 className={css`
                   .ant-input {
@@ -175,13 +194,13 @@ class FilterPopup extends Component {
                 value={operator}
                 placeholder="Select Operator"
                 name="operator"
-                onFilterChange={onFilterChange}
+                onFilterChange={this.onFilterChange}
               />
 
               <Input
                 placeholder="Input Value"
                 value={text}
-                onChange={e => onFilterChange("text", e.target.value)}
+                onChange={e => this.onFilterChange("text", e.target.value)}
                 style={{ paddingLeft: 0 }}
               />
             </div>

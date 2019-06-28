@@ -51,15 +51,20 @@ class Filter extends Component {
       statusType
     } = this.props.workflowFilterType;
 
+    //ON STATUS CHANGE//
     if (key == "status") {
       let statusObj = statusType.find(item => item.value == value);
       displayfilters.status = statusObj.label;
     }
+
+    //ON REGION CHANGE//
     if (key == "region") {
       let regionObj = regionType.results.find(item => item.value == value);
 
       displayfilters.region = regionObj.label;
     }
+
+    //ON BUSINESS UNIT CHANGE//
     if (key == "business_unit") {
       let business_unitObj = businessType.results.find(
         item => item.value == value
@@ -96,6 +101,8 @@ class Filter extends Component {
       filterType: key,
       filterValue: [value]
     };
+
+    console.log("applying filter----");
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
@@ -114,6 +121,7 @@ class Filter extends Component {
     this.props.dispatch(workflowActions.clearAll());
     this.handleModalClose();
   };
+
   changeScoreOrder = order => {
     const isAscending = this.state.sortOrderAsc;
     const isSortingEnabled = this.state.sortingEnabled;
@@ -167,18 +175,34 @@ class Filter extends Component {
   };
 
   componentDidMount() {
+    this.fetchAdvFilterData();
+  }
+
+  componentDidUpdate = prevProps => {
+    if (prevProps.workflowFilters.kind !== this.props.workflowFilters.kind) {
+      this.fetchAdvFilterData();
+    }
+  };
+
+  fetchAdvFilterData = () => {
+    const kindName = this.props.workflowFilters.kind.meta.tag;
+
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),
       credentials: "include"
     };
 
-    fetch(baseUrl + "fields/export-json/?active_kind=True", requestOptions)
-      .then(response => response.json())
-      .then(body => {
-        this.setState({ fieldOptions: body.results });
-      });
-  }
+    const url = `${baseUrl}fields/export-json/?active_kind=${kindName}`;
+
+    if (kindName) {
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(body => {
+          this.setState({ fieldOptions: body.results });
+        });
+    }
+  };
 
   render() {
     const { sortingEnabled } = this.state;
@@ -290,6 +314,7 @@ class Filter extends Component {
             onClear={this.onClear}
             onFilterChange={this.onFilterChange}
             onApply={this.onApply}
+            applyFilters={this.applyFilters}
           />
         </div>
         <div>
