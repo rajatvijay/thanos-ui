@@ -33,6 +33,7 @@ class WorkflowDetails extends Component {
     //console.log("params",params)
     const groupId = params.get("group");
     const stepId = params.get("step");
+    console.log("inside state", groupId, stepId);
 
     super(props);
     this.state = {
@@ -50,6 +51,7 @@ class WorkflowDetails extends Component {
 
   componentDidMount = () => {
     // TODO: Why??
+    console.log("insode did");
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.getInitialData();
     // this.setStepFromQuery()
@@ -63,41 +65,87 @@ class WorkflowDetails extends Component {
       workflowIdFromPropsForModal
     } = this.props;
 
+    console.log("props update", this.props);
+    const { selectedGroup, selectedStep, displayProfile } = this.state;
+    const { match, minimalUI } = this.props;
+
+    const params = new URL(document.location).searchParams;
+    //console.log("params",params)
+    const groupId = params.get("group");
+    const stepId = params.get("step");
+
+    //     if(selectedStep !== stepId && selectedGroup !==groupId && this.props.match){
+    //       this.setState({selectedGroup:groupId,selectedStep:stepId})
+    //     }
+
+    // if(!groupId && !displayProfile && !this.props.minimalUI){
+    //   this.setState({displayProfile:true})
+    // }
+
     // let wd = workflowDetails;
     //SET WORKFLOW ID FROM ROUTER
-    let workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+    console.log("before", selectedStep, stepId, selectedGroup);
+
+    if (
+      !minimalUI &&
+      match &&
+      selectedStep !== stepId &&
+      selectedGroup !== groupId
+    ) {
+      console.log("changed", selectedStep, stepId, selectedGroup);
+      this.setState(
+        { selectedGroup: groupId, selectedStep: stepId },
+        function() {
+          this.updateCurrentActiveStep();
+        }
+      );
+    }
+
+    if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
+      console.log("changes profile");
+      this.setState({ displayProfile: true });
+    }
+    if (stepId && groupId && displayProfile) {
+      this.setState({ displayProfile: false });
+    }
+
+    // let workflowId =
+    //   workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     // let thisCurrent = currentStepFields;
     // let prevCurrent = prevProps.currentStepFields;
 
-    const newWorflowId =
-      this.props.workflowIdFromPropsForModal ||
-      Number(this.props.match.params.id);
-    const oldWorkflowId =
-      prevProps.workflowIdFromPropsForModal ||
-      Number(prevProps.match.params.id);
+    // const newWorflowId =
+    //   this.props.workflowIdFromPropsForModal ||
+    //   Number(this.props.match.params.id);
+    // const oldWorkflowId =
+    //   prevProps.workflowIdFromPropsForModal ||
+    //   Number(prevProps.match.params.id);
 
-    if (newWorflowId !== oldWorkflowId) {
-      console.log("run");
-      this.updateCurrentActiveStep();
-    }
+    // if (newWorflowId !== oldWorkflowId) {
+    //   console.log("run");
+    //   this.updateCurrentActiveStep();
+    // }
 
-    try {
-      if (
-        prevProps.workflowDetails[oldWorkflowId].loading &&
-        !this.props.workflowDetails[newWorflowId].loading
-      ) {
-        this.updateCurrentActiveStep();
-      }
-    } catch (e) {
-      console.log(
-        "Making first API call for step fields",
-        "Error",
-        e,
-        prevProps.workflowDetails[oldWorkflowId],
-        this.props.workflowDetails[newWorflowId]
-      );
-    }
+    // try {
+    //   if (
+    //     prevProps.workflowDetails[oldWorkflowId].loading &&
+    //     !this.props.workflowDetails[newWorflowId].loading
+    //   ) {
+    //     this.updateCurrentActiveStep();
+    //   }
+    // } catch (e) {
+    //   console.log(
+    //     "Making first API call for step fields",
+    //     "Error",
+    //     e,
+    //     prevProps.workflowDetails[oldWorkflowId],
+    //     this.props.workflowDetails[newWorflowId]
+    //   );
+    // }
+
+    // if(selectedStep !== stepId && selectedGroup !==groupId){
+    //   this.updateCurrentActiveStep();
+    // }
 
     // const params = new URLSearchParams(this.props.location.search);
 
@@ -215,9 +263,9 @@ class WorkflowDetails extends Component {
 
     let workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    const { stepGroups } = this.props.workflowDetails[
-      workflowId
-    ].workflowDetails;
+    // const { stepGroups } = this.props.workflowDetails[
+    //   workflowId
+    // ].workflowDetails;
     //calculate activit step
     //let act = currentActiveStep(stepGroups, workflowId);
     // this.setState(
@@ -241,13 +289,13 @@ class WorkflowDetails extends Component {
     }
   };
 
-  checkWorkflowCompetion = () => {
-    let step_groups = {
-      step_groups: this.props.workflowDetails.workflowDetails.stepGroups.results
-    };
-    let prog = getProgressData(step_groups);
-    return prog;
-  };
+  // checkWorkflowCompetion = () => {
+  //   let step_groups = {
+  //     step_groups: this.props.workflowDetails.workflowDetails.stepGroups.results
+  //   };
+  //   let prog = getProgressData(step_groups);
+  //   return prog;
+  // };
 
   reinitialize = () => {
     this.getInitialData();
@@ -286,6 +334,7 @@ class WorkflowDetails extends Component {
       ...payload,
       fromEmbedded: this.props.fromEmbedded
     };
+    // if(!this.props.currentStepFields[payload.stepId])
     this.props.dispatch(workflowDetailsActions.getStepFields(payloadWithMeta));
   };
 

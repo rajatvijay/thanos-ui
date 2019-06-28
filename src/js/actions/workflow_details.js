@@ -88,9 +88,9 @@ function getStepGroup(id) {
 function getStepFields(step) {
   // For Error tracking
   if (!step.workflowId || !step.groupId || !step.stepId) {
-    Sentry.captureException(
-      new Error(`Get steps field called ${JSON.stringify(step)}`)
-    );
+    // Sentry.captureException(
+    //   new Error(`Get steps field called ${JSON.stringify(step)}`)
+    // );
     return () => {};
   }
   return dispatch => {
