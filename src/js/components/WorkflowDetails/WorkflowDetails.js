@@ -105,7 +105,8 @@ class WorkflowDetails extends Component {
       console.log("changes profile");
       this.setState({ displayProfile: true });
     }
-    if (stepId && groupId && displayProfile) {
+    if (stepId && groupId && displayProfile && !minimalUI) {
+      console.log("false");
       this.setState({ displayProfile: false });
     }
 
@@ -335,6 +336,9 @@ class WorkflowDetails extends Component {
       fromEmbedded: this.props.fromEmbedded
     };
     // if(!this.props.currentStepFields[payload.stepId])
+
+    console.log("cache", payloadWithMeta);
+
     this.props.dispatch(workflowDetailsActions.getStepFields(payloadWithMeta));
   };
 
