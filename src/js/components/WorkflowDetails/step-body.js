@@ -85,8 +85,13 @@ class StepBody extends Component {
 
     var stepData = null;
     console.log("l", loading);
+    console.log("ids", this.props.stepId);
 
-    if (!loading && this.props.currentStepFields[this.props.stepId]) {
+    if (
+      !loading &&
+      this.props.currentStepFields[this.props.stepId] &&
+      this.props.currentStepFields[this.props.stepId].currentStepFields
+    ) {
       stepData = this.props.currentStepFields[this.props.stepId]
         .currentStepFields;
     } else {
