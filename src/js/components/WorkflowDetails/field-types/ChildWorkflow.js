@@ -317,7 +317,8 @@ class ChildWorkflowField2 extends Component {
       status: 1,
       kind: e.key,
       name: "Draft",
-      parent: this.props.workflowId
+      parent: this.props.workflowId,
+      child_mapping: this.props.field.definition.extra.child_mapping || null
     };
 
     this.props.dispatch(createWorkflow(payload));
