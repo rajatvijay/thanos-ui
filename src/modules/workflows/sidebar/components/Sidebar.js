@@ -265,7 +265,7 @@ class Sidebar extends Component {
               />
             </Drawer>
           ) : null}
-          {/* {!minimalUI && (
+          {!minimalUI && (
             <div>
               <div
                 style={{
@@ -300,7 +300,7 @@ class Sidebar extends Component {
                 </Dropdown>
               </div>
               <Divider style={{ margin: "10px 0" }} />
-              <Row style={{ marginBottom: 15 }}>
+              {/* <Row style={{ marginBottom: 15 }}>
                 {lc_data.map(data => (
                   <Col span={12}>
                     <span
@@ -329,9 +329,9 @@ class Sidebar extends Component {
                     </span>
                   </Col>
                 ))}
-              </Row>
+              </Row> */}
             </div>
-          )} */}
+          )}
           <span
             // to={`${history.location.pathname}?group=${
             //   stepgroup.id

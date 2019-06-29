@@ -333,7 +333,11 @@ class WorkflowItem extends React.Component {
         <div>
           {/* {this.state.visible && ( */}
           <Modal
-            style={{ left: "21vw", margin: 0 }}
+            style={{
+              left: "21vw",
+              margin: 0,
+              top: "calc((100vh - 600px) / 2)"
+            }}
             footer={null}
             bodyStyle={{ padding: 0, maxHeight: 600 }}
             width="77vw"

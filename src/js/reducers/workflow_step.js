@@ -47,6 +47,7 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         [action.payload.id]: {
+          ...state[action.payload.id],
           isSubmitting: true,
           loading: true
         }
@@ -64,6 +65,7 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         [action.payload.id]: {
+          ...state[action.payload.id],
           isSubmitting: false,
           error: action.error
         }
@@ -80,6 +82,16 @@ export function currentStepFields(state = initialState, action) {
         }
         // currentStepFields: { ...action.field }
       };
+    case fieldConstants.POST_FIELD_FAILURE:
+      console.log("POST_FIELD_FAILURE", action);
+      return {
+        ...state,
+        [action.workflowId]: {
+          ...state[action.workflowId],
+          loading: false,
+          error: action.error
+        }
+      };
 
     // TODO: Fix the actions below this, when cleaning!
 
@@ -90,13 +102,6 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         loading: false
-      };
-    case fieldConstants.POST_FIELD_FAILURE:
-      console.log("POST_FIELD_FAILURE", action);
-      return {
-        ...state,
-        loading: false,
-        error: action.error
       };
 
     //////////////////////////////////////////////////////

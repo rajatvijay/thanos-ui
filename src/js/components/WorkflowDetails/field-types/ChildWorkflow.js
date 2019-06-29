@@ -1069,7 +1069,7 @@ class ChildWorkflowField2 extends Component {
             {/*show filters top*/}
             <Row>
               <Col
-                span={4}
+                span={6}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -1120,7 +1120,7 @@ class ChildWorkflowField2 extends Component {
               </Col>
 
               {_.size(this.state.filteredChildWorkflow) ? (
-                <Col span={8}>
+                <Col span={6}>
                   <Tooltip
                     title={
                       this.state.sortOrderAsc

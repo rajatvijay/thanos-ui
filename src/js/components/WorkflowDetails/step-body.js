@@ -108,7 +108,7 @@ class StepBody extends Component {
 
     var locked_tag = null;
 
-    if (stepData.is_locked) {
+    if (stepData && stepData.is_locked) {
       let dependent_steps = stepData.definition.dependent_steps;
       let dependent_step_name = _.map(dependent_steps, function(ds) {
         return ds["label"];
