@@ -6,9 +6,9 @@ export const goToPrevStep = () => {
 
   let url = `${histObj.pathname}${histObj.search}`;
 
-  if (histObj.search) {
-    url = url + "&backing=true";
-  }
+  // if (histObj.search) {
+  //   url = url + "&backing=true";
+  // }
 
   history.push(url);
 };
