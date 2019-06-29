@@ -96,6 +96,7 @@ class WorkflowDetails extends Component {
       this.setState(
         { selectedGroup: groupId, selectedStep: stepId },
         function() {
+          // if(!workflowDetails[stepId])
           this.updateCurrentActiveStep();
         }
       );
@@ -250,9 +251,11 @@ class WorkflowDetails extends Component {
     // }
   };
 
-  updateSidebar = id => {
-    this.props.dispatch(workflowDetailsActions.getStepGroup(id));
-  };
+  //   updateSidebar = id => {
+  // // console.log("sidebar call",id,this.props.workflowDetails[id])
+  // //     if(!this.props.workflowDetails[id])
+  //     this.props.dispatch(workflowDetailsActions.getStepGroup(id));
+  //   };
 
   updateCurrentActiveStep = () => {
     // console.log("update");
@@ -285,7 +288,11 @@ class WorkflowDetails extends Component {
     };
     console.log("trck", stepTrack);
 
-    if (!displayProfile && !minimalUI) {
+    if (
+      !displayProfile &&
+      !minimalUI &&
+      !this.props.currentStepFields[stepTrack.stepId]
+    ) {
       this.fetchStepData(stepTrack);
     }
   };
@@ -338,8 +345,10 @@ class WorkflowDetails extends Component {
     // if(!this.props.currentStepFields[payload.stepId])
 
     console.log("cache", payloadWithMeta);
-
-    this.props.dispatch(workflowDetailsActions.getStepFields(payloadWithMeta));
+    if (!this.props.currentStepFields[payload.stepId])
+      this.props.dispatch(
+        workflowDetailsActions.getStepFields(payloadWithMeta)
+      );
   };
 
   isParentWorkflow = () => {
