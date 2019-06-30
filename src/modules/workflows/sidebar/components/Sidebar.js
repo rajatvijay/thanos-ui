@@ -26,7 +26,11 @@ const Panel = Collapse.Panel;
 
 class Sidebar extends Component {
   constructor(props) {
-    const { workflowIdFromDetailsToSidebar } = props;
+    const {
+      workflowIdFromDetailsToSidebar,
+      selectedGroup,
+      selectedStep
+    } = props;
     super();
 
     this.state = {
@@ -38,8 +42,8 @@ class Sidebar extends Component {
           : null,
       showSidebar: false,
       isWorkflowPDFModalVisible: false,
-      groupId: null,
-      stepId: null
+      groupId: selectedGroup,
+      stepId: selectedStep
       //defaultSelected:true
     };
   }
@@ -163,7 +167,7 @@ class Sidebar extends Component {
       displayProfile,
       changeProfileDisplay
     } = this.props;
-    // console.log("min", minimalUI);
+    console.log("min", this.props);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
       workflowDetailsHeader[workflowIdFromDetailsToSidebar]

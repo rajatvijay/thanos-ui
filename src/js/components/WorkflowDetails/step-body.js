@@ -77,14 +77,21 @@ class StepBody extends Component {
 
   render = () => {
     const { displayProfile, workflowHead } = this.props;
+    //console.log("step",stepData,workflowHead)
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
       this.props.workflowDetails.loading;
 
     var stepData = null;
+    console.log("l", loading);
+    console.log("ids", this.props.stepId);
 
-    if (!loading && this.props.currentStepFields[this.props.stepId]) {
+    if (
+      !loading &&
+      this.props.currentStepFields[this.props.stepId] &&
+      this.props.currentStepFields[this.props.stepId].currentStepFields
+    ) {
       stepData = this.props.currentStepFields[this.props.stepId]
         .currentStepFields;
     } else {
@@ -95,7 +102,8 @@ class StepBody extends Component {
       workflowHead,
       stepData,
       this.props.currentStepFields,
-      this.props.stepId
+      this.props.stepId,
+      stepData
     );
 
     var locked_tag = null;
@@ -213,7 +221,7 @@ class StepBody extends Component {
             <div className="text-center mr-top-lg">
               <Icon type={"loading"} />
             </div>
-          ) : stepData ? (
+          ) : stepData && this.props.workflowHead ? (
             <div
               className={
                 this.state.printing ? "step-printing" : "step-not-printing"

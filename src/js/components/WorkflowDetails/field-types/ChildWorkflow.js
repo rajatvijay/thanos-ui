@@ -1018,9 +1018,10 @@ class ChildWorkflowField2 extends Component {
 
     const u = new URL(window.location.href);
     const step = u.searchParams.get("step");
-    const selectedWorkflow = currentStepFields[step]
-      ? currentStepFields[step].currentStepFields.workflow
-      : null;
+    const selectedWorkflow =
+      currentStepFields[step] && currentStepFields[step].currentStepFields
+        ? currentStepFields[step].currentStepFields.workflow
+        : null;
 
     let kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
     let workflowHeaderChild = childWorkflow ? childWorkflow : [];
