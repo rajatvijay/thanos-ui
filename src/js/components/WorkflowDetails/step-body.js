@@ -84,8 +84,8 @@ class StepBody extends Component {
       this.props.workflowDetails.loading;
 
     var stepData = null;
-    console.log("l", loading);
-    console.log("ids", this.props.stepId);
+    // console.log("l", loading);
+    // console.log("ids", this.props.stepId);
 
     if (
       !loading &&
@@ -97,14 +97,14 @@ class StepBody extends Component {
     } else {
       stepData = {};
     }
-    console.log(
-      "step",
-      workflowHead,
-      stepData,
-      this.props.currentStepFields,
-      this.props.stepId,
-      stepData
-    );
+    // console.log(
+    //   "step",
+    //   workflowHead,
+    //   stepData,
+    //   this.props.currentStepFields,
+    //   this.props.stepId,
+    //   stepData
+    // );
 
     var locked_tag = null;
 
