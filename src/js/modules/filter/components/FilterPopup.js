@@ -52,13 +52,15 @@ class FilterPopup extends Component {
   };
 
   getStatusTypes = () => {
-    try {
-      const allStatuses = this.props.workflowFilterType.statusType;
-      const kindId = this.props.workflowKindValue.selectedKindValue.id;
-      return allStatuses.filter(status => status.workflow_kind === kindId);
-    } catch (e) {
-      return [];
-    }
+    // TODO: Commenting out the filtering of status based on kind ID
+    // try {
+    //   const allStatuses = this.props.workflowFilterType.statusType;
+    //   const kindId = this.props.workflowKindValue.selectedKindValue.id;
+    //   return allStatuses.filter(status => status.workflow_kind === kindId);
+    // } catch (e) {
+    //   return [];
+    // }
+    return this.props.workflowFilterType.statusType;
   };
 
   render() {
