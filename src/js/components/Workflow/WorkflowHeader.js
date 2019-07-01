@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import moment from "moment";
 import _ from "lodash";
-import { Row, Col, Tooltip, Tag, Checkbox } from "antd";
+import { Row, Col, Tooltip, Tag, Checkbox, Popover } from "antd";
 import { calculatedData } from "./calculated-data";
 import { history } from "../../_helpers";
 import { changeStatusActions, workflowActions } from "../../actions";
@@ -137,22 +137,82 @@ const createFamilyListForBreadcrums = family => {
 
 const HeaderTitle = props => {
   const { workflow } = props;
+  const { family } = workflow;
 
-  return (
-    <div>
-      <span
-        title={props.workflow.name}
-        style={{
-          color: "#000000",
-          fontSize: "20px",
-          letterSpacing: "-0.04px",
-          lineHeight: "24px"
-        }}
-      >
-        {workflow.name}
-      </span>
-    </div>
-  );
+  if (family.length === 1) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          {workflow.name}
+        </span>
+      </div>
+    );
+  } else if (family.length === 2) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          <Link
+            className={css`
+              color: #b5b5b5;
+              &:hover {
+                color: black;
+              }
+            `}
+            to={"/workflows/instances/" + family[0].id}
+          >
+            {family[0].name}
+          </Link>{" "}
+          / {family[1].name}
+        </span>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Popover content={createFamilyListForBreadcrums(family)}>
+          <span
+            title={props.workflow.name}
+            style={{
+              color: "#000000",
+              fontSize: "16px",
+              letterSpacing: "-0.04px",
+              lineHeight: "24px"
+            }}
+          >
+            <Link
+              className={css`
+                color: #b5b5b5;
+                &:hover {
+                  color: black;
+                }
+              `}
+              to={"/workflows/instances/" + family[0].id}
+            >
+              {family[0].name}
+            </Link>
+            <span style={{ color: "#b5b5b5" }}> /... / </span>
+            {workflow.name}
+          </span>
+        </Popover>
+      </div>
+    );
+  }
 };
 
 export const HeaderLcData = props => {
