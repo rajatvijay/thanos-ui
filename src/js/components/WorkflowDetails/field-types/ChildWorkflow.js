@@ -210,7 +210,9 @@ class ChildWorkflowField2 extends Component {
 
   getChildWorkflow = () => {
     let parentId = this.props.workflowId;
+
     let kind = this.props.field.definition.extra.child_workflow_kind_id;
+
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),
@@ -233,10 +235,14 @@ class ChildWorkflowField2 extends Component {
     const param = this.objToParam({
       limit: 100,
       [paramName]: parentId,
-      kind: `${kind}${valueFilter}`,
+      kind: `${kind}`,
+      answer: `${valueFilter}`,
       ordering: sortBy,
       child_kinds: true
     });
+
+    console.log("param--");
+    console.log(kind, valueFilter);
 
     const url = `${baseUrl}workflows-list/?${param}`;
 
@@ -295,17 +301,16 @@ class ChildWorkflowField2 extends Component {
 
   getValuefilter = () => {
     let filterList = this.props.field.definition.extra.filters;
-    let filter = "&";
+    let filter = "";
 
     if (!_.size(filterList)) {
       return "";
     }
 
     _.forEach(filterList, (i, index) => {
-      filter =
-        filter + "answer=" + i.field + "__" + i.operator + "__" + i.value;
+      filter = filter + i.field + "__" + i.operator + "__" + i.value;
       if (!index + 1 === _.size(filterList)) {
-        filter = filter + "&";
+        filter = filter + "|";
       }
     });
 
@@ -1069,7 +1074,7 @@ class ChildWorkflowField2 extends Component {
             {/*show filters top*/}
             <Row>
               <Col
-                span={6}
+                span={16}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -1092,6 +1097,7 @@ class ChildWorkflowField2 extends Component {
                     />
                   </span>
                 ) : null}
+
                 {!this.state.bulkActionWorkflowChecked.length ? (
                   <span className="text-lighter">
                     {this.state.childWorkflow
@@ -1100,6 +1106,7 @@ class ChildWorkflowField2 extends Component {
                     results{" "}
                   </span>
                 ) : null}
+
                 {!this.state.bulkActionWorkflowChecked.length ? (
                   field.definition.extra.show_filters ? (
                     <span
@@ -1117,10 +1124,8 @@ class ChildWorkflowField2 extends Component {
                 {this.state.bulkActionWorkflowChecked.length
                   ? this.getBulkAction(this.state.bulkActionWorkflowChecked)
                   : null}
-              </Col>
 
-              {_.size(this.state.filteredChildWorkflow) ? (
-                <Col span={6}>
+                {_.size(this.state.filteredChildWorkflow) ? (
                   <Tooltip
                     title={
                       this.state.sortOrderAsc
@@ -1143,10 +1148,10 @@ class ChildWorkflowField2 extends Component {
                       ) : null}
                     </span>
                   </Tooltip>
-                </Col>
-              ) : null}
+                ) : null}
+              </Col>
 
-              <Col span={12} className="text-right small">
+              <Col span={8} className="text-right small">
                 <span
                   onClick={this.getChildWorkflow}
                   title="Reload"
