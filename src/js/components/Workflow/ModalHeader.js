@@ -7,7 +7,7 @@ class ModalHeader extends Component {
   render() {
     const { workflow, stepId, groupId } = this.props;
 
-    console.log("ids", stepId, groupId);
+    //console.log("ids", stepId, groupId);
 
     return (
       <div

@@ -33,7 +33,7 @@ class WorkflowDetails extends Component {
     //console.log("params",params)
     const groupId = params.get("group");
     const stepId = params.get("step");
-    console.log("inside state", groupId, stepId);
+    //console.log("inside state", groupId, stepId);
 
     super(props);
     this.state = {
@@ -51,7 +51,7 @@ class WorkflowDetails extends Component {
 
   componentDidMount = () => {
     // TODO: Why??
-    console.log("insode did");
+    //console.log("insode did");
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.getInitialData();
     // this.setStepFromQuery()

@@ -239,7 +239,7 @@ class Sidebar extends Component {
       >
         <div
           style={{
-            width: minimalUI ? 280 : NaN,
+            width: minimalUI ? 280 : "",
             paddingBottom: 100,
             height: "100%",
             backgroundColor: "#FAFAFA"
