@@ -5,7 +5,8 @@ import {
   createWorkflow,
   workflowActions,
   stepPreviewActions,
-  navbarActions
+  navbarActions,
+  toggleMinimalUI
 } from "../../actions";
 import _ from "lodash";
 import Collapsible from "react-collapsible";
@@ -86,6 +87,7 @@ class WorkflowItem extends React.Component {
     //  if(this.props.match.params.id){
     //   this.props.history.replace("/workflows/instances/"+this.props.match.params.id+"/");
     //  }
+    if (!this.props.minimalUI) this.props.toggleMinimalUI();
 
     this.setState({
       visible: true,
@@ -104,6 +106,9 @@ class WorkflowItem extends React.Component {
     // console.log(this.props);
     //this.props.history.replace("/workflows/instances");
     // console.log(e);
+
+    this.props.toggleMinimalUI();
+
     this.setState({
       visible: false
     });
@@ -351,7 +356,7 @@ class WorkflowItem extends React.Component {
               <WorkflowDetails
                 workflowItem={this.props.workflow}
                 location={this.props.location}
-                minimalUI={true}
+                minimalUI={this.props.minimalUI}
                 workflowIdFromPropsForModal={this.props.workflow.id}
                 setParameter={this.setParameter}
               />
@@ -447,10 +452,16 @@ class WorkflowItem extends React.Component {
 }
 
 function mapPropsToState(state) {
-  const { workflowChildren } = state;
+  const { workflowChildren, minimalUI } = state;
   return {
-    workflowChildren
+    workflowChildren,
+    minimalUI
   };
 }
 
-export default withRouter(connect(mapPropsToState)(WorkflowItem));
+export default withRouter(
+  connect(
+    mapPropsToState,
+    { toggleMinimalUI }
+  )(WorkflowItem)
+);

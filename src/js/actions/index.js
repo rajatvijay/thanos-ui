@@ -18,3 +18,5 @@ export { dunsFieldActions } from "./integration_step_submit";
 export { languageActions } from "./internationalize";
 export { navbarActions } from "./navbar";
 export { stepPreviewActions } from "./stepPreview";
+export { setWorkflowKeys } from "./workflowKeys";
+export { toggleMinimalUI } from "./toggleMinimalUI";

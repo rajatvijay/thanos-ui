@@ -76,7 +76,8 @@ class StepBody extends Component {
   };
 
   render = () => {
-    const { displayProfile, workflowHead } = this.props;
+    const { displayProfile, workflowHead, workflowId } = this.props;
+    console.log("workflowprops", workflowId);
     //console.log("step",stepData,workflowHead)
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
@@ -243,6 +244,7 @@ class StepBody extends Component {
                 <Divider />
               </div>
               <StepBodyForm
+                workflowId={workflowId}
                 stepData={stepData}
                 {...this.props}
                 version={this.props.stepVersionFields}

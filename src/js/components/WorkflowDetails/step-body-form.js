@@ -55,11 +55,13 @@ class StepBodyForm extends Component {
   };
 
   handleSubmit = e => {
+    const { workflowId } = this.props;
     e.preventDefault();
     this.props.dispatch(
-      workflowStepActions.submitStepData(
-        this.props.currentStepFields.currentStepFields
-      )
+      workflowStepActions.submitStepData({
+        ...this.props.currentStepFields.currentStepFields,
+        workflowId
+      })
     );
   };
 

@@ -16,3 +16,5 @@ export { stepVersionConstants } from "./step_version";
 export { languageConstants } from "./internationalize";
 export { navbarConstants } from "./navbar";
 export { stepPreviewConstants } from "./stepPreview";
+export { SET_WORKFLOW_KEYS } from "./workflowKeys";
+export { TOGGLE_MINIMALUI } from "./ToggleMinimalUI";

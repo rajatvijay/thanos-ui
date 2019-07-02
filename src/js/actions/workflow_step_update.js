@@ -6,12 +6,14 @@ import {
 import { workflowStepService } from "../services";
 import { notification, message } from "antd";
 import _ from "lodash";
+import { SET_WORKFLOW_KEYS } from "../constants/workflowKeys";
 import {
   workflowDetailsActions,
   workflowActions,
   workflowFiltersActions,
   stepPreviewActions
 } from "../actions";
+import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -204,20 +206,39 @@ function updateField(payload) {
 ////////////////////////////////////////
 function submitStepData(payload) {
   return dispatch => {
-    const workflowId = payload.id;
+    // console.log("store",getState())
+
+    // const {workflowDetails} = getState();
+    // console.log("ac work",workflowDetails)
+    const { workflowId, id } = payload;
+    //console.log("ac id",workflowId)
     dispatch(request(payload));
     dispatch(remove_errors({}));
 
     workflowStepService.submitStep(payload).then(
       stepData => {
         dispatch(success(stepData));
+
+        //   console.log("print step",stepData)
+        //   const {workflowId :wfId,groupId,stepId} =  currentActiveStep(workflowDetails[workflowId].workflowDetails.stepGroups,workflowId)
+        //  console.log("ac",workflowId,groupId,stepId)
+        //  dispatch({type:SET_WORKFLOW_KEYS,payload:{workflowId,groupId,stepId}})
+
         if (stepData.id) {
-          dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          dispatch(
+            workflowDetailsActions.getStepGroup(stepData.workflow, true)
+          );
           dispatch(workflowFiltersActions.getStatusData());
           dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
-      error => dispatch(failure(error, { id: workflowId }))
+      error => {
+        // const {workflowId,groupId,stepId} =  currentActiveStep(workflowDetails[workflowId].workflowDetails,workflowId)
+        // console.log("ac",workflowId,groupId,stepId)
+        //dispatch({type:"SET_WORKFLOW_KEYS",payload:{workflowId,groupId,stepId}})
+
+        dispatch(failure(error, { id }));
+      }
     );
   };
 

@@ -167,7 +167,7 @@ class Sidebar extends Component {
       displayProfile,
       changeProfileDisplay
     } = this.props;
-    console.log("min", this.props);
+    console.log("min", this.state, displayProfile);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
       workflowDetailsHeader[workflowIdFromDetailsToSidebar]
