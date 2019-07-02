@@ -338,7 +338,7 @@ function undoStep(payload) {
       stepData => {
         dispatch(success(stepData));
         if (stepData.id) {
-          //dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
           // call an action to update the sidebar here
           //dispatch(workflowDetailsActions.getById(stepData.workflow));
         }

@@ -65,7 +65,7 @@ class WorkflowDetails extends Component {
       workflowIdFromPropsForModal
     } = this.props;
 
-    console.log("props update", this.props);
+    //console.log("props update", this.props);
     const { selectedGroup, selectedStep, displayProfile } = this.state;
     const { match, minimalUI } = this.props;
 
@@ -84,7 +84,7 @@ class WorkflowDetails extends Component {
 
     // let wd = workflowDetails;
     //SET WORKFLOW ID FROM ROUTER
-    console.log("before", selectedStep, stepId, selectedGroup);
+    //console.log("before", selectedStep, stepId, selectedGroup);
 
     if (
       !minimalUI &&
@@ -92,7 +92,7 @@ class WorkflowDetails extends Component {
       selectedStep !== stepId &&
       selectedGroup !== groupId
     ) {
-      console.log("changed", selectedStep, stepId, selectedGroup);
+      //console.log("changed", selectedStep, stepId, selectedGroup);
       this.setState(
         { selectedGroup: groupId, selectedStep: stepId },
         function() {
@@ -103,11 +103,11 @@ class WorkflowDetails extends Component {
     }
 
     if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
-      console.log("changes profile");
+      //console.log("changes profile");
       this.setState({ displayProfile: true });
     }
     if (stepId && groupId && displayProfile && !minimalUI) {
-      console.log("false");
+      //console.log("false");
       this.setState({ displayProfile: false });
     }
 
@@ -286,7 +286,7 @@ class WorkflowDetails extends Component {
       groupId: this.state.selectedGroup,
       stepId: this.state.selectedStep
     };
-    console.log("trck", stepTrack);
+    //console.log("trck", stepTrack);
 
     if (
       !displayProfile &&
@@ -344,7 +344,7 @@ class WorkflowDetails extends Component {
     };
     // if(!this.props.currentStepFields[payload.stepId])
 
-    console.log("cache", payloadWithMeta);
+    // console.log("cache", payloadWithMeta);
     if (!this.props.currentStepFields[payload.stepId])
       this.props.dispatch(
         workflowDetailsActions.getStepFields(payloadWithMeta)
@@ -429,7 +429,7 @@ class WorkflowDetails extends Component {
         );
       }
     );
-    console.log("check", groupId, this.state);
+    // console.log("check", groupId, this.state);
     if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
   };
 
@@ -450,7 +450,7 @@ class WorkflowDetails extends Component {
   render = () => {
     const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
     const { displayProfile } = this.state;
-    console.log("wo", this.props.workflow);
+    // console.log("wo", this.props.workflow);
     const params = new URL(document.location).searchParams;
 
     const workflowId =
@@ -517,7 +517,7 @@ class WorkflowDetails extends Component {
 
     if (_.size(error)) {
       // LAYOUT PLACE HOLDER
-      console.log("e");
+      // console.log("e");
       return (
         <PlaceHolder error={error} showFilterMenu={this.props.showFilterMenu} />
       );
