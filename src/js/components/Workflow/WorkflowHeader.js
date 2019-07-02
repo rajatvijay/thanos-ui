@@ -491,7 +491,7 @@ export class GetMergedData extends React.Component {
               {item.show_label || (is_alert && item.link) ? item.label : ""}
               {item.link ? "" : item.show_label ? ": " : ""}
             </span>
-            {ProcessLcData(item) || ""}
+            {ProcessLcData(item, is_alert) || ""}
           </span>
 
           {/* {item.color ? (

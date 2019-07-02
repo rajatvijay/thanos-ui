@@ -345,6 +345,7 @@ class WorkflowItem extends React.Component {
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
+            className="workflow-modal"
           >
             <ModalHeader
               workflow={workflow}
