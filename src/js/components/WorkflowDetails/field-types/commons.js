@@ -27,6 +27,21 @@ export const commonFunctions = {
 
 //Utility func
 function getLabel(props, that) {
+  let helpText = "";
+
+  if (props.field.definition.help_text) {
+    helpText = (
+      <span className="pd-left-sm">
+        <Tooltip title={props.field.definition.help_text}>
+          <Icon
+            type="info-circle"
+            style={{ fontSize: "12px", color: "rgba(0,0,0,0.3)" }}
+          />
+        </Tooltip>
+      </span>
+    );
+  }
+
   if (that) {
     let label = (
       <span className="label-with-action">
@@ -62,9 +77,7 @@ function getLabel(props, that) {
         </span>
 
         {props.field.answers.length !== 0 ? (
-          <i className="material-icons t-13 text-middle text-green pd-right-sm">
-            check_circle
-          </i>
+          <GetAnsweredBy {...props} />
         ) : getRequired(props) ? (
           <Tooltip title="Answer is required">
             <i
@@ -76,16 +89,28 @@ function getLabel(props, that) {
           </Tooltip>
         ) : null}
 
-        {props.field.label_value
-          ? props.field.label_value
-          : props.field.definition.body}
+        {props.field.label_value ? (
+          <span>
+            {props.field.label_value} {helpText}
+          </span>
+        ) : (
+          <span>
+            {props.field.definition.body} {helpText}
+          </span>
+        )}
       </span>
     );
     return label;
   } else {
-    return props.field.label_value
-      ? props.field.label_value
-      : props.field.definition.body;
+    return props.field.label_value ? (
+      <span>
+        {props.field.label_value} {helpText}
+      </span>
+    ) : (
+      <span>
+        {props.field.definition.body} {helpText}
+      </span>
+    );
   }
 }
 
@@ -139,23 +164,13 @@ function stringToArray(string) {
 
 function field_error(props) {
   let error = props.error || {};
+
   if (error[props.field.id]) {
     return {
       help: error[props.field.id],
       validateStatus: "error"
     };
   }
-  return {
-    // TODO: Remove dangerouslySetInnerHTML
-    help: (
-      <span
-        dangerouslySetInnerHTML={{
-          __html: getLink(props.field.definition.help_text)
-        }}
-      />
-    )
-    //validateStatus: props.field.answers.length !== 0 ? "success" : null
-  };
 }
 
 function getRequired(props) {
@@ -435,13 +450,41 @@ function getAnsweredBy(props) {
     );
     return (
       <Tooltip placement="topLeft" title={ans}>
-        <span className="floater">&nbsp;</span>
+        <i className="material-icons t-13 text-middle text-green pd-right-sm">
+          check_circle
+        </i>
       </Tooltip>
     );
   } else {
     return;
   }
 }
+
+const GetAnsweredBy = props => {
+  if (props.field.answers[0] && props.field.answers[0].submitted_by) {
+    let answer = props.field.answers[0];
+    let ans = (
+      <span>
+        Answered by{" "}
+        {answer.submitted_by.first_name +
+          " " +
+          answer.submitted_by.last_name +
+          " "}
+        ( {answer.submitted_by.email}) on{" "}
+        <Moment format="MM/DD/YYYY">{answer.updated_at}</Moment>
+      </span>
+    );
+    return (
+      <Tooltip placement="topLeft" title={ans}>
+        <i className="material-icons t-13  text-green pd-right-sm">
+          check_circle
+        </i>
+      </Tooltip>
+    );
+  } else {
+    return <span />;
+  }
+};
 
 function isDnBIntegrationDataLoading(props) {
   return (
