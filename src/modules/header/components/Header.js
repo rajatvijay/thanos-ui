@@ -17,6 +17,8 @@ const openNotificationWithIcon = data => {
   });
 };
 
+const SubMenu = Menu.SubMenu;
+
 class Header extends Component {
   state = {
     searchInput: "",
@@ -71,11 +73,78 @@ class Header extends Component {
     );
   };
 
+  getExportList = () => {
+    let kind = this.props.workflowKind.workflowKind;
+
+    return (
+      <Dropdown
+        placement="bottomCenter"
+        icon={<Icon />}
+        overlay={
+          <Menu>
+            {_.map(kind, function(item, index) {
+              if (
+                !item.is_related_kind &&
+                _.includes(item.features, "add_workflow")
+              ) {
+                return (
+                  <Menu.Item key={index}>
+                    <a
+                      href={
+                        baseUrl2 +
+                        "workflow-kinds/" +
+                        item.tag +
+                        "/data-export/"
+                      }
+                      className="text-nounderline"
+                    >
+                      <i
+                        className="material-icons text-primary-dark"
+                        style={{
+                          width: "20px",
+                          fontSize: "14px",
+                          verticalAlign: "middle"
+                        }}
+                      >
+                        {item.icon}
+                      </i>
+                      {item.name}
+                    </a>
+                  </Menu.Item>
+                );
+              }
+              return null;
+            })}
+          </Menu>
+        }
+        trigger={["click"]}
+      >
+        <Tooltip title="Export data" placement="left">
+          <span
+            className="pd-ard-sm mr-right-lg "
+            style={{
+              fontSize: 24,
+              color: "#000000",
+              opacity: 0.3,
+              cursor: "pointer"
+            }}
+          >
+            <Icon type="download" />
+          </span>
+        </Tooltip>
+      </Dropdown>
+    );
+  };
+
   render() {
     const { searchInput, showSearchInputIcon } = this.state;
     let user = this.props.authentication.user;
     let supportedLaguanges = this.props.config.supported_languages;
     let regexForUrl = /\/instances\/[\d]+/;
+    let showExportOption =
+      this.props.config.permissions &&
+      this.props.config.permissions.includes("Can export workflow data");
+
     return (
       <div
         style={{
@@ -132,12 +201,16 @@ class Header extends Component {
               ? _.isEmpty(supportedLaguanges)
                 ? "180px"
                 : "100px"
-              : "250px",
+              : "350px",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center"
           }}
         >
+          {this.props.workflowKind.workflowKind && showExportOption
+            ? this.getExportList()
+            : null}
+
           {!regexForUrl.test(document.location.pathname) ? (
             showSearchInputIcon ? (
               <div className={"search-box "}>
@@ -194,6 +267,7 @@ class Header extends Component {
             )
           ) : null}
           {_.isEmpty(supportedLaguanges) || <SelectLanguage navbar={true} />}
+
           {user ? (
             <Dropdown
               icon={<Icon />}
