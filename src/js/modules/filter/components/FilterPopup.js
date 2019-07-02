@@ -45,7 +45,7 @@ class FilterPopup extends Component {
     if (field && text && operator) {
       const fieldValue = field[field.length - 1];
 
-      applyFilters("advance", `${fieldValue}_${operator}_${text}`);
+      applyFilters("answer", `${fieldValue}__${operator}__${text}`);
       this.setState({ showError: false });
       onModalClose();
     } else {
@@ -65,18 +65,7 @@ class FilterPopup extends Component {
 
   onFilterChange = (key, value) => {
     const { operator, text, field } = this.state;
-
-    if (key == "field") {
-      this.setState({ field: value });
-    }
-
-    if (key == "operator") {
-      this.setState({ operator: value });
-    }
-
-    if (key == "text") {
-      this.setState({ text: value });
-    }
+    this.setState({ [key]: value });
   };
 
   render() {
