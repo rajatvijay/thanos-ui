@@ -344,7 +344,7 @@ class WorkflowDetails extends Component {
     };
     // if(!this.props.currentStepFields[payload.stepId])
 
-    //console.log("cache", payloadWithMeta);
+    // console.log("cache", payloadWithMeta);
     if (!this.props.currentStepFields[payload.stepId])
       this.props.dispatch(
         workflowDetailsActions.getStepFields(payloadWithMeta)
@@ -429,7 +429,7 @@ class WorkflowDetails extends Component {
         );
       }
     );
-    //console.log("check", groupId, this.state);
+    // console.log("check", groupId, this.state);
     if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
   };
 
@@ -450,7 +450,7 @@ class WorkflowDetails extends Component {
   render = () => {
     const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
     const { displayProfile } = this.state;
-    //console.log("wo", this.props.workflow);
+    // console.log("wo", this.props.workflow);
     const params = new URL(document.location).searchParams;
 
     const workflowId =
@@ -517,7 +517,7 @@ class WorkflowDetails extends Component {
 
     if (_.size(error)) {
       // LAYOUT PLACE HOLDER
-      //console.log("e");
+      // console.log("e");
       return (
         <PlaceHolder error={error} showFilterMenu={this.props.showFilterMenu} />
       );
