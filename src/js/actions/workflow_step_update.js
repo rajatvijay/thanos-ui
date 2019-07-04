@@ -107,12 +107,12 @@ function saveField(payload, event_type) {
 /////////////////////////////
 // fetch extra for field   //
 /////////////////////////////
-function fetchFieldExtra(field, targetAnswer) {
+function fetchFieldExtra(field, answerFunction) {
   return dispatch => {
     dispatch(request(field));
 
     workflowStepService
-      .fetchFieldExtra(field, targetAnswer)
+      .fetchFieldExtra(field, answerFunction)
       .then(
         body => dispatch(success(field, body.results)),
         error => dispatch(failure(error))

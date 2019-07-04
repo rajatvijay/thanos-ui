@@ -142,7 +142,12 @@ class StepBodyForm extends Component {
       let extra = field.definition.extra;
       if (extra && extra.trigger_field_tag == targetField.definition.tag) {
         clear && this.clearFieldValue(field);
-        this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
+        this.props.dispatch(
+          workflowStepActions.fetchFieldExtra(
+            field,
+            this.fieldAnswerFunction(answer)
+          )
+        );
       }
     });
   };
@@ -181,21 +186,39 @@ class StepBodyForm extends Component {
     }
   };
 
+  fieldAnswerFunction = defaultAnswer => {
+    return fieldName => {
+      if (!fieldName) return defaultAnswer;
+
+      const field = _.find(
+        this.props.stepData.data_fields,
+        field => field.definition.tag == fieldName
+      );
+      if (field && field.answers[0]) {
+        return field.answers[0].answer;
+      }
+      //TODO: Should it return `undefined` or ...
+      //return fieldName;
+    };
+  };
+
   updateAllAPIFields = () => {
     _.map(this.props.stepData.data_fields, field => {
       let answer = field.answers[0]
         ? field.answers[0].answer
         : field.definition.defaultValue;
       this.updateDependentFields(field, answer);
-      this.updateIndependentAPIField(field, answer);
+      this.updateIndependentAPIField(field);
     });
   };
 
-  updateIndependentAPIField = (field, answer) => {
+  updateIndependentAPIField = field => {
     let extra = field.definition.extra;
     // check if independent API field
     if (extra && extra.api_url && !extra.trigger_field_tag) {
-      this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
+      this.props.dispatch(
+        workflowStepActions.fetchFieldExtra(field, this.fieldAnswerFunction())
+      );
     }
   };
 
