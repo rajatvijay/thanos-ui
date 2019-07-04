@@ -241,9 +241,6 @@ class ChildWorkflowField2 extends Component {
       child_kinds: true
     });
 
-    console.log("param--");
-    console.log(kind, valueFilter);
-
     const url = `${baseUrl}workflows-list/?${param}`;
 
     this.setState({ fetching: true });
