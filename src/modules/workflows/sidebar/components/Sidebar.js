@@ -209,14 +209,14 @@ class Sidebar extends Component {
           </span>
         </Menu.Item>
 
-        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              file_copy
-            </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
-          </span>
-        </Menu.Item>
+        {/*<Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>*/}
+        {/*  <span>*/}
+        {/*    <i className="material-icons t-18 text-middle pd-right-sm">*/}
+        {/*      file_copy*/}
+        {/*    </i>{" "}*/}
+        {/*    <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />*/}
+        {/*  </span>*/}
+        {/*</Menu.Item>*/}
       </Menu>
     );
 
