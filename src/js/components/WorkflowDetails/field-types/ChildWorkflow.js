@@ -1078,7 +1078,7 @@ class ChildWorkflowField2 extends Component {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  paddingLeft: "40px"
+                  paddingLeft: "30px"
                 }}
               >
                 {_.size(this.state.filteredChildWorkflow) ? (
@@ -1134,7 +1134,7 @@ class ChildWorkflowField2 extends Component {
                     }
                   >
                     <span
-                      style={{ marginRight: 15 }}
+                      style={{ marginRight: 15, marginLeft: 15 }}
                       className="text-secondary text-anchor"
                       onClick={this.changeScoreOrder}
                     >

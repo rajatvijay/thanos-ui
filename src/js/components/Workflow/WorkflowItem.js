@@ -76,7 +76,6 @@ class WorkflowItem extends React.Component {
   };
 
   setParameter = (selectedStep, selectedGroup) => {
-    console.log("parameter");
     this.setState({ selectedGroup, selectedStep });
   };
 
@@ -98,6 +97,7 @@ class WorkflowItem extends React.Component {
     this.setState({
       visible: false
     });
+    this.props.onWorkflowCollapse(this.props.workflow.id);
   };
 
   handleCancel = e => {
@@ -107,6 +107,7 @@ class WorkflowItem extends React.Component {
     this.setState({
       visible: false
     });
+    this.props.onWorkflowCollapse(this.props.workflow.id);
   };
 
   setWorkflowId = id => {
@@ -308,16 +309,25 @@ class WorkflowItem extends React.Component {
 
   render = () => {
     let that = this;
-    //console.log("work",this.props.workflow)
-    //const {location}
-    // console.log("location", this.props.workflow);
-    //console.log("workflow",this.props)
+
     const { workflow } = this.props;
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
-    const showQuickDetailsFunction =
-      this.shouldShowQuickDetails() && this.showQuickDetails && false;
-    console.log("state", this.state);
+
+    if (this.state.visible) {
+      this.props.onWorkflowExpand(this.props.workflow.id);
+    }
+
+    console.log("this.props.selectedWorkflow--");
+    console.log(this.props.selectedWorkflow);
+    console.log(this.props);
+    console.log(" \n\n ");
+    if (
+      this.props.workflow.parent &&
+      this.props.selectedWorkflow === this.props.workflow.parent
+    ) {
+      console.log(" baaapuuuuuuu \n\n ");
+    }
 
     return (
       <div
@@ -368,16 +378,7 @@ class WorkflowItem extends React.Component {
               groupId={this.state.selectedGroup}
             />
           </Modal>
-          {/* )} */}
 
-          {/* <Collapsible
-            trigger={
-              <div
-                className="lc-card"
-                style={{
-                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)"
-                }}
-              > */}
           <WorkflowHeader
             visibleModal={this.state.modal}
             showModal={this.showModal}
@@ -405,45 +406,8 @@ class WorkflowItem extends React.Component {
             bulkActionWorkflowChecked={this.props.bulkActionWorkflowChecked}
             handleChildWorkflowCheckbox={this.props.handleChildWorkflowCheckbox}
           />
-          {/* </div> */}
-          {/* } */}
 
-          {/* // > */}
-          <div>
-            {/* <WorkflowBody
-              {...this.props}
-              createButton={
-                <CreateRelated
-                  relatedKind={this.state.relatedWorkflow}
-                  onChildSelect={this.createChildWorkflow}
-                />
-              }
-              isEmbedded={this.props.isEmbedded}
-              getGroupedData={this.getGroupedData}
-              addComment={this.props.addComment || null}
-              showCommentIcon={this.props.showCommentIcon}
-              expandedWorkflows={this.props.expandedWorkflows}
-              showQuickDetails={showQuickDetailsFunction}
-              showRelatedWorkflow={this.state.showRelatedWorkflow}
-              workflow={this.props.workflow}
-              statusView={this.props.statusView}
-              stepdataloading={this.state.stepdataloading}
-              stepGroupData={this.state.stepGroupData}
-              relatedKinds={
-                _.size(this.state.relatedKinds)
-                  ? this.state.relatedKinds
-                  : this.state.relatedWorkflow
-              }
-            /> */}
-
-            {showQuickDetailsFunction ? (
-              <StepPreview
-                workflowName={this.props.workflow.name}
-                hideQuickDetails={this.hideQuickDetails}
-                showQuickDetails={this.state.showQuickDetails}
-              />
-            ) : null}
-          </div>
+          <div />
           {/* </Collapsible> */}
         </div>
       </div>

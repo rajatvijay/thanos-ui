@@ -344,7 +344,10 @@ class HeaderOptions extends React.Component {
             {props.showCommentIcon &&
             props.isEmbedded &&
             workflow.comments_allowed ? (
-              <span title="Adjudicate" className="add_comment_btn">
+              <span
+                title="Adjudicate"
+                className="add_comment_btn text-ellipsis"
+              >
                 <Tooltip title="Adjudicate">
                   <span
                     className="ant-btn ant-btn-primary btn-o btn-sm text-ellipsis"

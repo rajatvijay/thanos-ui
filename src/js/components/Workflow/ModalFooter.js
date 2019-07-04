@@ -6,8 +6,6 @@ import FullScreen from "../../../images/fullScreenWhite.svg";
 function ModalFooter(props) {
   const { stepId, groupId, workflowIdFromPropsForModal } = props;
 
-  console.log("modal footer", stepId, groupId);
-
   return (
     <div
       style={{
