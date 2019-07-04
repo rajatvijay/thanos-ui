@@ -34,7 +34,25 @@ const { getProcessedData, getProgressData } = calculatedData;
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
 
+function displaySortingKey(workflow) {
+  const obj = workflow.definition.extra_fields_json.find(
+    ({ label, display_label }) => label === "sorting_primary_field"
+  );
+
+  console.log("display", workflow);
+  if (obj) {
+    return obj.format === "date"
+      ? new Date(workflow.sorting_primary_field).toDateString()
+      : workflow.sorting_primary_field;
+  }
+
+  //return workflow?workflow.display_label:"Risk"
+}
+
 export const WorkflowHeader = props => {
+  const { workflow, isEmbedded } = props;
+  console.log("props", props);
+
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
       {props.isEmbedded ? (
@@ -62,7 +80,7 @@ export const WorkflowHeader = props => {
           />
         </Col>
       ) : null}
-      <Col span={props.isEmbedded ? 8 : 9} className="text-left ">
+      <Col span={props.isEmbedded ? 7 : 8} className="text-left ">
         <HeaderTitle {...props} />
       </Col>
 
@@ -70,7 +88,7 @@ export const WorkflowHeader = props => {
         <HeaderLcData {...props} />
       </Col>
 
-      <Col span={5}>
+      <Col span={4}>
         <GetMergedData {...props} />
       </Col>
 
@@ -86,6 +104,11 @@ export const WorkflowHeader = props => {
           </span>
         ) : null}
       </Col>
+      {isEmbedded && (
+        <Col span={2}>
+          <div>{displaySortingKey(workflow)}</div>
+        </Col>
+      )}
 
       <Col span={5}>
         <HeaderOptions {...props} />
