@@ -101,12 +101,12 @@ class WorkflowAdvFilter extends Component {
     });
 
     if (a.length > 0) {
-      a.map((filterItem, index) => {
+      a.forEach((filterItem, index) => {
         stringifyFilter += filterItem + (index !== a.length - 1 ? "|" : "");
       });
     }
 
-    let payload = { filterType: "answer", filterValue: [stringifyFilter] };
+    const payload = { filterType: "answer", filterValue: [stringifyFilter] };
 
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
