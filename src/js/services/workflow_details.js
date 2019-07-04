@@ -5,7 +5,8 @@ export const workflowDetailsService = {
   getStepGroup,
   getStepFields,
   getComments,
-  getStepVersionFields
+  getStepVersionFields,
+  archiveWorkflow
 };
 
 //GET WORKFLOW BY ID
@@ -104,4 +105,20 @@ function getStepVersionFields(step) {
       step.versionId,
     requestOptions
   ).then(handleResponse);
+}
+
+function archiveWorkflow(workflowId) {
+  const requestOptions = {
+    method: "POST",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  const deleteUrl = `${baseUrl}/workflows/${workflowId}/archive/`;
+  return fetch(deleteUrl, requestOptions).then(response => {
+    if (!response.ok) {
+      return Promise.reject(response.statusText);
+    }
+    return response.text();
+  });
 }

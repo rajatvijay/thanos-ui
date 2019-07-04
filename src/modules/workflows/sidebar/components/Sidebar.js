@@ -31,7 +31,7 @@ class Sidebar extends Component {
       selectedGroup,
       selectedStep
     } = props;
-    super();
+    super(props);
 
     this.state = {
       current:
@@ -116,6 +116,13 @@ class Sidebar extends Component {
     this.setState(state => ({
       isWorkflowPDFModalVisible: !state.isWorkflowPDFModalVisible
     }));
+  };
+
+  archiveWorkflow = () => {
+    const workflowId = this.props.workflowDetailsHeader[
+      this.props.workflowIdFromDetailsToSidebar
+    ].id;
+    this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
   };
 
   // componentDidMount() {
@@ -217,6 +224,15 @@ class Sidebar extends Component {
         {/*    <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />*/}
         {/*  </span>*/}
         {/*</Menu.Item>*/}
+
+        <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              archive
+            </i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.archiveWorkflow" />
+          </span>
+        </Menu.Item>
       </Menu>
     );
 
@@ -351,7 +367,6 @@ class Sidebar extends Component {
                 paddingLeft: "10px",
                 paddingTop: "5px",
                 paddingBottom: "5px",
-                marginLeft: "-12px",
                 marginLeft: "-14px",
                 marginBottom: 2,
                 display: "flex",
@@ -504,7 +519,6 @@ class Sidebar extends Component {
                                         paddingLeft: "10px",
                                         paddingTop: "5px",
                                         paddingBottom: "5px",
-                                        marginLeft: "-12px",
                                         marginLeft: "-14px",
                                         color: "#FFFFFF"
                                       }
