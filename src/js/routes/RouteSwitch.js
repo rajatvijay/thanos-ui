@@ -1,22 +1,17 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
-
-import { connect } from "react-redux";
-import { history } from "../_helpers";
 
 import { PrivateRoute } from "../components/PrivateRoute";
 import { GenericNotFound } from "../components/notfound";
 import { LoginPage } from "../components/LoginPage";
 import { MagicLogin } from "../components/LoginPage/MagicLogin";
 import { OTPLogin } from "../components/LoginPage/OTPLogin";
-import { RegisterPage } from "../components/RegisterPage";
-import Navbar from "../components/Navbar";
 import Workflow from "../components/Workflow";
 import WorkflowDetailsRoot from "../components/WorkflowDetails";
 import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
+import ReportPage from "../components/ReportPage";
 import HeaderView from "../../modules/header/components/index";
-import { injectIntl } from "react-intl";
 import _ from "lodash";
 
 class RoutSwitch extends React.Component {
@@ -120,6 +115,8 @@ class RoutSwitch extends React.Component {
           path="/workflows/instances/:id?/"
           component={WorkflowDetailsRoot}
         />
+
+        <PrivateRoute path="/reports/" exact component={ReportPage} />
 
         <Route path="/" component={GenericNotFound} />
       </Switch>
