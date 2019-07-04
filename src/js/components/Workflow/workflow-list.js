@@ -15,13 +15,6 @@ const { getProcessedData } = calculatedData;
 const PAGE_SIZE = 20;
 
 class WorkflowList extends Component {
-  constructor() {
-    super();
-    this.state = {
-      selectedWorkflow: []
-    };
-  }
-
   handlePageChange = (page, rage) => {
     let param = [{ label: "page", value: page }];
     this.props.dispatch(workflowActions.getAll(param));
@@ -38,43 +31,6 @@ class WorkflowList extends Component {
     } else {
       return count - (page - 1) * 20 - index + 1;
     }
-  };
-
-  onWorkflowExpand = workflow => {
-    let selectedWorkflow = this.state.selectedWorkflow;
-
-    if (
-      !selectedWorkflow.find(o => {
-        console.log("----o----");
-        console.log(o);
-        return o === workflow;
-      })
-    ) {
-      console.log("selectedWorkflow before");
-      console.log(selectedWorkflow);
-      selectedWorkflow.push(workflow);
-      console.log("selectedWorkflow after");
-      console.log(selectedWorkflow);
-      this.setState({ selectedWorkflow: selectedWorkflow });
-    }
-
-    console.log("this.state.selectedWorkflow add ----");
-    console.log(this.state.selectedWorkflow);
-  };
-
-  onWorkflowCollapse = workflow => {
-    console.log("collapding-");
-    let { selectedWorkflow } = this.state;
-
-    var index = selectedWorkflow.indexOf(workflow);
-    if (index > -1) {
-      selectedWorkflow.splice(index, 1);
-    }
-
-    this.setState({ selectedWorkflow: selectedWorkflow });
-
-    console.log("this.state.selectedWorkflow remove ----");
-    console.log(this.state.selectedWorkflow);
   };
 
   render() {
@@ -146,9 +102,6 @@ class WorkflowList extends Component {
             config={that.props.config}
             bulkActionWorkflowChecked={that.props.bulkActionWorkflowChecked}
             handleChildWorkflowCheckbox={that.props.handleChildWorkflowCheckbox}
-            onWorkflowExpand={that.onWorkflowExpand}
-            onWorkflowCollapse={that.onWorkflowCollapse}
-            selectedWorkflow={that.state.selectedWorkflow}
           />
         );
       });
