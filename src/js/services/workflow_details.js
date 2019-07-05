@@ -114,11 +114,11 @@ function archiveWorkflow(workflowId) {
     credentials: "include"
   };
 
-  const deleteUrl = `${baseUrl}/workflows/${workflowId}/archive/`;
+  const deleteUrl = `${baseUrl}workflows/${workflowId}/archive/`;
   return fetch(deleteUrl, requestOptions).then(response => {
     if (!response.ok) {
-      return Promise.reject(response.statusText);
+      return Promise.reject(response);
     }
-    return response.text();
+    return Promise.success(response);
   });
 }
