@@ -220,16 +220,22 @@ const GetTable = props => {
       title: "Status",
       key: "status",
       filters: [
-        { text: "Open", value: "open" },
-        { text: "Closed", value: "closed" }
+        { text: "In Progress", value: "in_progress" },
+        { text: "Reviewed", value: "reviewed" },
+        { text: "Not Reviewed", value: "not_reviewed" }
       ],
       onFilter: (value, record) => {
         return record.krypton_status === value;
       },
       render: record => {
         let options = {
+          //backward compatiblility
           open: { label: "Open", class: "red" },
-          closed: { label: "Closed", class: "green" }
+          closed: { label: "Closed", class: "green" },
+          //new statuses
+          in_progress: { label: "In Progress", class: "blue" },
+          reviewed: { label: "Reviewed", class: "green" },
+          not_reviewed: { label: "Not Reviewed", class: "grey" }
         };
 
         return (

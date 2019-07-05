@@ -334,8 +334,9 @@ class Comments extends Component {
         onChange={that.changeStatus}
         className="comment-select"
       >
-        <Option value="open">Open</Option>
-        <Option value="closed">Closed</Option>
+        <Option value="in_progress">In Progress</Option>
+        <Option value="reviewed">Reviewed</Option>
+        <Option value="not_reviewed">Not Reviewed</Option>
       </Select>
     );
 
