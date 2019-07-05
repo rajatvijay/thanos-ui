@@ -54,15 +54,19 @@ class FilterPopup extends Component {
   };
 
   getStatusTypes = () => {
-    // TODO: Commenting out the filtering of status based on kind ID
-    // try {
-    //   const allStatuses = this.props.workflowFilterType.statusType;
-    //   const kindId = this.props.workflowKindValue.selectedKindValue.id;
-    //   return allStatuses.filter(status => status.workflow_kind === kindId);
-    // } catch (e) {
-    //   return [];
-    // }
-    return this.props.workflowFilterType.statusType;
+    try {
+      const allStatuses = this.props.workflowFilterType.statusType;
+      const selectedKind = this.props.workflowKindValue.selectedKindValue;
+      if (selectedKind && selectedKind.available_statuses) {
+        // This will maintain the order of statuses as defined for the kind
+        return selectedKind.available_statuses.map(statusId =>
+          allStatuses.find(status => status.id === statusId)
+        );
+      }
+    } catch (e) {}
+    return [];
+    // previously it would show all statuses
+    //return this.props.workflowFilterType.statusType;
   };
 
   onFilterChange = (key, value) => {
