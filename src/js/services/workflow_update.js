@@ -85,7 +85,7 @@ function updateField(payload) {
 }
 
 //fetch extra for field
-function fetchFieldExtra(field, targetAnswer) {
+function fetchFieldExtra(field, answerFunction) {
   let url = field.definition.extra.api_url;
   if (!url) {
     return Promise.reject('"url" not defined for fetchFieldExtra');
@@ -95,9 +95,10 @@ function fetchFieldExtra(field, targetAnswer) {
     headers: authHeader.get(),
     credentials: "include"
   };
-  if (targetAnswer) {
-    url = url.replace(/{}/, targetAnswer);
-  }
+  url = url.replace(
+    /{([^}]*)}/g,
+    (expr, variable) => answerFunction(variable) || ""
+  );
   if (!url.match(/^https?:\/\//)) {
     url = baseUrl + url;
   }
