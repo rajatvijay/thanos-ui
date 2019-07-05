@@ -166,8 +166,11 @@ class UserWorkflow extends React.Component {
   };
 
   createUserWorkflow = () => {
+    const kind = this.props.kinds.workflowKind.find(
+      kind => kind.tag == "users"
+    );
     const payload = {
-      status: 1,
+      status: kind && kind.default_status,
       kind: "users",
       name: "Draft",
       parent: this.props.parentWorkflowID
