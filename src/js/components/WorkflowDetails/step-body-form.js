@@ -4,7 +4,7 @@ import { Form, Divider, Row, Col, Alert, Button, Tooltip, Tabs } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
-import moment from "moment-timezone";
+import "moment-timezone";
 //import { getFieldType } from "./field-types";
 import FieldItem from "./FieldItem";
 import { FormattedMessage, injectIntl } from "react-intl";
