@@ -285,9 +285,7 @@ class StepBodyForm extends Component {
             </Moment>
           }
         >
-          <Moment format="YYYY/MM/DD">
-            {new Date(step.completed_at).toISOString()}
-          </Moment>
+          <Moment format="YYYY/MM/DD">{step.completed_at}</Moment>
         </Tooltip>
       </span>
     );
