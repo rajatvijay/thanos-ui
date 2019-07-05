@@ -90,7 +90,8 @@ export default {
       postButtonText: "Post",
       commentsButtonText:
         "{count, plural, =0 {Add comment/question} one {{count} comment} other {{count} comments}}",
-      downloadWorkflowPDF: "Download Workflow PDF"
+      downloadWorkflowPDF: "Download Workflow PDF",
+      archiveWorkflow: "Archive Workflow"
     },
     errorMessageInstances: {
       magicLinkExpired: "We’re sorry, this link has expired.",
@@ -219,7 +220,8 @@ export default {
       postButtonText: "Enviar",
       commentsButtonText:
         "{count, plural, =0 {Añadir comentario/pregunta} one {{count} comentario} other {{count} comentarios}}",
-      downloadWorkflowPDF: "Descargar Workflow PDF"
+      downloadWorkflowPDF: "Descargar Workflow PDF",
+      archiveWorkflow: "Archivo Workflow"
     },
     errorMessageInstances: {
       magicLinkExpired: "Lo sentimos, este enlace ha caducado",
