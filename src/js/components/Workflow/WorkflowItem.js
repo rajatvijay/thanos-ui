@@ -194,9 +194,13 @@ class WorkflowItem extends React.Component {
 
       this.props.dispatch(workflowActions.showUserWorkflowModal(payload));
     } else {
+      const kindTag = e.key;
+      const kind = this.props.kinds.workflowKind.find(
+        kind => kind.tag == kindTag
+      );
       const payload = {
-        status: 1,
-        kind: e.key,
+        status: kind && kind.default_status,
+        kind: kindTag,
         name: "Draft",
         parent: this.props.workflow.id
       };

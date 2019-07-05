@@ -182,6 +182,7 @@ class WorkflowList extends Component {
           )}
           <UserWorkflow
             visible={this.props.userWorkflowModal.visible}
+            kinds={this.props.workflowKind}
             parentWorkflowID={this.props.userWorkflowModal.workflowID}
             {...this.props}
           />

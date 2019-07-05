@@ -315,9 +315,13 @@ class ChildWorkflowField2 extends Component {
   };
 
   onChildSelect = e => {
+    const kindTag = e.key;
+    const kind = this.props.workflowKind.workflowKind.find(
+      kind => kind.tag == kindTag
+    );
     let payload = {
-      status: 1,
-      kind: e.key,
+      status: kind && kind.default_status,
+      kind: kindTag,
       name: "Draft",
       parent: this.props.workflowId,
       child_mapping: this.props.field.definition.extra.child_mapping || null
