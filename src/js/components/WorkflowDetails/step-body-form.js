@@ -266,10 +266,10 @@ class StepBodyForm extends Component {
     } else {
       completed_by = "...";
     }
-    const completedAt = new Date(step.completed_at).toISOString();
-    const completedAtUtc = moment(completedAt)
-      .tz("UTC")
-      .format("YYYY/MM/DD Z");
+    // const completedAt = new Date(step.completed_at).toISOString();
+    // const completedAtUTC = moment(completedAt)
+    //   .tz("UTC")
+    //   .format("YYYY/MM/DD z");
 
     return (
       <span className="text-secondary pd-right-sm ">
@@ -278,8 +278,16 @@ class StepBodyForm extends Component {
         </i>
         Submitted by <span className="text-medium ">{completed_by}</span> on
         {"  "}
-        <Tooltip title={completedAtUtc}>
-          <Moment format="YYYY/MM/DD">{completedAt}</Moment>
+        <Tooltip
+          title={
+            <Moment tz="UTC" format="YYYY/MM/DD z">
+              {step.completed_at}
+            </Moment>
+          }
+        >
+          <Moment format="YYYY/MM/DD">
+            {new Date(step.completed_at).toISOString()}
+          </Moment>
         </Tooltip>
       </span>
     );
