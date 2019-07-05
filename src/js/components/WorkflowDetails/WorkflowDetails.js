@@ -51,8 +51,6 @@ class WorkflowDetails extends Component {
 
   componentDidMount = () => {
     // TODO: Why??
-    //console.log("insode did");
-    this.props.dispatch(workflowActions.expandedWorkflowsList([]));
     this.getInitialData();
     // this.setStepFromQuery()
   };

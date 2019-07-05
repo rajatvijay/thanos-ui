@@ -7,7 +7,8 @@ import {
   logout,
   checkAuth,
   workflowDetailsActions,
-  navbarActions
+  navbarActions,
+  workflowActions
 } from "../../actions";
 
 class WorkflowDetailsRoot extends Component {
@@ -24,6 +25,10 @@ class WorkflowDetailsRoot extends Component {
     this.setState({
       customHistory: [{ pathname: "/workflows/instances/", search: "" }]
     });
+
+    if (!this.props.minimalUI) {
+      this.props.dispatch(workflowActions.expandedWorkflowsList([]));
+    }
   };
 
   componentDidUpdate = prevProps => {

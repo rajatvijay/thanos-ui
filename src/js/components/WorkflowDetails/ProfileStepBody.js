@@ -4,7 +4,6 @@ import { Row, Col } from "antd";
 class ProfileStepBody extends Component {
   renderDetails() {
     const { workflowHead } = this.props;
-    console.log("work", workflowHead);
 
     const lc_data = workflowHead.lc_data.filter(
       item => item.display_type === "normal" && item.value
@@ -41,7 +40,7 @@ class ProfileStepBody extends Component {
   }
 
   render() {
-    console.log("head", this.props.workflowHead);
+    //console.log("head", this.props.workflowHead);
 
     if (!this.props.workflowHead) {
       return null;
