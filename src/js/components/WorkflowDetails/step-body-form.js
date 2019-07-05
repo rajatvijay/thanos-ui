@@ -4,6 +4,7 @@ import { Form, Divider, Row, Col, Alert, Button, Tooltip, Tabs } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
+import moment from "moment-timezone";
 //import { getFieldType } from "./field-types";
 import FieldItem from "./FieldItem";
 import { FormattedMessage, injectIntl } from "react-intl";
@@ -265,6 +266,10 @@ class StepBodyForm extends Component {
     } else {
       completed_by = "...";
     }
+    let completed_at = new Date(step.completed_at).toISOString();
+    let completed_at_utc = moment(completed_at)
+      .tz("Africa/Abidjan")
+      .format("YYYY/MM/DD UTCZ");
 
     return (
       <span className="text-secondary pd-right-sm ">
@@ -273,7 +278,10 @@ class StepBodyForm extends Component {
         </i>
         Submitted by <span className="text-medium ">{completed_by}</span> on
         {"  "}
-        {new Date(step.completed_at).toISOString()}
+        {/*{new Date(step.completed_at).toISOString()}*/}
+        <Tooltip title={completed_at_utc}>
+          <Moment format="YYYY/MM/DD">{completed_at}</Moment>
+        </Tooltip>
       </span>
     );
   };
