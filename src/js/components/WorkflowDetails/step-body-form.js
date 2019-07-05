@@ -146,6 +146,7 @@ class StepBodyForm extends Component {
           workflowStepActions.fetchFieldExtra(
             field,
             this.fieldAnswerFunction(answer)
+            // fieldAnswerFunction will be used to expand `{field-tag}` placeholders in `api_url`
           )
         );
       }
@@ -187,6 +188,11 @@ class StepBodyForm extends Component {
   };
 
   fieldAnswerFunction = defaultAnswer => {
+    /*//////////////////////////////////////////////////
+    This function returns a function that can return answer
+    of a field with tag `fieldName` (and default to `defaultAnswer`
+    if no fieldName is specified
+    //////////////////////////////////////////////////// */
     return fieldName => {
       if (!fieldName) return defaultAnswer;
 
@@ -218,6 +224,7 @@ class StepBodyForm extends Component {
     if (extra && extra.api_url && !extra.trigger_field_tag) {
       this.props.dispatch(
         workflowStepActions.fetchFieldExtra(field, this.fieldAnswerFunction())
+        // fieldAnswerFunction will be used to expand `{field-tag}` placeholders in `api_url`
       );
     }
   };
