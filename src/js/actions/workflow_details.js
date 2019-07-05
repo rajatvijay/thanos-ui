@@ -211,8 +211,8 @@ function archiveWorkflow(id) {
         dispatch(success(response));
         history.push("/workflows/instances/");
       },
-      error => {
-        dispatch(failure(error));
+      response => {
+        dispatch(failure(response));
         setTimeout(function() {
           history.push("/workflows/instances/");
         }, 1500);
@@ -228,10 +228,17 @@ function archiveWorkflow(id) {
     return { type: workflowDetailsheaderConstants.ARCHIVE_REQUEST_SUCCESS };
   }
 
-  function failure(error) {
+  function failure(response) {
+    if (response.status === 400) {
+      openNotificationWithIcon({
+        type: "error",
+        message:
+          "Possible misconfiguration of status'es mappings, please check with site admin"
+      });
+    }
     return {
       type: workflowDetailsheaderConstants.ARCHIVE_REQUEST_FAILURE,
-      error
+      error: response.statusText
     };
   }
 }
