@@ -1012,6 +1012,18 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
+  findSorting() {
+    const workflows = this.state.filteredChildWorkflow;
+    if (workflows && workflows.length) {
+      const workflow = workflows[0].definition.extra_fields_json.find(
+        ({ label, display_label }) => label === "sorting_primary_field"
+      );
+
+      console.log("display", workflow);
+      return workflow ? workflow.display_label : "";
+    }
+  }
+
   render = () => {
     const { props } = this;
     const {
@@ -1022,6 +1034,7 @@ class ChildWorkflowField2 extends Component {
     } = props;
     const { bulkActionWorkflowChecked, childWorkflow } = this.state;
     let that = this;
+    console.log("filter", this.state.filteredChildWorkflow);
 
     const u = new URL(window.location.href);
     const step = u.searchParams.get("step");
@@ -1140,7 +1153,7 @@ class ChildWorkflowField2 extends Component {
                       className="text-secondary text-anchor"
                       onClick={this.changeScoreOrder}
                     >
-                      Risk
+                      {this.findSorting()}
                       {this.state.sortingEnabled ? (
                         <i className="material-icons t-14  text-middle">
                           {this.state.sortOrderAsc
