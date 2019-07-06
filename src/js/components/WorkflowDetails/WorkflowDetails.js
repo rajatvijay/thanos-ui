@@ -11,7 +11,8 @@ import {
   workflowActions,
   workflowFiltersActions,
   workflowStepActions,
-  configActions
+  configActions,
+  stepBodyActions
 } from "../../actions";
 import { WorkflowHeader } from "../Workflow/WorkflowHeader";
 import Comments from "./comments";
@@ -425,6 +426,7 @@ class WorkflowDetails extends Component {
           this.props.workflowIdFromPropsForModal ||
             Number(this.props.match.params.id)
         );
+        // this.props.getAssignedUser(stepId)
       }
     );
     // console.log("check", groupId, this.state);
@@ -692,4 +694,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(WorkflowDetails));
+export default connect(
+  mapStateToProps,
+  stepBodyActions
+)(injectIntl(WorkflowDetails));

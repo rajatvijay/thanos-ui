@@ -16,3 +16,4 @@ export { stepVersionConstants } from "./step_version";
 export { languageConstants } from "./internationalize";
 export { navbarConstants } from "./navbar";
 export { stepPreviewConstants } from "./stepPreview";
+export { stepBody } from "./stepBody";
