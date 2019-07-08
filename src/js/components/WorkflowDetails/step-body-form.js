@@ -4,6 +4,7 @@ import { Form, Divider, Row, Col, Alert, Button, Tooltip, Tabs } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
+import "moment-timezone";
 //import { getFieldType } from "./field-types";
 import FieldItem from "./FieldItem";
 import { FormattedMessage, injectIntl } from "react-intl";
@@ -142,7 +143,13 @@ class StepBodyForm extends Component {
       let extra = field.definition.extra;
       if (extra && extra.trigger_field_tag == targetField.definition.tag) {
         clear && this.clearFieldValue(field);
-        this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
+        this.props.dispatch(
+          workflowStepActions.fetchFieldExtra(
+            field,
+            this.fieldAnswerFunction(answer)
+            // fieldAnswerFunction will be used to expand `{field-tag}` placeholders in `api_url`
+          )
+        );
       }
     });
   };
@@ -181,21 +188,45 @@ class StepBodyForm extends Component {
     }
   };
 
+  fieldAnswerFunction = defaultAnswer => {
+    /*//////////////////////////////////////////////////
+    This function returns a function that can return answer
+    of a field with tag `fieldName` (and default to `defaultAnswer`
+    if no fieldName is specified
+    //////////////////////////////////////////////////// */
+    return fieldName => {
+      if (!fieldName) return defaultAnswer;
+
+      const field = _.find(
+        this.props.stepData.data_fields,
+        field => field.definition.tag == fieldName
+      );
+      if (field && field.answers[0]) {
+        return field.answers[0].answer;
+      }
+      //TODO: Should it return `undefined` or ...
+      //return fieldName;
+    };
+  };
+
   updateAllAPIFields = () => {
     _.map(this.props.stepData.data_fields, field => {
       let answer = field.answers[0]
         ? field.answers[0].answer
         : field.definition.defaultValue;
       this.updateDependentFields(field, answer);
-      this.updateIndependentAPIField(field, answer);
+      this.updateIndependentAPIField(field);
     });
   };
 
-  updateIndependentAPIField = (field, answer) => {
+  updateIndependentAPIField = field => {
     let extra = field.definition.extra;
     // check if independent API field
     if (extra && extra.api_url && !extra.trigger_field_tag) {
-      this.props.dispatch(workflowStepActions.fetchFieldExtra(field, answer));
+      this.props.dispatch(
+        workflowStepActions.fetchFieldExtra(field, this.fieldAnswerFunction())
+        // fieldAnswerFunction will be used to expand `{field-tag}` placeholders in `api_url`
+      );
     }
   };
 
@@ -235,6 +266,10 @@ class StepBodyForm extends Component {
     } else {
       completed_by = "...";
     }
+    // const completedAt = new Date(step.completed_at).toISOString();
+    // const completedAtUTC = moment(completedAt)
+    //   .tz("UTC")
+    //   .format("YYYY/MM/DD z");
 
     return (
       <span className="text-secondary pd-right-sm ">
@@ -243,7 +278,15 @@ class StepBodyForm extends Component {
         </i>
         Submitted by <span className="text-medium ">{completed_by}</span> on
         {"  "}
-        {new Date(step.completed_at).toISOString()}
+        <Tooltip
+          title={
+            <Moment tz="UTC" format="YYYY/MM/DD z">
+              {step.completed_at}
+            </Moment>
+          }
+        >
+          <Moment format="YYYY/MM/DD">{step.completed_at}</Moment>
+        </Tooltip>
       </span>
     );
   };
@@ -461,7 +504,9 @@ class StepBodyForm extends Component {
           ? that.props.workflowIdFromPropsForModal
           : fieldParams.workflowId;
         // console.log("field", fieldParams, that.props);
-        return <FieldItem fieldParams={fieldParams} />;
+        return (
+          <FieldItem stepData={that.props.stepData} fieldParams={fieldParams} />
+        );
       },
       getSizeFraction(field) {
         // Get the current field size in fraction

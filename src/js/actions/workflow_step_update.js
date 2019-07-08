@@ -39,15 +39,23 @@ export const workflowStepActions = {
 // update data on field change//
 ////////////////////////////////
 function saveField(payload, event_type) {
-  return dispatch => {
+  let workflowId;
+  return (dispatch, getState) => {
+    const reduxState = getState();
+    workflowId = Object.keys(reduxState.currentStepFields).find(
+      stepId =>
+        reduxState.currentStepFields[stepId].currentStepFields &&
+        reduxState.currentStepFields[stepId].currentStepFields.workflow ===
+          payload.workflow
+    );
     dispatch(request(payload));
-    dispatch(remove_errors({}));
+    dispatch(remove_errors({}, workflowId));
 
     workflowStepService
       .saveField(payload)
       .then(
         field => dispatch(success(field, event_type)),
-        error => dispatch(failure(error))
+        error => dispatch(failure(error, workflowId))
       );
   };
 
@@ -56,47 +64,55 @@ function saveField(payload, event_type) {
     return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
   }
 
-  function remove_errors(payload) {
+  function remove_errors(payload, workflowId) {
     //message.destroy();
-    return { type: workflowFieldConstants.POST_FIELD_FAILURE, payload };
+    return {
+      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      payload,
+      workflowId
+    };
   }
 
   function success(field) {
     message.destroy();
     // hack for to avoid response.json promise in case of failure
     if (!field.id) {
-      return failure(field);
+      return failure(field, workflowId);
     }
 
-    if (event_type != "blur") {
-      // openNotificationWithIcon({
-      //   type: "success",
-      //   message: "Saved successfully"
-      // });
-    }
+    // if (event_type != "blur") {
+    //   // openNotificationWithIcon({
+    //   //   type: "success",
+    //   //   message: "Saved successfully"
+    //   // });
+    // }
 
     return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
   }
 
-  function failure(error) {
+  function failure(error, workflowId) {
     message.destroy();
     // openNotificationWithIcon({
     //   type: "error",
     //   message: "Unable to save."
     // });
-    return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
+    return {
+      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      error,
+      workflowId
+    };
   }
 }
 
 /////////////////////////////
 // fetch extra for field   //
 /////////////////////////////
-function fetchFieldExtra(field, targetAnswer) {
+function fetchFieldExtra(field, answerFunction) {
   return dispatch => {
     dispatch(request(field));
 
     workflowStepService
-      .fetchFieldExtra(field, targetAnswer)
+      .fetchFieldExtra(field, answerFunction)
       .then(
         body => dispatch(success(field, body.results)),
         error => dispatch(failure(error))
@@ -121,15 +137,16 @@ function fetchFieldExtra(field, targetAnswer) {
 }
 
 function removeAttachment(payload, event_type) {
+  const workflowId = payload.id;
   return dispatch => {
     dispatch(request(payload));
-    dispatch(remove_errors({}));
+    dispatch(remove_errors({}, workflowId));
 
     workflowStepService
       .removeAttachment(payload)
       .then(
         field => dispatch(success(field, event_type)),
-        error => dispatch(failure(error))
+        error => dispatch(failure(error, workflowId))
       );
   };
 
@@ -137,8 +154,12 @@ function removeAttachment(payload, event_type) {
     return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
   }
 
-  function remove_errors(payload) {
-    return { type: workflowFieldConstants.POST_FIELD_FAILURE, payload };
+  function remove_errors(payload, workflowId) {
+    return {
+      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      payload,
+      workflowId
+    };
   }
 
   function success(field) {
@@ -150,12 +171,16 @@ function removeAttachment(payload, event_type) {
     return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
   }
 
-  function failure(error) {
+  function failure(error, workflowId) {
     openNotificationWithIcon({
       type: "error",
       message: "Unable to save."
     });
-    return { type: workflowFieldConstants.POST_FIELD_FAILURE, error };
+    return {
+      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      error,
+      workflowId
+    };
   }
 }
 
@@ -203,10 +228,10 @@ function updateField(payload) {
 //fetch stepgroup  data i.e steps list//
 ////////////////////////////////////////
 function submitStepData(payload) {
+  const workflowId = payload.id;
   return dispatch => {
-    const workflowId = payload.id;
     dispatch(request(payload));
-    dispatch(remove_errors({}));
+    dispatch(remove_errors({}, workflowId));
 
     workflowStepService.submitStep(payload).then(
       stepData => {
@@ -225,8 +250,12 @@ function submitStepData(payload) {
     return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
 
-  function remove_errors(payload) {
-    return { type: workflowFieldConstants.POST_FIELD_FAILURE, payload };
+  function remove_errors(payload, workflowId) {
+    return {
+      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      payload,
+      workflowId
+    };
   }
 
   function success(stepData) {
@@ -248,7 +277,11 @@ function submitStepData(payload) {
       message: "Failed to submit step."
     });
 
-    return { type: workflowStepConstants.SUBMIT_FAILURE, error, payload };
+    return {
+      type: workflowStepConstants.SUBMIT_FAILURE,
+      error,
+      payload: { ...payload, id: workflowId }
+    };
   }
 }
 
@@ -256,6 +289,7 @@ function submitStepData(payload) {
 //Approve step//
 ////////////////
 function approveStep(payload) {
+  const workflowId = payload.id;
   return dispatch => {
     dispatch(request(payload));
 
@@ -284,7 +318,11 @@ function approveStep(payload) {
       message: "Failed to approve step"
     });
 
-    return { type: workflowStepConstants.SUBMIT_FAILURE, error }; //{ type: workflowStepConstants.APPROVE_FAILURE, error };
+    return {
+      type: workflowStepConstants.SUBMIT_FAILURE,
+      error,
+      payload: { id: workflowId }
+    }; //{ type: workflowStepConstants.APPROVE_FAILURE, error };
   }
 }
 
@@ -292,6 +330,7 @@ function approveStep(payload) {
 //Undo step//
 /////////////
 function undoStep(payload) {
+  const workflowId = payload.id;
   return dispatch => {
     dispatch(request(payload));
 
@@ -299,7 +338,7 @@ function undoStep(payload) {
       stepData => {
         dispatch(success(stepData));
         if (stepData.id) {
-          //dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
           // call an action to update the sidebar here
           //dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
@@ -324,7 +363,11 @@ function undoStep(payload) {
       message: "Failed to revert completion"
     });
 
-    return { type: workflowStepConstants.SUBMIT_FAILURE, error, payload }; //{ type: workflowStepConstants.UNDO_FAILURE, error };
+    return {
+      type: workflowStepConstants.SUBMIT_FAILURE,
+      error,
+      payload: { ...payload, id: workflowId }
+    }; //{ type: workflowStepConstants.UNDO_FAILURE, error };
   }
 }
 

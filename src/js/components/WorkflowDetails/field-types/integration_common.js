@@ -590,7 +590,9 @@ function dnb_directors_html(record) {
     <div>
       <div>
         <b>Name</b>:{" "}
-        {record.PrincipalName ? record.PrincipalName.FullName.$ : "-"}
+        {record.PrincipalName && record.PrincipalName.FullName
+          ? record.PrincipalName.FullName.$
+          : "-"}
       </div>
       {record.MostSeniorPrincipalIndicator ? (
         <div>

@@ -60,7 +60,7 @@ class Comments extends Component {
 
     if (workflowKind) {
       workflowFiltersService
-        .getStatusData({ workflow_kind: workflowKind })
+        .getStatusData({ kinds: workflowKind })
         .then(response => {
           this.setState({ workflowStatuses: response });
         });
@@ -73,7 +73,7 @@ class Comments extends Component {
 
     if (currentWorkflowKind && currentWorkflowKind !== previousWorkflowKind) {
       workflowFiltersService
-        .getStatusData({ workflow_kind: currentWorkflowKind })
+        .getStatusData({ kinds: currentWorkflowKind })
         .then(response => {
           this.setState({ workflowStatuses: response });
         });

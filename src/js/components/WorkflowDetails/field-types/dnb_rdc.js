@@ -1080,18 +1080,24 @@ const GetTabsFilter = props => {
 
   return (
     <Tabs defaultActiveKey="all" onChange={callback}>
-      {_.map(getFilterData(data), function(tab, index) {
-        return (
-          <TabPane tab={tab.label + " (" + tab.count + ")"} key={tab.value}>
-            <GetTable
-              getComment={props.getComment}
-              jsonData={tab.data}
-              commentCount={props.commentCount}
-              flag_dict={props.flag_dict}
-            />
-          </TabPane>
-        );
-      })}
+      {getFilterData(data).length > 0
+        ? getFilterData(data).map(function(tab, index) {
+            if (!tab.label) {
+              return;
+            }
+
+            return (
+              <TabPane tab={tab.label + " (" + tab.count + ")"} key={tab.value}>
+                <GetTable
+                  getComment={props.getComment}
+                  jsonData={tab.data}
+                  commentCount={props.commentCount}
+                  flag_dict={props.flag_dict}
+                />
+              </TabPane>
+            );
+          })
+        : null}
     </Tabs>
   );
 };

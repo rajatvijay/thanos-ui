@@ -17,6 +17,22 @@ export function workflowDetailsHeader(state = {}, action) {
         loading: false,
         error: action.error
       };
+    case workflowDetailsheaderConstants.ARCHIVE_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+    case workflowDetailsheaderConstants.ARCHIVE_REQUEST_SUCCESS:
+      return {
+        ...state,
+        loading: false
+      };
+    case workflowDetailsheaderConstants.ARCHIVE_REQUEST_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        loading: false
+      };
     default:
       return state;
   }

@@ -42,12 +42,6 @@
 }
 
 .workflow-list {
-  &.has-Open-workflow {
-    > .month-group > div > .paper:not(.opened) {
-      opacity: 0.5;
-    }
-  }
-
   .grouping-head {
     font-size: 14px;
     font-weight: bold;
@@ -226,9 +220,9 @@
 
 //LC CARD HEAR/COLLAPSED VIEW
 .lc-card-head {
-  padding: 0 20px;
+  padding: 0 22px 0 26px;
   background: @color-white;
-  height: 54px;
+  min-height: 54px;
   .company-name {
     font-size: 20px;
     padding-left: 8px;
@@ -261,6 +255,10 @@
       top: 11px;
       right: 6px;
     }
+  }
+
+  .step-ui {
+    padding-top:3px;
   }
 }
 

@@ -26,8 +26,12 @@ const Panel = Collapse.Panel;
 
 class Sidebar extends Component {
   constructor(props) {
-    const { workflowIdFromDetailsToSidebar } = props;
-    super();
+    const {
+      workflowIdFromDetailsToSidebar,
+      selectedGroup,
+      selectedStep
+    } = props;
+    super(props);
 
     this.state = {
       current:
@@ -38,8 +42,8 @@ class Sidebar extends Component {
           : null,
       showSidebar: false,
       isWorkflowPDFModalVisible: false,
-      groupId: null,
-      stepId: null
+      groupId: selectedGroup,
+      stepId: selectedStep
       //defaultSelected:true
     };
   }
@@ -114,6 +118,13 @@ class Sidebar extends Component {
     }));
   };
 
+  archiveWorkflow = () => {
+    const workflowId = this.props.workflowDetailsHeader[
+      this.props.workflowIdFromDetailsToSidebar
+    ].id;
+    this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
+  };
+
   // componentDidMount() {
   //   // this.setState({
   //   //   groupId: String(this.props.selectedGroup),
@@ -163,7 +174,7 @@ class Sidebar extends Component {
       displayProfile,
       changeProfileDisplay
     } = this.props;
-    // console.log("min", minimalUI);
+    //console.log("min", this.props);
     let lc_data =
       Object.values(workflowDetailsHeader).length &&
       workflowDetailsHeader[workflowIdFromDetailsToSidebar]
@@ -205,12 +216,21 @@ class Sidebar extends Component {
           </span>
         </Menu.Item>
 
-        <Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>
+        {/*<Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>*/}
+        {/*  <span>*/}
+        {/*    <i className="material-icons t-18 text-middle pd-right-sm">*/}
+        {/*      file_copy*/}
+        {/*    </i>{" "}*/}
+        {/*    <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />*/}
+        {/*  </span>*/}
+        {/*</Menu.Item>*/}
+
+        <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
           <span>
             <i className="material-icons t-18 text-middle pd-right-sm">
-              file_copy
+              archive
             </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />
+            <FormattedMessage id="stepBodyFormInstances.archiveWorkflow" />
           </span>
         </Menu.Item>
       </Menu>
@@ -235,7 +255,7 @@ class Sidebar extends Component {
       >
         <div
           style={{
-            width: minimalUI ? 280 : NaN,
+            width: minimalUI ? 280 : "",
             paddingBottom: 100,
             height: "100%",
             backgroundColor: "#FAFAFA"
@@ -261,7 +281,7 @@ class Sidebar extends Component {
               />
             </Drawer>
           ) : null}
-          {/* {!minimalUI && (
+          {!minimalUI && (
             <div>
               <div
                 style={{
@@ -296,7 +316,7 @@ class Sidebar extends Component {
                 </Dropdown>
               </div>
               <Divider style={{ margin: "10px 0" }} />
-              <Row style={{ marginBottom: 15 }}>
+              {/* <Row style={{ marginBottom: 15 }}>
                 {lc_data.map(data => (
                   <Col span={12}>
                     <span
@@ -325,9 +345,9 @@ class Sidebar extends Component {
                     </span>
                   </Col>
                 ))}
-              </Row>
+              </Row> */}
             </div>
-          )} */}
+          )}
           <span
             // to={`${history.location.pathname}?group=${
             //   stepgroup.id
@@ -347,7 +367,6 @@ class Sidebar extends Component {
                 paddingLeft: "10px",
                 paddingTop: "5px",
                 paddingBottom: "5px",
-                marginLeft: "-12px",
                 marginLeft: "-14px",
                 marginBottom: 2,
                 display: "flex",
@@ -500,7 +519,6 @@ class Sidebar extends Component {
                                         paddingLeft: "10px",
                                         paddingTop: "5px",
                                         paddingBottom: "5px",
-                                        marginLeft: "-12px",
                                         marginLeft: "-14px",
                                         color: "#FFFFFF"
                                       }

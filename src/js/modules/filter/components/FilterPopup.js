@@ -43,7 +43,9 @@ class FilterPopup extends Component {
     const { applyFilters, onModalClose } = this.props;
 
     if (field && text && operator) {
-      applyFilters("advance", `${field}_${operator}_${text}`);
+      const fieldValue = field[field.length - 1];
+
+      applyFilters("answer", `${fieldValue}__${operator}__${text}`);
       this.setState({ showError: false });
       onModalClose();
     } else {
@@ -54,11 +56,22 @@ class FilterPopup extends Component {
   getStatusTypes = () => {
     try {
       const allStatuses = this.props.workflowFilterType.statusType;
-      const kindId = this.props.workflowKindValue.selectedKindValue.id;
-      return allStatuses.filter(status => status.workflow_kind === kindId);
-    } catch (e) {
-      return [];
-    }
+      const selectedKind = this.props.workflowKindValue.selectedKindValue;
+      if (selectedKind && selectedKind.available_statuses) {
+        // This will maintain the order of statuses as defined for the kind
+        return selectedKind.available_statuses.map(statusId =>
+          allStatuses.find(status => status.id === statusId)
+        );
+      }
+    } catch (e) {}
+    return [];
+    // previously it would show all statuses
+    //return this.props.workflowFilterType.statusType;
+  };
+
+  onFilterChange = (key, value) => {
+    const { operator, text, field } = this.state;
+    this.setState({ [key]: value });
   };
 
   render() {
@@ -69,17 +82,18 @@ class FilterPopup extends Component {
       onClear,
       onModalClose
     } = this.props;
+
     const {
       visible,
       fieldOptions,
       status,
       region,
       business_unit,
-      operator,
-      showError,
-      text,
-      field
+      showError
     } = filterState;
+
+    const { operator, text, field } = this.state;
+
     const { businessType, regionType } = workflowFilterType;
 
     return (
@@ -161,7 +175,7 @@ class FilterPopup extends Component {
                 value={field}
                 style={{ width: "100%" }}
                 options={fieldOptions}
-                onChange={arr => onFilterChange("field", arr)}
+                onChange={arr => this.onFilterChange("field", arr)}
                 placeholder="Please select field"
                 className={css`
                   .ant-input {
@@ -175,13 +189,13 @@ class FilterPopup extends Component {
                 value={operator}
                 placeholder="Select Operator"
                 name="operator"
-                onFilterChange={onFilterChange}
+                onFilterChange={this.onFilterChange}
               />
 
               <Input
                 placeholder="Input Value"
                 value={text}
-                onChange={e => onFilterChange("text", e.target.value)}
+                onChange={e => this.onFilterChange("text", e.target.value)}
                 style={{ paddingLeft: 0 }}
               />
             </div>

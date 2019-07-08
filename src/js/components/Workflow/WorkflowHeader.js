@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import moment from "moment";
 import _ from "lodash";
-import { Row, Col, Tooltip, Tag, Checkbox } from "antd";
+import { Row, Col, Tooltip, Tag, Checkbox, Popover } from "antd";
 import { calculatedData } from "./calculated-data";
 import { history } from "../../_helpers";
 import { changeStatusActions, workflowActions } from "../../actions";
@@ -34,7 +34,25 @@ const { getProcessedData, getProgressData } = calculatedData;
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
 
+function displaySortingKey(workflow) {
+  const obj = workflow.definition.extra_fields_json.find(
+    ({ label, display_label }) => label === "sorting_primary_field"
+  );
+
+  console.log("display", workflow);
+  if (obj) {
+    return obj.format === "date"
+      ? moment(workflow.sorting_primary_field).format("DD/MM/YYYY") // new Date(workflow.sorting_primary_field).toDateString()
+      : workflow.sorting_primary_field;
+  }
+
+  //return workflow?workflow.display_label:"Risk"
+}
+
 export const WorkflowHeader = props => {
+  const { workflow, isEmbedded } = props;
+  console.log("props", props);
+
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
       {props.isEmbedded ? (
@@ -62,7 +80,7 @@ export const WorkflowHeader = props => {
           />
         </Col>
       ) : null}
-      <Col span={props.isEmbedded ? 8 : 9} className="text-left ">
+      <Col span={props.isEmbedded ? 7 : 8} className="text-left ">
         <HeaderTitle {...props} />
       </Col>
 
@@ -70,7 +88,7 @@ export const WorkflowHeader = props => {
         <HeaderLcData {...props} />
       </Col>
 
-      <Col span={5}>
+      <Col span={4}>
         <GetMergedData {...props} />
       </Col>
 
@@ -86,6 +104,11 @@ export const WorkflowHeader = props => {
           </span>
         ) : null}
       </Col>
+      {isEmbedded && (
+        <Col span={2}>
+          <div>{displaySortingKey(workflow)}</div>
+        </Col>
+      )}
 
       <Col span={5}>
         <HeaderOptions {...props} />
@@ -137,27 +160,87 @@ const createFamilyListForBreadcrums = family => {
 
 const HeaderTitle = props => {
   const { workflow } = props;
+  const { family } = workflow;
 
-  return (
-    <div>
-      <span
-        title={props.workflow.name}
-        style={{
-          color: "#000000",
-          fontSize: "20px",
-          letterSpacing: "-0.04px",
-          lineHeight: "24px"
-        }}
-      >
-        {workflow.name}
-      </span>
-    </div>
-  );
+  if (family.length === 1) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          {workflow.name}
+        </span>
+      </div>
+    );
+  } else if (family.length === 2) {
+    return (
+      <div>
+        <span
+          title={props.workflow.name}
+          style={{
+            color: "#000000",
+            fontSize: "20px",
+            letterSpacing: "-0.04px",
+            lineHeight: "24px"
+          }}
+        >
+          <Link
+            className={css`
+              color: #b5b5b5;
+              &:hover {
+                color: black;
+              }
+            `}
+            to={"/workflows/instances/" + family[0].id}
+          >
+            {family[0].name}
+          </Link>{" "}
+          / {family[1].name}
+        </span>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Popover content={createFamilyListForBreadcrums(family)}>
+          <span
+            title={props.workflow.name}
+            style={{
+              color: "#000000",
+              fontSize: "16px",
+              letterSpacing: "-0.04px",
+              lineHeight: "24px"
+            }}
+          >
+            <Link
+              className={css`
+                color: #b5b5b5;
+                &:hover {
+                  color: black;
+                }
+              `}
+              to={"/workflows/instances/" + family[0].id}
+            >
+              {family[0].name}
+            </Link>
+            <span style={{ color: "#b5b5b5" }}> /... / </span>
+            {workflow.name}
+          </span>
+        </Popover>
+      </div>
+    );
+  }
 };
 
 export const HeaderLcData = props => {
   let subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type == "normal";
+    return item.display_type === "normal";
   });
   return (
     <div
@@ -170,7 +253,13 @@ export const HeaderLcData = props => {
       }}
     >
       {_.size(subtext) >= 2 ? (
-        <Tooltip title={subtext[1].label + ": " + (subtext[1].value || "-")}>
+        <Tooltip
+          title={
+            <span>
+              {subtext[1].label}: {ProcessLcData(subtext[1])}
+            </span>
+          }
+        >
           <span className="t-cap">
             {subtext[1].show_label ? subtext[1].label + ": " : ""}
           </span>
@@ -434,7 +523,7 @@ export class GetMergedData extends React.Component {
               {item.show_label || (is_alert && item.link) ? item.label : ""}
               {item.link ? "" : item.show_label ? ": " : ""}
             </span>
-            {ProcessLcData(item) || ""}
+            {ProcessLcData(item, is_alert) || ""}
           </span>
 
           {/* {item.color ? (

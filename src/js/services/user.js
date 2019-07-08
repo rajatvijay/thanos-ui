@@ -1,4 +1,4 @@
-import { authHeader, baseUrl, baseUrl2 } from "../_helpers";
+import { authHeader, baseUrl } from "../_helpers";
 import { tenant } from "../../config";
 
 export const userService = {
@@ -81,12 +81,9 @@ function loginOtp(username, password) {
 }
 
 function tokenLogin(token, next) {
-  console.log("tokend login service");
-
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
-    credentials: "same-origin",
     credentials: "include"
   };
 
@@ -123,8 +120,7 @@ export const logout = async () => {
     //body: JSON.stringify({})
   };
   try {
-    const response = await fetch(baseUrl + "users/logout/", requestOptions);
-    return response;
+    return await fetch(baseUrl + "users/logout/", requestOptions);
   } catch (error) {
     throw error;
   }
@@ -138,8 +134,7 @@ export const sendEmailAuthToken = async (email, next) => {
     body: JSON.stringify({ email, next })
   };
   try {
-    const response = await fetch(baseUrl + "users/magic_link/", requestOptions);
-    return response;
+    return await fetch(baseUrl + "users/magic_link/", requestOptions);
   } catch (error) {
     throw error;
   }
@@ -149,7 +144,6 @@ function checkAuth() {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
-    credentials: "same-origin",
     credentials: "include"
   };
 

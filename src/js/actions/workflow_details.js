@@ -7,7 +7,7 @@ import {
 } from "../constants";
 import { workflowDetailsService } from "../services";
 import _ from "lodash";
-//import { history } from "../_helpers";
+import { history } from "../_helpers";
 import { notification, message } from "antd";
 import Sentry from "@sentry/browser";
 
@@ -26,7 +26,8 @@ export const workflowDetailsActions = {
   getComment,
   getStepVersionFields,
   setCurrentStepId,
-  removeCurrentStepId
+  removeCurrentStepId,
+  archiveWorkflow
 };
 
 //Get workflow details
@@ -88,9 +89,9 @@ function getStepGroup(id) {
 function getStepFields(step) {
   // For Error tracking
   if (!step.workflowId || !step.groupId || !step.stepId) {
-    Sentry.captureException(
-      new Error(`Get steps field called ${JSON.stringify(step)}`)
-    );
+    // Sentry.captureException(
+    //   new Error(`Get steps field called ${JSON.stringify(step)}`)
+    // );
     return () => {};
   }
   return dispatch => {
@@ -199,4 +200,45 @@ function setCurrentStepId(payload) {
 //url has step info
 function removeCurrentStepId() {
   return { type: workflowDetailsConstants.REMOVE_STEP_ID };
+}
+
+function archiveWorkflow(id) {
+  return dispatch => {
+    dispatch(request());
+
+    workflowDetailsService.archiveWorkflow(id).then(
+      response => {
+        dispatch(success(response));
+        history.push("/workflows/instances/");
+      },
+      response => {
+        dispatch(failure(response));
+        setTimeout(function() {
+          history.push("/workflows/instances/");
+        }, 1500);
+      }
+    );
+  };
+
+  function request() {
+    return { type: workflowDetailsheaderConstants.ARCHIVE_REQUEST };
+  }
+
+  function success(response) {
+    return { type: workflowDetailsheaderConstants.ARCHIVE_REQUEST_SUCCESS };
+  }
+
+  function failure(response) {
+    if (response.status === 400) {
+      openNotificationWithIcon({
+        type: "error",
+        message:
+          "Possible misconfiguration of status'es mappings, please check with site admin"
+      });
+    }
+    return {
+      type: workflowDetailsheaderConstants.ARCHIVE_REQUEST_FAILURE,
+      error: response.statusText
+    };
+  }
 }

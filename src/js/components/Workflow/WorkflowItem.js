@@ -39,7 +39,9 @@ class WorkflowItem extends React.Component {
     stepdataloading: true,
     initialLoad: true,
     collapseDisabled: false,
-    visible: false
+    visible: false,
+    selectedStep: null,
+    selectedGroup: null
   };
 
   componentDidMount = () => {
@@ -52,13 +54,6 @@ class WorkflowItem extends React.Component {
   componentDidUpdate = (prevProps, prevState) => {
     let id = this.props.workflow.id;
     const { stepGroupData } = this.state;
-    if (
-      this.state.stepGroupData !== prevState.stepGroupData &&
-      this.state.initialLoad
-    ) {
-      this.showQuickDetails();
-      this.setState({ showQuickDetails: true, initialLoad: false });
-    }
 
     if (
       this.props.workflowChildren[id] !== prevProps.workflowChildren[id] &&
@@ -73,6 +68,10 @@ class WorkflowItem extends React.Component {
     }
   };
 
+  setParameter = (selectedStep, selectedGroup) => {
+    this.setState({ selectedGroup, selectedStep });
+  };
+
   showModal = id => {
     //this.props.history.replace("/workflows/instances"+this.props.location.search.params.id);
     //this.props.location.search = ""
@@ -84,6 +83,45 @@ class WorkflowItem extends React.Component {
       visible: true,
       workflowId: id
     });
+
+    this.addToOpenModalList();
+  };
+
+  addToOpenModalList = () => {
+    let { list } = this.props.expandedWorkflows;
+
+    if (!list.find(item => item.id === this.props.workflow.id)) {
+      console.log();
+      list.push(this.props.workflow);
+      this.props.dispatch(workflowActions.expandedWorkflowsList(list));
+    }
+  };
+
+  removeFromOpenModalList = () => {
+    let { list } = this.props.expandedWorkflows;
+    let index = list.indexOf(this.props.workflow);
+
+    if (index > -1) {
+      list.splice(index, 1);
+      this.props.dispatch(workflowActions.expandedWorkflowsList(list));
+    }
+  };
+
+  calcTopPos = () => {
+    let { list } = this.props.expandedWorkflows;
+    const index = list.indexOf(this.props.workflow);
+    let style = {
+      left: "21vw",
+      margin: 0,
+      top: "calc((100vh - 600px) / 2)"
+    };
+
+    if (index > -1) {
+      const topPosition = (600 - index * 120).toString() + "px";
+      style.top = `calc((100vh - ${topPosition}) / 2)`;
+    }
+
+    return style;
   };
 
   handleOk = e => {
@@ -91,6 +129,7 @@ class WorkflowItem extends React.Component {
     this.setState({
       visible: false
     });
+    this.removeFromOpenModalList();
   };
 
   handleCancel = e => {
@@ -100,6 +139,7 @@ class WorkflowItem extends React.Component {
     this.setState({
       visible: false
     });
+    this.removeFromOpenModalList();
   };
 
   setWorkflowId = id => {
@@ -154,9 +194,13 @@ class WorkflowItem extends React.Component {
 
       this.props.dispatch(workflowActions.showUserWorkflowModal(payload));
     } else {
+      const kindTag = e.key;
+      const kind = this.props.kinds.workflowKind.find(
+        kind => kind.tag == kindTag
+      );
       const payload = {
-        status: 1,
-        kind: e.key,
+        status: kind && kind.default_status,
+        kind: kindTag,
         name: "Draft",
         parent: this.props.workflow.id
       };
@@ -165,151 +209,11 @@ class WorkflowItem extends React.Component {
     }
   };
 
-  expandChildWorkflow = () => {
-    this.setState({ showRelatedWorkflow: true });
-
-    this.props.dispatch(
-      workflowActions.getChildWorkflow(this.props.workflow.id)
-    );
-  };
-
-  showQuickDetails = stepData => {
-    let that = this;
-    let workflow = this.props.workflow;
-    const { stepGroupData } = this.state;
-    let stepTrack = {
-      workflowId: workflow.id,
-      groupId: null,
-      stepId: null
-    };
-
-    if (stepData) {
-      stepTrack = {
-        workflowId: workflow.id,
-        groupId: stepData.step_group,
-        stepId: stepData.id
-      };
-    } else {
-      let group = _.first(
-        _.filter(stepGroupData, sg => {
-          if (sg.steps && _.size(sg.steps)) return sg;
-        })
-      );
-
-      let step = _.first(
-        _.filter(group.steps, step => {
-          if (step.is_enabled) {
-            return step;
-          }
-        })
-      );
-
-      stepTrack = {
-        workflowId: workflow.id,
-        groupId: group.id,
-        stepId: step.id
-      };
-    }
-
-    setTimeout(() => {
-      that.setState({ showQuickDetails: true });
-    }, 1000);
-    //this.props.dispatch(navbarActions.toggleRightSidebar(true));
-    this.props.dispatch(stepPreviewActions.getStepPreviewFields(stepTrack));
-  };
-
-  hideQuickDetails = () => {
-    //this.props.dispatch(navbarActions.toggleRightSidebar(false));
-    this.setState({ showQuickDetails: false });
-  };
-
-  onWorkflowToggle = action => {
-    let list = [];
-    let eList = this.props.expandedWorkflows.list;
-
-    if (action === "add") {
-      list = eList;
-      list.push(this.props.workflow.id);
-    } else if (action === "remove") {
-      list = _.forEach(eList, (id, index) => {
-        if (eList[index] === this.props.workflow.id) {
-          eList.splice(index, 1);
-        }
-      });
-    }
-    this.props.dispatch(workflowActions.expandedWorkflowsList(list));
-  };
-
-  // TODO - remove this quickfix, added for feature toggle / backward compat
-  shouldShowQuickDetails = () => {
-    const show_quick_details =
-      this.props.config &&
-      this.props.config.custom_ui_labels &&
-      this.props.config.custom_ui_labels.show_quick_details;
-    return show_quick_details;
-  };
-
-  onOpen = () => {
-    if (this.props.workflow.children_count && !this.state.opened)
-      this.expandChildWorkflow();
-
-    if (!this.state.opened && !this.state.initialLoad) {
-      if (this.shouldShowQuickDetails()) {
-        this.showQuickDetails();
-        this.props.dispatch(navbarActions.hideFilterMenu());
-      }
-      this.onWorkflowToggle("add");
-    }
-
-    if (!this.state.opened && !this.state.stepGroupData) {
-      workflowDetailsService
-        .getStepGroup(this.props.workflow.id)
-        .then(response => {
-          let proccessedData = getProcessedData(response.results);
-          this.setState({
-            stepGroupData: proccessedData,
-            stepdataloading: false
-          });
-        });
-    }
-
-    this.setState({ opened: true });
-  };
-
-  onClose = () => {
-    if (this.state.opened) {
-      this.hideQuickDetails();
-      this.onWorkflowToggle("remove");
-    }
-    this.setState({ opened: false });
-  };
-
-  getGroupedData = children => {
-    let grouped = _.groupBy(children, function(child) {
-      return child.definition.kind.toString();
-    });
-    return grouped;
-  };
-
-  disableCollapse = () => {
-    this.setState({ collapseDisabled: true });
-  };
-
-  enableCollapse = () => {
-    this.setState({ collapseDisabled: false });
-  };
-
   render = () => {
-    let that = this;
-    //console.log("work",this.props.workflow)
-    //const {location}
-    // console.log("location", this.props.workflow);
-    //console.log("workflow",this.props)
     const { workflow } = this.props;
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
-    const showQuickDetailsFunction =
-      this.shouldShowQuickDetails() && this.showQuickDetails && false;
+    const { list } = this.props.expandedWorkflows;
 
     return (
       <div
@@ -325,35 +229,38 @@ class WorkflowItem extends React.Component {
         <div>
           {/* {this.state.visible && ( */}
           <Modal
-            style={{ left: "22vw", margin: 0 }}
+            style={this.calcTopPos()}
             footer={null}
-            bodyStyle={{ padding: 0, maxHeight: 600, overflowY: "scroll" }}
+            bodyStyle={{ padding: 0, maxHeight: 600 }}
             width="77vw"
             destroyOnClose={true}
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
+            className="workflow-modal"
           >
-            <ModalHeader workflow={workflow} />
-            <WorkflowDetails
-              workflowItem={this.props.workflow}
-              location={this.props.location}
-              minimalUI={true}
-              workflowIdFromPropsForModal={this.props.workflow.id}
+            <ModalHeader
+              workflow={workflow}
+              stepId={this.state.selectedStep}
+              groupId={this.state.selectedGroup}
             />
+            <div style={{ maxHeight: 600, overflowY: "scroll" }}>
+              <WorkflowDetails
+                workflowItem={this.props.workflow}
+                location={this.props.location}
+                minimalUI={true}
+                workflowIdFromPropsForModal={this.props.workflow.id}
+                setParameter={this.setParameter}
+              />
+            </div>
 
-            <ModalFooter workflowIdFromPropsForModal={this.props.workflow.id} />
+            <ModalFooter
+              workflowIdFromPropsForModal={this.props.workflow.id}
+              stepId={this.state.selectedStep}
+              groupId={this.state.selectedGroup}
+            />
           </Modal>
-          {/* )} */}
 
-          {/* <Collapsible
-            trigger={
-              <div
-                className="lc-card"
-                style={{
-                  boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.09)"
-                }}
-              > */}
           <WorkflowHeader
             visibleModal={this.state.modal}
             showModal={this.showModal}
@@ -368,58 +275,19 @@ class WorkflowItem extends React.Component {
             statusView={this.props.statusView}
             hasChildren={hasChildren}
             fieldExtra={
-              that.props.field && that.props.field.definition.extra
-                ? that.props.field.definition.extra
+              this.props.field && this.props.field.definition.extra
+                ? this.props.field.definition.extra
                 : null
             }
             addComment={this.props.addComment || null}
             showCommentIcon={this.props.showCommentIcon}
             isExpanded={this.state.opened}
-            disableCollapse={this.disableCollapse}
-            enableCollapse={this.enableCollapse}
             config={this.props.config}
             bulkActionWorkflowChecked={this.props.bulkActionWorkflowChecked}
             handleChildWorkflowCheckbox={this.props.handleChildWorkflowCheckbox}
           />
-          {/* </div> */}
-          {/* } */}
 
-          {/* // > */}
-          <div>
-            {/* <WorkflowBody
-              {...this.props}
-              createButton={
-                <CreateRelated
-                  relatedKind={this.state.relatedWorkflow}
-                  onChildSelect={this.createChildWorkflow}
-                />
-              }
-              isEmbedded={this.props.isEmbedded}
-              getGroupedData={this.getGroupedData}
-              addComment={this.props.addComment || null}
-              showCommentIcon={this.props.showCommentIcon}
-              expandedWorkflows={this.props.expandedWorkflows}
-              showQuickDetails={showQuickDetailsFunction}
-              showRelatedWorkflow={this.state.showRelatedWorkflow}
-              workflow={this.props.workflow}
-              statusView={this.props.statusView}
-              stepdataloading={this.state.stepdataloading}
-              stepGroupData={this.state.stepGroupData}
-              relatedKinds={
-                _.size(this.state.relatedKinds)
-                  ? this.state.relatedKinds
-                  : this.state.relatedWorkflow
-              }
-            /> */}
-
-            {showQuickDetailsFunction ? (
-              <StepPreview
-                workflowName={this.props.workflow.name}
-                hideQuickDetails={this.hideQuickDetails}
-                showQuickDetails={this.state.showQuickDetails}
-              />
-            ) : null}
-          </div>
+          <div />
           {/* </Collapsible> */}
         </div>
       </div>
@@ -428,9 +296,10 @@ class WorkflowItem extends React.Component {
 }
 
 function mapPropsToState(state) {
-  const { workflowChildren } = state;
+  const { workflowChildren, expandedWorkflows } = state;
   return {
-    workflowChildren
+    workflowChildren,
+    expandedWorkflows
   };
 }
 

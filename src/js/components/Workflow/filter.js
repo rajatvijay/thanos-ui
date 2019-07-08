@@ -326,8 +326,11 @@ class FilterSidebar extends Component {
 
   clicked = tag => {
     //dispatch
+    const kind = this.props.workflowKind.workflowKind.find(
+      kind => kind.tag == tag
+    );
     let payload = {
-      status: 1,
+      status: kind && kind.default_status,
       kind: tag,
       name: "Draft"
     };

@@ -80,6 +80,8 @@ class Workflow extends Component {
     if (this.props.workflowKind.workflowKind) {
       this.getDefaultKind();
     }
+
+    this.props.dispatch(workflowActions.expandedWorkflowsList([]));
   };
 
   componentDidUpdate = prevProps => {

@@ -47,6 +47,7 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         [action.payload.id]: {
+          ...state[action.payload.id],
           isSubmitting: true,
           loading: true
         }
@@ -64,7 +65,30 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         [action.payload.id]: {
+          ...state[action.payload.id],
           isSubmitting: false,
+          error: action.error
+        }
+      };
+    case fieldConstants.POST_FIELD_SUCCESS:
+      return {
+        ...state,
+        // loading: false,
+        [action.field.id]: {
+          loading: false,
+          isSubmitting: false,
+          currentStepFields: action.field,
+          error: null
+        }
+        // currentStepFields: { ...action.field }
+      };
+    case fieldConstants.POST_FIELD_FAILURE:
+      console.log("POST_FIELD_FAILURE", action);
+      return {
+        ...state,
+        [action.workflowId]: {
+          ...state[action.workflowId],
+          loading: false,
           error: action.error
         }
       };
@@ -78,18 +102,6 @@ export function currentStepFields(state = initialState, action) {
       return {
         ...state,
         loading: false
-      };
-    case fieldConstants.POST_FIELD_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        currentStepFields: { ...action.field }
-      };
-    case fieldConstants.POST_FIELD_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.error
       };
 
     //////////////////////////////////////////////////////

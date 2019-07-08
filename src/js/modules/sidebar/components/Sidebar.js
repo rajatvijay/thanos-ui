@@ -31,11 +31,13 @@ class Sidebar extends Component {
       nextProps.workflowKind.workflowKind !=
       this.props.workflowKind.workflowKind
     ) {
-      let metaValue = _.find(nextProps.workflowKind.workflowKind, item => {
-        return item.tag === "entity";
-      });
-
-      this.props.dispatch(workflowKindActions.setValue(metaValue));
+      const metaValue =
+        nextProps.workflowKind.workflowKind &&
+        nextProps.workflowKind.workflowKind[0];
+      if (metaValue) {
+        this.props.dispatch(workflowKindActions.setValue(metaValue));
+        this.setState({ value: metaValue.id });
+      }
     }
   }
 
@@ -93,6 +95,11 @@ class Sidebar extends Component {
     const { isError } = this.props.workflowAlertGroupCount;
     const { collapse } = this.state;
     const { workflowKind } = this.props.workflowKind;
+    let selectedKind =
+      this.state.value &&
+      _.find(this.props.workflowKind.workflowKind, item => {
+        return item.id == this.state.value;
+      });
 
     return (
       <Sider
@@ -133,7 +140,7 @@ class Sidebar extends Component {
                 color: white;
               }
             `}
-            defaultValue="Entity"
+            value={selectedKind && selectedKind.name}
             style={{ width: "100%", display: "block" }}
             onChange={this.handleChange}
           >

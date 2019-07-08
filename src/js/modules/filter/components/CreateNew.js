@@ -8,10 +8,10 @@ class CreateNew extends Component {
     this.props.dispatch(workflowKindActions.getAll());
   };
 
-  handleWorkflowKindClick = tag => {
+  handleWorkflowKindClick = kind => {
     const payload = {
-      status: 1,
-      kind: tag,
+      status: kind.default_status,
+      kind: kind.tag,
       name: "Draft"
     };
     this.props.dispatch(createWorkflow(payload));
@@ -65,7 +65,7 @@ class CreateNew extends Component {
           return (
             <Menu.Item key={"key-" + index}>
               <div
-                onClick={() => this.handleWorkflowKindClick(item.tag)}
+                onClick={() => this.handleWorkflowKindClick(item)}
                 className="kind-item"
               >
                 {item.name}

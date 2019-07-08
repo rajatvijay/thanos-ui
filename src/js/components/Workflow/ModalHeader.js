@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 
 class ModalHeader extends Component {
   render() {
-    const { workflow } = this.props;
+    const { workflow, stepId, groupId } = this.props;
+
+    //console.log("ids", stepId, groupId);
 
     return (
       <div
@@ -14,7 +16,7 @@ class ModalHeader extends Component {
           justifyContent: "space-between",
           padding: "20px 30px",
           alignItems: "center",
-          position: "fixed",
+          position: "absolute",
           zIndex: 1,
           width: "77vw",
           backgroundColor: "white",
@@ -39,7 +41,18 @@ class ModalHeader extends Component {
 
           <span>{workflow.status.label}</span>
 
-          <Link to={"/workflows/instances/" + workflow.id + "/"}>
+          <Link
+            to={
+              !stepId && !groupId
+                ? "/workflows/instances/" + workflow.id + "/"
+                : "/workflows/instances/" +
+                  workflow.id +
+                  "?step=" +
+                  stepId +
+                  "&group=" +
+                  groupId
+            }
+          >
             <img style={{ width: 20 }} src={FullScreen} />
           </Link>
         </div>

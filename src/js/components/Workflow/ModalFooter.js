@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import FullScreen from "../../../images/fullScreenWhite.svg";
 
 function ModalFooter(props) {
+  const { stepId, groupId, workflowIdFromPropsForModal } = props;
+
   return (
     <div
       style={{
@@ -19,7 +21,16 @@ function ModalFooter(props) {
     >
       <Link
         style={{ color: "white", textDecoration: "none" }}
-        to={"/workflows/instances/" + props.workflowIdFromPropsForModal + "/"}
+        to={
+          !stepId && !groupId
+            ? "/workflows/instances/" + workflowIdFromPropsForModal + "/"
+            : "/workflows/instances/" +
+              workflowIdFromPropsForModal +
+              "?step=" +
+              stepId +
+              "&group=" +
+              groupId
+        }
       >
         Expand View
         <img style={{ width: 20, marginLeft: 20 }} src={FullScreen} />

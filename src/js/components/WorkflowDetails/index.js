@@ -7,7 +7,8 @@ import {
   logout,
   checkAuth,
   workflowDetailsActions,
-  navbarActions
+  navbarActions,
+  workflowActions
 } from "../../actions";
 
 class WorkflowDetailsRoot extends Component {
@@ -24,6 +25,10 @@ class WorkflowDetailsRoot extends Component {
     this.setState({
       customHistory: [{ pathname: "/workflows/instances/", search: "" }]
     });
+
+    if (!this.props.minimalUI) {
+      this.props.dispatch(workflowActions.expandedWorkflowsList([]));
+    }
   };
 
   componentDidUpdate = prevProps => {
@@ -75,11 +80,11 @@ class WorkflowDetailsRoot extends Component {
 
   fetchWorkflowData = () => {
     //Get workflow  basic data
+    const { workflowId } = this.state;
 
-    this.props.dispatch(workflowDetailsActions.getById(this.state.workflowId));
-    this.props.dispatch(
-      workflowDetailsActions.getStepGroup(this.state.workflowId)
-    );
+    this.props.dispatch(workflowDetailsActions.getById(workflowId));
+    if (!this.props.workflowDetails[workflowId])
+      this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
   };
 
   updateCustomHistory = url => {
@@ -152,13 +157,19 @@ class WorkflowDetailsRoot extends Component {
 }
 
 function mapPropsToState(state) {
-  const { authentication, users, workflowDetailsHeader } = state;
+  const {
+    authentication,
+    users,
+    workflowDetailsHeader,
+    workflowDetails
+  } = state;
 
   //Send to component
   return {
     workflowDetailsHeader,
     authentication,
-    users
+    users,
+    workflowDetails
   };
 }
 
