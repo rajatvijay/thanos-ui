@@ -20,6 +20,7 @@ import {
   workflowStepActions
 } from "../../../../js/actions";
 import { history } from "../../../../js/_helpers";
+import { black } from "ansi-colors";
 const { Sider } = Layout;
 
 const Panel = Collapse.Panel;
@@ -363,22 +364,28 @@ class Sidebar extends Component {
             <p
               style={{
                 backgroundColor: displayProfile ? "#104774" : "#FAFAFA",
-                borderRadius: "16px",
-                paddingLeft: "10px",
+                borderRadius: "50px",
+                paddingLeft: "7px",
                 paddingTop: "5px",
                 paddingBottom: "5px",
-                marginLeft: "-14px",
-                marginBottom: 2,
+                marginLeft: "-9px",
+                marginBottom: 8,
                 display: "flex",
-                alignItems: "center"
+                alignItems: "center",
+                color: displayProfile ? "white" : "black",
+                fontSize: 14
               }}
             >
               <i
                 className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
                 fill="#FFF"
-                style={{ color: "#CCCCCC", fontSize: 24 }}
+                style={{
+                  color: displayProfile ? "white" : "rgb(204, 204, 204)",
+                  fontSize: 24
+                }}
               >
-                {"panorama_fish_eye"}
+                {/* {"panorama_fish_eye"} */}
+                info_outline
               </i>
               Profile
             </p>
@@ -519,12 +526,12 @@ class Sidebar extends Component {
                                         paddingLeft: "10px",
                                         paddingTop: "5px",
                                         paddingBottom: "5px",
-                                        marginLeft: "-14px",
+                                        marginLeft: "-10px",
                                         color: "#FFFFFF"
                                       }
                                     : {
-                                        backgroundColor: "#fafafa",
-                                        marginLeft: "-14px"
+                                        backgroundColor: "#fafafa"
+                                        // marginLeft: "-14px"
                                       }
                                 }
                               >
@@ -535,7 +542,7 @@ class Sidebar extends Component {
                                     style={
                                       groupId == stepgroup.id &&
                                       stepId == step.id
-                                        ? { color: "#00C89B", fontSize: 18 }
+                                        ? { color: "#00C89B", fontSize: 14 }
                                         : { color: "#00C89B" }
                                     }
                                   >
@@ -548,7 +555,7 @@ class Sidebar extends Component {
                                     style={
                                       groupId == stepgroup.id &&
                                       stepId == step.id
-                                        ? { color: "#FFFFFF", fontSize: 16 }
+                                        ? { color: "#FFFFFF", fontSize: 14 }
                                         : { color: "#CCCCCC" }
                                     }
                                   >
