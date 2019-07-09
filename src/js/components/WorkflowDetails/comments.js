@@ -31,6 +31,9 @@ import styled from "@emotion/styled";
 import { css } from "emotion";
 import { status_filters } from "./EventStatuses";
 
+console.clear();
+console.log("status_filters---");
+console.log(status_filters);
 const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
@@ -336,7 +339,7 @@ class Comments extends Component {
         className="comment-select"
       >
         {status_filters.map(item => {
-          return <Option value={item.value}>{item.label}</Option>;
+          return <Option value={item.value}>{item.text}</Option>;
         })}
       </Select>
     );
