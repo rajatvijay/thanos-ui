@@ -10,6 +10,7 @@ import {
   navbarActions,
   workflowActions
 } from "../../actions";
+//import { refetchWorkflowDetails } from "../../actions/workflow_details";
 
 class WorkflowDetailsRoot extends Component {
   constructor(props) {
@@ -21,6 +22,16 @@ class WorkflowDetailsRoot extends Component {
 
   componentDidMount = () => {
     this.verifyAuth();
+    const { workflowIdFromPropsForModal } = this.props;
+
+    const WFId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+
+    //set refetch true on initial call
+    if (this.props.match) {
+      this.props.dispatch(workflowDetailsActions.refetchWorkflowDetails(WFId));
+    }
+
     this.setWorkflowId();
     this.setState({
       customHistory: [{ pathname: "/workflows/instances/", search: "" }]
@@ -32,11 +43,21 @@ class WorkflowDetailsRoot extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    const { workflowIdFromPropsForModal } = this.props;
+    const { workflowIdFromPropsForModal, minimalUI } = this.props;
+    console.log("comparing", prevProps, this.props);
 
     let WFId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     const { location } = this.props;
+
+    //set refetch true for childWorkflows
+    if (
+      !minimalUI &&
+      prevProps.match.params.id !== this.props.match.params.id
+    ) {
+      this.props.dispatch(workflowDetailsActions.refetchWorkflowDetails(WFId));
+    }
+
     this.setWorkflowId();
 
     //update custom history stack for back button purpose
@@ -60,8 +81,10 @@ class WorkflowDetailsRoot extends Component {
     //if(!workflowIdFromPropsForModal){
     let WFId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+
     if (this.state.workflowId !== WFId) {
       this.setState({ workflowId: WFId }, () => {
+        console.log("calling");
         this.fetchWorkflowData();
       });
       this.props.dispatch(navbarActions.showFilterMenu());
@@ -83,8 +106,18 @@ class WorkflowDetailsRoot extends Component {
     const { workflowId } = this.state;
 
     this.props.dispatch(workflowDetailsActions.getById(workflowId));
-    if (!this.props.workflowDetails[workflowId])
+
+    if (
+      !this.props.workflowDetails[workflowId] ||
+      !this.props.workflowDetails[workflowId].workflowDetails
+    ) {
       this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
+    } else if (
+      this.props.workflowDetails[workflowId].refetch &&
+      this.props.minimalUI
+    ) {
+      this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
+    }
   };
 
   updateCustomHistory = url => {

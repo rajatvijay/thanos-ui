@@ -1,7 +1,8 @@
 import {
   workflowStepConstants as stepConstants,
   workflowFieldConstants as fieldConstants,
-  dunsFieldConstants
+  dunsFieldConstants,
+  commomConstants
 } from "../constants";
 
 const initialState = {
@@ -27,7 +28,8 @@ export function currentStepFields(state = initialState, action) {
         [action.stepFields.id]: {
           loading: false,
           currentStepFields: action.stepFields,
-          error: {}
+          error: {},
+          refetch: false
         }
       };
 
@@ -38,6 +40,12 @@ export function currentStepFields(state = initialState, action) {
           loading: false,
           error: action.error
         }
+      };
+
+    case commomConstants.REFETCH_STEP_FIELDS:
+      return {
+        ...state,
+        [action.id]: { ...state[action.id], refetch: true }
       };
 
     //////////////////////////////////

@@ -3,13 +3,22 @@ import {
   workflowDetailsheaderConstants,
   workflowStepConstants,
   workflowCommentsConstants,
-  stepVersionConstants
+  stepVersionConstants,
+  commomConstants
 } from "../constants";
 import { workflowDetailsService } from "../services";
 import _ from "lodash";
 import { history } from "../_helpers";
 import { notification, message } from "antd";
 import Sentry from "@sentry/browser";
+
+export const refetchWorkflowDetails = id => {
+  return { type: commomConstants.REFETCH_WORKFLOW_DETAILS, id };
+};
+
+export const refetchStepFields = id => {
+  return { type: commomConstants.REFETCH_STEP_FIELDS, id };
+};
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -27,7 +36,9 @@ export const workflowDetailsActions = {
   getStepVersionFields,
   setCurrentStepId,
   removeCurrentStepId,
-  archiveWorkflow
+  archiveWorkflow,
+  refetchWorkflowDetails,
+  refetchStepFields
 };
 
 //Get workflow details

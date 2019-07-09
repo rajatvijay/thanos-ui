@@ -1,4 +1,4 @@
-import { workflowDetailsConstants } from "../constants";
+import { workflowDetailsConstants, commomConstants } from "../constants";
 
 const initialState = {
   loading: false,
@@ -40,7 +40,8 @@ export function workflowDetails(state = {}, action) {
         ...state,
         [action.id]: {
           loading: false,
-          workflowDetails: { stepGroups: action.stepGroups }
+          workflowDetails: { stepGroups: action.stepGroups },
+          refetch: false
         },
         loading: false,
         workflowDetails: { stepGroups: action.stepGroups }
@@ -50,6 +51,9 @@ export function workflowDetails(state = {}, action) {
         ...state,
         error: action.error
       };
+
+    case commomConstants.REFETCH_WORKFLOW_DETAILS:
+      return { ...state, [action.id]: { ...state[action.id], refetch: true } };
 
     default:
       return state;

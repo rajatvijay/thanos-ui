@@ -53,6 +53,13 @@ class WorkflowDetails extends Component {
     // TODO: Why??
     this.getInitialData();
     // this.setStepFromQuery()
+    // this.updateCurrentActiveStep(true);
+    const params = new URL(document.location).searchParams;
+    const stepId = params.get("step");
+
+    if (this.props.match && stepId) {
+      this.props.dispatch(workflowDetailsActions.refetchStepFields(stepId));
+    }
   };
 
   componentDidUpdate = prevProps => {
@@ -84,6 +91,11 @@ class WorkflowDetails extends Component {
     //SET WORKFLOW ID FROM ROUTER
     //console.log("before", selectedStep, stepId, selectedGroup);
 
+    // if(!minimalUI && prevProps.match.params.id !== this.props.match.params.id){
+    //   this.props.dispatch(workflowDetailsActions.refetchWorkflowDetails(WFId))
+    // }
+
+    //dont call stepfield api when you are in modal
     if (
       !minimalUI &&
       match &&
@@ -94,7 +106,7 @@ class WorkflowDetails extends Component {
       this.setState(
         { selectedGroup: groupId, selectedStep: stepId },
         function() {
-          // if(!workflowDetails[stepId])
+          this.props.dispatch(workflowDetailsActions.refetchStepFields(stepId));
           this.updateCurrentActiveStep();
         }
       );
@@ -291,6 +303,7 @@ class WorkflowDetails extends Component {
       !minimalUI &&
       !this.props.currentStepFields[stepTrack.stepId]
     ) {
+      //right side
       this.fetchStepData(stepTrack);
     }
   };
@@ -336,6 +349,8 @@ class WorkflowDetails extends Component {
   };
 
   fetchStepData = payload => {
+    const { match, minimalUI } = this.props;
+
     const payloadWithMeta = {
       ...payload,
       fromEmbedded: this.props.fromEmbedded
@@ -343,10 +358,24 @@ class WorkflowDetails extends Component {
     // if(!this.props.currentStepFields[payload.stepId])
 
     // console.log("cache", payloadWithMeta);
-    if (!this.props.currentStepFields[payload.stepId])
+    if (!this.props.currentStepFields[payload.stepId]) {
       this.props.dispatch(
         workflowDetailsActions.getStepFields(payloadWithMeta)
       );
+    } else if (
+      this.props.currentStepFields[payload.stepId].refetch &&
+      minimalUI
+    ) {
+      this.props.dispatch(
+        workflowDetailsActions.getStepFields(payloadWithMeta)
+      );
+    }
+
+    // else if(match && !minimalUI && this.props.currentStepFields[payload.stepId].invalid){
+    //   this.props.dispatch(
+    //     workflowDetailsActions.getStepFields(payloadWithMeta)
+    //   );
+    // }
   };
 
   isParentWorkflow = () => {
