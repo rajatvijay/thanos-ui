@@ -16,6 +16,7 @@ import {
   Collapse
 } from "antd";
 import _ from "lodash";
+import { event_status } from "../EventStatuses";
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -672,11 +673,6 @@ export class EventDetailComp extends Component {
     );
   }
 }
-
-const event_status = {
-  open: { label: "Open", class: "red" },
-  closed: { label: "Closed", class: "green" }
-};
 
 const Block = props => {
   return (
