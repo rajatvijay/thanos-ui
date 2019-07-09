@@ -29,6 +29,7 @@ import MentionWithAttachments from "./MentionWithAttachments";
 import { workflowFiltersService } from "../../services";
 import styled from "@emotion/styled";
 import { css } from "emotion";
+import { status_filters } from "./EventStatuses";
 
 const { toString, toContentState } = Mention;
 
@@ -334,8 +335,9 @@ class Comments extends Component {
         onChange={that.changeStatus}
         className="comment-select"
       >
-        <Option value="open">Open</Option>
-        <Option value="closed">Closed</Option>
+        {status_filters.map(item => {
+          return <Option value={item.value}>{item.label}</Option>;
+        })}
       </Select>
     );
 
@@ -368,7 +370,7 @@ class Comments extends Component {
           position: "fixed",
           right: 0,
           top: "60px",
-          zIndex: 2
+          zIndex: 10
         }}
         width="570"
         collapsed={false}
