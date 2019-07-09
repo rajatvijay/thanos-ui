@@ -18,7 +18,7 @@ import { commonFunctions } from "./commons";
 import { countries } from "./countries.js";
 import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { EventDetailComp, getEventItem } from "./rdc_alert_metadata";
-import { event_status } from "../EventStatuses";
+import { event_status, status_filters } from "../EventStatuses";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -220,11 +220,7 @@ const GetTable = props => {
     {
       title: "Status",
       key: "status",
-      filters: [
-        { text: "In Progress", value: "in_progress" },
-        { text: "Reviewed", value: "reviewed" },
-        { text: "Not Reviewed", value: "not_reviewed" }
-      ],
+      filters: status_filters,
       onFilter: (value, record) => {
         return record.krypton_status === value;
       },

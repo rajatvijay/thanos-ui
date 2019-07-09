@@ -7,3 +7,9 @@ export const event_status = {
   reviewed: { label: "Reviewed", class: "green" },
   not_reviewed: { label: "Not Reviewed", class: "grey" }
 };
+
+export const status_filters = [
+  { text: "In Progress", value: "in_progress" },
+  { text: "Reviewed", value: "reviewed" },
+  { text: "Not Reviewed", value: "not_reviewed" }
+];
