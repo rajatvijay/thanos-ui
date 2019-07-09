@@ -82,7 +82,7 @@ class RoutSwitch extends React.Component {
   };
 
   pushToCustomHisotry = item => {
-    let arr = JSON.parse(localStorage.getItem("customHistory"));
+    let arr = JSON.parse(localStorage.getItem("customHistory")) || [];
     arr.push(item);
     localStorage.setItem("customHistory", JSON.stringify(arr));
   };
