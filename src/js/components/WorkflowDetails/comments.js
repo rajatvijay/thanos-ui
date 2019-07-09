@@ -31,9 +31,6 @@ import styled from "@emotion/styled";
 import { css } from "emotion";
 import { status_filters } from "./EventStatuses";
 
-console.clear();
-console.log("status_filters---");
-console.log(status_filters);
 const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
