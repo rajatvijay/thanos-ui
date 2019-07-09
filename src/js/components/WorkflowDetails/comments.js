@@ -336,7 +336,7 @@ class Comments extends Component {
         className="comment-select"
       >
         {status_filters.map(item => {
-          return <Option value={item.value}>{item.label}</Option>;
+          return <Option value={item.value}>{item.text}</Option>;
         })}
       </Select>
     );
