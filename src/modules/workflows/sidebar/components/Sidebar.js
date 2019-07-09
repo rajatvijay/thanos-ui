@@ -1,27 +1,14 @@
 import React, { Component } from "react";
-import {
-  Layout,
-  Divider,
-  Dropdown,
-  Collapse,
-  Row,
-  Menu,
-  Col,
-  Drawer,
-  spin,
-  Icon
-} from "antd";
-import { FormattedMessage } from "react-intl";
+import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
+import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import AuditListTabs from "../../../../js/components/Navbar/audit_log";
 import {
   workflowDetailsActions,
   workflowStepActions
 } from "../../../../js/actions";
-import { history } from "../../../../js/_helpers";
-const { Sider } = Layout;
 
+const { Sider } = Layout;
 const Panel = Collapse.Panel;
 
 class Sidebar extends Component {
@@ -119,10 +106,19 @@ class Sidebar extends Component {
   };
 
   archiveWorkflow = () => {
-    const workflowId = this.props.workflowDetailsHeader[
-      this.props.workflowIdFromDetailsToSidebar
-    ].id;
-    this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
+    const intl = this.props.intl;
+    if (
+      window.confirm(
+        intl.formatMessage({
+          id: "commonTextInstances.archiveConfirmText"
+        })
+      )
+    ) {
+      const workflowId = this.props.workflowDetailsHeader[
+        this.props.workflowIdFromDetailsToSidebar
+      ].id;
+      this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
+    }
   };
 
   // componentDidMount() {
@@ -582,4 +578,4 @@ function mapStateToProps(state, ownProps) {
   return { workflowDetailsHeader, workflowDetails, currentStepFields, config };
 }
 
-export default connect(mapStateToProps)(Sidebar);
+export default connect(mapStateToProps)(injectIntl(Sidebar));
