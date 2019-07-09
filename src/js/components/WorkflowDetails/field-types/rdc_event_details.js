@@ -18,6 +18,7 @@ import { commonFunctions } from "./commons";
 import { countries } from "./countries.js";
 import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { EventDetailComp, getEventItem } from "./rdc_alert_metadata";
+import { event_status } from "../EventStatuses";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -228,28 +229,18 @@ const GetTable = props => {
         return record.krypton_status === value;
       },
       render: record => {
-        let options = {
-          //backward compatiblility
-          open: { label: "Open", class: "red" },
-          closed: { label: "Closed", class: "green" },
-          //new statuses
-          in_progress: { label: "In Progress", class: "blue" },
-          reviewed: { label: "Reviewed", class: "green" },
-          not_reviewed: { label: "Not Reviewed", class: "grey" }
-        };
-
         return (
           <div>
             {record.krypton_status ? (
               <Tag
                 color={
-                  options[record.krypton_status]
-                    ? options[record.krypton_status]["class"]
+                  event_status[record.krypton_status]
+                    ? event_status[record.krypton_status]["class"]
                     : "grey"
                 }
               >
-                {options[record.krypton_status]
-                  ? options[record.krypton_status]["label"]
+                {event_status[record.krypton_status]
+                  ? event_status[record.krypton_status]["label"]
                   : "N/A"}
               </Tag>
             ) : null}
