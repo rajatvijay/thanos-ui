@@ -280,7 +280,7 @@ class StepBodyForm extends Component {
         {"  "}
         <Tooltip
           title={
-            <Moment tz="UTC" format="YYYY/MM/DD z">
+            <Moment tz="UTC" format="YYYY/MM/DDTHH:mm:ssz">
               {step.completed_at}
             </Moment>
           }
