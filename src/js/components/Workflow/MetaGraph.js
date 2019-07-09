@@ -34,7 +34,7 @@ class MetaGraph extends Component {
     fetch(baseUrl + "dashboard/embed-url/", requestOptions)
       .then(function(response) {
         if (!response.ok) {
-          this.setState({
+          that.setState({
             error: response.statusText,
             loading: false
           });
