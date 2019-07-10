@@ -110,7 +110,9 @@ class StepBody extends Component {
 
     return data.map(item => (
       <Menu.Item>
-        <a onClick={() => postStepUser({ stepId, id: item.id })}>{item.name}</a>
+        <a onClick={() => postStepUser({ step: stepId, user: item.id })}>
+          {item.full_name}
+        </a>
       </Menu.Item>
     ));
   };
@@ -207,7 +209,8 @@ class StepBody extends Component {
             "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
-          {stepUsers[stepId] && stepUsers[stepId].display && (
+          {/* //&& stepUsers[stepId].display */}
+          {stepUsers[stepId] && (
             <div>
               {stepUsers[stepId].user && (
                 <Tag
@@ -218,7 +221,7 @@ class StepBody extends Component {
                     deleteStepUser(stepId, stepUsers[stepId].user.id)
                   }
                 >
-                  {stepUsers[stepId].user.user.name}
+                  {stepUsers[stepId].user.user_full_name}
                 </Tag>
               )}
 
