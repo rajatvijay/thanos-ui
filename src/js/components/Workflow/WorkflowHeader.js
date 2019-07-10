@@ -306,7 +306,7 @@ class HeaderOptions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: this.props.workflow.status.label,
+      current: this.getWorkflowStatus(),
       showSidebar: false,
       isWorkflowPDFModalVisible: false
     };
@@ -314,6 +314,14 @@ class HeaderOptions extends React.Component {
 
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
+  };
+
+  getWorkflowStatus = () => {
+    if (this.props.workflow.status.label !== undefined) {
+      return this.props.workflow.status.label;
+    } else {
+      return this.props.workflow.status.kind_display;
+    }
   };
 
   getComment = (object_id, e) => {
