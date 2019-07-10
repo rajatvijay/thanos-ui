@@ -317,11 +317,10 @@ class HeaderOptions extends React.Component {
   };
 
   getWorkflowStatus = () => {
-    if (this.props.workflow.status.label !== undefined) {
-      return this.props.workflow.status.label;
-    } else {
-      return this.props.workflow.status.kind_display;
-    }
+    return (
+      this.props.workflow.status.label ||
+      this.props.workflow.status.kind_display
+    );
   };
 
   getComment = (object_id, e) => {
