@@ -110,7 +110,7 @@ function getStepVersionFields(step) {
 function archiveWorkflow(workflowId) {
   const requestOptions = {
     method: "POST",
-    headers: authHeader.get(),
+    headers: authHeader.post(),
     credentials: "include"
   };
 
