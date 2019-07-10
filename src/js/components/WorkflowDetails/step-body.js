@@ -126,11 +126,16 @@ class StepBody extends Component {
       if (stepUsers[stepId].data) {
         return (
           <Dropdown
+            overlayStyle={{
+              maxHeight: 200,
+              overflowY: "scroll",
+              boxShadow: "1px 3px 5px rgba(0, 0, 0, 0.12)"
+            }}
             disabled={stepUsers[stepId].disabled}
             overlay={<Menu>{this.userList(stepUsers[stepId].data)}</Menu>}
             trigger={["click"]}
           >
-            <img style={{ width: "6%" }} src={addUser} />
+            <img style={{ width: "6%", cursor: "pointer" }} src={addUser} />
           </Dropdown>
         );
       }

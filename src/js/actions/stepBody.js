@@ -31,7 +31,7 @@ const postStepUser = obj => async dispatch => {
     method: "POST",
     headers: authHeader.post(),
     credentials: "include",
-    body: JSON.stringify(obj)
+    body: JSON.stringify({ ...obj, tag: "Assignee" })
   };
 
   const url = `${baseUrl}step-user-tags/`;
