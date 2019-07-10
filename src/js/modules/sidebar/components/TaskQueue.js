@@ -2,7 +2,7 @@ import React from "react";
 import CountWidget from "./CountWidget";
 import styled from "@emotion/styled";
 
-function TaskQueue({ item, onSelect, isSelected }) {
+export function TaskQueue({ item, onSelect, isSelected }) {
   return (
     <StyledTaskQueueContainer
       isSelected={isSelected}
@@ -18,7 +18,23 @@ function TaskQueue({ item, onSelect, isSelected }) {
   );
 }
 
-export default TaskQueue;
+export function DefaultTaskQueue({ item }) {
+  return (
+    <StyledTaskQueueContainer data-testid="task-queue-list-item">
+      <div>
+        <img
+          src={item.image}
+          style={{ width: "6%", marginRight: 10, marginBottom: 5 }}
+        />
+        <span className="name">{item.name}</span>
+      </div>
+      <WorkflowCounts
+        workflowCount={item.count}
+        overdueCount={item.overdue_count}
+      />
+    </StyledTaskQueueContainer>
+  );
+}
 
 function WorkflowCounts({ workflowCount, overdueCount }) {
   return (

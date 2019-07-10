@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import Collapsible from "react-collapsible";
 import { css } from "emotion";
 import _ from "lodash";
+import { taskQueueCount } from "../sidebarActions";
 
 const { Sider } = Layout;
 const Option = Select.Option;
@@ -17,6 +18,10 @@ class Sidebar extends Component {
     parent: null,
     collapse: true
   };
+
+  componentDidMount() {
+    this.props.taskQueueCount();
+  }
 
   setFilter = () => {
     const payload = {
@@ -164,6 +169,7 @@ class Sidebar extends Component {
           >
             <div>
               <TaskQueueList
+                count={this.props.count}
                 taskQueues={this.props.workflowGroupCount.stepgroupdef_counts}
                 loading={this.props.workflowAlertGroupCount.loading}
                 // workflowGroupCount={this.props.workflowGroupCount}
@@ -192,7 +198,8 @@ function mapStateToProps(state) {
     workflowFilters,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    taskQueueCount
   } = state;
   return {
     workflowKind,
@@ -200,8 +207,12 @@ function mapStateToProps(state) {
     workflowFilters,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    count: taskQueueCount.count
   };
 }
 
-export default connect(mapStateToProps)(Sidebar);
+export default connect(
+  mapStateToProps,
+  { taskQueueCount }
+)(Sidebar);

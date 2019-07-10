@@ -1,12 +1,24 @@
 import React, { Component } from "react";
-import { Icon, Menu, Dropdown, Button, Divider, Tooltip, Row, Col } from "antd";
+import {
+  Icon,
+  Menu,
+  Dropdown,
+  Button,
+  Divider,
+  Tooltip,
+  Row,
+  Col,
+  Tag,
+  Spin
+} from "antd";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
-import { workflowDetailsActions } from "../../actions";
+import { workflowDetailsActions, stepBodyActions } from "../../actions";
 import _ from "lodash";
 import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
+import addUser from "../../../images/addUser.svg";
 
 class StepBody extends Component {
   constructor(props) {
@@ -21,6 +33,11 @@ class StepBody extends Component {
   addComment = stepData => {
     this.props.toggleSidebar(stepData.id, "step");
   };
+  componentDidMount() {
+    const { stepId, getAssignedUser } = this.props;
+
+    this.props.getAssignedUser(stepId);
+  }
 
   onVersionChange = e => {
     this.versionToggle();
@@ -75,9 +92,63 @@ class StepBody extends Component {
     );
   };
 
+  userList = data => {
+    // return <Menu>
+    //   <Menu.Item key="0">
+    //     <a href="http://www.alipay.com/">1st menu item</a>
+    //   </Menu.Item>
+    //   <Menu.Item key="1">
+    //     <a href="http://www.taobao.com/">2nd menu item</a>
+    //   </Menu.Item>
+    //   <Menu.Divider />
+    //   <Menu.Item key="3">3rd menu item</Menu.Item>
+    // </Menu>
+
+    const { stepId, postStepUser } = this.props;
+
+    console.log("data", data);
+
+    return data.map(item => (
+      <Menu.Item>
+        <a onClick={() => postStepUser({ step: stepId, user: item.id })}>
+          {item.full_name}
+        </a>
+      </Menu.Item>
+    ));
+  };
+
+  renderStepUsers = () => {
+    const { stepUsers, stepId } = this.props;
+
+    console.log("result", stepUsers, stepId, stepUsers[stepId]);
+
+    if (stepUsers[stepId] && !stepUsers[stepId].isLoading) {
+      if (stepUsers[stepId].data) {
+        return (
+          <Dropdown
+            disabled={stepUsers[stepId].disabled}
+            overlay={<Menu>{this.userList(stepUsers[stepId].data)}</Menu>}
+            trigger={["click"]}
+          >
+            <img style={{ width: "6%" }} src={addUser} />
+          </Dropdown>
+        );
+      }
+      return;
+    }
+    return <Spin />;
+  };
+
   render = () => {
-    const { displayProfile, workflowHead } = this.props;
-    //console.log("step",stepData,workflowHead)
+    //console.log("render",this.props.stepUsers)
+    const {
+      displayProfile,
+      workflowHead,
+      stepUsers,
+      stepId,
+      deleteStepUser
+    } = this.props;
+    console.log("step", stepId);
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
@@ -129,11 +200,37 @@ class StepBody extends Component {
     if (_.size(stepData)) {
       var step_comment_btn = (
         <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center"
+          }}
           className={
             "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
+          {/* //&& stepUsers[stepId].display */}
+          {stepUsers[stepId] && (
+            <div>
+              {stepUsers[stepId].user && (
+                <Tag
+                  color="#104774"
+                  style={{ marginRight: 30 }}
+                  closable
+                  onClose={() =>
+                    deleteStepUser(stepId, stepUsers[stepId].user.id)
+                  }
+                >
+                  {stepUsers[stepId].user.user_full_name}
+                </Tag>
+              )}
+
+              {this.renderStepUsers()}
+            </div>
+          )}
+
           {this.versionDropDown()}
+
           <span className="display-inline-block pd-right-sm"> </span>
           <span
             style={{ cursor: "pointer" }}
@@ -277,15 +374,20 @@ function mapStateToProps(state) {
     workflowDetails,
     stepVersionFields,
     config,
-    workflowDetailsHeader
+    workflowDetailsHeader,
+    stepUsers
   } = state;
   return {
     currentStepFields,
     workflowDetails,
     stepVersionFields,
     config,
-    workflowDetailsHeader
+    workflowDetailsHeader,
+    stepUsers
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(StepBody));
+export default connect(
+  mapStateToProps,
+  stepBodyActions
+)(injectIntl(StepBody));
