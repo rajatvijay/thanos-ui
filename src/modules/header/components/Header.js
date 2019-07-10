@@ -3,11 +3,20 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { authHeader, baseUrl, baseUrl2 } from "../../../js/_helpers";
-import { Tooltip, Menu, Dropdown, Input, Icon, notification } from "antd";
+import {
+  Tooltip,
+  Menu,
+  Dropdown,
+  Input,
+  Icon,
+  notification,
+  Drawer
+} from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import { logout, workflowActions, navbarActions } from "../../../js/actions";
 import "../header.css";
+import { Link } from "react-router-dom";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -144,6 +153,16 @@ class Header extends Component {
     let showExportOption =
       this.props.config.permissions &&
       this.props.config.permissions.includes("Can export workflow data");
+    let showInsights = false;
+
+    if (
+      user &&
+      user.features.includes("view_reports") &&
+      this.props.config &&
+      this.props.config.report_embed_url
+    ) {
+      showInsights = true;
+    }
 
     return (
       <div
@@ -207,6 +226,21 @@ class Header extends Component {
             alignItems: "center"
           }}
         >
+          {showInsights ? (
+            <div style={{ display: "flex", alignItems: "end" }}>
+              <Tooltip title="Show Reports" placement="left">
+                <Link to="/reports/">
+                  <i
+                    className="material-icons text-middle text-anchor"
+                    style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
+                  >
+                    trending_up
+                  </i>
+                </Link>
+              </Tooltip>
+            </div>
+          ) : null}
+
           {this.props.workflowKind.workflowKind && showExportOption
             ? this.getExportList()
             : null}

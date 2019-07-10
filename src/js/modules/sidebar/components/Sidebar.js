@@ -145,6 +145,7 @@ class Sidebar extends Component {
                 color: white;
               }
             `}
+            dropdownClassName="kind-select"
             value={selectedKind && selectedKind.name}
             style={{ width: "100%", display: "block" }}
             onChange={this.handleChange}
