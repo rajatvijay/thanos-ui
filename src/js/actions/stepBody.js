@@ -124,7 +124,7 @@ const deleteStepUser = (stepId, id) => async dispatch => {
     // body: JSON.stringify(obj)
   };
 
-  const url = `${baseUrl}/api/v1/step-user-tags/${id}`;
+  const url = `${baseUrl}step-user-tags/${id}`;
   let res = await fetch(url, requestOptions);
   res = await res.json();
 
