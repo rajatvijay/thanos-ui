@@ -515,6 +515,7 @@ class Sidebar extends Component {
                                         paddingLeft: "10px",
                                         paddingTop: "5px",
                                         paddingBottom: "5px",
+                                        marginLeft: "-10px",
                                         color: "#FFFFFF"
                                       }
                                     : {
