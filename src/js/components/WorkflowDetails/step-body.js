@@ -118,7 +118,9 @@ class StepBody extends Component {
   renderStepUsers = () => {
     const { stepUsers, stepId } = this.props;
 
-    if (stepUsers[stepId] && !stepUsers[stepId].isLoading) {
+    //console.log("result", stepUsers, stepId, stepUsers[stepId]);
+
+    if (!stepUsers[stepId].isLoading) {
       if (stepUsers[stepId].data) {
         return (
           <Dropdown
@@ -137,7 +139,9 @@ class StepBody extends Component {
       }
       return;
     }
-    return <Spin />;
+    return (
+      <Spin indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />} />
+    );
   };
 
   render = () => {
@@ -149,7 +153,7 @@ class StepBody extends Component {
       stepId,
       deleteStepUser
     } = this.props;
-    console.log("step", stepId);
+    //console.log("step", stepId);
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
