@@ -106,8 +106,6 @@ class StepBody extends Component {
 
     const { stepId, postStepUser } = this.props;
 
-    console.log("data", data);
-
     return data.map(item => (
       <Menu.Item>
         <a onClick={() => postStepUser({ step: stepId, user: item.id })}>
@@ -119,8 +117,6 @@ class StepBody extends Component {
 
   renderStepUsers = () => {
     const { stepUsers, stepId } = this.props;
-
-    console.log("result", stepUsers, stepId, stepUsers[stepId]);
 
     if (stepUsers[stepId] && !stepUsers[stepId].isLoading) {
       if (stepUsers[stepId].data) {
@@ -360,6 +356,7 @@ class StepBody extends Component {
                   ...this.props.currentStepFields,
                   ...this.props.currentStepFields[this.props.stepId]
                 }}
+                dispatch={this.props.dispatch}
               />
             </div>
           ) : (
