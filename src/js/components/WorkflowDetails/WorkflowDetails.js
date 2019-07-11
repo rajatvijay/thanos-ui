@@ -576,6 +576,7 @@ class WorkflowDetails extends Component {
                           ? this.props.workflowDetailsHeader[workflowId]
                           : null
                       }
+                      dispatch={this.props.dispatch}
                       displayProfile={this.state.displayProfile}
                     />
                   </div>
