@@ -1,4 +1,5 @@
-import { authHeader, baseUrl } from "../_helpers";
+//import { authHeader, baseUrl } from "../_helpers";
+import { stepBodyService } from "../services";
 import { stepBody } from "../constants";
 
 const {
@@ -18,17 +19,9 @@ const {
 
 const postStepUser = obj => async dispatch => {
   dispatch({ type: POST_STEP_USER_LOADING, stepId: obj.stepId });
-  try {
-    const requestOptions = {
-      method: "POST",
-      headers: authHeader.post(),
-      credentials: "include",
-      body: JSON.stringify({ ...obj, tag: "Assignee" })
-    };
 
-    const url = `${baseUrl}step-user-tags/`;
-    let res = await fetch(url, requestOptions);
-    res = await res.json();
+  try {
+    const res = await stepBodyService.postStepUser({ ...obj, tag: "Assignee" });
 
     dispatch({
       type: POST_STEP_USER_SUCCESS,
@@ -46,16 +39,9 @@ const postStepUser = obj => async dispatch => {
 
 export const getStepUsers = stepId => async dispatch => {
   dispatch({ type: GET_STEP_USERS_LOADING, stepId });
-  try {
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
 
-    const url = `${baseUrl}steps/${stepId}/get-users-with-edit-access/`;
-    let res = await fetch(url, requestOptions);
-    res = await res.json();
+  try {
+    const res = await stepBody.getStepUsers(stepId);
 
     dispatch({ type: GET_STEP_USERS_SUCCESS, payload: res, stepId });
   } catch (err) {
@@ -65,16 +51,9 @@ export const getStepUsers = stepId => async dispatch => {
 
 const deleteStepUser = (stepId, id) => async dispatch => {
   dispatch({ type: DELETE_STEP_USER_LOADING, stepId: stepId });
-  try {
-    const requestOptions = {
-      method: "DELETE",
-      headers: authHeader.post(),
-      credentials: "include"
-    };
 
-    const url = `${baseUrl}step-user-tags/${id}/`;
-    let res = await fetch(url, requestOptions);
-    //res = await res.json();
+  try {
+    const res = await stepBodyService.deleteStepUser(id);
 
     dispatch({ type: DELETE_STEP_USER_SUCCESS, stepId });
   } catch (err) {
@@ -84,16 +63,9 @@ const deleteStepUser = (stepId, id) => async dispatch => {
 
 const getAssignedUser = stepId => async dispatch => {
   dispatch({ type: POST_STEP_USER_LOADING, stepId: stepId });
-  try {
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
 
-    const url = `${baseUrl}step-user-tags/?step=${stepId}`;
-    let res = await fetch(url, requestOptions);
-    res = await res.json();
+  try {
+    const res = await stepBodyService.getAssignedUser(stepId);
 
     if (res.results.length) {
       dispatch({
@@ -102,7 +74,6 @@ const getAssignedUser = stepId => async dispatch => {
         stepId: stepId
       });
     } else {
-      console.log("getting");
       dispatch(getStepUsers(stepId));
     }
   } catch (err) {
