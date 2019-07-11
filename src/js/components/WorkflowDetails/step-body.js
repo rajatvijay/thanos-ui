@@ -122,7 +122,7 @@ class StepBody extends Component {
 
     console.log("result", stepUsers, stepId, stepUsers[stepId]);
 
-    if (stepUsers[stepId] && !stepUsers[stepId].isLoading) {
+    if (!stepUsers[stepId].isLoading) {
       if (stepUsers[stepId].data) {
         return (
           <Dropdown
@@ -141,7 +141,9 @@ class StepBody extends Component {
       }
       return;
     }
-    return <Spin />;
+    return (
+      <Spin indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />} />
+    );
   };
 
   render = () => {
