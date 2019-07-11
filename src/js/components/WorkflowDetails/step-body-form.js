@@ -126,6 +126,22 @@ class StepBodyForm extends Component {
       "multi_select",
       "cascader"
     ];
+
+    // Check for `extra` (esp if loaded from `api_url`)
+    const extrasFromAPI = this.props.currentStepFields.extrasFromAPI || {};
+    const extra =
+      extrasFromAPI[payload.field.definition.tag] ||
+      payload.field.definition.extra;
+    if (_.isArray(extra)) {
+      // Find the item from `extra` for selected value
+      const extra_json = _.find(extra, item => item.value === data.answer);
+      // If `extra` has fields other than `label` and `value`
+      if (extra_json && Object.keys(extra_json).length > 2) {
+        // Add as `extra_json` to enable mapping to other field responses
+        data.extra_json = extra_json;
+      }
+    }
+
     if (saveNowType.includes(payload.field.definition.field_type)) {
       this.props.dispatch(workflowStepActions.saveField(data));
     } else {
