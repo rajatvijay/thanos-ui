@@ -57,8 +57,14 @@ class WorkflowDetails extends Component {
     const params = new URL(document.location).searchParams;
     const stepId = params.get("step");
 
+    //to set invalid as true when we first open workflowDetails as full screen
+    //minimalUI check not needed because this condition wont run inside modal due to this.props.match ==null
+    //so stay calm
+
     if (this.props.match && stepId) {
-      this.props.dispatch(workflowDetailsActions.refetchStepFields(stepId));
+      this.props.dispatch(
+        workflowDetailsActions.setAsInvalidStepFields(stepId)
+      );
     }
   };
 
@@ -95,18 +101,29 @@ class WorkflowDetails extends Component {
     //   this.props.dispatch(workflowDetailsActions.refetchWorkflowDetails(WFId))
     // }
 
-    //dont call stepfield api when you are in modal
+    //dont call stepfield api when you are in modal because default we open profile in modal
+    //same check as above in component did mount because when we go to the full screen from workflowDetail page
+    //constructor ans componentDidMount will not call so we have to handle that case from componentDidMount
     if (
       !minimalUI &&
       match &&
       selectedStep !== stepId &&
       selectedGroup !== groupId
     ) {
-      //console.log("changed", selectedStep, stepId, selectedGroup);
+      console.log(
+        "changed",
+        selectedStep,
+        stepId,
+        selectedGroup,
+        groupId,
+        minimalUI
+      );
       this.setState(
         { selectedGroup: groupId, selectedStep: stepId },
         function() {
-          this.props.dispatch(workflowDetailsActions.refetchStepFields(stepId));
+          this.props.dispatch(
+            workflowDetailsActions.setAsInvalidStepFields(stepId)
+          );
           this.updateCurrentActiveStep();
         }
       );
@@ -363,7 +380,7 @@ class WorkflowDetails extends Component {
         workflowDetailsActions.getStepFields(payloadWithMeta)
       );
     } else if (
-      this.props.currentStepFields[payload.stepId].refetch &&
+      this.props.currentStepFields[payload.stepId].invalid &&
       minimalUI
     ) {
       this.props.dispatch(

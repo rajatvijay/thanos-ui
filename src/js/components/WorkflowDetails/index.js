@@ -27,9 +27,11 @@ class WorkflowDetailsRoot extends Component {
     const WFId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
 
-    //set refetch true on initial call
+    //set invalid true for sidebar on initial call
     if (this.props.match) {
-      this.props.dispatch(workflowDetailsActions.refetchWorkflowDetails(WFId));
+      this.props.dispatch(
+        workflowDetailsActions.setAsInvalidWorkflowDetails(WFId)
+      );
     }
 
     this.setWorkflowId();
@@ -50,12 +52,16 @@ class WorkflowDetailsRoot extends Component {
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     const { location } = this.props;
 
-    //set refetch true for childWorkflows
+    //set invalid true for childWorkflows when we open them for full screen from workflowDetails page
+    //sidebar data only only changes when workflowId changes (second check in if statement)
+    //ansd we want to set invalid true when we are on screen not on minimal ui(first check in if statement)
     if (
       !minimalUI &&
       prevProps.match.params.id !== this.props.match.params.id
     ) {
-      this.props.dispatch(workflowDetailsActions.refetchWorkflowDetails(WFId));
+      this.props.dispatch(
+        workflowDetailsActions.setAsInvalidWorkflowDetails(WFId)
+      );
     }
 
     this.setWorkflowId();
@@ -113,7 +119,7 @@ class WorkflowDetailsRoot extends Component {
     ) {
       this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
     } else if (
-      this.props.workflowDetails[workflowId].refetch &&
+      this.props.workflowDetails[workflowId].invalid &&
       this.props.minimalUI
     ) {
       this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
