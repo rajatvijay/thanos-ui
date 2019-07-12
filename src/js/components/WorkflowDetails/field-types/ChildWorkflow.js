@@ -1014,12 +1014,15 @@ class ChildWorkflowField2 extends Component {
 
   findSorting() {
     const workflows = this.state.filteredChildWorkflow;
-    if (workflows && workflows.length) {
+
+    if (
+      workflows &&
+      workflows.length &&
+      workflows[0].definition.extra_fields_json.length
+    ) {
       const workflow = workflows[0].definition.extra_fields_json.find(
         ({ label, display_label }) => label === "sorting_primary_field"
       );
-
-      console.log("display", workflow);
       return workflow ? workflow.display_label : "";
     }
   }
