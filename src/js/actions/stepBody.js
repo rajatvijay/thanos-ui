@@ -41,7 +41,7 @@ export const getStepUsers = stepId => async dispatch => {
   dispatch({ type: GET_STEP_USERS_LOADING, stepId });
 
   try {
-    const res = await stepBody.getStepUsers(stepId);
+    const res = await stepBodyService.getStepUsers(stepId);
 
     dispatch({ type: GET_STEP_USERS_SUCCESS, payload: res, stepId });
   } catch (err) {
