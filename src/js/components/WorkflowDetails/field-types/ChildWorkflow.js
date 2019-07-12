@@ -1018,7 +1018,7 @@ class ChildWorkflowField2 extends Component {
     if (
       workflows &&
       workflows.length &&
-      workflows[0].definition.extra_fields_json.length
+      Array.isArray(workflows[0].definition.extra_fields_json)
     ) {
       const workflow = workflows[0].definition.extra_fields_json.find(
         ({ label, display_label }) => label === "sorting_primary_field"
