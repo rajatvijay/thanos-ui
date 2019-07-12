@@ -36,7 +36,7 @@ const { getProcessedData, getProgressData } = calculatedData;
 
 function displaySortingKey(workflow) {
   const obj =
-    workflow.definition.extra_fields_json.length &&
+    Array.isArray(workflow.definition.extra_fields_json) &&
     workflow.definition.extra_fields_json.find(
       ({ label, display_label }) => label === "sorting_primary_field"
     );
