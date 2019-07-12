@@ -22,7 +22,7 @@ function postStepUser(payload) {
 
 function getStepUsers(stepId) {
   const requestOptions = {
-    method: "POST",
+    method: "GET",
     headers: authHeader.get(),
     credentials: "include"
   };
@@ -47,7 +47,7 @@ function deleteStepUser(id) {
 
 function getAssignedUser(stepId) {
   const requestOptions = {
-    method: "POST",
+    method: "GET",
     headers: authHeader.get(),
     credentials: "include"
   };
