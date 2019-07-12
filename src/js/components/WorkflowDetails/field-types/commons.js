@@ -27,20 +27,30 @@ export const commonFunctions = {
 
 //Utility func
 function getLabel(props, that) {
-  let helpText = "";
+  const helpText = props.field.definition.help_text ? (
+    <span className="pd-left-sm">
+      <Tooltip title={props.field.definition.help_text}>
+        <Icon
+          type="info-circle"
+          style={{ fontSize: "12px", color: "rgba(0,0,0,0.3)" }}
+        />
+      </Tooltip>
+    </span>
+  ) : null;
 
-  if (props.field.definition.help_text) {
-    helpText = (
-      <span className="pd-left-sm">
-        <Tooltip title={props.field.definition.help_text}>
-          <Icon
-            type="info-circle"
-            style={{ fontSize: "12px", color: "rgba(0,0,0,0.3)" }}
-          />
-        </Tooltip>
-      </span>
-    );
-  }
+  const answeredBy =
+    props.field.answers.length !== 0 ? <GetAnsweredBy {...props} /> : null;
+
+  const required = getRequired(props) ? (
+    <Tooltip title="Answer is required">
+      <i
+        title="Answer required"
+        className="material-icons t-13 text-middle text-light pd-right-sm"
+      >
+        panorama_fish_eye
+      </i>
+    </Tooltip>
+  ) : null;
 
   if (that) {
     let label = (
@@ -76,18 +86,7 @@ function getLabel(props, that) {
             : null}
         </span>
 
-        {props.field.answers.length !== 0 ? (
-          <GetAnsweredBy {...props} />
-        ) : getRequired(props) ? (
-          <Tooltip title="Answer is required">
-            <i
-              title="Answer required"
-              className="material-icons t-13 text-middle text-light pd-right-sm"
-            >
-              panorama_fish_eye
-            </i>
-          </Tooltip>
-        ) : null}
+        {props.field.answers.length !== 0 ? answeredBy : required}
 
         {props.field.label_value ? (
           <span>
@@ -104,10 +103,12 @@ function getLabel(props, that) {
   } else {
     return props.field.label_value ? (
       <span>
+        {props.field.answers.length !== 0 ? answeredBy : required}
         {props.field.label_value} {helpText}
       </span>
     ) : (
       <span>
+        {props.field.answers.length !== 0 ? answeredBy : required}
         {props.field.definition.body} {helpText}
       </span>
     );

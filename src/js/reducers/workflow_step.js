@@ -83,7 +83,6 @@ export function currentStepFields(state = initialState, action) {
         // currentStepFields: { ...action.field }
       };
     case fieldConstants.POST_FIELD_FAILURE:
-      console.log("POST_FIELD_FAILURE", action);
       return {
         ...state,
         [action.workflowId]: {

@@ -210,8 +210,11 @@ function updateFlag(payload) {
 
 function handleResponse(response) {
   if (!response.ok) {
-    return response.json();
+    return response.json().then(error => {
+      return Promise.reject(error);
+    });
   }
+
   return response.json();
 }
 

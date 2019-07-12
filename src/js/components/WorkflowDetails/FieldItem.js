@@ -82,8 +82,8 @@ class FieldItem extends Component {
     fieldParams["stepData"] = this.props.stepData;
 
     let dynamicUserPerm = this.props.fieldParams.dynamicUserPerms;
-
     let showButton = false;
+
     if (
       _.includes(
         this.props.fieldParams.permission,
