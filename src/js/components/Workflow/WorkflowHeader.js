@@ -35,9 +35,11 @@ const { getProcessedData, getProgressData } = calculatedData;
 // title --- lc data + alerts ---- status --- rank --- go to details //
 
 function displaySortingKey(workflow) {
-  const obj = workflow.definition.extra_fields_json.find(
-    ({ label, display_label }) => label === "sorting_primary_field"
-  );
+  const obj =
+    Array.isArray(workflow.definition.extra_fields_json) &&
+    workflow.definition.extra_fields_json.find(
+      ({ label, display_label }) => label === "sorting_primary_field"
+    );
 
   console.log("display", workflow);
   if (obj) {
