@@ -53,7 +53,6 @@ function displaySortingKey(workflow) {
 
 export const WorkflowHeader = props => {
   const { workflow, isEmbedded } = props;
-  console.log("props", props);
 
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">

@@ -20,7 +20,6 @@ export const taskQueueCount = () => async dispatch => {
       }
     });
   });
-  console.log("response", res);
 
   try {
     dispatch({ type: TASK_QUEUE_COUNT_SUCCESS, payload: res.payload });

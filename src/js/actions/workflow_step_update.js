@@ -242,7 +242,10 @@ function submitStepData(payload) {
           dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
-      error => dispatch(failure(error, { id: workflowId }))
+
+      error => {
+        dispatch(failure(error, { id: workflowId }));
+      }
     );
   };
 
