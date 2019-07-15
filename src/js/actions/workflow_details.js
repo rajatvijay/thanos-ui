@@ -5,6 +5,7 @@ import {
   workflowCommentsConstants,
   stepVersionConstants
 } from "../constants";
+import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
 import _ from "lodash";
 import { history } from "../_helpers";
@@ -101,7 +102,18 @@ function getStepFields(step) {
 
     workflowDetailsService
       .getStepFields(step)
-      .then(stepFields => dispatch(success({ ...stepFields })))
+      .then(stepFields => {
+        if (
+          stepFields.definition.available_user_tags &&
+          stepFields.definition.available_user_tags.some(
+            item => item === "Assignee"
+          )
+        ) {
+          dispatch(stepBodyActions.getAssignedUser(step.stepId));
+        }
+        console.log("fields", stepFields);
+        return dispatch(success({ ...stepFields }));
+      })
       .catch(e => {
         dispatch(failure(e, step));
       });

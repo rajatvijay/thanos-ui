@@ -35,9 +35,11 @@ const { getProcessedData, getProgressData } = calculatedData;
 // title --- lc data + alerts ---- status --- rank --- go to details //
 
 function displaySortingKey(workflow) {
-  const obj = workflow.definition.extra_fields_json.find(
-    ({ label, display_label }) => label === "sorting_primary_field"
-  );
+  const obj =
+    Array.isArray(workflow.definition.extra_fields_json) &&
+    workflow.definition.extra_fields_json.find(
+      ({ label, display_label }) => label === "sorting_primary_field"
+    );
 
   console.log("display", workflow);
   if (obj) {
@@ -51,7 +53,6 @@ function displaySortingKey(workflow) {
 
 export const WorkflowHeader = props => {
   const { workflow, isEmbedded } = props;
-  console.log("props", props);
 
   let headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
@@ -306,7 +307,7 @@ class HeaderOptions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: this.props.workflow.status.label,
+      current: this.getWorkflowStatus(),
       showSidebar: false,
       isWorkflowPDFModalVisible: false
     };
@@ -314,6 +315,13 @@ class HeaderOptions extends React.Component {
 
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
+  };
+
+  getWorkflowStatus = () => {
+    return (
+      this.props.workflow.status.label ||
+      this.props.workflow.status.kind_display
+    );
   };
 
   getComment = (object_id, e) => {

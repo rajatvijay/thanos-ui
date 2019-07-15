@@ -91,9 +91,7 @@ function fetchFieldExtra(field, answerFunction) {
     return Promise.reject('"url" not defined for fetchFieldExtra');
   }
   const requestOptions = {
-    method: "GET",
-    headers: authHeader.get(),
-    credentials: "include"
+    method: "GET"
   };
   url = url.replace(
     /{([^}]*)}/g,
@@ -101,6 +99,10 @@ function fetchFieldExtra(field, answerFunction) {
   );
   if (!url.match(/^https?:\/\//)) {
     url = baseUrl + url;
+    Object.assign(requestOptions, {
+      headers: authHeader.get(),
+      credentials: "include"
+    });
   }
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -210,8 +212,11 @@ function updateFlag(payload) {
 
 function handleResponse(response) {
   if (!response.ok) {
-    return response.json();
+    return response.json().then(error => {
+      return Promise.reject(error);
+    });
   }
+
   return response.json();
 }
 

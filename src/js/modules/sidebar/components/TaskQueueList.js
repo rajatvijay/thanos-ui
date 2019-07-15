@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Icon, Spin } from "antd";
 import styled from "@emotion/styled";
 import { css } from "emotion";
-import TaskQueue from "./TaskQueue";
+import { TaskQueue, DefaultTaskQueue } from "./TaskQueue";
+import user from "../../../../images/user.svg";
 
 const INITIAL_SHOW_COUNT = 5;
 
@@ -50,7 +51,7 @@ class TaskQueueList extends Component {
   };
 
   render() {
-    const { taskQueues, loading } = this.props;
+    const { taskQueues, loading, count } = this.props;
     const { showingAll } = this.state;
 
     // Loading state
@@ -88,6 +89,7 @@ class TaskQueueList extends Component {
               list-style-type: none;
             `}
           >
+            <DefaultTaskQueue item={{ name: "My Tasks", count, image: user }} />
             {this.renderList()}
             <StyledLastListItem>
               <ToggleListSizeButton

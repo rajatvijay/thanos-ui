@@ -12,3 +12,4 @@ export { updateSelectedLanguageService } from "./internationalize";
 export { getChildWorkflow } from "./getChildWorkflow";
 export { requestWorflowPDF } from "./requestWorkflowPDF";
 export { stepPreviewService } from "./stepPreview";
+export { stepBodyService } from "./stepBody";
