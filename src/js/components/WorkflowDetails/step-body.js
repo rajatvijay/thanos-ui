@@ -118,30 +118,35 @@ class StepBody extends Component {
   renderStepUsers = () => {
     const { stepUsers, stepId } = this.props;
 
-    //console.log("result", stepUsers, stepId, stepUsers[stepId]);
-
-    if (!stepUsers[stepId].isLoading) {
-      if (stepUsers[stepId].data) {
-        return (
-          <Dropdown
-            overlayStyle={{
-              maxHeight: 200,
-              overflowY: "scroll",
-              boxShadow: "1px 3px 5px rgba(0, 0, 0, 0.12)"
-            }}
-            disabled={stepUsers[stepId].disabled}
-            overlay={<Menu>{this.userList(stepUsers[stepId].data)}</Menu>}
-            trigger={["click"]}
-          >
-            <img style={{ width: "6%", cursor: "pointer" }} src={addUser} />
-          </Dropdown>
-        );
-      }
-      return;
+    // Loading Case
+    if (stepUsers[stepId].isLoading) {
+      return (
+        <Spin
+          indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />}
+        />
+      );
     }
-    return (
-      <Spin indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />} />
-    );
+
+    const hasUserWithEditAccess = stepUsers[stepId].data;
+    const hasUserAlreadyAssigned = stepUsers[stepId].user;
+    if (hasUserWithEditAccess && !hasUserAlreadyAssigned) {
+      return (
+        <Dropdown
+          overlayStyle={{
+            maxHeight: 200,
+            overflowY: "scroll",
+            boxShadow: "1px 3px 5px rgba(0, 0, 0, 0.12)"
+          }}
+          disabled={stepUsers[stepId].disabled}
+          overlay={<Menu>{this.userList(stepUsers[stepId].data)}</Menu>}
+          trigger={["click"]}
+        >
+          <Icon type="user-add" />
+        </Dropdown>
+      );
+    }
+
+    return null;
   };
 
   render = () => {

@@ -4,11 +4,17 @@ import styled from "@emotion/styled";
 import { css } from "emotion";
 import { TaskQueue, DefaultTaskQueue } from "./TaskQueue";
 import user from "../../../../images/user.svg";
+import { stepBodyService } from "../../../services";
 
 const INITIAL_SHOW_COUNT = 5;
 
 class TaskQueueList extends Component {
-  state = { selected: null, showingAll: false };
+  state = {
+    selected: null,
+    showingAll: false,
+    myTasksCount: null,
+    loadingMyTasksCount: false
+  };
 
   onSelect = taskQueue => {
     const { onSelectTask } = this.props;
@@ -26,6 +32,23 @@ class TaskQueueList extends Component {
   isTaskQueueVisible = taskQueue => {
     return !taskQueue.extra || !taskQueue.extra.hide;
   };
+
+  getMyTasksCount = async () => {
+    this.setState({ loadingMyTasksCount: true });
+    try {
+      const response = await stepBodyService.getMyTasksCount();
+      this.setState({
+        myTasksCount: response["Assignee"] || 0,
+        loadingMyTasksCount: false
+      });
+    } catch (e) {
+      this.setState({ myTasksCount: null, loadingMyTasksCount: false });
+    }
+  };
+
+  componentDidMount() {
+    this.getMyTasksCount();
+  }
 
   renderList = () => {
     const { taskQueues } = this.props;
@@ -50,9 +73,20 @@ class TaskQueueList extends Component {
     this.setState(({ showingAll }) => ({ showingAll: !showingAll }));
   };
 
+  toggleMyTaskFilter = () => {
+    const { isMyTaskSelected } = this.props;
+    if (isMyTaskSelected) {
+      // Remove the filter
+      this.props.onSelectMyTask();
+    } else {
+      // Apply the filter
+      this.props.onSelectMyTask("Assignee");
+    }
+  };
+
   render() {
-    const { taskQueues, loading, count } = this.props;
-    const { showingAll } = this.state;
+    const { taskQueues, loading, isMyTaskSelected } = this.props;
+    const { showingAll, loadingMyTasksCount, myTasksCount } = this.state;
 
     // Loading state
     if (loading) {
@@ -89,7 +123,12 @@ class TaskQueueList extends Component {
               list-style-type: none;
             `}
           >
-            <DefaultTaskQueue item={{ name: "My Tasks", count, image: user }} />
+            <DefaultTaskQueue
+              item={{ name: "My Tasks", count: myTasksCount, image: user }}
+              loading={loadingMyTasksCount}
+              onClick={this.toggleMyTaskFilter}
+              isSelected={isMyTaskSelected}
+            />
             {this.renderList()}
             <StyledLastListItem>
               <ToggleListSizeButton
@@ -135,33 +174,3 @@ const StyledToggleListSizeContainer = styled.span`
   color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
 `;
-
-/**
-
-  <li
-              style={{
-                borderTop: "1px solid rgba(0, 0, 0, 0.3)",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "10px 20px",
-                display: taskQueues && taskQueues.length > 0 ? "flex" : "none"
-              }}
-            >
-              <div>
-                <i
-                  className="material-icons"
-                  style={{
-                    fontSize: 22,
-                    color: "#CFDAE3",
-                    margin: "0px 10px 2px 0px",
-                    verticalAlign: "bottom"
-                  }}
-                >
-                  person
-                </i>
-                <span style={{ fontSize: 16, color: "#CFDAE3" }}>My Tasks</span>
-              </div>
-              <span style={{ fontSize: 14, color: "#567C9C" }}>{2}</span>
-            </li>
-
- */

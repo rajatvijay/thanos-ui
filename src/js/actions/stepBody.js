@@ -18,7 +18,7 @@ const {
 } = stepBody;
 
 const postStepUser = obj => async dispatch => {
-  dispatch({ type: POST_STEP_USER_LOADING, stepId: obj.stepId });
+  dispatch({ type: POST_STEP_USER_LOADING, stepId: obj.step });
 
   try {
     const res = await stepBodyService.postStepUser({ ...obj, tag: "Assignee" });
@@ -26,13 +26,13 @@ const postStepUser = obj => async dispatch => {
     dispatch({
       type: POST_STEP_USER_SUCCESS,
       payload: res,
-      stepId: obj.stepId
+      stepId: obj.step
     });
   } catch (err) {
     dispatch({
       type: POST_STEP_USER_FAILURE,
       payload: err,
-      stepId: obj.stepId
+      stepId: obj.step
     });
   }
 };

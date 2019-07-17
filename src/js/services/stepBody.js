@@ -1,10 +1,21 @@
-import { authHeader, handleResponse, baseUrl } from "../_helpers";
+import { authHeader, baseUrl } from "../_helpers";
+
+const handleResponse = (response, hasNONJSONResponse) => {
+  if (!response.ok) {
+    return Promise.reject(response.statusText);
+  }
+  if (hasNONJSONResponse) {
+    return null;
+  }
+  return response.json();
+};
 
 export const stepBodyService = {
   postStepUser,
   getStepUsers,
   deleteStepUser,
-  getAssignedUser
+  getAssignedUser,
+  getMyTasksCount
 };
 
 function postStepUser(payload) {
@@ -40,8 +51,8 @@ function deleteStepUser(id) {
     credentials: "include"
   };
 
-  return fetch(`${baseUrl}step-user-tags/${id}/`, requestOptions).then(
-    handleResponse
+  return fetch(`${baseUrl}step-user-tags/${id}/`, requestOptions).then(res =>
+    handleResponse(res, true)
   );
 }
 
@@ -55,4 +66,16 @@ function getAssignedUser(stepId) {
   return fetch(`${baseUrl}step-user-tags/?step=${stepId}`, requestOptions).then(
     handleResponse
   );
+}
+
+function getMyTasksCount() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+  return fetch(
+    `${baseUrl}get-my-tagged-incomplete-steps/`,
+    requestOptions
+  ).then(handleResponse);
 }

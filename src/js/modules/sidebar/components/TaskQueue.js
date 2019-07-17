@@ -1,6 +1,7 @@
 import React from "react";
 import CountWidget from "./CountWidget";
 import styled from "@emotion/styled";
+import { Spin, Icon } from "antd";
 
 export function TaskQueue({ item, onSelect, isSelected }) {
   return (
@@ -18,20 +19,27 @@ export function TaskQueue({ item, onSelect, isSelected }) {
   );
 }
 
-export function DefaultTaskQueue({ item }) {
+export function DefaultTaskQueue({ item, loading, onClick, isSelected }) {
   return (
-    <StyledTaskQueueContainer data-testid="task-queue-list-item">
+    <StyledTaskQueueContainer isSelected={isSelected} onClick={onClick}>
       <div>
         <img
           src={item.image}
           style={{ width: "6%", marginRight: 10, marginBottom: 5 }}
+          alt=""
         />
         <span className="name">{item.name}</span>
       </div>
-      <WorkflowCounts
-        workflowCount={item.count}
-        overdueCount={item.overdue_count}
-      />
+      {loading ? (
+        <Spin
+          indicator={<Icon type="loading" style={{ fontSize: 20 }} spin />}
+        />
+      ) : (
+        <WorkflowCounts
+          workflowCount={item.count}
+          overdueCount={item.overdue_count}
+        />
+      )}
     </StyledTaskQueueContainer>
   );
 }
