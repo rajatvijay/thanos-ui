@@ -6,12 +6,14 @@ import {
 import { workflowStepService } from "../services";
 import { notification, message } from "antd";
 import _ from "lodash";
+import { SET_WORKFLOW_KEYS } from "../constants/workflowKeys";
 import {
   workflowDetailsActions,
   workflowActions,
   workflowFiltersActions,
   stepPreviewActions
 } from "../actions";
+import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -228,7 +230,8 @@ function updateField(payload) {
 //fetch stepgroup  data i.e steps list//
 ////////////////////////////////////////
 function submitStepData(payload) {
-  const workflowId = payload.id;
+  //const workflowId = payload.id;
+  const { workflowId, id } = payload;
   return dispatch => {
     dispatch(request(payload));
     dispatch(remove_errors({}, workflowId));
@@ -237,14 +240,17 @@ function submitStepData(payload) {
       stepData => {
         dispatch(success(stepData));
         if (stepData.id) {
-          dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
+          dispatch(
+            workflowDetailsActions.getStepGroup(stepData.workflow, true)
+          );
+          //dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
           dispatch(workflowFiltersActions.getStatusData());
           dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
 
       error => {
-        dispatch(failure(error, { id: workflowId }));
+        dispatch(failure(error, { id }));
       }
     );
   };

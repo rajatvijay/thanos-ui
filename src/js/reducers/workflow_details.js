@@ -40,7 +40,8 @@ export function workflowDetails(state = {}, action) {
         ...state,
         [action.id]: {
           loading: false,
-          workflowDetails: { stepGroups: action.stepGroups }
+          workflowDetails: { stepGroups: action.stepGroups },
+          isActive: action["isActive"]
         },
         loading: false,
         workflowDetails: { stepGroups: action.stepGroups }
