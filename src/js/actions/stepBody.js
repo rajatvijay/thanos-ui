@@ -56,6 +56,7 @@ const deleteStepUser = (stepId, id) => async dispatch => {
     const res = await stepBodyService.deleteStepUser(id);
 
     dispatch({ type: DELETE_STEP_USER_SUCCESS, stepId });
+    dispatch(getStepUsers(stepId));
   } catch (err) {
     dispatch({ type: DELETE_STEP_USER_FAILURE, payload: err, stepId });
   }
