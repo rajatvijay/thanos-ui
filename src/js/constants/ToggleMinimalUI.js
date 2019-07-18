@@ -1,0 +1,1 @@
+export const TOGGLE_MINIMALUI = "TOGGLE_MINIMALUI";

@@ -19,3 +19,5 @@ export { languageActions } from "./internationalize";
 export { navbarActions } from "./navbar";
 export { stepPreviewActions } from "./stepPreview";
 export { stepBodyActions } from "./stepBody";
+export { setWorkflowKeys } from "./workflowKeys";
+export { toggleMinimalUI } from "./toggleMinimalUI";

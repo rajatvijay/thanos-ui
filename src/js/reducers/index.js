@@ -26,6 +26,8 @@ import { stepPreviewFields } from "./stepPreview";
 import { userWorkflowModal } from "./user_workflow";
 import taskQueueCount from "../modules/sidebar/sidebarReducer";
 import stepUsers from "./stepBody";
+import workflowKeys from "./workflowKeys";
+import minimalUI from "./toggleMinimalUI";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -58,7 +60,9 @@ const rootReducer = combineReducers({
   languageSelector,
   userWorkflowModal,
   taskQueueCount,
-  stepUsers
+  stepUsers,
+  workflowKeys,
+  minimalUI
 });
 
 export default rootReducer;
