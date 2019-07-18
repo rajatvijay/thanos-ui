@@ -706,7 +706,7 @@ class StepBodyForm extends Component {
                     type="primary"
                     size="large"
                     className="no-print pd-ard"
-                    htmlType="submit"
+                    onClick={this.handleSubmit}
                     disabled={this.props.isSubmitting}
                   >
                     {this.props.isSubmitting ? (
