@@ -40,6 +40,7 @@ class WorkflowDetails extends Component {
     const groupId = params.get("group");
     const stepId = params.get("step");
     //console.log("inside state", groupId, stepId);
+
     setWorkflowKeys({ workflowId, stepId, groupId });
 
     super(props);
@@ -69,7 +70,10 @@ class WorkflowDetails extends Component {
       workflowDetails,
       currentStepFields,
       workflowIdFromPropsForModal,
-      setWorkflowKeys
+      setWorkflowKeys,
+      match,
+      minimalUI,
+      workflowKeys
     } = this.props;
 
     //console.log("props update", this.props);
@@ -77,7 +81,7 @@ class WorkflowDetails extends Component {
     // const { match, minimalUI } = this.props;
 
     const { displayProfile } = this.state;
-    const { match, minimalUI, workflowKeys } = this.props;
+    //const { match, minimalUI, workflowKeys } = this.props;
 
     // TODO: Should be taken from react router params
     const params = new URL(document.location).searchParams;
@@ -99,14 +103,16 @@ class WorkflowDetails extends Component {
     const workflowId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
 
+    //console.log("changing",workflowKeys[workflowId].stepId ,stepId,workflowKeys[workflowId].groupId ,groupId)
+
     if (
       !minimalUI &&
       match &&
       workflowKeys[workflowId].stepId !== stepId &&
       workflowKeys[workflowId].groupId !== groupId
     ) {
-      //console.log("changed", selectedStep, stepId, selectedGroup);
-      setWorkflowKeys({ workflowId, stepId, groupId });
+      //console.log("changed",  stepId, groupId,params);
+      //setWorkflowKeys({ workflowId, stepId:workflowKeys[workflowId].groupId, groupId });
       this.handleUpdateOfActiveStep(groupId, stepId);
       // this.setState(
       //   { selectedGroup: groupId, selectedStep: stepId },
@@ -118,11 +124,9 @@ class WorkflowDetails extends Component {
     }
 
     if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
-      //console.log("changes profile");
       this.setState({ displayProfile: true });
     }
     if (stepId && groupId && displayProfile && !minimalUI) {
-      //console.log("false");
       this.setState({ displayProfile: false });
     }
 
@@ -426,11 +430,12 @@ class WorkflowDetails extends Component {
       parseInt(this.props.match.params.id, 10);
     const { setWorkflowKeys } = this.props;
 
-    if (!this.props.minimalUI) {
+    if (!this.props.minimalUI && groupId && stepId) {
       history.replace(
         `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
       );
     }
+    setWorkflowKeys({ workflowId, stepId, groupId });
 
     this.setState({ displayProfile: false });
 
@@ -460,13 +465,16 @@ class WorkflowDetails extends Component {
   };
 
   changeProfileDisplay = displayProfile => {
+    const { setWorkflowKeys, workflowIdFromPropsForModal } = this.props;
+
     const workflowId =
-      this.props.workflowIdFromPropsForModal ||
-      parseInt(this.props.match.params.id, 10);
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
 
     if (!this.props.minimalUI) {
       history.replace(`/workflows/instances/${workflowId}`);
     }
+
+    setWorkflowKeys(workflowId);
 
     this.setState({ displayProfile });
   };
