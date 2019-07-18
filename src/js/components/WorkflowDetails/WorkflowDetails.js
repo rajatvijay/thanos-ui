@@ -33,19 +33,20 @@ class WorkflowDetails extends Component {
     const params = new URL(document.location).searchParams;
     //console.log("params",params)
     const groupId = params.get("group");
-    const stepId = params.get("step");
+    // const stepId = params.get("step");
     //console.log("inside state", groupId, stepId);
 
     super(props);
     this.state = {
       // workflowId: null,
-      selectedStep: stepId || null,
-      selectedGroup: groupId || null,
+      selectedStep: null,
+      selectedGroup: null,
       printing: false,
       dont: false,
       firstLoad: true,
       currentStep: null,
       //displayProfile: !minimalUI ? false : true
+      // TODO: Check why we need groupId check
       displayProfile: minimalUI ? true : groupId ? false : true
     };
   }
@@ -68,6 +69,7 @@ class WorkflowDetails extends Component {
     const { selectedGroup, selectedStep, displayProfile } = this.state;
     const { match, minimalUI } = this.props;
 
+    // TODO: Should be taken from react router params
     const params = new URL(document.location).searchParams;
     //console.log("params",params)
     const groupId = params.get("group");
@@ -92,13 +94,14 @@ class WorkflowDetails extends Component {
       selectedGroup !== groupId
     ) {
       //console.log("changed", selectedStep, stepId, selectedGroup);
-      this.setState(
-        { selectedGroup: groupId, selectedStep: stepId },
-        function() {
-          // if(!workflowDetails[stepId])
-          this.updateCurrentActiveStep();
-        }
-      );
+      this.handleUpdateOfActiveStep(groupId, stepId);
+      // this.setState(
+      //   { selectedGroup: groupId, selectedStep: stepId },
+      //   function() {
+      //     // if(!workflowDetails[stepId])
+      //     this.updateCurrentActiveStep();
+      //   }
+      // );
     }
 
     if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
