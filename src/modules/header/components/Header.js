@@ -219,7 +219,7 @@ class Header extends Component {
             width: regexForUrl.test(document.location.pathname)
               ? _.isEmpty(supportedLaguanges)
                 ? "180px"
-                : "100px"
+                : "180px"
               : "350px",
             display: "flex",
             justifyContent: "space-between",

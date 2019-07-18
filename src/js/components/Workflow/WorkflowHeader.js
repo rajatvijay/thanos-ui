@@ -41,7 +41,6 @@ function displaySortingKey(workflow) {
       ({ label, display_label }) => label === "sorting_primary_field"
     );
 
-  console.log("display", workflow);
   if (obj) {
     return obj.format === "date"
       ? moment(workflow.sorting_primary_field).format("DD/MM/YYYY") // new Date(workflow.sorting_primary_field).toDateString()
@@ -307,7 +306,6 @@ class HeaderOptions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: this.getWorkflowStatus(),
       showSidebar: false,
       isWorkflowPDFModalVisible: false
     };
@@ -315,13 +313,6 @@ class HeaderOptions extends React.Component {
 
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
-  };
-
-  getWorkflowStatus = () => {
-    return (
-      this.props.workflow.status.label ||
-      this.props.workflow.status.kind_display
-    );
   };
 
   getComment = (object_id, e) => {
@@ -354,10 +345,14 @@ class HeaderOptions extends React.Component {
     let that = this;
     const { workflow } = this.props;
 
+    const statusLabel =
+      this.props.workflow.status.label ||
+      this.props.workflow.status.kind_display;
+
     let status = (
-      <Tooltip title={this.state.current}>
+      <Tooltip title={statusLabel}>
         <div className="pd-left-sm status-text text-black t-12 text-right text-ellipsis">
-          {this.state.current}
+          {statusLabel}
         </div>
       </Tooltip>
     );
