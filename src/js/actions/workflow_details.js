@@ -88,8 +88,6 @@ function getStepGroup(id) {
 
 //Get workflow step fileds data.
 function getStepFields(step) {
-  console.log("checking");
-  console.log(Sentry);
   // For Error tracking
   if (!step.workflowId || !step.groupId || !step.stepId) {
     Sentry.captureException(
