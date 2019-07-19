@@ -133,10 +133,69 @@ class FieldItem extends Component {
           </div>
         </FormItem>
       );
+    } else if (this.props.fieldParams.field.regex_value) {
+      return <FieldRegexValidator {...this.props} />;
     } else {
       return getFieldType(fieldParams);
     }
   };
+}
+
+class FieldRegexValidator extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isValidAnswer: true
+    };
+  }
+
+  onFieldChangeValidate = (e, payload, cal) => {
+    const { regex_value } = this.props.fieldParams.field;
+    const re = new RegExp(regex_value);
+    let ans = null;
+
+    if (payload.field.regex_value) {
+      if (cal) {
+        ans = e || e === 0 ? e : "";
+      } else if (e.target) {
+        ans = e.target.value;
+      }
+
+      this.setState({ isValidAnswer: re.test(ans) }, function() {
+        if (this.state.isValidAnswer) {
+          this.props.fieldParams.onFieldChange(e, payload, cal);
+        }
+      });
+    } else {
+      this.props.fieldParams.onFieldChange(e, payload, cal);
+    }
+  };
+
+  render() {
+    let defError = "";
+    let fieldParams = Object.assign({}, this.props.fieldParams);
+    const error = fieldParams.error;
+
+    fieldParams["onFieldChange"] = this.onFieldChangeValidate;
+
+    if (error === undefined || !Array.isArray(error)) {
+      defError = error;
+      fieldParams.error = [];
+    } else if (error && error.detail) {
+      defError = error.detail;
+    }
+
+    if (defError && typeof defError === "string") {
+      defError = fieldParams.field.regex_error + ". " + defError;
+    } else {
+      defError = fieldParams.field.regex_error;
+    }
+
+    fieldParams.error[fieldParams.field.id] =
+      (!this.state.isValidAnswer && defError) || "";
+
+    return getFieldType(fieldParams);
+  }
 }
 
 export default FieldItem;
