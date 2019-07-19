@@ -482,11 +482,7 @@ class ChildWorkflowField2 extends Component {
           key={k}
           onClick={that.onFilterTagChange.bind(that, "status", k)}
           selected={
-            k === "All" && selected === ""
-              ? true
-              : selected === k
-              ? true
-              : false
+            k === "All" && !selected ? true : selected === k ? true : false
           }
         />
       );
@@ -1037,7 +1033,6 @@ class ChildWorkflowField2 extends Component {
     } = props;
     const { bulkActionWorkflowChecked, childWorkflow } = this.state;
     let that = this;
-    console.log("filter", this.state.filteredChildWorkflow);
 
     const u = new URL(window.location.href);
     const step = u.searchParams.get("step");

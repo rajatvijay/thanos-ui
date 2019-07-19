@@ -38,7 +38,7 @@ class WorkflowDetails extends Component {
       workflowIdFromPropsForModal || parseInt(props.match.params.id, 10);
 
     const groupId = params.get("group");
-    const stepId = params.get("step");
+    // const stepId = params.get("step");
     //console.log("inside state", groupId, stepId);
 
     setWorkflowKeys({ workflowId, stepId, groupId });

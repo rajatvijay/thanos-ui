@@ -36,8 +36,9 @@ class FilterPopup extends Component {
 
   //CLEAR ALL ITEMS FROM ADVANCED FILTERS
   onAdvClear = () => {
-    this.setState({ advFitlers: [] });
-    this.applyAdvFilters();
+    this.setState({ advFitlers: [] }, function() {
+      this.applyAdvFilters();
+    });
     this.props.onModalClose();
   };
 

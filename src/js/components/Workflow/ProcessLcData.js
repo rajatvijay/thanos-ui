@@ -1,13 +1,18 @@
 import React from "react";
 import Moment from "react-moment";
+import moment from "moment";
 
 export const ProcessLcData = (lc, is_alert) => {
   let subtext_value = <span />;
 
   if (lc.format === "date") {
-    subtext_value = (
-      <Moment format="MM/DD/YYYY">{lc.value || (is_alert ? "" : "-")}</Moment>
-    );
+    if (moment(lc.value, moment.ISO_8601).isValid()) {
+      subtext_value = (
+        <Moment format="MM/DD/YYYY">{lc.value || (is_alert ? "" : "-")}</Moment>
+      );
+    } else {
+      return "";
+    }
   } else if (lc.format && lc.format.toLowerCase() === "pid") {
     subtext_value = (
       <span className="t-upr">{lc.value || (is_alert ? "" : "-")}</span>

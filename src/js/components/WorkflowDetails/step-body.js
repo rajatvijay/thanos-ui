@@ -19,6 +19,7 @@ import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
 import addUser from "../../../images/addUser.svg";
+import StepAssignmentUsers from "./StepAssignmentUsers";
 
 class StepBody extends Component {
   constructor(props) {
@@ -92,31 +93,8 @@ class StepBody extends Component {
     );
   };
 
-  userList = data => {
-    // return <Menu>
-    //   <Menu.Item key="0">
-    //     <a href="http://www.alipay.com/">1st menu item</a>
-    //   </Menu.Item>
-    //   <Menu.Item key="1">
-    //     <a href="http://www.taobao.com/">2nd menu item</a>
-    //   </Menu.Item>
-    //   <Menu.Divider />
-    //   <Menu.Item key="3">3rd menu item</Menu.Item>
-    // </Menu>
-
-    const { stepId, postStepUser } = this.props;
-
-    return data.map(item => (
-      <Menu.Item>
-        <a onClick={() => postStepUser({ step: stepId, user: item.id })}>
-          {item.full_name}
-        </a>
-      </Menu.Item>
-    ));
-  };
-
   renderStepUsers = () => {
-    const { stepUsers, stepId } = this.props;
+    const { stepUsers, stepId, postStepUser } = this.props;
 
     // Loading Case
     if (stepUsers[stepId].isLoading) {
@@ -133,12 +111,17 @@ class StepBody extends Component {
       return (
         <Dropdown
           overlayStyle={{
-            maxHeight: 200,
-            overflowY: "scroll",
             boxShadow: "1px 3px 5px rgba(0, 0, 0, 0.12)"
           }}
           disabled={stepUsers[stepId].disabled}
-          overlay={<Menu>{this.userList(stepUsers[stepId].data)}</Menu>}
+          overlay={
+            <StepAssignmentUsers
+              onSelectUser={user =>
+                postStepUser({ step: stepId, user: user.id })
+              }
+              users={stepUsers[stepId].data}
+            />
+          }
           trigger={["click"]}
         >
           <Icon type="user-add" />
@@ -226,7 +209,6 @@ class StepBody extends Component {
               {stepUsers[stepId].user && (
                 <Tag
                   color="#104774"
-                  style={{ marginRight: 30 }}
                   closable
                   onClose={() =>
                     deleteStepUser(stepId, stepUsers[stepId].user.id)

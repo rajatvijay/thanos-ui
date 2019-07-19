@@ -11,7 +11,7 @@ import { workflowDetailsService } from "../services";
 import _ from "lodash";
 import { history } from "../_helpers";
 import { notification, message } from "antd";
-import Sentry from "@sentry/browser";
+import * as Sentry from "@sentry/browser";
 import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
 //import { history } from "../_helpers";
 
@@ -115,9 +115,9 @@ function getStepGroup(id, isActive) {
 function getStepFields(step) {
   // For Error tracking
   if (!step.workflowId || !step.groupId || !step.stepId) {
-    // Sentry.captureException(
-    //   new Error(`Get steps field called ${JSON.stringify(step)}`)
-    // );
+    Sentry.captureException(
+      new Error(`Get steps field called ${JSON.stringify(step)}`)
+    );
     return () => {};
   }
   return dispatch => {

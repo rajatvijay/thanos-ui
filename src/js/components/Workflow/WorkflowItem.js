@@ -93,7 +93,6 @@ class WorkflowItem extends React.Component {
     let { list } = this.props.expandedWorkflows;
 
     if (!list.find(item => item.id === this.props.workflow.id)) {
-      console.log();
       list.push(this.props.workflow);
       this.props.dispatch(workflowActions.expandedWorkflowsList(list));
     }
