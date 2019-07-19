@@ -126,13 +126,13 @@ function getExtra(props) {
   return props.field.definition.extra;
 }
 
-function onFieldChange(value, props, value2) {
-  props.onFieldChange(value, props, value2);
+function onFieldChange(props, value, value2) {
+  props.onFieldChange(value, props, true);
 }
 
-function onFieldChangeArray(value, props) {
+function onFieldChangeArray(props, value) {
   let answer = arrayToString(value);
-  onFieldChange(answer, props);
+  onFieldChange(props, answer);
 }
 
 function arrayToString(arr) {
