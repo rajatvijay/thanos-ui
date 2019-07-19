@@ -3,7 +3,8 @@ import {
   workflowDetailsheaderConstants,
   workflowStepConstants,
   workflowCommentsConstants,
-  stepVersionConstants
+  stepVersionConstants,
+  SET_WORKFLOW_KEYS
 } from "../constants";
 import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
@@ -11,6 +12,8 @@ import _ from "lodash";
 import { history } from "../_helpers";
 import { notification, message } from "antd";
 import * as Sentry from "@sentry/browser";
+import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
+//import { history } from "../_helpers";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -59,16 +62,45 @@ function getById(id) {
 }
 
 //Get workflow step groups and steps list.
-function getStepGroup(id) {
-  return dispatch => {
+function getStepGroup(id, isActive) {
+  return (dispatch, getState) => {
     dispatch(request(id));
 
-    workflowDetailsService
-      .getStepGroup(id)
-      .then(
-        stepGroups => dispatch(success(stepGroups, id)),
-        error => dispatch(failure(error))
-      );
+    // workflowDetailsService
+    //   .getStepGroup(id)
+    //   .then(
+    //     stepGroups => dispatch(success(stepGroups, id)),
+    //     error => dispatch(failure(error))
+    //   );
+    workflowDetailsService.getStepGroup(id).then(
+      stepGroups => {
+        const { minimalUI } = getState();
+        const { workflowId, stepId, groupId } = currentActiveStep(
+          stepGroups,
+          id
+        );
+        if (isActive && !minimalUI) {
+          console.log("stepGroups", stepGroups, workflowId, stepId, groupId);
+          history.replace(
+            `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
+          );
+        } else {
+          dispatch(
+            getStepFields({
+              workflowId,
+              stepId,
+              groupId
+            })
+          );
+        }
+        dispatch({
+          type: SET_WORKFLOW_KEYS,
+          payload: { workflowId, stepId, groupId }
+        });
+        dispatch(success(stepGroups, id));
+      },
+      error => dispatch(failure(error))
+    );
   };
 
   function request() {
@@ -79,6 +111,7 @@ function getStepGroup(id) {
       type: workflowDetailsConstants.GET_STEPGROUPS_SUCCESS,
       stepGroups,
       id
+      //isActive
     };
   }
   function failure(error) {

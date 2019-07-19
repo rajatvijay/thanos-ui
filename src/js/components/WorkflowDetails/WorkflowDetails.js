@@ -12,7 +12,8 @@ import {
   workflowFiltersActions,
   workflowStepActions,
   configActions,
-  stepBodyActions
+  stepBodyActions,
+  setWorkflowKeys
 } from "../../actions";
 import { WorkflowHeader } from "../Workflow/WorkflowHeader";
 import Comments from "./comments";
@@ -29,18 +30,25 @@ const { Sider, Content } = Layout;
 
 class WorkflowDetails extends Component {
   constructor(props) {
-    const { minimalUI } = props;
+    const { minimalUI, setWorkflowKeys, workflowIdFromPropsForModal } = props;
     const params = new URL(document.location).searchParams;
     //console.log("params",params)
+
+    const workflowId =
+      workflowIdFromPropsForModal || parseInt(props.match.params.id, 10);
+
     const groupId = params.get("group");
+    const stepId = params.get("step");
     // const stepId = params.get("step");
     //console.log("inside state", groupId, stepId);
+
+    setWorkflowKeys({ workflowId, stepId, groupId });
 
     super(props);
     this.state = {
       // workflowId: null,
-      selectedStep: null,
-      selectedGroup: null,
+      //selectedStep: null,
+      //selectedGroup: null,
       printing: false,
       dont: false,
       firstLoad: true,
@@ -62,12 +70,19 @@ class WorkflowDetails extends Component {
       location,
       workflowDetails,
       currentStepFields,
-      workflowIdFromPropsForModal
+      workflowIdFromPropsForModal,
+      setWorkflowKeys,
+      match,
+      minimalUI,
+      workflowKeys
     } = this.props;
 
     //console.log("props update", this.props);
-    const { selectedGroup, selectedStep, displayProfile } = this.state;
-    const { match, minimalUI } = this.props;
+    // const { selectedGroup, selectedStep, displayProfile } = this.state;
+    // const { match, minimalUI } = this.props;
+
+    const { displayProfile } = this.state;
+    //const { match, minimalUI, workflowKeys } = this.props;
 
     // TODO: Should be taken from react router params
     const params = new URL(document.location).searchParams;
@@ -86,14 +101,19 @@ class WorkflowDetails extends Component {
     // let wd = workflowDetails;
     //SET WORKFLOW ID FROM ROUTER
     //console.log("before", selectedStep, stepId, selectedGroup);
+    const workflowId =
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
+
+    //console.log("changing",workflowKeys[workflowId].stepId ,stepId,workflowKeys[workflowId].groupId ,groupId)
 
     if (
       !minimalUI &&
       match &&
-      selectedStep !== stepId &&
-      selectedGroup !== groupId
+      workflowKeys[workflowId].stepId !== stepId &&
+      workflowKeys[workflowId].groupId !== groupId
     ) {
-      //console.log("changed", selectedStep, stepId, selectedGroup);
+      //console.log("changed",  stepId, groupId,params);
+      //setWorkflowKeys({ workflowId, stepId:workflowKeys[workflowId].groupId, groupId });
       this.handleUpdateOfActiveStep(groupId, stepId);
       // this.setState(
       //   { selectedGroup: groupId, selectedStep: stepId },
@@ -105,11 +125,9 @@ class WorkflowDetails extends Component {
     }
 
     if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
-      //console.log("changes profile");
       this.setState({ displayProfile: true });
     }
     if (stepId && groupId && displayProfile && !minimalUI) {
-      //console.log("false");
       this.setState({ displayProfile: false });
     }
 
@@ -397,11 +415,11 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
 
-  getStepDetailsData = workflowId => {
+  getStepDetailsData = (workflowId, groupId, stepId) => {
     const stepTrack = {
       workflowId,
-      groupId: this.state.selectedGroup,
-      stepId: this.state.selectedStep
+      groupId,
+      stepId
     };
 
     this.fetchStepData(stepTrack);
@@ -411,39 +429,53 @@ class WorkflowDetails extends Component {
     const workflowId =
       this.props.workflowIdFromPropsForModal ||
       parseInt(this.props.match.params.id, 10);
+    const { setWorkflowKeys } = this.props;
 
-    if (!this.props.minimalUI) {
+    if (!this.props.minimalUI && groupId && stepId) {
       history.replace(
         `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
       );
     }
+    setWorkflowKeys({ workflowId, stepId, groupId });
 
-    this.setState(
-      {
-        selectedGroup: groupId,
-        selectedStep: stepId,
-        displayProfile: false
-      },
-      () => {
-        this.getStepDetailsData(
-          this.props.workflowIdFromPropsForModal ||
-            Number(this.props.match.params.id)
-        );
-        // this.props.getAssignedUser(stepId)
-      }
-    );
+    this.setState({ displayProfile: false });
+
+    // this.setState(
+    //   {
+    //     selectedGroup: groupId,
+    //     selectedStep: stepId,
+    //     displayProfile: false
+    //   },
+    //   () => {
+    //     this.getStepDetailsData(
+    //       this.props.workflowIdFromPropsForModal ||
+    //         Number(this.props.match.params.id)
+    //     );
+    //     // this.props.getAssignedUser(stepId)
+    //   }
+    // );
     // console.log("check", groupId, this.state);
+    this.getStepDetailsData(
+      this.props.workflowIdFromPropsForModal ||
+        Number(this.props.match.params.id),
+      groupId,
+      stepId
+    );
+
     if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
   };
 
   changeProfileDisplay = displayProfile => {
+    const { setWorkflowKeys, workflowIdFromPropsForModal } = this.props;
+
     const workflowId =
-      this.props.workflowIdFromPropsForModal ||
-      parseInt(this.props.match.params.id, 10);
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
 
     if (!this.props.minimalUI) {
       history.replace(`/workflows/instances/${workflowId}`);
     }
+
+    setWorkflowKeys(workflowId);
 
     this.setState({ displayProfile });
   };
@@ -451,7 +483,13 @@ class WorkflowDetails extends Component {
   ////Comment functions ends///////
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
+    //const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
+    const {
+      minimalUI,
+      workflowIdFromPropsForModal,
+      workflowItem,
+      workflowKeys
+    } = this.props;
     const { displayProfile } = this.state;
     // console.log("wo", this.props.workflow);
     const params = new URL(document.location).searchParams;
@@ -542,8 +580,16 @@ class WorkflowDetails extends Component {
               <BackButton />
 
               <SidebarView
-                selectedGroup={this.state.selectedGroup}
-                selectedStep={this.state.selectedStep}
+                selectedGroup={
+                  workflowKeys[workflowId]
+                    ? workflowKeys[workflowId].groupId
+                    : null
+                }
+                selectedStep={
+                  workflowKeys[workflowId]
+                    ? workflowKeys[workflowId].stepId
+                    : null
+                }
                 minimalUI={minimalUI}
                 workflowIdFromDetailsToSidebar={workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
@@ -567,7 +613,12 @@ class WorkflowDetails extends Component {
                     }}
                   >
                     <StepBody
-                      stepId={this.state.selectedStep}
+                      stepId={
+                        workflowKeys[workflowId]
+                          ? workflowKeys[workflowId].stepId
+                          : null
+                      }
+                      workflowId={workflowId}
                       workflowIdFromPropsForModal={workflowIdFromPropsForModal}
                       toggleSidebar={this.callBackCollapser}
                       changeFlag={this.changeFlag}
@@ -678,7 +729,8 @@ function mapStateToProps(state) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl
+    nextUrl,
+    workflowKeys
   } = state;
 
   return {
@@ -694,11 +746,12 @@ function mapStateToProps(state) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl
+    nextUrl,
+    workflowKeys
   };
 }
 
 export default connect(
   mapStateToProps,
-  stepBodyActions
+  { stepBodyActions, setWorkflowKeys }
 )(injectIntl(WorkflowDetails));

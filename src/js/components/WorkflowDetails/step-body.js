@@ -139,7 +139,8 @@ class StepBody extends Component {
       workflowHead,
       stepUsers,
       stepId,
-      deleteStepUser
+      deleteStepUser,
+      workflowId
     } = this.props;
     //console.log("step", stepId);
     const loading =
@@ -332,6 +333,7 @@ class StepBody extends Component {
                 <Divider />
               </div>
               <StepBodyForm
+                workflowId={workflowId}
                 stepData={stepData}
                 {...this.props}
                 version={this.props.stepVersionFields}
