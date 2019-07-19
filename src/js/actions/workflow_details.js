@@ -84,6 +84,14 @@ function getStepGroup(id, isActive) {
           history.replace(
             `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
           );
+        } else {
+          dispatch(
+            getStepFields({
+              workflowId,
+              stepId,
+              groupId
+            })
+          );
         }
         dispatch({
           type: SET_WORKFLOW_KEYS,

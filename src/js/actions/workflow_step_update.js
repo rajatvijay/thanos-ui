@@ -231,10 +231,10 @@ function updateField(payload) {
 ////////////////////////////////////////
 function submitStepData(payload) {
   //const workflowId = payload.id;
-  const { workflowId, id } = payload;
+  const { id } = payload;
   return dispatch => {
     dispatch(request(payload));
-    dispatch(remove_errors({}, workflowId));
+    dispatch(remove_errors({}, id));
 
     workflowStepService.submitStep(payload).then(
       stepData => {
@@ -289,7 +289,7 @@ function submitStepData(payload) {
     return {
       type: workflowStepConstants.SUBMIT_FAILURE,
       error,
-      payload: { ...payload, id: workflowId }
+      payload: { ...payload, id }
     };
   }
 }
