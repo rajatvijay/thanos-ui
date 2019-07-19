@@ -241,9 +241,9 @@ class Sidebar extends Component {
           backgroundColor: "#FAFAFA",
           padding: "30px",
           paddingTop: 0,
-          paddingLeft: minimalUI ? "30px" : "40px",
+          paddingLeft: minimalUI ? "30px" : "55px",
           zIndex: 0,
-          marginRight: minimalUI ? 0 : 10,
+          marginRight: minimalUI ? 0 : 35,
           paddingRight: 0,
           position: "relative",
           marginTop: minimalUI ? 0 : 35
@@ -349,7 +349,7 @@ class Sidebar extends Component {
             //   stepgroup.id
             // }&step=${step.id}`}
             style={{
-              color: displayProfile ? "white" : "#969696",
+              color: "#000000",
               textDecoration: "none",
               cursor: "pointer"
             }}

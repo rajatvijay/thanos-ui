@@ -84,16 +84,17 @@ export const WorkflowHeader = props => {
           />
         </Col>
       ) : null}
-      <Col span={props.isEmbedded ? 7 : 8} className="text-left ">
+
+      <Col span={isEmbedded ? 7 : 8} className="text-left ">
         <HeaderTitle {...props} />
+      </Col>
+
+      <Col span={isEmbedded ? 4 : 6}>
+        <GetMergedData {...props} />
       </Col>
 
       <Col span={4}>
         <HeaderLcData {...props} />
-      </Col>
-
-      <Col span={4}>
-        <GetMergedData {...props} />
       </Col>
 
       <Col span={1} className="text-center">
@@ -108,6 +109,7 @@ export const WorkflowHeader = props => {
           </span>
         ) : null}
       </Col>
+
       {isEmbedded && (
         <Col span={2}>
           <div>{displaySortingKey(workflow)}</div>

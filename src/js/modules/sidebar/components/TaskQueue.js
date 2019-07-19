@@ -23,11 +23,12 @@ export function DefaultTaskQueue({ item, loading, onClick, isSelected }) {
   return (
     <StyledTaskQueueContainer isSelected={isSelected} onClick={onClick}>
       <div>
-        <img
-          src={item.image}
-          style={{ width: "6%", marginRight: 10, marginBottom: 5 }}
-          alt=""
-        />
+        <i
+          className="material-icons text-middle"
+          style={{ color: "#FFF", marginRight: 10, marginBottom: 5 }}
+        >
+          person
+        </i>
         <span className="name">{item.name}</span>
       </div>
       {loading ? (

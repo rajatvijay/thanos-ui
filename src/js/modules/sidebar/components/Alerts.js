@@ -92,6 +92,9 @@ const StyledAlertListItem = styled.li`
   border-top: 1px solid rgba(0, 0, 0, 0.3);
   padding: 10px 20px;
   cursor: pointer;
+  &:last-child {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const StyledAlertSubCategoryListItem = styled.li`

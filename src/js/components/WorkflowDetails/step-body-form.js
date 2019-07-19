@@ -682,7 +682,11 @@ class StepBodyForm extends Component {
           ) : null}
 
           {_.size(groupedField) ? (
-            <Tabs defaultActiveKey="group_0" onChange={this.callback}>
+            <Tabs
+              defaultActiveKey="group_0"
+              onChange={this.callback}
+              className="paragraph-section"
+            >
               {_.map(groupedField, function(group, index) {
                 return (
                   <TabPane tab={group.label} key={"group_" + index}>
