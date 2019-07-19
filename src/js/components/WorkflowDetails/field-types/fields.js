@@ -91,7 +91,7 @@ export const Text = props => {
         {...feedValue(props)}
         autoComplete="new-password"
         autoComplete="new-password"
-        onChange={e => onFieldChange(e, props)}
+        onChange={e => props.onFieldChange(e, props)}
         onBlur={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       />
@@ -119,7 +119,7 @@ export const Bool = props => {
     >
       <RadioGroup
         style={{ width: "100%" }}
-        onChange={e => onFieldChange(e, props)}
+        onChange={e => props.onFieldChange(e, props)}
         defaultValue={defVal ? defVal : null}
       >
         <Radio value={"True"} disabled={isDisabled(props)}>
@@ -215,7 +215,7 @@ class Email2 extends React.Component {
     let valid = validator.isEmail(e.target.value);
     this.setState({ isValidEamil: valid });
     if (valid) {
-      onFieldChange(e, this.props);
+      this.props.onFieldChange(e, this.props);
     }
   };
 
@@ -286,7 +286,7 @@ class URL2 extends React.Component {
     let valid = validator.isURL(e.target.value);
     this.setState({ isValidUrl: valid });
     if (valid) {
-      onFieldChange(e, this.props);
+      this.props.onFieldChange(e, this.props);
     }
   };
 
@@ -592,7 +592,7 @@ class FileUpload extends Component {
       //rejectedFilesList: rejectedFiles
     });
     let value = e[0];
-    onFieldChange(value, this.props, "file");
+    this.props.onFieldChange(value, this.props, "file");
   };
 
   removeFile = () => {
@@ -879,7 +879,7 @@ export const RadioField = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
-        onChange={e => onFieldChange(e, props)}
+        onChange={e => props.onFieldChange(e, props)}
         style={getStyle(props)}
       >
         {_.map(getExtra(props), function(item, index) {
