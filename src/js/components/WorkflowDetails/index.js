@@ -83,8 +83,8 @@ class WorkflowDetailsRoot extends Component {
     const { workflowId } = this.state;
 
     this.props.dispatch(workflowDetailsActions.getById(workflowId));
-    if (!this.props.workflowDetails[workflowId])
-      this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
+    // if (!this.props.workflowDetails[workflowId])
+    this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
   };
 
   updateCustomHistory = url => {
