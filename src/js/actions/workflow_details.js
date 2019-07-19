@@ -10,7 +10,7 @@ import { workflowDetailsService } from "../services";
 import _ from "lodash";
 import { history } from "../_helpers";
 import { notification, message } from "antd";
-import Sentry from "@sentry/browser";
+import * as Sentry from "@sentry/browser";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -90,9 +90,9 @@ function getStepGroup(id) {
 function getStepFields(step) {
   // For Error tracking
   if (!step.workflowId || !step.groupId || !step.stepId) {
-    // Sentry.captureException(
-    //   new Error(`Get steps field called ${JSON.stringify(step)}`)
-    // );
+    Sentry.captureException(
+      new Error(`Get steps field called ${JSON.stringify(step)}`)
+    );
     return () => {};
   }
   return dispatch => {
