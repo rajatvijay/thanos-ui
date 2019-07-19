@@ -365,10 +365,8 @@ class WorkflowDetails extends Component {
     // if(!this.props.currentStepFields[payload.stepId])
 
     // console.log("cache", payloadWithMeta);
-    if (!this.props.currentStepFields[payload.stepId])
-      this.props.dispatch(
-        workflowDetailsActions.getStepFields(payloadWithMeta)
-      );
+    // if (!this.props.currentStepFields[payload.stepId])
+    this.props.dispatch(workflowDetailsActions.getStepFields(payloadWithMeta));
   };
 
   isParentWorkflow = () => {
