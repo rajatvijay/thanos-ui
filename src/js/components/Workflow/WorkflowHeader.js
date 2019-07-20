@@ -42,9 +42,13 @@ function displaySortingKey(workflow) {
     );
 
   if (obj) {
-    return obj.format === "date"
-      ? moment(workflow.sorting_primary_field).format("DD/MM/YYYY") // new Date(workflow.sorting_primary_field).toDateString()
-      : workflow.sorting_primary_field;
+    if (obj.format === "date") {
+      return moment(workflow.sorting_primary_field, moment.ISO_8601).isValid()
+        ? moment(workflow.sorting_primary_field).format("DD/MM/YYYY")
+        : "";
+    } else {
+      return workflow.sorting_primary_field;
+    }
   }
 
   //return workflow?workflow.display_label:"Risk"
