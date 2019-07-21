@@ -43,13 +43,15 @@ class Filter extends Component {
   };
 
   onFilterChange = (key, value) => {
-    const { displayfilters, status, region, business_unit } = this.state;
+    const { displayfilters = {}, status, region, business_unit } = this.state;
 
     const {
       businessType,
       regionType,
       statusType
     } = this.props.workflowFilterType;
+
+    const updatedState = {};
 
     //ON STATUS CHANGE//
     if (key == "status") {
@@ -60,6 +62,18 @@ class Filter extends Component {
     //ON REGION CHANGE//
     if (key == "region") {
       let regionObj = regionType.results.find(item => item.value == value);
+
+      if (value != region && !!business_unit) {
+        // if region is changed, make sure to clean the business unit as well.
+        updatedState.business_unit = undefined;
+        displayfilters.business_unit = undefined;
+        this.removeFilter("business_unit");
+      }
+
+      // load business units (Divisions), according to the selected region.
+      this.props.dispatch(
+        workflowFiltersActions.getBusinessUnitData(regionObj.value)
+      );
 
       displayfilters.region = regionObj.label;
     }
@@ -72,7 +86,10 @@ class Filter extends Component {
       displayfilters.business_unit = business_unitObj.label;
     }
 
-    this.setState({ [key]: value, displayfilters }, function() {
+    updatedState[key] = value;
+    updatedState.displayfilters = { ...displayfilters };
+
+    this.setState({ ...updatedState }, function() {
       if (key !== "operator" && key !== "field" && key !== "text") {
         this.applyFilters(key, value);
         this.handleModalClose();
@@ -104,6 +121,14 @@ class Filter extends Component {
 
     console.log("applying filter----");
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
+  };
+
+  removeFilter = key => {
+    const payload = {
+      filterType: key
+    };
+
+    this.props.dispatch(workflowFiltersActions.removeFilters(payload));
   };
 
   onClear = () => {
