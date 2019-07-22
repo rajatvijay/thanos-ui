@@ -1,4 +1,5 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 export const dunsFieldService = {
   saveDunsField,
@@ -12,7 +13,7 @@ function saveDunsField(payload) {
     credentials: "include"
   };
 
-  let url = baseUrl + "integrations/?field_id=" + payload.fieldId;
+  let url = apiBaseURL + "integrations/?field_id=" + payload.fieldId;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -30,7 +31,7 @@ function selectDunsItem(payload) {
     body: JSON.stringify(payload)
   };
 
-  let url = baseUrl + "integrations/dnb/";
+  let url = apiBaseURL + "integrations/dnb/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { authHeader, baseUrl, baseUrl2 } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
 import {
   Icon,
   Form,
@@ -27,6 +27,7 @@ import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import validator from "validator";
 import { ESign } from "./esign.js";
+import { apiBaseURL, siteOrigin } from "../../../../config";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -89,7 +90,6 @@ export const Text = props => {
             : props.field.definition.defaultValue
         }
         {...feedValue(props)}
-        autoComplete="new-password"
         autoComplete="new-password"
         onChange={e => props.onFieldChange(e, props)}
         onBlur={e => props.onFieldChange(e, props)}
@@ -434,7 +434,7 @@ export const Select = props => {
         }
         onChange={save}
         showSearch={true}
-        filterOption={(input: any, option: any) =>
+        filterOption={(input, option) =>
           option.props.children
             .toString()
             .toLowerCase()
@@ -616,7 +616,7 @@ class FileUpload extends Component {
     let that = this;
     const { field } = this.props;
     let url = this.state.decryptURL
-      ? baseUrl2 + this.state.decryptURL
+      ? `${siteOrigin}/api/v1/${this.state.decryptURL}`
       : field.answers[0] && field.answers[0].attachment;
 
     return (
@@ -767,7 +767,7 @@ class AttachmentDownload extends Component {
     this.setState({ fetching: true });
 
     fetch(
-      baseUrl +
+      apiBaseURL +
         "fields/" +
         this.props.field.definition.id +
         "/download_attachment/?format=json",

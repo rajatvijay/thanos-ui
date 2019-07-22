@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { baseUrl, authHeader } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
 
 import FilterPopup from "./FilterPopup";
 import { workflowFiltersActions, workflowActions } from "../../../actions";
 import { Tooltip, Icon } from "antd";
 import CreateNew from "./CreateNew";
 import { css } from "emotion";
+import { apiBaseURL } from "../../../../config";
 
 class Filter extends Component {
   state = {
@@ -193,7 +194,7 @@ class Filter extends Component {
       credentials: "include"
     };
 
-    const url = `${baseUrl}fields/export-json/?active_kind=${kindName}`;
+    const url = `${apiBaseURL}fields/export-json/?active_kind=${kindName}`;
 
     if (kindName) {
       fetch(url, requestOptions)

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Radio, Modal, notification } from "antd";
 import { css } from "emotion";
-import { authHeader, baseUrl } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
+import { apiBaseURL } from "../../../../config";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -122,7 +123,7 @@ class BulkActionFields extends Component {
             }
           })
         };
-        return fetch(baseUrl + "workflow/bulk-action/", requestOptions).then(
+        return fetch(apiBaseURL + "workflow/bulk-action/", requestOptions).then(
           response => {
             this.setState({
               isLoading: false

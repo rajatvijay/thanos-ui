@@ -1,4 +1,5 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 function updateSelectedLanguage(payload) {
   const requestOptions = {
@@ -8,7 +9,7 @@ function updateSelectedLanguage(payload) {
     body: JSON.stringify({ to_language: payload })
   };
 
-  let url = baseUrl + "users/change_prefered_language/";
+  let url = apiBaseURL + "users/change_prefered_language/";
   return fetch(url, requestOptions).then(handleResponse);
 }
 

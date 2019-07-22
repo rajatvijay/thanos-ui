@@ -43,32 +43,38 @@ class LoginForm extends React.Component {
     this.setState({ [name]: value });
   }
 
+  _login = ({ token = null } = {}) => {
+    const { username, password } = this.state;
+    const { dispatch } = this.props;
+    if (username && password) {
+      dispatch(login(username, password, token));
+    }
+  };
+
   handleSubmit(e) {
     e.preventDefault();
 
-    if (
-      typeof window === "undefined" &&
-      typeof window.grecaptcha === "undefined"
-    ) {
-      message.error("Google captcha error, please reload!");
-      return;
-    }
-
     this.setState({ submitted: true });
-    try {
+
+    if ([undefined, "true"].includes(process.env.REACT_APP_RECAPTCHA_ENABLED)) {
+      // If recaptcha is not explicitly set, fallback to previous behaviour (i.e. enabled)
+      if (
+        typeof window === "undefined" &&
+        typeof window.grecaptcha === "undefined"
+      ) {
+        message.error("Google captcha error, please reload!");
+        return;
+      }
+
       window.grecaptcha
         .execute("6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8", {
           action: "login"
         })
         .then(token => {
-          const { username, password } = this.state;
-          const { dispatch } = this.props;
-          if (username && password) {
-            dispatch(login(username, password, token));
-          }
+          this._login({ token });
         });
-    } catch (err) {
-      console.log(err);
+    } else {
+      this._login();
     }
   }
 

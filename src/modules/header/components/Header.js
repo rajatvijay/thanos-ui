@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
-import { authHeader, baseUrl, baseUrl2 } from "../../../js/_helpers";
+import { authHeader } from "../../../js/_helpers";
 import {
   Tooltip,
   Menu,
@@ -17,6 +17,7 @@ import _ from "lodash";
 import { logout, workflowActions, navbarActions } from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
+import { apiBaseURL, siteOrigin } from "../../../config";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -100,8 +101,8 @@ class Header extends Component {
                   <Menu.Item key={index}>
                     <a
                       href={
-                        baseUrl2 +
-                        "workflow-kinds/" +
+                        siteOrigin +
+                        "/api/v1/workflow-kinds/" +
                         item.tag +
                         "/data-export/"
                       }

@@ -1,11 +1,12 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 // /workflow/pdf-print/
 
 const END_POINT = "workflow/pdf-print/";
 
 const getURL = () => {
-  return `${baseUrl}${END_POINT}`;
+  return `${apiBaseURL}${END_POINT}`;
 };
 
 function requestWorflowPDF(payload) {

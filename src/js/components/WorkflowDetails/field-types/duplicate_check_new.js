@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
+import { authHeader, handleResponse } from "../../../_helpers";
 import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
 import { connect } from "react-redux";
 
@@ -25,6 +25,7 @@ import {
   workflowDetailsActions
 } from "../../../actions";
 import { workflowDetailsService } from "../../../services";
+import { apiBaseURL } from "../../../../config";
 
 const FormItem = Form.Item;
 
@@ -126,7 +127,7 @@ class DuplicateCheckComp extends Component {
     workflow_ids = workflow_ids.join(",");
 
     if (_.size(workflow_ids)) {
-      let url = baseUrl + "workflows-list/?workflow_ids=" + workflow_ids;
+      let url = apiBaseURL + "workflows-list/?workflow_ids=" + workflow_ids;
       this.setState({ fetching: true });
 
       fetch(url, requestOptions)

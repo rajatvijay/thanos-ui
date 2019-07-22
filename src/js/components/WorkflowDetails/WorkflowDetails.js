@@ -1,61 +1,46 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Tooltip, Divider } from "antd";
+import { Layout, Tooltip } from "antd";
 import SidebarView from "../../../modules/workflows/sidebar/components";
 import _ from "lodash";
 import StepBody from "./step-body.js";
-import { baseUrl, authHeader, history } from "../../_helpers";
-import Moment from "react-moment";
+import { history } from "../../_helpers";
 import {
-  workflowDetailsActions,
-  workflowActions,
-  workflowFiltersActions,
-  workflowStepActions,
   configActions,
+  setWorkflowKeys,
   stepBodyActions,
-  setWorkflowKeys
+  workflowDetailsActions,
+  workflowFiltersActions,
+  workflowStepActions
 } from "../../actions";
-import { WorkflowHeader } from "../Workflow/WorkflowHeader";
 import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
-import BreadCrums from "./BreadCrums";
-import StepPreview from "../Workflow/StepPreview";
-import { calculatedData } from "../Workflow/calculated-data";
-import { currentActiveStep } from "./utils/active-step";
 import { goToPrevStep } from "../../utils/customBackButton";
 
-const { getProgressData } = calculatedData;
-
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 
 class WorkflowDetails extends Component {
   constructor(props) {
     const { minimalUI, setWorkflowKeys, workflowIdFromPropsForModal } = props;
     const params = new URL(document.location).searchParams;
-    //console.log("params",params)
 
     const workflowId =
       workflowIdFromPropsForModal || parseInt(props.match.params.id, 10);
 
     const groupId = params.get("group");
     const stepId = params.get("step");
-    // const stepId = params.get("step");
-    //console.log("inside state", groupId, stepId);
 
     setWorkflowKeys({ workflowId, stepId, groupId });
 
     super(props);
     this.state = {
-      // workflowId: null,
-      //selectedStep: null,
-      //selectedGroup: null,
       printing: false,
       dont: false,
       firstLoad: true,
       currentStep: null,
       //displayProfile: !minimalUI ? false : true
       // TODO: Check why we need groupId check
-      displayProfile: minimalUI ? true : groupId ? false : true
+      displayProfile: minimalUI ? true : !groupId
     };
   }
 

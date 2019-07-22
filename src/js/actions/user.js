@@ -4,8 +4,9 @@ import {
   logout as UserLogout,
   sendEmailAuthToken as userSendEmailAuthToken
 } from "../services/user";
-import { history, baseUrl2 } from "../_helpers";
+import { history } from "../_helpers";
 import { notification } from "antd";
+import { siteOrigin } from "../../config";
 
 export const userActions = {
   register,
@@ -113,7 +114,7 @@ const logoutNav = () => {
   localStorage.removeItem("magicLogin");
   localStorage.removeItem("customHistory");
   removeCookies();
-  document.location.href = baseUrl2 + "users/logout/";
+  document.location.href = siteOrigin + "/";
 };
 
 const logoutXHR = () => async dispatch => {

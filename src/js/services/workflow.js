@@ -1,6 +1,7 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
 import _ from "lodash";
 import { store } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 export const workflowService = {
   getAll,
@@ -27,7 +28,7 @@ function getAll(filter) {
 
   let filters = store.getState().workflowFilters,
     filterParams = getFilterParams(filters),
-    url = baseUrl + "workflows-list/";
+    url = apiBaseURL + "workflows-list/";
 
   url += filterParams + "&lean=true";
 
@@ -47,7 +48,7 @@ function clearAll() {
 
   let filters = store.getState().workflowFilters,
     filterParams = getFilterParams(filters),
-    url = baseUrl + "workflows-list/";
+    url = apiBaseURL + "workflows-list/";
 
   url += filterParams + "&lean=true";
 
@@ -62,7 +63,7 @@ function getChildWorkflow(parent) {
     credentials: "include"
   };
 
-  let url = baseUrl + "workflows-list/?parent_workflow_id=" + parent;
+  let url = apiBaseURL + "workflows-list/?parent_workflow_id=" + parent;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -108,7 +109,7 @@ function getById(id) {
     credentials: "include"
   };
 
-  return fetch(baseUrl + "workflows/" + id + "/", requestOptions).then(
+  return fetch(apiBaseURL + "workflows/" + id + "/", requestOptions).then(
     handleResponse
   );
 }
@@ -120,7 +121,7 @@ function searchWorkflowGet(query) {
     credentials: "include"
   };
 
-  let url = baseUrl + "workflows/?q=" + query;
+  let url = apiBaseURL + "workflows/?q=" + query;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -133,7 +134,7 @@ function searchWorkflow(query) {
     body: JSON.stringify({ q: query })
   };
 
-  let url = baseUrl + "workflows-list/search/";
+  let url = apiBaseURL + "workflows-list/search/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -147,7 +148,7 @@ function searchUserWorkflowByEmail({ email }) {
   };
 
   return fetch(
-    `${baseUrl}workflows/search-user-workflow/`,
+    `${apiBaseURL}workflows/search-user-workflow/`,
     requestOptions
   ).then(handleResponse);
 }
@@ -160,7 +161,7 @@ function updateWorkflow({ id, payload }) {
     body: JSON.stringify(payload)
   };
 
-  return fetch(`${baseUrl}workflows/${id}/`, requestOptions).then(
+  return fetch(`${apiBaseURL}workflows/${id}/`, requestOptions).then(
     handleResponse
   );
 }

@@ -1,19 +1,12 @@
 import React, { Component } from "react";
-//import { authHeader, baseUrl } from "../../../_helpers";
-import { Row, Col, Icon, Divider, Select } from "antd";
+import { Icon } from "antd";
 import _ from "lodash";
-import { countries } from "./countries.js";
 import { dunsFieldActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import FinancialData from "./FinancialData";
 import LitigationData from "./LitigationData";
 
 const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
   getIntegrationSearchButton,
   isDnBIntegrationDataLoading
 } = commonFunctions;

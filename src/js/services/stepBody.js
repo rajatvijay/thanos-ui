@@ -1,4 +1,5 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 const handleResponse = (response, hasNONJSONResponse) => {
   if (!response.ok) {
@@ -26,7 +27,7 @@ function postStepUser(payload) {
     body: JSON.stringify(payload)
   };
 
-  return fetch(`${baseUrl}step-user-tags/`, requestOptions).then(
+  return fetch(`${apiBaseURL}step-user-tags/`, requestOptions).then(
     handleResponse
   );
 }
@@ -39,7 +40,7 @@ function getStepUsers(stepId) {
   };
 
   return fetch(
-    `${baseUrl}steps/${stepId}/get-users-with-edit-access/`,
+    `${apiBaseURL}steps/${stepId}/get-users-with-edit-access/`,
     requestOptions
   ).then(handleResponse);
 }
@@ -51,7 +52,7 @@ function deleteStepUser(id) {
     credentials: "include"
   };
 
-  return fetch(`${baseUrl}step-user-tags/${id}/`, requestOptions).then(res =>
+  return fetch(`${apiBaseURL}step-user-tags/${id}/`, requestOptions).then(res =>
     handleResponse(res, true)
   );
 }
@@ -63,9 +64,10 @@ function getAssignedUser(stepId) {
     credentials: "include"
   };
 
-  return fetch(`${baseUrl}step-user-tags/?step=${stepId}`, requestOptions).then(
-    handleResponse
-  );
+  return fetch(
+    `${apiBaseURL}step-user-tags/?step=${stepId}`,
+    requestOptions
+  ).then(handleResponse);
 }
 
 function getMyTasksCount() {
@@ -75,7 +77,7 @@ function getMyTasksCount() {
     credentials: "include"
   };
   return fetch(
-    `${baseUrl}get-my-tagged-incomplete-steps/`,
+    `${apiBaseURL}get-my-tagged-incomplete-steps/`,
     requestOptions
   ).then(handleResponse);
 }

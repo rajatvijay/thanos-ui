@@ -1,5 +1,6 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
 import _ from "lodash";
+import { apiBaseURL } from "../../config";
 
 export const workflowStepService = {
   saveField,
@@ -44,7 +45,7 @@ function saveField(payload) {
     };
   }
 
-  return fetch(baseUrl + "responses/", requestOptions).then(handleResponse);
+  return fetch(apiBaseURL + "responses/", requestOptions).then(handleResponse);
 }
 
 function removeAttachment({ workflow, field, responseId }) {
@@ -59,9 +60,10 @@ function removeAttachment({ workflow, field, responseId }) {
     body: JSON.stringify(data)
   };
 
-  return fetch(baseUrl + "responses/" + responseId + "/", requestOptions).then(
-    handleResponse
-  );
+  return fetch(
+    apiBaseURL + "responses/" + responseId + "/",
+    requestOptions
+  ).then(handleResponse);
 }
 
 //update fields onchange
@@ -79,7 +81,7 @@ function updateField(payload) {
   };
 
   return fetch(
-    baseUrl + "responses/" + payload.answerId + "/",
+    apiBaseURL + "responses/" + payload.answerId + "/",
     requestOptions
   ).then(handleResponse);
 }
@@ -98,7 +100,7 @@ function fetchFieldExtra(field, answerFunction) {
     (expr, variable) => answerFunction(variable) || ""
   );
   if (!url.match(/^https?:\/\//)) {
-    url = baseUrl + url;
+    url = apiBaseURL + url;
     Object.assign(requestOptions, {
       headers: authHeader.get(),
       credentials: "include"
@@ -117,7 +119,7 @@ function submitStep(payload) {
   };
 
   const url =
-    baseUrl +
+    apiBaseURL +
     "workflows/" +
     payload.workflow +
     "/stepgroups/" +
@@ -138,7 +140,7 @@ function approveStep(payload) {
   };
 
   const url =
-    baseUrl +
+    apiBaseURL +
     "workflows/" +
     payload.workflow +
     "/stepgroups/" +
@@ -158,7 +160,7 @@ function undoStep(payload) {
   };
 
   const url =
-    baseUrl +
+    apiBaseURL +
     "workflows/" +
     payload.workflow +
     "/stepgroups/" +
@@ -195,7 +197,7 @@ function addComment(payload) {
     delete requestOptions.headers["Content-Type"];
   }
 
-  return fetch(baseUrl + "channels/addmessage/", requestOptions).then(
+  return fetch(apiBaseURL + "channels/addmessage/", requestOptions).then(
     handleResponse
   );
 }
@@ -207,7 +209,7 @@ function updateFlag(payload) {
     credentials: "include",
     body: JSON.stringify(payload)
   };
-  return fetch(baseUrl + "flags/", requestOptions).then(handleResponse);
+  return fetch(apiBaseURL + "flags/", requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {
@@ -228,7 +230,7 @@ function updateIntegrationStatus(payload) {
     body: JSON.stringify(payload)
   };
   return fetch(
-    baseUrl + "integrations/status-update/" + payload["row_uid"] + "/",
+    apiBaseURL + "integrations/status-update/" + payload["row_uid"] + "/",
     requestOptions
   ).then(handleResponse);
 }

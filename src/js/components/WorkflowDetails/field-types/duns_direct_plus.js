@@ -1,35 +1,10 @@
 import React, { Component } from "react";
-//import { authHeader, baseUrl } from "../../../_helpers";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select
-} from "antd";
+import { Table, Icon } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { countries } from "./countries.js";
 import { dunsFieldActions } from "../../../actions";
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { Column, ColumnGroup } = Table;
-
-//const dunsResponse = JSON.parse(dunsData);
-
-const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
-  getIntegrationSearchButton
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {

@@ -1,4 +1,5 @@
-import { authHeader, baseUrl, handleResponse } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 export const workflowDetailsService = {
   getById,
@@ -18,7 +19,7 @@ function getById(id) {
   };
 
   return fetch(
-    baseUrl + "workflows/" + id + "/?lean=true",
+    apiBaseURL + "workflows/" + id + "/?lean=true",
     requestOptions
   ).then(handleResponse);
 }
@@ -32,8 +33,8 @@ function getStepGroup(id) {
 
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    //baseUrl + "workflows/" + id + "/stepgroups/",
-    baseUrl + "workflows/" + parseInt(id, 10) + "/stepgroups/",
+    //apiBaseURL + "workflows/" + id + "/stepgroups/",
+    apiBaseURL + "workflows/" + parseInt(id, 10) + "/stepgroups/",
     requestOptions
   ).then(handleResponse);
 }
@@ -47,7 +48,7 @@ function getStepFields(step) {
 
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    baseUrl +
+    apiBaseURL +
       "workflows/" +
       step.workflowId +
       "/stepgroups/" +
@@ -67,7 +68,7 @@ function getComments(payload) {
   };
 
   let request_url =
-    baseUrl +
+    apiBaseURL +
     "channels?object_id=" +
     payload.object_id +
     "&type=" +
@@ -79,7 +80,7 @@ function getComments(payload) {
 
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    //baseUrl + "workflows/" + id + "/stepgroups/",
+    //apiBaseURL + "workflows/" + id + "/stepgroups/",
     request_url,
     requestOptions
   ).then(handleResponse);
@@ -94,7 +95,7 @@ function getStepVersionFields(step) {
 
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    baseUrl +
+    apiBaseURL +
       "workflows/" +
       step.workflowId +
       "/stepgroups/" +
@@ -114,7 +115,7 @@ function archiveWorkflow(workflowId) {
     credentials: "include"
   };
 
-  const deleteUrl = `${baseUrl}workflows/${workflowId}/archive/`;
+  const deleteUrl = `${apiBaseURL}workflows/${workflowId}/archive/`;
   return fetch(deleteUrl, requestOptions).then(response => {
     if (!response.ok) {
       return Promise.reject(response);

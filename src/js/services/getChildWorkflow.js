@@ -1,11 +1,12 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 const getURL = (parent_workflow_id, kind, limit = 100) => {
   const sanitizedParamsObject = JSON.parse(
     JSON.stringify({ parent_workflow_id, kind, limit })
   );
   const params = new URLSearchParams(sanitizedParamsObject);
-  return `${baseUrl}workflows-list/?${params}`;
+  return `${apiBaseURL}workflows-list/?${params}`;
 };
 
 function getChildWorkflow(parentId, kind) {

@@ -1,4 +1,5 @@
-import { authHeader, baseUrl, handleResponse } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 export const workflowFiltersService = {
   // getFilters,
@@ -19,7 +20,7 @@ function getStatusData(queryParams = {}) {
   };
 
   const searchParams = new URLSearchParams(queryParams);
-  const url = `${baseUrl}workflow-status/?${searchParams}`;
+  const url = `${apiBaseURL}workflow-status/?${searchParams}`;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -31,8 +32,8 @@ function getBusinessData(region) {
     credentials: "include"
   };
   let url = region
-    ? baseUrl + `business-unit/extra-data/?regions__code=${region}`
-    : baseUrl + "fields/export-business-json/";
+    ? apiBaseURL + `business-unit/extra-data/?regions__code=${region}`
+    : apiBaseURL + "fields/export-business-json/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -43,13 +44,13 @@ function getRegionData() {
     headers: authHeader.get(),
     credentials: "include"
   };
-  let url = baseUrl + "fields/export-region-json/";
+  let url = apiBaseURL + "fields/export-region-json/";
 
   return fetch(url, requestOptions)
     .then(handleResponse)
     .then(response => {
-      const sortedResults = response.results.sort(
-        (a, b) => (a.label > b.label ? 1 : -1)
+      const sortedResults = response.results.sort((a, b) =>
+        a.label > b.label ? 1 : -1
       );
       return { results: sortedResults };
     });
@@ -62,5 +63,5 @@ function setFilters(payload) {
   //   credentials: "include",
   //   body: JSON.stringify(payload)
   // };
-  // return fetch(baseUrl + "responses/", requestOptions).then(handleResponse);
+  // return fetch(apiBaseURL + "responses/", requestOptions).then(handleResponse);
 }

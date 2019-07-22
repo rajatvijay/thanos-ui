@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Icon } from "antd";
-import { authHeader, baseUrl } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import _ from "lodash";
+import { apiBaseURL } from "../../../config";
 
 ///////////////////
 ///META GRAPH////
@@ -31,7 +32,7 @@ class MetaGraph extends Component {
       credentials: "include"
     };
 
-    fetch(baseUrl + "dashboard/embed-url/", requestOptions)
+    fetch(apiBaseURL + "dashboard/embed-url/", requestOptions)
       .then(function(response) {
         if (!response.ok) {
           that.setState({

@@ -1,36 +1,12 @@
 import React, { Component } from "react";
-//import { authHeader, baseUrl } from "../../../_helpers";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select,
-  Tabs,
-  Tag
-} from "antd";
+import { Row, Col, Table, Icon, Divider, Tabs, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { countries } from "./countries.js";
-import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
+import { dunsFieldActions } from "../../../actions";
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { Column, ColumnGroup } = Table;
 const TabPane = Tabs.TabPane;
 
-const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
-  getIntegrationSearchButton
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 

@@ -11,7 +11,7 @@ import {
   Icon,
   Menu
 } from "antd";
-import { baseUrl, authHeader } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import {
   workflowFiltersActions,
   workflowActions,
@@ -25,6 +25,7 @@ import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
 //import { regionData } from "./regionData";
 import { FormattedMessage, injectIntl } from "react-intl";
 import FooterLink from "./FooterLinks";
+import { apiBaseURL } from "../../../config";
 
 //const filter = {};
 const { Sider } = Layout;

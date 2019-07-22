@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Button, Select, Input, Cascader, Form } from "antd";
-import { baseUrl, authHeader } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import { workflowFiltersActions } from "../../actions";
 import _ from "lodash";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { apiBaseURL } from "../../../config";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -59,7 +60,7 @@ class WorkflowAdvFilter extends Component {
         };
 
         fetch(
-          `${baseUrl}fields/export-json/?active_kind=${kindName}`,
+          `${apiBaseURL}fields/export-json/?active_kind=${kindName}`,
           requestOptions
         )
           .then(response => response.json())

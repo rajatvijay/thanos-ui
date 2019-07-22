@@ -1,4 +1,3 @@
-//import { authHeader, baseUrl } from "../_helpers";
 import { stepBodyService } from "../services";
 import { stepBody } from "../constants";
 
@@ -11,10 +10,7 @@ const {
   POST_STEP_USER_FAILURE,
   DELETE_STEP_USER_FAILURE,
   DELETE_STEP_USER_SUCCESS,
-  DELETE_STEP_USER_LOADING,
-  GET_ASSIGNED_USER_LOADING,
-  GET_ASSIGNED_USER_SUCCESS,
-  GET_ASSIGNED_USER_FAILURE
+  DELETE_STEP_USER_LOADING
 } = stepBody;
 
 const postStepUser = obj => async dispatch => {

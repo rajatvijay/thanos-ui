@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { baseUrl, authHeader, history } from "../../_helpers";
+import { authHeader, history } from "../../_helpers";
 import WorkflowDetails from "./WorkflowDetails";
 import { veryfiyClient } from "../../utils/verification";
 import {
@@ -10,6 +10,7 @@ import {
   navbarActions,
   workflowActions
 } from "../../actions";
+import { apiBaseURL } from "../../../config";
 
 class WorkflowDetailsRoot extends Component {
   constructor(props) {

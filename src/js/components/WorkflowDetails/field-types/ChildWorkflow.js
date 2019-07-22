@@ -1,6 +1,6 @@
 //NEWER
 import React, { Component, Fragment } from "react";
-import { authHeader, baseUrl, handleResponse } from "../../../_helpers";
+import { authHeader, handleResponse } from "../../../_helpers";
 import Collapsible from "react-collapsible";
 import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
 import { calculatedData } from "../../Workflow/calculated-data";
@@ -27,6 +27,7 @@ import { workflowKindActions, createWorkflow } from "../../../actions";
 import { FormattedMessage, injectIntl } from "react-intl";
 import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
+import { apiBaseURL } from "../../../../config";
 
 const { getProcessedData } = calculatedData;
 const Option = Select.Option;
@@ -241,7 +242,7 @@ class ChildWorkflowField2 extends Component {
       child_kinds: true
     });
 
-    const url = `${baseUrl}workflows-list/?${param}`;
+    const url = `${apiBaseURL}workflows-list/?${param}`;
 
     this.setState({ fetching: true });
 

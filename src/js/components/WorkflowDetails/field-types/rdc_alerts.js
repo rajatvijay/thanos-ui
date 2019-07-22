@@ -1,42 +1,12 @@
 import React, { Component } from "react";
-//import { authHeader, baseUrl } from "../../../_helpers";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select,
-  Tag,
-  Tooltip,
-  Collapse
-} from "antd";
+import { Row, Col, Table, Icon, Tag, Tooltip, Collapse } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { integrationCommonFunctions } from "./integration_common";
-import { countries } from "./countries.js";
-import {
-  dunsFieldActions,
-  workflowStepActions,
-  workflowDetailsActions
-} from "../../../actions";
+import { dunsFieldActions } from "../../../actions";
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { Column, ColumnGroup } = Table;
 const Panel = Collapse.Panel;
 
-//const dunsResponse = JSON.parse(dunsData);
-
 const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
   getIntegrationSearchButton,
   isDnBIntegrationDataLoading
 } = commonFunctions;

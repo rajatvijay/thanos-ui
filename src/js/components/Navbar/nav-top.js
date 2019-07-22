@@ -25,10 +25,11 @@ import {
 } from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { authHeader, baseUrl, baseUrl2 } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MetaGraph from "../Workflow/MetaGraph";
+import { apiBaseURL, siteOrigin } from "../../../config";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -127,7 +128,10 @@ class NavTop extends Component {
               <Menu.Item key={index}>
                 <a
                   href={
-                    baseUrl2 + "workflow-kinds/" + item.tag + "/data-export/"
+                    siteOrigin +
+                    "/api/v1/workflow-kinds/" +
+                    item.tag +
+                    "/data-export/"
                   }
                   className="text-nounderline"
                 >
