@@ -60,7 +60,9 @@ class DunsSearch extends Component {
       fieldId: this.props.field.id
     };
 
-    this.props.dispatch(dunsFieldActions.dunsSaveField(payload));
+    this.props.dispatch(
+      dunsFieldActions.dunsSaveField(payload, this.props.stepData.id)
+    );
   };
 
   selectItem = data => {
@@ -68,7 +70,9 @@ class DunsSearch extends Component {
       duns: data.organization.duns,
       field_id: this.props.field.id
     };
-    this.props.dispatch(dunsFieldActions.dunsSelectItem(payload));
+    this.props.dispatch(
+      dunsFieldActions.dunsSelectItem(payload, this.props.stepData.id)
+    );
   };
 
   render = () => {
@@ -87,8 +91,11 @@ class DunsSearch extends Component {
 
     let final_html = null;
     if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      (this.props.currentStepFields[this.props.stepData.id] &&
+        this.props.currentStepFields[this.props.stepData.id]
+          .integration_data_loading) ||
+      field.integration_json.status_message ===
+        "Fetching data for this field..."
     ) {
       final_html = (
         <div>

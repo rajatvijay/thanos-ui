@@ -18,7 +18,7 @@ export const dunsFieldActions = {
 ////////////////////////////////
 // update data on field change//
 ////////////////////////////////
-function dunsSaveField(payload) {
+function dunsSaveField(payload, stepId) {
   return dispatch => {
     dispatch(request(payload));
     //dispatch(remove_errors({}));
@@ -32,11 +32,11 @@ function dunsSaveField(payload) {
   };
 
   function request(payload) {
-    return { type: dunsFieldConstants.DUNS_FIELD_REQUEST, payload };
+    return { type: dunsFieldConstants.DUNS_FIELD_REQUEST, payload, stepId };
   }
 
   function remove_errors(payload) {
-    return { type: dunsFieldConstants.DUNS_FIELD_FAILURE, payload };
+    return { type: dunsFieldConstants.DUNS_FIELD_FAILURE, payload, stepId };
   }
 
   function success(field) {
@@ -53,11 +53,11 @@ function dunsSaveField(payload) {
       type: "error",
       message: "Unable to save."
     });
-    return { type: dunsFieldConstants.DUNS_FIELD_FAILURE, error };
+    return { type: dunsFieldConstants.DUNS_FIELD_FAILURE, error, stepId };
   }
 }
 
-function dunsSelectItem(payload) {
+function dunsSelectItem(payload, stepId) {
   return dispatch => {
     dispatch(request(payload));
     //dispatch(remove_errors({}));
@@ -71,11 +71,11 @@ function dunsSelectItem(payload) {
   };
 
   function request(payload) {
-    return { type: dunsFieldConstants.DUNS_SELECT_REQUEST, payload };
+    return { type: dunsFieldConstants.DUNS_SELECT_REQUEST, payload, stepId };
   }
 
   function remove_errors(payload) {
-    return { type: dunsFieldConstants.DUNS_SELECT_FAILURE, payload };
+    return { type: dunsFieldConstants.DUNS_SELECT_FAILURE, payload, stepId };
   }
 
   function success(field) {
@@ -97,6 +97,6 @@ function dunsSelectItem(payload) {
       type: "error",
       message: "Unable to save."
     });
-    return { type: dunsFieldConstants.DUNS_SELECT_FAILURE, error };
+    return { type: dunsFieldConstants.DUNS_SELECT_FAILURE, error, stepId };
   }
 }
