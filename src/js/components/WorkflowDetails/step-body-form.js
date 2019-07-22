@@ -60,9 +60,6 @@ class StepBodyForm extends Component {
   };
 
   handleSubmit = e => {
-    if (this.state.error) {
-    }
-
     const { workflowId } = this.props;
 
     e.preventDefault();
