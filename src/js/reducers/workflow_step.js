@@ -97,6 +97,7 @@ export function currentStepFields(state = initialState, action) {
     ////////////////////////////////////////////////////////////
     //Update step data on first/initial answer OR POST REQUEST//
     ////////////////////////////////////////////////////////////
+    // TODO: Is this even required?
     case fieldConstants.POST_FIELD_REQUEST:
       return {
         ...state,
@@ -123,6 +124,7 @@ export function currentStepFields(state = initialState, action) {
         loading: false,
         error: action.error
       };
+    // TODO: Fix the actions below this, when cleaning!
 
     /////////////////////////////
     //Update options for field //
@@ -150,47 +152,36 @@ export function currentStepFields(state = initialState, action) {
     ///////////////////////
     ///Duns field update///
     ///////////////////////
+    case dunsFieldConstants.DUNS_SELECT_REQUEST:
     case dunsFieldConstants.DUNS_FIELD_REQUEST:
       return {
         ...state,
-        integration_data_loading: true
+        [action.stepId]: {
+          ...state[action.stepId],
+          integration_data_loading: true
+        }
       };
+    case dunsFieldConstants.DUNS_SELECT_SUCCESS:
     case dunsFieldConstants.DUNS_FIELD_SUCCESS:
       return {
         ...state,
-        loading: false,
-        integration_data_loading: false,
-        currentStepFields: action.field,
-        error: {}
+        [action.field.id]: {
+          ...state[action.stepId],
+          integration_data_loading: false,
+          currentStepFields: action.field,
+          error: {}
+        }
       };
+    case dunsFieldConstants.DUNS_SELECT_FAILURE:
     case dunsFieldConstants.DUNS_FIELD_FAILURE:
       return {
         ...state,
-        error: action.error
+        [action.stepId]: {
+          ...state[action.stepId],
+          integration_data_loading: false,
+          error: action.error
+        }
       };
-
-    /////////////////////
-    ///Duns select item//
-    /////////////////////
-    case dunsFieldConstants.DUNS_SELECT_REQUEST:
-      return {
-        ...state,
-        integration_data_loading: true
-      };
-    case dunsFieldConstants.DUNS_SELECT_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        integration_data_loading: false,
-        currentStepFields: action.field,
-        error: {}
-      };
-    case dunsFieldConstants.DUNS_SELECT_FAILURE:
-      return {
-        ...state,
-        error: action.error
-      };
-
     default:
       return state;
   }
