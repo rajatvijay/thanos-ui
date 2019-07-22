@@ -524,7 +524,12 @@ export class GetMergedData extends React.Component {
         <span>
           <span
             className={" ellip-small text-middle "}
-            style={{ maxWidth: "100%" }}
+            style={{
+              maxWidth: "100%",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
+              overflow: "hidden"
+            }}
           >
             <span className="t-cap">
               {item.show_label || (is_alert && item.link) ? item.label : ""}
