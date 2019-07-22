@@ -3,7 +3,6 @@ import {
   Icon,
   Menu,
   Dropdown,
-  Button,
   Divider,
   Tooltip,
   Row,
@@ -18,7 +17,6 @@ import _ from "lodash";
 import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
-import addUser from "../../../images/addUser.svg";
 import StepAssignmentUsers from "./StepAssignmentUsers";
 
 class StepBody extends Component {

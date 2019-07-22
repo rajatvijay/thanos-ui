@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Icon, Tooltip, Divider, Form } from "antd";
 import _ from "lodash";
-import { baseUrl, authHeader, history } from "../../_helpers";
+import { authHeader, history } from "../../_helpers";
 import { getFieldType } from "./field-types";
 import { commonFunctions } from "./field-types/commons";
+import { apiBaseURL } from "../../../config";
 
 const FormItem = Form.Item;
 const {
@@ -55,7 +56,7 @@ class FieldItem extends Component {
     };
 
     this.setState({ fetching: true });
-    let url = baseUrl + this.decryptURL();
+    let url = apiBaseURL + this.decryptURL();
     fetch(url, requestOptions)
       .then(response => {
         if (!response.ok) {

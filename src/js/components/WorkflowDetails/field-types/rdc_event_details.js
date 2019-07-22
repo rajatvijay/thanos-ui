@@ -1,39 +1,13 @@
 import React, { Component } from "react";
-//import { authHeader, baseUrl } from "../../../_helpers";
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select,
-  Tabs,
-  Tag
-} from "antd";
+import { Table, Icon, Tabs, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { countries } from "./countries.js";
-import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
-import { EventDetailComp, getEventItem } from "./rdc_alert_metadata";
+import { getEventItem } from "./rdc_alert_metadata";
 import { event_status, status_filters } from "../EventStatuses";
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { Column, ColumnGroup } = Table;
 const TabPane = Tabs.TabPane;
 
-const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
-  getIntegrationSearchButton,
-  isDnBIntegrationDataLoading
-} = commonFunctions;
+const { isDnBIntegrationDataLoading } = commonFunctions;
 
 class RDCEventDetailComponent extends Component {
   constructor() {

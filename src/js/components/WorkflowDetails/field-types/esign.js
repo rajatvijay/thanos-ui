@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Button, Form, Row, Col, Input, notification } from "antd";
 import { commonFunctions } from "./commons";
-import { authHeader, baseUrl } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
+import { apiBaseURL } from "../../../../config";
 
 const FormItem = Form.Item;
 const { onFieldChange, field_error, getRequired, isDisabled } = commonFunctions;
@@ -59,7 +60,7 @@ class Doc extends Component {
     this.setState({ fetching: true });
 
     const _response = await fetch(
-      baseUrl +
+      apiBaseURL +
         "fields/" +
         this.props.field.definition.id +
         "/download_attachment/?format=json",

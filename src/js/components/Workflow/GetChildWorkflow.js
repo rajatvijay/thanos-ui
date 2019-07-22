@@ -3,7 +3,8 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import WorkflowItem from "./WorkflowItem";
 import { Tabs, Checkbox, notification } from "antd";
-import { authHeader, baseUrl } from "../../_helpers";
+import { authHeader } from "../../_helpers";
+import { apiBaseURL } from "../../../config";
 
 const TabPane = Tabs.TabPane;
 
@@ -92,7 +93,7 @@ class GetChildWorkflow extends Component {
       })
     };
     return fetch(
-      baseUrl + "workflows/" + workflowId + "/checkmark-related-type/",
+      apiBaseURL + "workflows/" + workflowId + "/checkmark-related-type/",
       requestOptions
     )
       .then(response => {

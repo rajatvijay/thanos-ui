@@ -1,5 +1,5 @@
-import { authHeader, baseUrl } from "../_helpers";
-import { tenant } from "../../config";
+import { authHeader } from "../_helpers";
+import { apiBaseURL, tenant } from "../../config";
 
 export const userService = {
   login,
@@ -23,7 +23,7 @@ function login(username, password, token) {
     credentials: "include",
     body: JSON.stringify({ email: username, password: password, token: token })
   };
-  return fetch(baseUrl + "users/login/", requestOptions)
+  return fetch(apiBaseURL + "users/login/", requestOptions)
     .then(response => {
       if (!response.ok) {
         return response.json().then(error => {
@@ -57,7 +57,7 @@ function loginOtp(username, password) {
     body: JSON.stringify({ email: username, token: password })
   };
 
-  return fetch(baseUrl + "users/submit_otp/", requestOptions)
+  return fetch(apiBaseURL + "users/submit_otp/", requestOptions)
     .then(response => {
       if (!response.ok) {
         return response.json().then(error => {
@@ -88,7 +88,7 @@ function tokenLogin(token, next) {
   };
 
   return fetch(
-    baseUrl + "users/process_token?token=" + token + "&next=" + next,
+    apiBaseURL + "users/process_token?token=" + token + "&next=" + next,
     requestOptions
   )
     .then(response => {
@@ -120,7 +120,7 @@ export const logout = async () => {
     //body: JSON.stringify({})
   };
   try {
-    return await fetch(baseUrl + "users/logout/", requestOptions);
+    return await fetch(apiBaseURL + "users/logout/", requestOptions);
   } catch (error) {
     throw error;
   }
@@ -134,7 +134,7 @@ export const sendEmailAuthToken = async (email, next) => {
     body: JSON.stringify({ email, next })
   };
   try {
-    return await fetch(baseUrl + "users/magic_link/", requestOptions);
+    return await fetch(apiBaseURL + "users/magic_link/", requestOptions);
   } catch (error) {
     throw error;
   }
@@ -147,9 +147,12 @@ function checkAuth() {
     credentials: "include"
   };
 
-  return fetch(baseUrl + "users/me/?format=json", requestOptions)
+  return fetch(apiBaseURL + "users/me/?format=json", requestOptions)
     .then(response => {
       if (!response.ok) {
+        if (response.status === 403) {
+          window.location = "/login";
+        }
         return Promise.reject(response.statusText);
       }
       return response.json();
@@ -174,7 +177,7 @@ function getAll() {
     headers: authHeader.get()
   };
 
-  return fetch(baseUrl + "users/", requestOptions).then(handleResponse);
+  return fetch(apiBaseURL + "users/", requestOptions).then(handleResponse);
 }
 
 function getById(id) {
@@ -184,7 +187,7 @@ function getById(id) {
     credentials: "include"
   };
 
-  return fetch(baseUrl + "users/" + id + "/", requestOptions).then(
+  return fetch(apiBaseURL + "users/" + id + "/", requestOptions).then(
     handleResponse
   );
 }
@@ -206,7 +209,7 @@ function update(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch(baseUrl + "users/" + user.id, requestOptions).then(
+  return fetch(apiBaseURL + "users/" + user.id, requestOptions).then(
     handleResponse
   );
 }
@@ -218,7 +221,7 @@ function _delete(id) {
     headers: authHeader.post()
   };
 
-  return fetch(baseUrl + "users/" + id, requestOptions).then(handleResponse);
+  return fetch(apiBaseURL + "users/" + id, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

@@ -1,4 +1,5 @@
-import { authHeader, baseUrl, handleResponse } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 export const workflowKindService = {
   getAll,
@@ -14,7 +15,7 @@ function getAll() {
     credentials: "include"
   };
 
-  return fetch(baseUrl + "workflow-kinds/?limit=50", requestOptions).then(
+  return fetch(apiBaseURL + "workflow-kinds/?limit=50", requestOptions).then(
     handleResponse
   );
 }
@@ -27,7 +28,7 @@ function getAlertCount(tag) {
   };
 
   return fetch(
-    baseUrl + "workflow-kinds/" + tag + "/alert-count",
+    apiBaseURL + "workflow-kinds/" + tag + "/alert-count",
     requestOptions
   ).then(handleResponse);
 }
@@ -40,7 +41,7 @@ function getCount(tag) {
   };
 
   return fetch(
-    baseUrl + "workflow-kinds/" + tag + "/count/?type=stepgroup",
+    apiBaseURL + "workflow-kinds/" + tag + "/count/?type=stepgroup",
     requestOptions
   ).then(handleResponse);
 }
@@ -53,7 +54,7 @@ function getStatusCount(tag) {
   };
 
   return fetch(
-    baseUrl + "workflow-kinds/" + tag + "/count/?type=status",
+    apiBaseURL + "workflow-kinds/" + tag + "/count/?type=status",
     requestOptions
   ).then(handleResponse);
 }

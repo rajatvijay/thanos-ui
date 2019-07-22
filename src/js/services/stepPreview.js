@@ -1,4 +1,5 @@
-import { authHeader, baseUrl, handleResponse } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 export const stepPreviewService = { getStepPreviewFields };
 
@@ -11,7 +12,7 @@ function getStepPreviewFields(step) {
 
   return fetch(
     //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    baseUrl +
+    apiBaseURL +
       "workflows/" +
       step.workflowId +
       "/stepgroups/" +

@@ -15,10 +15,11 @@ import validator from "validator";
 import _ from "lodash";
 import { loginOtp } from "../../actions";
 import { connect } from "react-redux";
-import { baseUrl, authHeader } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
 
 import { FormattedMessage, injectIntl } from "react-intl";
+import { apiBaseURL } from "../../../config";
 
 const FormItem = Form.Item;
 
@@ -196,7 +197,7 @@ class OTPForm extends React.Component {
       body: JSON.stringify({ email: payload })
     };
 
-    fetch(baseUrl + "users/generate_otp/", requestOptions)
+    fetch(apiBaseURL + "users/generate_otp/", requestOptions)
       .then(function(response) {
         if (!response.ok) {
           response.json().then(data => {

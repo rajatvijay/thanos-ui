@@ -1,21 +1,15 @@
-const DEFAULT_TENANT = "walmart";
-const DEFAULT_BASE_URL = "https://api.slackcart.com/api/v1/";
-
-function getAPIBaseURL() {
-  const url = new URL(window.location.href);
-  const { hostname, protocol } = url;
-  const host = hostname.split(".");
-  return protocol + "//api." + host[1] + "." + host[2] + "/api/v1/";
-}
-
 function getTenant() {
   const url = new URL(window.location.href);
   return url.hostname.split(".")[0];
 }
 
-function isProductionEnv() {
-  return process.env.NODE_ENV === "production" ? true : false;
-}
+const DEFAULT_TENANT = process.env.REACT_APP_DEFAULT_TENANT || "walmart";
+const apiOrigin = process.env.REACT_APP_API_ORIGIN;
 
-export const baseUrl = isProductionEnv() ? getAPIBaseURL() : DEFAULT_BASE_URL;
-export const tenant = isProductionEnv() ? getTenant() : DEFAULT_TENANT;
+// Building via scripts keeps the environment as production which can be confusing
+// hence the choice of this variable name to be more verbose
+const isBuildEnv = process.env.NODE_ENV === "production";
+
+export const tenant = isBuildEnv ? getTenant() : DEFAULT_TENANT;
+export const siteOrigin = `${document.location.origin}`;
+export const apiBaseURL = `${apiOrigin}/api/v1/`;

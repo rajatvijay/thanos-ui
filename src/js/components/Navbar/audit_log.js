@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
-import { authHeader, baseUrl } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import Moment from "react-moment";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
+import { apiBaseURL } from "../../../config";
 
 const TabPane = Tabs.TabPane;
 
@@ -49,7 +50,7 @@ class AuditListTabs extends Component {
       return filename && (filename.match(/filename=\"(.*)\"/) || []).pop();
     }
 
-    let url = `${baseUrl}workflows/${this.props.id}/export/`;
+    let url = `${apiBaseURL}workflows/${this.props.id}/export/`;
     return fetch(url, requestOptions).then(function(resp) {
       resp.blob().then(function(blob) {
         // Allowing filename and MIME type to be decided by the backend
@@ -131,11 +132,11 @@ class AuditList extends Component {
   loadData = () => {
     let url = this.state.data.next
       ? this.state.data.next
-      : baseUrl +
+      : apiBaseURL +
         `workflows/${this.props.id}/activity/?actions=${this.props.actions.join(
           ","
         )}`;
-    //let url = this.state.data.next? this.state.data.next: baseUrl + "activities/";
+    //let url = this.state.data.next? this.state.data.next: apiBaseURL + "activities/";
 
     const requestOptions = {
       method: "GET",

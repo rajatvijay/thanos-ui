@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { authHeader, baseUrl } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
 import { Form, Select as AntSelect, Row, Col } from "antd";
 import _ from "lodash";
 import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import validator from "validator";
+import { apiBaseURL } from "../../../../config";
 
 const FormItem = Form.Item;
 const Option = AntSelect.Option;
@@ -42,7 +43,7 @@ class BU extends Component {
       credentials: "include"
     };
 
-    fetch(baseUrl + "fields/export-business-json/", requestOptions)
+    fetch(apiBaseURL + "fields/export-business-json/", requestOptions)
       .then(response => response.json())
       .then(body => {
         if (_.isEmpty(body.results)) {

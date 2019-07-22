@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { authHeader, baseUrl } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
 import { Form, Select as AntSelect, Row, Col } from "antd";
 import _ from "lodash";
 import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import validator from "validator";
+import { apiBaseURL } from "../../../../config";
 
 const FormItem = Form.Item;
 const Option = AntSelect.Option;
@@ -42,7 +43,7 @@ class Reg extends Component {
       credentials: "include"
     };
 
-    fetch(baseUrl + "fields/export-region-json/", requestOptions)
+    fetch(apiBaseURL + "fields/export-region-json/", requestOptions)
       .then(response => response.json())
       .then(body => {
         if (_.isEmpty(body.results)) {
@@ -53,8 +54,8 @@ class Reg extends Component {
             loading: false
           });
         } else {
-          const sortedResults = body.results.sort(
-            (a, b) => (a.label > b.label ? 1 : -1)
+          const sortedResults = body.results.sort((a, b) =>
+            a.label > b.label ? 1 : -1
           );
           this.setState({ data: sortedResults, loading: false });
         }

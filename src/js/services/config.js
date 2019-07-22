@@ -1,4 +1,5 @@
-import { authHeader, baseUrl } from "../_helpers";
+import { authHeader } from "../_helpers";
+import { apiBaseURL } from "../../config";
 
 export const configService = {
   getConfig
@@ -11,7 +12,7 @@ function getConfig() {
     credentials: "include"
   };
 
-  return fetch(baseUrl + "customers/configuration/", requestOptions).then(
+  return fetch(apiBaseURL + "customers/configuration/", requestOptions).then(
     handleResponse
   );
 }
