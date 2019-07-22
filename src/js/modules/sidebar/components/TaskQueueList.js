@@ -157,7 +157,7 @@ function ToggleListSizeButton({ showingAll, onClick }) {
 
 const StyledTaskQueueHeading = styled.h1`
   color: #138bd4;
-  margin: 30px 0px 20px 15px;
+  margin: 30px 0px 20px 20px;
   font-size: 12px;
   font-weight: bold;
   letter-spacing: 0.8px;

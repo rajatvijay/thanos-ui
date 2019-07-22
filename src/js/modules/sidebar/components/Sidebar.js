@@ -148,12 +148,14 @@ class Sidebar extends Component {
                 height: 65px;
                 color: white;
                 font-size: 18px;
+                padding-left: 10px;
               }
               .ant-select-selection-selected-value {
                 line-height: 65px;
               }
               .ant-select-arrow {
                 color: white;
+                margin-right: 10px;
               }
             `}
             dropdownClassName="kind-select"
