@@ -521,11 +521,9 @@ class StepBodyForm extends Component {
       ["asc"]
     );
 
-    const error = this.getUnifiedErrors();
-
     let param = {
       currentStepFields: this.props.currentStepFields,
-      error: error,
+      error: this.getUnifiedErrors(),
       onFieldChange: this.onFieldChange,
       workflowId: this.props.currentStepFields.currentStepFields
         ? this.props.currentStepFields.currentStepFields.workflow
