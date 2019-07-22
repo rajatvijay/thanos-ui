@@ -23,9 +23,13 @@ const sizeFractions = {
 };
 
 class StepBodyForm extends Component {
-  state = {
-    version: false
-  };
+  constructor() {
+    super();
+    this.state = {
+      version: false,
+      error: {}
+    };
+  }
 
   getWorkflowId = () => {
     let path = document.location.pathname;
@@ -56,6 +60,9 @@ class StepBodyForm extends Component {
   };
 
   handleSubmit = e => {
+    if (this.state.error) {
+    }
+
     const { workflowId } = this.props;
 
     e.preventDefault();
@@ -80,37 +87,65 @@ class StepBodyForm extends Component {
       return false;
     }*/
 
-    if (calculated === "file") {
-      let method = "save";
-      let data = {
-        attachment: e,
-        field: payload.field.id,
-        workflow: payload.workflowId
-      };
-      this.callDispatch(data, method, payload);
+    const id = payload.field.id;
 
-      // console.log(e.target);
-    } else if (calculated) {
-      let method = "save";
-      let data = {
-        answer: e || e === 0 ? e : "",
-        field: payload.field.id,
-        workflow: payload.workflowId
-      };
+    const { regex_value } = payload.field;
+    const re = new RegExp(regex_value);
+    let error = this.state.error;
+    let ans = null;
+    let isvalid = true;
 
-      this.callDispatch(data, method, payload);
-    } else if (e.target) {
-      let method = "save";
-      let data = {
-        answer: e.target.value,
-        field: payload.field.id,
-        workflow: payload.workflowId
-      };
+    if (regex_value) {
+      if (calculated) {
+        ans = e || e === 0 ? e : "";
+      } else if (e.target) {
+        ans = e.target.value;
+      }
 
-      if (e.type == "blur") {
-        this.props.dispatch(workflowStepActions.saveField(data, "blur"));
+      isvalid = re.test(ans);
+
+      if (!isvalid) {
+        error[id] = payload.field.regex_error;
+        this.setState({ error: error });
       } else {
+        error[id] = "";
+        this.setState({ error: error });
+      }
+    }
+
+    if (isvalid) {
+      if (calculated === "file") {
+        let method = "save";
+        let data = {
+          attachment: e,
+          field: payload.field.id,
+          workflow: payload.workflowId
+        };
         this.callDispatch(data, method, payload);
+
+        // console.log(e.target);
+      } else if (calculated) {
+        let method = "save";
+        let data = {
+          answer: e || e === 0 ? e : "",
+          field: payload.field.id,
+          workflow: payload.workflowId
+        };
+
+        this.callDispatch(data, method, payload);
+      } else if (e.target) {
+        let method = "save";
+        let data = {
+          answer: e.target.value,
+          field: payload.field.id,
+          workflow: payload.workflowId
+        };
+
+        if (e.type == "blur") {
+          this.props.dispatch(workflowStepActions.saveField(data, "blur"));
+        } else {
+          this.callDispatch(data, method, payload);
+        }
       }
     }
   };
@@ -263,7 +298,6 @@ class StepBodyForm extends Component {
       },
       function(error) {
         console.log(error);
-        //notify eorro;
       }
     );
   };
@@ -458,6 +492,18 @@ class StepBodyForm extends Component {
       }
   };
 
+  getUnifiedErrors = () => {
+    const currentStepErrors = this.props.currentStepFields.error;
+    const currentFieldError = this.state.error;
+    let consolidatedErrors = Object.assign(
+      {},
+      currentStepErrors,
+      currentFieldError
+    );
+
+    return consolidatedErrors;
+  };
+
   render = () => {
     if (!this.props.currentStepFields) {
       return null;
@@ -478,9 +524,11 @@ class StepBodyForm extends Component {
       ["asc"]
     );
 
+    const error = this.getUnifiedErrors();
+
     let param = {
       currentStepFields: this.props.currentStepFields,
-      error: this.props.currentStepFields.error,
+      error: error,
       onFieldChange: this.onFieldChange,
       workflowId: this.props.currentStepFields.currentStepFields
         ? this.props.currentStepFields.currentStepFields.workflow
@@ -516,6 +564,7 @@ class StepBodyForm extends Component {
       reset() {
         this.fields = [];
       },
+
       getFieldForRender(field) {
         let fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
@@ -527,6 +576,7 @@ class StepBodyForm extends Component {
           <FieldItem stepData={that.props.stepData} fieldParams={fieldParams} />
         );
       },
+
       getSizeFraction(field) {
         // Get the current field size in fraction
         if (field.definition && field.definition.size in sizeFractions) {
