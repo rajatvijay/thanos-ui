@@ -229,6 +229,16 @@ class Workflow extends Component {
       }
     }
 
+    if (localStorage.getItem("magicLogin")) {
+      return (
+        <div style={{ paddingTop: "150px" }}>
+          <h4 className="text-center t-24 text-bold">
+            You are unauthorised to view this page.
+          </h4>
+        </div>
+      );
+    }
+
     return (
       <Layout
         className="workflow-container inner-container"
