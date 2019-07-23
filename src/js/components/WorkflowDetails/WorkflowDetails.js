@@ -94,6 +94,7 @@ class WorkflowDetails extends Component {
     if (
       !minimalUI &&
       match &&
+      workflowKeys[workflowId] &&
       workflowKeys[workflowId].stepId !== stepId &&
       workflowKeys[workflowId].groupId !== groupId
     ) {
