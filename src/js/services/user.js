@@ -150,9 +150,6 @@ function checkAuth() {
   return fetch(apiBaseURL + "users/me/?format=json", requestOptions)
     .then(response => {
       if (!response.ok) {
-        if (response.status === 403) {
-          window.location = "/login";
-        }
         return Promise.reject(response.statusText);
       }
       return response.json();
