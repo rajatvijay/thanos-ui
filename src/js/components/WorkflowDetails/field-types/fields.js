@@ -25,6 +25,7 @@ import flags from "../../../../images/flags2.png";
 import Dropzone from "react-dropzone";
 import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
+import { FormattedMessage } from "react-intl";
 import validator from "validator";
 import { ESign } from "./esign.js";
 import { apiBaseURL, siteOrigin } from "../../../../config";
@@ -123,10 +124,10 @@ export const Bool = props => {
         defaultValue={defVal ? defVal : null}
       >
         <Radio value={"True"} disabled={isDisabled(props)}>
-          Yes
+          <FormattedMessage id="commonTextInstances.yes" />
         </Radio>
         <Radio disabled={isDisabled(props)} value={"False"}>
-          No
+          <FormattedMessage id="commonTextInstances.no" />
         </Radio>
       </RadioGroup>
     </FormItem>
