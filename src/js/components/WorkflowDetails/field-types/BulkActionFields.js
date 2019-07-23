@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Radio, Modal, notification } from "antd";
+import { FormattedMessage } from "react-intl";
 import { css } from "emotion";
 import { authHeader } from "../../../_helpers";
 import { apiBaseURL } from "../../../../config";
@@ -58,8 +59,12 @@ function getField(fieldDetail, OnFieldChange, fieldList, getFieldDecorator) {
             <Radio.Group
               onChange={event => OnFieldChange(event, fieldDetail.tag)}
             >
-              <Radio value="True">Yes</Radio>
-              <Radio value="False">No</Radio>
+              <Radio value="True">
+                <FormattedMessage id="commonTextInstances.yes" />
+              </Radio>
+              <Radio value="False">
+                <FormattedMessage id="commonTextInstances.no" />
+              </Radio>
             </Radio.Group>
           )}
         </Form.Item>

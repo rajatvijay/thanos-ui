@@ -77,7 +77,9 @@ export default {
       OtpEmpty: "One time password can't be empty",
       enterOtp: "Enter the one time password to verify your account",
       oneTimePassword: "One time password",
-      archiveConfirmText: "Are you sure you want to archive this workflow?"
+      archiveConfirmText: "Are you sure you want to archive this workflow?",
+      yes: "Yes",
+      no: "No"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -208,7 +210,9 @@ export default {
       enterOtp:
         "Ingrese la contraseña de un solo uso para verificar su cuenta ",
       oneTimePassword: "Contraseña de una sola vez",
-      archiveConfirmText: "¿Seguro que quieres archivar este flujo de trabajo?"
+      archiveConfirmText: "¿Seguro que quieres archivar este flujo de trabajo?",
+      yes: "Sí",
+      no: "No"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por ",
