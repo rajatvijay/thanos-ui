@@ -114,7 +114,7 @@ const logoutNav = () => {
   localStorage.removeItem("magicLogin");
   localStorage.removeItem("customHistory");
   removeCookies();
-  document.location.href = siteOrigin + "/";
+  document.location.href = siteOrigin + "/api/v1/users/logout/";
 };
 
 const logoutXHR = () => async dispatch => {
