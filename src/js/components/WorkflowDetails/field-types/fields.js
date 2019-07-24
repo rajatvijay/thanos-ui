@@ -83,14 +83,21 @@ export const Text = props => {
         disabled={isDisabled(props)}
         autosize={{ minRows: rows }}
         placeholder={props.field.placeholder}
-        defaultValue={
+        // defaultValue={
+        //   props.decryptedData
+        //     ? props.decryptedData.answer
+        //     : props.field.answers[0]
+        //     ? props.field.answers[0].answer
+        //     : props.field.definition.defaultValue
+        // }
+        {...feedValue(props)}
+        value={
           props.decryptedData
             ? props.decryptedData.answer
             : props.field.answers[0]
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
-        {...feedValue(props)}
         autoComplete="new-password"
         onChange={e => props.onFieldChange(e, props)}
         onBlur={e => props.onFieldChange(e, props)}
@@ -411,6 +418,8 @@ export const Select = props => {
     save = onFieldChangeArray.bind(this, props);
   }
   let that = this;
+  // console.log("props",getExtra(props))
+
   return (
     <FormItem
       label={getLabel(props, that)}
