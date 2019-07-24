@@ -52,39 +52,39 @@ function getLabel(props, that) {
     </Tooltip>
   ) : null;
 
+  let commentClasses =
+    props.field.comment_count > 0 ? "comment-icon has-comment" : "comment-icon";
+
+  const comment = (
+    <span className="float-right">
+      <span className={commentClasses}>{addCommentBtn(that, props)}</span>
+      {/*fieldFlagDropdown(that, props)*/}
+
+      {props.field.alerts
+        ? props.field.alerts.map(function(item) {
+            return (
+              <Tag key={item.alert.id} className="v-tag alert-metal ">
+                {item.alert.category.name}{" "}
+                <i
+                  className="material-icons text-middle pd-left-sm"
+                  style={{
+                    fontSize: "12px",
+                    color: item.alert.category.color_label
+                  }}
+                >
+                  fiber_manual_records
+                </i>
+              </Tag>
+            );
+          })
+        : null}
+    </span>
+  );
+
   if (that) {
     let label = (
       <span className="label-with-action">
-        <span className="float-right">
-          <span
-            className={
-              "comment-icon " +
-              (props.field.comment_count > 0 ? " has-comment " : "")
-            }
-          >
-            {addCommentBtn(that, props)}
-          </span>
-          {/*fieldFlagDropdown(that, props)*/}
-
-          {_.size(props.field.alerts)
-            ? _.map(props.field.alerts, function(item) {
-                return (
-                  <Tag key={item.alert.id} className="v-tag alert-metal ">
-                    {item.alert.category.name}{" "}
-                    <i
-                      className="material-icons text-middle pd-left-sm"
-                      style={{
-                        fontSize: "12px",
-                        color: item.alert.category.color_label
-                      }}
-                    >
-                      fiber_manual_records
-                    </i>
-                  </Tag>
-                );
-              })
-            : null}
-        </span>
+        {comment}
 
         {props.field.answers.length !== 0 ? answeredBy : required}
 
@@ -102,12 +102,14 @@ function getLabel(props, that) {
     return label;
   } else {
     return props.field.label_value ? (
-      <span>
+      <span className="label-with-action">
+        {comment}
         {props.field.answers.length !== 0 ? answeredBy : required}
         {props.field.label_value} {helpText}
       </span>
     ) : (
-      <span>
+      <span className="label-with-action">
+        {comment}
         {props.field.answers.length !== 0 ? answeredBy : required}
         {props.field.definition.body} {helpText}
       </span>

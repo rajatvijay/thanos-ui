@@ -411,6 +411,16 @@ export const Select = props => {
     save = onFieldChangeArray.bind(this, props);
   }
   let that = this;
+
+  const options = getExtra(props) || [];
+  const answer = props.field.answers[0]
+    ? single
+      ? props.field.answers[0].answer
+      : stringToArray(props.field.answers[0])
+    : stringToArray(props.field.definition.defaultValue);
+
+  //const value = options ? options.find(item =>{return item.value === answer}) :null
+
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -426,13 +436,7 @@ export const Select = props => {
         mode={single ? "default" : "multiple"}
         style={getStyle(props)}
         disabled={isDisabled(props)}
-        value={
-          props.field.answers[0]
-            ? single
-              ? props.field.answers[0].answer
-              : stringToArray(props.field.answers[0])
-            : stringToArray(props.field.definition.defaultValue)
-        }
+        value={answer}
         onChange={save}
         showSearch={true}
         filterOption={(input, option) =>
@@ -441,15 +445,17 @@ export const Select = props => {
             .toLowerCase()
             .indexOf(input.toLowerCase()) >= 0
         }
+        optionLabelProp="label"
         //filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
-        {_.map(getExtra(props), function(item, index) {
-          return (
-            <Option key={index} value={item.value}>
-              {item.label}
-            </Option>
-          );
-        })}
+        {options.length &&
+          options.map(function(item, index) {
+            return (
+              <Option key={item.value} value={item.value}>
+                {item.label}
+              </Option>
+            );
+          })}
       </AntSelect>
     </FormItem>
   );
