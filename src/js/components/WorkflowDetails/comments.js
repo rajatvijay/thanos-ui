@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment";
 import {
   Layout,
   Icon,
@@ -505,9 +506,7 @@ class Comments extends Component {
                                     }}
                                   >
                                     <Tooltip
-                                      title={new Date(
-                                        msg.created_at
-                                      ).toISOString()}
+                                      title={moment(msg.created_at).format()}
                                     >
                                       <Moment fromNow>{msg.created_at}</Moment>
                                     </Tooltip>
