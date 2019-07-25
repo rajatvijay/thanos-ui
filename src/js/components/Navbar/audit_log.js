@@ -214,7 +214,7 @@ const ActivityLogSimple = ({ item }) => {
       {item.action.type} {item.object.name}
       <br />
       <span className="small text-light">
-        <Tooltip title={new Date(item.actiontime.humanize_time).toISOString()}>
+        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
           <Moment fromNow>{item.actiontime.datetime}</Moment>
         </Tooltip>
       </span>
@@ -233,7 +233,7 @@ const ActivityLogEmail = ({ item }) => {
       </a>
       <br />
       <span className="small text-light">
-        <Tooltip title={new Date(item.actiontime.humanize_time).toISOString()}>
+        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
           <Moment fromNow>{item.actiontime.datetime}</Moment>
         </Tooltip>
       </span>
