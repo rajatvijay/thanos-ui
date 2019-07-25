@@ -362,7 +362,8 @@ function getIntegrationSearchButton(props) {
     dnb_initiate_investigation: "Initiate Investigation",
     dnb_investigation_status: "Get Investigation Status",
     ocr: "Get OCR data",
-    docusign: "Sign with Docusign"
+    docusign: "Sign with Docusign",
+    krypton_ai_push: "Push AI data"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
