@@ -1304,7 +1304,7 @@ class ChildWorkflowField2 extends Component {
                   handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
                 />
               ) : (
-                <div>No related workflows</div>
+                <div>No results found</div>
               )}
             </div>
           </div>
