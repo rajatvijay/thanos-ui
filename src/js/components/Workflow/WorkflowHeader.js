@@ -363,6 +363,23 @@ class HeaderOptions extends React.Component {
       </Tooltip>
     );
 
+    const showComment =
+      props.showCommentIcon && props.isEmbedded && workflow.comments_allowed;
+
+    const adjudicateText =
+      selected_flag && props.isEmbedded
+        ? selected_flag.flag_detail.label
+        : "Adjudicate";
+
+    const adjudicateTooltip =
+      selected_flag && props.isEmbedded
+        ? selected_flag.reason_code
+        : "Adjudicate";
+
+    const adjBtnColor = selected_flag
+      ? selected_flag.flag_detail.extra.color
+      : "";
+
     return (
       <Row>
         <Col
@@ -377,40 +394,24 @@ class HeaderOptions extends React.Component {
         >
           {status}
         </Col>
+
         {props.isEmbedded ? (
           <Col span={16} className="text-right">
-            {props.showCommentIcon &&
-            props.isEmbedded &&
-            workflow.comments_allowed ? (
+            {showComment ? (
               <span
                 title="Adjudicate"
                 className="add_comment_btn text-ellipsis"
               >
-                <Tooltip title="Adjudicate">
+                <Tooltip title={adjudicateTooltip}>
                   <span
                     className="ant-btn ant-btn-primary btn-o btn-sm text-ellipsis"
+                    style={{ color: adjBtnColor, borderColor: adjBtnColor }}
                     onClick={that.getComment.bind(that, props.workflow.id)}
                   >
-                    Adjudicate
+                    {adjudicateText}
                   </span>
                 </Tooltip>
               </span>
-            ) : null}
-
-            {selected_flag && props.isEmbedded ? (
-              <Tooltip title={selected_flag.flag_detail.label}>
-                <span style={{ marginTop: "3px" }}>
-                  <i
-                    style={{
-                      color: selected_flag.flag_detail.extra.color,
-                      width: "14px"
-                    }}
-                    className="material-icons  t-12 "
-                  >
-                    fiber_manual_records
-                  </i>
-                </span>
-              </Tooltip>
             ) : null}
           </Col>
         ) : null}

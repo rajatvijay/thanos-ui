@@ -188,34 +188,31 @@ class DuplicateCheckComp extends Component {
             <div className="">No duplicates found</div>
           ) : (
             <div className="workflow-list">
-              <div className="paper">
-                {this.state.childWorkflow &&
-                this.state.childWorkflow.length > 0 ? (
-                  this.state.childWorkflow.map(workflow => {
-                    return (
-                      <div className="workflow-list-item ">
-                        <div className="collapse-wrapper">
-                          <div className="Collapsible">
-                            <span className="Collapsible__trigger is-closed">
-                              <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
-                                <WorkflowHeader
-                                  workflow={workflow}
-                                  link={true}
-                                  kind={""}
-                                  statusView={true}
-                                  config={this.props.config}
-                                />
-                              </div>
-                            </span>
-                          </div>
+              {this.state.childWorkflow && this.state.childWorkflow.length ? (
+                this.state.childWorkflow.map(workflow => {
+                  return (
+                    <div className="workflow-list-item paper ">
+                      <div className="collapse-wrapper">
+                        <div className="Collapsible">
+                          <span className="Collapsible__trigger is-closed">
+                            <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
+                              <WorkflowHeader
+                                workflow={workflow}
+                                link={true}
+                                kind={""}
+                                statusView={true}
+                                config={this.props.config}
+                              />
+                            </div>
+                          </span>
                         </div>
                       </div>
-                    );
-                  })
-                ) : (
-                  <div>No duplicates found</div>
-                )}
-              </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div>No duplicates found</div>
+              )}
             </div>
           )}
         </FormItem>
