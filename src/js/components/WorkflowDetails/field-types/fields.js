@@ -445,8 +445,6 @@ export const Select = props => {
             .toLowerCase()
             .indexOf(input.toLowerCase()) >= 0
         }
-        optionLabelProp="label"
-        //filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
       >
         {options.length &&
           options.map(function(item, index) {
