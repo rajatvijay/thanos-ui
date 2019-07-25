@@ -63,7 +63,7 @@ class Filter extends Component {
     if (key == "region") {
       let regionObj = regionType.results.find(item => item.value == value);
 
-      if (value != region && !!business_unit) {
+      if (value !== region && !!business_unit) {
         // if region is changed, make sure to clean the business unit as well.
         updatedState.business_unit = undefined;
         displayfilters.business_unit = undefined;

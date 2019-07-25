@@ -203,17 +203,14 @@ class FilterPopup extends Component {
                 placeholder="Market"
                 onFilterChange={onFilterChange}
               />
-              {businessType.loading != true ? (
-                <DropdownFilter
-                  name="business_unit"
-                  value={business_unit}
-                  data={businessType.results}
-                  placeholder="Division"
-                  onFilterChange={onFilterChange}
-                />
-              ) : (
-                <Icon type="loading" style={{ fontSize: 24 }} />
-              )}
+              <DropdownFilter
+                loading={businessType.loading}
+                name="business_unit"
+                value={business_unit}
+                data={businessType.results}
+                placeholder="Division"
+                onFilterChange={onFilterChange}
+              />
             </div>
           </div>
 
