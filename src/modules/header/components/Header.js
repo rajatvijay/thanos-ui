@@ -66,12 +66,6 @@ class Header extends Component {
     }
   };
 
-  toggleSearchIcon = () => {
-    this.setState(({ showSearchInputIcon }) => ({
-      showSearchInputIcon: !showSearchInputIcon
-    }));
-  };
-
   onLogout = (event, key) => {
     // this.props.dispatch(logout());
     logout();
@@ -147,7 +141,7 @@ class Header extends Component {
   };
 
   render() {
-    const { searchInput, showSearchInputIcon } = this.state;
+    const { searchInput } = this.state;
     let user = this.props.authentication.user;
     let supportedLaguanges = this.props.config.supported_languages;
     let regexForUrl = /\/instances\/[\d]+/;
@@ -180,23 +174,7 @@ class Header extends Component {
           height: "60px"
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center"
-          }}
-        >
-          {/* <span
-            className="logo float-left text-anchor text-base mr-right-sm"
-            title="Toggle filter menu"
-            onClick={this.onMenuToggle}
-          >
-            <Tooltip title="Toggle sidebar menu" placement="right">
-              <i className="material-icons text-middle">
-                {this.props.showFilterMenu.show ? "dehaze" : "dehaze"}{" "}
-              </i>
-            </Tooltip>
-          </span> */}
+        <div style={{ flexBasis: "300px" }}>
           <a href="/">
             {!this.props.config.loading && this.props.config.logo ? (
               <img
@@ -214,6 +192,37 @@ class Header extends Component {
             )}
           </a>
         </div>
+
+        {!regexForUrl.test(document.location.pathname) ? (
+          <div
+            className="search-box"
+            style={{ flexBasis: "300px", marginLeft: "56px" }}
+          >
+            <Input
+              style={{
+                display: "inline",
+                border: "none",
+                borderRadius: 0
+              }}
+              suffix={
+                <Icon
+                  type="search"
+                  onClick={() => this.onSearch(searchInput)}
+                  className="text-anchor"
+                  style={{ fontSize: 20, color: "#000000", opacity: 0.3 }}
+                />
+              }
+              value={searchInput}
+              placeholder={this.props.intl.formatMessage({
+                id: "commonTextInstances.search"
+              })}
+              onChange={this.onSearchChange}
+              ref={node => (this.searchInput = node)}
+              onKeyPress={this.handleKeyPress}
+            />
+          </div>
+        ) : null}
+
         <div
           style={{
             marginRight: "29.66px",
@@ -222,9 +231,8 @@ class Header extends Component {
                 ? "180px"
                 : "180px"
               : "350px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
+            flexGrow: 1,
+            textAlign: "right"
           }}
         >
           {showInsights ? (
@@ -246,61 +254,6 @@ class Header extends Component {
             ? this.getExportList()
             : null}
 
-          {!regexForUrl.test(document.location.pathname) ? (
-            showSearchInputIcon ? (
-              <div className={"search-box "}>
-                <Input
-                  style={{
-                    display: "inline",
-                    border: "none",
-                    borderRadius: 0
-                  }}
-                  className={"ant-input"}
-                  suffix={
-                    <Icon
-                      type="search"
-                      onClick={() => this.onSearch(searchInput)}
-                      className="text-anchor"
-                      style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
-                    />
-                  }
-                  value={searchInput}
-                  placeholder={this.props.intl.formatMessage({
-                    id: "commonTextInstances.search"
-                  })}
-                  onChange={this.onSearchChange}
-                  ref={node => (this.searchInput = node)}
-                  onKeyPress={this.handleKeyPress}
-                />
-                {/* <Icon onClick={this.toggleSearchIcon} type="close-circle" /> */}
-              </div>
-            ) : (
-              <div
-                style={{ display: "flex", alignItems: "end" }}
-                onClick={this.toggleSearchIcon}
-              >
-                <span
-                  style={{
-                    opacity: 0.3,
-                    color: "#000000",
-                    fontWeight: 500,
-                    fontSize: "18px",
-                    letterSpacing: "-0.03px",
-                    lineHeight: "22px",
-                    marginRight: "8px"
-                  }}
-                >
-                  Search
-                </span>
-                <i
-                  className="material-icons text-middle"
-                  style={{ fontSize: 24, color: "#000000", opacity: 0.3 }}
-                >
-                  search
-                </i>
-              </div>
-            )
-          ) : null}
           {_.isEmpty(supportedLaguanges) || <SelectLanguage navbar={true} />}
 
           {user ? (
