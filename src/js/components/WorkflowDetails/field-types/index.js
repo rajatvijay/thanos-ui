@@ -189,6 +189,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "docusign":
       return DnBCommon(props);
+    case "krypton_ai_push":
+      return DnBCommon(props);
     default:
       return Text(props);
   }
