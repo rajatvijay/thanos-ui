@@ -204,6 +204,7 @@ class FilterPopup extends Component {
                 onFilterChange={onFilterChange}
               />
               <DropdownFilter
+                loading={businessType.loading}
                 name="business_unit"
                 value={business_unit}
                 data={businessType.results}

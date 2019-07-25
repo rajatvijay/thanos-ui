@@ -9,7 +9,8 @@ const initialState = {
   },
   status: [],
   region: [],
-  business: [],
+  // business: [],
+  business_unit: [],
   multifilter: null,
   stepgroupdef: null,
   advFilter: null
@@ -37,10 +38,12 @@ export function workflowFilters(state = initialState, action) {
         workflowFilters: [{ ...action.workflowFilter }]
       };
 
-    case workflowFiltersConstants.REMOVE_REQUEST:
+    case workflowFiltersConstants.DELETE_REQUEST:
+      let newState = { ...state };
+      delete newState[action.workflowFilter.filterType];
       return {
         //loading: true
-        workflowFilters: [{ ...action.workflowFilter }]
+        ...newState
       };
 
     case workflowFiltersConstants.CLEAR_FILTERS:
@@ -48,7 +51,8 @@ export function workflowFilters(state = initialState, action) {
         ...state,
         status: [],
         region: [],
-        business: [],
+        // business: [],
+        business_unit: [],
         advFilter: null,
         advance: []
       };

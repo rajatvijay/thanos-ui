@@ -307,11 +307,16 @@ class FilterSidebar extends Component {
   constructor() {
     super();
     this.state = { showAdvFilters: false };
+
+    // To prevent multiple calls when we change multiple filters by dispatching
+    // more than one action within a method (like when we change a region, we also
+    // reset the business_unit, and that's done in two seperate actions).
+    this.applyFilterOnList = _.debounce(this.applyFilterOnList.bind(this), 50);
   }
 
-  componentWillReceiveProps = nextProps => {
-    if (this.props.workflowFilters !== nextProps.workflowFilters) {
-      this.props.dispatch(workflowActions.getAll());
+  componentDidUpdate = prevProps => {
+    if (this.props.workflowFilters !== prevProps.workflowFilters) {
+      this.applyFilterOnList();
     }
   };
 
@@ -319,6 +324,10 @@ class FilterSidebar extends Component {
     if (!this.props.workflowKind.workflowKind) {
       this.loadWorkflowKind();
     }
+  };
+
+  applyFilterOnList = () => {
+    this.props.dispatch(workflowActions.getAll());
   };
 
   loadWorkflowKind = () => {

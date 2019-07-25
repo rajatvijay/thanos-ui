@@ -45,7 +45,7 @@ function removeFilters(payload) {
 
   return dispatch => {
     dispatch({
-      type: workflowFiltersConstants.REMOVE_REQUEST,
+      type: workflowFiltersConstants.DELETE_REQUEST,
       workflowFilter: payload
     });
   };
