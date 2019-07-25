@@ -40,6 +40,8 @@ import { DuplicateCheck } from "./duplicate_check_new.js";
 import { RDCEventDetails } from "./rdc_event_details.js";
 import { RDCAlertsMetadata } from "./rdc_alert_metadata.js";
 import { ESign } from "./esign.js";
+import S3URL from "./S3ObjectField.js";
+import React from "react";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -80,6 +82,8 @@ export const getFieldType = props => {
       return CascaderField(props);
     case "url":
       return URL(props);
+    case "s3_object":
+      return <S3URL {...props} />;
 
     //custom
     case "business_unit":
