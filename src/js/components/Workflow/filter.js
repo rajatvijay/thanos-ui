@@ -313,8 +313,8 @@ class FilterSidebar extends Component {
     this.applyFilterOnList = _.debounce(this.applyFilterOnList.bind(this), 50);
   }
 
-  componentWillReceiveProps = nextProps => {
-    if (this.props.workflowFilters !== nextProps.workflowFilters) {
+  componentDidUpdate = prevProps => {
+    if (this.props.workflowFilters !== prevProps.workflowFilters) {
       this.applyFilterOnList();
     }
   };
