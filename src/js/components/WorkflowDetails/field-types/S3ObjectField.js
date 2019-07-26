@@ -60,7 +60,7 @@ class S3URL extends React.Component {
             autoComplete="new-password"
             message="The input is not valid URL"
             onChange={this.onChangeValidate}
-            defaultValue={fieldValue}
+            value={fieldValue}
             onBlur={this.onChangeValidate}
             {...feedValue(props)}
           />
