@@ -529,12 +529,11 @@ class Comments extends Component {
                                   />
                                 </div>
                                 {msg.attachment ? (
-                                  <span
+                                  <div
                                     style={{
+                                      marginLeft: "30px",
                                       fontSize: "12px",
-                                      paddingLeft: "32px",
-                                      position: "relative",
-                                      top: "-17px"
+                                      padding: "2px 0px 3px"
                                     }}
                                   >
                                     <i class="anticon anticon-paper-clip" />
@@ -542,7 +541,7 @@ class Comments extends Component {
                                     <a href={msg.attachment}>
                                       {attachment_text}
                                     </a>
-                                  </span>
+                                  </div>
                                 ) : null}
                               </div>
                             );
