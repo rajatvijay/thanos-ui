@@ -70,6 +70,23 @@ class DuplicateCheckComp extends Component {
 
   componentDidMount = () => {
     this.getDuplicateWorkflow();
+    if (
+      this.props.currentStepFields &&
+      this.props.currentStepFields.currentStepFields
+    ) {
+      const {
+        step_group: groupId,
+        workflow: workflowId,
+        id: stepId
+      } = this.props.currentStepFields.currentStepFields;
+      this.props.dispatch(
+        workflowDetailsActions.getStepFields({
+          workflowId,
+          groupId,
+          stepId
+        })
+      );
+    }
   };
 
   componentDidUpdate = () => {
