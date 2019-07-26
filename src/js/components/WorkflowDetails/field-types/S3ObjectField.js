@@ -2,10 +2,11 @@ import React from "react";
 import validator from "validator";
 import { commonFunctions } from "./commons";
 import { Icon, Form, Input } from "antd";
+import _ from "lodash";
 
 const FormItem = Form.Item;
 
-const { getLabel, field_error, feedValue, isDisabled } = commonFunctions;
+const { getLabel, field_error, isDisabled } = commonFunctions;
 
 //Field Type S3 Objects
 class S3URL extends React.Component {
@@ -32,6 +33,16 @@ class S3URL extends React.Component {
     } else {
       return ferr;
     }
+  };
+
+  feedValue = () => {
+    var opts = {};
+    if (this.props.field.definition.disabled) {
+      opts["value"] = _.size(this.props.field.answers)
+        ? this.props.field.answers[0].attachment
+        : this.props.field.definition.defaultValue;
+    }
+    return opts;
   };
 
   getFieldValue = () => {
@@ -62,7 +73,7 @@ class S3URL extends React.Component {
             onChange={this.onChangeValidate}
             value={fieldValue}
             onBlur={this.onChangeValidate}
-            {...feedValue(props)}
+            {...this.feedValue(props)}
           />
         ) : (
           <span>
