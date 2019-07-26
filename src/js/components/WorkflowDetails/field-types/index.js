@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Text,
   Bool,
@@ -45,7 +46,7 @@ export const getFieldType = props => {
   switch (props.field.definition.field_type) {
     //generic fields
     case "text":
-      return Text(props);
+      return <Text props={props} />;
     case "bool":
       return Bool(props);
     case "integer":
