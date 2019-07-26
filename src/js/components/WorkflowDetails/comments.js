@@ -108,10 +108,12 @@ class Comments extends Component {
     //   formData.append("files[]", file);
     // });
 
+    const workflowId = this.props.workflowId;
+
     let step_reload_payload = {
-      workflowId: this.props.currentStepFields.currentStepFields.workflow,
-      groupId: this.props.currentStepFields.currentStepFields.step_group,
-      stepId: this.props.currentStepFields.currentStepFields.id
+      workflowId: workflowId,
+      groupId: this.props.workflowKeys[workflowId].groupId,
+      stepId: this.props.workflowKeys[workflowId].stepId
     };
 
     this.props.addComment(
@@ -237,10 +239,12 @@ class Comments extends Component {
       addComment: true
     };
 
+    const workflowId = this.props.workflowId;
+
     let step_reload_payload = {
-      workflowId: this.props.currentStepFields.currentStepFields.workflow,
-      groupId: this.props.currentStepFields.currentStepFields.step_group,
-      stepId: this.props.currentStepFields.currentStepFields.id
+      workflowId: workflowId,
+      groupId: this.props.workflowKeys[workflowId].groupId,
+      stepId: this.props.workflowKeys[workflowId].stepId
     };
 
     this.props.dispatch(
