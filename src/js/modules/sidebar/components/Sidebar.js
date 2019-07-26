@@ -99,10 +99,21 @@ class Sidebar extends Component {
   onSelectMyTask = tag => {
     const payload = {
       filterType: "user-step-tag",
-      filterValue: tag
+      filterValue: tag ? [tag] : []
     };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
+
+  get isMyTaskSelected() {
+    return (
+      this.props.workflowFilters["user-step-tag"] &&
+      this.props.workflowFilters["user-step-tag"].filterValue &&
+      this.props.workflowFilters["user-step-tag"].filterValue.length &&
+      this.props.workflowFilters["user-step-tag"].filterValue.includes(
+        "Assignee"
+      )
+    );
+  }
 
   render() {
     const { isError } = this.props.workflowAlertGroupCount;
@@ -114,9 +125,6 @@ class Sidebar extends Component {
         return item.id == this.state.value;
       });
 
-    const isMyTaskSelected =
-      this.props.workflowFilters["user-step-tag"] &&
-      this.props.workflowFilters["user-step-tag"].filterValue === "Assignee";
     return (
       <Sider
         width={300}
@@ -188,7 +196,7 @@ class Sidebar extends Component {
                 // workflowGroupCount={this.props.workflowGroupCount}
                 onSelectTask={this.onSelectTask}
                 onSelectMyTask={this.onSelectMyTask}
-                isMyTaskSelected={isMyTaskSelected}
+                isMyTaskSelected={this.isMyTaskSelected}
               />
             </div>
 
