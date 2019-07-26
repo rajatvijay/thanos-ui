@@ -28,6 +28,10 @@ class OTPLogin extends React.Component {
     }
   };
 
+  onMagicLogin = () => {
+    localStorage.setItem("magicLogin", "true");
+  };
+
   render = () => {
     const config = this.props.config;
     let showRightBlock = true;
@@ -37,8 +41,10 @@ class OTPLogin extends React.Component {
 
     if (localStorage.getItem("user")) {
       if (this.props.location.state && this.props.location.state.from) {
+        this.onMagicLogin();
         return <Redirect to={this.props.location.state.from} />;
       } else if (parsed.next) {
+        this.onMagicLogin();
         return <Redirect to={parsed.next} />;
       } else {
         return (
