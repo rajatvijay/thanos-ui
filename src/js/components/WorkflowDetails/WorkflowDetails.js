@@ -500,6 +500,7 @@ class WorkflowDetails extends Component {
     let showBackButtom = true;
 
     if (
+      this.props.workflow &&
       this.props.workflow.workflow_family &&
       this.props.workflow.workflow_family.length <= 1
     ) {
