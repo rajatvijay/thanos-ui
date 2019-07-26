@@ -11,13 +11,9 @@ import {
   Checkbox as AntCheckbox,
   Divider as AntDivider,
   Button,
-  Cascader,
-  Row,
-  Col,
-  Tooltip
+  Cascader
 } from "antd";
 import _ from "lodash";
-import Moment from "react-moment";
 import moment from "moment";
 import ReactTelInput from "react-telephone-input";
 import "react-telephone-input/lib/withStyles";
@@ -41,27 +37,19 @@ const {
   getExtra,
   onFieldChange,
   onFieldChangeArray,
-  arrayToString,
   stringToArray,
   field_error,
-  getRequired,
   feedValue,
   getLink,
   getStyle,
   isDisabled
-  //getAnsweredBy
 } = commonFunctions;
 
 //Field Type Text
 export const Text = props => {
-  let css = {};
-  if (props.field.selected_flag[props.field.id]) {
-    css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
-  }
+  const that = this;
 
-  let that = this;
-
-  let rows =
+  const rows =
     props.field.definition.meta && props.field.definition.meta.height
       ? props.field.definition.meta.height
       : 1;
@@ -102,13 +90,13 @@ export const Text = props => {
 
 //Field Type Boolean
 export const Bool = props => {
-  let defVal = props.field.answers[0]
+  const defVal = props.field.answers[0]
     ? props.field.answers[0].answer
     : props.field.definition.defaultValue !== ""
     ? props.field.definition.defaultValue
     : null;
 
-  let that = this;
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -136,7 +124,7 @@ export const Bool = props => {
 
 //Field Type Number
 export const Number = props => {
-  let that = this;
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -159,7 +147,6 @@ export const Number = props => {
         }
         {...feedValue(props)}
         autoComplete="new-password"
-        autoComplete="new-password"
         onChange={onFieldChange.bind(this, props)}
         onBlur={e => props.onFieldChange(e, props)}
       />
@@ -169,16 +156,16 @@ export const Number = props => {
 
 //Field Type Date
 export const Date = props => {
-  let defaultAnswer = props.field.answers[0]
+  const defaultAnswer = props.field.answers[0]
     ? props.field.answers[0].answer
     : props.field.definition.defaultValue;
 
-  let defaultDate = moment.utc(defaultAnswer, "YYYY-MM-DD").isValid();
+  const defaultDate = moment.utc(defaultAnswer, "YYYY-MM-DD").isValid();
   let defaultAnswer2 = moment.utc().format("YYYY/MM/DD");
   if (defaultDate) {
     defaultAnswer2 = moment.utc(defaultAnswer).format("YYYY/MM/DD");
   }
-  let that = this;
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -213,7 +200,7 @@ class Email2 extends React.Component {
   }
 
   onChangeValidate = e => {
-    let valid = validator.isEmail(e.target.value);
+    const valid = validator.isEmail(e.target.value);
     this.setState({ isValidEamil: valid });
     if (valid) {
       this.props.onFieldChange(e, this.props);
@@ -221,7 +208,7 @@ class Email2 extends React.Component {
   };
 
   fielderror = () => {
-    let ferr = field_error(this.props);
+    const ferr = field_error(this.props);
 
     if (this.state.isValidEamil === false) {
       return {
@@ -235,7 +222,7 @@ class Email2 extends React.Component {
 
   render = () => {
     const props = this.props;
-    let that = this;
+    const that = this;
     return (
       <FormItem
         label={getLabel(props, that)}
@@ -246,7 +233,7 @@ class Email2 extends React.Component {
         hasFeedback
         autoComplete="new-password"
         help={this.state.isValidEamil === false ? "invalid email" : null}
-        validateStatus={this.state.isValidEamil === false && "error"}
+        validateStatus={this.state.isValidEamil === false ? "error" : ""}
         {...this.fielderror()}
       >
         <Input
@@ -284,7 +271,7 @@ class URL2 extends React.Component {
   }
 
   onChangeValidate = e => {
-    let valid = validator.isURL(e.target.value);
+    const valid = validator.isURL(e.target.value);
     this.setState({ isValidUrl: valid });
     if (valid) {
       this.props.onFieldChange(e, this.props);
@@ -292,7 +279,7 @@ class URL2 extends React.Component {
   };
 
   fielderror = () => {
-    let ferr = field_error(this.props);
+    const ferr = field_error(this.props);
 
     if (this.state.isValidUrl === false) {
       return {
@@ -306,7 +293,7 @@ class URL2 extends React.Component {
 
   render = () => {
     const props = this.props;
-    let that = this;
+    const that = this;
     return (
       <FormItem
         label={getLabel(props, that)}
@@ -370,8 +357,8 @@ export const URL = props => {
 //Field Type Checkbox
 const CheckboxGroup = AntCheckbox.Group;
 export const Checkbox = props => {
-  let defVal = [{ label: "Yes", value: "true" }];
-  let that = this;
+  const defVal = [{ label: "Yes", value: "true" }];
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -403,14 +390,14 @@ export const Checkbox = props => {
 
 //Field Type Select
 export const Select = props => {
-  let single =
+  const single =
     props.field.definition.field_type === "single_select" ? true : false;
   let save = onFieldChange.bind(this, props);
 
   if (!single) {
     save = onFieldChangeArray.bind(this, props);
   }
-  let that = this;
+  const that = this;
 
   const options = getExtra(props) || [];
   const answer = props.field.answers[0]
@@ -418,8 +405,6 @@ export const Select = props => {
       ? props.field.answers[0].answer
       : stringToArray(props.field.answers[0])
     : stringToArray(props.field.definition.defaultValue);
-
-  //const value = options ? options.find(item =>{return item.value === answer}) :null
 
   return (
     <FormItem
@@ -449,7 +434,7 @@ export const Select = props => {
         {options.length &&
           options.map(function(item, index) {
             return (
-              <Option key={item.value} value={item.value}>
+              <Option key={`option_${item.value}`} value={item.value}>
                 {item.label}
               </Option>
             );
@@ -461,7 +446,7 @@ export const Select = props => {
 
 //Field Type Phone Number
 export const Phone = props => {
-  let that = this;
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -480,12 +465,10 @@ export const Phone = props => {
             : props.field.definition.defaultValue
         }
         className={isDisabled(props) ? "tel-input disabled" : "tel-input"}
-        //style={{ width: "100%" }}
         defaultCountry="us"
         flagsImagePath={flags}
         onChange={onFieldChange.bind(this, props)}
         onBlur={e => props.onFieldChange(e, props)}
-        //onBlur={handleInputBlur}
       />
     </FormItem>
   );
@@ -520,7 +503,11 @@ export const Paragraph = props => {
       ) : null}
 
       {props.field.definition.extra.logo ? (
-        <img src={props.field.definition.extra.logo} className="para-logo" />
+        <img
+          src={props.field.definition.extra.logo}
+          className="para-logo"
+          alt=""
+        />
       ) : null}
       <span
         dangerouslySetInnerHTML={{
@@ -533,7 +520,7 @@ export const Paragraph = props => {
 
 //Field Type List option select
 export const List = props => {
-  let that = this;
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -543,7 +530,7 @@ export const List = props => {
       message=""
       {...field_error(props)}
       hasFeedback
-      validateStatus={props.field.answers.length !== 0 ? "success" : null}
+      validateStatus={props.field.answers.length !== 0 ? "success" : ""}
     >
       list
     </FormItem>
@@ -594,15 +581,14 @@ class FileUpload extends Component {
     this.setState({
       filesList: e,
       loading: true
-      //rejectedFilesList: rejectedFiles
     });
-    let value = e[0];
+    const value = e[0];
     this.props.onFieldChange(value, this.props, "file");
   };
 
   removeFile = () => {
     this.setState({ loading: true });
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       field: this.props.field.id,
       responseId: this.props.field.answers[0].id
@@ -618,9 +604,9 @@ class FileUpload extends Component {
   };
 
   render = () => {
-    let that = this;
+    const that = this;
     const { field } = this.props;
-    let url = this.state.decryptURL
+    const url = this.state.decryptURL
       ? `${siteOrigin}/api/v1/${this.state.decryptURL}`
       : field.answers[0] && field.answers[0].attachment;
 
@@ -633,10 +619,6 @@ class FileUpload extends Component {
         {...field_error(this.props)}
       >
         <Dropzone
-          //accept="image/jpeg, image/png"
-          //ref={"dropzoneRef"}
-          // onDragEnter={this.onDragEnter.bind(this)}
-          // onDragLeave={this.onDragLeave.bind(this)}
           className={
             isDisabled(this.props)
               ? "file-upload-field disabled"
@@ -698,6 +680,7 @@ class FileUpload extends Component {
                     <a
                       href={url}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="ant-upload-list-item-name"
                     >
                       {field.answers[0].attachment.substring(
@@ -717,31 +700,6 @@ class FileUpload extends Component {
                 </div>
               </div>
             ) : null}
-
-            {/*_.map(this.state.rejectedFilesList, function(file, index) {
-            return (
-              <div
-                className="ant-upload-list-item ant-upload-list-item-error"
-                key={"file-" + index}
-              >
-                <div className="ant-upload-list-item-info">
-                  <span>
-                    <i className="anticon anticon-paper-clip" />
-                    <a
-                      href=""
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ant-upload-list-item-name"
-                      title={file.name}
-                    >
-                      {file.name}
-                    </a>
-                  </span>
-                </div>
-                <i title="Remove file" className="anticon anticon-cross" />
-              </div>
-            );
-          })*/}
           </div>
         )}
       </FormItem>
@@ -787,7 +745,7 @@ class AttachmentDownload extends Component {
   };
 
   render = () => {
-    let that = this;
+    const that = this;
     let hasAttachment = null;
     if (this.props.field.answers[0] && this.props.field.answers[0].attachment) {
       hasAttachment = this.props.field.answers[0].attachment;
@@ -804,17 +762,16 @@ class AttachmentDownload extends Component {
         >
           {hasAttachment ? (
             <Button
-              //disabled={this.props.completed}
               icon="paper-clip"
               href={hasAttachment}
               target="_blank"
+              rel="noopener noreferrer"
               className="ant-btn-primary"
             >
               Download file
             </Button>
           ) : (
             <Button
-              //disabled={this.props.completed}
               icon="paper-clip"
               onClick={this.generateFile}
               loading={this.state.fetching}
@@ -838,7 +795,7 @@ export const Attachment = props => {
 
 //Field Type Cascader
 export const CascaderField = props => {
-  let that = this;
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -864,9 +821,7 @@ export const CascaderField = props => {
 
 //Field Type Select
 export const RadioField = props => {
-  let save = onFieldChange.bind(this, props);
-
-  let that = this;
+  const that = this;
   return (
     <FormItem
       label={getLabel(props, that)}
@@ -889,7 +844,7 @@ export const RadioField = props => {
       >
         {_.map(getExtra(props), function(item, index) {
           return (
-            <Radio key={index} value={item.value}>
+            <Radio key={`radio_${index}`} value={item.value}>
               {item.label}
             </Radio>
           );
@@ -902,6 +857,7 @@ export const RadioField = props => {
 export const IFrameField = props => {
   return (
     <iframe
+      title={"Linked field"}
       style={{ minHeight: 400, width: "100%" }}
       frameBorder="0"
       src={props.field.definition.extra.iframe_url}

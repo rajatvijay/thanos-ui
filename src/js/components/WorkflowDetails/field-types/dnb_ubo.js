@@ -23,7 +23,7 @@ class DnbUBO extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -36,7 +36,7 @@ class DnbUBO extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -50,7 +50,8 @@ class DnbUBO extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      field.integration_json.status_message ===
+        "Fetching data for this field..."
     ) {
       final_html = (
         <div>
@@ -90,7 +91,7 @@ class DnbUBO extends Component {
 const GetTable = props => {
   // for error
   if (
-    props.jsonData.OrderProductResponse.TransactionResult.ResultText !=
+    props.jsonData.OrderProductResponse.TransactionResult.ResultText !==
     "Success"
   ) {
     return (
@@ -130,8 +131,8 @@ const GetTable = props => {
           ? props.flag_dict[record.MemberID]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span

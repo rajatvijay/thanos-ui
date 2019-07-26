@@ -1,11 +1,5 @@
 import { workflowDetailsConstants } from "../constants";
 
-const initialState = {
-  loading: false,
-  workflowDetails: {},
-  error: null
-};
-
 export function workflowDetails(state = {}, action) {
   switch (action.type) {
     //Workflow detials
@@ -27,13 +21,9 @@ export function workflowDetails(state = {}, action) {
 
     //WORKFLOW STEPS AND GROUPS LIST DATA
     case workflowDetailsConstants.GET_STEPGROUPS_REQUEST:
-      // console.log("action id", action);
-
-      //state = {};
       return {
         ...state,
         [action.id]: { loading: true }
-        //loading: true
       };
     case workflowDetailsConstants.GET_STEPGROUPS_SUCCESS:
       return {

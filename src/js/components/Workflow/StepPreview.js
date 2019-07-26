@@ -1,17 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Layout, Icon, Tooltip, Divider, Form } from "antd";
-import { getFieldType } from "../WorkflowDetails/field-types";
+import { Layout, Icon, Divider, Form } from "antd";
 import _ from "lodash";
-import { IntlProvider, injectIntl } from "react-intl";
+import { injectIntl } from "react-intl";
 import { workflowStepActions, workflowDetailsActions } from "../../actions";
 import Comments from "../WorkflowDetails/comments";
 import FieldItem from "../WorkflowDetails/FieldItem";
 
-const FormItem = Form.Item;
 const { Content, Sider } = Layout;
-
 class StepPreview extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +36,7 @@ class StepPreview extends React.Component {
 
   getIntegrationComments = (uid, field_id) => {
     this.state.loading_sidebar = true;
-    let payload = {
+    const payload = {
       uid: uid,
       field_id: field_id
     };
@@ -59,19 +56,17 @@ class StepPreview extends React.Component {
   };
 
   render() {
-    let currentField = this.props.stepPreviewFields;
+    const currentField = this.props.stepPreviewFields;
 
-    let param = {
+    const param = {
       currentStepFields: currentField,
       error: null,
-      //onFieldChange: this.onFieldChange,
       workflowId: currentField.currentStepFields.workflow,
       formProps: this.props.form,
-      //completed: !!this.props.stepData.completed_at,
       is_locked: true,
-      addComment: this.toggleSidebar, //this.props.toggleSidebar,
-      changeFlag: this.changeFlag, //this.props.changeFlag,
-      getIntegrationComments: this.getIntegrationComments, //this.props.getIntegrationComments,
+      addComment: this.toggleSidebar,
+      changeFlag: this.changeFlag,
+      getIntegrationComments: this.getIntegrationComments,
       dispatch: this.props.dispatch,
       intl: this.props.intl,
       permission: [],
@@ -80,23 +75,22 @@ class StepPreview extends React.Component {
     };
 
     const getFieldForRender = field => {
-      let fieldParams = Object.assign({}, param);
+      const fieldParams = Object.assign({}, param);
       fieldParams["field"] = field;
       return <FieldItem fieldParams={fieldParams} />;
     };
 
     const RenderField = () => {
-      let body = (
+      const body = (
         <Form
           layout="vertical"
-          //hideRequiredMark={true}
           onSubmit={this.handleSubmit}
           className="step-form"
           autoComplete="off"
         >
-          {_.map(currentField.currentStepFields.data_fields, field => {
+          {_.map(currentField.currentStepFields.data_fields, (field, index) => {
             return (
-              <div className="mr-bottom-sm">
+              <div className="mr-bottom-sm" key={`group_${index}`}>
                 <div className="mr-bottom-sm">{getFieldForRender(field)}</div>
               </div>
             );
@@ -107,7 +101,7 @@ class StepPreview extends React.Component {
       return body;
     };
 
-    let comment_data = this.props.workflowComments.data;
+    const comment_data = this.props.workflowComments.data;
 
     if (currentField.loading) {
       return (
@@ -117,7 +111,7 @@ class StepPreview extends React.Component {
         </div>
       );
     } else {
-      let step = currentField.currentStepFields;
+      const step = currentField.currentStepFields;
       return (
         <div>
           <Sider

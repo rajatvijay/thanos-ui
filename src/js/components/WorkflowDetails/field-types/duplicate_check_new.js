@@ -1,44 +1,16 @@
 import React, { Component } from "react";
-import { authHeader, handleResponse } from "../../../_helpers";
+import { authHeader } from "../../../_helpers";
 import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
 import { connect } from "react-redux";
-
-import {
-  Form,
-  Input,
-  Button,
-  Row,
-  Col,
-  Table,
-  Icon,
-  Divider,
-  Select,
-  Tag,
-  Tooltip,
-  Collapse
-} from "antd";
+import { Form, Icon } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import {
-  dunsFieldActions,
-  workflowStepActions,
-  workflowDetailsActions
-} from "../../../actions";
-import { workflowDetailsService } from "../../../services";
+import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { apiBaseURL } from "../../../../config";
 
 const FormItem = Form.Item;
 
-//const dunsResponse = JSON.parse(dunsData);
-
-const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
-  getIntegrationSearchButton
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {
@@ -58,7 +30,7 @@ class DuplicateCheckComp extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -90,7 +62,6 @@ class DuplicateCheckComp extends Component {
   };
 
   componentDidUpdate = () => {
-    // If there is status_message => auto trigerring is still in progress
     if (this.props.field.integration_json.status_code === "fetching") {
       const {
         step_group: groupId,
@@ -108,7 +79,7 @@ class DuplicateCheckComp extends Component {
   };
 
   componentWillReceiveProps = nextProps => {
-    let that = this;
+    const that = this;
 
     if (
       this.props.field.integration_json !== nextProps.field.integration_json
@@ -126,7 +97,7 @@ class DuplicateCheckComp extends Component {
     ) {
       return;
     }
-    let duplicate_data = this.props.field.integration_json.data;
+    const duplicate_data = this.props.field.integration_json.data;
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),
@@ -144,7 +115,7 @@ class DuplicateCheckComp extends Component {
     workflow_ids = workflow_ids.join(",");
 
     if (_.size(workflow_ids)) {
-      let url = apiBaseURL + "workflows-list/?workflow_ids=" + workflow_ids;
+      const url = apiBaseURL + "workflows-list/?workflow_ids=" + workflow_ids;
       this.setState({ fetching: true });
 
       fetch(url, requestOptions)
@@ -161,7 +132,7 @@ class DuplicateCheckComp extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
     const props = {
       field: field,
       onSearch: this.onSearch,
@@ -173,7 +144,7 @@ class DuplicateCheckComp extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_code == "fetching"
+      field.integration_json.status_code === "fetching"
     ) {
       final_html = (
         <div>
@@ -182,7 +153,7 @@ class DuplicateCheckComp extends Component {
           </div>
         </div>
       );
-    } else if (field.integration_json.status_code == "error") {
+    } else if (field.integration_json.status_code === "error") {
       final_html = <div>{field.integration_json.status_message}</div>;
     } else if (
       _.size(field.integration_json) &&
@@ -206,9 +177,12 @@ class DuplicateCheckComp extends Component {
           ) : (
             <div className="workflow-list">
               {this.state.childWorkflow && this.state.childWorkflow.length ? (
-                this.state.childWorkflow.map(workflow => {
+                this.state.childWorkflow.map((workflow, index) => {
                   return (
-                    <div className="workflow-list-item paper ">
+                    <div
+                      className="workflow-list-item paper "
+                      key={`workflow_${index}`}
+                    >
                       <div className="collapse-wrapper">
                         <div className="Collapsible">
                           <span className="Collapsible__trigger is-closed">

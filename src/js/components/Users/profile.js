@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Layout, Icon, Avatar, Collapse } from "antd";
 import { Link } from "react-router-dom";
+import Anchor from "../common/Anchor";
 
 const { Sider } = Layout;
 
@@ -82,7 +83,8 @@ class Profile extends Component {
                 <Icon type="phone" /> {this.props.user.phone}
               </li>
               <li>
-                <Icon type="environment-o" />United States
+                <Icon type="environment-o" />
+                United States
               </li>
             </ul>
           </div>
@@ -104,10 +106,12 @@ class Profile extends Component {
                 <p>
                   <ul>
                     <li>
-                      <a href="">JORGE UBALDO COLIN PESCINA </a>
+                      <Anchor href="#">JORGE UBALDO COLIN PESCINA </Anchor>
                     </li>
                     <li>
-                      <a href="">JORGE UBALDO COLIN PESCINA (MAIN)</a>
+                      <Anchor href="#">
+                        JORGE UBALDO COLIN PESCINA (MAIN)
+                      </Anchor>
                     </li>
                   </ul>
                 </p>

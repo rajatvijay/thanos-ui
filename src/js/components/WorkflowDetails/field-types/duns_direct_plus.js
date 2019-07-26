@@ -30,7 +30,7 @@ class DunsSearch extends Component {
   };
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -41,7 +41,7 @@ class DunsSearch extends Component {
   };
 
   selectItem = data => {
-    let payload = {
+    const payload = {
       duns: data.organization.duns,
       field_id: this.props.field.id
     };
@@ -51,7 +51,7 @@ class DunsSearch extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -138,7 +138,7 @@ const GetTable = props => {
       dataIndex: "organization[tradeStyleNames]",
       render: (text, data, index) => {
         if (_.size(data.tradeStyleNames)) {
-          let record = data.tradeStyleNames[0];
+          const record = data.tradeStyleNames[0];
           return <span>{record.name}</span>;
         } else {
           return <span>-</span>;
@@ -159,7 +159,7 @@ const GetTable = props => {
       dataIndex: "organization[primaryAddress][addressCountry]['name']",
       render: (text, data, index) => {
         if (_.size(data.organization.primaryAddress)) {
-          let record = data.organization;
+          const record = data.organization;
           return (
             <span>
               {record.primaryAddress.streetAddress.line1} <br />
@@ -176,11 +176,6 @@ const GetTable = props => {
       },
       key: "organization[primaryAddress][addressCountry]['name']"
     },
-    // {
-    //   title: "Address",
-    //   dataIndex: "organization[primaryAddress][addressCountry]['name']",
-    //   key: "organization[primaryAddress][addressCountry]['name']"
-    //},
     {
       title: "Status",
       dataIndex:

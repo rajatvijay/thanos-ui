@@ -1,6 +1,5 @@
 import { stepPreviewConstants } from "../constants";
 import { stepPreviewService } from "../services";
-import _ from "lodash";
 
 export const stepPreviewActions = { getStepPreviewFields };
 

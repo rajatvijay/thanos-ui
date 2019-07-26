@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import _ from "lodash";
-import { Layout, Menu, Icon, Affix, Badge, Tooltip } from "antd";
+import { Layout, Menu, Icon, Tooltip } from "antd";
 import { calculatedData } from "../Workflow/calculated-data";
 import { utils } from "../Workflow/utils";
 import { history } from "../../_helpers";
@@ -38,9 +38,9 @@ const StepSidebar = props => {
 
 class StepSidebarMenu extends Component {
   getGroups(data) {
-    let that = this;
-    let data2 = getProcessedData(data);
-    let visible_steps = getVisibleSteps(data);
+    const that = this;
+    const data2 = getProcessedData(data);
+    const visible_steps = getVisibleSteps(data);
 
     return _.map(_.orderBy(data2, [{ id: Number }], ["asc"]), function(
       g,
@@ -56,11 +56,12 @@ class StepSidebarMenu extends Component {
       }
       return (
         <SubMenu
-          title={g.definition.name}
           key={"sub-" + g.id}
           className={
             !g.completed
-              ? g.overdue ? "text-red overdue" : "text-light "
+              ? g.overdue
+                ? "text-red overdue"
+                : "text-light "
               : "text-secondary completed text-medium"
           }
           title={
@@ -79,9 +80,9 @@ class StepSidebarMenu extends Component {
   }
 
   getSteps(data, group_id, visible_steps) {
-    let that = this;
+    const that = this;
 
-    let steps = _.map(data, function(s, key) {
+    const steps = _.map(data, function(s, key) {
       let icon_cls = "panorama_fish_eye";
       if (s.completed_at) {
         icon_cls = "check_circle";
@@ -94,7 +95,7 @@ class StepSidebarMenu extends Component {
       }
 
       //check alerts for steps
-      let hasAlert = [];
+      const hasAlert = [];
       if (_.size(that.props.alerts)) {
         _.forEach(that.props.alerts, function(alert) {
           if (alert.step === s.id) {
@@ -112,7 +113,9 @@ class StepSidebarMenu extends Component {
           key={group_id + "_" + s.id}
           className={
             s.completed_at === null
-              ? s.overdue ? "text-red overdue" : "text-light"
+              ? s.overdue
+                ? "text-red overdue"
+                : "text-light"
               : "text-secondary completed text-light"
           }
           style={{ paddingLeft: "40px" }}
@@ -125,9 +128,9 @@ class StepSidebarMenu extends Component {
 
             {_.size(hasAlert) ? (
               <span className="float-right pd-left">
-                {_.map(hasAlert, alert => {
+                {_.map(hasAlert, (alert, index) => {
                   return (
-                    <Tooltip title={alert.label}>
+                    <Tooltip title={alert.label} key={`tooltip_${index}`}>
                       <i
                         className="material-icons"
                         style={{ fontSize: "9px", color: alert.color }}
@@ -147,7 +150,7 @@ class StepSidebarMenu extends Component {
   }
 
   getMenu() {
-    let grouping = this.props.step2;
+    const grouping = this.props.step2;
 
     return (
       <Menu

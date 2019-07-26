@@ -1,11 +1,10 @@
 import React from "react";
-import { Row, Col, Divider, Collapse } from "antd";
+import { Row, Col, Collapse } from "antd";
 import _ from "lodash";
-import NumberFormat from "../../../_helpers/NumberFormat";
 
 const Panel = Collapse.Panel;
 const LitigationData = props => {
-  var suit_list =
+  const suit_list =
     props.field.integration_json["OrderProductResponse"][
       "OrderProductResponseDetail"
     ] &&
@@ -28,92 +27,6 @@ const LitigationData = props => {
     border: 0,
     overflow: "hidden"
   };
-
-  // const Column = props => {
-  //   return (
-  //     <Col span={props.column ? props.column : 24}>
-  //       <span className="dt-value">{props.label}</span>
-  //       <span className="pull-right dt-value">
-  //         {props.value ? props.value : "-"}
-  //       </span>
-  //     </Col>
-  //   );
-  // };
-
-  // const RowHead = props => {
-  //   return (
-  //     <Row
-  //       gutter={24}
-  //       className={props.className ? props.className : "mr-bottom-lg"}
-  //     >
-  //       <Col span={24}>
-  //         <strong className="dt-label">{props.label}</strong>
-  //       </Col>
-  //     </Row>
-  //   );
-  // };
-
-  // const Rowminator = props => {
-  //   return (
-  //     <Row gutter={24}>
-  //       {_.map(props.row, function(col, index) {
-  //         return col;
-  //       })}
-  //     </Row>
-  //   );
-  // };
-
-  // const Columnizer = props => {
-  //   let final_html = null;
-  //   let row = [];
-  //   let rowRender = null;
-
-  //   final_html = _.map(props.cols, function(col, index) {
-  //     row.push(col);
-  //     if (row.length < 2) {
-  //       if (props.cols.length - 1 === index) {
-  //         rowRender = <Rowminator row={row} />;
-  //         row = [];
-  //         return rowRender;
-  //       }
-  //     } else {
-  //       rowRender = <Rowminator row={row} />;
-  //       row = [];
-  //       return rowRender;
-  //     }
-  //   });
-  //   return final_html;
-  // };
-
-  // const FinSection = props => {
-  //   let cols = [];
-  //   const list = props.list;
-  //   let length = list.length;
-
-  //   _.map(list, function(item, index) {
-  //     var col = (
-  //       <Column
-  //         label={item.ItemDescriptionText ? item.ItemDescriptionText["$"] : "-"}
-  //         value={
-  //           item.ItemAmount ? (
-  //             <NumberFormat value={item.ItemAmount["$"]} format={"0,0"} />
-  //           ) : (
-  //             "-"
-  //           )
-  //         }
-  //         column={12}
-  //       />
-  //     );
-  //     cols.push(col);
-  //   });
-
-  //   return (
-  //     <div className="statement-section">
-  //       <RowHead label={props.header} className="mr-top-lg mr-bottom-lg" />
-  //       <Columnizer cols={cols} />
-  //     </div>
-  //   );
-  // };
 
   const InfoRow = props => {
     return (
@@ -207,8 +120,8 @@ const LitigationData = props => {
                       </div>
                     ) : null}
 
-                    {_.map(b.RolePlayer, function(rp) {
-                      var addr = rp.RolePlayerLocation || "-";
+                    {_.map(b.RolePlayer, function(rp, index) {
+                      let addr = rp.RolePlayerLocation || "-";
                       if (addr && addr.StreetAddressLine) {
                         addr =
                           addr.StreetAddressLine[0]["LineText"] +
@@ -220,7 +133,7 @@ const LitigationData = props => {
                           addr.PostalCode;
                       }
                       return (
-                        <div>
+                        <div key={`row_${index}`}>
                           <Row>
                             <InfoRow
                               label="Role Player Name"

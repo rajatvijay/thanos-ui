@@ -32,8 +32,6 @@ function getStepGroup(id) {
   };
 
   return fetch(
-    //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    //apiBaseURL + "workflows/" + id + "/stepgroups/",
     apiBaseURL + "workflows/" + parseInt(id, 10) + "/stepgroups/",
     requestOptions
   ).then(handleResponse);
@@ -47,7 +45,6 @@ function getStepFields(step) {
   };
 
   return fetch(
-    //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
     apiBaseURL +
       "workflows/" +
       step.workflowId +
@@ -78,12 +75,7 @@ function getComments(payload) {
       "&field_id=" + payload.extra.field_id + "&uid=" + payload.extra.uid;
   }
 
-  return fetch(
-    //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
-    //apiBaseURL + "workflows/" + id + "/stepgroups/",
-    request_url,
-    requestOptions
-  ).then(handleResponse);
+  return fetch(request_url, requestOptions).then(handleResponse);
 }
 
 function getStepVersionFields(step) {
@@ -94,7 +86,6 @@ function getStepVersionFields(step) {
   };
 
   return fetch(
-    //UNCOMMENT BELOW TO GET REAL DATA FOR WORKFLOW AND REMOVE SECOND LINE.
     apiBaseURL +
       "workflows/" +
       step.workflowId +

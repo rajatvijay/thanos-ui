@@ -35,7 +35,7 @@ class StatusGraph extends Component {
 
   handleChange = value => {
     this.setState({ selected: value });
-    let payload = { filterType: "status", filterValue: [value] };
+    const payload = { filterType: "status", filterValue: [value] };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
@@ -67,23 +67,20 @@ class StatusGraph extends Component {
   };
 
   generateData = fList => {
-    let arr = [];
+    const arr = [];
     _.map(fList, function(i, index) {
-      //let data = Math.floor(Math.random() * 700) + 1
-      let item = { name: i.status.label, id: i.status.id, value: i.count };
+      const item = { name: i.status.label, id: i.status.id, value: i.count };
       arr.push(item);
     });
     return arr;
   };
 
   removeFilter = () => {
-    //this.setState({ selected: value });
-    let payload = { filterType: "status", filterValue: [] };
+    const payload = { filterType: "status", filterValue: [] };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
   render = () => {
-    //const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
     const COLORS = [
       "#C0CA33",
       "#039BE5",
@@ -158,7 +155,6 @@ class StatusGraph extends Component {
               data={this.state.statusList}
               nameKey="name"
               dataKey="value"
-              fill="#8884d8"
               innerRadius={"60%"}
               outerRadius={"100%"}
               onClick={this.pieClick}
@@ -166,7 +162,10 @@ class StatusGraph extends Component {
               cx="20%"
             >
               {this.state.statusList.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell_${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <RTooltip />

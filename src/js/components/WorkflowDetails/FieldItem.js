@@ -1,27 +1,13 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Layout, Icon, Tooltip, Divider, Form } from "antd";
+import { Icon, Form } from "antd";
 import _ from "lodash";
-import { authHeader, history } from "../../_helpers";
+import { authHeader } from "../../_helpers";
 import { getFieldType } from "./field-types";
 import { commonFunctions } from "./field-types/commons";
 import { apiBaseURL } from "../../../config";
 
 const FormItem = Form.Item;
-const {
-  getLabel,
-  onFieldChange,
-  onFieldChangeArray,
-  arrayToString,
-  stringToArray,
-  field_error,
-  getRequired,
-  feedValue,
-  getLink,
-  getStyle,
-  isDisabled
-  //getAnsweredBy
-} = commonFunctions;
+const { getLabel, field_error } = commonFunctions;
 
 class FieldItem extends Component {
   constructor(props) {
@@ -35,14 +21,13 @@ class FieldItem extends Component {
   }
 
   componentDidMount = () => {
-    //let e =_.sample([true, false]);
     this.setState({
       encrypted: this.props.fieldParams.field.definition.is_encrypted
     });
   };
 
   decryptURL = () => {
-    let answerObj = this.props.fieldParams.field.answers[0];
+    const answerObj = this.props.fieldParams.field.answers[0];
     if (answerObj) {
       return `responses/${answerObj.id}/decrypt/`;
     }
@@ -56,7 +41,7 @@ class FieldItem extends Component {
     };
 
     this.setState({ fetching: true });
-    let url = apiBaseURL + this.decryptURL();
+    const url = apiBaseURL + this.decryptURL();
     fetch(url, requestOptions)
       .then(response => {
         if (!response.ok) {
@@ -71,10 +56,9 @@ class FieldItem extends Component {
   };
 
   render = () => {
-    let encrypted = _.sample([true, false]);
     const props = this.props.fieldParams;
 
-    let fieldParams = Object.assign({}, this.props.fieldParams);
+    const fieldParams = Object.assign({}, this.props.fieldParams);
     fieldParams["encrypted"] = this.state.encrypted;
     fieldParams["fetching"] = this.state.fetching;
     fieldParams["decryptData"] = this.decryptData;
@@ -82,7 +66,7 @@ class FieldItem extends Component {
     fieldParams["decryptedData"] = this.state.decrypted;
     fieldParams["stepData"] = this.props.stepData;
 
-    let dynamicUserPerm = this.props.fieldParams.dynamicUserPerms;
+    const dynamicUserPerm = this.props.fieldParams.dynamicUserPerms;
     let showButton = false;
 
     if (
@@ -98,7 +82,7 @@ class FieldItem extends Component {
     }
 
     if (this.props.fieldParams.field.answers[0] && this.state.encrypted) {
-      if (this.props.fieldParams.field.definition.field_type == "file") {
+      if (this.props.fieldParams.field.definition.field_type === "file") {
         if (showButton) {
           fieldParams["decryptURL"] = this.decryptURL();
         }

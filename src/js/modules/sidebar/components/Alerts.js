@@ -14,7 +14,7 @@ class Alerts extends Component {
     if (item.sub_categories) {
       return item.sub_categories.map(subCategory => (
         <StyledAlertSubCategoryListItem
-          key={subCategory.id}
+          key={`item_${subCategory.id}`}
           onClick={e => onSelect(subCategory)}
           data-testid="alerts-list-item"
           isSelected={subCategory.name === selected}

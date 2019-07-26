@@ -4,7 +4,6 @@ import MagicForm from "./MagicForm";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
-import { logout } from "../../actions";
 import _ from "lodash";
 import queryString from "query-string";
 import LoginHeader from "./LoginHeader";
@@ -31,7 +30,7 @@ class MagicLogin extends React.Component {
 
   render = () => {
     if (localStorage.getItem("user")) {
-      let parsed = queryString.parse(this.props.location.search);
+      const parsed = queryString.parse(this.props.location.search);
 
       if (this.props.location.state && this.props.location.state.from) {
         return <Redirect to={this.props.location.state.from} />;
@@ -42,7 +41,7 @@ class MagicLogin extends React.Component {
       }
     }
 
-    let supportedLaguanges = this.props.config.supported_languages;
+    const supportedLaguanges = this.props.config.supported_languages;
 
     return (
       <div className="login login-container container-fluid" id="login">

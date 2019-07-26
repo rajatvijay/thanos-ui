@@ -1,22 +1,11 @@
 import React, { Component } from "react";
-import { Form, Icon, Select, Table, Tag } from "antd";
+import { Icon, Table, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
 
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { Column, ColumnGroup } = Table;
-
-const {
-  getLabel,
-  field_error,
-  getRequired,
-  feedValue,
-  addCommentBtn,
-  getIntegrationSearchButton
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {
@@ -33,7 +22,7 @@ class GoogleSrch extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -42,12 +31,12 @@ class GoogleSrch extends Component {
   };
 
   getComment = (e, data) => {
-    let uid = data.custom_hash || data.cacheId;
+    const uid = data.custom_hash || data.cacheId;
     this.props.getIntegrationComments(uid, this.props.field.id);
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
     const props = {
       field: field,
       onSearch: this.onSearch,
@@ -57,15 +46,11 @@ class GoogleSrch extends Component {
       permission: this.props.permission
     };
 
-    // TODO: Hack to mock server response
-    // let _field = Object.assign({}, field);
-    // _field.integration_json = jsonData //.data_fields[4].integration_json;
-    // TODO: 1. Field override
-
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      field.integration_json.status_message ===
+        "Fetching data for this field..."
     ) {
       final_html = (
         <div>
@@ -91,7 +76,6 @@ class GoogleSrch extends Component {
           </div>
         </div>
       );
-      // TODO: Hack end - remove till 1, change _field -> field before review
     }
 
     return (
@@ -108,9 +92,9 @@ const GetTable = props => {
     return <div className="text-center text-red">No result found!</div>;
   }
 
-  let data = props.jsonData.results.sort((a, b) => {
-    let aData = a.sentiment_score * a.sentiment_magnitude;
-    let bData = b.sentiment_score * b.sentiment_magnitude;
+  const data = props.jsonData.results.sort((a, b) => {
+    const aData = a.sentiment_score * a.sentiment_magnitude;
+    const bData = b.sentiment_score * b.sentiment_magnitude;
 
     return aData - bData;
   });
@@ -119,7 +103,7 @@ const GetTable = props => {
     <span className="text-metal">{`Found ${data.length} results`}</span>
   );
 
-  let cate = (
+  const cate = (
     <div>
       <span className="text-metal pd-right">Filter:</span>{" "}
       {_.map(
@@ -128,10 +112,13 @@ const GetTable = props => {
             return o.category.name;
           }
         }),
-        function(i) {
+        function(i, index) {
           if (i.category && i.category.name) {
             return (
-              <Tag className="alert-tag-item alert-primary">
+              <Tag
+                key={`tag_${index}`}
+                className="alert-tag-item alert-primary"
+              >
                 {i.category.name}
               </Tag>
             );
@@ -147,7 +134,6 @@ const GetTable = props => {
       dataIndex: "result",
       colspan: 2,
       render: (text, record, index) => {
-        //let adrData = record
         return integrationCommonFunctions.google_search_html(
           record,
           props.onSearch
@@ -163,13 +149,13 @@ const GetTable = props => {
       className: "comment-column",
       verticalAlign: "top",
       render: record => {
-        let uid = record.custom_hash || record.cacheId;
+        const uid = record.custom_hash || record.cacheId;
         let flag_data = _.size(props.flag_dict[uid])
           ? props.flag_dict[uid]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span

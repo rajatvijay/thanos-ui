@@ -16,7 +16,6 @@ import _ from "lodash";
 import { loginOtp } from "../../actions";
 import { connect } from "react-redux";
 import { authHeader } from "../../_helpers";
-import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
 
 import { FormattedMessage, injectIntl } from "react-intl";
 import { apiBaseURL } from "../../../config";
@@ -74,7 +73,7 @@ class OTPForm extends React.Component {
     e.preventDefault();
     this.setState({ submitted: true });
     const { email, password } = this.state;
-    const { dispatch, nextUrl } = this.props;
+    const { dispatch } = this.props;
 
     if (email && password) {
       dispatch(loginOtp(email, password));
@@ -82,22 +81,18 @@ class OTPForm extends React.Component {
   };
 
   onSubmit = e => {
-    // e.preventDefault();
-
-    let data = this.state.data;
+    const data = this.state.data;
     const errors = this.validate(data, "otp"); //error valitation in form
     this.setState({ errors: errors });
     if (Object.keys(errors).length === 0) {
       //if no error is found then submit
-      //this.props.userLogin(data);
-      //this.props.onSubmit(data);
       this.handleSubmit(e);
     }
   };
 
   //counter to prevent opt request spamming
   otpReset = () => {
-    let that = this;
+    const that = this;
     let timer = 30;
 
     setInterval(function() {
@@ -174,7 +169,7 @@ class OTPForm extends React.Component {
 
   //otp request preflight check
   onOptRequest = e => {
-    let data = this.state.data;
+    const data = this.state.data;
     const errors = this.validate(data); //error valitation in form
 
     this.setState({ errors: errors });
@@ -187,8 +182,8 @@ class OTPForm extends React.Component {
 
   //actual otp request
   generateOtp = () => {
-    let that = this;
-    let payload = this.state.data.email;
+    const that = this;
+    const payload = this.state.data.email;
 
     const requestOptions = {
       method: "POST",
@@ -205,13 +200,10 @@ class OTPForm extends React.Component {
               errors: { ...state.errors, OtpErr: data.detail },
               loading: false
             }));
-            // that.showMessageFaliure();
-            // console.log(response.json());
           });
           throw Error(response.statusText);
         } else {
           that.setState({ optSent: true });
-          //that.otpReset();
           that.showMessageSuccess();
         }
         return response;
@@ -234,13 +226,6 @@ class OTPForm extends React.Component {
     const { data, errors } = this.state;
     const { config, showRightBlock } = this.props;
 
-    const suffix = (
-      <Icon
-        type={this.state.showPassword ? "eye" : "eye-invisible"}
-        onClick={this.toggleShowPassword}
-      />
-    );
-
     if (
       config.configuration &&
       !_.includes(config.configuration.client_auth_backends, 3)
@@ -262,7 +247,7 @@ class OTPForm extends React.Component {
                 autoComplete="off"
               >
                 <FormItem
-                  validateStatus={errors.message && "error"}
+                  validateStatus={errors.message ? "error" : ""}
                   hasFeedback
                   label={
                     <FormattedMessage id="loginPageInstances.oneTimeLink" />
@@ -284,7 +269,7 @@ class OTPForm extends React.Component {
 
                 {this.state.optSent ? (
                   <FormItem
-                    validateStatus={errors.message && "error"}
+                    validateStatus={errors.message ? "error" : ""}
                     hasFeedback
                     label={
                       <FormattedMessage id="commonTextInstances.enterOtp" />
@@ -334,7 +319,6 @@ class OTPForm extends React.Component {
                 <FormItem>
                   <Button
                     type="primary"
-                    // htmlType="submit"
                     className="login-form-button btn-block"
                     onClick={
                       this.state.optSent ? this.onSubmit : this.onOptRequest
@@ -382,7 +366,11 @@ class OTPForm extends React.Component {
                     username and password
                   </div>
                   <div className="logo">
-                    <img src={config.logo} style={{ maxWidth: "120px" }} />
+                    <img
+                      src={config.logo}
+                      style={{ maxWidth: "120px" }}
+                      alt=""
+                    />
                   </div>
                   <div className="text-light t-16">
                     Login using your {config.name} username and password
@@ -403,7 +391,6 @@ class OTPForm extends React.Component {
                         <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
                         {config.name} account
                       </span>
-                      {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
                     </a>
                   ) : (
                     <Link

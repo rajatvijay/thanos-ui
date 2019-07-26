@@ -18,7 +18,6 @@ function getChildWorkflow(parentId, kind) {
 
   const url = getURL(parentId, kind);
   return fetch(url, requestOptions).then(response => {
-    // console.log(response.json());
     return response.json();
   });
 }

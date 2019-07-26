@@ -13,7 +13,7 @@ function saveDunsField(payload) {
     credentials: "include"
   };
 
-  let url = apiBaseURL + "integrations/?field_id=" + payload.fieldId;
+  const url = apiBaseURL + "integrations/?field_id=" + payload.fieldId;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -31,7 +31,7 @@ function selectDunsItem(payload) {
     body: JSON.stringify(payload)
   };
 
-  let url = apiBaseURL + "integrations/dnb/";
+  const url = apiBaseURL + "integrations/dnb/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

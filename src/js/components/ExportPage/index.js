@@ -6,12 +6,6 @@ import { FormattedMessage } from "react-intl";
 const { Content } = Layout;
 
 class ExportList extends Component {
-  constructor(props) {
-    super();
-
-    //this.state = { sidebar: false, userId: null };
-  }
-
   render() {
     return (
       <Layout className="users-container inner-container">
@@ -28,7 +22,6 @@ class ExportList extends Component {
                     className="demo-loadmore-list"
                     loading={this.props.workflowKind.loading}
                     itemLayout="horizontal"
-                    //loadMore={loadMore}
                     dataSource={this.props.workflowKind.workflowKind}
                     renderItem={item => (
                       <List.Item
@@ -37,6 +30,7 @@ class ExportList extends Component {
                             icon="downlaod"
                             type="primary"
                             target="_blank"
+                            rel="noopener noreferrer"
                             href={
                               "http://vetted.slackcart.com/api/v1/workflow-kinds/" +
                               item.tag +
@@ -48,11 +42,9 @@ class ExportList extends Component {
                         ]}
                       >
                         <List.Item.Meta
-                          //avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
                           title={
                             <h4 className="text-grey-dark">{item.name}</h4>
                           }
-                          //description="Ant Design, a design language for background applications, is refined by Ant UED Team"
                         />
                       </List.Item>
                     )}

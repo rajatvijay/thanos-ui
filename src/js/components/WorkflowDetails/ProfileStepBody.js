@@ -9,14 +9,17 @@ class ProfileStepBody extends Component {
       item => item.display_type === "normal" && item.value
     );
 
-    return lc_data.map(data => (
-      <Col style={{ margin: "0px 0px 25px 0px" }} span={12}>
+    return lc_data.map((data, index) => (
+      <Col
+        style={{ margin: "0px 0px 25px 0px" }}
+        span={12}
+        key={`col_${index}`}
+      >
         <span
           style={{
             opacity: 0.3,
             color: "#000000",
             fontSize: "20px",
-            //fontWeight: "bold",
             letterSpacing: "-0.02px",
             lineHeight: "15px"
           }}
@@ -40,8 +43,6 @@ class ProfileStepBody extends Component {
   }
 
   render() {
-    //console.log("head", this.props.workflowHead);
-
     if (!this.props.workflowHead) {
       return null;
     }

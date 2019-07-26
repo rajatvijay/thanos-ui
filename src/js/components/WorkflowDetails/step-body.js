@@ -33,7 +33,7 @@ class StepBody extends Component {
     this.props.toggleSidebar(stepData.id, "step");
   };
   componentDidMount() {
-    const { stepId, getAssignedUser } = this.props;
+    const { stepId } = this.props;
 
     this.props.getAssignedUser(stepId);
   }
@@ -42,7 +42,7 @@ class StepBody extends Component {
     this.versionToggle();
     const currentStepFields = this.props.currentStepFields[this.props.stepId]
       .currentStepFields;
-    let stepTrack = {
+    const stepTrack = {
       workflowId: currentStepFields.workflow,
       groupId: currentStepFields.step_group,
       stepId: currentStepFields.id,
@@ -63,9 +63,9 @@ class StepBody extends Component {
       <Menu onClick={this.onVersionChange}>
         {currentStepFields.versions.length > 0 ? (
           _.map(currentStepFields.versions, function(i) {
-            let str = i.label;
-            let strMod = str.replace(/Created/g, "Submitted");
-            return <Menu.Item key={i.value}> {strMod}</Menu.Item>;
+            const str = i.label;
+            const strMod = str.replace(/Created/g, "Submitted");
+            return <Menu.Item key={`${i.value}`}> {strMod}</Menu.Item>;
           })
         ) : (
           <Menu.Item key={0} disabled>
@@ -131,7 +131,6 @@ class StepBody extends Component {
   };
 
   render = () => {
-    //console.log("render",this.props.stepUsers)
     const {
       displayProfile,
       workflowHead,
@@ -140,15 +139,12 @@ class StepBody extends Component {
       deleteStepUser,
       workflowId
     } = this.props;
-    //console.log("step", stepId);
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
       this.props.workflowDetails.loading;
 
-    var stepData = null;
-    // console.log("l", loading);
-    // console.log("ids", this.props.stepId);
+    let stepData = null;
 
     if (
       !loading &&
@@ -160,20 +156,12 @@ class StepBody extends Component {
     } else {
       stepData = {};
     }
-    // console.log(
-    //   "step",
-    //   workflowHead,
-    //   stepData,
-    //   this.props.currentStepFields,
-    //   this.props.stepId,
-    //   stepData
-    // );
 
-    var locked_tag = null;
+    let locked_tag = null;
 
     if (stepData && stepData.is_locked) {
-      let dependent_steps = stepData.definition.dependent_steps;
-      let dependent_step_name = _.map(dependent_steps, function(ds) {
+      const dependent_steps = stepData.definition.dependent_steps;
+      const dependent_step_name = _.map(dependent_steps, function(ds) {
         return ds["label"];
       });
       locked_tag = (
@@ -187,10 +175,10 @@ class StepBody extends Component {
       );
     }
 
-    var step_comment_btn = null;
+    let step_comment_btn = null;
 
     if (_.size(stepData)) {
-      var step_comment_btn = (
+      step_comment_btn = (
         <div
           style={{
             display: "flex",
@@ -201,7 +189,6 @@ class StepBody extends Component {
             "text-right " + (this.state.printing ? "hide-print" : null)
           }
         >
-          {/* //&& stepUsers[stepId].display */}
           {stepUsers[stepId] && (
             <div>
               {stepUsers[stepId].user && (
@@ -233,7 +220,7 @@ class StepBody extends Component {
       );
     }
 
-    let dynamicUserPerms = this.props.workflowDetailsHeader
+    const dynamicUserPerms = this.props.workflowDetailsHeader
       .workflowDetailsHeader
       ? this.props.workflowDetailsHeader.workflowDetailsHeader.definition
           .dynamic_group_names_with_perm

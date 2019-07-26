@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Layout, Icon, Select } from "antd";
+import { Layout, Select } from "antd";
 import TaskQueueList from "./TaskQueueList";
 import AlertList from "./AlertList";
 import { workflowFiltersActions, workflowKindActions } from "../../../actions";
 import { connect } from "react-redux";
-import Collapsible from "react-collapsible";
 import { css } from "emotion";
 import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
@@ -33,7 +32,7 @@ class Sidebar extends Component {
 
   componentWillUpdate(nextProps) {
     if (
-      nextProps.workflowKind.workflowKind !=
+      nextProps.workflowKind.workflowKind !==
       this.props.workflowKind.workflowKind
     ) {
       const metaValue =
@@ -47,14 +46,14 @@ class Sidebar extends Component {
   }
 
   handleChange = value => {
-    let id = parseInt(value, 10);
+    const id = parseInt(value, 10);
 
-    let that = this;
+    const that = this;
     this.setState({ value });
-    let metaValue = _.find(this.props.workflowKind.workflowKind, item => {
+    const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
       return item.id === id;
     });
-    let payload = { filterType: "kind", filterValue: [id], meta: metaValue };
+    const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
     this.props.dispatch(workflowKindActions.setValue(metaValue));
 
@@ -71,7 +70,7 @@ class Sidebar extends Component {
     const { workflowKind } = this.props.workflowKind;
     if (workflowKind) {
       return workflowKind.map(function(item) {
-        return <Option key={item.id}>{item.name}</Option>;
+        return <Option key={`option_${item.id}`}>{item.name}</Option>;
       });
     }
   };
@@ -117,12 +116,10 @@ class Sidebar extends Component {
 
   render() {
     const { isError } = this.props.workflowAlertGroupCount;
-    const { collapse } = this.state;
-    const { workflowKind } = this.props.workflowKind;
-    let selectedKind =
+    const selectedKind =
       this.state.value &&
       _.find(this.props.workflowKind.workflowKind, item => {
-        return item.id == this.state.value;
+        return item.id === this.state.value;
       });
 
     return (
@@ -178,7 +175,6 @@ class Sidebar extends Component {
             style={{
               backgroundColor: "#104774",
               padding: "5px 0px",
-              // minHeight: "100vh"
               maxHeight: "80vh",
               overflowY: "scroll"
             }}
@@ -193,7 +189,6 @@ class Sidebar extends Component {
                 count={this.props.count}
                 taskQueues={this.props.workflowGroupCount.stepgroupdef_counts}
                 loading={this.props.workflowAlertGroupCount.loading}
-                // workflowGroupCount={this.props.workflowGroupCount}
                 onSelectTask={this.onSelectTask}
                 onSelectMyTask={this.onSelectMyTask}
                 isMyTaskSelected={this.isMyTaskSelected}

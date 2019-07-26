@@ -3,10 +3,6 @@ import { Avatar, Row, Col, Icon, Rate } from "antd";
 import { Link } from "react-router-dom";
 
 class CardUser extends Component {
-  constructor(props) {
-    super(); // or super(props) ?
-  }
-
   render() {
     const { user } = this.props;
 

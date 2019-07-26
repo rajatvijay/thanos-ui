@@ -4,7 +4,6 @@ import OTPForm from "./OTPForm";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
-import { logout } from "../../actions";
 import _ from "lodash";
 import queryString from "query-string";
 import LoginHeader from "./LoginHeader";
@@ -17,9 +16,7 @@ class OTPLogin extends React.Component {
     };
   }
 
-  componentDidMount = () => {
-    //this.processUrl();
-  };
+  componentDidMount = () => {};
 
   processUrl = () => {
     const parsed = queryString.parse(this.props.location.search);
@@ -35,9 +32,9 @@ class OTPLogin extends React.Component {
   render = () => {
     const config = this.props.config;
     let showRightBlock = true;
-    let supportedLaguanges = config.supported_languages;
+    const supportedLaguanges = config.supported_languages;
 
-    let parsed = queryString.parse(this.props.location.search);
+    const parsed = queryString.parse(this.props.location.search);
 
     if (localStorage.getItem("user")) {
       if (this.props.location.state && this.props.location.state.from) {

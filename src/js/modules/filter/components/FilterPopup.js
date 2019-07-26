@@ -50,8 +50,8 @@ class FilterPopup extends Component {
   //ON ADVANCED FILTER APPLY EVENT
   onApply = () => {
     const { field, text, operator } = this.state;
-    const { applyFilters, onModalClose } = this.props;
-    let advFitlers = this.state.advFitlers;
+    const { onModalClose } = this.props;
+    const advFitlers = this.state.advFitlers;
 
     if (field && text && operator) {
       const fieldValue = field[field.length - 1];
@@ -97,7 +97,7 @@ class FilterPopup extends Component {
 
   //REMOVE INDIVISUAL FILTER ITEM
   removeAdvFilter = key => {
-    let { advFitlers } = this.state;
+    const { advFitlers } = this.state;
     advFitlers.splice(key, 1);
     this.setState({ advFitlers: advFitlers });
     this.applyAdvFilters();
@@ -116,11 +116,9 @@ class FilterPopup extends Component {
     } catch (e) {}
     return [];
     // previously it would show all statuses
-    //return this.props.workflowFilterType.statusType;
   };
 
   onFilterChange = (key, value) => {
-    const { operator, text, field } = this.state;
     this.setState({ [key]: value });
   };
 
@@ -129,7 +127,7 @@ class FilterPopup extends Component {
       workflowFilterType,
       filterState,
       onFilterChange,
-      onClear,
+
       onModalClose
     } = this.props;
 
@@ -239,7 +237,7 @@ class FilterPopup extends Component {
                 {this.state.advFitlers.map((item, index) => {
                   return (
                     <span
-                      key={index}
+                      key={`item_${index}`}
                       className="t-12 text-middle text-light  ant-tag v-tag pd-right"
                       style={{
                         wordBreak: "break-word",

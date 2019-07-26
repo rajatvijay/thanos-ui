@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Tag, List, Tooltip, Modal } from "antd";
+import { Tag, Tooltip, Modal } from "antd";
 import _ from "lodash";
-import { Row, Col, Button, Progress } from "antd";
+import { Row, Col, Progress } from "antd";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -17,7 +17,7 @@ export const integrationCommonFunctions = {
 };
 
 function comment_answer_body(c) {
-  let classes = "";
+  const classes = "";
 
   if (_.size(c.target.workflow_details)) {
     return <span className={classes}>{workflow_comment_html(c.target)}</span>;
@@ -28,31 +28,32 @@ function comment_answer_body(c) {
   }
 
   if (c.target.field_details.is_integration_type) {
-    if (c.target.field_details.type == "dnb_livingstone") {
+    // TODO : Use Switch here instead.
+    if (c.target.field_details.type === "dnb_livingstone") {
       return (
         <span className={classes}>
           {dnb_livingston_html(c.target.row_json)}
         </span>
       );
-    } else if (c.target.field_details.type == "dnb_ubo") {
+    } else if (c.target.field_details.type === "dnb_ubo") {
       return <span className={classes}>{dnb_ubo_html(c.target.row_json)}</span>;
-    } else if (c.target.field_details.type == "dnb_directors") {
+    } else if (c.target.field_details.type === "dnb_directors") {
       return (
         <span className={classes}>{dnb_directors_html(c.target.row_json)}</span>
       );
-    } else if (c.target.field_details.type == "google_search") {
+    } else if (c.target.field_details.type === "google_search") {
       return (
         <span className={classes}>{google_search_html(c.target.row_json)}</span>
       );
-    } else if (c.target.field_details.type == "ln_search") {
+    } else if (c.target.field_details.type === "ln_search") {
       return (
         <span className={classes}>{lexisnexis_html(c.target.row_json)}</span>
       );
-    } else if (c.target.field_details.type == "thomson_reuters_screenresult") {
+    } else if (c.target.field_details.type === "thomson_reuters_screenresult") {
       return (
         <span className={classes}>{tr_results_html(c.target.row_json)}</span>
       );
-    } else if (c.target.field_details.type == "rdc_event_details") {
+    } else if (c.target.field_details.type === "rdc_event_details") {
       return (
         <span className={classes}>{rdc_event_details(c.target.row_json)}</span>
       );
@@ -84,15 +85,18 @@ function lexisnexis_html(record) {
   ) {
     addr = (
       <div>
-        {_.map(record.EntityDetails.Addresses.EntityAddress, function(a) {
-          let t = [
+        {_.map(record.EntityDetails.Addresses.EntityAddress, function(
+          a,
+          index
+        ) {
+          const t = [
             a.Street1 ? a.Street1.$ : "",
             a.City ? a.City.$ : "",
             a.StateProvinceDistrict ? a.StateProvinceDistrict.$ : "",
             a.Country ? a.Country.$ : "",
             a.PostalCode ? a.PostalCode.$ : ""
           ];
-          return <div> - {t.join(" ")}</div>;
+          return <div key={`part_${index}`}> - {t.join(" ")}</div>;
         })}
       </div>
     );
@@ -112,17 +116,21 @@ function lexisnexis_html(record) {
       <br />
       False Positive:{" "}
       {record.FalsePositive
-        ? record.FalsePositive.$ == true
+        ? record.FalsePositive.$ === true
           ? "True"
           : "False"
         : "-"}
       <br />
       True Match:{" "}
-      {record.TrueMatch ? (record.TrueMatch.$ == true ? "True" : "False") : "-"}
+      {record.TrueMatch
+        ? record.TrueMatch.$ === true
+          ? "True"
+          : "False"
+        : "-"}
       <br />
       Added To Accept List:{" "}
       {record.AddedToAcceptList
-        ? record.AddedToAcceptList.$ == true
+        ? record.AddedToAcceptList.$ === true
           ? "True"
           : "False"
         : "-"}
@@ -143,7 +151,7 @@ function serp_search_html(record) {
         <b>{record.snippet}</b>
       </div>
       <div>
-        <a href={record.link} target="_blank">
+        <a href={record.link} target="_blank" rel="noopener noreferrer">
           {record.displayed_link}
         </a>
       </div>
@@ -184,7 +192,7 @@ class EntityGroup extends Component {
   };
 
   render() {
-    let firstEntity = this.props.group[0];
+    const firstEntity = this.props.group[0];
 
     return (
       <Col
@@ -209,6 +217,7 @@ class EntityGroup extends Component {
               firstEntity.entity_metadata.wikipedia_url ? (
                 <a
                   target="_blank"
+                  rel="noopener noreferrer"
                   href={firstEntity.entity_metadata.wikipedia_url}
                   className="text-secondary"
                 >
@@ -242,14 +251,15 @@ class EntityGroup extends Component {
                   return o.entity_metadata.wikipedia_url;
                 }
               ]),
-              function(entity) {
+              function(entity, index) {
                 return (
-                  <div className="mr-bottom">
+                  <div className="mr-bottom" key={`item_${index}`}>
                     <EntityItem
                       title={
                         entity.entity_metadata.wikipedia_url ? (
                           <a
                             target="_blank"
+                            rel="noopener noreferrer"
                             href={entity.entity_metadata.wikipedia_url}
                             className="text-secondary"
                           >
@@ -291,10 +301,9 @@ const getProgressColor = ({ percent }) => {
 };
 
 const EntityItem = props => {
-  let percent = getProgressPercent({ score: props.score });
-  let color = getProgressColor({ percent: percent });
+  const percent = getProgressPercent({ score: props.score });
 
-  let i = (
+  const i = (
     <Row gutter={10}>
       <Col span={18} className="text-light">
         <div className="text-ellipsis">{props.title}</div>
@@ -325,8 +334,7 @@ class DescriptionToggle extends Component {
   };
 
   componentDidMount = () => {
-    let body = this.props.body;
-    let show = this.state.show;
+    const body = this.props.body;
 
     if (body && body.length > 50) {
       this.setState({ body: this.props.body.slice(0, 300) });
@@ -334,7 +342,7 @@ class DescriptionToggle extends Component {
   };
 
   render() {
-    let toggle = (
+    const toggle = (
       <span
         onClick={this.onToggle}
         className="text-secondary text-underline text-anchor pd-left-sm"
@@ -376,10 +384,10 @@ function google_search_html(record, search) {
 
   const progressPercent = getProgressPercent({ score: record.sentiment_score });
 
-  let removeEntity = ["CONSUMER_GOOD", "WORK_OF_ART", "OTHER"];
+  const removeEntity = ["CONSUMER_GOOD", "WORK_OF_ART", "OTHER"];
 
   const getRelevanceScore = score => {
-    let s = parseFloat(score).toFixed(2);
+    const s = parseFloat(score).toFixed(2);
     let icon = "nobar";
     if (s > 0.5 && s < 0.625) {
       icon = "bar1";
@@ -394,18 +402,17 @@ function google_search_html(record, search) {
   };
 
   const keywordHighlight = (string, keyword) => {
-    let marked = `<mark><b>${keyword}</b></mark>`;
-    let regEsc = /^[a-zA-Z ]*$/g;
+    const marked = `<mark><b>${keyword}</b></mark>`;
+    const regEsc = /^[a-zA-Z ]*$/g;
 
     if (keyword && keyword.match(regEsc)) {
-      //if (keyword && !_.includes(keyword, "+")) {
       return string.replace(new RegExp(keyword, "gi"), marked);
     } else {
       return string;
     }
   };
 
-  let snippet = record.snippet;
+  const snippet = record.snippet;
   let highlighted = snippet;
 
   _.forEach(record.matched_keywords, function(keyword) {
@@ -442,7 +449,12 @@ function google_search_html(record, search) {
         dangerouslySetInnerHTML={{ __html: highlighted }}
       />
       <div className="mr-bottom-lg">
-        <a href={record.link} target="_blank" className="text-secondary">
+        <a
+          href={record.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-secondary"
+        >
           {record.link}
         </a>
       </div>
@@ -478,7 +490,7 @@ function google_search_html(record, search) {
         </Col>
         {_.map(groupedData, function(group, key) {
           if (!removeEntity.includes(key)) {
-            return <EntityGroup group={group} title={key} />;
+            return <EntityGroup group={group} title={`entityGroup_${key}`} />;
           }
         })}
       </Row>
@@ -505,7 +517,7 @@ function rdc_event_details(record) {
 }
 
 function dnb_ubo_html(record) {
-  let addr = record.PrimaryAddress;
+  const addr = record.PrimaryAddress;
   let addr_arr = [];
   if (_.size(addr)) {
     addr_arr = [
@@ -578,8 +590,10 @@ function dnb_directors_html(record) {
           <b>Positions:</b>
         </div>
         <div>
-          {_.map(record.Position, function(p) {
-            return <div>&nbsp;&nbsp;{p.PositionText.$}</div>;
+          {_.map(record.Position, function(p, index) {
+            return (
+              <div key={`pos_${index}`}>&nbsp;&nbsp;{p.PositionText.$}</div>
+            );
           })}
         </div>
       </span>
@@ -597,7 +611,7 @@ function dnb_directors_html(record) {
       {record.MostSeniorPrincipalIndicator ? (
         <div>
           <b>Most Senior Principal Indicator</b>:{" "}
-          {record.MostSeniorPrincipalIndicator == true ? "True" : "False"}
+          {record.MostSeniorPrincipalIndicator === true ? "True" : "False"}
         </div>
       ) : null}
 
@@ -620,14 +634,14 @@ function dnb_directors_html(record) {
 }
 
 function dnb_livingston_html(record) {
-  let screening_names = record.ScreeningNames;
+  const screening_names = record.ScreeningNames;
   let screening_names_html = "";
   if (_.size(screening_names)) {
     screening_names_html = (
       <span>
-        {_.map(screening_names, function(name) {
+        {_.map(screening_names, function(name, index) {
           return (
-            <span>
+            <span key={`screeningNames_${index}`}>
               <span>Name: {name.SubjectName}</span>
               <br />
               <span>Match Strength: {name.MatchStrengthValue}</span>
@@ -640,7 +654,7 @@ function dnb_livingston_html(record) {
     );
   }
 
-  let citations = record.Citations;
+  const citations = record.Citations;
   let citations_html = "";
   if (_.size(citations)) {
     citations_html = (
@@ -653,9 +667,9 @@ function dnb_livingston_html(record) {
               <th>Expiration Date</th>
               <th>Citation</th>
             </tr>
-            {_.map(citations, function(c) {
+            {_.map(citations, function(c, index) {
               return (
-                <tr>
+                <tr key={`citation_${index}`}>
                   <td>{c.DocumentDate}</td>
                   <td>{c.EffectiveDate}</td>
                   <td>{c.ExpirationDate}</td>
@@ -672,14 +686,14 @@ function dnb_livingston_html(record) {
     );
   }
 
-  let doc_link =
+  const doc_link =
     "https://s3.amazonaws.com/vetted-static-assets/livingtone_rpltype.html#" +
     record.ScreeningListType;
   return (
     <div>
       <b>
         RPL Type:{" "}
-        <a target="_blank" href={doc_link}>
+        <a target="_blank" rel="noopener noreferrer" href={doc_link}>
           {record.ScreeningListType}
         </a>
       </b>{" "}
@@ -780,8 +794,14 @@ function dnb_rdc_html(record) {
   if (_.size(record.Alias)) {
     alias_html = (
       <div className="text-left">
-        {_.map(record.Alias, function(al) {
-          return <InfoRow label={al.AliasType} value={al.AliasName} />;
+        {_.map(record.Alias, function(al, index) {
+          return (
+            <InfoRow
+              key={`row_${index}`}
+              label={al.AliasType}
+              value={al.AliasName}
+            />
+          );
         })}
       </div>
     );
@@ -824,7 +844,11 @@ function dnb_rdc_html(record) {
                   <div>{record.ReferenceDetail.SourceName}</div>
                   <div>{record.ReferenceDetail.PublicationDate}</div>
                   <div>
-                    <a href={record.ReferenceDetail.WebPageURL} target="_blank">
+                    <a
+                      href={record.ReferenceDetail.WebPageURL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {record.ReferenceDetail.WebPageURL}
                     </a>
                   </div>

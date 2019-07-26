@@ -11,8 +11,6 @@ const openNotificationWithIcon = data => {
 
 const success = () => {
   message.loading("Preparing forms ...", 12.5);
-  // .then(() => message.success('Loading finished', 2.5))
-  // .then(() => message.info('Loading finished is finished', 2.5));
 };
 
 export function workflowCreate(state = {}, action) {
@@ -22,7 +20,6 @@ export function workflowCreate(state = {}, action) {
 
       return {
         loading: true
-        //workflowList: action.workflows,
       };
     case workflowCreateConstants.CREATE_SUCCESS:
       message.destroy();

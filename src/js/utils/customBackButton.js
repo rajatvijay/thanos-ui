@@ -1,14 +1,10 @@
 import { history } from "../_helpers";
 
 export const goToPrevStep = () => {
-  let customHistory = JSON.parse(localStorage.getItem("customHistory"));
-  let histObj = customHistory.pop();
+  const customHistory = JSON.parse(localStorage.getItem("customHistory"));
+  const histObj = customHistory.pop();
 
-  let url = `${histObj.pathname}${histObj.search}`;
-
-  // if (histObj.search) {
-  //   url = url + "&backing=true";
-  // }
+  const url = `${histObj.pathname}${histObj.search}`;
 
   history.push(url);
 };

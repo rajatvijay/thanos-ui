@@ -1,11 +1,10 @@
-import React, { Component, Fragment } from "react";
-import { Menu, Dropdown, Button } from "antd";
-import { FormattedMessage } from "react-intl";
+import React from "react";
+import { Menu, Dropdown } from "antd";
 import _ from "lodash";
 
 export const CreateRelated = props => {
   const menuItems = () => {
-    let workflowKindFiltered = [];
+    const workflowKindFiltered = [];
 
     _.map(props.relatedKind, function(item) {
       if (item.is_related_kind && _.includes(item.features, "add_workflow")) {

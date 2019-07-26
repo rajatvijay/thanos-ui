@@ -23,7 +23,7 @@ class MetaGraph extends Component {
   };
 
   getFilterData = () => {
-    let that = this;
+    const that = this;
 
     this.setState({ loading: true });
     const requestOptions = {
@@ -75,6 +75,7 @@ class MetaGraph extends Component {
     } else {
       return (
         <iframe
+          title={"Reporting dashboard"}
           src={this.state.data.data.iframe_url}
           frameborder="0"
           width="560"

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { connect } from "react-redux";
 import WorkflowItem from "./WorkflowItem";
 import { Tabs, Checkbox, notification } from "antd";
 import { authHeader } from "../../_helpers";
@@ -46,12 +45,12 @@ class GetChildWorkflow extends Component {
   };
 
   assignChilrenToKind = () => {
-    let rk = this.state.relatedKinds;
-    let children = this.state.children;
-    let workFlowDetail = this.props.workflow;
+    const rk = this.state.relatedKinds;
+    const children = this.state.children;
+    const workFlowDetail = this.props.workflow;
 
-    let workflowFilterByKind = _.map(rk, kind => {
-      let k = {
+    const workflowFilterByKind = _.map(rk, kind => {
+      const k = {
         name: kind.name,
         id: kind.id,
         is_related_checkmarking_enabled: kind.is_related_checkmarking_enabled,
@@ -111,10 +110,10 @@ class GetChildWorkflow extends Component {
       .then(data => {
         // login successful if there's a jwt token in the response
         if (data) {
-          let rk = this.state.relatedKinds;
+          const rk = this.state.relatedKinds;
 
-          let workflowFilterByKind = rk.map(kind => {
-            let k = {
+          const workflowFilterByKind = rk.map(kind => {
+            const k = {
               name: kind.name,
               id: kind.id,
               is_related_checkmarking_enabled:
@@ -139,7 +138,7 @@ class GetChildWorkflow extends Component {
   };
 
   getChildCheckbox = kind => {
-    let regexForUrl = /\/instances\/[\d]+/;
+    const regexForUrl = /\/instances\/[\d]+/;
     if (kind.is_related_checkmarking_enabled) {
       return (
         <div>
@@ -172,12 +171,11 @@ class GetChildWorkflow extends Component {
     const cbtn = (
       <span style={{ paddingRight: "20px" }}>{props.createButton}</span>
     );
-    let workflowId = props.workflow.id;
     return (
       <Tabs tabBarExtraContent={cbtn}>
         {_.map(this.state.relatedKinds, (kind, key) => {
           return (
-            <TabPane tab={this.getChildCheckbox(kind)} key={kind.name}>
+            <TabPane tab={this.getChildCheckbox(kind)} key={`${kind.name}`}>
               <div className="pd-ard-lg">
                 {_.size(kind.workflows) ? (
                   _.map(kind.workflows, function(item, index) {
@@ -185,7 +183,7 @@ class GetChildWorkflow extends Component {
                       <WorkflowItem
                         isChild={true}
                         workflow={item}
-                        key={index}
+                        key={`${index}`}
                         kinds={props.kinds}
                         dispatch={props.dispatch}
                         workflowFilterType={props.workflowFilterType}
@@ -210,16 +208,5 @@ class GetChildWorkflow extends Component {
     );
   }
 }
-
-function mapPropsToState(state) {
-  const { workflowKind, workflowFilterType, workflowChildren } = state;
-  return {
-    workflowKind,
-    workflowFilterType,
-    workflowChildren
-  };
-}
-
-const ChildWorkflow = connect(mapPropsToState)(GetChildWorkflow);
 
 export default GetChildWorkflow;

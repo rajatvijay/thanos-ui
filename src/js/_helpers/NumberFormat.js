@@ -1,4 +1,3 @@
-import React from "react";
 import numeral from "numeral";
 
 export const NumberFormat = props => {
@@ -9,7 +8,7 @@ export const NumberFormat = props => {
     format = props.format;
   }
 
-  let number = numeral(props.value).format(format);
+  const number = numeral(props.value).format(format);
 
   return number;
 };

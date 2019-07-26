@@ -44,7 +44,7 @@ class Filter extends Component {
   };
 
   onFilterChange = (key, value) => {
-    const { displayfilters = {}, status, region, business_unit } = this.state;
+    const { displayfilters = {}, region, business_unit } = this.state;
 
     const {
       businessType,
@@ -55,14 +55,14 @@ class Filter extends Component {
     const updatedState = {};
 
     //ON STATUS CHANGE//
-    if (key == "status") {
-      let statusObj = statusType.find(item => item.value == value);
+    if (key === "status") {
+      const statusObj = statusType.find(item => item.value === value);
       displayfilters.status = statusObj.label;
     }
 
     //ON REGION CHANGE//
-    if (key == "region") {
-      let regionObj = regionType.results.find(item => item.value == value);
+    if (key === "region") {
+      const regionObj = regionType.results.find(item => item.value === value);
 
       if (value !== region && !!business_unit) {
         // if region is changed, make sure to clean the business unit as well.
@@ -70,8 +70,6 @@ class Filter extends Component {
         displayfilters.business_unit = undefined;
         this.removeFilter("business_unit");
       }
-
-      // load business units (Divisions), according to the selected region.
       this.props.dispatch(
         workflowFiltersActions.getBusinessUnitData(regionObj.value)
       );
@@ -80,9 +78,9 @@ class Filter extends Component {
     }
 
     //ON BUSINESS UNIT CHANGE//
-    if (key == "business_unit") {
-      let business_unitObj = businessType.results.find(
-        item => item.value == value
+    if (key === "business_unit") {
+      const business_unitObj = businessType.results.find(
+        item => item.value === value
       );
       displayfilters.business_unit = business_unitObj.label;
     }
@@ -100,7 +98,6 @@ class Filter extends Component {
 
   onApply = () => {
     const { field, text, operator } = this.state;
-    // const { applyFilters, onModalClose } = this.props;
 
     if (field && text && operator) {
       this.applyFilters(
@@ -133,8 +130,6 @@ class Filter extends Component {
   };
 
   onClear = () => {
-    const { getAllWorkflow, onModalClose } = this.props;
-
     this.setState({
       status: undefined,
       region: undefined,
@@ -194,7 +189,7 @@ class Filter extends Component {
 
     const arr = Object.values(displayfilters);
     if (arr.length) {
-      let str = arr.join(",");
+      const str = arr.join(",");
 
       return `: ${str}`;
     }
@@ -232,8 +227,6 @@ class Filter extends Component {
 
   render() {
     const { sortingEnabled } = this.state;
-
-    // const { visible, fieldOptions,status,region ,business_unit,operator,text,field,showError} = this.state;
 
     return (
       <div
@@ -288,7 +281,6 @@ class Filter extends Component {
                 {this.props.workflowFilters.kind.meta
                   .is_sorting_field_enabled ? (
                   <Tooltip
-                    // TODO: Use destructuring, dont access state directly inside any method
                     title={
                       this.state.sortOrderAsc
                         ? "High to low risk score"

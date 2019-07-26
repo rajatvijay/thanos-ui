@@ -5,23 +5,15 @@ import {
   Icon,
   Select,
   Avatar,
-  Collapse,
   Button,
-  Breadcrumb,
-  Tag,
   Mention,
-  Divider,
   Row,
   Col,
-  Menu,
-  Dropdown,
   Cascader,
   Upload,
-  Modal,
   Tooltip
 } from "antd";
-import { Link } from "react-router-dom";
-import { workflowDetailsActions, changeStatusActions } from "../../actions";
+import { changeStatusActions } from "../../actions";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import _ from "lodash";
 import Moment from "react-moment";
@@ -93,7 +85,7 @@ class Comments extends Component {
 
   addComment = (c, message, files) => {
     let content_type = "step";
-    if (c.content_type == "integrationresult") {
+    if (c.content_type === "integrationresult") {
       content_type = "integrationresult";
     } else if (c.target.field_details) {
       content_type = "field";
@@ -103,14 +95,10 @@ class Comments extends Component {
 
     const { fileList: filesFromState } = this.state;
     const fileList = files && files.length ? files : filesFromState;
-    // const formData = new FormData();
-    // fileList.forEach(file => {
-    //   formData.append("files[]", file);
-    // });
 
     const workflowId = this.props.workflowId;
 
-    let step_reload_payload = {
+    const step_reload_payload = {
       workflowId: workflowId,
       groupId: this.props.workflowKeys[workflowId].groupId,
       stepId: this.props.workflowKeys[workflowId].stepId
@@ -130,7 +118,7 @@ class Comments extends Component {
   };
 
   selectStep = target => {
-    let payload = {
+    const payload = {
       workflowId: target.workflow,
       groupId: target.step_group_details.id,
       stepId: target.step_details.id
@@ -150,12 +138,12 @@ class Comments extends Component {
   };
 
   selectFlag = option => {
-    let flag = option[0];
-    let reason = _.size(option) > 1 ? option[1] : "";
-    let comments = this.props.workflowComments
+    const flag = option[0];
+    const reason = _.size(option) > 1 ? option[1] : "";
+    const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    let target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = _.size(comments.results) ? comments.results[0].target : {};
 
     let payload = {};
     if (target.field_details) {
@@ -180,15 +168,15 @@ class Comments extends Component {
   };
 
   changeStatus = value => {
-    let comments = this.props.workflowComments
+    const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    let target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = _.size(comments.results) ? comments.results[0].target : {};
 
     if (!target.field_details.is_integration_type) {
       return;
     }
-    let payload = {
+    const payload = {
       parent_field_id: target.row_json.parent_field_id,
       parent_row_uid: target.row_json.parent_row_uid,
       krypton_status: value,
@@ -202,17 +190,15 @@ class Comments extends Component {
   };
 
   changeRiskCode = value => {
-    let comments = this.props.workflowComments
+    const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    let target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = _.size(comments.results) ? comments.results[0].target : {};
 
     if (!target.field_details.is_integration_type) {
       return;
     }
-    let payload = {
-      //parent_field_id: target.row_json.parent_field_id,
-      //parent_row_uid: target.row_json.parent_row_uid,
+    const payload = {
       krypton_risk_code: value,
       field_id: target.field,
       row_uid: target.uid,
@@ -224,16 +210,16 @@ class Comments extends Component {
   };
 
   changeWorkflowStatus = value => {
-    let comments = this.props.workflowComments
+    const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    let target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = _.size(comments.results) ? comments.results[0].target : {};
 
     if (!target.workflow_details) {
       return;
     }
 
-    let payload = {
+    const payload = {
       workflowId: target.workflow_details.id,
       statusId: value,
       addComment: true
@@ -241,7 +227,7 @@ class Comments extends Component {
 
     const workflowId = this.props.workflowId;
 
-    let step_reload_payload = {
+    const step_reload_payload = {
       workflowId: workflowId,
       groupId: this.props.workflowKeys[workflowId].groupId,
       stepId: this.props.workflowKeys[workflowId].stepId
@@ -272,13 +258,12 @@ class Comments extends Component {
   };
 
   render() {
-    const Panel = Collapse.Panel;
-    let comments = this.props.workflowComments
+    const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    let that = this;
-    let single_comments = _.size(comments.results) <= 1 ? true : false;
-    let c = _.size(comments.results) ? comments.results[0] : [];
+    const that = this;
+    const single_comments = _.size(comments.results) <= 1 ? true : false;
+    const c = _.size(comments.results) ? comments.results[0] : [];
 
     //ADJUDICATION SELECTION
     const adjudication = (
@@ -303,8 +288,12 @@ class Comments extends Component {
         className="comment-select"
       >
         {that.state.workflowStatuses.length > 0
-          ? that.state.workflowStatuses.map(v => {
-              return <Option value={v.id}>{v.label}</Option>;
+          ? that.state.workflowStatuses.map((v, index) => {
+              return (
+                <Option key={`option_${index}`} value={v.id}>
+                  {v.label}
+                </Option>
+              );
             })
           : null}
       </Select>
@@ -340,14 +329,18 @@ class Comments extends Component {
         onChange={that.changeStatus}
         className="comment-select"
       >
-        {status_filters.map(item => {
-          return <Option value={item.value}>{item.text}</Option>;
+        {status_filters.map((item, index) => {
+          return (
+            <Option key={`option_${index}`} value={item.value}>
+              {item.text}
+            </Option>
+          );
         })}
       </Select>
     );
 
     // for comment attachments
-    const { uploading, fileList } = this.state;
+    const { fileList } = this.state;
     const props = {
       onRemove: file => {
         this.setState(state => {
@@ -387,13 +380,14 @@ class Comments extends Component {
         <div className="comment-details" style={{ width: "570px" }}>
           <Content style={{ background: "#fdfdfd", paddingBottom: "50px" }}>
             {comments.results.length > 0 &&
-              comments.results.map(c => {
+              comments.results.map((c, index) => {
                 if (!single_comments && !_.size(c.messages)) {
                   return null;
                 }
 
                 return (
                   <div
+                    key={`commentContainer_${index}`}
                     style={{
                       height: "calc(100vh - 400px)",
                       overflowY: "scroll"
@@ -461,8 +455,9 @@ class Comments extends Component {
                             : null}
 
                           {c.target.field_details &&
-                          (c.target.field_details.type == "google_search" ||
-                            c.target.field_details.type == "serp_google_search")
+                          (c.target.field_details.type === "google_search" ||
+                            c.target.field_details.type ===
+                              "serp_google_search")
                             ? risk_codes_dropdown
                             : null}
                         </Col>
@@ -556,14 +551,6 @@ class Comments extends Component {
                     {single_comments ? (
                       <div className="affix-bottom" style={{ width: "100%" }}>
                         <StyledAddCommentContainer>
-                          {/*c.target.workflow_details ? (
-                            <Col span={10}>
-                              {c.target.workflow_details
-                                ? workflow_status_dropdown
-                                : null}
-                            </Col>
-                          ) : null*/}
-
                           <div>
                             {(c.target.field_details ||
                               c.target.workflow_details) &&

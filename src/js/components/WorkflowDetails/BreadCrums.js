@@ -22,8 +22,8 @@ class BreadCrums extends React.Component {
           color: "#305ebe"
         }}
       >
-        {items.map(item => (
-          <span>
+        {items.map((item, index) => (
+          <span key={`breadcrumb_${index}`}>
             <a href={`/workflows/instances/${item.id}/`}>{item.name}</a> >{" "}
           </span>
         ))}

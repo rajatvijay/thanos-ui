@@ -21,14 +21,9 @@ function getAll(filter) {
     credentials: "include"
   };
 
-  //case filter type status ==> http://slackcart.com/api/v1/workflows/?status=<status_id>
-  //case filter type kind ==>   http://slackcart.com/api/v1/workflows/?kind=<kind_id>
-  //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?answer=<field_tag>__<operator>__<value>
-  //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?stepgroupdef=<stepgroup_id>
-
-  let filters = store.getState().workflowFilters,
-    filterParams = getFilterParams(filters),
-    url = apiBaseURL + "workflows-list/";
+  const filters = store.getState().workflowFilters;
+  const filterParams = getFilterParams(filters);
+  let url = apiBaseURL + "workflows-list/";
 
   url += filterParams + "&lean=true";
 
@@ -46,9 +41,9 @@ function clearAll() {
     credentials: "include"
   };
 
-  let filters = store.getState().workflowFilters,
-    filterParams = getFilterParams(filters),
-    url = apiBaseURL + "workflows-list/";
+  const filters = store.getState().workflowFilters;
+  const filterParams = getFilterParams(filters);
+  let url = apiBaseURL + "workflows-list/";
 
   url += filterParams + "&lean=true";
 
@@ -63,7 +58,7 @@ function getChildWorkflow(parent) {
     credentials: "include"
   };
 
-  let url = apiBaseURL + "workflows-list/?parent_workflow_id=" + parent;
+  const url = apiBaseURL + "workflows-list/?parent_workflow_id=" + parent;
 
   return fetch(url, requestOptions).then(handleResponse);
 }
@@ -72,7 +67,7 @@ function getChildWorkflow(parent) {
 const getFilterParams = filters => {
   let p = "?";
   _.map(filters, function(i, index) {
-    let isFirst = index === 0 ? true : false;
+    const isFirst = index === 0 ? true : false;
 
     if (i) {
       _.map(i.filterValue, function(val) {
@@ -89,13 +84,9 @@ const getFilterParams = filters => {
 
 //CONSTRUCT PARAM FOR PAGINATION
 const pageUrl = filter => {
-  let url = _.map(filter, function(i, index) {
+  const url = _.map(filter, function(i, index) {
     let g = "";
     g = g + "&" + i.label + "=" + i.value;
-    // if (index === 0) {
-    //   g = g + "?" + i.label + "=" + i.value;
-    // } else {
-    // }
     return g;
   });
   return url.toString();
@@ -114,18 +105,6 @@ function getById(id) {
   );
 }
 
-function searchWorkflowGet(query) {
-  const requestOptions = {
-    method: "GET",
-    headers: authHeader.get(),
-    credentials: "include"
-  };
-
-  let url = apiBaseURL + "workflows/?q=" + query;
-
-  return fetch(url, requestOptions).then(handleResponse);
-}
-
 function searchWorkflow(query) {
   const requestOptions = {
     method: "POST",
@@ -134,7 +113,7 @@ function searchWorkflow(query) {
     body: JSON.stringify({ q: query })
   };
 
-  let url = apiBaseURL + "workflows-list/search/";
+  const url = apiBaseURL + "workflows-list/search/";
 
   return fetch(url, requestOptions).then(handleResponse);
 }

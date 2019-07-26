@@ -5,7 +5,7 @@ import { NumberFormat } from "../../../_helpers/NumberFormat";
 
 const Panel = Collapse.Panel;
 const FinancialData = props => {
-  var fs_list = props.field.integration_json["OrderProductResponse"][
+  const fs_list = props.field.integration_json["OrderProductResponse"][
     "OrderProductResponseDetail"
   ]["Product"]["Organization"]["Financial"]
     ? props.field.integration_json["OrderProductResponse"][
@@ -63,12 +63,12 @@ const FinancialData = props => {
       row.push(col);
       if (row.length < 2) {
         if (props.cols.length - 1 === index) {
-          rowRender = <Rowminator row={row} />;
+          rowRender = <Rowminator key={`row_${index}`} row={row} />;
           row = [];
           return rowRender;
         }
       } else {
-        rowRender = <Rowminator row={row} />;
+        rowRender = <Rowminator key={`row_${index}`} row={row} />;
         row = [];
         return rowRender;
       }
@@ -77,13 +77,13 @@ const FinancialData = props => {
   };
 
   const FinSection = props => {
-    let cols = [];
+    const cols = [];
     const list = props.list;
-    let length = list.length;
 
     _.map(list, function(item, index) {
-      var col = (
+      const col = (
         <Column
+          key={`col_${index}`}
           label={item.ItemDescriptionText ? item.ItemDescriptionText["$"] : "-"}
           value={
             item.ItemAmount ? (
@@ -115,12 +115,12 @@ const FinancialData = props => {
           className="financial-statement-collapse"
         >
           {_.map(fs_list, function(b, index) {
-            var shd = b.StatementHeaderDetails || {};
-            var bs = b.BalanceSheet || {};
-            var bs_assets = _.size(bs) ? bs.Assets || {} : {};
-            var lb = _.size(bs) ? bs.Liabilities : {};
-            var pnl = b.ProfitAndLossStatement || {};
-            var fr = b.FinancialRatios || {};
+            const shd = b.StatementHeaderDetails || {};
+            const bs = b.BalanceSheet || {};
+            const bs_assets = _.size(bs) ? bs.Assets || {} : {};
+            const lb = _.size(bs) ? bs.Liabilities : {};
+            const pnl = b.ProfitAndLossStatement || {};
+            const fr = b.FinancialRatios || {};
             return (
               <Panel
                 header={
@@ -268,14 +268,14 @@ const FinancialData = props => {
                     ) : null}
 
                     {_.size(fr) && _.size(fr.FinancialRatioCategory)
-                      ? _.map(fr.FinancialRatioCategory, function(frc) {
-                          var fri = frc.FinancialRatioItem || [];
+                      ? _.map(fr.FinancialRatioCategory, function(frc, index) {
+                          let fri = frc.FinancialRatioItem || [];
                           if (!_.size(fri)) {
-                            return <span />;
+                            return <span key={`row_${index}`} />;
                           }
                           fri = fri[0];
                           return (
-                            <Row gutter={24}>
+                            <Row gutter={24} key={`row_${index}`}>
                               <Column
                                 label={
                                   fri.ItemDescriptionText

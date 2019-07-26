@@ -27,11 +27,7 @@ class RDCEventDetailComponent extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
-
-    const props = {
-      field: field
-    };
+    const { field } = this.props;
 
     let final_html = null;
     if (
@@ -66,32 +62,10 @@ class RDCEventDetailComponent extends Component {
   };
 }
 
-const DescriptionItem = ({ title, content }) => (
-  <div
-    style={{
-      fontSize: 14,
-      lineHeight: "22px",
-      marginBottom: 7,
-      color: "rgba(0,0,0,0.65)"
-    }}
-  >
-    <p
-      style={{
-        marginRight: 8,
-        display: "inline-block",
-        color: "rgba(0,0,0,0.85)"
-      }}
-    >
-      {title}:
-    </p>
-    {content}
-  </div>
-);
-
 const buildDetails = obj => {
   obj["id"] = obj["custom_hash"];
 
-  var ref_details = obj["ReferenceDetail"] || [];
+  let ref_details = obj["ReferenceDetail"] || [];
   ref_details = _.map(ref_details, function(rd, index) {
     return (
       <span key={"key-" + index}>
@@ -111,7 +85,11 @@ const buildDetails = obj => {
           {rd["WebPageURL"] ? (
             <span>
               &nbsp;<b>Link:</b>{" "}
-              <a href={rd["WebPageURL"]} target="_blank">
+              <a
+                href={rd["WebPageURL"]}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {rd["WebPageURL"]}
               </a>
             </span>
@@ -222,13 +200,13 @@ const GetTable = props => {
       title: "Comments",
       key: "ln_index",
       render: record => {
-        let uid = record.custom_hash;
+        const uid = record.custom_hash;
         let flag_data = _.size(props.flag_dict[uid])
           ? props.flag_dict[uid]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span
@@ -267,10 +245,10 @@ const GetTabsFilter = props => {
     return <div className="text-center text-green">No alerts found</div>;
   }
 
-  let data = props.jsonData.data;
+  const data = props.jsonData.data;
 
-  let filter_key = "krypton_category";
-  let categories = _.map(data, function(e) {
+  const filter_key = "krypton_category";
+  const categories = _.map(data, function(e) {
     return { label: e[filter_key], value: e[filter_key], data: [], count: 0 };
   });
 
@@ -288,7 +266,7 @@ const GetTabsFilter = props => {
     fList = fList.concat(categories);
 
     _.map(data, function(i) {
-      let fName = i[filter_key];
+      const fName = i[filter_key];
       _.map(fList, function(f, index) {
         if (fName === f.value) {
           fList[index].count++;
@@ -314,7 +292,10 @@ const GetTabsFilter = props => {
         }),
         function(tab, index) {
           return (
-            <TabPane tab={tab.label + " (" + tab.count + ")"} key={tab.value}>
+            <TabPane
+              tab={tab.label + " (" + tab.count + ")"}
+              key={`tab_${tab.value}`}
+            >
               <GetTable
                 getComment={props.getComment}
                 jsonData={tab.data}

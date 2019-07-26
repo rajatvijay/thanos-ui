@@ -1,14 +1,13 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
-import moment from "moment";
 import _ from "lodash";
-import { Divider, Row, Col, Tooltip, Tag, Alert } from "antd";
+import { Tooltip } from "antd";
 import { utils } from "./utils";
 import { FormattedMessage } from "react-intl";
 import { ProcessLcData } from "./ProcessLcData";
 
-const { getVisibleSteps, isLockedStepEnable, isLockedStepGroupEnable } = utils;
+const { getVisibleSteps, isLockedStepGroupEnable } = utils;
 
 const LcItem = props => {
   return (
@@ -22,10 +21,10 @@ const LcItem = props => {
 };
 
 export const LcData = props => {
-  let lcdata = props.workflow.lc_data;
-  let lcdataList = _.map(lcdata, (item, index) => {
+  const lcdata = props.workflow.lc_data;
+  const lcdataList = _.map(lcdata, (item, index) => {
     if (item.display_type === "normal" && item.value) {
-      return <LcItem key={index} label={item.label} item={item} />;
+      return <LcItem key={`lcitem_${index}`} label={item.label} item={item} />;
     }
   });
 
@@ -54,7 +53,7 @@ export const LcData = props => {
 };
 
 export const StepGroupList = props => {
-  let visible_steps = getVisibleSteps(props.stepGroupData);
+  const visible_steps = getVisibleSteps(props.stepGroupData);
 
   return (
     <div className="shadow-wrapper">
@@ -62,8 +61,8 @@ export const StepGroupList = props => {
         <ul className="groupaz-list" id="groupaz-list">
           {_.size(visible_steps) ? (
             _.map(props.stepGroupData, function(group, index) {
-              let completed = group.completed;
-              let od = group.overdue;
+              const completed = group.completed;
+              const od = group.overdue;
 
               if (!_.size(group.steps)) {
                 return null;
@@ -141,21 +140,18 @@ export const StepGroupList = props => {
 };
 
 const StepItem = props => {
-  let step_complete = props.stepData.completed_at ? true : false;
-  let overdue = props.stepData.overdue ? true : false;
+  const step_complete = props.stepData.completed_at ? true : false;
+  const overdue = props.stepData.overdue ? true : false;
   let icon_cls = "panorama_fish_eye";
   if (step_complete) {
     icon_cls = "check_circle";
   } else if (props.stepData.is_locked) {
     icon_cls = "lock";
-    // if (!isLockedStepEnable(props.stepData, props.visible_steps)) {
-    //   return null;
-    // }
   } else if (overdue) {
     icon_cls = "error";
   }
 
-  let hasAlert = [];
+  const hasAlert = [];
 
   if (_.size(props.workflow.alerts)) {
     _.forEach(props.workflow.alerts, function(alert) {
@@ -196,9 +192,9 @@ const StepItem = props => {
           <span>{props.stepData.name}</span>
           {_.size(hasAlert) ? (
             <span className="alert-dot">
-              {_.map(hasAlert, alert => {
+              {_.map(hasAlert, (alert, index) => {
                 return (
-                  <Tooltip title={alert.label}>
+                  <Tooltip title={alert.label} key={`tooltip_${index}`}>
                     <i
                       className="material-icons"
                       style={{ fontSize: "9px", color: alert.color }}
@@ -244,9 +240,9 @@ const StepItem = props => {
           <span>{props.stepData.name}</span>
           {_.size(hasAlert) ? (
             <span className="alert-dot">
-              {_.map(hasAlert, alert => {
+              {_.map(hasAlert, (alert, index) => {
                 return (
-                  <Tooltip title={alert.label}>
+                  <Tooltip title={alert.label} key={`tooltip_${index}`}>
                     <i
                       className="material-icons"
                       style={{ fontSize: "9px", color: alert.color }}
@@ -263,23 +259,3 @@ const StepItem = props => {
     </li>
   );
 };
-
-{
-  /*export const GetQuickData = props => {
-  return (
-    <div className="group-overview">
-      <div className="overflow-wrapper">
-        <div className="step-ui">
-          {_.map(props.workflow.lc_data, function(lcItem, index) {
-            return (
-              <Tag className="alert-tag-item alert-primary">
-                {lcItem.label} : {lcItem.value}
-              </Tag>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-};*/
-}

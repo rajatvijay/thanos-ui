@@ -1,6 +1,4 @@
 import { authHeader } from "../_helpers";
-import _ from "lodash";
-import { store } from "../_helpers";
 import { apiBaseURL } from "../../config";
 
 export const changeStatusService = {
@@ -19,7 +17,7 @@ function update(payload) {
     })
   };
 
-  let url =
+  const url =
     apiBaseURL +
     "workflows/" +
     payload.workflowId +

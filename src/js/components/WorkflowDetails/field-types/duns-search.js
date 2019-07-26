@@ -30,7 +30,7 @@ class DunsSearch extends Component {
   };
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -39,7 +39,7 @@ class DunsSearch extends Component {
   };
 
   selectItem = data => {
-    let payload = {
+    const payload = {
       duns: data.DUNSNumber,
       field_id: this.props.field.id
     };
@@ -47,7 +47,7 @@ class DunsSearch extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -63,7 +63,8 @@ class DunsSearch extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      field.integration_json.status_message ===
+        "Fetching data for this field..."
     ) {
       final_html = (
         <div>
@@ -101,7 +102,7 @@ class DunsSearch extends Component {
 const GetTable = props => {
   // for error
   if (
-    props.jsonData.GetCleanseMatchResponse.TransactionResult.ResultText !=
+    props.jsonData.GetCleanseMatchResponse.TransactionResult.ResultText !==
     "Success"
   ) {
     return (
@@ -148,12 +149,6 @@ const GetTable = props => {
       dataIndex: "OperatingStatusText[$]",
       key: "OperatingStatusText[$]"
     },
-    // {
-    //   title: "Confidence code (10=highest)",
-    //   dataIndex: "MatchQualityInformation[ConfidenceCodeValue]",
-    //   key: "MatchQualityInformation[ConfidenceCodeValue]",
-    //   defaultSortOrder: "descend"
-    // },
     {
       title: "Action",
       key: "index",

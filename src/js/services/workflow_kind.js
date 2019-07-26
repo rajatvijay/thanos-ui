@@ -58,12 +58,3 @@ function getStatusCount(tag) {
     requestOptions
   ).then(handleResponse);
 }
-
-// function handleResponse(response) {
-//   if (!response.ok) {
-//     return Promise.reject(response.statusText);
-//   }
-//   let l = response.json();
-//   console.log(l);
-//   return l;
-// }

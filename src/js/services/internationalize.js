@@ -9,7 +9,7 @@ function updateSelectedLanguage(payload) {
     body: JSON.stringify({ to_language: payload })
   };
 
-  let url = apiBaseURL + "users/change_prefered_language/";
+  const url = apiBaseURL + "users/change_prefered_language/";
   return fetch(url, requestOptions).then(handleResponse);
 }
 

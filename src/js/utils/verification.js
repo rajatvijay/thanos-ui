@@ -1,7 +1,6 @@
 export const veryfiyClient = csrf => {
-  let currentCookie = document.cookie;
-  let storedCookie = csrf;
-  let verified = false;
+  const currentCookie = document.cookie;
+  const storedCookie = csrf;
 
   if (currentCookie === storedCookie) {
     return true;

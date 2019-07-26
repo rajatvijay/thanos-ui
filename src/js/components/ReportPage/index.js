@@ -6,10 +6,6 @@ import { injectIntl } from "react-intl";
 const { Content } = Layout;
 
 class ReportPage extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <Layout
@@ -21,6 +17,7 @@ class ReportPage extends Component {
             <Row className="clear">
               <div style={{ minHeight: "400px" }}>
                 <iframe
+                  title={"Reporting dashboard"}
                   style={{ width: "100%", minHeight: "80vh" }}
                   src={this.props.config.report_embed_url}
                 />

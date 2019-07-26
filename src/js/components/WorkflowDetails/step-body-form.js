@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { Form, Divider, Row, Col, Alert, Button, Tooltip, Tabs } from "antd";
+import { Form, Divider, Row, Col, Button, Tooltip, Tabs } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
 import "moment-timezone";
-//import { getFieldType } from "./field-types";
 import FieldItem from "./FieldItem";
 import { FormattedMessage, injectIntl } from "react-intl";
 
-const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const SIZE_33 = 4,
   SIZE_50 = 3,
@@ -32,9 +30,9 @@ class StepBodyForm extends Component {
   }
 
   getWorkflowId = () => {
-    let path = document.location.pathname;
-    let pathLast = path.split("/")[3];
-    let workflowID = pathLast.split("?")[0];
+    const path = document.location.pathname;
+    const pathLast = path.split("/")[3];
+    const workflowID = pathLast.split("?")[0];
     return workflowID;
   };
 
@@ -75,20 +73,11 @@ class StepBodyForm extends Component {
   //ON Field Change save or update data//
   //////////////////////////////////////
   onFieldChange = (e, payload, calculated) => {
-    //sanitize this function later
-    /*if (
-      _.size(payload.field.answers) &&
-      payload.field.answers[0].answer == e.target.value
-    ) {
-      console.log("not calling");
-      return false;
-    }*/
-
     const id = payload.field.id;
 
     const { regex_value } = payload.field;
     const re = new RegExp(regex_value);
-    let error = this.state.error;
+    const error = this.state.error;
     let ans = null;
     let isvalid = true;
 
@@ -112,18 +101,16 @@ class StepBodyForm extends Component {
 
     if (isvalid) {
       if (calculated === "file") {
-        let method = "save";
-        let data = {
+        const method = "save";
+        const data = {
           attachment: e,
           field: payload.field.id,
           workflow: payload.workflowId
         };
         this.callDispatch(data, method, payload);
-
-        // console.log(e.target);
       } else if (calculated) {
-        let method = "save";
-        let data = {
+        const method = "save";
+        const data = {
           answer: e || e === 0 ? e : "",
           field: payload.field.id,
           workflow: payload.workflowId
@@ -131,14 +118,14 @@ class StepBodyForm extends Component {
 
         this.callDispatch(data, method, payload);
       } else if (e.target) {
-        let method = "save";
-        let data = {
+        const method = "save";
+        const data = {
           answer: e.target.value,
           field: payload.field.id,
           workflow: payload.workflowId
         };
 
-        if (e.type == "blur") {
+        if (e.type === "blur") {
           this.props.dispatch(workflowStepActions.saveField(data, "blur"));
         } else {
           this.callDispatch(data, method, payload);
@@ -150,7 +137,7 @@ class StepBodyForm extends Component {
   //////////////////////////////////////
   //Dispatch field update /save actions/
   callDispatch = (data, method, payload) => {
-    let saveNowType = [
+    const saveNowType = [
       "dnb_duns_search",
       "bool",
       "file",
@@ -191,14 +178,13 @@ class StepBodyForm extends Component {
 
   updateDependentFields = (targetField, answer, clear) => {
     _.map(this.props.stepData.data_fields, field => {
-      let extra = field.definition.extra;
-      if (extra && extra.trigger_field_tag == targetField.definition.tag) {
+      const extra = field.definition.extra;
+      if (extra && extra.trigger_field_tag === targetField.definition.tag) {
         clear && this.clearFieldValue(field);
         this.props.dispatch(
           workflowStepActions.fetchFieldExtra(
             field,
             this.fieldAnswerFunction(answer)
-            // fieldAnswerFunction will be used to expand `{field-tag}` placeholders in `api_url`
           )
         );
       }
@@ -207,11 +193,11 @@ class StepBodyForm extends Component {
 
   haveNewFieldsBeenAdded = prev => {
     let anythingNew = false;
-    if (this.props.stepData.data_fields != prev.stepData.data_fields) {
+    if (this.props.stepData.data_fields !== prev.stepData.data_fields) {
       _.forEach(this.props.stepData.data_fields, field => {
         let somethingNew = true;
         _.forEach(prev.stepData.data_fields, oldField => {
-          if (oldField.id == field.id) {
+          if (oldField.id === field.id) {
             somethingNew = false;
             return false;
           }
@@ -250,19 +236,18 @@ class StepBodyForm extends Component {
 
       const field = _.find(
         this.props.stepData.data_fields,
-        field => field.definition.tag == fieldName
+        field => field.definition.tag === fieldName
       );
       if (field && field.answers[0]) {
         return field.answers[0].answer;
       }
       //TODO: Should it return `undefined` or ...
-      //return fieldName;
     };
   };
 
   updateAllAPIFields = () => {
     _.map(this.props.stepData.data_fields, field => {
-      let answer = field.answers[0]
+      const answer = field.answers[0]
         ? field.answers[0].answer
         : field.definition.defaultValue;
       this.updateDependentFields(field, answer);
@@ -271,18 +256,17 @@ class StepBodyForm extends Component {
   };
 
   updateIndependentAPIField = field => {
-    let extra = field.definition.extra;
+    const extra = field.definition.extra;
     // check if independent API field
     if (extra && extra.api_url && !extra.trigger_field_tag) {
       this.props.dispatch(
         workflowStepActions.fetchFieldExtra(field, this.fieldAnswerFunction())
-        // fieldAnswerFunction will be used to expand `{field-tag}` placeholders in `api_url`
       );
     }
   };
 
   getUserById = (id, status) => {
-    let that = this;
+    const that = this;
     userService.getById(id).then(
       function(result, error) {
         if (status === "completed") {
@@ -316,10 +300,6 @@ class StepBodyForm extends Component {
     } else {
       completed_by = "...";
     }
-    // const completedAt = new Date(step.completed_at).toISOString();
-    // const completedAtUTC = moment(completedAt)
-    //   .tz("UTC")
-    //   .format("YYYY/MM/DD z");
 
     return (
       <span className="text-secondary pd-right-sm ">
@@ -344,13 +324,9 @@ class StepBodyForm extends Component {
   //Calculate step completions and approval
   getStepStatus = stepData => {
     const step = stepData;
-    let editable = step.is_editable !== undefined ? step.is_editable : true;
+    const editable = step.is_editable !== undefined ? step.is_editable : true;
 
     if ((step.completed_at || step.approved_at) && editable) {
-      //this.getUserById(step.completed_by, 'completed');
-
-      //if(step.approved_at ){this.getUserById(step.approved_by, 'approved')};
-
       return (
         <div className=" step-status-box pd-top-sm">
           {step.completed_at ? this.getCompletedBy(step) : null}
@@ -366,49 +342,9 @@ class StepBodyForm extends Component {
               </span>
             </span>
           ) : null}
-
-          {/*
-              <span className="float-right pd-right-sm pd-left-sm">|</span>
-              <span
-                  className="float-right text-anchor text-underline text-primary"
-                  onClick={this.onApproveStep.bind(this, step)}
-                >
-                  {step.approved_at ? "Undo approval" : "Approve step"}
-                </span>
-              */}
-
-          {/*
-              {step.approved_at ? (
-                <span>
-                  {" "}
-                  and approved by{" "}
-                  <span className="text-medium ">
-                    this.state.stepApprovedBy
-                      ? this.state.stepApprovedBy.first_name
-                      : "..."
-                    ...
-                  </span>{" "}
-                  on <Moment format="MM/DD/YYYY">{step.approved_at}</Moment>
-                </span>
-              ) : null}
-                  */}
         </div>
       );
     } else if (step.updated_at) {
-      {
-        /**  return (
-        <Alert
-          className="animated-long page-break"
-          message={
-            <div className="">
-              Last updated <Moment fromNow>{step.updated_at}</Moment>{" "}
-            </div>
-          }
-          type="info"
-          showIcon
-        />
-      )**/
-      }
     } else {
       return <span />;
     }
@@ -433,22 +369,22 @@ class StepBodyForm extends Component {
   };
 
   getVersionField = fieldId => {
-    let data = this.props.stepVersionFields.stepVersionFields.data_fields;
+    const data = this.props.stepVersionFields.stepVersionFields.data_fields;
 
-    let fieldReturn = _.find(data, function(field) {
+    const fieldReturn = _.find(data, function(field) {
       if (field.id === parseInt(fieldId)) {
         return field;
       }
     });
 
-    let showAnswer =
+    const showAnswer =
       fieldReturn &&
       fieldReturn.answers.length !== 0 &&
       fieldReturn.answers[0].answer !== "";
 
     if (showAnswer)
       if (showAnswer && fieldReturn.definition.field_type !== "paragraph") {
-        let tooltip = (
+        const tooltip = (
           <span className="float-right ">
             {fieldReturn.answers[0].submitted_by_email ? (
               <Tooltip
@@ -492,7 +428,7 @@ class StepBodyForm extends Component {
   getUnifiedErrors = () => {
     const currentStepErrors = this.props.currentStepFields.error;
     const currentFieldError = this.state.error;
-    let consolidatedErrors = Object.assign(
+    const consolidatedErrors = Object.assign(
       {},
       currentStepErrors,
       currentFieldError
@@ -505,23 +441,22 @@ class StepBodyForm extends Component {
     if (!this.props.currentStepFields) {
       return null;
     }
-    let that = this;
-    let row = [];
-    let showFieldVersion =
+    const that = this;
+    const showFieldVersion =
       !_.isEmpty(this.props.stepVersionFields.stepVersionFields) &&
       this.props.showVersion;
-    let editable =
+    const editable =
       this.props.currentStepFields.currentStepFields.is_editable !== undefined
         ? this.props.currentStepFields.currentStepFields.is_editable
         : true;
 
-    let orderedStep = _.orderBy(
+    const orderedStep = _.orderBy(
       this.props.stepData.data_fields,
       [{ orderBy: Number }],
       ["asc"]
     );
 
-    let param = {
+    const param = {
       currentStepFields: this.props.currentStepFields,
       error: this.getUnifiedErrors(),
       onFieldChange: this.onFieldChange,
@@ -540,7 +475,7 @@ class StepBodyForm extends Component {
       dynamicUserPerms: this.props.dynamicUserPerms
     };
 
-    let rowGroup = {
+    const rowGroup = {
       fields: [],
       get currentOccupancy() {
         return this.fields.reduce((accumulator, rawField) => {
@@ -561,12 +496,11 @@ class StepBodyForm extends Component {
       },
 
       getFieldForRender(field) {
-        let fieldParams = Object.assign({}, param);
+        const fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
         fieldParams.workflowId = that.props.workflowIdFromPropsForModal
           ? that.props.workflowIdFromPropsForModal
           : fieldParams.workflowId;
-        // console.log("field", fieldParams, that.props);
         return (
           <FieldItem stepData={that.props.stepData} fieldParams={fieldParams} />
         );
@@ -585,17 +519,17 @@ class StepBodyForm extends Component {
         const fieldSizeFraction = this.getSizeFraction(field);
         return 1 - this.currentOccupancy >= fieldSizeFraction;
       },
-      render() {
+      render(key = `randomKey_${Math.random()}`) {
         // render the current group
         const _rowGroup = Object.assign(this);
         const fields = _rowGroup.fields;
 
         this.reset();
         return (
-          <Row gutter={60}>
+          <Row gutter={60} key={key}>
             {_.map(fields, rawField => {
-              let field = this.getFieldForRender(rawField);
-              let ftype = rawField.definition.field_type;
+              const field = this.getFieldForRender(rawField);
+
               return (
                 <Col
                   key={"field-" + rawField.id}
@@ -611,7 +545,7 @@ class StepBodyForm extends Component {
       }
     };
 
-    let groupedField = [];
+    const groupedField = [];
 
     _.forEach(orderedStep, function(step) {
       if (
@@ -619,10 +553,10 @@ class StepBodyForm extends Component {
         _.size(step.definition.extra) &&
         step.definition.extra.section
       ) {
-        let groupItem = { label: step.definition.body, steps: [step] };
+        const groupItem = { label: step.definition.body, steps: [step] };
         groupedField.push(groupItem);
       } else if (_.size(groupedField)) {
-        let index = groupedField.length - 1;
+        const index = groupedField.length - 1;
         groupedField[index].steps.push(step);
       }
     });
@@ -692,11 +626,11 @@ class StepBodyForm extends Component {
                   <TabPane tab={group.label} key={"group_" + index}>
                     {_.map(group.steps, function(field, index) {
                       if (index !== 0) {
-                        let renderQueue = [];
+                        const renderQueue = [];
                         if (!rowGroup.canAccommodateField(field)) {
                           // This field cannot be accommodated in the current group
                           // render the current group and append this to next batch for rendering
-                          renderQueue.push(rowGroup.render());
+                          renderQueue.push(rowGroup.render(`group_${index}`));
                         }
                         rowGroup.addToRenderGroup(field);
                         if (
@@ -706,9 +640,13 @@ class StepBodyForm extends Component {
                         ) {
                           // Row is full or
                           // this is the last field & rowGroup still has elements remaining
-                          renderQueue.push(rowGroup.render());
+                          renderQueue.push(rowGroup.render(`group2_${index}`));
                         }
-                        return renderQueue;
+                        return (
+                          <React.Fragment key={`frag_${index}`}>
+                            {renderQueue}
+                          </React.Fragment>
+                        );
                       }
                     })}
                   </TabPane>
@@ -717,7 +655,7 @@ class StepBodyForm extends Component {
             </Tabs>
           ) : (
             _.map(orderedStep, function(field, index) {
-              let renderQueue = [];
+              const renderQueue = [];
               if (!rowGroup.canAccommodateField(field)) {
                 // This field cannot be accommodated in the current group
                 // render the current group and append this to next batch for rendering

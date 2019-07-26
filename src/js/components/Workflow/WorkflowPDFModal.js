@@ -161,11 +161,6 @@ class WorkflowPDFModal extends Component {
       .catch(err => {
         this.setState({ requestingPDF: false });
         message.error("Oops! Some error occurred. Please try again!");
-
-        // this.props.onOk();
-        // message.success(
-        //   "Request to generate PDF has been successfully created. You'll soon recieve PDF on you email."
-        // );
       });
   };
   pdfConfigOptions = [
@@ -222,8 +217,8 @@ function ParentStepCheckboxes({ steps, onChange }) {
       style={{ marginBottom: 10, width: "100%" }}
     >
       <Row type="flex">
-        {steps.map(step => (
-          <Col xs={6}>
+        {steps.map((step, index) => (
+          <Col xs={6} key={`step_${index}`}>
             <Checkbox value={step.value}>{step.label}</Checkbox>
           </Col>
         ))}
@@ -236,16 +231,19 @@ function ChildStepsCheckboxes({ steps, onChange }) {
   return (
     <div type="flex" className="child-checkboxes-outer">
       <div className="child-checkboxes-inner">
-        {steps.map(step => (
-          <div className="child-checkbox-group-container">
+        {steps.map((step, index) => (
+          <div
+            className="child-checkbox-group-container"
+            key={`group_${index}`}
+          >
             <p>{step.name}</p>
             <CheckboxGroup
               className="child-checkbox-group"
               onChange={value => onChange(step.kind, value)}
             >
               <ul>
-                {step.stepsForCheckboxes.map(option => (
-                  <li>
+                {step.stepsForCheckboxes.map((option, index) => (
+                  <li key={`step_${index}`}>
                     <Checkbox value={option.value}>{option.label}</Checkbox>
                   </li>
                 ))}

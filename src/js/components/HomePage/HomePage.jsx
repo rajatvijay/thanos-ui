@@ -1,5 +1,4 @@
 import React from "react";
-//import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { userActions } from "../../actions";
@@ -14,8 +13,6 @@ class HomePage extends React.Component {
   }
 
   render() {
-    const { user, users } = this.props;
-
     return (
       <div className=" text-center">
         <br />
@@ -24,16 +21,6 @@ class HomePage extends React.Component {
         <br />
         <h1>Feature coming soon</h1>
         <h4>Hang tight, this feature will come soon on VETTED</h4>
-        {/*        
-        <h1>Hi {user.firstName}!</h1>
-        <h3>stats:</h3>
-        {users.loading && <em>Loading users...</em>}
-        {users.erros && <p>users.erros</p>}
-        {users.item && console.log(users)}
-
-        <p>
-          <Link to="/login">Logout</Link>
-        </p>*/}
       </div>
     );
   }

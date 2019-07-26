@@ -1,9 +1,6 @@
 import { userConstants } from "../constants";
 import { userService } from "../services";
-import {
-  logout as UserLogout,
-  sendEmailAuthToken as userSendEmailAuthToken
-} from "../services/user";
+import { sendEmailAuthToken as userSendEmailAuthToken } from "../services/user";
 import { history } from "../_helpers";
 import { notification } from "antd";
 import { siteOrigin } from "../../config";
@@ -15,7 +12,6 @@ export const userActions = {
   delete: _delete,
   setNextUrl,
   removeNextUrl
-  //checkAuth
 };
 
 const openNotificationWithIcon = data => {
@@ -101,10 +97,10 @@ export const tokenLogin = (token, next) => async dispatch => {
 };
 
 function removeCookies() {
-  var res = document.cookie;
-  var multiple = res.split(";");
-  for (var i = 0; i < multiple.length; i++) {
-    var key = multiple[i].split("=");
+  const res = document.cookie;
+  const multiple = res.split(";");
+  for (let i = 0; i < multiple.length; i++) {
+    const key = multiple[i].split("=");
     document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
   }
 }
@@ -115,19 +111,6 @@ const logoutNav = () => {
   localStorage.removeItem("customHistory");
   removeCookies();
   document.location.href = siteOrigin + "/api/v1/users/logout/";
-};
-
-const logoutXHR = () => async dispatch => {
-  try {
-    // history.push("/login/magic");
-    const response = await UserLogout();
-    dispatch({ type: userConstants.LOGOUT });
-    removeCookies();
-    document.location.reload();
-  } catch (error) {
-    removeCookies();
-    throw error;
-  }
 };
 
 export const logout = logoutNav;

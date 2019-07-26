@@ -2,7 +2,7 @@ import React from "react";
 import MagicLinkRedirect from "./MagicLinkRedirect";
 
 export const GenericNotFound = () => {
-  let param = document.location.search.split("=")[1];
+  const param = document.location.search.split("=")[1];
   if (param === "magic-link") {
     return <MagicLinkRedirect />;
   } else {
@@ -14,7 +14,8 @@ export const GenericNotFound = () => {
         <br />
         <br />
         <h1>
-          ERROR 404!<br />
+          ERROR 404!
+          <br />
         </h1>
         <h3>Page Not Found</h3>
       </div>

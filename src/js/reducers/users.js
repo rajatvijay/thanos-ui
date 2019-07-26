@@ -82,8 +82,8 @@ export function users(state = initialState, action) {
       // add 'deleting:true' property to user being deleted
       return {
         ...state,
-        items: state.items.map(
-          user => (user.id === action.id ? { ...user, deleting: true } : user)
+        items: state.items.map(user =>
+          user.id === action.id ? { ...user, deleting: true } : user
         )
       };
     case userConstants.DELETE_SUCCESS:
@@ -98,7 +98,7 @@ export function users(state = initialState, action) {
         items: state.items.map(user => {
           if (user.id === action.id) {
             // make copy of user without 'deleting:true' property
-            const { deleting, ...userCopy } = user;
+            const { ...userCopy } = user;
             // return copy of user with 'deleteError:[error]' property
             return { ...userCopy, deleteError: action.error };
           }

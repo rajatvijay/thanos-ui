@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Form, Input, Icon, Button, Layout } from "antd";
+import { FormattedMessage } from "react-intl";
 const FormItem = Form.Item;
 const { Sider } = Layout;
 
@@ -38,7 +39,6 @@ class DynamicFieldSet extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        // console.log("Received values of form: ", values);
       }
     });
   };
@@ -57,17 +57,6 @@ class DynamicFieldSet extends React.Component {
       }
     };
 
-    const fieldData = [
-      "initiate",
-      "contact info",
-      "Banking info",
-      "TaxID",
-      "W8/W9",
-      "DUNS number"
-    ];
-
-    const operator = ["&", "or", "=", ">", "<"];
-
     const formItemLayoutWithOutLabel = {
       wrapperCol: {
         xs: { span: 24, offset: 0 },
@@ -83,7 +72,7 @@ class DynamicFieldSet extends React.Component {
           {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
           label={index === 0 ? "Field" : ""}
           required={false}
-          key={k}
+          key={`${k}`}
         >
           {getFieldDecorator(`names[${k}]`, {
             validateTrigger: ["onChange", "onBlur"],
@@ -133,12 +122,6 @@ class DynamicFieldSet extends React.Component {
 const WrappedDynamicFieldSet = Form.create()(DynamicFieldSet);
 
 class Filter extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  callback = key => {};
-
   toggle = () => {
     this.props.toggleSidebar();
   };
@@ -160,7 +143,6 @@ class Filter extends Component {
         collapsible
         reverseArrow={true}
         defaultCollapsed={true}
-        //trigger={null}
       >
         <div className="profile-details">
           <div className="sidebar-head">
@@ -181,7 +163,3 @@ class Filter extends Component {
 }
 
 export const Filter2 = Filter;
-
-// export  const WrappedDynamicFieldSet = () => {
-//   return <div>yeelllelel</div>
-// }

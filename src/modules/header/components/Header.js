@@ -3,21 +3,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
-import {
-  Tooltip,
-  Menu,
-  Dropdown,
-  Input,
-  Icon,
-  notification,
-  Drawer
-} from "antd";
+import { Tooltip, Menu, Dropdown, Input, Icon, notification } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import { logout, workflowActions, navbarActions } from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
-import { apiBaseURL, siteOrigin } from "../../../config";
+import { siteOrigin } from "../../../config";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -26,8 +18,6 @@ const openNotificationWithIcon = data => {
     placement: "bottomLeft"
   });
 };
-
-const SubMenu = Menu.SubMenu;
 
 class Header extends Component {
   state = {
@@ -78,7 +68,7 @@ class Header extends Component {
   };
 
   getExportList = () => {
-    let kind = this.props.workflowKind.workflowKind;
+    const kind = this.props.workflowKind.workflowKind;
 
     return (
       <Dropdown
@@ -92,7 +82,7 @@ class Header extends Component {
                 _.includes(item.features, "add_workflow")
               ) {
                 return (
-                  <Menu.Item key={index}>
+                  <Menu.Item key={`menu_${index}`}>
                     <a
                       href={
                         siteOrigin +
@@ -142,10 +132,10 @@ class Header extends Component {
 
   render() {
     const { searchInput } = this.state;
-    let user = this.props.authentication.user;
-    let supportedLaguanges = this.props.config.supported_languages;
-    let regexForUrl = /\/instances\/[\d]+/;
-    let showExportOption =
+    const user = this.props.authentication.user;
+    const supportedLaguanges = this.props.config.supported_languages;
+    const regexForUrl = /\/instances\/[\d]+/;
+    const showExportOption =
       this.props.config.permissions &&
       this.props.config.permissions.includes("Can export workflow data");
     let showInsights = false;

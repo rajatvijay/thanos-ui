@@ -31,8 +31,9 @@ class StepAssignmentUsers extends React.Component {
           onChange={this.updateQueryString}
         />
         <Menu style={{ maxHeight: 200, overflowY: "scroll" }}>
-          {this.getFilteredUsers().map(user => (
+          {this.getFilteredUsers().map((user, index) => (
             <Menu.Item
+              key={`menu_${index}`}
               style={{ lineHeight: "25px", height: 25 }}
               onClick={this.handleUserClick(user)}
             >

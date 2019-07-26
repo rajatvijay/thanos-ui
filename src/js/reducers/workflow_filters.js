@@ -9,7 +9,6 @@ const initialState = {
   },
   status: [],
   region: [],
-  // business: [],
   business_unit: [],
   multifilter: null,
   stepgroupdef: null,
@@ -34,15 +33,13 @@ export function workflowFilters(state = initialState, action) {
 
     case workflowFiltersConstants.GET_REQUEST:
       return {
-        //loading: true
         workflowFilters: [{ ...action.workflowFilter }]
       };
 
     case workflowFiltersConstants.DELETE_REQUEST:
-      let newState = { ...state };
+      const newState = { ...state };
       delete newState[action.workflowFilter.filterType];
       return {
-        //loading: true
         ...newState
       };
 
@@ -51,7 +48,6 @@ export function workflowFilters(state = initialState, action) {
         ...state,
         status: [],
         region: [],
-        // business: [],
         business_unit: [],
         advFilter: null,
         advance: []
@@ -63,10 +59,10 @@ export function workflowFilters(state = initialState, action) {
 }
 
 function normalizeData(data) {
-  let arr = [];
+  const arr = [];
 
   _.map(data, function(item) {
-    let i = item;
+    const i = item;
     i.value = item.id;
     arr.push(i);
   });
@@ -98,22 +94,6 @@ export function workflowFilterType(state = initialDataState, action) {
       };
 
     //kind type fitler data
-    // case workflowFiltersConstants.GET_KIND_REQUEST:
-    //   return {
-    //     loading: true
-    //   };
-
-    // case workflowFiltersConstants.GET_KIND_SUCCESS:
-    //   return {
-    //     loading: false,
-    //     workflowFilters: { ...action.workflowFilters }
-    //   };
-
-    // case workflowFiltersConstants.GET_KIND_FAILURE:
-    //   return {
-    //     loading: false,
-    //     error: action.error
-    //   };
 
     case workflowFiltersConstants.GET_BUSINESS_UNIT_REQUEST:
       return {

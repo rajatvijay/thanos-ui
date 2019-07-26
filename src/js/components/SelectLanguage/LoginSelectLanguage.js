@@ -23,7 +23,7 @@ class LoginSelectLanguage extends React.Component {
       preferredLanguage = preferredLanguage.split("-")[0];
     }
 
-    let supportedLaguanges = this.props.config.supported_languages;
+    const supportedLaguanges = this.props.config.supported_languages;
     if (
       supportedLaguanges &&
       !_.includes(supportedLaguanges, preferredLanguage)

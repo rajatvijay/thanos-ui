@@ -10,10 +10,9 @@ import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
 import _ from "lodash";
 import { history } from "../_helpers";
-import { notification, message } from "antd";
+import { notification } from "antd";
 import * as Sentry from "@sentry/browser";
 import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
-//import { history } from "../_helpers";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -67,11 +66,6 @@ function getStepGroup(id, isActive) {
     dispatch(request(id));
 
     // workflowDetailsService
-    //   .getStepGroup(id)
-    //   .then(
-    //     stepGroups => dispatch(success(stepGroups, id)),
-    //     error => dispatch(failure(error))
-    //   );
     workflowDetailsService.getStepGroup(id).then(
       stepGroups => {
         const { minimalUI } = getState();
@@ -169,7 +163,7 @@ function getStepFields(step) {
 
 // Get workflow/step/field Comments
 function getComment(object_id, content_type, addtn, isEmbedded) {
-  let payload = {
+  const payload = {
     object_id: object_id,
     type: content_type,
     extra: addtn

@@ -22,6 +22,7 @@ export const ProcessLcData = (lc, is_alert) => {
       <a
         href={lc.value}
         target="_blank"
+        rel="noopener noreferrer"
         className="text-nounderline text-anchor"
       >
         <i className="material-icons">picture_as_pdf</i>

@@ -27,7 +27,7 @@ class DnbRDCAlerts extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -40,7 +40,7 @@ class DnbRDCAlerts extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -92,8 +92,6 @@ class DnbRDCAlerts extends Component {
 }
 
 const buildDetails = obj => {
-  var akas = obj["alias"];
-
   const Column = props => {
     return (
       <Col span={props.column ? props.column : 24} className="pd-left pd-right">
@@ -105,73 +103,14 @@ const buildDetails = obj => {
     );
   };
 
-  const RowHead = props => {
-    return (
-      <Row
-        gutter={24}
-        className={props.className ? props.className : "mr-bottom-lg"}
-      >
-        <Col span={24}>
-          <strong className="dt-label">{props.label}</strong>
-        </Col>
-      </Row>
-    );
-  };
-
-  const Rowminator = props => {
-    return (
-      <Row gutter={24}>
-        {_.map(props.row, function(col, index) {
-          return col;
-        })}
-      </Row>
-    );
-  };
-
-  const Columnizer = props => {
-    let final_html = null;
-    let row = [];
-    let rowRender = null;
-
-    final_html = _.map(props.cols, function(col, index) {
-      row.push(col);
-      if (row.length < 2) {
-        if (props.cols.length - 1 === index) {
-          rowRender = <Rowminator row={row} />;
-          row = [];
-          return rowRender;
-        }
-      } else {
-        rowRender = <Rowminator row={row} />;
-        row = [];
-        return rowRender;
-      }
-    });
-    return final_html;
-  };
-
-  akas = _.map(akas, function(aka) {
-    return (
-      <span>
-        <span>
-          &nbsp;<b>{aka.aliasTyp}: </b>
-          {aka.aliasName}
-        </span>
-        <br />
-      </span>
-    );
-  });
-
   const customPanelStyle = {
-    // /background: '#f7f7f7',
     borderRadius: 0,
     marginBottom: 0,
-    //border: 0,
     overflow: "hidden"
   };
 
   const getAbbr = (code, subCode) => {
-    let abbrList = [
+    const abbrList = [
       { label: "ACC", value: "Accuse" },
       { label: "ALL", value: "Allege" },
       { label: "CSP", value: "Conspire" },
@@ -296,10 +235,10 @@ const buildDetails = obj => {
       { label: "NSC", value: "Nonspecific Crimes" }
     ];
 
-    let tootliptext1 = _.find(abbrList, function(o) {
+    const tootliptext1 = _.find(abbrList, function(o) {
       return o.label === code;
     });
-    let tootliptext2 = _.find(abbrList, function(o) {
+    const tootliptext2 = _.find(abbrList, function(o) {
       return o.label === subCode;
     });
 
@@ -345,7 +284,7 @@ const buildDetails = obj => {
             column={12}
             label="URL"
             value={
-              <a href={obj.rdcURL} target="_blank">
+              <a href={obj.rdcURL} target="_blank" rel="noopener noreferrer">
                 {obj.rdcURL}
               </a>
             }
@@ -359,9 +298,13 @@ const buildDetails = obj => {
             style={customPanelStyle}
           >
             <Row>
-              {_.map(obj.event, function(refItem) {
+              {_.map(obj.event, function(refItem, index) {
                 return (
-                  <Row gutter={16} className="mr-bottom-lg">
+                  <Row
+                    gutter={16}
+                    className="mr-bottom-lg"
+                    key={`row_${index}`}
+                  >
                     {refItem.category ? (
                       <div>
                         {refItem.category.categoryCode ? (
@@ -425,9 +368,9 @@ const buildDetails = obj => {
             style={customPanelStyle}
           >
             <Row>
-              {_.map(obj.postAddr, function(address) {
+              {_.map(obj.postAddr, function(address, index) {
                 return (
-                  <div>
+                  <div key={`row_${index}`}>
                     <Column
                       column={12}
                       label="Locator Type:"
@@ -454,9 +397,9 @@ const buildDetails = obj => {
             key="attribute"
             style={customPanelStyle}
           >
-            {_.map(obj.attribute, function(arrtitem) {
+            {_.map(obj.attribute, function(arrtitem, index) {
               return (
-                <Row gutter={16} className="mr-bottom-lg">
+                <Row gutter={16} className="mr-bottom-lg" key={`row_${index}`}>
                   <Column
                     column={12}
                     label="Attribute Code:"
@@ -481,9 +424,9 @@ const buildDetails = obj => {
             key="4"
             style={customPanelStyle}
           >
-            {_.map(obj.alias, function(aliasItem) {
+            {_.map(obj.alias, function(aliasItem, index) {
               return (
-                <Row gutter={16} className="mr-bottom-lg">
+                <Row gutter={16} className="mr-bottom-lg" key={`row_${index}`}>
                   <Column
                     column={12}
                     label={aliasItem.aliasTyp + ":"}
@@ -564,8 +507,8 @@ const GetTable = props => {
           ? props.flag_dict[record.sysId]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span

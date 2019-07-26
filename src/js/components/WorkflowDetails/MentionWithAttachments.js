@@ -65,9 +65,9 @@ class MentionWithAttachments extends Component {
           onOk={this.uploadAndAddComment}
           onCancel={this.hideModalAndResetState}
         >
-          {files.map(file => (
-            <div>
-              <img width="200" src={file.url} />
+          {files.map((file, index) => (
+            <div key={`file_${index}`}>
+              <img width="200" src={file.url} alt="" />
               <p>{file.file.name}</p>
             </div>
           ))}

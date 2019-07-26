@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Radio, Modal, notification } from "antd";
 import { FormattedMessage } from "react-intl";
-import { css } from "emotion";
 import { authHeader } from "../../../_helpers";
 import { apiBaseURL } from "../../../../config";
 
@@ -38,7 +37,6 @@ function getField(fieldDetail, OnFieldChange, fieldList, getFieldDecorator) {
           )}
         </Form.Item>
       );
-      break;
 
     case "bool":
       return (
@@ -69,7 +67,6 @@ function getField(fieldDetail, OnFieldChange, fieldList, getFieldDecorator) {
           )}
         </Form.Item>
       );
-      break;
 
     default:
       break;
@@ -84,7 +81,7 @@ class BulkActionFields extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.actionDetail !== this.props.actionDetail) {
-      let fields = {};
+      const fields = {};
       this.props.actionDetail &&
         this.props.actionDetail.edit_fields.forEach(item => {
           fields[item.tag] = item.default_value;
@@ -178,8 +175,8 @@ class BulkActionFields extends Component {
         {this.props.actionDetail ? (
           <Form layout="inline" onSubmit={this.onSubmitClick}>
             <div style={{ display: "flex", flexDirection: "row" }}>
-              {this.props.actionDetail.edit_fields.map(field => (
-                <div>
+              {this.props.actionDetail.edit_fields.map((field, index) => (
+                <div key={`field_${index}`}>
                   <p
                     style={{
                       margin: 0,

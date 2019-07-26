@@ -18,7 +18,7 @@ class CardList extends Component {
         <Content style={{ padding: 24, margin: 0, minHeight: "100vh" }}>
           <div className="card-wrapper">
             {_.map(users, function(user) {
-              return <CardUser key={user.id} user={user} />;
+              return <CardUser key={`${user.id}`} user={user} />;
             })}
           </div>
         </Content>

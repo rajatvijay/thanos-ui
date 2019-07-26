@@ -44,6 +44,5 @@ export const changeStatusActions = (
       type: "error",
       message: "Failed"
     });
-    // dispatch(alertActions.error(error));
   }
 };

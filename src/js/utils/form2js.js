@@ -33,8 +33,6 @@
     root.form2js = factory();
   }
 })(this, function() {
-  "use strict";
-
   /**
    * Returns form values represented as Javascript object
    * "name" attribute defines structure of resulting object
@@ -54,23 +52,24 @@
     getDisabled
   ) {
     getDisabled = getDisabled ? true : false;
-    if (typeof skipEmpty == "undefined" || skipEmpty == null) skipEmpty = true;
-    if (typeof delimiter == "undefined" || delimiter == null) delimiter = ".";
+    if (typeof skipEmpty === "undefined" || skipEmpty === null)
+      skipEmpty = true;
+    if (typeof delimiter === "undefined" || delimiter === null) delimiter = ".";
     if (arguments.length < 5) useIdIfEmptyName = false;
 
     rootNode =
-      typeof rootNode == "string"
+      typeof rootNode === "string"
         ? document.getElementById(rootNode)
         : rootNode;
 
-    var formValues = [],
+    let formValues = [],
       currNode,
       i = 0;
 
     /* If rootNode is array - combine values */
     if (
-      rootNode.constructor == Array ||
-      (typeof NodeList != "undefined" && rootNode.constructor == NodeList)
+      rootNode.constructor === Array ||
+      (typeof NodeList !== "undefined" && rootNode.constructor === NodeList)
     ) {
       while ((currNode = rootNode[i++])) {
         formValues = formValues.concat(
@@ -92,13 +91,13 @@
   /**
    * Processes collection of { name: 'name', value: 'value' } objects.
    * @param nameValues
-   * @param skipEmpty if true skips elements with value == '' or value == null
+   * @param skipEmpty if true skips elements with value === '' or value === null
    * @param delimiter
    */
   function processNameValues(nameValues, skipEmpty, delimiter) {
-    var result = {},
-      arrays = {},
-      i,
+    const result = {},
+      arrays = {};
+    let i,
       j,
       k,
       l,
@@ -127,9 +126,9 @@
         namePart = _nameParts[j].split("][");
         if (namePart.length > 1) {
           for (k = 0; k < namePart.length; k++) {
-            if (k == 0) {
+            if (k === 0) {
               namePart[k] = namePart[k] + "]";
-            } else if (k == namePart.length - 1) {
+            } else if (k === namePart.length - 1) {
               namePart[k] = "[" + namePart[k];
             } else {
               namePart[k] = "[" + namePart[k] + "]";
@@ -150,7 +149,7 @@
       for (j = 0; j < nameParts.length; j++) {
         namePart = nameParts[j];
 
-        if (namePart.indexOf("[]") > -1 && j == nameParts.length - 1) {
+        if (namePart.indexOf("[]") > -1 && j === nameParts.length - 1) {
           arrName = namePart.substr(0, namePart.indexOf("["));
           arrNameFull += arrName;
 
@@ -164,17 +163,17 @@
           arrNameFull += "_" + arrName + "_" + arrIdx;
 
           /*
-					 * Because arrIdx in field name can be not zero-based and step can be
-					 * other than 1, we can't use them in target array directly.
-					 * Instead we're making a hash where key is arrIdx and value is a reference to
-					 * added array element
-					 */
+           * Because arrIdx in field name can be not zero-based and step can be
+           * other than 1, we can't use them in target array directly.
+           * Instead we're making a hash where key is arrIdx and value is a reference to
+           * added array element
+           */
 
           if (!arrays[arrNameFull]) arrays[arrNameFull] = {};
-          if (arrName != "" && !currResult[arrName]) currResult[arrName] = [];
+          if (arrName !== "" && !currResult[arrName]) currResult[arrName] = [];
 
-          if (j == nameParts.length - 1) {
-            if (arrName == "") {
+          if (j === nameParts.length - 1) {
+            if (arrName === "") {
               currResult.push(value);
               arrays[arrNameFull][arrIdx] = currResult[currResult.length - 1];
             } else {
@@ -217,7 +216,7 @@
     useIdIfEmptyName,
     getDisabled
   ) {
-    var result = extractNodeValues(
+    const result = extractNodeValues(
       rootNode,
       nodeCallback,
       useIdIfEmptyName,
@@ -234,7 +233,7 @@
     useIdIfEmptyName,
     getDisabled
   ) {
-    var result = [],
+    let result = [],
       currentNode = rootNode.firstChild;
 
     while (currentNode) {
@@ -260,23 +259,21 @@
   ) {
     if (node.disabled && !getDisabled) return [];
 
-    var callbackResult,
-      fieldValue,
-      result,
-      fieldName = getFieldName(node, useIdIfEmptyName);
+    const fieldName = getFieldName(node, useIdIfEmptyName),
+      callbackResult = nodeCallback && nodeCallback(node);
 
-    callbackResult = nodeCallback && nodeCallback(node);
+    let fieldValue, result;
 
     if (callbackResult && callbackResult.name) {
       result = [callbackResult];
-    } else if (fieldName != "" && node.nodeName.match(/INPUT|TEXTAREA/i)) {
+    } else if (fieldName !== "" && node.nodeName.match(/INPUT|TEXTAREA/i)) {
       fieldValue = getFieldValue(node, getDisabled);
       if (null === fieldValue) {
         result = [];
       } else {
         result = [{ name: fieldName, value: fieldValue }];
       }
-    } else if (fieldName != "" && node.nodeName.match(/SELECT/i)) {
+    } else if (fieldName !== "" && node.nodeName.match(/SELECT/i)) {
       fieldValue = getFieldValue(node, getDisabled);
       result = [{ name: fieldName.replace(/\[\]$/, ""), value: fieldValue }];
     } else {
@@ -292,8 +289,8 @@
   }
 
   function getFieldName(node, useIdIfEmptyName) {
-    if (node.name && node.name != "") return node.name;
-    else if (useIdIfEmptyName && node.id && node.id != "") return node.id;
+    if (node.name && node.name !== "") return node.name;
+    else if (useIdIfEmptyName && node.id && node.id !== "") return node.id;
     else return "";
   }
 
@@ -306,7 +303,7 @@
         switch (fieldNode.type.toLowerCase()) {
           case "radio":
             if (fieldNode.checked && fieldNode.value === "false") return false;
-          case "checkbox":
+          case "checkbox": // NEED INPUT : Is this a fallthrough case intentionally? or can a break be added above this?
             if (fieldNode.checked && fieldNode.value === "true") return true;
             if (!fieldNode.checked && fieldNode.value === "true") return false;
             if (fieldNode.checked) return fieldNode.value;
@@ -317,17 +314,14 @@
           case "submit":
           case "image":
             return "";
-            break;
 
           default:
             return fieldNode.value;
-            break;
         }
         break;
 
       case "SELECT":
         return getSelectedOptionValue(fieldNode);
-        break;
 
       default:
         break;
@@ -337,11 +331,9 @@
   }
 
   function getSelectedOptionValue(selectNode) {
-    var multiple = selectNode.multiple,
-      result = [],
-      options,
-      i,
-      l;
+    const multiple = selectNode.multiple,
+      result = [];
+    let options, i, l;
 
     if (!multiple) return selectNode.value;
 

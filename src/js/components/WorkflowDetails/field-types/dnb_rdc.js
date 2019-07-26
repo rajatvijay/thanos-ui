@@ -25,7 +25,7 @@ class DnbRDC extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -41,7 +41,7 @@ class DnbRDC extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -55,7 +55,8 @@ class DnbRDC extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      field.integration_json.status_message ===
+        "Fetching data for this field..."
     ) {
       final_html = (
         <div>
@@ -93,8 +94,6 @@ class DnbRDC extends Component {
 }
 
 const buildDetails = obj => {
-  var akas = obj["Alias"];
-
   const Column = props => {
     return (
       <Col span={props.column ? props.column : 24} className="pd-left pd-right">
@@ -105,63 +104,6 @@ const buildDetails = obj => {
       </Col>
     );
   };
-
-  const RowHead = props => {
-    return (
-      <Row
-        gutter={24}
-        className={props.className ? props.className : "mr-bottom-lg"}
-      >
-        <Col span={24}>
-          <strong className="dt-label">{props.label}</strong>
-        </Col>
-      </Row>
-    );
-  };
-
-  const Rowminator = props => {
-    return (
-      <Row gutter={24}>
-        {_.map(props.row, function(col, index) {
-          return col;
-        })}
-      </Row>
-    );
-  };
-
-  const Columnizer = props => {
-    let final_html = null;
-    let row = [];
-    let rowRender = null;
-
-    final_html = _.map(props.cols, function(col, index) {
-      row.push(col);
-      if (row.length < 2) {
-        if (props.cols.length - 1 === index) {
-          rowRender = <Rowminator row={row} />;
-          row = [];
-          return rowRender;
-        }
-      } else {
-        rowRender = <Rowminator row={row} />;
-        row = [];
-        return rowRender;
-      }
-    });
-    return final_html;
-  };
-
-  akas = _.map(akas, function(aka) {
-    return (
-      <span>
-        <span>
-          &nbsp;<b>{aka.AliasType}: </b>
-          {aka.AliasName}
-        </span>
-        <br />
-      </span>
-    );
-  });
 
   const referenceBuilder = props => {
     let refArry = [];
@@ -176,19 +118,13 @@ const buildDetails = obj => {
     return refArry;
   };
 
-  const customPanelStyle = {
-    borderRadius: 0,
-    marginBottom: 0,
-    overflow: "hidden"
-  };
-
   const getImg = () => {
-    let imgItem = _.find(obj.NonspecificParameterDetail, item => {
+    const imgItem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "IMG";
     });
     return imgItem ? (
       <Col span={12}>
-        <img src={imgItem.ParameterValue} style={{ maxWidth: "100%" }} />
+        <img src={imgItem.ParameterValue} style={{ maxWidth: "100%" }} alt="" />
       </Col>
     ) : (
       <span />
@@ -197,9 +133,9 @@ const buildDetails = obj => {
 
   const getBirthDate = () => {
     if (obj.PersonalDetail && obj.PersonalDetail.BirthDate) {
-      let dates = _.map(obj.PersonalDetail.BirthDate, date => {
+      const dates = _.map(obj.PersonalDetail.BirthDate, date => {
         return (
-          <span key={date} className="pd-right-lg">
+          <span key={`date_${date}`} className="pd-right-lg">
             {date},
           </span>
         );
@@ -211,7 +147,7 @@ const buildDetails = obj => {
   };
 
   const getSex = () => {
-    let sexitem = _.find(obj.NonspecificParameterDetail, item => {
+    const sexitem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "SEX";
     });
     return sexitem ? (
@@ -222,7 +158,7 @@ const buildDetails = obj => {
   };
 
   const getRisk = () => {
-    let riskItem = _.find(obj.NonspecificParameterDetail, item => {
+    const riskItem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "RID";
     });
     return riskItem ? (
@@ -231,10 +167,10 @@ const buildDetails = obj => {
   };
 
   const getPepType = () => {
-    let pepItem = _.find(obj.NonspecificParameterDetail, item => {
+    const pepItem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "PTY";
     });
-    let pepDesc = _.find(obj.NonspecificParameterDetail, item => {
+    const pepDesc = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "RGP";
     });
     return pepItem && pepItem.ParameterValue ? (
@@ -247,7 +183,7 @@ const buildDetails = obj => {
   };
 
   const getPepRating = () => {
-    let ratingItem = _.find(obj.NonspecificParameterDetail, item => {
+    const ratingItem = _.find(obj.NonspecificParameterDetail, item => {
       return item.ParameterIdentificationNumber === "PRT";
     });
     return ratingItem ? ratingItem.ParameterValue : null;
@@ -263,18 +199,12 @@ const buildDetails = obj => {
 
   return (
     <div
-      //ref="rdcTable"
-      //ref={el => (this.container = el)}
       id="rdc-table"
       className="dnb-rdc-wrapper"
       style={{ marginLeft: "-50px", marginTop: "-16px" }}
     >
       <div className="match-item company-item">
-        <Tabs
-          defaultActiveKey="1"
-          tabPosition="top"
-          //style={{ maxWidth: "75%" }}
-        >
+        <Tabs defaultActiveKey="1" tabPosition="top">
           <TabPane tab="Entity details & Alias" key="1">
             <Row gutter={16} className="mr-bottom-lg">
               {getImg()}
@@ -307,7 +237,7 @@ const buildDetails = obj => {
               {_.map(obj.Alias, function(aliasItem, index) {
                 return (
                   <Column
-                    key={index}
+                    key={`col_${index}`}
                     column={8}
                     label={aliasItem.AliasType + ":"}
                     value={aliasItem.AliasName || "-"}
@@ -344,7 +274,7 @@ const buildDetails = obj => {
 
               wholeAddress = //PIN CODE
                 wholeAddress + (address.PostalCode ? address.PostalCode : "");
-              return <RowItem key={index} text={wholeAddress} />;
+              return <RowItem key={`address_${index}`} text={wholeAddress} />;
             })}
           </TabPane>
 
@@ -352,7 +282,7 @@ const buildDetails = obj => {
             <TabPane tab="Position" key="3">
               {obj.Positions && obj.Positions.Position
                 ? _.map(obj.Positions.Position, function(position, index) {
-                    return <RowItem key={index} text={position} />;
+                    return <RowItem key={`pos_${index}`} text={position} />;
                   })
                 : null}
             </TabPane>
@@ -364,7 +294,7 @@ const buildDetails = obj => {
                 if (item.ParameterIdentificationNumber === "RGP") {
                   return (
                     <Column
-                      key={item.ParameterValue}
+                      key={`col_${item.ParameterValue}`}
                       column={24}
                       label={item.ParameterIdentificationNumber + ":"}
                       value={item.ParameterValue}
@@ -388,7 +318,7 @@ const buildDetails = obj => {
               {_.map(obj.Relationships, function(relationship, index) {
                 return (
                   <RowItem
-                    key={index}
+                    key={`row_${index}`}
                     text={
                       <Row>
                         <Column
@@ -422,7 +352,7 @@ const buildDetails = obj => {
           <TabPane tab="Source" key="7">
             {_.map(referenceBuilder(obj), function(refItem, index) {
               return (
-                <Row key={index} className="mr-bottom-lg">
+                <Row key={`row_${index}`} className="mr-bottom-lg">
                   <Column
                     column={12}
                     label="SourceName:"
@@ -438,7 +368,11 @@ const buildDetails = obj => {
                     label="Web page:"
                     value={
                       (
-                        <a href={refItem.WebPageURL} target="_blank">
+                        <a
+                          href={refItem.WebPageURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {refItem.WebPageURL}
                         </a>
                       ) || "-"
@@ -482,7 +416,11 @@ const buildDetails = obj => {
                   label="Web page:"
                   value={
                     (
-                      <a href={obj.ReferenceDetail.WebPageURL} target="_blank">
+                      <a
+                        href={obj.ReferenceDetail.WebPageURL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {obj.ReferenceDetail.WebPageURL}
                       </a>
                     ) || "-"
@@ -514,9 +452,13 @@ const buildDetails = obj => {
               if (item.ParameterIdentificationNumber === "URL") {
                 return (
                   <RowItem
-                    key={index}
+                    key={`item_${index}`}
                     text={
-                      <a href={item.ParameterValue} target="_blank">
+                      <a
+                        href={item.ParameterValue}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {" "}
                         {item.ParameterValue}{" "}
                       </a>
@@ -566,7 +508,7 @@ class EventDetailComp extends Component {
         {_.size(refItem.ReferenceDetail)
           ? _.map(refItem.ReferenceDetail, function(item, index) {
               return (
-                <div key={index} className="mr-bottom-lg">
+                <div key={`refDetail_${index}`} className="mr-bottom-lg">
                   <div>
                     {item.Headline ? (
                       <h4 className="t-16 text-medium">{item.Headline}</h4>
@@ -576,7 +518,11 @@ class EventDetailComp extends Component {
 
                     {item.WebPageURL ? (
                       <div className="mr-bottom">
-                        <a href={item.WebPageURL} target="_blank">
+                        <a
+                          href={item.WebPageURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {item.WebPageURL}
                         </a>
                       </div>
@@ -680,13 +626,6 @@ class EventDetailComp extends Component {
             value={refItem.EventSubTypeText || "-"}
             className="mr-bottom-sm"
           />
-
-          {/*<Block
-                      column={4}
-                      label="Postal Code:"
-                      value={refItem.PostalCode || "-"}
-                      className="mr-bottom-sm"
-                    />*/}
         </Row>
         <Divider />
       </div>
@@ -694,8 +633,8 @@ class EventDetailComp extends Component {
   };
 
   render() {
-    let obj = this.props.obj;
-    let that = this;
+    const obj = this.props.obj;
+    const that = this;
 
     const { activeFilter, data } = this.state;
 
@@ -723,8 +662,12 @@ class EventDetailComp extends Component {
 
         <Divider />
 
-        {_.map(data, function(refItem) {
-          return that.getEventItem(refItem);
+        {_.map(data, function(refItem, index) {
+          return (
+            <React.Fragment key={`${index}`}>
+              {that.getEventItem(refItem)}
+            </React.Fragment>
+          );
         })}
       </div>
     );
@@ -746,7 +689,7 @@ const Block = props => {
 };
 
 const getAbbr = (code, subCode) => {
-  let abbrList = [
+  const abbrList = [
     { label: "ACC", value: "Accuse" },
     { label: "ALL", value: "Allege" },
     { label: "CSP", value: "Conspire" },
@@ -868,10 +811,10 @@ const getAbbr = (code, subCode) => {
     { label: "NSC", value: "Nonspecific Crimes" }
   ];
 
-  let tootliptext1 = _.find(abbrList, function(o) {
+  const tootliptext1 = _.find(abbrList, function(o) {
     return o.label === code;
   });
-  let tootliptext2 = _.find(abbrList, function(o) {
+  const tootliptext2 = _.find(abbrList, function(o) {
     return o.label === subCode;
   });
 
@@ -925,8 +868,8 @@ const GetTable = props => {
           ? props.flag_dict[record.AlertEntitySystemID]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span
@@ -961,7 +904,7 @@ const GetTable = props => {
 const GetTabsFilter = props => {
   // for error
   if (
-    props.jsonData.SearchComplianceAlertsResponse.TransactionResult.ResultID !=
+    props.jsonData.SearchComplianceAlertsResponse.TransactionResult.ResultID !==
     "PD021"
   ) {
     return (
@@ -991,7 +934,7 @@ const GetTabsFilter = props => {
     props.jsonData.SearchComplianceAlertsResponse
       .SearchComplianceAlertsResponseDetail.AlertDetail[0]["AlertEntity"];
 
-  let category_counts = {};
+  const category_counts = {};
   _.map(data, function(e) {
     _.map(e["custom_counts"], function(v, k) {
       if (!category_counts[k]) {
@@ -1022,7 +965,7 @@ const GetTabsFilter = props => {
     fList = fList.concat(categories);
 
     _.map(data, function(i) {
-      let categs = i["custom_counts"] || {};
+      const categs = i["custom_counts"] || {};
       _.map(fList, function(f, index) {
         if (categs[f.label]) {
           fList[index].count++;
@@ -1045,11 +988,14 @@ const GetTabsFilter = props => {
       {getFilterData(data).length > 0
         ? getFilterData(data).map(function(tab, index) {
             if (!tab.label) {
-              return;
+              return null;
             }
 
             return (
-              <TabPane tab={tab.label + " (" + tab.count + ")"} key={tab.value}>
+              <TabPane
+                tab={tab.label + " (" + tab.count + ")"}
+                key={`tab_${tab.value}`}
+              >
                 <GetTable
                   getComment={props.getComment}
                   jsonData={tab.data}

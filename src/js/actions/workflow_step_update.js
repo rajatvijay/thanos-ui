@@ -6,14 +6,11 @@ import {
 import { workflowStepService } from "../services";
 import { notification, message } from "antd";
 import _ from "lodash";
-import { SET_WORKFLOW_KEYS } from "../constants/workflowKeys";
 import {
   workflowDetailsActions,
-  workflowActions,
   workflowFiltersActions,
   stepPreviewActions
 } from "../actions";
-import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -67,7 +64,6 @@ function saveField(payload, event_type) {
   }
 
   function remove_errors(payload, workflowId) {
-    //message.destroy();
     return {
       type: workflowFieldConstants.POST_FIELD_FAILURE,
       payload,
@@ -82,22 +78,11 @@ function saveField(payload, event_type) {
       return failure(field, workflowId);
     }
 
-    // if (event_type != "blur") {
-    //   // openNotificationWithIcon({
-    //   //   type: "success",
-    //   //   message: "Saved successfully"
-    //   // });
-    // }
-
     return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
   }
 
   function failure(error, workflowId) {
     message.destroy();
-    // openNotificationWithIcon({
-    //   type: "error",
-    //   message: "Unable to save."
-    // });
     return {
       type: workflowFieldConstants.POST_FIELD_FAILURE,
       error,
@@ -208,10 +193,6 @@ function updateField(payload) {
 
   function success(field) {
     message.destroy();
-    // openNotificationWithIcon({
-    //   type: "success",
-    //   message: "Saved successfully"
-    // });
 
     return { type: workflowFieldConstants.PATCH_FIELD_SUCCESS, field };
   }
@@ -230,7 +211,6 @@ function updateField(payload) {
 //fetch stepgroup  data i.e steps list//
 ////////////////////////////////////////
 function submitStepData(payload) {
-  //const workflowId = payload.id;
   const { id } = payload;
   return dispatch => {
     dispatch(request(payload));
@@ -243,7 +223,6 @@ function submitStepData(payload) {
           dispatch(
             workflowDetailsActions.getStepGroup(stepData.workflow, true)
           );
-          //dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
           dispatch(workflowFiltersActions.getStatusData());
           dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
@@ -311,7 +290,7 @@ function approveStep(payload) {
   };
 
   function request() {
-    return { type: workflowStepConstants.SUBMIT_REQUEST, payload }; //{ type: workflowStepConstants.APPROVE_REQUEST, payload };
+    return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
   function success(stepData) {
     openNotificationWithIcon({
@@ -319,7 +298,7 @@ function approveStep(payload) {
       message: "Approved"
     });
 
-    return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData }; //{type: workflowStepConstants.APPROVE_SUCCESS,stepData};
+    return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData };
   }
   function failure(error) {
     openNotificationWithIcon({
@@ -331,7 +310,7 @@ function approveStep(payload) {
       type: workflowStepConstants.SUBMIT_FAILURE,
       error,
       payload: { id: workflowId }
-    }; //{ type: workflowStepConstants.APPROVE_FAILURE, error };
+    };
   }
 }
 
@@ -349,7 +328,6 @@ function undoStep(payload) {
         if (stepData.id) {
           dispatch(workflowDetailsActions.getStepGroup(stepData.workflow));
           // call an action to update the sidebar here
-          //dispatch(workflowDetailsActions.getById(stepData.workflow));
         }
       },
       error => dispatch(failure(error, payload))
@@ -357,14 +335,14 @@ function undoStep(payload) {
   };
 
   function request() {
-    return { type: workflowStepConstants.SUBMIT_REQUEST, payload }; //{ type: workflowStepConstants.UNDO_REQUEST, payload };
+    return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
   function success(stepData) {
     openNotificationWithIcon({
       type: "success",
       message: "Successfully reverted step completion"
     });
-    return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData }; //{type: workflowStepConstants.UNDO_SUCCESS,stepData};
+    return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData };
   }
   function failure(error, payload) {
     openNotificationWithIcon({
@@ -376,7 +354,7 @@ function undoStep(payload) {
       type: workflowStepConstants.SUBMIT_FAILURE,
       error,
       payload: { ...payload, id: workflowId }
-    }; //{ type: workflowStepConstants.UNDO_FAILURE, error };
+    };
   }
 }
 
@@ -385,8 +363,6 @@ function undoStep(payload) {
 ////////////////////
 function addComment(payload, step_reload_payload, isEmbedded) {
   return dispatch => {
-    //dispatch(request(payload));
-
     workflowStepService.addComment(payload).then(
       commentData => {
         if (commentData["detail"]) {
@@ -399,7 +375,7 @@ function addComment(payload, step_reload_payload, isEmbedded) {
           _.size(commentData.results) &&
           !commentData.results[0].target.workflow_details
         ) {
-          let stepTrack = {
+          const stepTrack = {
             workflowId: commentData.results[0].target.workflow,
             groupId: commentData.results[0].target.step_group_details.id,
             stepId: commentData.results[0].target.step_details.id,
@@ -454,8 +430,6 @@ function addComment(payload, step_reload_payload, isEmbedded) {
 ////////////////////
 function updateFlag(payload, isEmbedded) {
   return dispatch => {
-    //dispatch(request(payload));
-
     workflowStepService.updateFlag(payload).then(
       commentData => {
         commentData.isEmbedded = isEmbedded;
@@ -464,7 +438,7 @@ function updateFlag(payload, isEmbedded) {
           _.size(commentData.results) &&
           !commentData.results[0].target.workflow_details
         ) {
-          let stepTrack = {
+          const stepTrack = {
             workflowId: commentData.results[0].target.workflow,
             groupId: commentData.results[0].target.step_group_details.id,
             stepId: commentData.results[0].target.step_details.id,
@@ -511,14 +485,12 @@ function updateFlag(payload, isEmbedded) {
 ////////////////////
 function updateIntegrationStatus(payload, isEmbedded) {
   return dispatch => {
-    //dispatch(request(payload));
-
     workflowStepService.updateIntegrationStatus(payload).then(
       commentData => {
         commentData.isEmbedded = isEmbedded;
         dispatch(success(commentData));
         if (_.size(commentData.results)) {
-          let stepTrack = {
+          const stepTrack = {
             workflowId: commentData.results[0].target.workflow,
             groupId: commentData.results[0].target.step_group_details.id,
             stepId: commentData.results[0].target.step_details.id,

@@ -7,9 +7,6 @@ export const configActions = {
 
 function getConfig() {
   return dispatch => {
-    //return {type:"hello"}
-    // dispatch(request());  to prevent reloading of page
-
     configService
       .getConfig()
       .then(
@@ -18,9 +15,6 @@ function getConfig() {
       );
   };
 
-  function request() {
-    return { type: configConstants.CONFIG_REQUEST };
-  }
   function success(config) {
     return { type: configConstants.CONFIG_SUCCESS, config };
   }

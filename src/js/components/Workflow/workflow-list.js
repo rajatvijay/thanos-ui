@@ -1,9 +1,7 @@
-import React, { Component, Fragment } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from "react";
 import { Layout, Pagination } from "antd";
 import { workflowActions } from "../../actions";
 import _ from "lodash";
-import { calculatedData } from "./calculated-data";
 import { connect } from "react-redux";
 import moment from "moment";
 import { FormattedMessage } from "react-intl";
@@ -11,12 +9,11 @@ import UserWorkflow from "./user-workflow";
 import WorkflowItem from "./WorkflowItem";
 
 const { Content } = Layout;
-const { getProcessedData } = calculatedData;
 const PAGE_SIZE = 20;
 
 class WorkflowList extends Component {
   handlePageChange = (page, rage) => {
-    let param = [{ label: "page", value: page }];
+    const param = [{ label: "page", value: page }];
     this.props.dispatch(workflowActions.getAll(param));
   };
 
@@ -34,7 +31,7 @@ class WorkflowList extends Component {
   };
 
   render() {
-    let that = this;
+    const that = this;
     const data = this.props.workflow;
     let page = 1;
     if (data.next) {
@@ -45,10 +42,10 @@ class WorkflowList extends Component {
       page = parseInt(page[1], 10) + 1;
     }
 
-    var occurrenceDay = function(occurrence) {
-      var today = moment().startOf("day");
-      var thisWeek = moment().startOf("week");
-      var thisMonth = moment().startOf("month");
+    const occurrenceDay = function(occurrence) {
+      const today = moment().startOf("day");
+      const thisWeek = moment().startOf("week");
+      const thisMonth = moment().startOf("month");
 
       if (moment(occurrence.created_at).isAfter(today)) {
         return "Today";
@@ -69,19 +66,19 @@ class WorkflowList extends Component {
         rank: that.getRank(page, i + 1, data.count)
       }));
 
-    var result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
+    let result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
     if (this.props.isEmbedded) {
-      var result = _.groupBy(data.workflow, occurrenceDay);
+      result = _.groupBy(data.workflow, occurrenceDay);
     }
 
-    var ListCompletes = _.map(result, (list, key) => {
-      var listL = _.map(list, function(item, index) {
+    const ListCompletes = _.map(result, (list, key) => {
+      const listL = _.map(list, function(item, index) {
         return (
           <WorkflowItem
             location={that.props.location}
             rank={item.rank}
             workflow={item}
-            key={index}
+            key={`${index}`}
             kinds={that.props.workflowKind}
             dispatch={that.props.dispatch}
             workflowFilterType={that.props.workflowFilterType}
@@ -110,7 +107,6 @@ class WorkflowList extends Component {
         <span key={key} className="month-group">
           {!this.props.isEmbedded ? (
             <div
-              // className={"h6 grouping-head " + key}
               style={{
                 marginTop: "38px",
                 marginBottom: "11px",

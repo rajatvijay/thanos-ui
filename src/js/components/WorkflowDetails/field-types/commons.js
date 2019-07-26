@@ -3,6 +3,7 @@ import { Button, Row, Col, Icon, Tag, Menu, Dropdown, Tooltip } from "antd";
 import _ from "lodash";
 import Moment from "react-moment";
 import { URL_REGEX, ANCHOR_TAG_REGEX } from "../../../utils/contants";
+import Anchor from "../../common/Anchor";
 
 export const commonFunctions = {
   getLabel,
@@ -52,14 +53,12 @@ function getLabel(props, that) {
     </Tooltip>
   ) : null;
 
-  let commentClasses =
+  const commentClasses =
     props.field.comment_count > 0 ? "comment-icon has-comment" : "comment-icon";
 
   const comment = (
     <span className="float-right">
       <span className={commentClasses}>{addCommentBtn(that, props)}</span>
-      {/*fieldFlagDropdown(that, props)*/}
-
       {props.field.alerts
         ? props.field.alerts.map(function(item) {
             return (
@@ -82,7 +81,7 @@ function getLabel(props, that) {
   );
 
   if (that) {
-    let label = (
+    const label = (
       <span className="label-with-action">
         {comment}
 
@@ -119,7 +118,7 @@ function getLabel(props, that) {
 
 function getExtra(props) {
   if (props.field.definition.extra.api_url) {
-    let extrasFromAPI = props.currentStepFields.extrasFromAPI || {};
+    const extrasFromAPI = props.currentStepFields.extrasFromAPI || {};
     return (
       extrasFromAPI[props.field.definition.tag] ||
       props.field.definition.extra.defaultValue
@@ -133,7 +132,7 @@ function onFieldChange(props, value, value2) {
 }
 
 function onFieldChangeArray(props, value) {
-  let answer = arrayToString(value);
+  const answer = arrayToString(value);
   onFieldChange(props, answer);
 }
 
@@ -153,7 +152,7 @@ function stringToArray(string) {
     if (string.answer.isArray) {
       arr = string.answer[0].split("~");
     } else {
-      if (string.answer == "") {
+      if (string.answer === "") {
         arr = [];
       } else {
         arr = string.answer.split("~");
@@ -166,7 +165,7 @@ function stringToArray(string) {
 }
 
 function field_error(props) {
-  let error = props.error || {};
+  const error = props.error || {};
 
   if (error[props.field.id]) {
     return {
@@ -181,7 +180,7 @@ function getRequired(props) {
 }
 
 function feedValue(props) {
-  var opts = {};
+  const opts = {};
   if (props.field.definition.disabled) {
     opts["value"] = _.size(props.field.answers)
       ? props.field.answers[0].answer
@@ -195,12 +194,6 @@ function addComment(props) {
 }
 
 function addCommentBtn(e, props) {
-  let comment_btn_text = "Add comment/question";
-  if (props.field.comment_count == 1) {
-    comment_btn_text = "1 comment";
-  } else if (props.field.comment_count > 1) {
-    comment_btn_text = props.field.comment_count + " comments";
-  }
   return (
     <div className="add_comment_btn" onClick={addComment.bind(e, props)}>
       <Tooltip
@@ -234,7 +227,7 @@ function addCommentBtn(e, props) {
 }
 
 function selectFlag(props, flag) {
-  let payload = {
+  const payload = {
     workflow: props.workflowId,
     field: props.field.id,
     flag: parseInt(flag.key)
@@ -243,12 +236,14 @@ function selectFlag(props, flag) {
 }
 
 function fieldFlagDropdown(e, props) {
-  let flag_dropdown = (
+  const flag_dropdown = (
     <Menu onClick={selectFlag.bind(e, props)}>
       {_.map(props.field.comment_flag_options, function(cfo) {
-        let text_color_css = cfo.extra.color ? { color: cfo.extra.color } : {};
+        const text_color_css = cfo.extra.color
+          ? { color: cfo.extra.color }
+          : {};
         return (
-          <Menu.Item key={cfo.value}>
+          <Menu.Item key={`${cfo.value}`}>
             <i
               className="material-icons t-18 "
               style={{
@@ -274,10 +269,13 @@ function fieldFlagDropdown(e, props) {
       }}
     >
       <Dropdown overlay={flag_dropdown}>
-        <a className="ant-dropdown-link text-nounderline text-metal" href="#">
+        <Anchor
+          href="#"
+          className="ant-dropdown-link text-nounderline text-metal"
+        >
           <i className="material-icons text-middle t-18">outlined_flag</i>{" "}
           <Icon type="down" />
-        </a>
+        </Anchor>
       </Dropdown>
     </div>
   );
@@ -298,11 +296,17 @@ function getLink(text) {
     return text.replace(URL_REGEX, function(url) {
       // For email URLS
       if (url.includes("@")) {
-        return '<a href="mailto:' + url + '" target="_blank">' + url + "</a>";
+        return (
+          '<a href="mailto:' +
+          url +
+          '" target="_blank" rel="noopener noreferrer">' +
+          url +
+          "</a>"
+        );
       }
 
       // For all other URLs
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url.includes("http") ? url : `http://${url}`}</a>`;
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" >${url.includes("http") ? url : `http://${url}`}</a>`;
     });
   }
 
@@ -323,7 +327,7 @@ function getStyle(props, extra) {
 function getIntegrationSearchButton(props) {
   // need to figure out how to change the name on search button
 
-  let type_button_map = {
+  const type_button_map = {
     dnb_company_profile: "Get Company profile",
     dnb_risk_score: "Get Risk scores",
     dnb_data_reader: "Get Data",
@@ -397,7 +401,7 @@ function getIntegrationSearchButton(props) {
             if (_.size(item.answer) && item.answer.answer)
               return (
                 <div
-                  key={index}
+                  key={`answer_${index}`}
                   className="float-left"
                   style={{ marginRight: "15px" }}
                 >
@@ -416,12 +420,12 @@ function getIntegrationSearchButton(props) {
 }
 
 function isDisabled(props) {
-  let editable =
+  const editable =
     props.currentStepFields.currentStepFields.is_editable !== undefined
       ? props.currentStepFields.currentStepFields.is_editable
       : true;
 
-  let disabled =
+  const disabled =
     props.completed ||
     props.is_locked ||
     props.field.definition.disabled ||
@@ -440,8 +444,8 @@ function isDisabled(props) {
 
 function getAnsweredBy(props) {
   if (props.field.answers[0] && props.field.answers[0].submitted_by) {
-    let answer = props.field.answers[0];
-    let ans = (
+    const answer = props.field.answers[0];
+    const ans = (
       <span>
         Answered by{" "}
         {answer.submitted_by.first_name +
@@ -466,8 +470,8 @@ function getAnsweredBy(props) {
 
 const GetAnsweredBy = props => {
   if (props.field.answers[0] && props.field.answers[0].submitted_by) {
-    let answer = props.field.answers[0];
-    let ans = (
+    const answer = props.field.answers[0];
+    const ans = (
       <span>
         Answered by{" "}
         {answer.submitted_by.first_name +
@@ -494,7 +498,7 @@ function isDnBIntegrationDataLoading(props) {
   return (
     props.currentStepFields.integration_data_loading ||
     (props.integration_json &&
-      props.integration_json.status_message ==
+      props.integration_json.status_message ===
         "Fetching data for this field...")
   );
 }

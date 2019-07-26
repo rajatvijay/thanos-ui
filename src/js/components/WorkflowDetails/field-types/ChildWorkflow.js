@@ -1,9 +1,6 @@
 //NEWER
 import React, { Component, Fragment } from "react";
-import { authHeader, handleResponse } from "../../../_helpers";
-import Collapsible from "react-collapsible";
-import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
-import { calculatedData } from "../../Workflow/calculated-data";
+import { authHeader } from "../../../_helpers";
 import { connect } from "react-redux";
 import { css } from "emotion";
 import {
@@ -18,50 +15,23 @@ import {
   Divider,
   Tag,
   Select,
-  Collapse,
   Checkbox
 } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
-import { FormattedMessage, injectIntl } from "react-intl";
+import { injectIntl } from "react-intl";
 import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
 
-const { getProcessedData } = calculatedData;
 const Option = Select.Option;
 const FormItem = Form.Item;
-const {
-  getLabel,
-  onFieldChange,
-  onFieldChangeArray,
-  arrayToString,
-  stringToArray,
-  field_error,
-  getRequired,
-  feedValue,
-  getLink,
-  isDisabled
-} = commonFunctions;
-const Panel = Collapse.Panel;
-
-//MOVE TO UTILS
-const getKindID = (kindTag, workflowkind) => {
-  let kind = null;
-  kind = _.find(workflowkind, function(k) {
-    return k.tag === kindTag;
-  });
-  if (kind) {
-    return kind.id;
-  } else {
-    return;
-  }
-};
+const { field_error } = commonFunctions;
 
 //MOVE TO UTILS
 const getKindName = (kindId, workflowKind) => {
-  let kind = _.find(workflowKind, function(k) {
+  const kind = _.find(workflowKind, function(k) {
     return k.id === parseInt(kindId, 10);
   });
 
@@ -73,10 +43,10 @@ const getKindName = (kindId, workflowKind) => {
 };
 
 function countBy(collection, func) {
-  var object = Object.create(null);
+  const object = Object.create(null);
 
   collection.forEach(function(item) {
-    var key = func(item);
+    const key = func(item);
     if (key in object) {
       ++object[key];
     } else {
@@ -98,13 +68,13 @@ const getChildKinds = (workflows, kinds) => {
     });
   }
 
-  grouped_child_kinds = grouped_child_kinds.reduce((a, b) => a.concat(b), []); //_.flatten(grouped_child_kinds);
+  grouped_child_kinds = grouped_child_kinds.reduce((a, b) => a.concat(b), []);
 
-  let kindlist = [...new Set(grouped_child_kinds)]; // _.uniq(grouped_child_kinds);
-  let count = countBy(grouped_child_kinds, Math.floor);
+  const kindlist = [...new Set(grouped_child_kinds)];
+  const count = countBy(grouped_child_kinds, Math.floor);
 
-  let filteredKind = kindlist.map(kind => {
-    let item = {};
+  const filteredKind = kindlist.map(kind => {
+    const item = {};
     item.id = kind;
     item.name = getKindName(kind, kinds);
     item.count = count[kind.toString()];
@@ -115,7 +85,7 @@ const getChildKinds = (workflows, kinds) => {
 };
 
 const VTag = props => {
-  let tag = (
+  const tag = (
     <span
       className={"vet-tag " + (props.selected ? "vet-tag-selected" : "")}
       onClick={props.onClick}
@@ -172,7 +142,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   prepFetchChildData = () => {
-    let kind = this.props.field.definition.extra.child_workflow_kind_id;
     if (this.props.field.definition.extra["exclude_filters"]) {
       this.state.excluded_filters = this.props.field.definition.extra[
         "exclude_filters"
@@ -210,9 +179,9 @@ class ChildWorkflowField2 extends Component {
   };
 
   getChildWorkflow = () => {
-    let parentId = this.props.workflowId;
+    const parentId = this.props.workflowId;
 
-    let kind = this.props.field.definition.extra.child_workflow_kind_id;
+    const kind = this.props.field.definition.extra.child_workflow_kind_id;
 
     const requestOptions = {
       method: "GET",
@@ -257,7 +226,6 @@ class ChildWorkflowField2 extends Component {
         });
         this.createStatusFilterTag();
         this.createFilterTag();
-        //this.filterByFlag();
         this.excludeWorkflows();
       });
   };
@@ -298,7 +266,7 @@ class ChildWorkflowField2 extends Component {
   };
 
   getValuefilter = () => {
-    let filterList = this.props.field.definition.extra.filters;
+    const filterList = this.props.field.definition.extra.filters;
     let filter = "";
 
     if (!_.size(filterList)) {
@@ -318,9 +286,9 @@ class ChildWorkflowField2 extends Component {
   onChildSelect = e => {
     const kindTag = e.key;
     const kind = this.props.workflowKind.workflowKind.find(
-      kind => kind.tag == kindTag
+      kind => kind.tag === kindTag
     );
-    let payload = {
+    const payload = {
       status: kind && kind.default_status,
       kind: kindTag,
       name: "Draft",
@@ -332,12 +300,12 @@ class ChildWorkflowField2 extends Component {
   };
 
   getRelatedTypes = () => {
-    let related = this.props.workflowDetailsHeader.workflowDetailsHeader
+    const related = this.props.workflowDetailsHeader.workflowDetailsHeader
       .definition.related_types;
 
-    let that = this;
+    const that = this;
 
-    let rt = [];
+    const rt = [];
     if (related.length !== 0) {
       _.map(related, function(rtc) {
         _.filter(that.props.workflowKind.workflowKind, function(kind) {
@@ -352,8 +320,8 @@ class ChildWorkflowField2 extends Component {
   };
 
   getKindMenu = () => {
-    let that = this;
-    let workflowKindFiltered = [];
+    const that = this;
+    const workflowKindFiltered = [];
     const relatedKind = this.getRelatedTypes();
 
     _.map(relatedKind, function(item) {
@@ -370,10 +338,10 @@ class ChildWorkflowField2 extends Component {
       return null;
     }
 
-    let menu = (
+    const menu = (
       <Menu onClick={this.onChildSelect}>
         {_.map(workflowKindFiltered, function(item, index) {
-          return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
+          return <Menu.Item key={`${item.tag}`}>{item.name}</Menu.Item>;
         })}
       </Menu>
     );
@@ -386,7 +354,6 @@ class ChildWorkflowField2 extends Component {
     if (!kindMenu) {
       return null;
     }
-    // let menu = (
     return this.props.stepData.completed_at ||
       this.props.stepData.is_locked ? null : (
       <Dropdown
@@ -405,7 +372,7 @@ class ChildWorkflowField2 extends Component {
   };
 
   createFlagFilter = () => {
-    let that = this;
+    const that = this;
     if (!_.size(that.state.childWorkflow)) {
       return <span />;
     }
@@ -423,7 +390,7 @@ class ChildWorkflowField2 extends Component {
           k
         ) {
           return (
-            <Option key={v.label} value={v.label}>
+            <Option key={`${v.label}`} value={v.label}>
               {v.label}
             </Option>
           );
@@ -433,15 +400,15 @@ class ChildWorkflowField2 extends Component {
   };
 
   filterByFlag = () => {
-    let that = this;
-    let flag_workflow_map = {};
+    const that = this;
+    const flag_workflow_map = {};
 
     // getting lc data alerts count
     _.map(that.state.filteredChildWorkflow, function(val, k) {
       if (!_.size(val.selected_flag)) {
         return;
       }
-      let flag = val.selected_flag[val.id]["flag_detail"]["label"];
+      const flag = val.selected_flag[val.id]["flag_detail"]["label"];
       if (flag_workflow_map[flag]) {
         flag_workflow_map[flag].push(val);
       } else {
@@ -454,16 +421,16 @@ class ChildWorkflowField2 extends Component {
   };
 
   createStatusFilterTag = () => {
-    let that = this;
-    let status_workflow_map = { All: that.state.childWorkflow };
-    let workflow_status_count = {
+    const that = this;
+    const status_workflow_map = { All: that.state.childWorkflow };
+    const workflow_status_count = {
       All: _.size(that.state.childWorkflow)
     };
-    let selected = this.state.selected_filters.status;
+    const selected = this.state.selected_filters.status;
 
     // getting workflow status count
     _.map(that.state.childWorkflow, function(v, k) {
-      let wstatus = v["status"]["label"];
+      const wstatus = v["status"]["label"];
       if (workflow_status_count[wstatus]) {
         workflow_status_count[wstatus] += 1;
       } else {
@@ -480,7 +447,7 @@ class ChildWorkflowField2 extends Component {
       return (
         <VTag
           label={k + " (" + v + ")"}
-          key={k}
+          key={`vtag_${k}`}
           onClick={that.onFilterTagChange.bind(that, "status", k)}
           selected={
             k === "All" && !selected ? true : selected === k ? true : false
@@ -488,15 +455,10 @@ class ChildWorkflowField2 extends Component {
         />
       );
     });
-
-    // this.setState({
-    //   statusfilterTags: statusfilterTags,
-    //   status_workflow_map: status_workflow_map
-    // });
   };
 
   createFilterTag = () => {
-    let that = this;
+    const that = this;
     this.setState({
       filterTags: null
     });
@@ -506,10 +468,10 @@ class ChildWorkflowField2 extends Component {
       return;
     }
 
-    let filter_tag_count = {
+    const filter_tag_count = {
       All: _.size(that.state.filteredChildWorkflow)
     };
-    let tag_workflow_map = {
+    const tag_workflow_map = {
       All: that.state.filteredChildWorkflow
     };
 
@@ -519,13 +481,13 @@ class ChildWorkflowField2 extends Component {
         if (!tag.value) {
           return true;
         }
-        if (tag.display_type == "normal") {
+        if (tag.display_type === "normal") {
           return true;
         }
         if (filter_tag_count[tag.label]) {
-          filter_tag_count[tag.label] += 1; //parseInt(tag.value)
+          filter_tag_count[tag.label] += 1;
         } else {
-          filter_tag_count[tag.label] = 1; //parseInt(tag.value)
+          filter_tag_count[tag.label] = 1;
         }
 
         if (tag_workflow_map[tag.label]) {
@@ -536,14 +498,15 @@ class ChildWorkflowField2 extends Component {
       });
     });
 
-    let styling = this.props.field.definition.extra.lc_data_colorcodes || {};
+    const styling = this.props.field.definition.extra.lc_data_colorcodes || {};
 
-    let filterTags = (
+    const filterTags = (
       <div>
         <span className="text-lighter mr-right-sm">Concerns: </span>
         {_.map(filter_tag_count, (v, k) => {
           return (
             <VTag
+              key={`vtag_${v}-${k}`}
               label={
                 <Tooltip title={k}>
                   {k} ({v})
@@ -562,7 +525,6 @@ class ChildWorkflowField2 extends Component {
                   ) : null}
                 </Tooltip>
               }
-              key={v + k}
               onClick={this.onFilterTagChange.bind(that, k, "category")}
             />
           );
@@ -577,69 +539,57 @@ class ChildWorkflowField2 extends Component {
   };
 
   onFilterTagChange = (tag, _type) => {
-    let filtered_workflow = this.state.filteredChildWorkflow;
-
-    if (tag == "status") {
-      if (_type == "All") {
-        delete this.state.selected_filters["status"];
+    const { selected_filters } = this.state;
+    if (tag === "status") {
+      if (_type === "All") {
+        delete selected_filters["status"];
       } else {
-        this.state.selected_filters["status"] = _type;
+        selected_filters["status"] = _type;
       }
-      this.setState({
-        selected_filters: this.state.selected_filters
-      });
-    } else if (_type == "category") {
-      if (tag == "All") {
-        this.state.selected_filters["category"] = [];
-        //delete this.state.selected_filters["category"];
+    } else if (_type === "category") {
+      if (tag === "All") {
+        selected_filters["category"] = [];
       } else {
-        this.state.selected_filters["category"] = [];
-        if (_.size(this.state.selected_filters["category"])) {
-          if (!_.includes(this.state.selected_filters["category"], tag)) {
-            this.state.selected_filters["category"].push(tag);
+        selected_filters["category"] = [];
+        if (_.size(selected_filters["category"])) {
+          if (!_.includes(selected_filters["category"], tag)) {
+            selected_filters["category"].push(tag);
           }
         } else {
-          this.state.selected_filters["category"] = [tag];
+          selected_filters["category"] = [tag];
         }
       }
-      this.setState({
-        selected_filters: this.state.selected_filters
-      });
-    } else if (tag == "flag") {
-      this.state.selected_filters["flag"] = _type;
-      this.setState({
-        selected_filters: this.state.selected_filters
-      });
-    } else if (tag == "kind") {
-      let { selected_filters } = this.state;
-      if (_type == "all") {
+    } else if (tag === "flag") {
+      selected_filters["flag"] = _type;
+    } else if (tag === "kind") {
+      const { selected_filters } = this.state;
+      if (_type === "all") {
         selected_filters.kind = "";
       } else {
         selected_filters.kind = _type;
       }
-      this.setState({ selected_filters: selected_filters });
     }
+    this.setState({ selected_filters: selected_filters });
 
     this.filterWorkflows();
     this.excludeWorkflows();
   };
 
   filterWorkflows = () => {
-    let that = this;
-    let selected_filters = this.state.selected_filters;
+    const that = this;
+    const selected_filters = this.state.selected_filters;
     if (!_.size(selected_filters)) {
-      this.state.filteredChildWorkflow = that.state.childWorkflow;
       this.setState({ filteredChildWorkflow: that.state.childWorkflow });
       this.excludeWorkflows();
       return true;
     }
-    let filtered_workflow = [];
+    const filtered_workflow = [];
     _.map(that.state.childWorkflow, function(cw) {
       let found = cw;
       _.map(selected_filters, function(fval, key) {
-        if (key == "category" && fval.length) {
+        if (key === "category" && fval.length) {
           _.forEach(cw.lc_data, function(lc_tag, i) {
-            if (!lc_tag.value || lc_tag.display_type != "alert") {
+            if (!lc_tag.value || lc_tag.display_type !== "alert") {
               found = null;
               return true;
             }
@@ -650,26 +600,26 @@ class ChildWorkflowField2 extends Component {
           });
         }
 
-        if (key == "status" && fval) {
+        if (key === "status" && fval) {
           // search for fvalue in cw["status"]["label"]
-          if (cw["status"]["label"] != fval && fval != "All") {
+          if (cw["status"]["label"] !== fval && fval !== "All") {
             found = null;
             return true;
           }
         }
 
-        if (key == "flag" && fval) {
+        if (key === "flag" && fval) {
           if (
             !_.size(cw.selected_flag[cw.id]) ||
-            cw.selected_flag[cw.id]["flag_detail"]["label"] != fval
+            cw.selected_flag[cw.id]["flag_detail"]["label"] !== fval
           ) {
             found = null;
             return true;
           }
         }
 
-        if (key == "kind" && fval) {
-          if (cw.child_kinds[0] == null || !cw.child_kinds.includes(fval)) {
+        if (key === "kind" && fval) {
+          if (cw.child_kinds[0] === null || !cw.child_kinds.includes(fval)) {
             found = null;
             return true;
           }
@@ -680,25 +630,24 @@ class ChildWorkflowField2 extends Component {
         filtered_workflow.push(cw);
       }
     });
-    this.state.filteredChildWorkflow = filtered_workflow;
     this.setState({ filteredChildWorkflow: filtered_workflow });
     this.excludeWorkflows();
   };
 
   excludeWorkflows = () => {
-    let that = this;
-    let excluded_filters = this.state.excluded_filters;
+    const that = this;
+    const excluded_filters = this.state.excluded_filters;
     if (!_.size(excluded_filters)) {
       this.setState({
         filteredChildWorkflow: that.state.filteredChildWorkflow
       });
       return true;
     }
-    let filtered_workflow = [];
+    const filtered_workflow = [];
     _.map(that.state.filteredChildWorkflow, function(cw) {
       let found = cw;
       _.map(excluded_filters, function(fval, key) {
-        if (key == "category" && fval.length) {
+        if (key === "category" && fval.length) {
           _.map(cw.lc_data, function(lc_tag, i) {
             if (!lc_tag.value) {
               return true;
@@ -709,24 +658,24 @@ class ChildWorkflowField2 extends Component {
             }
           });
         }
-        if (key == "status" && fval) {
+        if (key === "status" && fval) {
           // search for fvalue in cw["status"]["label"]
-          if (cw["status"]["label"] == fval && fval != "All") {
+          if (cw["status"]["label"] === fval && fval !== "All") {
             found = null;
             return true;
           }
         }
-        if (key == "flag" && fval) {
+        if (key === "flag" && fval) {
           if (
             _.size(cw.selected_flag[cw.id]) &&
-            cw.selected_flag[cw.id]["flag_detail"]["label"] == fval
+            cw.selected_flag[cw.id]["flag_detail"]["label"] === fval
           ) {
             found = null;
             return true;
           }
         }
 
-        if (key == "kind" && fval) {
+        if (key === "kind" && fval) {
           if (cw.child_kinds[0] && cw.child_kinds.includes(fval)) {
             found = null;
             return true;
@@ -743,35 +692,33 @@ class ChildWorkflowField2 extends Component {
 
   removeSelectedFilter = (k, v) => {
     // remove filters from selected_filters
-    let selected_filters = this.state.selected_filters;
-    if ((k == "category") & (_.size(selected_filters[k]) > 1)) {
+    const selected_filters = this.state.selected_filters;
+    if ((k === "category") & (_.size(selected_filters[k]) > 1)) {
       selected_filters[k] = _.filter(selected_filters[k], function(cat) {
-        return cat != v;
+        return cat !== v;
       });
     } else {
       delete selected_filters[k];
     }
     this.setState({ selected_filters: selected_filters });
     this.filterWorkflows();
-    //this.createFilterTag();
   };
 
   removeExcludedFilter = (k, v) => {
-    let excluded_filters = this.state.excluded_filters;
-    if ((k == "category") & (_.size(excluded_filters[k]) > 1)) {
+    const excluded_filters = this.state.excluded_filters;
+    if ((k === "category") & (_.size(excluded_filters[k]) > 1)) {
       excluded_filters[k] = _.filter(excluded_filters[k], function(cat) {
-        return cat != v;
+        return cat !== v;
       });
     } else {
       delete excluded_filters[k];
     }
     this.setState({ excluded_filters: excluded_filters });
     this.filterWorkflows();
-    //this.createFilterTag();
   };
 
   selectedFilter = () => {
-    let that = this;
+    const that = this;
     if (!_.size(this.state.selected_filters)) {
       return <span />;
     }
@@ -779,7 +726,7 @@ class ChildWorkflowField2 extends Component {
       <span>
         {" "}
         {_.map(this.state.selected_filters, function(v, k) {
-          if (k == "category") {
+          if (k === "category") {
             return _.map(v, function(c) {
               if (!c) {
                 return;
@@ -814,21 +761,19 @@ class ChildWorkflowField2 extends Component {
   };
 
   excludedFilter = () => {
-    let that = this;
     if (!_.size(this.state.excluded_filters)) {
       return <span />;
     }
     return (
       <span>
         {_.map(this.state.excluded_filters, function(v, k) {
-          if (k == "category") {
+          if (k === "category") {
             return _.map(v, function(c) {
               return (
                 <Tag
                   key={c + k + "selected"}
                   className="alert-tag-item alert-metal"
                   // closable
-                  // onClose={that.removeExcludedFilter.bind(that, k, c)}
                 >
                   <Tooltip title={k}>{c}</Tooltip>
                 </Tag>
@@ -840,7 +785,6 @@ class ChildWorkflowField2 extends Component {
                 key={v + k + "selected"}
                 className="alert-tag-item alert-metal"
                 // closable
-                // onClose={that.removeExcludedFilter.bind(that, k, v)}
               >
                 <Tooltip title={k}>{v}</Tooltip>
               </Tag>
@@ -854,14 +798,14 @@ class ChildWorkflowField2 extends Component {
   //CREATE. KIND FILTER
   createKindFilter = () => {
     const { props } = this;
-    const { field, workflowKind } = props;
-    let that = this;
-    let kindList = getChildKinds(
+    const { workflowKind } = props;
+    const that = this;
+    const kindList = getChildKinds(
       this.state.childWorkflow,
       workflowKind.workflowKind
     );
 
-    let selected = this.state.selected_filters.kind;
+    const selected = this.state.selected_filters.kind;
 
     if (kindList.length === 0) {
       return <span />;
@@ -884,7 +828,7 @@ class ChildWorkflowField2 extends Component {
           return (
             <VTag
               label={`${v.name} (${v.count})`}
-              key={v.id}
+              key={`${v.id}`}
               onClick={this.onFilterTagChange.bind(that, "kind", v.id)}
               selected={selected === v.id ? true : false}
             />
@@ -921,7 +865,7 @@ class ChildWorkflowField2 extends Component {
   };
 
   handleChildWorkflowCheckbox = (event, id, kindId) => {
-    let kindDetail = this.props.workflowKind.workflowKind.filter(
+    const kindDetail = this.props.workflowKind.workflowKind.filter(
       item => item.id === kindId
     );
     if (event.target.checked) {
@@ -937,8 +881,8 @@ class ChildWorkflowField2 extends Component {
         ]
       });
     } else {
-      let checkedChildren = this.state.bulkActionWorkflowChecked.filter(
-        item => item.id != id
+      const checkedChildren = this.state.bulkActionWorkflowChecked.filter(
+        item => item.id !== id
       );
       this.setState({
         bulkActionWorkflowChecked: checkedChildren
@@ -964,7 +908,6 @@ class ChildWorkflowField2 extends Component {
     const allBulkActions = workflows.flatMap(
       workflow => workflow.kindDetail.bulk_actions
     );
-    // const uniqueBulkActions = Array.from(new Set(allBulkActions))
     const uniqueBulkActions = [];
     allBulkActions.forEach(bulkAction => {
       if (
@@ -993,8 +936,9 @@ class ChildWorkflowField2 extends Component {
     } else {
       return (
         <div style={{ display: "flex", flexDirection: "row" }}>
-          {commonBulkActions.map(action => (
+          {commonBulkActions.map((action, index) => (
             <Button
+              key={`button_${index}`}
               onClick={event => this.onOpenBulkActionModal(action)}
               style={{
                 border: "1px solid #148CD6",
@@ -1018,7 +962,7 @@ class ChildWorkflowField2 extends Component {
       Array.isArray(workflows[0].definition.extra_fields_json)
     ) {
       const workflow = workflows[0].definition.extra_fields_json.find(
-        ({ label, display_label }) => label === "sorting_primary_field"
+        ({ label }) => label === "sorting_primary_field"
       );
       return workflow ? workflow.display_label : "";
     }
@@ -1026,24 +970,11 @@ class ChildWorkflowField2 extends Component {
 
   render = () => {
     const { props } = this;
-    const {
-      field,
-      workflowKind,
-      workflowDetailsHeader,
-      currentStepFields
-    } = props;
+    const { field, workflowKind } = props;
     const { bulkActionWorkflowChecked, childWorkflow } = this.state;
-    let that = this;
 
-    const u = new URL(window.location.href);
-    const step = u.searchParams.get("step");
-    const selectedWorkflow =
-      currentStepFields[step] && currentStepFields[step].currentStepFields
-        ? currentStepFields[step].currentStepFields.workflow
-        : null;
-
-    let kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
-    let workflowHeaderChild = childWorkflow ? childWorkflow : [];
+    const kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
+    const workflowHeaderChild = childWorkflow ? childWorkflow : [];
     const bulkActionChilren = workflowHeaderChild;
     workflowHeaderChild.forEach((child, index) => {
       kindList.forEach(kind => {
@@ -1055,7 +986,7 @@ class ChildWorkflowField2 extends Component {
       });
     });
 
-    let isBulkCheck =
+    const isBulkCheck =
       bulkActionChilren.length &&
       bulkActionWorkflowChecked.length &&
       bulkActionChilren.length === bulkActionWorkflowChecked.length;

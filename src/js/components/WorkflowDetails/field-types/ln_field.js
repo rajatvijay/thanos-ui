@@ -25,7 +25,7 @@ class LexisNexisSearch extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -41,7 +41,7 @@ class LexisNexisSearch extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -55,7 +55,8 @@ class LexisNexisSearch extends Component {
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message == "Fetching data for this field..."
+      field.integration_json.status_message ===
+        "Fetching data for this field..."
     ) {
       final_html = (
         <div>
@@ -115,15 +116,15 @@ const DescriptionItem = ({ title, content }) => (
 const buildDetails = obj => {
   obj["id"] = obj["ID"]["$"];
 
-  var akas = obj["EntityDetails"]["AKAs"]
+  let akas = obj["EntityDetails"]["AKAs"]
     ? obj["EntityDetails"]["AKAs"]["EntityAKA"]
     : [];
-  akas = _.map(akas, function(aka) {
+  akas = _.map(akas, function(aka, index) {
     if (!aka["Name"] || !aka["Name"]["Full"]) {
-      return <span>-</span>;
+      return <span key={`aka_${index}`}>-</span>;
     }
     return (
-      <span>
+      <span key={`aka_${index}`}>
         <span>
           &nbsp;<b>AKA: </b>
           {aka["Name"]["Full"]["$"]}
@@ -133,12 +134,12 @@ const buildDetails = obj => {
     );
   });
 
-  var comments = "-";
+  let comments = "-";
   if (obj["EntityDetails"]["Comments"]) {
-    var comments_list = obj["EntityDetails"]["Comments"]["$"].split("||");
-    comments = _.map(comments_list, function(c) {
+    const comments_list = obj["EntityDetails"]["Comments"]["$"].split("||");
+    comments = _.map(comments_list, function(c, index) {
       return (
-        <span>
+        <span key={`item_${index}`}>
           <span>{c.trim()}</span>
           <br />
         </span>
@@ -146,28 +147,28 @@ const buildDetails = obj => {
     });
   }
 
-  var additional_info = "-";
+  let additional_info = "-";
   if (
     obj["EntityDetails"]["AdditionalInfo"] &&
     obj["EntityDetails"]["AdditionalInfo"]["EntityAdditionalInfo"]
   ) {
     additional_info = _.map(
       obj["EntityDetails"]["AdditionalInfo"]["EntityAdditionalInfo"],
-      function(eai) {
-        var type = eai["Type"] ? eai["Type"]["$"] + " Information" : "-";
-        var value = eai["Value"] ? eai["Value"]["$"] : "-";
-        var comments = eai["Comments"] ? eai["Comments"]["$"].split("|") : [];
+      function(eai, index) {
+        const type = eai["Type"] ? eai["Type"]["$"] + " Information" : "-";
+        const value = eai["Value"] ? eai["Value"]["$"] : "-";
+        const comments = eai["Comments"] ? eai["Comments"]["$"].split("|") : [];
         return (
-          <span>
+          <span key={`row_${index}`}>
             <span>
               &nbsp;<b>{type}</b>: {value}
             </span>
             <br />
             <span>
               &nbsp;Comments:{" "}
-              {_.map(comments, function(c) {
+              {_.map(comments, function(c, index) {
                 return (
-                  <span>
+                  <span key={`comment_${index}`}>
                     <span>{c.trim()}</span>
                     <br />
                   </span>
@@ -181,41 +182,22 @@ const buildDetails = obj => {
     );
   }
 
-  var source_date = "-";
-  if (
-    obj["File"] &&
-    obj["File"]["Published"] &&
-    obj["File"]["Published"]["$"]
-  ) {
-    source_date = new Date(obj["File"]["Published"]["$"]).toLocaleDateString();
-  }
-
-  var number = "-";
-  if (
-    obj["EntityDetails"]["IDs"] &&
-    obj["EntityDetails"]["IDs"]["EntityID"] &&
-    obj["EntityDetails"]["IDs"]["EntityID"]["Number"] &&
-    obj["EntityDetails"]["IDs"]["EntityID"]["Number"]["$"]
-  ) {
-    number = obj["EntityDetails"]["IDs"]["EntityID"]["Number"]["$"];
-  }
-
-  var addresses = "-";
+  let addresses = "-";
   if (
     obj["EntityDetails"]["Addresses"] &&
     obj["EntityDetails"]["Addresses"]["EntityAddress"]
   ) {
     addresses = _.map(
       obj["EntityDetails"]["Addresses"]["EntityAddress"],
-      function(adr) {
-        var addr = [
+      function(adr, index) {
+        const addr = [
           adr["Street1"] ? adr["Street1"]["$"] : "",
           adr["City"] ? adr["City"]["$"] : "",
           adr["StateProvinceDistrict"] ? adr["StateProvinceDistrict"]["$"] : "",
           adr["PostalCode"] ? adr["PostalCode"]["$"] : ""
         ];
         return (
-          <span>
+          <span key={`adr_${index}`}>
             &nbsp;<b>Address: </b> <span>{addr.join(" ")}</span>
             <br />
             &nbsp;&nbsp;<span>Country: </span>{" "}
@@ -225,23 +207,6 @@ const buildDetails = obj => {
         );
       }
     );
-  }
-
-  var ids = "-";
-  if (obj["EntityDetails"]["IDs"] && obj["EntityDetails"]["IDs"]["EntityID"]) {
-    var ids_arr = obj["EntityDetails"]["IDs"]["EntityID"];
-    if (Object.prototype.toString.call(ids_arr) == "[object Object]") {
-      ids_arr = [ids_arr];
-    }
-    ids = _.map(ids_arr, function(id) {
-      return (
-        <span>
-          &nbsp;<b>{id["Type"]["$"]}: </b>
-          <span>{id["Number"]["$"]}</span>
-          <br />
-        </span>
-      );
-    });
   }
 
   obj["additional_info_text"] = additional_info;
@@ -403,7 +368,6 @@ const GetTable = props => {
       title: "Addresses",
       dataIndex: "EntityDetails[Addresses][EntityAddress]",
       render: (text, record, index) => {
-        //let adrData = record
         if (!_.isEmpty(text)) {
           if (_.isArray(text)) {
             return (
@@ -450,8 +414,8 @@ const GetTable = props => {
           ? props.flag_dict[record.EntityUniqueID["$"]]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span
@@ -479,11 +443,6 @@ const GetTable = props => {
         rowKey="uid"
         // whole structure is required for the extra data available
         expandedRowRender={record => buildDetails(record)}
-        // onRow={(record) => ({
-        //   onClick: () => {
-        //     this.selectRow(record);
-        //   },
-        // })}
       />
     </div>
   );
@@ -492,8 +451,6 @@ const GetTable = props => {
 const GetTabsFilter = props => {
   // error
   if (props.jsonData.Envelope.Body.Fault) {
-    let message =
-      props.jsonData.Envelope.Body.Fault.detail.ServiceFault.Message["$"];
     return <div className="text-center text-green">No match found</div>;
   }
 
@@ -511,7 +468,7 @@ const GetTabsFilter = props => {
   }
 
   const getFilterData = data => {
-    let fList = [
+    const fList = [
       {
         label: "All",
         value: "all",
@@ -560,7 +517,10 @@ const GetTabsFilter = props => {
     <Tabs defaultActiveKey="all" onChange={callback}>
       {_.map(getFilterData(data), function(tab, index) {
         return (
-          <TabPane tab={tab.label + " (" + tab.count + ")"} key={tab.value}>
+          <TabPane
+            tab={tab.label + " (" + tab.count + ")"}
+            key={`tab_${tab.value}`}
+          >
             <GetTable
               getComment={props.getComment}
               jsonData={tab.data}

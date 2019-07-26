@@ -33,7 +33,7 @@ function ModalFooter(props) {
         }
       >
         Expand View
-        <img style={{ width: 20, marginLeft: 20 }} src={FullScreen} />
+        <img style={{ width: 20, marginLeft: 20 }} src={FullScreen} alt="" />
       </Link>
     </div>
   );

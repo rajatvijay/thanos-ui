@@ -1,11 +1,10 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Form, Button, Input, Icon, Divider, Row, Col } from "antd";
 import validator from "validator";
 import _ from "lodash";
 import { sendEmailAuthToken } from "../../actions/user";
 import { connect } from "react-redux";
-import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
 
 import { FormattedMessage, injectIntl } from "react-intl";
 
@@ -61,15 +60,11 @@ class MagicForm extends React.Component {
   /////////////////////////////////////////////////////
 
   onSubmit = e => {
-    // e.preventDefault();
-
-    let data = this.state.data;
+    const data = this.state.data;
     const errors = this.validate(data); //error valitation in form
     this.setState({ errors: errors });
     if (Object.keys(errors).length === 0) {
       //if no error is found then submit
-      //this.props.userLogin(data);
-      //this.props.onSubmit(data);
       this.handleSubmit(e);
     }
   };
@@ -99,14 +94,9 @@ class MagicForm extends React.Component {
 
   render() {
     const { data, errors } = this.state;
-    let supportedLaguanges = this.props.config.supported_languages;
-    let authList = this.props.config.configuration
+    const authList = this.props.config.configuration
       ? this.props.config.configuration.client_auth_backends
       : [];
-
-    // if (!_.includes(authList, 1)) {
-    //   return <Redirect to={"/"} />;
-    // }
 
     return (
       <div className="login-form-box magic-box">
@@ -123,7 +113,7 @@ class MagicForm extends React.Component {
                     autoComplete="off"
                   >
                     <FormItem
-                      validateStatus={errors.message && "error"}
+                      validateStatus={errors.message ? "error" : ""}
                       hasFeedback
                       help={errors.message}
                       label={
@@ -149,7 +139,6 @@ class MagicForm extends React.Component {
                     <FormItem>
                       <Button
                         type="primary"
-                        // htmlType="submit"
                         className="login-form-button btn-block"
                         onClick={this.onSubmit}
                       >
@@ -171,7 +160,6 @@ class MagicForm extends React.Component {
                               <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
                               {this.props.config.name} account
                             </span>
-                            {/*<FormattedMessage id="loginPageInstances.customSAMLloginText2" />*/}
                           </a>
                         </React.Fragment>
                       ) : null}
@@ -234,7 +222,9 @@ class MagicForm extends React.Component {
                 <Link
                   to={
                     !_.includes(authList, 3)
-                      ? _.includes(authList, 0) ? "/login/basic/" : "/"
+                      ? _.includes(authList, 0)
+                        ? "/login/basic/"
+                        : "/"
                       : "/"
                   }
                 >

@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Icon } from "antd";
-import _ from "lodash";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
 import { tokenLogin } from "../../actions";
@@ -28,8 +27,8 @@ class MagicLinkProcess extends React.Component {
     }
 
     if (parsed.token) {
-      let token = parsed.token;
-      let next = parsed.next ? parsed.next : "";
+      const token = parsed.token;
+      const next = parsed.next ? parsed.next : "";
       this.tokenLoginRequest(token, next);
     }
   };
@@ -86,5 +85,3 @@ function mapStateToProps(state) {
 
 const connectedLoginPage = connect(mapStateToProps)(MagicLinkProcess);
 export { connectedLoginPage as MagicLinkProcess };
-
-// export default MagicLinkProcess ;

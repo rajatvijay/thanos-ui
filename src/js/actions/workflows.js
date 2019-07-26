@@ -139,13 +139,13 @@ function getChildWorkflow(parent) {
   };
 
   function request(parent) {
-    let response = { [parent]: { loading: true } };
+    const response = { [parent]: { loading: true } };
 
     return { type: workflowConstants.GET_CHILD_REQUEST, response };
   }
 
   function success(childWorkflow) {
-    let response = {
+    const response = {
       [parent]: { loading: false, children: childWorkflow.results }
     };
 
@@ -153,7 +153,7 @@ function getChildWorkflow(parent) {
   }
 
   function failure(error) {
-    let response = { [parent]: { loading: false, error: error } };
+    const response = { [parent]: { loading: false, error: error } };
     return { type: workflowConstants.GET_CHILD_FAILURE, response };
   }
 }

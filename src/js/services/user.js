@@ -35,7 +35,7 @@ function login(username, password, token) {
     .then(user => {
       // login successful if there's a jwt token in the response
       if (user) {
-        let userData = user;
+        const userData = user;
         userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -69,7 +69,7 @@ function loginOtp(username, password) {
     .then(user => {
       // login successful if there's a jwt token in the response
       if (user) {
-        let userData = user;
+        const userData = user;
         userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -100,7 +100,7 @@ function tokenLogin(token, next) {
     .then(user => {
       // login successful if there's a jwt token in the response
       if (user) {
-        let userData = user;
+        const userData = user;
         userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -117,7 +117,6 @@ export const logout = async () => {
     method: "GET",
     headers: authHeader.get(),
     credentials: "include"
-    //body: JSON.stringify({})
   };
   try {
     return await fetch(apiBaseURL + "users/logout/", requestOptions);
@@ -158,7 +157,7 @@ function checkAuth() {
       // login successful if there's a jwt token in the response
 
       if (user) {
-        let userData = user;
+        const userData = user;
         userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { authHeader, history } from "../../_helpers";
+import { history } from "../../_helpers";
 import WorkflowDetails from "./WorkflowDetails";
 import { veryfiyClient } from "../../utils/verification";
 import {
@@ -10,7 +10,6 @@ import {
   navbarActions,
   workflowActions
 } from "../../actions";
-import { apiBaseURL } from "../../../config";
 
 class WorkflowDetailsRoot extends Component {
   constructor(props) {
@@ -33,10 +32,6 @@ class WorkflowDetailsRoot extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    const { workflowIdFromPropsForModal } = this.props;
-
-    let WFId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     const { location } = this.props;
     this.setWorkflowId();
 
@@ -57,9 +52,7 @@ class WorkflowDetailsRoot extends Component {
 
   setWorkflowId = () => {
     const { workflowIdFromPropsForModal } = this.props;
-
-    //if(!workflowIdFromPropsForModal){
-    let WFId =
+    const WFId =
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
     if (this.state.workflowId !== WFId) {
       this.setState({ workflowId: WFId }, () => {
@@ -67,7 +60,6 @@ class WorkflowDetailsRoot extends Component {
       });
       this.props.dispatch(navbarActions.showFilterMenu());
     }
-    //}
   };
 
   verifyAuth = () => {
@@ -84,12 +76,11 @@ class WorkflowDetailsRoot extends Component {
     const { workflowId } = this.state;
 
     this.props.dispatch(workflowDetailsActions.getById(workflowId));
-    // if (!this.props.workflowDetails[workflowId])
     this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
   };
 
   updateCustomHistory = url => {
-    let hist = this.state.customHistory;
+    const hist = this.state.customHistory;
     if (hist[hist.length - 1].pathname !== url.pathname) {
       hist.push(url);
       this.setState({ customHistory: hist });
@@ -97,32 +88,32 @@ class WorkflowDetailsRoot extends Component {
   };
 
   replaceLastHistory = url => {
-    let hist = this.state.customHistory;
-    let len = hist.length;
+    const hist = this.state.customHistory;
+    const len = hist.length;
     hist[len - 1] = url;
     this.setState({ customHistory: hist });
   };
 
   removefromHistory = () => {
-    let hist = this.state.customHistory;
+    const hist = this.state.customHistory;
     hist.pop();
     this.setState({ customHistory: hist });
   };
 
   goBack = () => {
     const { customHistory } = this.state;
-    let len = customHistory.length,
-      last = customHistory[len - 2],
-      url = "";
+    const len = customHistory.length;
+    const last = customHistory[len - 2];
+    let url = "";
 
     if (last) {
       url = last.pathname + last.search;
       history.push(url);
       this.removefromHistory();
     } else {
-      let fam = this.props.workflowDetailsHeader.workflowDetailsHeader
+      const fam = this.props.workflowDetailsHeader.workflowDetailsHeader
         .workflow_family;
-      let len = fam.length;
+      const len = fam.length;
 
       if (fam.length > 1) {
         history.push(`/workflows/instances/${fam[len - 2].id}`);

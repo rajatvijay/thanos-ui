@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Modal,
-  Form,
-  Icon,
-  Input,
-  Button,
-  Checkbox,
-  Alert,
-  notification
-} from "antd";
+import { Modal, Form, Input, Button, Alert, notification } from "antd";
 import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import { workflowService } from "../../services/workflow";
@@ -167,7 +158,7 @@ class UserWorkflow extends React.Component {
 
   createUserWorkflow = () => {
     const kind = this.props.kinds.workflowKind.find(
-      kind => kind.tag == "users"
+      kind => kind.tag === "users"
     );
     const payload = {
       status: kind && kind.default_status,

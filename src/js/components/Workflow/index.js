@@ -1,18 +1,6 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  Layout,
-  Icon,
-  Row,
-  Col,
-  Button,
-  Dropdown,
-  Menu,
-  Switch,
-  Tooltip,
-  Tabs
-} from "antd";
+import { Layout, Icon, Row } from "antd";
 import WorkflowList from "./workflow-list";
 import {
   workflowActions,
@@ -23,20 +11,13 @@ import {
   workflowKindActions
 } from "../../actions";
 import FilterSidebar from "./filter";
-import { authHeader } from "../../_helpers";
-import AlertFilter from "./AlertFilter";
-import WorkflowFilterTop from "./WorkflowFilterTop";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../modules/sidebar/components/Sidebar";
-
 import Filter from "../../modules/filter/components/Filter";
 
-const { Header, Content, Footer, Sider } = Layout;
-
-const SubMenu = Menu.SubMenu;
-const TabPane = Tabs.TabPane;
+const { Content } = Layout;
 
 class Workflow extends Component {
   constructor(props) {
@@ -71,8 +52,6 @@ class Workflow extends Component {
   }
 
   componentDidMount = () => {
-    let tag = this.props.workflowFilters.kind.meta.tag;
-
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
@@ -106,32 +85,12 @@ class Workflow extends Component {
       for workflow fetch so  by removing this call we reduced the
       extra call for workflow fetch thus reducing time to load
     */ ////////////////////////////////////////////////////
-
-    // if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind ) {
-    //     this.reloadWorkflowList();
-    // }
   };
 
   getDefaultKind = config_loaded => {
-    let kindList = this.props.workflowKind.workflowKind;
-    let kindId = 2;
+    const kindList = this.props.workflowKind.workflowKind;
     let defKind = null;
 
-    if (config_loaded) {
-      kindId = this.props.config.configuration.default_workflow_kind;
-    } else {
-      kindId = kindList[0].id;
-    }
-
-    // if (kindId) {
-    //   _.map(kindList, function(kind) {
-    //     if (kind.id === parseInt(kindId, 10)) {
-    //       defKind = kind;
-    //     }
-    //   });
-    // } else {
-    //   defKind = kindList[0];
-    // }
     defKind = kindList[0];
 
     if (defKind) {
@@ -219,11 +178,10 @@ class Workflow extends Component {
   };
 
   render = () => {
-    const { sortingEnabled } = this.state;
     if (this.props.workflow.loadingStatus === "failed") {
       // TODO the checkAuth method only reports status text: `403 Forbidden`
       // In future, we should relook at a better way to handle this
-      if (this.props.users.me && this.props.users.me.error == "Forbidden") {
+      if (this.props.users.me && this.props.users.me.error === "Forbidden") {
         this.props.dispatch(logout());
         return;
       }
@@ -275,10 +233,6 @@ class Workflow extends Component {
                 <div className="mr-top-lg text-center text-bold text-metal">
                   <FormattedMessage id="errorMessageInstances.noWorkflowsError" />
                   .{" "}
-                  {/**<div className="text-anchor ">
-                   Click here to reload{" "}
-                   <i className="material-icons text-middle">refresh</i>
-                 </div>**/}
                   <div className="mr-top-lg text-center text-bold text-metal">
                     <FormattedMessage id="errorMessageInstances.loggedOutError" />
                     <div

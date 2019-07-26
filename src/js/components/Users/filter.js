@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { Select, Spin } from "antd";
 import debounce from "lodash.debounce";
 
-//const filter = {};
-
 const Option = Select.Option;
 
 class UserFilter extends Component {
@@ -58,7 +56,9 @@ class UserFilter extends Component {
         onChange={this.handleChange}
         style={{ width: "100%" }}
       >
-        {data.map(d => <Option key={d.value}>{d.text}</Option>)}
+        {data.map(d => (
+          <Option key={d.value}>{d.text}</Option>
+        ))}
       </Select>
     );
   }

@@ -1,32 +1,10 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import Moment from "react-moment";
 import moment from "moment";
 import _ from "lodash";
-import { Row, Col, Tooltip, Tag, Checkbox, Popover } from "antd";
-import { calculatedData } from "./calculated-data";
-import { history } from "../../_helpers";
-import { changeStatusActions, workflowActions } from "../../actions";
-import { FormattedMessage } from "react-intl";
-import AuditListTabs from "../Navbar/audit_log";
-import WorkflowPDFModal from "./WorkflowPDFModal";
+import { Row, Col, Tooltip, Checkbox, Popover } from "antd";
 import { ProcessLcData } from "./ProcessLcData";
-import { goToPrevStep } from "../../utils/customBackButton";
 import { css } from "emotion";
-
-const { getProcessedData, getProgressData } = calculatedData;
-
-// const getpercent = group => {
-//   let total = group.steps.length;
-//   let completed = 0;
-//   _.map(group.steps, function(item) {
-//     if (item.completed_at) {
-//       completed += 1;
-//     }
-//   });
-
-//   return Math.trunc(completed / total * 100);
-// };
 
 //////////////////
 /*workflow Head*/
@@ -38,7 +16,7 @@ function displaySortingKey(workflow) {
   const obj =
     Array.isArray(workflow.definition.extra_fields_json) &&
     workflow.definition.extra_fields_json.find(
-      ({ label, display_label }) => label === "sorting_primary_field"
+      ({ label }) => label === "sorting_primary_field"
     );
 
   if (obj) {
@@ -50,14 +28,12 @@ function displaySortingKey(workflow) {
       return workflow.sorting_primary_field;
     }
   }
-
-  //return workflow?workflow.display_label:"Risk"
 }
 
 export const WorkflowHeader = props => {
   const { workflow, isEmbedded } = props;
 
-  let headerData = (
+  const headerData = (
     <Row type="flex" align="middle" className="lc-card-head">
       {props.isEmbedded ? (
         <Col span={1} className="text-left">
@@ -130,31 +106,13 @@ export const WorkflowHeader = props => {
       align="middle"
     >
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
-
-      {/* {props.isExpanded ? (
-        <Col span={2} className="details-link-wrapper ">
-          {/* <span
-          //onClick={()=>props.showModal(props.workflow.id)}
-            className="details-link slide-this"
-           //to={"/workflows/instances/" + props.workflow.id + "/"}
-            title="Show details"
-            style={{
-              width: "75px",
-              float: "right",
-              //pointer:"cursor"
-            }}
-          >
-            <i className="material-icons">arrow_forward</i>
-          </span> */}
-      {/* </Col> */}
-      {/* // ) : null} */}
     </Row>
   );
 };
 
 const createFamilyListForBreadcrums = family => {
-  return family.map(item => (
-    <React.Fragment>
+  return family.map((item, index) => (
+    <React.Fragment key={`link_${index}`}>
       <Link style={{ color: "black" }} to={"/workflows/instances/" + item.id}>
         {" "}
         {item.name}
@@ -245,7 +203,7 @@ const HeaderTitle = props => {
 };
 
 export const HeaderLcData = props => {
-  let subtext = _.filter(props.workflow.lc_data, item => {
+  const subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal";
   });
   return (
@@ -278,36 +236,6 @@ export const HeaderLcData = props => {
   );
 };
 
-const getGroupProgress = group => {
-  let progress = 0;
-  let allSteps = group.steps.length;
-  let stepCompleted = 0;
-
-  _.map(group.steps, function(step) {
-    if (step.completed_at !== null) {
-      stepCompleted += 1;
-    }
-  });
-
-  progress = Math.trunc((stepCompleted / allSteps) * 100);
-  return progress;
-};
-
-// const getAllProgress = group => {
-//   let progress = 0;
-//   let allSteps = group.steps.length;
-//   let stepCompleted = 0;
-
-//   _.map(group.steps, function(step) {
-//     if (step.completed_at !== null) {
-//       stepCompleted += 1;
-//     }
-//   });
-
-//   progress = Math.trunc(stepCompleted / allSteps * 100);
-//   return progress;
-// };
-
 class HeaderOptions extends React.Component {
   constructor(props) {
     super(props);
@@ -338,24 +266,19 @@ class HeaderOptions extends React.Component {
 
   render = () => {
     const props = this.props;
-    const filteredStatus = _.filter(props.statusType, function(o) {
-      if (o.workflow_kind === props.workflow.definition.kind) {
-        return o;
-      }
-    });
 
     let selected_flag = null;
     if (_.size(props.workflow.selected_flag)) {
       selected_flag = props.workflow.selected_flag[props.workflow.id];
     }
-    let that = this;
+    const that = this;
     const { workflow } = this.props;
 
     const statusLabel =
       this.props.workflow.status.label ||
       this.props.workflow.status.kind_display;
 
-    let status = (
+    const status = (
       <Tooltip title={statusLabel}>
         <div className="pd-left-sm status-text text-black t-12 text-right text-ellipsis">
           {statusLabel}
@@ -420,25 +343,6 @@ class HeaderOptions extends React.Component {
   };
 }
 
-const getIcon = (id, kinds) => {
-  let returnKind = _.filter(kinds.workflowKind, ["id", id]);
-  let icon = _.size(returnKind) ? returnKind[0].icon : null;
-
-  if (icon) {
-    return icon;
-  } else {
-    return "folder_open";
-  }
-};
-
-const CheckData = props => {
-  if (moment(props.data, moment.ISO_8601).isValid()) {
-    return <Moment format="MM/DD/YYYY">{props.data}</Moment>;
-  } else {
-    return props.data;
-  }
-};
-
 export class GetMergedData extends React.Component {
   constructor(props) {
     super(props);
@@ -454,16 +358,10 @@ export class GetMergedData extends React.Component {
   };
 
   render() {
-    let props = this.props;
+    const data = this.props.workflow.lc_data;
 
-    // if (!props.field) {
-    //   return <span />;
-    // }
-
-    let data = this.props.workflow.lc_data;
-
-    let alert_data = _.map(this.props.workflow.alerts, function(alert) {
-      let alertReduced = {
+    const alert_data = _.map(this.props.workflow.alerts, function(alert) {
+      const alertReduced = {
         display_type: "alert",
         label: alert.alert.category.name,
         link:
@@ -480,24 +378,23 @@ export class GetMergedData extends React.Component {
     });
 
     _.forEach(data, function(v) {
-      if (v.display_type == "alert" && v.value) {
+      if (v.display_type === "alert" && v.value) {
         alert_data.push(v);
       }
     });
 
-    let lc_data = _.filter(data, function(v) {
-      return v.display_type == "normal";
+    const lc_data = _.filter(data, function(v) {
+      return v.display_type === "normal";
     });
 
-    let lc_data_filtered = _.filter(lc_data, function(v, index) {
+    const lc_data_filtered = _.filter(lc_data, function(v, index) {
       return v.value && index > 1;
     });
 
-    let that = this;
-    let styling = props.fieldExtra ? props.fieldExtra.lc_data_colorcodes : {};
+    const that = this;
 
     const expander = data => {
-      let count = 2;
+      const count = 2;
       if (_.size(data) > count) {
         return (
           <span
@@ -521,9 +418,7 @@ export class GetMergedData extends React.Component {
       } else {
         classes += " pd-right-lg";
       }
-
-      //let tagLabel = <span className={classes}>
-      let tagLabel = (
+      const tagLabel = (
         <span>
           <span
             className={" ellip-small text-middle "}
@@ -540,22 +435,6 @@ export class GetMergedData extends React.Component {
             </span>
             {ProcessLcData(item, is_alert) || ""}
           </span>
-
-          {/* {item.color ? (
-            <i
-              style={{ color: item.color }}
-              className="material-icons  t-12 tag-dot"
-            >
-              fiber_manual_records
-            </i>
-          ) : styling && styling[item.label] ? (
-            <i
-              style={{ color: styling[item.label].color }}
-              className="material-icons t-12 tag-dot"
-            >
-              fiber_manual_records
-            </i>
-          ) : null} */}
         </span>
       );
 
@@ -597,7 +476,10 @@ export class GetMergedData extends React.Component {
       }
 
       return (
-        <Tooltip key={index} title={item.label + ": " + (item.value || "")}>
+        <Tooltip
+          key={`${index}`}
+          title={item.label + ": " + (item.value || "")}
+        >
           {tagWrapper}
         </Tooltip>
       );
@@ -610,7 +492,7 @@ export class GetMergedData extends React.Component {
             <Row type="flex" align="middle">
               {_.size(alert_data)
                 ? _.map(alert_data, function(item, index) {
-                    let count = index + 1;
+                    const count = index + 1;
                     if (count < 3) {
                       return TagItem(item, index, true);
                     } else if (that.state.expanded) {
@@ -618,7 +500,7 @@ export class GetMergedData extends React.Component {
                     }
                   })
                 : _.map(lc_data_filtered, function(item, index) {
-                    let count = index + 1;
+                    const count = index + 1;
                     if (count < 2) {
                       return TagItem(item, index, false);
                     }
@@ -633,7 +515,7 @@ export class GetMergedData extends React.Component {
 }
 
 const getScoreColor = riskValue => {
-  let value = parseInt(riskValue, 10);
+  const value = parseInt(riskValue, 10);
   if (value >= 7) {
     return "green";
   } else if (value >= 4 && value <= 6) {
@@ -643,52 +525,4 @@ const getScoreColor = riskValue => {
   } else {
     return "light";
   }
-};
-
-const GetAlertData = props => {
-  return (
-    <div className="group-overview">
-      <div className="overflow-wrapper">
-        <div className="filter-top-list alert-tag-list">
-          {_.map(props.workflow.alerts, function(item, index) {
-            let more = props.workflow.alerts - 3;
-
-            if (index >= 3) {
-              if (index === 4) {
-                return <span className="text-light">+{more}</span>;
-              } else {
-                return;
-              }
-            } else {
-              return (
-                <Tag
-                  key={item.alert.id}
-                  className={
-                    "alert-tag-item " + item.alert.category.color_label ||
-                    "alert-primary" +
-                      (item.alert.category.color_label ? "" : "text-grey")
-                  }
-                  color={item.alert.category.color_label || null}
-                >
-                  <Link
-                    to={
-                      "/workflows/instances/" +
-                      item.workflow +
-                      "/" +
-                      "?group=" +
-                      item.step_group +
-                      "&step=" +
-                      item.step
-                    }
-                  >
-                    {item.alert.category.name}
-                  </Link>
-                </Tag>
-              );
-            }
-          })}
-        </div>
-      </div>
-    </div>
-  );
 };

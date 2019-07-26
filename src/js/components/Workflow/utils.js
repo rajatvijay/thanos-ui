@@ -8,7 +8,7 @@ export const utils = {
 
 // method to get all visible steps
 function getVisibleSteps(step_data) {
-  var visible_step_id = [];
+  const visible_step_id = [];
   _.forEach(step_data, function(sg) {
     _.forEach(sg.steps, function(step) {
       visible_step_id.push(step.definition);
@@ -21,14 +21,14 @@ function getVisibleSteps(step_data) {
 function isLockedStepEnable(s, visible_steps) {
   let dependent_step_visibility_count = 0;
   _.forEach(s.dependent_steps, function(ds) {
-    if (visible_steps.indexOf(parseInt(ds.value)) != -1) {
+    if (visible_steps.indexOf(parseInt(ds.value)) !== -1) {
       dependent_step_visibility_count++;
     }
   });
 
   if (
     s.dependent_steps &&
-    s.dependent_steps.length != dependent_step_visibility_count
+    s.dependent_steps.length !== dependent_step_visibility_count
   ) {
     return false;
   }
@@ -42,7 +42,7 @@ function isLockedStepGroupEnable(sg, visible_steps) {
       locked_step_count++;
     }
   });
-  if (sg.steps.length == locked_step_count) {
+  if (sg.steps.length === locked_step_count) {
     return false;
   }
   return true;

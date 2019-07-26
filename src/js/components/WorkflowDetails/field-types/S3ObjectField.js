@@ -15,7 +15,7 @@ class S3URL extends React.Component {
   };
 
   onChangeValidate = e => {
-    let valid = validator.isURL(e.target.value);
+    const valid = validator.isURL(e.target.value);
     this.setState({ isValidURL: valid });
     if (valid) {
       this.props.onFieldChange(e, this.props);
@@ -23,7 +23,7 @@ class S3URL extends React.Component {
   };
 
   fieldError = () => {
-    let ferr = field_error(this.props);
+    const ferr = field_error(this.props);
 
     if (this.state.isValidURL === false) {
       return {

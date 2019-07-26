@@ -73,14 +73,12 @@ export function currentStepFields(state = initialState, action) {
     case fieldConstants.POST_FIELD_SUCCESS:
       return {
         ...state,
-        // loading: false,
         [action.field.id]: {
           loading: false,
           isSubmitting: false,
           currentStepFields: action.field,
           error: null
         }
-        // currentStepFields: { ...action.field }
       };
     case fieldConstants.POST_FIELD_FAILURE:
       return {
@@ -135,7 +133,7 @@ export function currentStepFields(state = initialState, action) {
         loading: false
       };
     case fieldConstants.FETCH_FIELD_EXTRA_SUCCESS:
-      let extrasFromAPI = state.extrasFromAPI || {};
+      const extrasFromAPI = state.extrasFromAPI || {};
       extrasFromAPI[action.field.definition.tag] = action.extra;
       return {
         ...state,

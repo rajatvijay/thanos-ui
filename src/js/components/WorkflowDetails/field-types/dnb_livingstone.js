@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Table, Icon, Select, Tag } from "antd";
+import { Table, Icon, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
@@ -26,7 +26,7 @@ class DnbLivingstone extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -39,7 +39,7 @@ class DnbLivingstone extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -92,7 +92,7 @@ class DnbLivingstone extends Component {
 
 const GetTable = props => {
   // for error
-  if (props.jsonData.TransactionResult.ResultID != "PD021") {
+  if (props.jsonData.TransactionResult.ResultID !== "PD021") {
     return (
       <div className="text-center text-red">
         {props.jsonData.TransactionResult.ResultText}
@@ -125,8 +125,8 @@ const GetTable = props => {
           ? props.flag_dict[record.custom_hash]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span

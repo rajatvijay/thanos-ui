@@ -25,7 +25,7 @@ class AlertList extends Component {
     return alerts.map(item => {
       return (
         <Alerts
-          key={item.id}
+          key={`alert_${item.id}`}
           loading={loading}
           selected={this.state.selected}
           onSelect={this.onSelect}

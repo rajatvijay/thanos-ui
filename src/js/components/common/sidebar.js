@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Icon, Avatar, Collapse } from "antd";
-import { Link } from "react-router-dom";
-
-const { Sider } = Layout;
+import { Icon } from "antd";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -16,8 +13,6 @@ class Sidebar extends Component {
   };
 
   render() {
-    const Panel = Collapse.Panel;
-
     return (
       <div
         className="profile-sidebar sidebar-right"
@@ -32,8 +27,6 @@ class Sidebar extends Component {
           width: 300,
           ...this.props.style
         }}
-        //width={350}
-        //defaultCollapsed={true}
         collapsed={this.props.sidebar}
         collapsedWidth={0}
         collapsible
@@ -50,7 +43,6 @@ class Sidebar extends Component {
                 onClick={this.toggle}
               />
             </span>
-            {/*<Link to="/users"></Link>*/}
           </div>
           {this.props.sidebar ? this.props.children : "..."}
         </div>

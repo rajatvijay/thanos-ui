@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { Icon, Divider, Badge, Tag, Tooltip } from "antd";
-import { connect } from "react-redux";
+import { Icon, Badge, Tag, Tooltip } from "antd";
 import { workflowFiltersActions, workflowKindActions } from "../../actions";
 import _ from "lodash";
-import { Scrollbars } from "react-custom-scrollbars";
 
 class WorkflowFilterTop extends Component {
   state = {
@@ -23,7 +21,7 @@ class WorkflowFilterTop extends Component {
   };
 
   setFilter = () => {
-    let payload = {
+    const payload = {
       filterType: "stepgroupdef",
       filterValue: this.state.activeFilter
     };
@@ -31,7 +29,7 @@ class WorkflowFilterTop extends Component {
   };
 
   componentDidMount = () => {
-    let tag = this.props.workflowFilters.kind.meta.tag;
+    const tag = this.props.workflowFilters.kind.meta.tag;
 
     if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.props.dispatch(workflowKindActions.getCount(tag));
@@ -40,7 +38,7 @@ class WorkflowFilterTop extends Component {
   };
 
   componeneDidUpdate = prevProps => {
-    let tag = this.props.workflowFilters.kind.meta.tag;
+    const tag = this.props.workflowFilters.kind.meta.tag;
 
     if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind) {
       this.props.dispatch(workflowKindActions.getCount(tag));
@@ -49,7 +47,7 @@ class WorkflowFilterTop extends Component {
   };
 
   render() {
-    let that = this;
+    const that = this;
     const { stepgroupdef_counts, loading } = this.props.workflowGroupCount;
 
     return (
@@ -61,7 +59,7 @@ class WorkflowFilterTop extends Component {
                 if (!item.extra || !item.extra.hide) {
                   return (
                     <Tag
-                      key={item.id}
+                      key={`${item.id}`}
                       className={
                         " pd-bottom-sm t-12 v-tag alert-metal  " +
                         (that.state.activeFilter[0] === item.id

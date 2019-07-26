@@ -21,7 +21,6 @@ export const dunsFieldActions = {
 function dunsSaveField(payload, stepId) {
   return dispatch => {
     dispatch(request(payload));
-    //dispatch(remove_errors({}));
 
     dunsFieldService
       .saveDunsField(payload)
@@ -33,10 +32,6 @@ function dunsSaveField(payload, stepId) {
 
   function request(payload) {
     return { type: dunsFieldConstants.DUNS_FIELD_REQUEST, payload, stepId };
-  }
-
-  function remove_errors(payload) {
-    return { type: dunsFieldConstants.DUNS_FIELD_FAILURE, payload, stepId };
   }
 
   function success(field) {
@@ -60,7 +55,6 @@ function dunsSaveField(payload, stepId) {
 function dunsSelectItem(payload, stepId) {
   return dispatch => {
     dispatch(request(payload));
-    //dispatch(remove_errors({}));
 
     dunsFieldService
       .selectDunsItem(payload)
@@ -72,10 +66,6 @@ function dunsSelectItem(payload, stepId) {
 
   function request(payload) {
     return { type: dunsFieldConstants.DUNS_SELECT_REQUEST, payload, stepId };
-  }
-
-  function remove_errors(payload) {
-    return { type: dunsFieldConstants.DUNS_SELECT_FAILURE, payload, stepId };
   }
 
   function success(field) {

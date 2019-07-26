@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-//import { Link } from "react-router-dom";
-//import "../../css/section/login/login.css";
 
 class ProfileEdit extends Component {
   render() {

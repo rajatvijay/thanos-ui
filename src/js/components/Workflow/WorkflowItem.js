@@ -1,32 +1,17 @@
-import React, { Component } from "react";
-import { Layout, Icon, Divider, Modal } from "antd";
+import React from "react";
+import { Modal } from "antd";
 import { connect } from "react-redux";
 import {
   createWorkflow,
   workflowActions,
-  stepPreviewActions,
-  navbarActions,
   toggleMinimalUI
 } from "../../actions";
 import _ from "lodash";
-import Collapsible from "react-collapsible";
-import { Link } from "react-router-dom";
-import StepPreview from "./StepPreview";
-import { CreateRelated } from "./CreateRelated";
-// import WorkflowBody from "./WorkflowBody";
 import { WorkflowHeader } from "./WorkflowHeader";
-import { workflowDetailsService } from "../../services";
-import { calculatedData } from "./calculated-data";
 import WorkflowDetails from "../WorkflowDetails";
-import SidebarView from "../../../modules/workflows/sidebar/components";
 import ModalHeader from "./ModalHeader";
 import ModalFooter from "./ModalFooter";
-import { css } from "emotion";
-import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 import { withRouter } from "react-router-dom";
-
-const { getProcessedData } = calculatedData;
-const { Content, Sider } = Layout;
 
 class WorkflowItem extends React.Component {
   state = {
@@ -53,8 +38,7 @@ class WorkflowItem extends React.Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    let id = this.props.workflow.id;
-    const { stepGroupData } = this.state;
+    const id = this.props.workflow.id;
 
     if (
       this.props.workflowChildren[id] !== prevProps.workflowChildren[id] &&
@@ -74,11 +58,6 @@ class WorkflowItem extends React.Component {
   };
 
   showModal = id => {
-    //this.props.history.replace("/workflows/instances"+this.props.location.search.params.id);
-    //this.props.location.search = ""
-    //  if(this.props.match.params.id){
-    //   this.props.history.replace("/workflows/instances/"+this.props.match.params.id+"/");
-    //  }
     if (!this.props.minimalUI) this.props.toggleMinimalUI();
 
     this.setState({
@@ -90,7 +69,7 @@ class WorkflowItem extends React.Component {
   };
 
   addToOpenModalList = () => {
-    let { list } = this.props.expandedWorkflows;
+    const { list } = this.props.expandedWorkflows;
 
     if (!list.find(item => item.id === this.props.workflow.id)) {
       list.push(this.props.workflow);
@@ -99,8 +78,8 @@ class WorkflowItem extends React.Component {
   };
 
   removeFromOpenModalList = () => {
-    let { list } = this.props.expandedWorkflows;
-    let index = list.indexOf(this.props.workflow);
+    const { list } = this.props.expandedWorkflows;
+    const index = list.indexOf(this.props.workflow);
 
     if (index > -1) {
       list.splice(index, 1);
@@ -109,9 +88,9 @@ class WorkflowItem extends React.Component {
   };
 
   calcTopPos = () => {
-    let { list } = this.props.expandedWorkflows;
+    const { list } = this.props.expandedWorkflows;
     const index = list.indexOf(this.props.workflow);
-    let style = {
+    const style = {
       left: "21vw",
       margin: 0,
       top: "calc((100vh - 600px) / 2)"
@@ -126,7 +105,6 @@ class WorkflowItem extends React.Component {
   };
 
   handleOk = e => {
-    // console.log(e);
     this.setState({
       visible: false
     });
@@ -134,9 +112,6 @@ class WorkflowItem extends React.Component {
   };
 
   handleCancel = e => {
-    // console.log(this.props);
-    //this.props.history.replace("/workflows/instances");
-    // console.log(e);
     this.props.toggleMinimalUI();
     this.setState({
       visible: false
@@ -149,15 +124,14 @@ class WorkflowItem extends React.Component {
   };
 
   assignChilrenToKind = () => {
-    let rk = this.state.relatedWorkflow;
-    let children = this.state.children;
+    const rk = this.state.relatedWorkflow;
+    const children = this.state.children;
 
-    let workflowFilterByKind = _.map(rk, kind => {
-      let k = kind;
+    const workflowFilterByKind = _.map(rk, kind => {
+      const k = kind;
       k.workflows = [];
       _.forEach(children, child => {
         if (child.definition.kind === kind.id) {
-          // console.log("matches");
           k.workflows.push(child);
         }
       });
@@ -174,8 +148,8 @@ class WorkflowItem extends React.Component {
   };
 
   getRelatedTypes = () => {
-    let that = this;
-    let rt = [];
+    const that = this;
+    const rt = [];
     if (this.props.workflow.definition.related_types.length !== 0) {
       _.map(this.props.workflow.definition.related_types, function(rtc) {
         _.filter(that.props.kinds.workflowKind, function(kind) {
@@ -198,7 +172,7 @@ class WorkflowItem extends React.Component {
     } else {
       const kindTag = e.key;
       const kind = this.props.kinds.workflowKind.find(
-        kind => kind.tag == kindTag
+        kind => kind.tag === kindTag
       );
       const payload = {
         status: kind && kind.default_status,
@@ -215,7 +189,6 @@ class WorkflowItem extends React.Component {
     const { workflow } = this.props;
     const { statusType } = this.props.workflowFilterType;
     const hasChildren = this.props.workflow.children_count !== 0;
-    const { list } = this.props.expandedWorkflows;
 
     return (
       <div
@@ -229,7 +202,6 @@ class WorkflowItem extends React.Component {
         }
       >
         <div>
-          {/* {this.state.visible && ( */}
           <Modal
             style={this.calcTopPos()}
             footer={null}
@@ -290,7 +262,6 @@ class WorkflowItem extends React.Component {
           />
 
           <div />
-          {/* </Collapsible> */}
         </div>
       </div>
     );

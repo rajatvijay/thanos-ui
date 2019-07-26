@@ -2,7 +2,6 @@ import {
   TASK_QUEUE_COUNT_FAILURE,
   TASK_QUEUE_COUNT_SUCCESS
 } from "./sidebarActionTypes";
-import { Action } from "rxjs/internal/scheduler/Action";
 
 export default function taskQueueCount(
   state = { count: null, err: null },

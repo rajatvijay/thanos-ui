@@ -5,7 +5,7 @@ import { loadReCaptcha } from "react-recaptcha-v3-global";
 import _ from "lodash";
 import { connect } from "react-redux";
 import messages from "./components/common/intlMessages";
-import { addLocaleData, IntlProvider, injectIntl } from "react-intl";
+import { addLocaleData, IntlProvider } from "react-intl";
 import { flattenMessages } from "./components/common/messageUtils";
 import { languageActions } from "./actions";
 import { languageConstants } from "./constants";
@@ -27,12 +27,12 @@ class App extends React.Component {
   }
 
   render = () => {
-    let user = this.props.authentication.user;
+    const user = this.props.authentication.user;
     if (
       user &&
       user.prefered_language &&
       this.props.languageSelector.language &&
-      user.prefered_language != this.props.languageSelector.language
+      user.prefered_language !== this.props.languageSelector.language
     ) {
       user.prefered_language = this.props.languageSelector.language;
       this.props.dispatch(
@@ -51,10 +51,10 @@ class App extends React.Component {
       addLocaleData(require(`react-intl/locale-data/${locale}`));
     } catch (e) {
       console.log("Missing react support for:", locale);
-      let reactLocale = locale.split("-")[0];
+      const reactLocale = locale.split("-")[0];
       addLocaleData(require(`react-intl/locale-data/${reactLocale}`));
     }
-    let messagesDefaultLocale = flattenMessages(
+    const messagesDefaultLocale = flattenMessages(
       messages[languageConstants.DEFAULT_LOCALE]
     );
     let messageTranslate = messagesDefaultLocale;
@@ -66,7 +66,7 @@ class App extends React.Component {
       messageTranslate = flattenMessages(messages[locale]);
       if (_.includes(locale, "-")) {
         // has parent locale
-        let parentLocale = locale.split("-")[0];
+        const parentLocale = locale.split("-")[0];
         if (messages[parentLocale]) {
           // parent locale supported
           console.log("Merging texts from parent locale:", parentLocale);
@@ -78,7 +78,7 @@ class App extends React.Component {
         }
       }
 
-      let missing = Object.keys(messagesDefaultLocale).reduce(
+      const missing = Object.keys(messagesDefaultLocale).reduce(
         (missing, key) => {
           messageTranslate[key] || missing.push(key);
           return missing;

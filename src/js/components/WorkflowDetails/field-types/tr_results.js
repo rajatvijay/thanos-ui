@@ -26,7 +26,7 @@ class TRResult extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -39,7 +39,7 @@ class TRResult extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -92,7 +92,7 @@ class TRResult extends Component {
 
 const GetTable = props => {
   // for error
-  if (!_.size(props.jsonData) || props.jsonData["status_code"] == 401) {
+  if (!_.size(props.jsonData) || props.jsonData["status_code"] === 401) {
     return <div className="text-center text-red">No result found!</div>;
   }
 
@@ -115,8 +115,8 @@ const GetTable = props => {
           ? props.flag_dict[record.resultId]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span

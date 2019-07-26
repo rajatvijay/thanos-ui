@@ -61,7 +61,7 @@ class TaskQueueList extends Component {
 
     return restrictedTaskQueues.map(taskQueue => (
       <TaskQueue
-        key={taskQueue.id}
+        key={`taskQueue_${taskQueue.id}`}
         item={taskQueue}
         onSelect={this.onSelect}
         isSelected={selected === taskQueue.name}

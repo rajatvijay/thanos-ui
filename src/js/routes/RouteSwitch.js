@@ -28,13 +28,13 @@ class RoutSwitch extends React.Component {
   };
 
   calculateNav = prevProps => {
-    let customHistory = JSON.parse(localStorage.getItem("customHistory"));
+    const customHistory = JSON.parse(localStorage.getItem("customHistory"));
 
     const { location } = this.props;
     const prevLocation = prevProps.location;
 
-    let currentId = this.getIdFromPath(location.pathname);
-    let prevId = this.getIdFromPath(prevLocation.pathname);
+    const currentId = this.getIdFromPath(location.pathname);
+    const prevId = this.getIdFromPath(prevLocation.pathname);
 
     if (
       location.pathname === "/workflows/instances/" ||
@@ -47,7 +47,7 @@ class RoutSwitch extends React.Component {
       if (this.doesPathExists(customHistory, currentId)) {
         this.removeFromCustomHisotry();
       } else {
-        let histObj = {
+        const histObj = {
           id: prevId,
           pathname: prevProps.location.pathname,
           search: prevProps.location.search
@@ -58,15 +58,15 @@ class RoutSwitch extends React.Component {
   };
 
   setInitialHistoryState = () => {
-    let customHistory = [
+    const customHistory = [
       { id: null, pathname: "/workflows/instances/", search: "" }
     ];
     localStorage.setItem("customHistory", JSON.stringify(customHistory));
   };
 
   getIdFromPath = path => {
-    let pathArray = path.split("/");
-    let id = pathArray[3];
+    const pathArray = path.split("/");
+    const id = pathArray[3];
     return id;
   };
 
@@ -82,20 +82,18 @@ class RoutSwitch extends React.Component {
   };
 
   pushToCustomHisotry = item => {
-    let arr = JSON.parse(localStorage.getItem("customHistory")) || [];
+    const arr = JSON.parse(localStorage.getItem("customHistory")) || [];
     arr.push(item);
     localStorage.setItem("customHistory", JSON.stringify(arr));
   };
 
   removeFromCustomHisotry = item => {
-    let arr = JSON.parse(localStorage.getItem("customHistory"));
+    const arr = JSON.parse(localStorage.getItem("customHistory"));
     arr.splice(arr.length - 1, 1);
     localStorage.setItem("customHistory", JSON.stringify(arr));
   };
 
   render() {
-    const { alert, nextUrl } = this.props;
-
     return (
       <Switch>
         <Route path="/login" exact component={OTPLogin} />

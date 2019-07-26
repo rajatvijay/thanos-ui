@@ -6,7 +6,7 @@ export const calculatedData = {
 };
 
 function getProcessedData(item) {
-  let data = item;
+  const data = item;
   _.map(data, function(group, index) {
     let groupComplete = true;
     _.map(group.steps, function(step) {
@@ -38,6 +38,6 @@ function getProgressData(item) {
     });
   });
 
-  progress = Math.trunc(stepCompleted / allSteps * 100);
+  progress = Math.trunc((stepCompleted / allSteps) * 100);
   return progress;
 }

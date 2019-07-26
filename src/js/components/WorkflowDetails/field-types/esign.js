@@ -6,7 +6,7 @@ import { authHeader } from "../../../_helpers";
 import { apiBaseURL } from "../../../../config";
 
 const FormItem = Form.Item;
-const { onFieldChange, field_error, getRequired, isDisabled } = commonFunctions;
+const { field_error, isDisabled } = commonFunctions;
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -30,10 +30,10 @@ class Doc extends Component {
 
   componentDidMount = () => {
     const { user } = this.props.authentication;
-    let defaultname = user.first_name
+    const defaultname = user.first_name
       ? user.first_name + (user.last_name ? " " + user.last_name : "")
       : null;
-    let defaultemail = user.email ? user.email : null;
+    const defaultemail = user.email ? user.email : null;
     this.setState({ username: defaultname, useremail: defaultemail });
   };
 
@@ -73,8 +73,8 @@ class Doc extends Component {
 
   _submitUserDetails = async () => {
     const { username, useremail } = this.state;
-    let file_url = await this.generateFile();
-    let token = "Token e4da7a0f0711318b222aed195c3a040db068b79d";
+    const file_url = await this.generateFile();
+    const token = "Token e4da7a0f0711318b222aed195c3a040db068b79d";
 
     const requestOptions = {
       method: "POST",
@@ -94,7 +94,7 @@ class Doc extends Component {
 
     this.setState({ fetching: true });
 
-    let response = await fetch(
+    const response = await fetch(
       "https://cyborg.slackcart.com/api/v1/request_esign/",
       requestOptions
     );
@@ -105,7 +105,7 @@ class Doc extends Component {
         message: response.statusText
       });
     } else {
-      let body = await response.json();
+      const body = await response.json();
       this.setState({ fetching: false });
       if (body.view_url === "None") {
         openNotificationWithIcon({
@@ -134,27 +134,22 @@ class Doc extends Component {
   render = () => {
     const props = this.props;
     const { user } = props.authentication;
-    const { username, useremail } = this.state;
-    let single = true;
-    let save = onFieldChange.bind(this, props);
-    let that = this;
 
-    let defaultname = user.first_name
+    const defaultname = user.first_name
       ? user.first_name + (user.last_name ? " " + user.last_name : "")
       : null;
-    let defaultemail = user.email ? user.email : null;
+    const defaultemail = user.email ? user.email : null;
 
     return (
       <Row gutter={24}>
         <Col span={10}>
           <FormItem
-            //label={getLabel(props, that)}
             disabled={isDisabled(props)}
             className="from-label"
             style={{ display: "block" }}
             key={"doc-user-name"}
             message=""
-            validateStatus={this.state.loading ? "validating" : null}
+            validateStatus={this.state.loading ? "validating" : ""}
             hasFeedback
           >
             <Input
@@ -163,7 +158,6 @@ class Doc extends Component {
               name="username"
               defaultValue={defaultname}
               autoComplete="new-password"
-              autocomplete="new-password"
               onChange={this.onInputChange}
             />
           </FormItem>
@@ -183,7 +177,6 @@ class Doc extends Component {
               name="useremail"
               defaultValue={defaultemail}
               autoComplete="new-password"
-              autocomplete="new-password"
               onChange={this.onInputChange}
             />
           </FormItem>
@@ -194,13 +187,12 @@ class Doc extends Component {
             style={{ display: "block" }}
             key="doc-submit"
             message=""
-            validateStatus={this.state.loading ? "validating" : null}
+            validateStatus={this.state.loading ? "validating" : ""}
             hasFeedback
             {...field_error(props)}
           >
             <Button
               disabled={isDisabled(props)}
-              //icon="paper-clip"
               onClick={this.submitUserDetails}
               loading={this.state.fetching}
               className="ant-btn-primary"

@@ -10,7 +10,6 @@ export const authHeader = {
 
 function get() {
   return {
-    //"Content-Type": "application/json",
     "X-DTS-SCHEMA": tenant
   };
 }

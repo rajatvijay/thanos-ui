@@ -4,7 +4,6 @@ import LoginForm from "./LoginForm";
 import { Icon } from "antd";
 import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
-import { ReCaptcha } from "react-recaptcha-v3-global";
 import LoginHeader from "./LoginHeader";
 import _ from "lodash";
 
@@ -22,7 +21,7 @@ class LoginPage extends React.Component {
   };
 
   render = () => {
-    let supportedLaguanges = this.props.config.supported_languages;
+    const supportedLaguanges = this.props.config.supported_languages;
 
     if (this.props.config.configuration) {
       if (
@@ -42,12 +41,6 @@ class LoginPage extends React.Component {
         id="login"
         token={this.state.token}
       >
-        {/* <ReCaptcha
-          sitekey="6LeIoHkUAAAAANZKP5vkvU-B2uEuJBhv13_6h9-8"
-          action="login"
-          verifyCallback={this.verifyCallback}
-        /> */}
-
         <LoginHeader
           showLanguage={_.isEmpty(supportedLaguanges) ? false : true}
         />

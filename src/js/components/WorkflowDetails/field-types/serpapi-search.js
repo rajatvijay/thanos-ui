@@ -25,7 +25,7 @@ class SerpSrch extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -38,7 +38,7 @@ class SerpSrch extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
 
     const props = {
       field: field,
@@ -102,7 +102,6 @@ const GetTable = props => {
       title: "Search results",
       dataIndex: "result",
       render: (text, record, index) => {
-        //let adrData = record
         return integrationCommonFunctions.serp_search_html(record);
       },
       key: "title"
@@ -116,8 +115,8 @@ const GetTable = props => {
           ? props.flag_dict[record.custom_hash]
           : {};
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
-        let css = flag_data.extra || {};
-        let flag_name = flag_data.label || null;
+        const css = flag_data.extra || {};
+        const flag_name = flag_data.label || null;
         return (
           <span>
             <span

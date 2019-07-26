@@ -1,5 +1,4 @@
 import { authHeader } from "../_helpers";
-import _ from "lodash";
 import { apiBaseURL } from "../../config";
 
 export const workflowStepService = {
@@ -18,7 +17,7 @@ export const workflowStepService = {
 function saveField(payload) {
   let requestOptions = {};
   if (payload.attachment) {
-    let data = new FormData();
+    const data = new FormData();
     data.append("workflow", payload.workflow);
     data.append("field", payload.field);
     data.append("attachment", payload.attachment);
@@ -51,7 +50,7 @@ function saveField(payload) {
 function removeAttachment({ workflow, field, responseId }) {
   let requestOptions = {};
 
-  let data = { attachment: null, workflow, field };
+  const data = { attachment: null, workflow, field };
 
   requestOptions = {
     method: "PATCH",
@@ -115,7 +114,6 @@ function submitStep(payload) {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },
     credentials: "include"
-    //body: JSON.stringify({ data: payload })
   };
 
   const url =
@@ -136,7 +134,6 @@ function approveStep(payload) {
     method: "POST",
     headers: { ...authHeader.post(), "Content-Type": "application/json" },
     credentials: "include"
-    //body: JSON.stringify({ data: payload })
   };
 
   const url =
@@ -174,8 +171,6 @@ function undoStep(payload) {
 
 function addComment(payload) {
   let requestOptions = {};
-
-  // let data = JSON.stringify(payload);
   let data = payload;
   if (payload.attachment) {
     data = new FormData();

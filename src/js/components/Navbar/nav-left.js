@@ -14,8 +14,6 @@ const menuList = [
   { name: "Workflows", path: "/workflows/instances", icon: "switcher" },
   { name: "People", path: "/users", icon: "user" },
   { name: "Export data", path: "/export-list", icon: "download" }
-  //  { name: "Insight", path: "/insight", icon: "line-chart" }
-  //{ name: "Logout", path: "/login", icon: "logout" }
 ];
 
 class NavLeft extends Component {
@@ -78,7 +76,7 @@ class NavLeft extends Component {
           >
             {_.map(menuList, function(m, index) {
               return (
-                <Menu.Item key={index}>
+                <Menu.Item key={`item_${index}`}>
                   <Link to={m.path} className="nav-text">
                     <div>
                       <Icon type={m.icon} />

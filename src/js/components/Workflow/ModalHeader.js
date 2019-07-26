@@ -7,8 +7,6 @@ class ModalHeader extends Component {
   render() {
     const { workflow, stepId, groupId } = this.props;
 
-    //console.log("ids", stepId, groupId);
-
     return (
       <div
         style={{
@@ -33,10 +31,8 @@ class ModalHeader extends Component {
             flexBasis: "50%"
           }}
         >
-          {/* <span style={{ color: "#C3C3C3" }}>United kingdom</span> */}
           <HeaderLcData {...this.props} />
 
-          {/* <span>2</span> */}
           <GetMergedData {...this.props} />
 
           <span>{workflow.status.label}</span>
@@ -53,7 +49,7 @@ class ModalHeader extends Component {
                   groupId
             }
           >
-            <img style={{ width: 20 }} src={FullScreen} />
+            <img style={{ width: 20 }} src={FullScreen} alt="" />
           </Link>
         </div>
       </div>

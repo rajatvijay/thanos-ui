@@ -1,9 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Icon } from "antd";
-import SelectLanguage from "../SelectLanguage/";
 import LoginSelectLanguage from "../SelectLanguage/LoginSelectLanguage";
-import { FormattedMessage, injectIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 
 const LoginHeader = props => {
   if (!props.config) {
@@ -14,12 +12,11 @@ const LoginHeader = props => {
         <div className="logo-container text-center">
           <div>
             {props.config.logo ? (
-              <img className="logo" src={props.config.logo} />
+              <img className="logo" src={props.config.logo} alt="" />
             ) : (
               <span className="text-bold t-18">{props.config.name}</span>
             )}
           </div>
-          {/* <span className="logo-subtext">PARTNERS</span> */}
         </div>
 
         <div className="language-selection text-center mr-bottom-lg ">

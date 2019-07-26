@@ -3,27 +3,8 @@ import { Router } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
 import _ from "lodash";
-import {
-  alertActions,
-  configActions,
-  userActions,
-  checkAuth
-} from "../actions";
-import { PrivateRoute } from "../components/PrivateRoute";
-import { GenericNotFound } from "../components/notfound";
-import Logout from "../components/LoginPage/Logout";
-import { LoginPage } from "../components/LoginPage";
-import { MagicLogin } from "../components/LoginPage/MagicLogin";
-import { OTPLogin } from "../components/LoginPage/OTPLogin";
-import { RegisterPage } from "../components/RegisterPage";
-import Navbar from "../components/Navbar";
+import { configActions, userActions, checkAuth } from "../actions";
 import Header from "../../modules/header/components";
-import Workflow from "../components/Workflow";
-import WorkflowDetailsRoot from "../components/WorkflowDetails";
-import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
-import Users from "../components/Users";
-import ExportList from "../components/ExportPage";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
 import queryString from "query-string";
@@ -60,9 +41,7 @@ class MainRoutes extends React.Component {
   }
 
   componentDidMount = () => {
-    //if (!localStorage.getItem("user")) {
-
-    let host = document.location.hostname.split(".");
+    const host = document.location.hostname.split(".");
 
     if (host[0] === "certa" || host[0] === "slackcart") {
       window.location = "https://www.thevetted.com";
@@ -71,9 +50,8 @@ class MainRoutes extends React.Component {
       this.props.dispatch(checkAuth());
       this.props.dispatch(configActions.getConfig());
     }
-    //}
 
-    let parsed = queryString.parse(history.location.search);
+    const parsed = queryString.parse(history.location.search);
     if (parsed.next) {
       this.props.dispatch(userActions.setNextUrl(parsed.next));
     }
@@ -90,7 +68,7 @@ class MainRoutes extends React.Component {
   }
 
   render() {
-    const { alert, nextUrl, users } = this.props;
+    const { users } = this.props;
 
     if (this.state.showBlank) {
       return <div />;
@@ -123,4 +101,3 @@ class MainRoutes extends React.Component {
 }
 
 export default injectIntl(connect(mapStateToProps)(MainRoutes));
-//export default { connectedApp as MainRoutes };

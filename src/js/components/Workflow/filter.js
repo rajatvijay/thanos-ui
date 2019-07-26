@@ -3,15 +3,12 @@ import {
   Button,
   Select,
   Layout,
-  Input,
   Cascader,
   Form,
   Dropdown,
-  Popover,
   Icon,
   Menu
 } from "antd";
-import { authHeader } from "../../_helpers";
 import {
   workflowFiltersActions,
   workflowActions,
@@ -22,12 +19,9 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
 import { WrappedAdvancedFilterForm } from "./advanced-filters.js";
-//import { regionData } from "./regionData";
 import { FormattedMessage, injectIntl } from "react-intl";
 import FooterLink from "./FooterLinks";
-import { apiBaseURL } from "../../../config";
 
-//const filter = {};
 const { Sider } = Layout;
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -46,7 +40,7 @@ class WorkflowFilter extends Component {
   // this is required as super.handleChange is not possible for react components
   _handleChange = value => {
     this.setState({ value });
-    let fType = this.filterType.toLowerCase();
+    const fType = this.filterType.toLowerCase();
     let payload = { filterType: fType, filterValue: [] };
 
     if (value !== undefined && value.length !== 0) {
@@ -67,8 +61,8 @@ class WorkflowFilter extends Component {
   handleChange = this._handleChange;
 
   getLabel = () => {
-    let custom_ui_labels = this.props.config.custom_ui_labels || {};
-    let label =
+    const custom_ui_labels = this.props.config.custom_ui_labels || {};
+    const label =
       this.props.intl.formatMessage({
         id: `workflowFiltersTranslated.filterLabels.${this.filterType}`
       }) || this.filterType;
@@ -76,8 +70,8 @@ class WorkflowFilter extends Component {
   };
 
   getPlaceHolder = () => {
-    let custom_ui_labels = this.props.config.custom_ui_labels || {};
-    let placeholder =
+    const custom_ui_labels = this.props.config.custom_ui_labels || {};
+    const placeholder =
       this.props.intl.formatMessage({
         id: `workflowFiltersTranslated.filterPlaceholders.${this.filterType}`
       }) || this.filterType;
@@ -86,11 +80,9 @@ class WorkflowFilter extends Component {
 
   render() {
     const { value } = this.state;
-    let label = this.getLabel();
-    let placeholder = this.getPlaceHolder();
+    const placeholder = this.getPlaceHolder();
     return (
       <div>
-        <div>{/*<label>{label ? label : placeholder}</label>*/}</div>
         <FormItem>
           <Select
             showSearch
@@ -99,7 +91,6 @@ class WorkflowFilter extends Component {
             value={value}
             placeholder={placeholder}
             onChange={this.handleChange}
-            //onDeselect={this.onDeselect}
             onSelect={this.onSelect}
             style={{ width: "100%" }}
             allowClear={true}
@@ -107,7 +98,7 @@ class WorkflowFilter extends Component {
           >
             {_.map(this.getData(), function(c, index) {
               return (
-                <Option prop={c} title={c.value} key={c.value}>
+                <Option prop={c} title={c.value} key={`${c.value}`}>
                   {c.label}
                 </Option>
               );
@@ -148,7 +139,7 @@ class WorkflowRegionFilter extends WorkflowFilter {
 
   handleChange = value => {
     this._handleChange(value);
-    let region = value && value.key;
+    const region = value && value.key;
     this.props.dispatch(workflowFiltersActions.getBusinessUnitData(region));
   };
 }
@@ -182,18 +173,13 @@ class WorkflowBUFilter extends WorkflowFilter {
       loading: bd.loading,
       results: _.orderBy(bd.results, ["label"], ["asc"])
     };
-    const statusData = !this.props.workflowFilterType.statusType.error
-      ? _.orderBy(this.props.workflowFilterType.statusType, ["label"], ["asc"])
-      : [{ value: "empty", label: "empty" }];
-    let label = this.getLabel();
-    let placeholder = this.getPlaceHolder();
+    const placeholder = this.getPlaceHolder();
 
     return (
       <div>
-        <div>{/*<label>{label ? label : placeholder}</label>*/}</div>
         <FormItem
           hasFeedback={businessData.loading ? true : false}
-          validateStatus={this.state.fetching ? "validating" : null}
+          validateStatus={this.state.fetching ? "validating" : ""}
           help={
             businessData.loading
               ? this.props.intl.formatMessage({
@@ -208,10 +194,9 @@ class WorkflowBUFilter extends WorkflowFilter {
             label={placeholder}
             placeholder={placeholder}
             value={value}
-            //onDeselect={this.onDeselect}
             onSelect={this.onSelect}
             style={{ width: "100%" }}
-            loading={businessData.loading}
+            loading={`${businessData.loading}`}
           />
         </FormItem>
       </div>
@@ -244,14 +229,14 @@ class WorkflowKindFilter extends Component {
   };
 
   handleChange = value => {
-    let id = parseInt(value, 10);
-    let that = this;
+    const id = parseInt(value, 10);
+    const that = this;
     this.setState({ value });
-    let metaValue = _.find(this.props.workflowKind.workflowKind, item => {
+    const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
       return item.id === id;
     });
 
-    let payload = { filterType: "kind", filterValue: [id], meta: metaValue };
+    const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
     setTimeout(function() {
       that.fetchGroupData(metaValue.tag);
@@ -265,8 +250,7 @@ class WorkflowKindFilter extends Component {
   };
 
   render = () => {
-    let workflowKindList = null;
-    let workflowKind = _.orderBy(
+    const workflowKind = _.orderBy(
       this.props.workflowKind.workflowKind,
       ["name"],
       ["asc"]
@@ -274,16 +258,12 @@ class WorkflowKindFilter extends Component {
     const { value } = this.state;
 
     const options = workflowKind
-      ? _.map(workflowKind, d => <Option key={d.id}>{d.name}</Option>)
+      ? _.map(workflowKind, d => <Option key={`${d.id}`}>{d.name}</Option>)
       : [];
 
     return (
       <div className="aux-item aux-lead filter-title">
-        <FormItem
-        // label={
-        //   <FormattedMessage id="workflowFiltersTranslated.filterWorkflowType" />
-        // }
-        >
+        <FormItem>
           <Select
             mode="single"
             value={value}
@@ -292,8 +272,6 @@ class WorkflowKindFilter extends Component {
             onDeselect={this.onDeselect}
             onSelect={this.onSelect}
             style={{ width: "100%" }}
-            //allowClear={true}
-            //labelInValue={true}
           >
             {options}
           </Select>
@@ -337,9 +315,9 @@ class FilterSidebar extends Component {
   clicked = tag => {
     //dispatch
     const kind = this.props.workflowKind.workflowKind.find(
-      kind => kind.tag == tag
+      kind => kind.tag === tag
     );
-    let payload = {
+    const payload = {
       status: kind && kind.default_status,
       kind: tag,
       name: "Draft"
@@ -352,11 +330,11 @@ class FilterSidebar extends Component {
   };
 
   render = () => {
-    let that = this;
+    const that = this;
 
     const { workflowKind } = this.props.workflowKind;
 
-    let workflowKindFiltered = [];
+    const workflowKindFiltered = [];
 
     _.map(workflowKind, function(item) {
       if (!item.is_related_kind && _.includes(item.features, "add_workflow")) {
@@ -372,8 +350,6 @@ class FilterSidebar extends Component {
         {_.map(workflowKindFiltered, function(item, index) {
           //////////---------------HACK---------------////////////
           //Hide users workflow kind from create button. Temporary
-
-          let showitem = false;
 
           if (item.tag === "users") {
             return;
@@ -428,7 +404,6 @@ class FilterSidebar extends Component {
         collapsedWidth={0}
       >
         <Scrollbars
-          autoWidth={true}
           autoHide={true}
           style={{ height: "100%", position: "relative" }}
         >

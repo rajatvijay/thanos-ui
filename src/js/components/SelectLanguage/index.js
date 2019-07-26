@@ -22,7 +22,7 @@ class SelectLanguage extends React.Component {
       console.log(`Language change done, will reload`);
       window.location.reload();
     }
-    let user = this.props.authentication.user;
+    const user = this.props.authentication.user;
     let preferredLanguage =
       this.props.languageSelector.language ||
       (user && user.prefered_language) ||
@@ -33,7 +33,7 @@ class SelectLanguage extends React.Component {
     if (!languages.endonyms[preferredLanguage]) {
       preferredLanguage = preferredLanguage.split("-")[0];
     }
-    let supportedLaguanges = this.props.config.supported_languages;
+    const supportedLaguanges = this.props.config.supported_languages;
     if (!_.includes(supportedLaguanges, preferredLanguage)) {
       preferredLanguage = supportedLaguanges[0];
     }

@@ -28,7 +28,7 @@ class DnBSearch extends Component {
   }
 
   onSearch = () => {
-    let payload = {
+    const payload = {
       workflow: this.props.workflowId,
       fieldId: this.props.field.id
     };
@@ -37,7 +37,7 @@ class DnBSearch extends Component {
   };
 
   render = () => {
-    let { field } = this.props;
+    const { field } = this.props;
     let integration = null;
     const props = {
       field: field,
@@ -68,7 +68,7 @@ class DnBSearch extends Component {
       if (
         props.field.integration_json.OrderProductResponse &&
         props.field.integration_json.OrderProductResponse.TransactionResult
-          .ResultText != "Success"
+          .ResultText !== "Success"
       ) {
         final_html = (
           <div className="text-center text-red">

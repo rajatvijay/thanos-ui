@@ -21,11 +21,11 @@ class WorkflowAdvFilter extends Component {
   };
 
   handleChange = (type, value) => {
-    let fb = this.state.filterBuilder;
+    const fb = this.state.filterBuilder;
 
     switch (type) {
       case "field":
-        let fieldLast = value.length - 1;
+        const fieldLast = value.length - 1;
 
         fb.field = value[fieldLast];
         break;
@@ -34,6 +34,8 @@ class WorkflowAdvFilter extends Component {
         break;
       case "fieldValue":
         fb.value = value.target.value;
+        break;
+      default:
         break;
     }
 
@@ -72,7 +74,7 @@ class WorkflowAdvFilter extends Component {
   };
 
   onAddFilterItem = () => {
-    let filterList = this.state.filterList;
+    const filterList = this.state.filterList;
 
     if (_.some(this.state.filterBuilder, _.isEmpty)) {
       this.setState({ advFilterErr: true });
@@ -83,7 +85,6 @@ class WorkflowAdvFilter extends Component {
 
       this.setState({
         filterList: filterList,
-        //filterBuilder: { field: null, operator: null, value: null },
         advFilterErr: false
       });
       this.props.form.resetFields();
@@ -93,11 +94,11 @@ class WorkflowAdvFilter extends Component {
   };
 
   setFilter = filterList => {
-    let a = [];
+    const a = [];
     let stringifyFilter = "";
 
     _.map(filterList, function(i) {
-      let f = i.field + "__" + i.operator + "__" + i.value;
+      const f = i.field + "__" + i.operator + "__" + i.value;
       a.push(f);
     });
 
@@ -113,14 +114,14 @@ class WorkflowAdvFilter extends Component {
   };
 
   removeFilterItem = index => {
-    let arr = this.state.filterList;
+    const arr = this.state.filterList;
     arr.splice(index, 1);
     this.setState({ filterList: arr });
     this.setFilter(arr);
   };
 
   render = () => {
-    let that = this;
+    const that = this;
 
     return (
       <Form>
@@ -234,7 +235,7 @@ class WorkflowAdvFilter extends Component {
               return (
                 <div
                   className="adv-filter-item"
-                  key={index}
+                  key={`item_${index}`}
                   onClick={that.removeFilterItem.bind(that, index)}
                 >
                   where <b>{i.field}</b> {i.operator} to <b>{i.value}</b>

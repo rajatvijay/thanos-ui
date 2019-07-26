@@ -49,21 +49,21 @@ class Sidebar extends Component {
 
   openCommentSidebar = () => {
     const { workflowIdFromDetailsToSidebar } = this.props;
-    let object_id = this.props.workflowDetailsHeader[
+    const object_id = this.props.workflowDetailsHeader[
       workflowIdFromDetailsToSidebar
     ].id;
     this.callBackCollapser(object_id, "all_data");
   };
 
   printDiv = () => {
-    var that = this;
+    const that = this;
     this.setState({ printing: true });
 
     setTimeout(function() {
-      var printContents = document.getElementById("StepBody").innerHTML;
-      var docHead = document.querySelector("head").innerHTML;
+      const printContents = document.getElementById("StepBody").innerHTML;
+      const docHead = document.querySelector("head").innerHTML;
 
-      var body =
+      const body =
         "<!DOCTYPE html><html><head>" +
         "<title>" +
         //that.props.currentStepFields.currentStepFields.definition.name +
@@ -72,7 +72,7 @@ class Sidebar extends Component {
         "</head><body>" +
         printContents +
         "</body></html>";
-      var myWindow = window.open();
+      const myWindow = window.open();
       myWindow.document.write(body);
       myWindow.document.close();
       myWindow.focus();
@@ -165,22 +165,21 @@ class Sidebar extends Component {
       workflowDetailsHeader,
       workflowDetails,
       minimalUI,
-      act,
+
       workflowIdFromDetailsToSidebar,
-      displayProfile,
-      changeProfileDisplay
+      displayProfile
     } = this.props;
     //console.log("min", this.props);
-    let lc_data =
-      Object.values(workflowDetailsHeader).length &&
-      workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-        ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
-        : [];
-    lc_data = lc_data.filter(
-      (data, index) => data.display_type == "normal" && data.value
-    );
+    // let lc_data =
+    //   Object.values(workflowDetailsHeader).length &&
+    //   workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+    //     ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
+    //     : [];
+    // lc_data = lc_data.filter(
+    //   (data, index) => data.display_type === "normal" && data.value
+    // );
 
-    const { groupId, stepId, defaultSelected } = this.state;
+    const { groupId, stepId } = this.state;
 
     const workflowActionMenu = (
       <Menu>
@@ -396,7 +395,7 @@ class Sidebar extends Component {
           ) : (
             <div>
               <Collapse
-                defaultActiveKey={groupId}
+                defaultActiveKey={[groupId]}
                 activeKey={groupId}
                 accordion
                 style={{
@@ -418,7 +417,7 @@ class Sidebar extends Component {
                       .filter(group => group.steps.length)
                       .map((stepgroup, index) => (
                         <Panel
-                          key={stepgroup.id}
+                          key={`panel_${stepgroup.id}`}
                           showArrow={false}
                           header={
                             <div
@@ -477,8 +476,9 @@ class Sidebar extends Component {
                             </div>
                           }
                         >
-                          {stepgroup.steps.map(step => (
+                          {stepgroup.steps.map((step, index) => (
                             <span
+                              key={`step_${step.id}`}
                               // to={`${history.location.pathname}?group=${
                               //   stepgroup.id
                               // }&step=${step.id}`}
@@ -508,12 +508,11 @@ class Sidebar extends Component {
                                   event
                                 )
                               }
-                              key={step.id}
                             >
                               <p
                                 style={
-                                  groupId == stepgroup.id &&
-                                  stepId == step.id &&
+                                  groupId === stepgroup.id &&
+                                  stepId === step.id &&
                                   !displayProfile
                                     ? {
                                         backgroundColor: "#104774",
@@ -535,8 +534,8 @@ class Sidebar extends Component {
                                     className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
                                     fill="#FFF"
                                     style={
-                                      groupId == stepgroup.id &&
-                                      stepId == step.id
+                                      groupId === stepgroup.id &&
+                                      stepId === step.id
                                         ? { color: "#00C89B", fontSize: 14 }
                                         : { color: "#00C89B" }
                                     }
@@ -548,14 +547,14 @@ class Sidebar extends Component {
                                     className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
                                     fill="#FFF"
                                     style={
-                                      groupId == stepgroup.id &&
-                                      stepId == step.id
+                                      groupId === stepgroup.id &&
+                                      stepId === step.id
                                         ? { color: "#FFFFFF", fontSize: 14 }
                                         : { color: "#CCCCCC" }
                                     }
                                   >
-                                    {groupId == stepgroup.id &&
-                                    stepId == step.id
+                                    {groupId === stepgroup.id &&
+                                    stepId === step.id
                                       ? "lens"
                                       : "panorama_fish_eye"}
                                   </i>

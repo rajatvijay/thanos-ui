@@ -3,39 +3,25 @@ import {
   Layout,
   Menu,
   Icon,
-  Button,
   Input,
-  Dropdown,
-  Badge,
-  Popover,
-  List,
-  Avatar,
   Row,
   Col,
-  Select,
   Drawer,
   Tooltip,
   notification
 } from "antd";
-import {
-  logout,
-  workflowActions,
-  languageActions,
-  navbarActions
-} from "../../actions";
+import { logout, workflowActions, navbarActions } from "../../actions";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { authHeader } from "../../_helpers";
 import SelectLanguage from "../SelectLanguage";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MetaGraph from "../Workflow/MetaGraph";
-import { apiBaseURL, siteOrigin } from "../../../config";
+import { siteOrigin } from "../../../config";
+import Anchor from "../common/Anchor";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-const Search = Input.Search;
-const Option = Select.Option;
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -55,7 +41,6 @@ class NavTop extends Component {
   }
 
   onLogout(key) {
-    // this.props.dispatch(logout());
     logout();
   }
 
@@ -109,7 +94,7 @@ class NavTop extends Component {
   };
 
   getExportList = () => {
-    let kind = this.props.workflowKind.workflowKind;
+    const kind = this.props.workflowKind.workflowKind;
     return (
       <SubMenu
         key="sub4"
@@ -125,7 +110,7 @@ class NavTop extends Component {
             _.includes(item.features, "add_workflow")
           ) {
             return (
-              <Menu.Item key={index}>
+              <Menu.Item key={`item_${index}`}>
                 <a
                   href={
                     siteOrigin +
@@ -157,8 +142,7 @@ class NavTop extends Component {
   };
 
   render = () => {
-    let that = this;
-    let user = this.props.authentication.user;
+    const user = this.props.authentication.user;
     const { searchInput } = this.state;
     const suffix = searchInput ? (
       <Icon type="close-circle" onClick={this.emitEmpty} />
@@ -174,14 +158,14 @@ class NavTop extends Component {
 
     // Initializing it to false to start with
     let showInsights = false;
-    let showExportOption =
+    const showExportOption =
       this.props.config.permissions &&
       this.props.config.permissions.includes("Can export workflow data");
     if (user && _.includes(user.features, "view_reports")) {
       showInsights = true;
     }
-    let supportedLaguanges = this.props.config.supported_languages;
-    let regexForUrl = /\/instances\/[\d]+/;
+    const supportedLaguanges = this.props.config.supported_languages;
+    const regexForUrl = /\/instances\/[\d]+/;
 
     return (
       <div>
@@ -203,7 +187,7 @@ class NavTop extends Component {
                 </span>
 
                 <span className="logo" style={{ float: "left" }}>
-                  <a href={localStorage.getItem("magicLogin") ? "#" : "/"}>
+                  <Anchor href={localStorage.getItem("magicLogin") ? "#" : "#"}>
                     {!this.props.config.loading && this.props.config.logo ? (
                       <img
                         alt={this.props.config.name}
@@ -214,7 +198,7 @@ class NavTop extends Component {
                     ) : (
                       <h3>{authHeader.tenant}</h3>
                     )}
-                  </a>
+                  </Anchor>
                 </span>
 
                 {!regexForUrl.test(document.location.pathname) ? (
@@ -243,19 +227,6 @@ class NavTop extends Component {
                   style={{ lineHeight: "62px", float: "right" }}
                   selectable={false}
                 >
-                  {/* <Menu.Item key="2">
-                       <Popover
-                         placement="bottomRight"
-                         title={<span className="text-medium">Activity log</span>}
-                         content={<AuditList />}
-                         trigger="click"
-                       >
-                         <i className="material-icons text-grey text-middle">
-                           restore
-                         </i>
-                       </Popover>
-                     </Menu.Item>*/}
-
                   {this.props.workflowKind.workflowKind && showExportOption
                     ? this.getExportList()
                     : null}

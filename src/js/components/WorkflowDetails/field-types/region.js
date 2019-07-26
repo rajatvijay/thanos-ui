@@ -1,26 +1,13 @@
 import React, { Component } from "react";
 import { authHeader } from "../../../_helpers";
-import { Form, Select as AntSelect, Row, Col } from "antd";
+import { Form, Select as AntSelect } from "antd";
 import _ from "lodash";
-import { workflowStepActions } from "../../../actions";
 import { commonFunctions } from "./commons";
-import validator from "validator";
 import { apiBaseURL } from "../../../../config";
-
 const FormItem = Form.Item;
 const Option = AntSelect.Option;
 
-const {
-  getLabel,
-  onFieldChange,
-  onFieldChangeArray,
-  arrayToString,
-  stringToArray,
-  field_error,
-  getRequired,
-  feedValue,
-  getLink
-} = commonFunctions;
+const { getLabel, onFieldChange, stringToArray, field_error } = commonFunctions;
 
 class Reg extends Component {
   constructor() {
@@ -64,14 +51,9 @@ class Reg extends Component {
 
   render = () => {
     const props = this.props;
-    let single = true;
-    //            props.field.definition.field_type === "single_select" ? true : false;
-    let save = onFieldChange.bind(this, props);
-
-    // if (!single) {
-    //     save = onFieldChangeArray.bind(this, props);
-    // }
-    let that = this;
+    const single = true;
+    const save = onFieldChange.bind(this, props);
+    const that = this;
     return (
       <FormItem
         label={getLabel(props, that)}
@@ -79,7 +61,7 @@ class Reg extends Component {
         style={{ display: "block" }}
         key={props.field.id}
         message=""
-        validateStatus={this.state.loading ? "validating" : null}
+        validateStatus={this.state.loading ? "validating" : ""}
         hasFeedback
         {...field_error(props)}
       >
@@ -101,7 +83,7 @@ class Reg extends Component {
         >
           {_.map(this.state.data, function(item, index) {
             return (
-              <Option key={index} value={item.value}>
+              <Option key={`option_${index}`} value={item.value}>
                 {item.label}
               </Option>
             );

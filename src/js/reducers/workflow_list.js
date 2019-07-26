@@ -1,11 +1,7 @@
 import { workflowConstants } from "../constants";
-const initialState = {
-  loading: false,
-  workflow: {},
-  count: 0
-};
 
 export function workflow(state = { workflowId: null }, action) {
+  let workflow; // being used below
   switch (action.type) {
     //GET ALL THE WORKFLOWS
     case workflowConstants.GETALL_REQUEST:
@@ -48,7 +44,6 @@ export function workflow(state = { workflowId: null }, action) {
         previous: workflow.previous
       };
     case workflowConstants.SEARCH_FAILURE:
-      // console.log("failed to load ");
       return {
         search: true,
         loading: false,
@@ -93,7 +88,6 @@ export function workflow(state = { workflowId: null }, action) {
         error: action.error
       };
     case workflowConstants.SET_WORKFLOW_ID:
-      // console.log("reducer");
       return {
         workflowId: action.payload.id
       };
@@ -102,10 +96,6 @@ export function workflow(state = { workflowId: null }, action) {
       return state;
   }
 }
-
-const initialStateChildWorkflow = {
-  //loading: false,
-};
 
 export function workflowChildren(state = {}, action) {
   switch (action.type) {
@@ -121,7 +111,6 @@ export function workflowChildren(state = {}, action) {
         ...action.response
       };
     case workflowConstants.GET_CHILD_FAILURE:
-      // console.log("failed to load ");
       return {
         ...state,
         ...action.response

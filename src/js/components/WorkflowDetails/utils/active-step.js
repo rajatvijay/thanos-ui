@@ -32,10 +32,10 @@ export const currentActiveStep = (stepData, workflowId) => {
   // This conditions is satisfies only when all step groups are completed
   // This will choose the last group and last step as active
   if (!activeStepGroup) {
-    let last_sg_index = stepData.results.length - 1;
+    const last_sg_index = stepData.results.length - 1;
     activeStepGroup = stepData.results[last_sg_index];
 
-    let last_step_index = activeStepGroup.steps.length - 1;
+    const last_step_index = activeStepGroup.steps.length - 1;
     activeStep = activeStepGroup.steps[last_step_index];
     isLast = true;
   }
@@ -43,7 +43,7 @@ export const currentActiveStep = (stepData, workflowId) => {
   // This condition will execute when step is available but steps
   // inside are not available for edit (i.e. locked/completed)
   if (activeStepGroup && !activeStep) {
-    let last_step_index = activeStepGroup.steps.length - 1;
+    const last_step_index = activeStepGroup.steps.length - 1;
     activeStep = activeStepGroup.steps[last_step_index];
   }
 
@@ -59,9 +59,9 @@ export const currentActiveStep = (stepData, workflowId) => {
     //FAIL SAFE
     //if no active step could be calculated for any reason
     //this will choose first step of first group as active
-    let actStepGrp = stepData.results[0];
-    let actStep = actStepGrp.steps[0];
-    let isLast = true;
+    const actStepGrp = stepData.results[0];
+    const actStep = actStepGrp.steps[0];
+    const isLast = true;
 
     return {
       workflowId: workflowId,

@@ -8,7 +8,11 @@ class DropdownFilter extends Component {
   renderOptions = () => {
     const { data } = this.props;
     return Array.isArray(data)
-      ? data.map(item => <Option value={item.value}>{item.label}</Option>)
+      ? data.map((item, index) => (
+          <Option key={`option_${index}`} value={item.value}>
+            {item.label}
+          </Option>
+        ))
       : null;
   };
 

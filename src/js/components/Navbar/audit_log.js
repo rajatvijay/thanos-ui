@@ -46,11 +46,11 @@ class AuditListTabs extends Component {
     };
 
     function getFileName(resp) {
-      var filename = resp.headers.get("Content-Disposition");
-      return filename && (filename.match(/filename=\"(.*)\"/) || []).pop();
+      const filename = resp.headers.get("Content-Disposition");
+      return filename && (filename.match(/filename="(.*)"/) || []).pop();
     }
 
-    let url = `${apiBaseURL}workflows/${this.props.id}/export/`;
+    const url = `${apiBaseURL}workflows/${this.props.id}/export/`;
     return fetch(url, requestOptions).then(function(resp) {
       resp.blob().then(function(blob) {
         // Allowing filename and MIME type to be decided by the backend
@@ -67,23 +67,21 @@ class AuditListTabs extends Component {
   render = () => {
     return (
       <Tabs defaultActiveKey="edits" onChange={this.onTabChange}>
-        {Object.entries(AuditListTabs.ACTIVITY_ACTION_GROUPS).map(
-          ([key, value]) => {
-            return (
-              <TabPane
-                tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
-                key={key}
-              >
-                <AuditList
-                  actions={AuditListTabs.ACTIVITY_ACTION_GROUPS[key]}
-                  isFocused={this.state.currentTab === key}
-                  logType={key}
-                  id={this.props.id}
-                />
-              </TabPane>
-            );
-          }
-        )}
+        {Object.entries(AuditListTabs.ACTIVITY_ACTION_GROUPS).map(([key]) => {
+          return (
+            <TabPane
+              tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
+              key={key}
+            >
+              <AuditList
+                actions={AuditListTabs.ACTIVITY_ACTION_GROUPS[key]}
+                isFocused={this.state.currentTab === key}
+                logType={key}
+                id={this.props.id}
+              />
+            </TabPane>
+          );
+        })}
         <TabPane
           isFocused={this.state.currentTab === "download"}
           key="download"
@@ -130,13 +128,12 @@ class AuditList extends Component {
   }
 
   loadData = () => {
-    let url = this.state.data.next
+    const url = this.state.data.next
       ? this.state.data.next
       : apiBaseURL +
         `workflows/${this.props.id}/activity/?actions=${this.props.actions.join(
           ","
         )}`;
-    //let url = this.state.data.next? this.state.data.next: apiBaseURL + "activities/";
 
     const requestOptions = {
       method: "GET",
@@ -152,8 +149,8 @@ class AuditList extends Component {
   };
 
   appendData = body => {
-    let oldData = this.state.data.results;
-    let newData = body;
+    const oldData = this.state.data.results;
+    const newData = body;
     newData.results = oldData.concat(newData.results);
     this.setState({
       data: newData,
@@ -264,7 +261,10 @@ class ActivityLogCollapsible extends Component {
           <Timeline style={{ paddingTop: 20, marginBottom: -20 }}>
             {_.map(item.object.changes, (change, index) => {
               return (
-                <Timeline.Item style={{ paddingBottom: 10 }}>
+                <Timeline.Item
+                  style={{ paddingBottom: 10 }}
+                  key={`item_${index}`}
+                >
                   {change.event}
                 </Timeline.Item>
               );
@@ -332,7 +332,7 @@ const AuditContent = props => {
 
             return (
               <Timeline.Item
-                key={index}
+                key={`item_${index}`}
                 dot={<i className="material-icons t-14">{icon}</i>}
                 color={color}
               >

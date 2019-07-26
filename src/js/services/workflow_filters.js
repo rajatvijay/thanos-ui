@@ -31,7 +31,7 @@ function getBusinessData(region) {
     headers: authHeader.get(),
     credentials: "include"
   };
-  let url = region
+  const url = region
     ? apiBaseURL + `business-unit/extra-data/?regions__code=${region}`
     : apiBaseURL + "fields/export-business-json/";
 
@@ -44,7 +44,7 @@ function getRegionData() {
     headers: authHeader.get(),
     credentials: "include"
   };
-  let url = apiBaseURL + "fields/export-region-json/";
+  const url = apiBaseURL + "fields/export-region-json/";
 
   return fetch(url, requestOptions)
     .then(handleResponse)
@@ -56,12 +56,4 @@ function getRegionData() {
     });
 }
 
-function setFilters(payload) {
-  // const requestOptions = {
-  //   method: "POST",
-  //   headers: { ...authHeader.post(), "Content-Type": "application/json" },
-  //   credentials: "include",
-  //   body: JSON.stringify(payload)
-  // };
-  // return fetch(apiBaseURL + "responses/", requestOptions).then(handleResponse);
-}
+function setFilters(payload) {}
