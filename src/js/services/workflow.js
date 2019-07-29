@@ -1,7 +1,7 @@
 import { authHeader } from "../_helpers";
 import _ from "lodash";
 import { store } from "../_helpers";
-import { apiBaseURL } from "../../config";
+import { APIFetch } from "../utils/request";
 
 export const workflowService = {
   getAll,
@@ -21,17 +21,20 @@ function getAll(filter) {
     credentials: "include"
   };
 
+  //case filter type status ==> http://slackcart.com/api/v1/workflows/?status=<status_id>
+  //case filter type kind ==>   http://slackcart.com/api/v1/workflows/?kind=<kind_id>
+  //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?answer=<field_tag>__<operator>__<value>
+  //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?stepgroupdef=<stepgroup_id>
+
   const filters = store.getState().workflowFilters;
   const filterParams = getFilterParams(filters);
-  let url = apiBaseURL + "workflows-list/";
-
-  url += filterParams + "&lean=true";
+  let url = `workflows-list/${filterParams}&lean=true`;
 
   if (filter) {
     const params = pageUrl(filter);
     url += params;
   }
-  return fetch(url, requestOptions).then(handleResponse);
+  return APIFetch(url, requestOptions).then(handleResponse);
 }
 
 function clearAll() {
@@ -43,11 +46,9 @@ function clearAll() {
 
   const filters = store.getState().workflowFilters;
   const filterParams = getFilterParams(filters);
-  let url = apiBaseURL + "workflows-list/";
+  const url = `workflows-list/${filterParams}&lean=true`;
 
-  url += filterParams + "&lean=true";
-
-  return fetch(url, requestOptions).then(handleResponse);
+  return APIFetch(url, requestOptions).then(handleResponse);
 }
 
 //GET CHILD WORKFLOW
@@ -57,10 +58,8 @@ function getChildWorkflow(parent) {
     headers: authHeader.get(),
     credentials: "include"
   };
-
-  const url = apiBaseURL + "workflows-list/?parent_workflow_id=" + parent;
-
-  return fetch(url, requestOptions).then(handleResponse);
+  const url = `workflows-list/?parent_workflow_id=${parent}`;
+  return APIFetch(url, requestOptions).then(handleResponse);
 }
 
 //CONSTRUCT PARAM FOR FILTERS
@@ -100,9 +99,7 @@ function getById(id) {
     credentials: "include"
   };
 
-  return fetch(apiBaseURL + "workflows/" + id + "/", requestOptions).then(
-    handleResponse
-  );
+  return APIFetch(`workflows/${id}/`, requestOptions).then(handleResponse);
 }
 
 function searchWorkflow(query) {
@@ -113,9 +110,9 @@ function searchWorkflow(query) {
     body: JSON.stringify({ q: query })
   };
 
-  const url = apiBaseURL + "workflows-list/search/";
+  const url = "workflows-list/search/";
 
-  return fetch(url, requestOptions).then(handleResponse);
+  return APIFetch(url, requestOptions).then(handleResponse);
 }
 
 function searchUserWorkflowByEmail({ email }) {
@@ -126,10 +123,9 @@ function searchUserWorkflowByEmail({ email }) {
     body: JSON.stringify({ email: email })
   };
 
-  return fetch(
-    `${apiBaseURL}workflows/search-user-workflow/`,
-    requestOptions
-  ).then(handleResponse);
+  return APIFetch(`workflows/search-user-workflow/`, requestOptions).then(
+    handleResponse
+  );
 }
 
 function updateWorkflow({ id, payload }) {
@@ -140,9 +136,7 @@ function updateWorkflow({ id, payload }) {
     body: JSON.stringify(payload)
   };
 
-  return fetch(`${apiBaseURL}workflows/${id}/`, requestOptions).then(
-    handleResponse
-  );
+  return APIFetch(`workflows/${id}/`, requestOptions).then(handleResponse);
 }
 
 // COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED

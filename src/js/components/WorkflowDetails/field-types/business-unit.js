@@ -3,7 +3,7 @@ import { authHeader } from "../../../_helpers";
 import { Form, Select as AntSelect } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
-import { apiBaseURL } from "../../../../config";
+import { APIFetch } from "../../../utils/request";
 
 const FormItem = Form.Item;
 const Option = AntSelect.Option;
@@ -31,7 +31,7 @@ class BU extends Component {
       credentials: "include"
     };
 
-    fetch(apiBaseURL + "fields/export-business-json/", requestOptions)
+    APIFetch("fields/export-business-json/", requestOptions)
       .then(response => response.json())
       .then(body => {
         if (_.isEmpty(body.results)) {

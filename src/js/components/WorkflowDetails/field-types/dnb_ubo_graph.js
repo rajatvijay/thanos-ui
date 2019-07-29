@@ -54,12 +54,7 @@ class DnbUBOGraph extends Component {
     this.loadResources();
     if (this.props.field.integration_json) {
       const data = JSON.stringify(this.props.field.integration_json);
-      const viz_instance_1 = window.renderGraph(
-        "GraphContainer",
-        "ubo-container",
-        data,
-        "English"
-      );
+      window.renderGraph("GraphContainer", "ubo-container", data, "English");
     }
   };
 
@@ -71,12 +66,7 @@ class DnbUBOGraph extends Component {
       prevProps.field.integration_json !== that.props.field.integration_json
     ) {
       const data = JSON.stringify(that.props.field.integration_json);
-      const viz_instance_1 = window.renderGraph(
-        "GraphContainer",
-        "ubo-container",
-        data,
-        "English"
-      );
+      window.renderGraph("GraphContainer", "ubo-container", data, "English");
     }
   };
 

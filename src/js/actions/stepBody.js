@@ -49,7 +49,7 @@ const deleteStepUser = (stepId, id) => async dispatch => {
   dispatch({ type: DELETE_STEP_USER_LOADING, stepId: stepId });
 
   try {
-    const res = await stepBodyService.deleteStepUser(id);
+    await stepBodyService.deleteStepUser(id);
 
     dispatch({ type: DELETE_STEP_USER_SUCCESS, stepId });
     dispatch(getStepUsers(stepId));

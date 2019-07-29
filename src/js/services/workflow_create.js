@@ -1,5 +1,5 @@
 import { authHeader, handleResponse } from "../_helpers";
-import { apiBaseURL } from "../../config";
+import { APIFetch } from "../utils/request";
 
 export const workflowCreateService = {
   crerateWorkflow
@@ -13,5 +13,5 @@ function crerateWorkflow(payload) {
     body: JSON.stringify(payload)
   };
 
-  return fetch(apiBaseURL + "workflows/", requestOptions).then(handleResponse);
+  return APIFetch("workflows/", requestOptions).then(handleResponse);
 }

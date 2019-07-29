@@ -23,7 +23,6 @@ const openNotificationWithIcon = data => {
 
 export const workflowStepActions = {
   saveField,
-  updateField,
   submitStepData,
   approveStep,
   undoStep,
@@ -168,42 +167,6 @@ function removeAttachment(payload, event_type) {
       error,
       workflowId
     };
-  }
-}
-
-////////////////////////////////
-// update data on field change//
-////////////////////////////////
-function updateField(payload) {
-  return dispatch => {
-    dispatch(request(payload));
-
-    workflowStepService
-      .updateField(payload)
-      .then(
-        field => dispatch(success(field)),
-        error => dispatch(failure(error))
-      );
-  };
-
-  function request(payload) {
-    message.loading("", 10);
-    return { type: workflowFieldConstants.PATCH_FIELD_REQUEST, payload };
-  }
-
-  function success(field) {
-    message.destroy();
-
-    return { type: workflowFieldConstants.PATCH_FIELD_SUCCESS, field };
-  }
-  function failure(error) {
-    message.destroy();
-    openNotificationWithIcon({
-      type: "error",
-      message: "Unable to update."
-    });
-
-    return { type: workflowFieldConstants.PATCH_FIELD_FAILURE, error };
   }
 }
 
@@ -401,10 +364,6 @@ function addComment(payload, step_reload_payload, isEmbedded) {
     );
   };
 
-  function request() {
-    return { type: workflowCommentsConstants.ADD_COMMENTS_REQUEST, payload };
-  }
-
   function success(data) {
     openNotificationWithIcon({
       type: "success",
@@ -456,10 +415,6 @@ function updateFlag(payload, isEmbedded) {
     );
   };
 
-  function request() {
-    return { type: workflowCommentsConstants.ADD_COMMENTS_REQUEST, payload };
-  }
-
   function success(data) {
     openNotificationWithIcon({
       type: "success",
@@ -507,10 +462,6 @@ function updateIntegrationStatus(payload, isEmbedded) {
       error => dispatch(failure(error))
     );
   };
-
-  function request() {
-    return { type: workflowCommentsConstants.ADD_COMMENTS_REQUEST, payload };
-  }
 
   function success(data) {
     openNotificationWithIcon({

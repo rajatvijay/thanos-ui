@@ -1,5 +1,6 @@
 import { authHeader } from "../_helpers";
 import { apiBaseURL, tenant } from "../../config";
+import { APIFetch } from "../utils/request";
 
 export const userService = {
   login,
@@ -112,17 +113,15 @@ function tokenLogin(token, next) {
 }
 
 export const logout = async () => {
-  localStorage.removeItem("user");
   const requestOptions = {
     method: "GET",
-    headers: authHeader.get(),
+    headers: {
+      "X-Requested-With": "XMLHttpRequest",
+      ...authHeader.get()
+    },
     credentials: "include"
   };
-  try {
-    return await fetch(apiBaseURL + "users/logout/", requestOptions);
-  } catch (error) {
-    throw error;
-  }
+  return await APIFetch("users/logout/", requestOptions);
 };
 
 export const sendEmailAuthToken = async (email, next) => {
@@ -132,21 +131,18 @@ export const sendEmailAuthToken = async (email, next) => {
     credentials: "include",
     body: JSON.stringify({ email, next })
   };
-  try {
-    return await fetch(apiBaseURL + "users/magic_link/", requestOptions);
-  } catch (error) {
-    throw error;
-  }
+  return await fetch(apiBaseURL + "users/magic_link/", requestOptions);
 };
 
 function checkAuth() {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
-    credentials: "include"
+    credentials: "include",
+    mode: "manual"
   };
 
-  return fetch(apiBaseURL + "users/me/?format=json", requestOptions)
+  return APIFetch("users/me/?format=json", requestOptions)
     .then(response => {
       if (!response.ok) {
         return Promise.reject(response.statusText);
@@ -154,13 +150,10 @@ function checkAuth() {
       return response.json();
     })
     .then(user => {
-      // login successful if there's a jwt token in the response
-
       if (user) {
         const userData = user;
         userData.tenant = tenant;
         userData.csrf = document.cookie;
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem("user", JSON.stringify(userData));
       }
       return user;
@@ -173,7 +166,7 @@ function getAll() {
     headers: authHeader.get()
   };
 
-  return fetch(apiBaseURL + "users/", requestOptions).then(handleResponse);
+  return APIFetch(`users/`, requestOptions).then(handleResponse);
 }
 
 function getById(id) {
@@ -183,9 +176,7 @@ function getById(id) {
     credentials: "include"
   };
 
-  return fetch(apiBaseURL + "users/" + id + "/", requestOptions).then(
-    handleResponse
-  );
+  return APIFetch(`users/${id}/`, requestOptions).then(handleResponse);
 }
 
 function register(user) {
@@ -195,7 +186,7 @@ function register(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch("/users/register", requestOptions).then(handleResponse);
+  return APIFetch("users/register/", requestOptions).then(handleResponse);
 }
 
 function update(user) {
@@ -205,9 +196,7 @@ function update(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch(apiBaseURL + "users/" + user.id, requestOptions).then(
-    handleResponse
-  );
+  return APIFetch(`users/${user.id}/`, requestOptions).then(handleResponse);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
@@ -217,7 +206,7 @@ function _delete(id) {
     headers: authHeader.post()
   };
 
-  return fetch(apiBaseURL + "users/" + id, requestOptions).then(handleResponse);
+  return APIFetch(`users/${id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

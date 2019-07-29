@@ -1,12 +1,7 @@
 import { authHeader, handleResponse } from "../_helpers";
-import { apiBaseURL } from "../../config";
+import { APIFetch } from "../utils/request";
 
 export const workflowFiltersService = {
-  // getFilters,
-  setFilters,
-  // removeFilters,
-
-  // getKindData,
   getStatusData,
   getBusinessData,
   getRegionData
@@ -20,9 +15,9 @@ function getStatusData(queryParams = {}) {
   };
 
   const searchParams = new URLSearchParams(queryParams);
-  const url = `${apiBaseURL}workflow-status/?${searchParams}`;
+  const url = `workflow-status/?${searchParams}`;
 
-  return fetch(url, requestOptions).then(handleResponse);
+  return APIFetch(url, requestOptions).then(handleResponse);
 }
 
 function getBusinessData(region) {
@@ -32,10 +27,10 @@ function getBusinessData(region) {
     credentials: "include"
   };
   const url = region
-    ? apiBaseURL + `business-unit/extra-data/?regions__code=${region}`
-    : apiBaseURL + "fields/export-business-json/";
+    ? `business-unit/extra-data/?regions__code=${region}`
+    : "fields/export-business-json/";
 
-  return fetch(url, requestOptions).then(handleResponse);
+  return APIFetch(url, requestOptions).then(handleResponse);
 }
 
 function getRegionData() {
@@ -44,9 +39,9 @@ function getRegionData() {
     headers: authHeader.get(),
     credentials: "include"
   };
-  const url = apiBaseURL + "fields/export-region-json/";
+  const url = "fields/export-region-json/";
 
-  return fetch(url, requestOptions)
+  return APIFetch(url, requestOptions)
     .then(handleResponse)
     .then(response => {
       const sortedResults = response.results.sort((a, b) =>
@@ -55,5 +50,3 @@ function getRegionData() {
       return { results: sortedResults };
     });
 }
-
-function setFilters(payload) {}

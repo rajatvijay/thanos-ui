@@ -1,17 +1,19 @@
 import { userConstants } from "../constants";
 import { userService } from "../services";
-import { sendEmailAuthToken as userSendEmailAuthToken } from "../services/user";
+import {
+  logout as userLogout,
+  sendEmailAuthToken as userSendEmailAuthToken
+} from "../services/user";
 import { history } from "../_helpers";
 import { notification } from "antd";
-import { siteOrigin } from "../../config";
+import { userUtilities } from "../utils/user";
 
 export const userActions = {
   register,
   getAll,
   getById,
   delete: _delete,
-  setNextUrl,
-  removeNextUrl
+  setNextUrl
 };
 
 const openNotificationWithIcon = data => {
@@ -38,8 +40,6 @@ export const login = (username, password, token) => async dispatch => {
 
     history.push("/");
   } catch (error) {
-    console.log("error login");
-    console.log(error);
     dispatch({
       type: userConstants.NORMAL_FAILURE,
       error: error.detail ? error.detail : "Failed to fetch"
@@ -64,8 +64,6 @@ export const loginOtp = (username, password) => async dispatch => {
 
     history.push("/");
   } catch (error) {
-    console.log("error login");
-    console.log(error);
     dispatch({
       type: userConstants.OTP_FAILURE,
       error: error.detail ? error.detail : "Failed to fetch"
@@ -88,32 +86,21 @@ export const tokenLogin = (token, next) => async dispatch => {
       user: response
     });
   } catch (error) {
-    console.log("error login");
-    console.log(error);
-
     dispatch({ type: userConstants.TOKEN_LOGIN_FAILURE, error });
     dispatch({ type: userConstants.GETME_FAILURE, error });
   }
 };
 
-function removeCookies() {
-  const res = document.cookie;
-  const multiple = res.split(";");
-  for (let i = 0; i < multiple.length; i++) {
-    const key = multiple[i].split("=");
-    document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
+export const logout = () => async dispatch => {
+  const response = await userLogout();
+  if (response.ok) {
+    dispatch({ type: userConstants.LOGOUT });
+    localStorage.removeItem("user");
+    userUtilities.postLogoutAction();
+  } else {
+    dispatch({ type: userConstants.LOGOUT_FAILURE });
   }
-}
-
-const logoutNav = () => {
-  localStorage.removeItem("user");
-  localStorage.removeItem("magicLogin");
-  localStorage.removeItem("customHistory");
-  removeCookies();
-  document.location.href = siteOrigin + "/api/v1/users/logout/";
 };
-
-export const logout = logoutNav;
 
 export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
   dispatch({ type: userConstants.LOGIN_LINK_REQUEST, email, nextUrl });
@@ -242,13 +229,6 @@ function getById(id) {
 function setNextUrl(nextUrl) {
   return dispatch => {
     dispatch({ type: userConstants.SET_NEXT_URL, nextUrl });
-  };
-}
-
-//REMOVE ENXTURL
-function removeNextUrl() {
-  return dispatch => {
-    dispatch({ type: userConstants.REMOVE_NEXT_URL });
   };
 }
 

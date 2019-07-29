@@ -1,5 +1,5 @@
 import { authHeader, handleResponse } from "../_helpers";
-import { apiBaseURL } from "../../config";
+import { APIFetch } from "../utils/request";
 
 export const workflowDetailsService = {
   getById,
@@ -18,10 +18,9 @@ function getById(id) {
     credentials: "include"
   };
 
-  return fetch(
-    apiBaseURL + "workflows/" + id + "/?lean=true",
-    requestOptions
-  ).then(handleResponse);
+  return APIFetch(`workflows/${id}/?lean=true`, requestOptions).then(
+    handleResponse
+  );
 }
 
 function getStepGroup(id) {
@@ -31,8 +30,8 @@ function getStepGroup(id) {
     credentials: "include"
   };
 
-  return fetch(
-    apiBaseURL + "workflows/" + parseInt(id, 10) + "/stepgroups/",
+  return APIFetch(
+    `workflows/${parseInt(id, 10)}/stepgroups/`,
     requestOptions
   ).then(handleResponse);
 }
@@ -44,15 +43,10 @@ function getStepFields(step) {
     credentials: "include"
   };
 
-  return fetch(
-    apiBaseURL +
-      "workflows/" +
-      step.workflowId +
-      "/stepgroups/" +
-      step.groupId +
-      "/steps/" +
-      step.stepId +
-      "/",
+  return APIFetch(
+    `workflows/${step.workflowId}/stepgroups/${step.groupId}/steps/${
+      step.stepId
+    }/`,
     requestOptions
   ).then(handleResponse);
 }
@@ -64,18 +58,16 @@ function getComments(payload) {
     credentials: "include"
   };
 
-  let request_url =
-    apiBaseURL +
-    "channels?object_id=" +
-    payload.object_id +
-    "&type=" +
-    payload.type;
+  let request_url = `channels?object_id=${payload.object_id}&type=${
+    payload.type
+  }`;
   if (payload.extra) {
-    request_url +=
-      "&field_id=" + payload.extra.field_id + "&uid=" + payload.extra.uid;
+    request_url += `&field_id=${payload.extra.field_id}&uid=${
+      payload.extra.uid
+    }`;
   }
 
-  return fetch(request_url, requestOptions).then(handleResponse);
+  return APIFetch(request_url, requestOptions).then(handleResponse);
 }
 
 function getStepVersionFields(step) {
@@ -85,18 +77,12 @@ function getStepVersionFields(step) {
     credentials: "include"
   };
 
-  return fetch(
-    apiBaseURL +
-      "workflows/" +
-      step.workflowId +
-      "/stepgroups/" +
-      step.groupId +
-      "/steps/" +
-      step.stepId +
-      "/?version=" +
-      step.versionId,
-    requestOptions
-  ).then(handleResponse);
+  const queryParams = `version=${step.versionId}`;
+  const url = `workflows/${step.workflowId}/stepgroups/${step.groupId}/steps/${
+    step.stepId
+  }/`;
+
+  return APIFetch(`${url}?${queryParams}`, requestOptions).then(handleResponse);
 }
 
 function archiveWorkflow(workflowId) {
@@ -106,8 +92,8 @@ function archiveWorkflow(workflowId) {
     credentials: "include"
   };
 
-  const deleteUrl = `${apiBaseURL}workflows/${workflowId}/archive/`;
-  return fetch(deleteUrl, requestOptions).then(response => {
+  const deleteUrl = `workflows/${workflowId}/archive/`;
+  return APIFetch(deleteUrl, requestOptions).then(response => {
     if (!response.ok) {
       return Promise.reject(response);
     }

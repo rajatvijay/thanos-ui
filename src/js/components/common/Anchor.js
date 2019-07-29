@@ -8,7 +8,7 @@ import React from "react";
  *
  * @param {React.HTMLProps<HTMLAnchorElement>} props
  */
-export default function(props: React.HTMLProps<HTMLAnchorElement>) {
+export default function(props) {
   const { href, children = [], ...otherProps } = props;
   const additionalProps = {};
   if (!!href === false || href === "#" || href === "javascript:void(0)") {

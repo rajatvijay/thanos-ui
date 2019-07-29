@@ -165,19 +165,9 @@ class Sidebar extends Component {
       workflowDetailsHeader,
       workflowDetails,
       minimalUI,
-
       workflowIdFromDetailsToSidebar,
       displayProfile
     } = this.props;
-    //console.log("min", this.props);
-    // let lc_data =
-    //   Object.values(workflowDetailsHeader).length &&
-    //   workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-    //     ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
-    //     : [];
-    // lc_data = lc_data.filter(
-    //   (data, index) => data.display_type === "normal" && data.value
-    // );
 
     const { groupId, stepId } = this.state;
 
@@ -479,9 +469,6 @@ class Sidebar extends Component {
                           {stepgroup.steps.map((step, index) => (
                             <span
                               key={`step_${step.id}`}
-                              // to={`${history.location.pathname}?group=${
-                              //   stepgroup.id
-                              // }&step=${step.id}`}
                               style={
                                 groupId === stepgroup.id && stepId === step.id
                                   ? {

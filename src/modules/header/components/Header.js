@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-
 import { connect } from "react-redux";
 import { injectIntl } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
-import { Tooltip, Menu, Dropdown, Input, Icon, notification } from "antd";
+import { Dropdown, Icon, Input, Menu, notification, Tooltip } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
-import { logout, workflowActions, navbarActions } from "../../../js/actions";
+import { logout, workflowActions } from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
 import { siteOrigin } from "../../../config";
@@ -44,12 +43,6 @@ class Header extends Component {
     this.setState({ searchInput: e.target.value });
   };
 
-  emitEmpty = () => {
-    this.searchInput.focus();
-    this.setState({ searchInput: "" });
-    this.props.dispatch(workflowActions.getAll());
-  };
-
   handleKeyPress = e => {
     if (e.key === "Enter") {
       this.onSearch(this.state.searchInput);
@@ -57,14 +50,7 @@ class Header extends Component {
   };
 
   onLogout = (event, key) => {
-    // this.props.dispatch(logout());
-    logout();
-  };
-
-  onMenuToggle = () => {
-    this.props.dispatch(
-      navbarActions.toggleFilterMenu(!this.props.showFilterMenu.show)
-    );
+    this.props.dispatch(logout());
   };
 
   getExportList = () => {
@@ -142,6 +128,7 @@ class Header extends Component {
 
     if (
       user &&
+      user.features &&
       user.features.includes("view_reports") &&
       this.props.config &&
       this.props.config.report_embed_url
