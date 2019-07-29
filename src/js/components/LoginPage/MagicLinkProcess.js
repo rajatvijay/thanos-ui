@@ -41,15 +41,9 @@ class MagicLinkProcess extends React.Component {
     }
   };
 
-  onMagicLogin = () => {
-    Godaam.magicLogin = true;
-  };
-
   render = () => {
     if (Godaam.user) {
       if (this.state.nextUrl) {
-        this.onMagicLogin();
-
         return <Redirect to={this.state.nextUrl} />;
       } else {
         return <Redirect to={"/workflows/instances/"} />;

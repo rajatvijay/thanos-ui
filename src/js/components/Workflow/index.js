@@ -188,11 +188,11 @@ class Workflow extends Component {
       }
     }
 
-    if (Godaam.magicLogin) {
+    if (this.props.authentication.user.kind === 2) {
       return (
         <div style={{ paddingTop: "150px" }}>
           <h4 className="text-center t-24 text-bold">
-            You are unauthorised to view this page.
+            You are not authorised to view this page.
           </h4>
         </div>
       );

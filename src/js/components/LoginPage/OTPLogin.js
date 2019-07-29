@@ -26,10 +26,6 @@ class OTPLogin extends React.Component {
     }
   };
 
-  onMagicLogin = () => {
-    Godaam.magicLogin = true;
-  };
-
   render = () => {
     const config = this.props.config;
     let showRightBlock = true;
@@ -39,10 +35,8 @@ class OTPLogin extends React.Component {
 
     if (Godaam.user) {
       if (this.props.location.state && this.props.location.state.from) {
-        this.onMagicLogin();
         return <Redirect to={this.props.location.state.from} />;
       } else if (parsed.next) {
-        this.onMagicLogin();
         return <Redirect to={parsed.next} />;
       } else {
         return (
