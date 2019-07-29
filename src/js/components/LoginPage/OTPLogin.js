@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 import _ from "lodash";
 import queryString from "query-string";
 import LoginHeader from "./LoginHeader";
+import Godaam from "../../utils/storage";
 
 class OTPLogin extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class OTPLogin extends React.Component {
   };
 
   onMagicLogin = () => {
-    localStorage.setItem("magicLogin", "true");
+    Godaam.magicLogin = true;
   };
 
   render = () => {
@@ -36,7 +37,7 @@ class OTPLogin extends React.Component {
 
     const parsed = queryString.parse(this.props.location.search);
 
-    if (localStorage.getItem("user")) {
+    if (Godaam.user) {
       if (this.props.location.state && this.props.location.state.from) {
         this.onMagicLogin();
         return <Redirect to={this.props.location.state.from} />;

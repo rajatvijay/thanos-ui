@@ -19,6 +19,7 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import MetaGraph from "../Workflow/MetaGraph";
 import { siteOrigin } from "../../../config";
 import Anchor from "../common/Anchor";
+import Godaam from "../../utils/storage";
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -187,7 +188,7 @@ class NavTop extends Component {
                 </span>
 
                 <span className="logo" style={{ float: "left" }}>
-                  <Anchor href={localStorage.getItem("magicLogin") ? "#" : "#"}>
+                  <Anchor href={Godaam.magicLogin ? "#" : "#"}>
                     {!this.props.config.loading && this.props.config.logo ? (
                       <img
                         alt={this.props.config.name}

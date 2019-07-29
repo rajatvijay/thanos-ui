@@ -13,6 +13,7 @@ import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import ReportPage from "../components/ReportPage";
 import HeaderView from "../../modules/header/components/index";
 import _ from "lodash";
+import Godaam from "../utils/storage";
 
 class RoutSwitch extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class RoutSwitch extends React.Component {
   };
 
   calculateNav = prevProps => {
-    const customHistory = JSON.parse(localStorage.getItem("customHistory"));
+    const customHistory = JSON.parse(Godaam.customHistory);
 
     const { location } = this.props;
     const prevLocation = prevProps.location;
@@ -61,7 +62,7 @@ class RoutSwitch extends React.Component {
     const customHistory = [
       { id: null, pathname: "/workflows/instances/", search: "" }
     ];
-    localStorage.setItem("customHistory", JSON.stringify(customHistory));
+    Godaam.customHistory = JSON.stringify(customHistory);
   };
 
   getIdFromPath = path => {
@@ -82,15 +83,15 @@ class RoutSwitch extends React.Component {
   };
 
   pushToCustomHisotry = item => {
-    const arr = JSON.parse(localStorage.getItem("customHistory")) || [];
+    const arr = JSON.parse(Godaam.customHistory) || [];
     arr.push(item);
-    localStorage.setItem("customHistory", JSON.stringify(arr));
+    Godaam.customHistory = JSON.stringify(arr);
   };
 
   removeFromCustomHisotry = item => {
-    const arr = JSON.parse(localStorage.getItem("customHistory"));
+    const arr = JSON.parse(Godaam.customHistory);
     arr.splice(arr.length - 1, 1);
-    localStorage.setItem("customHistory", JSON.stringify(arr));
+    Godaam.customHistory = JSON.stringify(arr);
   };
 
   render() {
@@ -101,7 +102,7 @@ class RoutSwitch extends React.Component {
         <Route path="/login/magic" exact component={MagicLogin} />
         <Route path="/login/header" component={HeaderView} />
         <Route path="/login/magicprocess" component={MagicLinkProcess} />
-        {this.props.nextUrl.url && localStorage.getItem("user") ? (
+        {this.props.nextUrl.url && Godaam.user ? (
           <Redirect from="/" exact to={this.props.nextUrl.url} />
         ) : (
           <Redirect from="/" exact to="/workflows/instances/" />

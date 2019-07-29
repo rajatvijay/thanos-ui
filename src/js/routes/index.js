@@ -9,6 +9,7 @@ import "antd/dist/antd.css";
 import { injectIntl } from "react-intl";
 import queryString from "query-string";
 import RouteSwitch from "./RouteSwitch";
+import Godaam from "../utils/storage";
 
 function mapStateToProps(state) {
   const { config, users, languageSelector, nextUrl } = state;
@@ -85,7 +86,7 @@ class MainRoutes extends React.Component {
                 <div className="text-center mr-top-lg">loading...</div>
               ) : (
                 <div>
-                  {localStorage.getItem("user") ||
+                  {Godaam.user ||
                   !_.includes(history.location.pathname, "/login") ? (
                     <Header />
                   ) : null}

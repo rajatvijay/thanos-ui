@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import Godaam from "./storage";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -22,7 +23,7 @@ const removeCookies = () => {
 };
 
 const postLogoutAction = ({ addNextURL = false } = {}) => {
-  localStorage.clear();
+  Godaam.clear();
   removeCookies();
   openNotificationWithIcon({
     type: "warning",

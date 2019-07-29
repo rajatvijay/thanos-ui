@@ -6,6 +6,7 @@ import "../../../css/section/login/login.css";
 import { Redirect } from "react-router-dom";
 import LoginHeader from "./LoginHeader";
 import _ from "lodash";
+import Godaam from "../../utils/storage";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class LoginPage extends React.Component {
       }
     }
 
-    if (localStorage.getItem("user")) {
+    if (Godaam.user) {
       return <Redirect to={"/workflows/instances/"} />;
     }
 

@@ -1,6 +1,7 @@
 import { authHeader } from "../_helpers";
 import { apiBaseURL, tenant } from "../../config";
 import { APIFetch } from "../utils/request";
+import Godaam from "../utils/storage";
 
 export const userService = {
   login,
@@ -40,7 +41,7 @@ function login(username, password, token) {
         userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(userData));
+        Godaam.user = JSON.stringify(userData);
       }
 
       return user;
@@ -74,7 +75,7 @@ function loginOtp(username, password) {
         userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(userData));
+        Godaam.user = JSON.stringify(userData);
       }
 
       return user;
@@ -105,7 +106,7 @@ function tokenLogin(token, next) {
         userData.tenant = tenant;
         userData.csrf = document.cookie;
         // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem("user", JSON.stringify(userData));
+        Godaam.user = JSON.stringify(userData);
       }
 
       return user;
@@ -154,7 +155,7 @@ function checkAuth() {
         const userData = user;
         userData.tenant = tenant;
         userData.csrf = document.cookie;
-        localStorage.setItem("user", JSON.stringify(userData));
+        Godaam.user = JSON.stringify(userData);
       }
       return user;
     });

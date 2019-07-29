@@ -1,6 +1,7 @@
 import { userConstants } from "../constants";
+import Godaam from "../utils/storage";
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(Godaam.user);
 const initialState = user ? { loggedIn: true, user } : { loggedIn: false };
 
 export function authentication(state = initialState, action) {

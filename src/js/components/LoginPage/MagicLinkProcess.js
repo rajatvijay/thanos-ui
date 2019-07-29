@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom";
 import { tokenLogin } from "../../actions";
 import queryString from "query-string";
 import MagicLinkRedirect from "../notfound/MagicLinkRedirect";
+import Godaam from "../../utils/storage";
 
 class MagicLinkProcess extends React.Component {
   constructor(props) {
@@ -41,11 +42,11 @@ class MagicLinkProcess extends React.Component {
   };
 
   onMagicLogin = () => {
-    localStorage.setItem("magicLogin", "true");
+    Godaam.magicLogin = true;
   };
 
   render = () => {
-    if (localStorage.getItem("user")) {
+    if (Godaam.user) {
       if (this.state.nextUrl) {
         this.onMagicLogin();
 

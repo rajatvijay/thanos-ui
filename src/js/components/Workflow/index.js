@@ -16,6 +16,7 @@ import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../modules/sidebar/components/Sidebar";
 import Filter from "../../modules/filter/components/Filter";
+import Godaam from "../../utils/storage";
 
 const { Content } = Layout;
 
@@ -187,7 +188,7 @@ class Workflow extends Component {
       }
     }
 
-    if (localStorage.getItem("magicLogin")) {
+    if (Godaam.magicLogin) {
       return (
         <div style={{ paddingTop: "150px" }}>
           <h4 className="text-center t-24 text-bold">

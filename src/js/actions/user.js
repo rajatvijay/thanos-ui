@@ -7,6 +7,7 @@ import {
 import { history } from "../_helpers";
 import { notification } from "antd";
 import { userUtilities } from "../utils/user";
+import Godaam from "../utils/storage";
 
 export const userActions = {
   register,
@@ -95,7 +96,7 @@ export const logout = () => async dispatch => {
   const response = await userLogout();
   if (response.ok) {
     dispatch({ type: userConstants.LOGOUT });
-    localStorage.removeItem("user");
+    Godaam.user = null;
     userUtilities.postLogoutAction();
   } else {
     dispatch({ type: userConstants.LOGOUT_FAILURE });

@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 import _ from "lodash";
 import queryString from "query-string";
 import LoginHeader from "./LoginHeader";
+import Godaam from "../../utils/storage";
 
 class MagicLogin extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class MagicLogin extends React.Component {
   };
 
   render = () => {
-    if (localStorage.getItem("user")) {
+    if (Godaam.user) {
       const parsed = queryString.parse(this.props.location.search);
 
       if (this.props.location.state && this.props.location.state.from) {
