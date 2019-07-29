@@ -275,5 +275,147 @@ export default {
   },
   "es-419": {
     // override translations for parent locale
+  },
+  //"fr": {
+  // added as a placeholder for future
+  //},
+  "fr-ca": {
+    workflowsInstances: {
+      waitingDropdown: "En attente ",
+      detailsViewToggle: "Vue détaillée",
+      workflowViewToggle: "Vue du flux de travail",
+      workflowsCount: "Flux de travail",
+      stepGroupName: "Nom du groupe d'étapes",
+      Progress: "Progression",
+      statusText: "Statut",
+      comments: "Commentaires",
+      viewDetails: "Voir les détails",
+      exportWorkflowData: "Exporter les données du flux de travail",
+      createChildButtonText: "Créer un nouveau",
+      loadingConfigsText: "Chargement des configurations...",
+      loadingFiltersText: "Chargement des filtres...",
+      fetchingDataText: "Récupération des données...",
+      viewActivityLog: "Voir le journal d'activité"
+    },
+    workflowFiltersTranslated: {
+      filterWorkflowType: "Filtrer le type de flux de travail",
+      createNewWorkflow: "Créer un nouveau",
+      advancedFilter: "Filtre avancé",
+      selectField: "Choisir un champ",
+      pleaseSelectField: "Veuillez sélectionner un champ",
+      fetchingFieldsData: "Récupération des données des champs...",
+      advancedFilterOperators: {
+        eq: "Égal",
+        not_eq: "Pas égal",
+        is_set: "A la valeur",
+        contains: "Contient",
+        not_contains: "Ne contient pas"
+      },
+      inputValue: "Valeur d'entrée",
+      selectOperator: "Choisir un opérateur",
+      addFilterButtonText: "Ajouter un filtre",
+      filterLabels: {
+        status: "Statut",
+        business_unit: "Unité opérationnelle",
+        region: "Région"
+      },
+      filterPlaceholders: {
+        status: "Statu",
+        business_unit: "Unité",
+        region: "Région"
+      }
+    },
+    commonTextInstances: {
+      submitButtonText: "Envoyer",
+      submittingButtonText: "Envoi en cours",
+      undoSubmissionText: "Annuler l'envoi",
+      cancel: "Annuler",
+      emailSent: "Courriel envoyé.",
+      clickHere: "Cliquez ici",
+      clickToLogin: "Cliquez ici pour vous connecter",
+      addButton: "Ajouter",
+      removeButton: "Supprimer",
+      search: "Rechercher",
+      createdText: "Créé",
+      submittedText: "Envoyé",
+      createdByText: "Créé par ",
+      submittedByText: "Envoyé par ",
+      exportText: "Exporter",
+      scrollToTop: "Défilement vers le haut",
+      reloadText: "recharger",
+      loadingText: "chargement",
+      addComments: "Ajouter un commentaire/une question",
+      commentsText: "commentaires",
+      categoryText: "Catégorie",
+      requestOneTimePasswordText: "Demander un mot de passe unique",
+      resendOneTimePasswordText: "Renvoyer le mot de passe unique",
+      oneTimePasswordSentText:
+        "Nous vous avons envoyé un courriel. Si vous êtes un utilisateur enregistré, vous trouverez également votre mot de passe unique dans le courriel envoyé à",
+      unableToSendOneTimePassword:
+        "Impossible d'envoyer un mot de passe unique à ",
+      emailCantBeEmpty: "Le courriel ne peut être vide",
+      invalidEmpty: "Courriel invalide",
+      OtpEmpty: "Un mot de passe unique ne peut être vide",
+      enterOtp: "Entrez le mot de passe unique pour vérifier votre compte",
+      oneTimePassword: "Mot de passe unique",
+      archiveConfirmText:
+        "Souhaitez-vous vraiment archiver ce flux de travaux ?",
+      yes: "Oui",
+      no: "Non"
+    },
+    stepBodyFormInstances: {
+      submittedBy: "Envoyé par ",
+      versionSubmittedOn: "Version envoyée le ",
+      printText: "Imprimer",
+      previousVersion: "Version précédente",
+      noOtherVersionAvailable: "Aucune autre version disponible",
+      addComments: "Ajouter un commentaire/une question",
+      commentsQuetions: "Commentaires/questions",
+      enterComment: "Entrez un commentaire ou une question",
+      postButtonText: "Publier",
+      commentsButtonText:
+        "{count, plural, =0 {Add comment/question} un {{count} comment} autre {{count} comments}}",
+      downloadWorkflowPDF: "Télécharger le PDF du flux de travail",
+      archiveWorkflow: "Archiver le flux de travail"
+    },
+    errorMessageInstances: {
+      magicLinkExpired: "Nous sommes désolés, ce lien a expiré.",
+      magicLinkgenerateNew:
+        "pour aller sur la page de connexion et générer un nouveau lien.",
+      magicLinkExpirationWindow: "Remarque : le lien expire dans 24 heures",
+      noWorkflowsError: "Impossible de charger la liste des flux de travail",
+      loggedOutError:
+        "Vous avez été déconnecté. Veuillez vous connecter à nouveau pour continuer",
+      noWorkflowsToShow:
+        "Aucun résultat trouvé. Essayez d'enlever les filtres ou ",
+      workflowNotFound:
+        "Désolé! Nous n'avons pas pu trouver le flux de travail que vous avez demandé.",
+      noStepInWorkflow:
+        "Cher utilisateur, les formulaires sont toujours en cours de traitement dans le système. Veuillez réessayer plus tard."
+    },
+    loginPageInstances: {
+      oneTimeLink: "Entrez votre adresse de courriel professionnelle",
+      loginEmailPassword: "Connectez-vous avec votre courriel et mot de passe",
+      loginUsingEmailOnly: "Connectez-vous en utilisant uniquement le courriel",
+      loginText: "Connexion",
+      logoutText: "Déconnexion",
+      emailText: "courriel",
+      passwordText: "mot de passe",
+      orText: "ou",
+      customSAMLloginText1: "Connectez-vous par votre ",
+      customSAMLloginText2: "nom d'utilisateur et mot de passe",
+      loginErrorMessage:
+        "Vos coordonnées doivent figurer au dossier pour que vous puissiez remplir cette demande.",
+      goToLoginPage: "Aller à la page de connexion",
+      selectPreferedLanguage: " Choisissez la langue :",
+      goBack: "Revenir en arrière"
+    },
+    userWorkflowInstances: {
+      searchUser: "Rechercher un utilisateur",
+      userFoundMessage:
+        "Utilisateur trouvé, procédez à l'envoi de l'invitation à ce flux de travail?",
+      userNotFoundMessage:
+        "Invitation d'un nouvel utilisateur pour ce flux de travail, continuer?"
+    }
   }
 };
