@@ -369,6 +369,9 @@ function getIntegrationSearchButton(props) {
     dnb_investigation_status: "Get Investigation Status",
     ocr: "Get OCR data",
     docusign: "Sign with Docusign",
+    csi: "Get CSI data",
+    boeing_screening_status: "Update Screening Status",
+    boeing_adjudication_status: "Update Adjudication Status",
     krypton_ai_push: "Push AI data"
   };
 

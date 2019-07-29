@@ -173,6 +173,12 @@ export const getFieldType = props => {
       return ChildWorkflowField(props);
     case "duplicate_check":
       return DuplicateCheck(props);
+    case "csi":
+      return DnBCommon(props);
+    case "boeing_screening_status":
+      return DnBCommon(props);
+    case "boeing_adjudication_status":
+      return DnBCommon(props);
     case "dnb_gbo":
       return DnBCommon(props);
     case "rdc_event_details":
