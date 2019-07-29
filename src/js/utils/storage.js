@@ -29,6 +29,7 @@ function getStorage({ backend, prefix }) {
           obj[prop] = value;
           backend.setItem(key, value);
         }
+        return true;
       },
       get: (obj, prop) => {
         if (prop === "clear") {
@@ -45,11 +46,16 @@ function getStorage({ backend, prefix }) {
  * Function to migrate usual storages to the new format
  * P.S. just adds prefixes to your current localStorage vars
  */
-function migrateStorage({ backend: storageBackend }) {
-  for (let i = 0; i < storageBackend.length; i++) {
-    const storageKey = storageBackend.key(i);
-    Godaam[storageKey] = storageBackend.getItem(storageKey);
-    storageBackend.removeItem(storageKey);
+function migrateStorage({ storageBackend }) {
+  const keysToMigrate = ["magicLogin", "customHistory", "user"];
+
+  for (let i = 0; i < keysToMigrate.length; i++) {
+    const currentKey = keysToMigrate[i];
+    const storageValue = storageBackend.getItem(currentKey);
+    if (storageValue) {
+      Godaam[currentKey] = storageValue;
+      localStorage.removeItem(currentKey);
+    }
   }
 }
 
@@ -59,7 +65,7 @@ const Godaam = getStorage({
 });
 
 if (!Godaam.storageMigrated) {
-  migrateStorage({ backend: localStorage });
+  migrateStorage({ storageBackend: localStorage });
   Godaam.storageMigrated = true;
 }
 
