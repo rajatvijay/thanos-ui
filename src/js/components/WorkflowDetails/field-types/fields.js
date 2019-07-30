@@ -400,11 +400,14 @@ export const Select = props => {
   const that = this;
 
   const options = getExtra(props) || [];
-  const answer = props.field.answers[0]
+
+  let answer = props.field.answers[0]
     ? single
       ? props.field.answers[0].answer
       : stringToArray(props.field.answers[0])
     : stringToArray(props.field.definition.defaultValue);
+
+  answer = parseInt(answer, 10) ? parseInt(answer, 10) : answer;
 
   return (
     <FormItem
