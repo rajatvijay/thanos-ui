@@ -47,16 +47,15 @@ class Sidebar extends Component {
 
   handleChange = value => {
     const id = parseInt(value, 10);
-
     const that = this;
-    this.setState({ value });
     const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
       return item.id === id;
     });
+
+    this.setState({ value: id });
     const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
     this.props.dispatch(workflowKindActions.setValue(metaValue));
-
     that.fetchGroupData(metaValue.tag);
   };
 
@@ -70,7 +69,7 @@ class Sidebar extends Component {
     const { workflowKind } = this.props.workflowKind;
     if (workflowKind) {
       return workflowKind.map(function(item) {
-        return <Option key={`option_${item.id}`}>{item.name}</Option>;
+        return <Option key={`${item.id}`}>{item.name}</Option>;
       });
     }
   };
