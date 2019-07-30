@@ -3,6 +3,7 @@ import Godaam from "./storage";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
+    key: "logoutNotification", // Ensure only single instance of notification exists
     message: data.message,
     description: data.body,
     placement: "bottomLeft"

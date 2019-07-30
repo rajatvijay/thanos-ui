@@ -1,3 +1,7 @@
+function requiredParam(param) {
+  throw new Error(`Required param ${param} is missing`);
+}
+
 /**
  * Returns a proxy for any storage backend for easy get/set
  * todo: move to an independent package in future so it can be used across projects
@@ -5,18 +9,11 @@
  * @param prefix Prefix for your storage values
  * @returns {{Proxy}}
  */
-function getStorage({ backend, prefix }) {
-  if (!prefix) {
-    throw new Error("Invalid prefix provided for storage proxy");
-  }
-
-  const clear = () => {
-    return backend.clear;
-  };
-
-  const getPropKey = prop => {
-    return `${prefix}.${prop}`;
-  };
+function getStorage({
+  backend = requiredParam("backend"),
+  prefix = requiredParam("prefix")
+}) {
+  const getPropKey = prop => `${prefix}.${prop}`;
 
   return new Proxy(
     {},
@@ -33,7 +30,7 @@ function getStorage({ backend, prefix }) {
       },
       get: (obj, prop) => {
         if (prop === "clear") {
-          return clear;
+          return backend.clear.bind(backend);
         }
 
         return backend.getItem(getPropKey(prop));

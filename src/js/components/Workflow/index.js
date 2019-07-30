@@ -16,7 +16,6 @@ import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../modules/sidebar/components/Sidebar";
 import Filter from "../../modules/filter/components/Filter";
-import Godaam from "../../utils/storage";
 
 const { Content } = Layout;
 
