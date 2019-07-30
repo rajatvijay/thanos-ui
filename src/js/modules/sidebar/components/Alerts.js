@@ -20,7 +20,10 @@ class Alerts extends Component {
           isSelected={subCategory.name === selected}
         >
           <span>{subCategory.name}</span>
-          <CountWidget innerColour="#D40000" value={subCategory.count} />
+          <CountWidget
+            innerColour={subCategory.color_label}
+            value={subCategory.count}
+          />
         </StyledAlertSubCategoryListItem>
       ));
     }
@@ -34,7 +37,6 @@ class Alerts extends Component {
   render() {
     const { collapsed } = this.state;
     const { item } = this.props;
-
     return (
       <StyledAlertListItem
         collapsed={collapsed}
@@ -65,7 +67,7 @@ class Alerts extends Component {
             </span>
           </div>
           {item.count > 0 && (
-            <CountWidget innerColour="#D40000" value={item.count} />
+            <CountWidget innerColour={item.color_label} value={item.count} />
           )}
         </div>
 
