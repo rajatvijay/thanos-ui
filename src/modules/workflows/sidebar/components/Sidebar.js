@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
+import {
+  Collapse,
+  Divider,
+  Drawer,
+  Dropdown,
+  Icon,
+  Layout,
+  Menu,
+  Row,
+  Col
+} from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import AuditListTabs from "../../../../js/components/Navbar/audit_log";
@@ -7,6 +17,8 @@ import {
   workflowDetailsActions,
   workflowStepActions
 } from "../../../../js/actions";
+
+import LCData from "./LCData";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
@@ -160,6 +172,28 @@ class Sidebar extends Component {
     }
   };
 
+  renderParent = () => {
+    const {
+      workflowDetailsHeader,
+      workflowIdFromDetailsToSidebar
+    } = this.props;
+
+    if (
+      workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family &&
+      workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family
+        .length > 1
+    ) {
+      return (
+        <span style={{ color: "gray", fontSize: 12 }}>
+          {
+            workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+              .workflow_family[0].name
+          }
+        </span>
+      );
+    }
+  };
+
   render() {
     const {
       workflowDetailsHeader,
@@ -168,6 +202,15 @@ class Sidebar extends Component {
       workflowIdFromDetailsToSidebar,
       displayProfile
     } = this.props;
+
+    let lc_data =
+      Object.values(workflowDetailsHeader).length &&
+      workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+        ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
+        : [];
+    lc_data = lc_data.filter(
+      (data, index) => data.display_type == "normal" && data.value
+    );
 
     const { groupId, stepId } = this.state;
 
@@ -266,73 +309,59 @@ class Sidebar extends Component {
               />
             </Drawer>
           ) : null}
-          {!minimalUI && (
-            <div>
-              <div
-                style={{
-                  color: "#000",
-                  padding: "25px 20px",
-                  cursor: "pointer",
-                  backgroundColor: "#fafafa",
-                  justifyContent: "space-between",
-                  display: "flex",
-                  fontSize: 24,
-                  paddingBottom: 0,
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                  letterSpacing: "-0.05px",
-                  lineHeight: "29px",
-                  alignItems: "center"
-                }}
-              >
-                {Object.values(workflowDetailsHeader).length &&
-                workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-                  ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].name
-                  : ""}
-                <Dropdown
-                  overlay={workflowActionMenu}
-                  className="child-workflow-dropdown"
+          {!minimalUI &&
+            Object.values(workflowDetailsHeader).length &&
+            workflowDetailsHeader[workflowIdFromDetailsToSidebar] && (
+              <div>
+                <div
+                  style={{
+                    // color: "#000",
+                    padding: "25px 20px",
+                    cursor: "pointer",
+                    backgroundColor: "#fafafa",
+                    justifyContent: "space-between",
+                    display: "flex",
+                    //fontSize: 24,
+                    paddingBottom: 0,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                    letterSpacing: "-0.05px",
+                    lineHeight: "29px",
+                    alignItems: "center"
+                  }}
                 >
-                  <span className="pd-ard-sm text-metal text-anchor">
-                    <i className="material-icons text-middle t-18 ">
-                      more_vert
-                    </i>
-                  </span>
-                </Dropdown>
-              </div>
-              <Divider style={{ margin: "10px 0" }} />
-              {/* <Row style={{ marginBottom: 15 }}>
-                {lc_data.map(data => (
-                  <Col span={12}>
-                    <span
-                      style={{
-                        opacity: 0.3,
-                        color: "#000000",
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        letterSpacing: "-0.02px",
-                        lineHeight: "15px"
-                      }}
-                    >
-                      {data.label}
+                  <div>
+                    <span style={{ color: "black", fontSize: 24 }}>
+                      {
+                        workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+                          .name
+                      }
                     </span>
                     <br />
-                    <span
-                      style={{
-                        color: "#000000",
-                        fontSize: "12px",
-                        letterSpacing: "-0.02px",
-                        lineHeight: "29px",
-                        wordWrap: "break-word"
-                      }}
-                    >
-                      {data.value}
+                    {this.renderParent()}
+                  </div>
+                  <Dropdown
+                    overlay={workflowActionMenu}
+                    className="child-workflow-dropdown"
+                  >
+                    <span className="pd-ard-sm text-metal text-anchor">
+                      <i className="material-icons text-middle t-18 ">
+                        more_vert
+                      </i>
                     </span>
-                  </Col>
-                ))}
-              </Row> */}
-            </div>
-          )}
+                  </Dropdown>
+                </div>
+                <Divider style={{ margin: "10px 0" }} />
+
+                <LCData
+                  lcData={[...lc_data].splice(0, 3)}
+                  status={
+                    workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
+                      .label
+                  }
+                />
+              </div>
+            )}
           <span
             // to={`${history.location.pathname}?group=${
             //   stepgroup.id
