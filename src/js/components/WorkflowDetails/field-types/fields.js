@@ -430,7 +430,7 @@ export const Select = props => {
       : stringToArray(props.field.answers[0])
     : stringToArray(props.field.definition.defaultValue);
 
-  answer = parseInt(answer, 10) ? parseInt(answer, 10) : answer;
+  answer = Number.isFinite(Number(answer)) ? Number(answer) : answer;
 
   return (
     <FormItem
