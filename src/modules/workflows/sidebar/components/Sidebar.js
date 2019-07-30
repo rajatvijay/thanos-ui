@@ -18,6 +18,8 @@ import {
   workflowStepActions
 } from "../../../../js/actions";
 
+import SidebarTopFields from "./SidebarTopFields";
+
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
 
@@ -371,8 +373,16 @@ class Sidebar extends Component {
                   </Col>
                 ))}
               </Row> */}
-                <Row style={{ marginBottom: 15 }}>
-                  <Col span={12}>
+                {/* <Row style={{ marginBottom: 15 }}> */}
+                <SidebarTopFields
+                  lc_data={[...lc_data].splice(0, 3)}
+                  status={
+                    workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
+                      .label
+                  }
+                />
+
+                {/* <Col span={12}>
                     <span
                       style={{
                         opacity: 0.3,
@@ -432,7 +442,7 @@ class Sidebar extends Component {
                         </Col>
                       )
                   )}
-                </Row>
+                </Row> */}
               </div>
             )}
           <span
