@@ -407,7 +407,7 @@ class Sidebar extends Component {
                       .filter(group => group.steps.length)
                       .map((stepgroup, index) => (
                         <Panel
-                          key={`panel_${stepgroup.id}`}
+                          key={`${stepgroup.id}`}
                           showArrow={false}
                           header={
                             <div
@@ -468,7 +468,7 @@ class Sidebar extends Component {
                         >
                           {stepgroup.steps.map((step, index) => (
                             <span
-                              key={`step_${step.id}`}
+                              key={`${step.id}`}
                               style={
                                 groupId === stepgroup.id && stepId === step.id
                                   ? {

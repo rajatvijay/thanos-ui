@@ -162,10 +162,7 @@ class StatusGraph extends Component {
               cx="20%"
             >
               {this.state.statusList.map((entry, index) => (
-                <Cell
-                  key={`cell_${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
+                <Cell key={`${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             <RTooltip />

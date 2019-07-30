@@ -115,10 +115,7 @@ const GetTable = props => {
         function(i, index) {
           if (i.category && i.category.name) {
             return (
-              <Tag
-                key={`tag_${index}`}
-                className="alert-tag-item alert-primary"
-              >
+              <Tag key={`${index}`} className="alert-tag-item alert-primary">
                 {i.category.name}
               </Tag>
             );

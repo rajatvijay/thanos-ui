@@ -135,7 +135,7 @@ const buildDetails = obj => {
     if (obj.PersonalDetail && obj.PersonalDetail.BirthDate) {
       const dates = _.map(obj.PersonalDetail.BirthDate, date => {
         return (
-          <span key={`date_${date}`} className="pd-right-lg">
+          <span key={`${date}`} className="pd-right-lg">
             {date},
           </span>
         );
@@ -237,7 +237,7 @@ const buildDetails = obj => {
               {_.map(obj.Alias, function(aliasItem, index) {
                 return (
                   <Column
-                    key={`col_${index}`}
+                    key={`${index}`}
                     column={8}
                     label={aliasItem.AliasType + ":"}
                     value={aliasItem.AliasName || "-"}
@@ -274,7 +274,7 @@ const buildDetails = obj => {
 
               wholeAddress = //PIN CODE
                 wholeAddress + (address.PostalCode ? address.PostalCode : "");
-              return <RowItem key={`address_${index}`} text={wholeAddress} />;
+              return <RowItem key={`${index}`} text={wholeAddress} />;
             })}
           </TabPane>
 
@@ -282,7 +282,7 @@ const buildDetails = obj => {
             <TabPane tab="Position" key="3">
               {obj.Positions && obj.Positions.Position
                 ? _.map(obj.Positions.Position, function(position, index) {
-                    return <RowItem key={`pos_${index}`} text={position} />;
+                    return <RowItem key={`${index}`} text={position} />;
                   })
                 : null}
             </TabPane>
@@ -294,7 +294,7 @@ const buildDetails = obj => {
                 if (item.ParameterIdentificationNumber === "RGP") {
                   return (
                     <Column
-                      key={`col_${item.ParameterValue}`}
+                      key={`${item.ParameterValue}`}
                       column={24}
                       label={item.ParameterIdentificationNumber + ":"}
                       value={item.ParameterValue}
@@ -318,7 +318,7 @@ const buildDetails = obj => {
               {_.map(obj.Relationships, function(relationship, index) {
                 return (
                   <RowItem
-                    key={`row_${index}`}
+                    key={`${index}`}
                     text={
                       <Row>
                         <Column
@@ -352,7 +352,7 @@ const buildDetails = obj => {
           <TabPane tab="Source" key="7">
             {_.map(referenceBuilder(obj), function(refItem, index) {
               return (
-                <Row key={`row_${index}`} className="mr-bottom-lg">
+                <Row key={`${index}`} className="mr-bottom-lg">
                   <Column
                     column={12}
                     label="SourceName:"
@@ -452,7 +452,7 @@ const buildDetails = obj => {
               if (item.ParameterIdentificationNumber === "URL") {
                 return (
                   <RowItem
-                    key={`item_${index}`}
+                    key={`${index}`}
                     text={
                       <a
                         href={item.ParameterValue}
@@ -508,7 +508,7 @@ class EventDetailComp extends Component {
         {_.size(refItem.ReferenceDetail)
           ? _.map(refItem.ReferenceDetail, function(item, index) {
               return (
-                <div key={`refDetail_${index}`} className="mr-bottom-lg">
+                <div key={`${index}`} className="mr-bottom-lg">
                   <div>
                     {item.Headline ? (
                       <h4 className="t-16 text-medium">{item.Headline}</h4>
@@ -994,7 +994,7 @@ const GetTabsFilter = props => {
             return (
               <TabPane
                 tab={tab.label + " (" + tab.count + ")"}
-                key={`tab_${tab.value}`}
+                key={`${tab.value}`}
               >
                 <GetTable
                   getComment={props.getComment}

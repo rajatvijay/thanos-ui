@@ -121,10 +121,10 @@ const buildDetails = obj => {
     : [];
   akas = _.map(akas, function(aka, index) {
     if (!aka["Name"] || !aka["Name"]["Full"]) {
-      return <span key={`aka_${index}`}>-</span>;
+      return <span key={`${index}`}>-</span>;
     }
     return (
-      <span key={`aka_${index}`}>
+      <span key={`${index}`}>
         <span>
           &nbsp;<b>AKA: </b>
           {aka["Name"]["Full"]["$"]}
@@ -139,7 +139,7 @@ const buildDetails = obj => {
     const comments_list = obj["EntityDetails"]["Comments"]["$"].split("||");
     comments = _.map(comments_list, function(c, index) {
       return (
-        <span key={`item_${index}`}>
+        <span key={`${index}`}>
           <span>{c.trim()}</span>
           <br />
         </span>
@@ -159,7 +159,7 @@ const buildDetails = obj => {
         const value = eai["Value"] ? eai["Value"]["$"] : "-";
         const comments = eai["Comments"] ? eai["Comments"]["$"].split("|") : [];
         return (
-          <span key={`row_${index}`}>
+          <span key={`${index}`}>
             <span>
               &nbsp;<b>{type}</b>: {value}
             </span>
@@ -168,7 +168,7 @@ const buildDetails = obj => {
               &nbsp;Comments:{" "}
               {_.map(comments, function(c, index) {
                 return (
-                  <span key={`comment_${index}`}>
+                  <span key={`${index}`}>
                     <span>{c.trim()}</span>
                     <br />
                   </span>
@@ -197,7 +197,7 @@ const buildDetails = obj => {
           adr["PostalCode"] ? adr["PostalCode"]["$"] : ""
         ];
         return (
-          <span key={`adr_${index}`}>
+          <span key={`${index}`}>
             &nbsp;<b>Address: </b> <span>{addr.join(" ")}</span>
             <br />
             &nbsp;&nbsp;<span>Country: </span>{" "}
@@ -519,7 +519,7 @@ const GetTabsFilter = props => {
         return (
           <TabPane
             tab={tab.label + " (" + tab.count + ")"}
-            key={`tab_${tab.value}`}
+            key={`${tab.value}`}
           >
             <GetTable
               getComment={props.getComment}

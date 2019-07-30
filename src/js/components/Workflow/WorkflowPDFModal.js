@@ -218,7 +218,7 @@ function ParentStepCheckboxes({ steps, onChange }) {
     >
       <Row type="flex">
         {steps.map((step, index) => (
-          <Col xs={6} key={`step_${index}`}>
+          <Col xs={6} key={`${index}`}>
             <Checkbox value={step.value}>{step.label}</Checkbox>
           </Col>
         ))}
@@ -232,10 +232,7 @@ function ChildStepsCheckboxes({ steps, onChange }) {
     <div type="flex" className="child-checkboxes-outer">
       <div className="child-checkboxes-inner">
         {steps.map((step, index) => (
-          <div
-            className="child-checkbox-group-container"
-            key={`group_${index}`}
-          >
+          <div className="child-checkbox-group-container" key={`${index}`}>
             <p>{step.name}</p>
             <CheckboxGroup
               className="child-checkbox-group"
@@ -243,7 +240,7 @@ function ChildStepsCheckboxes({ steps, onChange }) {
             >
               <ul>
                 {step.stepsForCheckboxes.map((option, index) => (
-                  <li key={`step_${index}`}>
+                  <li key={`${index}`}>
                     <Checkbox value={option.value}>{option.label}</Checkbox>
                   </li>
                 ))}

@@ -10,11 +10,7 @@ class ProfileStepBody extends Component {
     );
 
     return lc_data.map((data, index) => (
-      <Col
-        style={{ margin: "0px 0px 25px 0px" }}
-        span={12}
-        key={`col_${index}`}
-      >
+      <Col style={{ margin: "0px 0px 25px 0px" }} span={12} key={`${index}`}>
         <span
           style={{
             opacity: 0.3,

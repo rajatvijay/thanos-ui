@@ -63,7 +63,7 @@ const buildDetails = obj => {
     if (obj.PersonalDetail && obj.PersonalDetail.BirthDate) {
       const dates = _.map(obj.PersonalDetail.BirthDate, date => {
         return (
-          <span key={`date_${date}`} className="pd-right-lg">
+          <span key={`${date}`} className="pd-right-lg">
             {date},
           </span>
         );
@@ -161,7 +161,7 @@ const buildDetails = obj => {
               {_.map(obj.Alias, function(aliasItem, index) {
                 return (
                   <Column
-                    key={`col_${index}`}
+                    key={`${index}`}
                     column={8}
                     label={aliasItem.AliasType + ":"}
                     value={aliasItem.AliasName || "-"}
@@ -198,7 +198,7 @@ const buildDetails = obj => {
 
               wholeAddress = //PIN CODE
                 wholeAddress + (address.PostalCode ? address.PostalCode : "");
-              return <RowItem key={`row_${index}`} text={wholeAddress} />;
+              return <RowItem key={`${index}`} text={wholeAddress} />;
             })}
           </TabPane>
 
@@ -206,7 +206,7 @@ const buildDetails = obj => {
             <TabPane tab="Position" key="3">
               {obj.Positions && obj.Positions.Position
                 ? _.map(obj.Positions.Position, function(position, index) {
-                    return <RowItem key={`row_${index}`} text={position} />;
+                    return <RowItem key={`${index}`} text={position} />;
                   })
                 : null}
             </TabPane>
@@ -236,7 +236,7 @@ const buildDetails = obj => {
               {_.map(obj.Relationships, function(relationship, index) {
                 return (
                   <RowItem
-                    key={`row_${index}`}
+                    key={`${index}`}
                     text={
                       <Row>
                         <Column
@@ -270,7 +270,7 @@ const buildDetails = obj => {
           <TabPane tab="Source" key="7">
             {_.map(referenceBuilder(obj), function(refItem, index) {
               return (
-                <Row key={`row_${index}`} className="mr-bottom-lg">
+                <Row key={`${index}`} className="mr-bottom-lg">
                   <Column
                     column={12}
                     label="SourceName:"
@@ -370,7 +370,7 @@ const buildDetails = obj => {
               if (item.ParameterIdentificationNumber === "URL") {
                 return (
                   <RowItem
-                    key={`row_${index}`}
+                    key={`${index}`}
                     text={
                       <a
                         href={item.ParameterValue}
@@ -400,7 +400,7 @@ export const getEventItem = (refItem, hideHeader) => {
       {_.size(refItem.ReferenceDetail)
         ? _.map(refItem.ReferenceDetail, function(item, index) {
             return (
-              <div className="mr-bottom-lg" key={`row_${index}`}>
+              <div className="mr-bottom-lg" key={`${index}`}>
                 <div>
                   {item.Headline && !hideHeader ? (
                     <h4 className="t-16 text-medium">{item.Headline}</h4>
@@ -579,7 +579,7 @@ export class EventDetailComp extends Component {
             {_.map(obj.custom_counts, function(v, k) {
               return (
                 <Tag
-                  key={`tag_${k}`}
+                  key={`${k}`}
                   className={
                     "alert-tag-item " +
                     (activeFilter === k ? "alert-primary" : "")

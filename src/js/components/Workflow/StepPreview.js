@@ -90,7 +90,7 @@ class StepPreview extends React.Component {
         >
           {_.map(currentField.currentStepFields.data_fields, (field, index) => {
             return (
-              <div className="mr-bottom-sm" key={`group_${index}`}>
+              <div className="mr-bottom-sm" key={`${index}`}>
                 <div className="mr-bottom-sm">{getFieldForRender(field)}</div>
               </div>
             );

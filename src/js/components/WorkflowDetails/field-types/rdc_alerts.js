@@ -300,11 +300,7 @@ const buildDetails = obj => {
             <Row>
               {_.map(obj.event, function(refItem, index) {
                 return (
-                  <Row
-                    gutter={16}
-                    className="mr-bottom-lg"
-                    key={`row_${index}`}
-                  >
+                  <Row gutter={16} className="mr-bottom-lg" key={`${index}`}>
                     {refItem.category ? (
                       <div>
                         {refItem.category.categoryCode ? (
@@ -370,7 +366,7 @@ const buildDetails = obj => {
             <Row>
               {_.map(obj.postAddr, function(address, index) {
                 return (
-                  <div key={`row_${index}`}>
+                  <div key={`${index}`}>
                     <Column
                       column={12}
                       label="Locator Type:"
@@ -399,7 +395,7 @@ const buildDetails = obj => {
           >
             {_.map(obj.attribute, function(arrtitem, index) {
               return (
-                <Row gutter={16} className="mr-bottom-lg" key={`row_${index}`}>
+                <Row gutter={16} className="mr-bottom-lg" key={`${index}`}>
                   <Column
                     column={12}
                     label="Attribute Code:"
@@ -426,7 +422,7 @@ const buildDetails = obj => {
           >
             {_.map(obj.alias, function(aliasItem, index) {
               return (
-                <Row gutter={16} className="mr-bottom-lg" key={`row_${index}`}>
+                <Row gutter={16} className="mr-bottom-lg" key={`${index}`}>
                   <Column
                     column={12}
                     label={aliasItem.aliasTyp + ":"}

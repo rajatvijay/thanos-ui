@@ -63,12 +63,12 @@ const FinancialData = props => {
       row.push(col);
       if (row.length < 2) {
         if (props.cols.length - 1 === index) {
-          rowRender = <Rowminator key={`row_${index}`} row={row} />;
+          rowRender = <Rowminator key={`${index}`} row={row} />;
           row = [];
           return rowRender;
         }
       } else {
-        rowRender = <Rowminator key={`row_${index}`} row={row} />;
+        rowRender = <Rowminator key={`${index}`} row={row} />;
         row = [];
         return rowRender;
       }
@@ -83,7 +83,7 @@ const FinancialData = props => {
     _.map(list, function(item, index) {
       const col = (
         <Column
-          key={`col_${index}`}
+          key={`${index}`}
           label={item.ItemDescriptionText ? item.ItemDescriptionText["$"] : "-"}
           value={
             item.ItemAmount ? (
@@ -271,11 +271,11 @@ const FinancialData = props => {
                       ? _.map(fr.FinancialRatioCategory, function(frc, index) {
                           let fri = frc.FinancialRatioItem || [];
                           if (!_.size(fri)) {
-                            return <span key={`row_${index}`} />;
+                            return <span key={`${index}`} />;
                           }
                           fri = fri[0];
                           return (
-                            <Row gutter={24} key={`row_${index}`}>
+                            <Row gutter={24} key={`${index}`}>
                               <Column
                                 label={
                                   fri.ItemDescriptionText

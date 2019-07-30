@@ -294,7 +294,7 @@ const GetTabsFilter = props => {
           return (
             <TabPane
               tab={tab.label + " (" + tab.count + ")"}
-              key={`tab_${tab.value}`}
+              key={`${tab.value}`}
             >
               <GetTable
                 getComment={props.getComment}

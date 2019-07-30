@@ -111,7 +111,7 @@ class NavTop extends Component {
             _.includes(item.features, "add_workflow")
           ) {
             return (
-              <Menu.Item key={`item_${index}`}>
+              <Menu.Item key={`${index}`}>
                 <a
                   href={
                     siteOrigin +

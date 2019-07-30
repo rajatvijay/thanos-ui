@@ -290,7 +290,7 @@ class Comments extends Component {
         {that.state.workflowStatuses.length > 0
           ? that.state.workflowStatuses.map((v, index) => {
               return (
-                <Option key={`option_${index}`} value={v.id}>
+                <Option key={`${index}`} value={v.id}>
                   {v.label}
                 </Option>
               );
@@ -331,7 +331,7 @@ class Comments extends Component {
       >
         {status_filters.map((item, index) => {
           return (
-            <Option key={`option_${index}`} value={item.value}>
+            <Option key={`${index}`} value={item.value}>
               {item.text}
             </Option>
           );
@@ -387,7 +387,7 @@ class Comments extends Component {
 
                 return (
                   <div
-                    key={`commentContainer_${index}`}
+                    key={`${index}`}
                     style={{
                       height: "calc(100vh - 400px)",
                       overflowY: "scroll"

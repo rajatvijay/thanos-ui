@@ -83,7 +83,7 @@ class BU extends Component {
         >
           {_.map(this.state.data, function(item, index) {
             return (
-              <Option key={`option_${index}`} value={item.value}>
+              <Option key={`${index}`} value={item.value}>
                 {item.label}
               </Option>
             );

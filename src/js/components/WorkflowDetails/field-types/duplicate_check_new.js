@@ -179,10 +179,7 @@ class DuplicateCheckComp extends Component {
               {this.state.childWorkflow && this.state.childWorkflow.length ? (
                 this.state.childWorkflow.map((workflow, index) => {
                   return (
-                    <div
-                      className="workflow-list-item paper "
-                      key={`workflow_${index}`}
-                    >
+                    <div className="workflow-list-item paper " key={`${index}`}>
                       <div className="collapse-wrapper">
                         <div className="Collapsible">
                           <span className="Collapsible__trigger is-closed">

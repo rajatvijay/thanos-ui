@@ -23,7 +23,7 @@ class BreadCrums extends React.Component {
         }}
       >
         {items.map((item, index) => (
-          <span key={`breadcrumb_${index}`}>
+          <span key={`${index}`}>
             <a href={`/workflows/instances/${item.id}/`}>{item.name}</a> >{" "}
           </span>
         ))}

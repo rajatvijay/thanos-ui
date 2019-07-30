@@ -96,7 +96,7 @@ function lexisnexis_html(record) {
             a.Country ? a.Country.$ : "",
             a.PostalCode ? a.PostalCode.$ : ""
           ];
-          return <div key={`part_${index}`}> - {t.join(" ")}</div>;
+          return <div key={`${index}`}> - {t.join(" ")}</div>;
         })}
       </div>
     );
@@ -253,7 +253,7 @@ class EntityGroup extends Component {
               ]),
               function(entity, index) {
                 return (
-                  <div className="mr-bottom" key={`item_${index}`}>
+                  <div className="mr-bottom" key={`${index}`}>
                     <EntityItem
                       title={
                         entity.entity_metadata.wikipedia_url ? (
@@ -591,9 +591,7 @@ function dnb_directors_html(record) {
         </div>
         <div>
           {_.map(record.Position, function(p, index) {
-            return (
-              <div key={`pos_${index}`}>&nbsp;&nbsp;{p.PositionText.$}</div>
-            );
+            return <div key={`${index}`}>&nbsp;&nbsp;{p.PositionText.$}</div>;
           })}
         </div>
       </span>
@@ -641,7 +639,7 @@ function dnb_livingston_html(record) {
       <span>
         {_.map(screening_names, function(name, index) {
           return (
-            <span key={`screeningNames_${index}`}>
+            <span key={`${index}`}>
               <span>Name: {name.SubjectName}</span>
               <br />
               <span>Match Strength: {name.MatchStrengthValue}</span>
@@ -669,7 +667,7 @@ function dnb_livingston_html(record) {
             </tr>
             {_.map(citations, function(c, index) {
               return (
-                <tr key={`citation_${index}`}>
+                <tr key={`${index}`}>
                   <td>{c.DocumentDate}</td>
                   <td>{c.EffectiveDate}</td>
                   <td>{c.ExpirationDate}</td>
@@ -797,7 +795,7 @@ function dnb_rdc_html(record) {
         {_.map(record.Alias, function(al, index) {
           return (
             <InfoRow
-              key={`row_${index}`}
+              key={`${index}`}
               label={al.AliasType}
               value={al.AliasName}
             />

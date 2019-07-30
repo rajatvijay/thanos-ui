@@ -76,7 +76,7 @@ class NavLeft extends Component {
           >
             {_.map(menuList, function(m, index) {
               return (
-                <Menu.Item key={`item_${index}`}>
+                <Menu.Item key={`${index}`}>
                   <Link to={m.path} className="nav-text">
                     <div>
                       <Icon type={m.icon} />

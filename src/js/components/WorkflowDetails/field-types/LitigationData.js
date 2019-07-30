@@ -133,7 +133,7 @@ const LitigationData = props => {
                           addr.PostalCode;
                       }
                       return (
-                        <div key={`row_${index}`}>
+                        <div key={`${index}`}>
                           <Row>
                             <InfoRow
                               label="Role Player Name"

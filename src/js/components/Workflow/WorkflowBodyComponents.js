@@ -24,7 +24,7 @@ export const LcData = props => {
   const lcdata = props.workflow.lc_data;
   const lcdataList = _.map(lcdata, (item, index) => {
     if (item.display_type === "normal" && item.value) {
-      return <LcItem key={`lcitem_${index}`} label={item.label} item={item} />;
+      return <LcItem key={`${index}`} label={item.label} item={item} />;
     }
   });
 
@@ -194,7 +194,7 @@ const StepItem = props => {
             <span className="alert-dot">
               {_.map(hasAlert, (alert, index) => {
                 return (
-                  <Tooltip title={alert.label} key={`tooltip_${index}`}>
+                  <Tooltip title={alert.label} key={`${index}`}>
                     <i
                       className="material-icons"
                       style={{ fontSize: "9px", color: alert.color }}
@@ -242,7 +242,7 @@ const StepItem = props => {
             <span className="alert-dot">
               {_.map(hasAlert, (alert, index) => {
                 return (
-                  <Tooltip title={alert.label} key={`tooltip_${index}`}>
+                  <Tooltip title={alert.label} key={`${index}`}>
                     <i
                       className="material-icons"
                       style={{ fontSize: "9px", color: alert.color }}

@@ -447,7 +447,7 @@ class ChildWorkflowField2 extends Component {
       return (
         <VTag
           label={k + " (" + v + ")"}
-          key={`vtag_${k}`}
+          key={`${k}`}
           onClick={that.onFilterTagChange.bind(that, "status", k)}
           selected={
             k === "All" && !selected ? true : selected === k ? true : false
@@ -506,7 +506,7 @@ class ChildWorkflowField2 extends Component {
         {_.map(filter_tag_count, (v, k) => {
           return (
             <VTag
-              key={`vtag_${v}-${k}`}
+              key={`${v}-${k}`}
               label={
                 <Tooltip title={k}>
                   {k} ({v})
@@ -938,7 +938,7 @@ class ChildWorkflowField2 extends Component {
         <div style={{ display: "flex", flexDirection: "row" }}>
           {commonBulkActions.map((action, index) => (
             <Button
-              key={`button_${index}`}
+              key={`${index}`}
               onClick={event => this.onOpenBulkActionModal(action)}
               style={{
                 border: "1px solid #148CD6",

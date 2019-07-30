@@ -261,10 +261,7 @@ class ActivityLogCollapsible extends Component {
           <Timeline style={{ paddingTop: 20, marginBottom: -20 }}>
             {_.map(item.object.changes, (change, index) => {
               return (
-                <Timeline.Item
-                  style={{ paddingBottom: 10 }}
-                  key={`item_${index}`}
-                >
+                <Timeline.Item style={{ paddingBottom: 10 }} key={`${index}`}>
                   {change.event}
                 </Timeline.Item>
               );
@@ -332,7 +329,7 @@ const AuditContent = props => {
 
             return (
               <Timeline.Item
-                key={`item_${index}`}
+                key={`${index}`}
                 dot={<i className="material-icons t-14">{icon}</i>}
                 color={color}
               >

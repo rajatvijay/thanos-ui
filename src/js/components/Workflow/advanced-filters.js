@@ -235,7 +235,7 @@ class WorkflowAdvFilter extends Component {
               return (
                 <div
                   className="adv-filter-item"
-                  key={`item_${index}`}
+                  key={`${index}`}
                   onClick={that.removeFilterItem.bind(that, index)}
                 >
                   where <b>{i.field}</b> {i.operator} to <b>{i.value}</b>

@@ -437,7 +437,7 @@ export const Select = props => {
         {options.length &&
           options.map(function(item, index) {
             return (
-              <Option key={`option_${item.value}`} value={item.value}>
+              <Option key={`${item.value}`} value={item.value}>
                 {item.label}
               </Option>
             );
@@ -847,7 +847,7 @@ export const RadioField = props => {
       >
         {_.map(getExtra(props), function(item, index) {
           return (
-            <Radio key={`radio_${index}`} value={item.value}>
+            <Radio key={`${index}`} value={item.value}>
               {item.label}
             </Radio>
           );

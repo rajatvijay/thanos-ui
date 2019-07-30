@@ -7,7 +7,7 @@ const FooterLink = ({ footerLinks = [] }) => {
   return (
     <div className="footer-link-container">
       {footerLinks.map((link, index) => (
-        <span key={`footerLink_${index}`}>
+        <span key={`${index}`}>
           <a href={link.url} target="_blank" rel="noopener noreferrer">
             {link.label}
           </a>

@@ -519,7 +519,7 @@ class StepBodyForm extends Component {
         const fieldSizeFraction = this.getSizeFraction(field);
         return 1 - this.currentOccupancy >= fieldSizeFraction;
       },
-      render(key = `randomKey_${Math.random()}`) {
+      render(key = `${Math.random()}`) {
         // render the current group
         const _rowGroup = Object.assign(this);
         const fields = _rowGroup.fields;
@@ -643,7 +643,7 @@ class StepBodyForm extends Component {
                           renderQueue.push(rowGroup.render(`group2_${index}`));
                         }
                         return (
-                          <React.Fragment key={`frag_${index}`}>
+                          <React.Fragment key={`${index}`}>
                             {renderQueue}
                           </React.Fragment>
                         );

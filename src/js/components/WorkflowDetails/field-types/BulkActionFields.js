@@ -176,7 +176,7 @@ class BulkActionFields extends Component {
           <Form layout="inline" onSubmit={this.onSubmitClick}>
             <div style={{ display: "flex", flexDirection: "row" }}>
               {this.props.actionDetail.edit_fields.map((field, index) => (
-                <div key={`field_${index}`}>
+                <div key={`${index}`}>
                   <p
                     style={{
                       margin: 0,

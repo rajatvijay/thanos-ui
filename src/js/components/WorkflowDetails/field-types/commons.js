@@ -404,7 +404,7 @@ function getIntegrationSearchButton(props) {
             if (_.size(item.answer) && item.answer.answer)
               return (
                 <div
-                  key={`answer_${index}`}
+                  key={`${index}`}
                   className="float-left"
                   style={{ marginRight: "15px" }}
                 >

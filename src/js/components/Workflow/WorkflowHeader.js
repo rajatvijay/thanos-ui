@@ -112,7 +112,7 @@ export const WorkflowHeader = props => {
 
 const createFamilyListForBreadcrums = family => {
   return family.map((item, index) => (
-    <React.Fragment key={`link_${index}`}>
+    <React.Fragment key={`${index}`}>
       <Link style={{ color: "black" }} to={"/workflows/instances/" + item.id}>
         {" "}
         {item.name}
