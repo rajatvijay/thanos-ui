@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col } from "antd";
 
-function SidebarTopFields({ lc_data, status }) {
+function LCData({ lc_data, status }) {
   return (
     <Row>
       <Col span={12}>
@@ -62,4 +62,4 @@ function SidebarTopFields({ lc_data, status }) {
   );
 }
 
-export default SidebarTopFields;
+export default LCData;

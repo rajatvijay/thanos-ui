@@ -18,7 +18,7 @@ import {
   workflowStepActions
 } from "../../../../js/actions";
 
-import SidebarTopFields from "./SidebarTopFields";
+import LCData from "./LCData";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
@@ -172,6 +172,28 @@ class Sidebar extends Component {
     }
   };
 
+  renderParent = () => {
+    const {
+      workflowDetailsHeader,
+      workflowIdFromDetailsToSidebar
+    } = this.props;
+
+    if (
+      workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family &&
+      workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family
+        .length > 1
+    ) {
+      return (
+        <span style={{ color: "#000", fontSize: 24 }}>
+          {
+            workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+              .workflow_family[0].name
+          }
+        </span>
+      );
+    }
+  };
+
   render() {
     const {
       workflowDetailsHeader,
@@ -318,18 +340,7 @@ class Sidebar extends Component {
                       }
                     </span>
                     <br />
-                    {workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-                      .workflow_family &&
-                      workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-                        .workflow_family.length > 1 && (
-                        <span style={{ color: "#000", fontSize: 24 }}>
-                          {
-                            workflowDetailsHeader[
-                              workflowIdFromDetailsToSidebar
-                            ].workflow_family[0].name
-                          }
-                        </span>
-                      )}
+                    {this.renderParent()}
                   </div>
                   <Dropdown
                     overlay={workflowActionMenu}
@@ -343,106 +354,14 @@ class Sidebar extends Component {
                   </Dropdown>
                 </div>
                 <Divider style={{ margin: "10px 0" }} />
-                {/* <Row style={{ marginBottom: 15 }}>
-                {lc_data.map(data => (
-                  <Col span={12}>
-                    <span
-                      style={{
-                        opacity: 0.3,
-                        color: "#000000",
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        letterSpacing: "-0.02px",
-                        lineHeight: "15px"
-                      }}
-                    >
-                      {data.label}
-                    </span>
-                    <br />
-                    <span
-                      style={{
-                        color: "#000000",
-                        fontSize: "12px",
-                        letterSpacing: "-0.02px",
-                        lineHeight: "29px",
-                        wordWrap: "break-word"
-                      }}
-                    >
-                      {data.value}
-                    </span>
-                  </Col>
-                ))}
-              </Row> */}
-                {/* <Row style={{ marginBottom: 15 }}> */}
-                <SidebarTopFields
+
+                <LCData
                   lc_data={[...lc_data].splice(0, 3)}
                   status={
                     workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
                       .label
                   }
                 />
-
-                {/* <Col span={12}>
-                    <span
-                      style={{
-                        opacity: 0.3,
-                        color: "#000000",
-                        fontSize: "12px",
-                        fontWeight: "bold",
-                        letterSpacing: "-0.02px",
-                        lineHeight: "15px"
-                      }}
-                    >
-                      STATUS
-                    </span>
-                    <br />
-                    <span
-                      style={{
-                        color: "#000000",
-                        fontSize: "12px",
-                        letterSpacing: "-0.02px",
-                        lineHeight: "29px",
-                        wordWrap: "break-word"
-                      }}
-                    >
-                      {
-                        workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-                          .status.label
-                      }
-                    </span>
-                  </Col>
-                  {lc_data.map(
-                    (data, index) =>
-                      index < 3 && (
-                        <Col span={12}>
-                          <span
-                            style={{
-                              opacity: 0.3,
-                              color: "#000000",
-                              fontSize: "12px",
-                              fontWeight: "bold",
-                              letterSpacing: "-0.02px",
-                              lineHeight: "15px"
-                            }}
-                          >
-                            {data.label}
-                          </span>
-                          <br />
-                          <span
-                            style={{
-                              color: "#000000",
-                              fontSize: "12px",
-                              letterSpacing: "-0.02px",
-                              lineHeight: "29px",
-                              wordWrap: "break-word"
-                            }}
-                          >
-                            {data.value}
-                          </span>
-                        </Col>
-                      )
-                  )}
-                </Row> */}
               </div>
             )}
           <span
