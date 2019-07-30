@@ -45,7 +45,7 @@ export const getFieldType = props => {
   switch (props.field.definition.field_type) {
     //generic fields
     case "text":
-      return Text(props);
+      return <Text {...props} />;
     case "bool":
       return Bool(props);
     case "integer":
@@ -200,6 +200,6 @@ export const getFieldType = props => {
     case "krypton_ai_push":
       return DnBCommon(props);
     default:
-      return Text(props);
+      return <Text {...props} />;
   }
 };

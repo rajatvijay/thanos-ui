@@ -46,47 +46,70 @@ const {
 } = commonFunctions;
 
 //Field Type Text
-export const Text = props => {
-  const that = this;
+export class Text extends Component {
+  state = {
+    inputText: this.props.decryptedData
+      ? this.props.decryptedData.answer
+      : this.props.field.answers[0]
+      ? this.props.field.answers[0].answer
+      : this.props.field.definition.defaultValue
+  };
 
-  const rows =
-    props.field.definition.meta && props.field.definition.meta.height
-      ? props.field.definition.meta.height
-      : 1;
+  componentDidUpdate(prevProps) {
+    const inputText = this.props.decryptedData
+      ? this.props.decryptedData.answer
+      : this.props.field.answers[0]
+      ? this.props.field.answers[0].answer
+      : this.props.field.definition.defaultValue;
+    if (prevProps.decryptedData !== this.props.decryptedData) {
+      this.setState({ inputText });
+    }
+  }
+  onChange = e => {
+    const { value } = e.target;
+    this.setState({ inputText: value });
+    this.props.onFieldChange(e, this.props);
+  };
+  render() {
+    const { props } = this;
 
-  return (
-    <FormItem
-      label={getLabel(props, that)}
-      className={
-        "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
-      }
-      style={{ display: "block" }}
-      key={props.field.id}
-      message=""
-      hasFeedback
-      autoComplete="new-password"
-      {...field_error(props)}
-    >
-      <TextArea
-        disabled={isDisabled(props)}
-        autosize={{ minRows: rows }}
-        placeholder={props.field.placeholder}
-        defaultValue={
-          props.decryptedData
-            ? props.decryptedData.answer
-            : props.field.answers[0]
-            ? props.field.answers[0].answer
-            : props.field.definition.defaultValue
+    let css = {};
+    if (props.field.selected_flag[props.field.id]) {
+      css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
+    }
+
+    let rows =
+      props.field.definition.meta && props.field.definition.meta.height
+        ? props.field.definition.meta.height
+        : 1;
+
+    return (
+      <FormItem
+        label={getLabel(props, this)}
+        className={
+          "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
         }
-        {...feedValue(props)}
+        style={{ display: "block" }}
+        key={props.field.id}
+        message=""
+        hasFeedback
         autoComplete="new-password"
-        onChange={e => props.onFieldChange(e, props)}
-        onBlur={e => props.onFieldChange(e, props)}
-        style={getStyle(props)}
-      />
-    </FormItem>
-  );
-};
+        {...field_error(props)}
+      >
+        <TextArea
+          disabled={isDisabled(props)}
+          autosize={{ minRows: rows }}
+          placeholder={props.field.placeholder}
+          value={this.state.inputText}
+          autoComplete="new-password"
+          onChange={e => this.onChange(e)}
+          onBlur={e => props.onFieldChange(e, props)}
+          style={getStyle(props)}
+        />
+      </FormItem>
+    );
+  }
+}
 
 //Field Type Boolean
 export const Bool = props => {
