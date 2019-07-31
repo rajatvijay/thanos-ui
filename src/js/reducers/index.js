@@ -28,6 +28,7 @@ import taskQueueCount from "../modules/sidebar/sidebarReducer";
 import stepUsers from "./stepBody";
 import workflowKeys from "./workflowKeys";
 import minimalUI from "./toggleMinimalUI";
+import pdfData from "../modules/pdfPopup/pdfPopupReducer";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -62,7 +63,8 @@ const rootReducer = combineReducers({
   taskQueueCount,
   stepUsers,
   workflowKeys,
-  minimalUI
+  minimalUI,
+  pdfData
 });
 
 export default rootReducer;

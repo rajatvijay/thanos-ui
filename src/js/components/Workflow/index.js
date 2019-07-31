@@ -16,6 +16,7 @@ import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../modules/sidebar/components/Sidebar";
 import Filter from "../../modules/filter/components/Filter";
+import PdfPopup from "../../modules/pdfPopup/components/PdfPopup";
 
 const { Content } = Layout;
 
@@ -29,7 +30,8 @@ class Workflow extends Component {
       statusView: true,
       visible: false,
       sortOrderAsc: false,
-      sortingEnabled: false
+      sortingEnabled: false,
+      isPdfPopup: false
     };
 
     if (!this.props.users.me) {
@@ -177,7 +179,21 @@ class Workflow extends Component {
     }
   };
 
+  showModal = () => {
+    this.setState({
+      isPdfPopup: true
+    });
+  };
+
+  handleCancel = e => {
+    this.setState({
+      isPdfPopup: false
+    });
+  };
+
   render = () => {
+    const { isPdfPopup } = this.state;
+
     if (this.props.workflow.loadingStatus === "failed") {
       // TODO the checkAuth method only reports status text: `403 Forbidden`
       // In future, we should relook at a better way to handle this
@@ -197,6 +213,14 @@ class Workflow extends Component {
         <Layout>
           <Content style={{ margin: "4vh 4vw" }}>
             <Row className="clear">
+              <button onClick={this.showModal}>Click me</button>
+              {isPdfPopup && (
+                <PdfPopup
+                  visible={isPdfPopup}
+                  showModal={this.showModal}
+                  handleCancel={this.handleCancel}
+                />
+              )}
               <Filter />
 
               {this.props.config.loading ||
