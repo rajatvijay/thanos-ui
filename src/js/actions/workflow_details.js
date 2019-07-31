@@ -236,18 +236,28 @@ function removeCurrentStepId() {
 }
 
 function archiveWorkflow(id) {
+  const postArchiveRedirect = () => {
+    // TODO: Move to calling function rather than the action
+    if (history.length > 2) {
+      history.goBack();
+    } else {
+      // User has navigated straight to a workflow
+      history.push("/workflows/instances/");
+    }
+  };
+
   return dispatch => {
     dispatch(request());
 
     workflowDetailsService.archiveWorkflow(id).then(
       response => {
         dispatch(success(response));
-        history.back();
+        postArchiveRedirect();
       },
       response => {
         dispatch(failure(response));
         setTimeout(function() {
-          history.back();
+          postArchiveRedirect();
         }, 1500);
       }
     );
