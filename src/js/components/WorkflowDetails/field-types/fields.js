@@ -73,11 +73,6 @@ export class Text extends Component {
   render() {
     const { props } = this;
 
-    let css = {};
-    if (props.field.selected_flag[props.field.id]) {
-      css = props.field.selected_flag[props.field.id]["flag_detail"]["extra"];
-    }
-
     let rows =
       props.field.definition.meta && props.field.definition.meta.height
         ? props.field.definition.meta.height

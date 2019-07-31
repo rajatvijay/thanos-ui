@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-  Collapse,
-  Divider,
-  Drawer,
-  Dropdown,
-  Icon,
-  Layout,
-  Menu,
-  Row,
-  Col
-} from "antd";
+import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import AuditListTabs from "../../../../js/components/Navbar/audit_log";
@@ -17,6 +7,8 @@ import {
   workflowDetailsActions,
   workflowStepActions
 } from "../../../../js/actions";
+import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
+import Permissions from "../../../common/permissions/constants";
 
 import LCData from "./LCData";
 
@@ -209,7 +201,7 @@ class Sidebar extends Component {
         ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
         : [];
     lc_data = lc_data.filter(
-      (data, index) => data.display_type == "normal" && data.value
+      (data, index) => data.display_type === "normal" && data.value
     );
 
     const { groupId, stepId } = this.state;
@@ -244,23 +236,16 @@ class Sidebar extends Component {
           </span>
         </Menu.Item>
 
-        {/*<Menu.Item key={"printWorkflow"} onClick={this.toggleWorkflowPDFModal}>*/}
-        {/*  <span>*/}
-        {/*    <i className="material-icons t-18 text-middle pd-right-sm">*/}
-        {/*      file_copy*/}
-        {/*    </i>{" "}*/}
-        {/*    <FormattedMessage id="stepBodyFormInstances.downloadWorkflowPDF" />*/}
-        {/*  </span>*/}
-        {/*</Menu.Item>*/}
-
-        <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              archive
-            </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.archiveWorkflow" />
-          </span>
-        </Menu.Item>
+        <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOWS}>
+          <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
+            <span>
+              <i className="material-icons t-18 text-middle pd-right-sm">
+                archive
+              </i>{" "}
+              <FormattedMessage id="stepBodyFormInstances.archiveWorkflow" />
+            </span>
+          </Menu.Item>
+        </Chowkidaar>
       </Menu>
     );
 
