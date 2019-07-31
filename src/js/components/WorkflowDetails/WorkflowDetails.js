@@ -407,7 +407,7 @@ class WorkflowDetails extends Component {
                 )}
                 {comment_data &&
                 comment_data.results &&
-                comment_data.results.length > 0 &&
+                // comment_data.results. &&
                 !comment_data.isEmbedded ? (
                   <div>
                     <Comments

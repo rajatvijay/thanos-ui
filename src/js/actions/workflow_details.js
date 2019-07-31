@@ -186,12 +186,6 @@ function getComment(object_id, content_type, addtn, isEmbedded) {
   }
 
   function success(data) {
-    if (!_.size(data.results)) {
-      openNotificationWithIcon({
-        type: "error",
-        message: "This feature is disabled."
-      });
-    }
     data.isEmbedded = isEmbedded;
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
   }

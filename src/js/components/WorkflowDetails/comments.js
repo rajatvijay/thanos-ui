@@ -15,7 +15,7 @@ import {
 } from "antd";
 import { changeStatusActions } from "../../actions";
 import { integrationCommonFunctions } from "./field-types/integration_common";
-import _ from "lodash";
+import { size, get } from "lodash";
 import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import MentionWithAttachments from "./MentionWithAttachments";
@@ -23,6 +23,8 @@ import { workflowFiltersService } from "../../services";
 import styled from "@emotion/styled";
 import { css } from "emotion";
 import { status_filters } from "./EventStatuses";
+import { Link } from "react-router-dom";
+import { history } from "../../_helpers";
 
 const { toString, toContentState } = Mention;
 
@@ -109,7 +111,7 @@ class Comments extends Component {
         object_id: c.object_id,
         type: content_type,
         message: message || this.state.comment,
-        attachment: _.size(fileList) ? fileList[0] : ""
+        attachment: size(fileList) ? fileList[0] : ""
       },
       step_reload_payload,
       this.props.isEmbedded
@@ -130,7 +132,7 @@ class Comments extends Component {
       target.step_group_details.id
     ); // making the step active (this is not working for now)
     // open comment sidebar for selected field or steip
-    if (target.field_details.id) {
+    if (get(target, "field_details.id", false)) {
       this.props.toggleSidebar(target.field_details.id, "field");
     } else {
       this.props.toggleSidebar(target.step_details.id, "step");
@@ -139,11 +141,11 @@ class Comments extends Component {
 
   selectFlag = option => {
     const flag = option[0];
-    const reason = _.size(option) > 1 ? option[1] : "";
+    const reason = size(option) > 1 ? option[1] : "";
     const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    const target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = size(comments.results) ? comments.results[0].target : {};
 
     let payload = {};
     if (target.field_details) {
@@ -171,7 +173,7 @@ class Comments extends Component {
     const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    const target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = size(comments.results) ? comments.results[0].target : {};
 
     if (!target.field_details.is_integration_type) {
       return;
@@ -193,7 +195,7 @@ class Comments extends Component {
     const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    const target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = size(comments.results) ? comments.results[0].target : {};
 
     if (!target.field_details.is_integration_type) {
       return;
@@ -213,7 +215,7 @@ class Comments extends Component {
     const comments = this.props.workflowComments
       ? this.props.workflowComments.data
       : {};
-    const target = _.size(comments.results) ? comments.results[0].target : {};
+    const target = size(comments.results) ? comments.results[0].target : {};
 
     if (!target.workflow_details) {
       return;
@@ -262,11 +264,12 @@ class Comments extends Component {
       ? this.props.workflowComments.data
       : {};
     const that = this;
-    const single_comments = _.size(comments.results) <= 1 ? true : false;
-    const c = _.size(comments.results) ? comments.results[0] : [];
+    const single_comments = size(comments.results) <= 1 ? true : false;
+    const resultsCount = size(comments.results);
+    const c = resultsCount ? comments.results[0] : [];
 
     //ADJUDICATION SELECTION
-    const adjudication = (
+    const adjudication = resultsCount ? (
       <div>
         <div className="  t-16 text-light">Adjudication:</div>
         <Cascader
@@ -277,7 +280,7 @@ class Comments extends Component {
           className="comment-select"
         />
       </div>
-    );
+    ) : null;
 
     //WORJKFLOW STATUS SELECT
     const workflow_status_dropdown = (
@@ -368,7 +371,10 @@ class Comments extends Component {
           position: "fixed",
           right: 0,
           top: "60px",
-          zIndex: 10
+          // bottom: "0",
+          overflowY: "scroll",
+          overflowX: "hidden",
+          zIndex: 20
         }}
         width="570"
         collapsed={false}
@@ -379,9 +385,43 @@ class Comments extends Component {
       >
         <div className="comment-details" style={{ width: "570px" }}>
           <Content style={{ background: "#fdfdfd", paddingBottom: "50px" }}>
-            {comments.results.length > 0 &&
+            {comments.results.length <= 0 ? (
+              <div
+                style={{
+                  height: "calc(100vh - 400px)",
+                  overflowY: "scroll"
+                }}
+              >
+                {/*///////HEADER///////*/}
+                <StyledHeadContainer>
+                  <Row>
+                    <Col span={2}>
+                      <Icon
+                        type="close"
+                        onClick={this.toggle}
+                        className={css`
+                          font-size: 21px;
+                          float: left;
+                        `}
+                      />
+                    </Col>
+                    <Col span={16}>
+                      <div>
+                        <div className="t-22">
+                          {
+                            this.props.workflowDetailsHeader
+                              .workflowDetailsHeader.name
+                          }
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </StyledHeadContainer>
+                <StyledCommentContainer>No comments</StyledCommentContainer>
+              </div>
+            ) : (
               comments.results.map((c, index) => {
-                if (!single_comments && !_.size(c.messages)) {
+                if (!single_comments && !size(c.messages)) {
                   return null;
                 }
 
@@ -423,16 +463,14 @@ class Comments extends Component {
                                   type="right"
                                   className="small pd-left-sm pd-right-sm"
                                 />
-                                <span
-                                  onClick={that.selectStep.bind(this, c.target)}
+                                <Link
+                                  onClick={this.toggle}
+                                  to={`${history.location.pathname}?group=${
+                                    c.target.step_group
+                                  }&step=${c.target.step_details.id}`}
                                 >
                                   {c.target.step_details.name}
-                                </span>
-                                <Icon
-                                  type="right"
-                                  className=" small pd-left-sm pd-right-sm"
-                                />
-                                {c.target.step_details.name}
+                                </Link>
                               </div>
                             </div>
                           ) : null}
@@ -604,7 +642,8 @@ class Comments extends Component {
                     ) : null}
                   </div>
                 );
-              })}
+              })
+            )}
           </Content>
         </div>
       </Sider>
