@@ -242,12 +242,12 @@ function archiveWorkflow(id) {
     workflowDetailsService.archiveWorkflow(id).then(
       response => {
         dispatch(success(response));
-        history.push("/workflows/instances/");
+        history.back();
       },
       response => {
         dispatch(failure(response));
         setTimeout(function() {
-          history.push("/workflows/instances/");
+          history.back();
         }, 1500);
       }
     );
