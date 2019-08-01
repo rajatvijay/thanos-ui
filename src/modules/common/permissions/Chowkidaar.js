@@ -13,15 +13,15 @@ const userHasPermission = ({ permissionsAllowed, permissionName }) =>
  * @returns {null|React.DetailedReactHTMLElement<any, HTMLElement>[]}
  * @private
  */
-const _Chowkidaar = (check, children, props) => {
+const _Chowkidaar = ({ children, config, check, ...otherProps }) => {
   if (
     userHasPermission({
-      permissionsAllowed: props.config.permissions,
+      permissionsAllowed: config.permissions,
       permissionName: check
     })
   ) {
     return React.Children.map(children, child => {
-      return React.cloneElement(child, { ...props, ...child.props });
+      return React.cloneElement(child, { ...otherProps, ...child.props });
     });
   } else {
     return null; // TODO: or custom element that needs to be rendered
