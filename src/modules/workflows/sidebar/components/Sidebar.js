@@ -512,8 +512,8 @@ class Sidebar extends Component {
                             >
                               <p
                                 style={
-                                  groupId === stepgroup.id &&
-                                  stepId === step.id &&
+                                  groupId === stepgroup.id.toString() &&
+                                  stepId === step.id.toString() &&
                                   !displayProfile
                                     ? {
                                         backgroundColor: "#104774",
@@ -535,8 +535,8 @@ class Sidebar extends Component {
                                     className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
                                     fill="#FFF"
                                     style={
-                                      groupId === stepgroup.id &&
-                                      stepId === step.id
+                                      groupId === stepgroup.id.toString() &&
+                                      stepId === step.id.toString()
                                         ? { color: "#00C89B", fontSize: 14 }
                                         : { color: "#00C89B" }
                                     }
@@ -548,14 +548,14 @@ class Sidebar extends Component {
                                     className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
                                     fill="#FFF"
                                     style={
-                                      groupId === stepgroup.id &&
-                                      stepId === step.id
+                                      groupId === stepgroup.id.toString() &&
+                                      stepId === step.id.toString()
                                         ? { color: "#FFFFFF", fontSize: 14 }
                                         : { color: "#CCCCCC" }
                                     }
                                   >
-                                    {groupId === stepgroup.id &&
-                                    stepId === step.id
+                                    {groupId === stepgroup.id.toString() &&
+                                    stepId === step.id.toString()
                                       ? "lens"
                                       : "panorama_fish_eye"}
                                   </i>
