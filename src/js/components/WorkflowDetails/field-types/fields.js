@@ -62,7 +62,12 @@ export class Text extends Component {
       : this.props.field.answers[0]
       ? this.props.field.answers[0].answer
       : this.props.field.definition.defaultValue;
-    if (prevProps.decryptedData !== this.props.decryptedData) {
+    const prevInputText = prevProps.decryptedData
+      ? prevProps.decryptedData.answer
+      : prevProps.field.answers[0]
+      ? prevProps.field.answers[0].answer
+      : prevProps.field.definition.defaultValue;
+    if (inputText !== prevInputText) {
       this.setState({ inputText });
     }
   }
@@ -199,9 +204,7 @@ export const Date = props => {
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
-        defaultValue={
-          defaultDate ? moment.utc(defaultAnswer2, "YYYY/MM/DD") : null
-        }
+        value={defaultDate ? moment.utc(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"MM-DD-YYYY"}
       />
     </FormItem>
