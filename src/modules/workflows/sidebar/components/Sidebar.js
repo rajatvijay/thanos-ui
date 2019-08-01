@@ -224,7 +224,7 @@ class Sidebar extends Component {
             <i className="material-icons t-18 text-middle pd-right-sm">
               chat_bubble
             </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.addComments" />
+            <FormattedMessage id="stepBodyFormInstances.viewComments" />
           </span>
         </Menu.Item>
 

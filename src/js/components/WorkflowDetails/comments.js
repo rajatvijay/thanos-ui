@@ -367,12 +367,11 @@ class Comments extends Component {
         className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
         style={{
           background: "#fff",
-          height: "calc(100vh - 70px)",
+          height: "calc(100vh - 60px)",
           position: "fixed",
           right: 0,
           top: "60px",
-          // bottom: "0",
-          overflowY: "scroll",
+          overflowY: "auto",
           overflowX: "hidden",
           zIndex: 20
         }}
