@@ -23,7 +23,8 @@ export const commonFunctions = {
   fieldFlagDropdown,
   isDisabled,
   getAnsweredBy,
-  isDnBIntegrationDataLoading
+  isDnBIntegrationDataLoading,
+  stringifyObjectValue
 };
 
 //Utility func
@@ -504,4 +505,29 @@ function isDnBIntegrationDataLoading(props) {
       props.integration_json.status_message ===
         "Fetching data for this field...")
   );
+}
+
+function stringifyObjectValue(arry) {
+  let hasNumber = false;
+  const fristObj = arry[0];
+
+  //check if object has number type value
+  Object.keys(fristObj).forEach(key => {
+    if (typeof fristObj[key] === "number") {
+      hasNumber = true;
+    }
+  });
+
+  if (hasNumber) {
+    //convert number type to string
+    arry.forEach(obj => {
+      Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === "number") {
+          obj[key] = "" + obj[key];
+        }
+      });
+    });
+  }
+
+  return arry;
 }

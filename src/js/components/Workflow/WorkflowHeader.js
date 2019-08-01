@@ -126,7 +126,7 @@ const HeaderTitle = props => {
   const { workflow } = props;
   const { family } = workflow;
 
-  if (family.length === 1) {
+  if (family.length === 1 || props.isEmbedded) {
     return (
       <div>
         <span

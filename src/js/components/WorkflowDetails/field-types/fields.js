@@ -42,7 +42,8 @@ const {
   feedValue,
   getLink,
   getStyle,
-  isDisabled
+  isDisabled,
+  stringifyObjectValue
 } = commonFunctions;
 
 //Field Type Text
@@ -408,6 +409,8 @@ export const Checkbox = props => {
 
 //Field Type Select
 export const Select = props => {
+  let stringifiedOptions = [];
+
   const single =
     props.field.definition.field_type === "single_select" ? true : false;
   let save = onFieldChange.bind(this, props);
@@ -425,7 +428,9 @@ export const Select = props => {
       : stringToArray(props.field.answers[0])
     : stringToArray(props.field.definition.defaultValue);
 
-  answer = !isNaN(answer) ? parseInt(answer, 10) : answer;
+  if (options && options.length) {
+    stringifiedOptions = stringifyObjectValue(options);
+  }
 
   return (
     <FormItem

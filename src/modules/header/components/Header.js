@@ -209,11 +209,14 @@ class Header extends Component {
                 : "180px"
               : "350px",
             flexGrow: 1,
-            textAlign: "right"
+            textAlign: "right",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end"
           }}
         >
           {showInsights ? (
-            <div style={{ display: "flex", alignItems: "end" }}>
+            <span className="pd-ard-sm mr-right-lg ">
               <Tooltip title="Show Reports" placement="left">
                 <Link to="/reports/">
                   <i
@@ -224,7 +227,7 @@ class Header extends Component {
                   </i>
                 </Link>
               </Tooltip>
-            </div>
+            </span>
           ) : null}
 
           {this.props.workflowKind.workflowKind && showExportOption
@@ -249,17 +252,19 @@ class Header extends Component {
               trigger={["click"]}
             >
               <Tooltip title={user.email} placement="leftBottom">
-                <i
-                  className="material-icons text-middle"
-                  style={{
-                    fontSize: 32,
-                    color: "#000000",
-                    opacity: 0.3,
-                    cursor: "pointer"
-                  }}
-                >
-                  account_circle
-                </i>
+                <span className="pd-ard-sm mr-right-lg ">
+                  <i
+                    className="material-icons text-middle"
+                    style={{
+                      fontSize: 32,
+                      color: "#000000",
+                      opacity: 0.3,
+                      cursor: "pointer"
+                    }}
+                  >
+                    account_circle
+                  </i>
+                </span>
               </Tooltip>
             </Dropdown>
           ) : null}
