@@ -9,7 +9,8 @@ const userHasPermission = ({ permissionsAllowed, permissionName }) =>
  * TODO Add argument of element that should be rendered if permission is missing
  * @param check Permission to check against
  * @param children Default prop provided by React
- * @param props Redux props + any props passed from parent
+ * @param config Redux config state
+ * @param otherProps Props passed from parent
  * @returns {null|React.DetailedReactHTMLElement<any, HTMLElement>[]}
  * @private
  */

@@ -208,8 +208,7 @@ class Sidebar extends Component {
 
     const workflowActionMenu = (
       <Menu>
-        {this.props.config.permissions &&
-        this.props.config.permissions.includes("Can View Activity Log") ? (
+        <Chowkidaar check={Permissions.CAN_VIEW_ACTIVITY_LOG}>
           <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
             <span>
               <i className="material-icons t-18 text-middle pd-right-sm">
@@ -218,7 +217,7 @@ class Sidebar extends Component {
               <FormattedMessage id="workflowsInstances.viewActivityLog" />
             </span>
           </Menu.Item>
-        ) : null}
+        </Chowkidaar>
 
         <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
           <span>
@@ -236,7 +235,7 @@ class Sidebar extends Component {
           </span>
         </Menu.Item>
 
-        <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOWS}>
+        <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOW}>
           <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
             <span>
               <i className="material-icons t-18 text-middle pd-right-sm">
