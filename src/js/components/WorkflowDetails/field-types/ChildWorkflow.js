@@ -74,7 +74,7 @@ const getChildKinds = (workflows, kinds) => {
   const count = countBy(grouped_child_kinds, Math.floor);
 
   const filteredKind = kindlist.map(kind => {
-    const item = {};
+    let item = {};
     item.id = kind;
     item.name = getKindName(kind, kinds);
     item.count = count[kind.toString()];
@@ -116,6 +116,7 @@ class ChildWorkflowField2 extends Component {
       sortingEnabled: false,
       sortBy: undefined
     };
+    this.onFilterTagChange = this.onFilterTagChange.bind(this);
   }
 
   componentDidMount = () => {
@@ -305,34 +306,36 @@ class ChildWorkflowField2 extends Component {
 
     const that = this;
 
-    const rt = [];
+    let relatedType = [];
     if (related.length !== 0) {
-      _.map(related, function(rtc) {
+      related.map(function(rtc) {
         _.filter(that.props.workflowKind.workflowKind, function(kind) {
           if (kind.tag === rtc) {
-            rt.push(kind);
+            relatedType.push(kind);
           }
         });
       });
     }
 
-    return rt;
+    return relatedType;
   };
 
   getKindMenu = () => {
     const that = this;
-    const workflowKindFiltered = [];
+    let workflowKindFiltered = [];
     const relatedKind = this.getRelatedTypes();
 
-    _.map(relatedKind, function(item) {
-      if (
-        item.is_related_kind &&
-        _.includes(item.features, "add_workflow") &&
-        that.props.field.definition.extra.child_workflow_kind_id === item.id
-      ) {
-        workflowKindFiltered.push(item);
-      }
-    });
+    if (relatedKind.length) {
+      relatedKind.map(function(item) {
+        if (
+          item.is_related_kind &&
+          _.includes(item.features, "add_workflow") &&
+          that.props.field.definition.extra.child_workflow_kind_id === item.id
+        ) {
+          workflowKindFiltered.push(item);
+        }
+      });
+    }
 
     if (_.isEmpty(workflowKindFiltered)) {
       return null;
@@ -341,7 +344,7 @@ class ChildWorkflowField2 extends Component {
     const menu = (
       <Menu onClick={this.onChildSelect}>
         {_.map(workflowKindFiltered, function(item, index) {
-          return <Menu.Item key={`${item.tag}`}>{item.name}</Menu.Item>;
+          return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
         })}
       </Menu>
     );
@@ -354,6 +357,7 @@ class ChildWorkflowField2 extends Component {
     if (!kindMenu) {
       return null;
     }
+
     return this.props.stepData.completed_at ||
       this.props.stepData.is_locked ? null : (
       <Dropdown
@@ -386,12 +390,12 @@ class ChildWorkflowField2 extends Component {
         allowClear={true}
       >
         {_.map(that.state.childWorkflow[0].comment_flag_options, function(
-          v,
-          k
+          value,
+          key
         ) {
           return (
-            <Option key={`${v.label}`} value={v.label}>
-              {v.label}
+            <Option key={value.label} value={value.label}>
+              {value.label}
             </Option>
           );
         })}
@@ -401,10 +405,10 @@ class ChildWorkflowField2 extends Component {
 
   filterByFlag = () => {
     const that = this;
-    const flag_workflow_map = {};
+    let flag_workflow_map = {};
 
     // getting lc data alerts count
-    _.map(that.state.filteredChildWorkflow, function(val, k) {
+    _.map(that.state.filteredChildWorkflow, function(val, key) {
       if (!_.size(val.selected_flag)) {
         return;
       }
@@ -422,35 +426,36 @@ class ChildWorkflowField2 extends Component {
 
   createStatusFilterTag = () => {
     const that = this;
-    const status_workflow_map = { All: that.state.childWorkflow };
-    const workflow_status_count = {
+    let status_workflow_map = { All: that.state.childWorkflow };
+    let workflow_status_count = {
       All: _.size(that.state.childWorkflow)
     };
     const selected = this.state.selected_filters.status;
 
     // getting workflow status count
-    _.map(that.state.childWorkflow, function(v, k) {
-      const wstatus = v["status"]["label"];
-      if (workflow_status_count[wstatus]) {
-        workflow_status_count[wstatus] += 1;
-      } else {
-        workflow_status_count[wstatus] = 1;
-      }
-      if (status_workflow_map[wstatus]) {
-        status_workflow_map[wstatus].push(v);
-      } else {
-        status_workflow_map[wstatus] = [v];
-      }
-    });
+    that.state.childWorkflow &&
+      that.state.childWorkflow.map(function(value, key) {
+        const wstatus = value["status"]["label"];
+        if (workflow_status_count[wstatus]) {
+          workflow_status_count[wstatus] += 1;
+        } else {
+          workflow_status_count[wstatus] = 1;
+        }
+        if (status_workflow_map[wstatus]) {
+          status_workflow_map[wstatus].push(value);
+        } else {
+          status_workflow_map[wstatus] = [value];
+        }
+      });
 
-    return _.map(workflow_status_count, function(v, k) {
+    return _.map(workflow_status_count, function(value, key) {
       return (
         <VTag
-          label={k + " (" + v + ")"}
-          key={`${k}`}
-          onClick={that.onFilterTagChange.bind(that, "status", k)}
+          label={key + " (" + value + ")"}
+          key={key}
+          onClick={() => that.onFilterTagChange("status", key)}
           selected={
-            k === "All" && !selected ? true : selected === k ? true : false
+            key === "All" && !selected ? true : selected === key ? true : false
           }
         />
       );
@@ -459,15 +464,6 @@ class ChildWorkflowField2 extends Component {
 
   createFilterTag = () => {
     const that = this;
-    this.setState({
-      filterTags: null
-    });
-
-    if (!_.size(that.state.filteredChildWorkflow)) {
-      this.setState({ filterTags: <span /> });
-      return;
-    }
-
     const filter_tag_count = {
       All: _.size(that.state.filteredChildWorkflow)
     };
@@ -475,70 +471,77 @@ class ChildWorkflowField2 extends Component {
       All: that.state.filteredChildWorkflow
     };
 
-    // getting lc data alerts count
-    _.map(that.state.filteredChildWorkflow, function(val, k) {
-      _.map(val.lc_data, function(tag, i) {
-        if (!tag.value) {
-          return true;
-        }
-        if (tag.display_type === "normal") {
-          return true;
-        }
-        if (filter_tag_count[tag.label]) {
-          filter_tag_count[tag.label] += 1;
-        } else {
-          filter_tag_count[tag.label] = 1;
-        }
+    let selectedFilter = this.state.selected_filters.category;
 
-        if (tag_workflow_map[tag.label]) {
-          tag_workflow_map[tag.label].push(val);
-        } else {
-          tag_workflow_map[tag.label] = [val];
-        }
+    // getting lc data alerts count
+    if (this.state.childWorkflow) {
+      this.state.childWorkflow.map(function(val, key) {
+        _.map(val.lc_data, function(tag, i) {
+          if (!tag.value) {
+            return true;
+          }
+          if (tag.display_type === "normal") {
+            return true;
+          }
+          if (filter_tag_count[tag.label]) {
+            filter_tag_count[tag.label] += 1;
+          } else {
+            filter_tag_count[tag.label] = 1;
+          }
+
+          if (tag_workflow_map[tag.label]) {
+            tag_workflow_map[tag.label].push(val);
+          } else {
+            tag_workflow_map[tag.label] = [val];
+          }
+        });
       });
-    });
+    }
 
     const styling = this.props.field.definition.extra.lc_data_colorcodes || {};
 
-    const filterTags = (
-      <div>
-        <span className="text-lighter mr-right-sm">Concerns: </span>
-        {_.map(filter_tag_count, (v, k) => {
-          return (
-            <VTag
-              key={`${v}-${k}`}
-              label={
-                <Tooltip title={k}>
-                  {k} ({v})
-                  {styling && styling[k] ? (
-                    <i
-                      style={{
-                        color: styling[k].color,
-                        position: "relative",
-                        top: "-7px",
-                        right: "-23px"
-                      }}
-                      className="material-icons ellip-small s50 t-12 text-middle"
-                    >
-                      fiber_manual_records
-                    </i>
-                  ) : null}
-                </Tooltip>
-              }
-              onClick={this.onFilterTagChange.bind(that, k, "category")}
-            />
-          );
-        })}
-      </div>
-    );
+    const filterTags = _.map(filter_tag_count, (value, key) => {
+      let isSelected = false;
+      if (key === "All" && selectedFilter && selectedFilter.length === 0) {
+        isSelected = true;
+      }
 
-    this.setState({
-      filterTags: filterTags,
-      tag_workflow_map: tag_workflow_map
+      if (selectedFilter && selectedFilter[0] === key) {
+        isSelected = true;
+      }
+
+      return (
+        <VTag
+          label={
+            <Tooltip title={key}>
+              {key} ({value})
+              {styling && styling[key] ? (
+                <i
+                  style={{
+                    color: styling[key].color,
+                    position: "relative",
+                    top: "-7px",
+                    right: "-23px"
+                  }}
+                  className="material-icons ellip-small s50 t-12 text-middle"
+                >
+                  fiber_manual_records
+                </i>
+              ) : null}
+            </Tooltip>
+          }
+          key={value + key}
+          selected={isSelected}
+          onClick={this.onFilterTagChange.bind(that, key, "category")}
+        />
+      );
     });
+
+    return filterTags;
   };
 
   onFilterTagChange = (tag, _type) => {
+    //let filtered_workflow = this.state.filteredChildWorkflow;
     const { selected_filters } = this.state;
     if (tag === "status") {
       if (_type === "All") {
@@ -546,9 +549,13 @@ class ChildWorkflowField2 extends Component {
       } else {
         selected_filters["status"] = _type;
       }
+      this.setState({
+        selected_filters: selected_filters
+      });
     } else if (_type === "category") {
       if (tag === "All") {
         selected_filters["category"] = [];
+        //delete this.state.selected_filters["category"];
       } else {
         selected_filters["category"] = [];
         if (_.size(selected_filters["category"])) {
@@ -559,17 +566,22 @@ class ChildWorkflowField2 extends Component {
           selected_filters["category"] = [tag];
         }
       }
+      this.setState({
+        selected_filters: selected_filters
+      });
     } else if (tag === "flag") {
       selected_filters["flag"] = _type;
+      this.setState({
+        selected_filters: selected_filters
+      });
     } else if (tag === "kind") {
-      const { selected_filters } = this.state;
       if (_type === "all") {
         selected_filters.kind = "";
       } else {
         selected_filters.kind = _type;
       }
+      this.setState({ selected_filters: selected_filters });
     }
-    this.setState({ selected_filters: selected_filters });
 
     this.filterWorkflows();
     this.excludeWorkflows();
@@ -579,11 +591,12 @@ class ChildWorkflowField2 extends Component {
     const that = this;
     const selected_filters = this.state.selected_filters;
     if (!_.size(selected_filters)) {
+      this.state.filteredChildWorkflow = that.state.childWorkflow;
       this.setState({ filteredChildWorkflow: that.state.childWorkflow });
       this.excludeWorkflows();
       return true;
     }
-    const filtered_workflow = [];
+    let filtered_workflow = [];
     _.map(that.state.childWorkflow, function(cw) {
       let found = cw;
       _.map(selected_filters, function(fval, key) {
@@ -630,6 +643,8 @@ class ChildWorkflowField2 extends Component {
         filtered_workflow.push(cw);
       }
     });
+
+    this.state.filteredChildWorkflow = filtered_workflow;
     this.setState({ filteredChildWorkflow: filtered_workflow });
     this.excludeWorkflows();
   };
@@ -643,7 +658,7 @@ class ChildWorkflowField2 extends Component {
       });
       return true;
     }
-    const filtered_workflow = [];
+    let filtered_workflow = [];
     _.map(that.state.filteredChildWorkflow, function(cw) {
       let found = cw;
       _.map(excluded_filters, function(fval, key) {
@@ -690,31 +705,33 @@ class ChildWorkflowField2 extends Component {
     this.setState({ filteredChildWorkflow: filtered_workflow });
   };
 
-  removeSelectedFilter = (k, v) => {
+  removeSelectedFilter = (key, value) => {
     // remove filters from selected_filters
-    const selected_filters = this.state.selected_filters;
-    if ((k === "category") & (_.size(selected_filters[k]) > 1)) {
-      selected_filters[k] = _.filter(selected_filters[k], function(cat) {
-        return cat !== v;
+    let selected_filters = this.state.selected_filters;
+    if ((key === "category") & (_.size(selected_filters[key]) > 1)) {
+      selected_filters[key] = _.filter(selected_filters[key], function(cat) {
+        return cat !== value;
       });
     } else {
-      delete selected_filters[k];
+      delete selected_filters[key];
     }
     this.setState({ selected_filters: selected_filters });
     this.filterWorkflows();
+    //this.createFilterTag();
   };
 
-  removeExcludedFilter = (k, v) => {
-    const excluded_filters = this.state.excluded_filters;
-    if ((k === "category") & (_.size(excluded_filters[k]) > 1)) {
-      excluded_filters[k] = _.filter(excluded_filters[k], function(cat) {
-        return cat !== v;
+  removeExcludedFilter = (key, value) => {
+    let excluded_filters = this.state.excluded_filters;
+    if ((key === "category") & (_.size(excluded_filters[key]) > 1)) {
+      excluded_filters[key] = _.filter(excluded_filters[key], function(cat) {
+        return cat !== value;
       });
     } else {
-      delete excluded_filters[k];
+      delete excluded_filters[key];
     }
     this.setState({ excluded_filters: excluded_filters });
     this.filterWorkflows();
+    //this.createFilterTag();
   };
 
   selectedFilter = () => {
@@ -722,38 +739,71 @@ class ChildWorkflowField2 extends Component {
     if (!_.size(this.state.selected_filters)) {
       return <span />;
     }
+
+    const closeIcon = (
+      <i className="material-icons t-12 text-middle text-white pd-left-sm">
+        cancel
+      </i>
+    );
+
     return (
       <span>
         {" "}
-        {_.map(this.state.selected_filters, function(v, k) {
-          if (k === "category") {
-            return _.map(v, function(c) {
-              if (!c) {
+        {_.map(this.state.selected_filters, (value, key) => {
+          if (key == "category") {
+            return _.map(value, function(category) {
+              if (!category) {
                 return;
               }
 
               return (
                 <VTag
-                  label={<Tooltip title={k}>{c}</Tooltip>}
+                  label={
+                    <Tooltip title={key}>
+                      {category} {closeIcon}
+                    </Tooltip>
+                  }
                   selected={true}
-                  onClick={that.removeSelectedFilter.bind(that, k, c)}
-                  key={c + k + "selected"}
+                  onClick={that.removeSelectedFilter.bind(that, key, category)}
+                  key={category + key + "selected"}
                 />
               );
             });
           } else {
-            if (!v) {
+            if (!value) {
               return;
             }
 
-            return (
-              <VTag
-                label={<Tooltip title={k}>{v}</Tooltip>}
-                key={v + k + "selected"}
-                onClick={that.removeSelectedFilter.bind(that, k, v)}
-                selected={true}
-              />
-            );
+            if (key !== "kind") {
+              return (
+                <VTag
+                  label={
+                    <Tooltip title={key}>
+                      {value} {closeIcon}
+                    </Tooltip>
+                  }
+                  key={value + key + "selected"}
+                  onClick={that.removeSelectedFilter.bind(that, key, value)}
+                  selected={true}
+                />
+              );
+            } else {
+              const { workflowKind } = this.props.workflowKind;
+              const filterName = getKindName(value, workflowKind);
+
+              return (
+                <VTag
+                  label={
+                    <Tooltip title={key}>
+                      {filterName} {closeIcon}
+                    </Tooltip>
+                  }
+                  key={value + key + "selected"}
+                  onClick={that.removeSelectedFilter.bind(that, key, value)}
+                  selected={true}
+                />
+              );
+            }
           }
         })}
       </span>
@@ -764,29 +814,30 @@ class ChildWorkflowField2 extends Component {
     if (!_.size(this.state.excluded_filters)) {
       return <span />;
     }
+
     return (
       <span>
-        {_.map(this.state.excluded_filters, function(v, k) {
-          if (k === "category") {
-            return _.map(v, function(c) {
+        {_.map(this.state.excluded_filters, function(value, key) {
+          if (key === "category") {
+            return _.map(value, function(category) {
               return (
                 <Tag
-                  key={c + k + "selected"}
+                  key={category + key + "selected"}
                   className="alert-tag-item alert-metal"
                   // closable
+                  // onClose={that.removeExcludedFilter.bind(that, k, c)}
                 >
-                  <Tooltip title={k}>{c}</Tooltip>
+                  <Tooltip title={key}>{category}</Tooltip>
                 </Tag>
               );
             });
           } else {
             return (
               <Tag
-                key={v + k + "selected"}
+                key={value + key + "selected"}
                 className="alert-tag-item alert-metal"
-                // closable
               >
-                <Tooltip title={k}>{v}</Tooltip>
+                <Tooltip title={key}>{value}</Tooltip>
               </Tag>
             );
           }
@@ -798,7 +849,7 @@ class ChildWorkflowField2 extends Component {
   //CREATE. KIND FILTER
   createKindFilter = () => {
     const { props } = this;
-    const { workflowKind } = props;
+    const { field, workflowKind } = props;
     const that = this;
     const kindList = getChildKinds(
       this.state.childWorkflow,
@@ -813,24 +864,22 @@ class ChildWorkflowField2 extends Component {
 
     return (
       <div>
-        <span className="text-lighter mr-right-sm">Type: </span>
-
         {kindList.length > 0 ? (
           <VTag
-            label="All"
+            label={`All (${kindList.length})`}
             key={"all"}
-            onClick={this.onFilterTagChange.bind(that, "kind", "all")}
+            onClick={() => this.onFilterTagChange("kind", "all")}
             selected={selected === "" ? true : false}
           />
         ) : null}
 
-        {kindList.map(v => {
+        {kindList.map(value => {
           return (
             <VTag
-              label={`${v.name} (${v.count})`}
-              key={`${v.id}`}
-              onClick={this.onFilterTagChange.bind(that, "kind", v.id)}
-              selected={selected === v.id ? true : false}
+              label={`${value.name} (${value.count})`}
+              key={value.id}
+              onClick={() => this.onFilterTagChange("kind", value.id)}
+              selected={selected === value.id ? true : false}
             />
           );
         })}
@@ -908,6 +957,7 @@ class ChildWorkflowField2 extends Component {
     const allBulkActions = workflows.flatMap(
       workflow => workflow.kindDetail.bulk_actions
     );
+
     const uniqueBulkActions = [];
     allBulkActions.forEach(bulkAction => {
       if (
@@ -972,9 +1022,9 @@ class ChildWorkflowField2 extends Component {
     const { props } = this;
     const { field, workflowKind } = props;
     const { bulkActionWorkflowChecked, childWorkflow } = this.state;
-
     const kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
     const workflowHeaderChild = childWorkflow ? childWorkflow : [];
+
     const bulkActionChilren = workflowHeaderChild;
     workflowHeaderChild.forEach((child, index) => {
       kindList.forEach(kind => {
@@ -990,6 +1040,23 @@ class ChildWorkflowField2 extends Component {
       bulkActionChilren.length &&
       bulkActionWorkflowChecked.length &&
       bulkActionChilren.length === bulkActionWorkflowChecked.length;
+
+    const FilterComponent = props => {
+      const { label, filter } = props;
+
+      return (
+        <Row className="mr-bottom">
+          {label ? (
+            <Col span={2} className="text-lighter">
+              {label}:{" "}
+            </Col>
+          ) : null}
+
+          <Col span={label ? 22 : 24}>{filter}</Col>
+        </Row>
+      );
+    };
+
     return (
       <FormItem
         label={""}
@@ -1133,76 +1200,43 @@ class ChildWorkflowField2 extends Component {
                 >
                   {field.definition.extra.show_filters ? (
                     <div>
-                      <Row className="mr-bottom">
-                        <Col span={24}>
-                          {/*ADJUDICATION FILTER*/}
-                          <span className="mr-right">
-                            {this.createFlagFilter()}
-                          </span>
-                          <br />
-                        </Col>
-                      </Row>
+                      {/*ADJUDICATION FILTER*/}
+                      <FilterComponent filter={this.createFlagFilter()} />
 
-                      <Row className="mr-bottom">
-                        <Col span={24}>
-                          {/*CATEGORY FILTER*/}
-                          {this.state.filterTags}
-                        </Col>
-                      </Row>
-                      <Row className="mr-bottom">
-                        <Col span={24}>
-                          {/*KIND FILTER*/}
-                          {this.createKindFilter()}
-                        </Col>
-                      </Row>
+                      {/*Concerns ala CATEGORY FILTER*/}
+                      <FilterComponent
+                        label="Concerns"
+                        filter={this.createFilterTag()}
+                      />
+
+                      {/*KIND FILTER*/}
+                      <FilterComponent
+                        label="Type"
+                        filter={this.createKindFilter()}
+                      />
+
+                      {/*STATUS FILTER*/}
+                      <FilterComponent
+                        label="Status"
+                        filter={this.createStatusFilterTag()}
+                      />
+
+                      {/*EXCLUDED FILTERS*/}
+                      {this.state.excluded_filters ? (
+                        <FilterComponent
+                          label="Excluded"
+                          filter={this.excludedFilter()}
+                        />
+                      ) : null}
+
+                      {/*SELECTED FILTERS */}
+                      {_.size(this.state.selected_filters) ? (
+                        <FilterComponent
+                          label="Filtered"
+                          filter={this.selectedFilter()}
+                        />
+                      ) : null}
                     </div>
-                  ) : null}
-
-                  <Row className="mr-bottom">
-                    {field.definition.extra.show_filters ? (
-                      <Col span="18">
-                        <div>
-                          <span
-                            className="text-lighter"
-                            style={{ marginRight: "10px", float: "left" }}
-                          >
-                            Status:{" "}
-                          </span>
-
-                          {/*STATUS FILTER*/}
-                          <span className="mr-right">
-                            {this.createStatusFilterTag()}
-                          </span>
-                        </div>
-
-                        {/*EXCLUDED FILTERS*/}
-                        {_.size(this.state.excluded_filters) ? (
-                          <span className="mr-left-lg">
-                            <span className="text-lighter mr-right">
-                              {" "}
-                              Excluded:
-                            </span>
-                            {this.excludedFilter()}
-                          </span>
-                        ) : null}
-                      </Col>
-                    ) : (
-                      <Col span="18" />
-                    )}
-                  </Row>
-
-                  {_.size(this.state.selected_filters) ? (
-                    <Row>
-                      <Col span="12" style={{ marginTop: "10px" }}>
-                        <span
-                          className="text-lighter "
-                          style={{ marginRight: "10px", float: "left" }}
-                        >
-                          Filtered:{" "}
-                        </span>
-                        <span>{this.selectedFilter()}</span>
-                      </Col>
-                    </Row>
                   ) : null}
                 </div>
                 <Divider className="no-margin" />
