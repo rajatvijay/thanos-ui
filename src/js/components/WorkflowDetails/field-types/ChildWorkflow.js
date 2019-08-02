@@ -1266,6 +1266,7 @@ class ChildWorkflowField2 extends Component {
                   bulkActionWorkflowChecked={
                     this.state.bulkActionWorkflowChecked
                   }
+                  disableGrouping={true}
                   handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
                 />
               ) : (

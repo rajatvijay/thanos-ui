@@ -30,48 +30,64 @@ class WorkflowList extends Component {
     }
   };
 
+  getWorkflowWithHumaReadableRiskRanking = currentPage => {
+    const { workflow } = this.props;
+    return (
+      workflow.workflow &&
+      workflow.workflow.map((w, i) => ({
+        ...w,
+        rank: this.getRank(currentPage, i + 1, workflow.count)
+      }))
+    );
+  };
+
+  getGroupedWorkflows = currentPage => {
+    const { disableGrouping, isEmbedded, workflow } = this.props;
+    const workflows = isEmbedded
+      ? workflow.workflow
+      : this.getWorkflowWithHumaReadableRiskRanking(currentPage);
+    if (disableGrouping) {
+      return { workflows };
+    }
+    return _.groupBy(workflows, this.getOccurrenceDay);
+  };
+
+  getOccurrenceDay = occurrence => {
+    const today = moment().startOf("day");
+    const thisWeek = moment().startOf("week");
+    const thisMonth = moment().startOf("month");
+
+    if (moment(occurrence.created_at).isAfter(today)) {
+      return "Today";
+    }
+    if (moment(occurrence.created_at).isAfter(thisWeek)) {
+      return "This week";
+    }
+    if (moment(occurrence.created_at).isAfter(thisMonth)) {
+      return "This month";
+    }
+    return moment(occurrence.created_at).format("MMM");
+  };
+
+  getCurrentPage = () => {
+    const workflowData = this.props.workflow;
+    let page = 1;
+    if (workflowData.next) {
+      page = workflowData.next.split("page=");
+      page = parseInt(page[1], 10) - 1;
+    } else if (workflowData.previous) {
+      page = workflowData.previous.split("page=");
+      page = parseInt(page[1], 10) + 1;
+    }
+    return page;
+  };
+
   render() {
     const that = this;
     const data = this.props.workflow;
-    let page = 1;
-    if (data.next) {
-      page = data.next.split("page=");
-      page = parseInt(page[1], 10) - 1;
-    } else if (data.previous) {
-      page = data.previous.split("page=");
-      page = parseInt(page[1], 10) + 1;
-    }
-
-    const occurrenceDay = function(occurrence) {
-      const today = moment().startOf("day");
-      const thisWeek = moment().startOf("week");
-      const thisMonth = moment().startOf("month");
-
-      if (moment(occurrence.created_at).isAfter(today)) {
-        return "Today";
-      }
-      if (moment(occurrence.created_at).isAfter(thisWeek)) {
-        return "This week";
-      }
-      if (moment(occurrence.created_at).isAfter(thisMonth)) {
-        return "This month";
-      }
-      return moment(occurrence.created_at).format("MMM");
-    };
-
-    const workflowWithHumanReadableRiskRank =
-      data.workflow &&
-      data.workflow.map((w, i) => ({
-        ...w,
-        rank: that.getRank(page, i + 1, data.count)
-      }));
-
-    let result = _.groupBy(workflowWithHumanReadableRiskRank, occurrenceDay);
-    if (this.props.isEmbedded) {
-      result = _.groupBy(data.workflow, occurrenceDay);
-    }
-
-    const ListCompletes = _.map(result, (list, key) => {
+    const currentPage = this.getCurrentPage();
+    const groupedWorkflows = this.getGroupedWorkflows(currentPage);
+    const ListCompletes = _.map(groupedWorkflows, (list, key) => {
       const listL = _.map(list, function(item, index) {
         return (
           <WorkflowItem
@@ -158,7 +174,7 @@ class WorkflowList extends Component {
                         : "none"
                   }}
                   pageSize={PAGE_SIZE}
-                  defaultCurrent={page ? page : 1}
+                  defaultCurrent={currentPage ? currentPage : 1}
                   total={data.count}
                   onChange={this.handlePageChange.bind(this)}
                 />
