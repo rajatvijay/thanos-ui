@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
-import { authHeader } from "../../_helpers";
+import { requestOptions } from "../../services/auth-header-auditlog-service";
 import Moment from "react-moment";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
-import { apiBaseURL } from "../../../config";
+import { auditLogBaseURL } from "../../../config";
 
 const TabPane = Tabs.TabPane;
 
-class AuditListTabs extends Component {
+class ServerlessAuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
     edits: [
       "step_submitted",
@@ -39,19 +39,15 @@ class AuditListTabs extends Component {
   };
 
   downloadFile = () => {
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
-
     function getFileName(resp) {
       const filename = resp.headers.get("Content-Disposition");
       return filename && (filename.match(/filename="(.*)"/) || []).pop();
     }
 
-    const url = `${apiBaseURL}workflows/${this.props.id}/export/`;
-    return fetch(url, requestOptions).then(function(resp) {
+    const url = `${auditLogBaseURL}workflows/activity/export?workflows=${
+      this.props.id
+    }`;
+    return fetch(url, requestOptions()).then(function(resp) {
       resp.blob().then(function(blob) {
         // Allowing filename and MIME type to be decided by the backend
         // though it's possible to specify here
@@ -67,21 +63,23 @@ class AuditListTabs extends Component {
   render = () => {
     return (
       <Tabs defaultActiveKey="edits" onChange={this.onTabChange}>
-        {Object.entries(AuditListTabs.ACTIVITY_ACTION_GROUPS).map(([key]) => {
-          return (
-            <TabPane
-              tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
-              key={key}
-            >
-              <AuditList
-                actions={AuditListTabs.ACTIVITY_ACTION_GROUPS[key]}
-                isFocused={this.state.currentTab === key}
-                logType={key}
-                id={this.props.id}
-              />
-            </TabPane>
-          );
-        })}
+        {Object.entries(ServerlessAuditListTabs.ACTIVITY_ACTION_GROUPS).map(
+          ([key]) => {
+            return (
+              <TabPane
+                tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
+                key={key}
+              >
+                <AuditList
+                  actions={ServerlessAuditListTabs.ACTIVITY_ACTION_GROUPS[key]}
+                  isFocused={this.state.currentTab === key}
+                  logType={key}
+                  id={this.props.id}
+                />
+              </TabPane>
+            );
+          }
+        )}
         <TabPane
           isFocused={this.state.currentTab === "download"}
           key="download"
@@ -110,8 +108,8 @@ class AuditListTabs extends Component {
   };
 }
 
-AuditListTabs.propTypes = {
-  id: PropTypes.number.isRequired
+ServerlessAuditListTabs.propTypes = {
+  id: PropTypes.array.isRequired
 };
 
 class AuditList extends Component {
@@ -128,23 +126,21 @@ class AuditList extends Component {
   }
 
   loadData = () => {
+    const initUrl = `${auditLogBaseURL}workflows/activity/?workflows=${
+      this.props.id
+    }&actions=${this.props.actions.join(",")}`;
     const url = this.state.data.next
-      ? this.state.data.next
-      : apiBaseURL +
-        `workflows/${this.props.id}/activity/?actions=${this.props.actions.join(
-          ","
-        )}`;
+      ? `${initUrl}&from=${this.state.data.next}`
+      : initUrl;
 
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
-
-    fetch(url, requestOptions)
+    fetch(url, requestOptions())
       .then(response => response.json())
       .then(body => {
         this.appendData(body);
+      })
+      .catch(err => {
+        console.warn(err);
+        // TODO: Do something with error
       });
   };
 
@@ -196,7 +192,7 @@ class AuditList extends Component {
 }
 
 AuditList.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.array.isRequired,
   isFocused: PropTypes.bool,
   actions: PropTypes.array.isRequired,
   logType: PropTypes.string.isRequired
@@ -205,14 +201,14 @@ AuditList.propTypes = {
 const ActivityLogSimple = ({ item }) => {
   return (
     <div>
-      <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
-        {item.actor.email}
+      <a className="text-medium text-base" href={"mailto:" + item.actor_email}>
+        {item.actor_email}
       </a>{" "}
-      {item.action.type} {item.object.name}
+      {item.action_type} {item.object_name}
       <br />
       <span className="small text-light">
-        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
-          <Moment fromNow>{item.actiontime.datetime}</Moment>
+        <Tooltip title={moment(item.timestamp.$date).format()}>
+          <Moment fromNow>{item.timestamp.$date}</Moment>
         </Tooltip>
       </span>
     </div>
@@ -223,15 +219,15 @@ const ActivityLogEmail = ({ item }) => {
   return (
     <p className="pd-left-sm">
       Email{" "}
-      {item.object.name ? <span>&#8220;{item.object.name}&#8221;</span> : " "}
-      {item.action.type ? item.action.type : item.action.name}{" "}
-      <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
-        {item.actor.email}
+      {item.object_name ? <span>&#8220;{item.object_name}&#8221;</span> : " "}
+      {item.action_type ? item.action_type : item.action_code}{" "}
+      <a className="text-medium text-base" href={"mailto:" + item.actor_email}>
+        {item.actor_email}
       </a>
       <br />
       <span className="small text-light">
-        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
-          <Moment fromNow>{item.actiontime.datetime}</Moment>
+        <Tooltip title={moment(item.timestamp.$date).format()}>
+          <Moment fromNow>{item.timestamp.$date}</Moment>
         </Tooltip>
       </span>
     </p>
@@ -259,16 +255,19 @@ class ActivityLogCollapsible extends Component {
         <ActivityLogSimple item={item} />
         {this.state.isOpen && (
           <Timeline style={{ paddingTop: 20, marginBottom: -20 }}>
-            {_.map(item.object.changes, (change, index) => {
+            {_.map(item.changes, (change, index) => {
               return (
-                <Timeline.Item style={{ paddingBottom: 10 }} key={`${index}`}>
+                <Timeline.Item
+                  style={{ paddingBottom: 10 }}
+                  key={`item_${index}`}
+                >
                   {change.event}
                 </Timeline.Item>
               );
             })}
           </Timeline>
         )}
-        {item.object.changes.length > 0 ? (
+        {item.changes.length > 0 ? (
           <Button
             size={"small"}
             style={{ position: "absolute", top: 0, right: 0, width: "32px" }}
@@ -301,43 +300,43 @@ const AuditContent = props => {
             let icon = "panorama_fish_eye";
             let color = "blue";
 
-            if (item.action.type === "viewed") {
+            if (item.action_type === "viewed") {
               icon = "remove_red_eye";
-            } else if (item.action.type === "submitted") {
+            } else if (item.action_type === "submitted") {
               icon = "check_circle_outline";
               color = "green";
-            } else if (item.object.type === "email") {
+            } else if (item.action_type === "email") {
               icon = "email";
-              if (item.action.type === "rejected") {
+              if (item.action_type === "rejected") {
                 color = "red";
-              } else if (item.action.type === "delivered") {
+              } else if (item.action_type === "delivered") {
                 color = "green";
               }
-            } else if (item.action.type === "approved") {
+            } else if (item.action_type === "approved") {
               icon = "check_circle_outline";
               color = "green";
-            } else if (item.action.type === "undo") {
+            } else if (item.action_type === "undo") {
               icon = "restore";
               color = "orange";
-            } else if (item.action.code === "alert_created") {
+            } else if (item.action_code === "alert_created") {
               icon = "alarm_add";
               color = "red";
-            } else if (item.action.code === "alert_dismissed") {
+            } else if (item.action_code === "alert_dismissed") {
               icon = "alarm_off";
               color = "green";
             }
 
             return (
               <Timeline.Item
-                key={`${index}`}
+                key={`item_${index}`}
                 dot={<i className="material-icons t-14">{icon}</i>}
                 color={color}
               >
-                {item.object.type === "alert" ? (
+                {item.object_type === "alert" ? (
                   <ActivityLogCollapsible item={item} />
-                ) : item.object.type === "email" ? (
+                ) : item.object_type === "email" ? (
                   <ActivityLogEmail item={item} />
-                ) : item.object.changes && item.object.changes.length === 0 ? (
+                ) : item.changes && item.changes.length === 0 ? (
                   <ActivityLogSimple item={item} />
                 ) : (
                   <ActivityLogCollapsible item={item} />
@@ -351,4 +350,4 @@ const AuditContent = props => {
   );
 };
 
-export default AuditListTabs;
+export default ServerlessAuditListTabs;

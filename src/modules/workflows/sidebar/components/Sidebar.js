@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
+import ServerlessAuditListTabs from "../../../../js/components/Navbar/ServerlessAuditLog";
 import AuditListTabs from "../../../../js/components/Navbar/audit_log";
 import {
   workflowDetailsActions,
@@ -284,13 +285,24 @@ class Sidebar extends Component {
               width={500}
               className="activity-log-drawer"
             >
-              <AuditListTabs
-                id={
-                  this.props.workflowDetailsHeader[
+              {process.env.REACT_APP_CERTA_SERVELESS_CALL ? (
+                <ServerlessAuditListTabs
+                  id={[
+                    ...this.props.workflowDetailsHeader[
+                      workflowIdFromDetailsToSidebar
+                    ].children.map(item => item.id),
                     workflowIdFromDetailsToSidebar
-                  ].id
-                }
-              />
+                  ]}
+                />
+              ) : (
+                <AuditListTabs
+                  id={
+                    this.props.workflowDetailsHeader[
+                      workflowIdFromDetailsToSidebar
+                    ].id
+                  }
+                />
+              )}
             </Drawer>
           ) : null}
           {!minimalUI &&

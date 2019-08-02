@@ -13,3 +13,5 @@ const isBuildEnv = process.env.NODE_ENV === "production";
 export const tenant = isBuildEnv ? getTenant() : DEFAULT_TENANT;
 export const siteOrigin = `${document.location.origin}`;
 export const apiBaseURL = `${apiOrigin}/api/v1/`;
+
+export const auditLogBaseURL = process.env.REACT_APP_AUDIT_LOG_BASE_URL;
