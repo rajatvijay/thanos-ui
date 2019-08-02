@@ -119,23 +119,15 @@ class Comments extends Component {
     this.setState({ message: toContentState(""), fileList: [] });
   };
 
-  selectStep = target => {
-    const payload = {
-      workflowId: target.workflow,
-      groupId: target.step_group_details.id,
-      stepId: target.step_details.id
-    };
-    this.props.gotoStep(payload); // select the step
+  selectStep = ({ groupId, stepId, fieldId = null }) => {
     this.props.toggleSidebar(); // closing the sidebar
-    this.props.selectActiveStep(
-      target.step_details.id,
-      target.step_group_details.id
-    ); // making the step active (this is not working for now)
-    // open comment sidebar for selected field or steip
-    if (get(target, "field_details.id", false)) {
-      this.props.toggleSidebar(target.field_details.id, "field");
+
+    this.props.selectActiveStep(groupId, stepId);
+
+    if (fieldId !== null) {
+      this.props.toggleSidebar(fieldId, "field");
     } else {
-      this.props.toggleSidebar(target.step_details.id, "step");
+      this.props.toggleSidebar(stepId, "step");
     }
   };
 
@@ -426,7 +418,7 @@ class Comments extends Component {
 
                 return (
                   <div
-                    key={`${index}`}
+                    key={`${c.object_id}`}
                     style={{
                       height: "calc(100vh - 400px)",
                       overflowY: "scroll"
@@ -462,14 +454,18 @@ class Comments extends Component {
                                   type="right"
                                   className="small pd-left-sm pd-right-sm"
                                 />
-                                <Link
-                                  onClick={this.toggle}
-                                  to={`${history.location.pathname}?group=${
-                                    c.target.step_group
-                                  }&step=${c.target.step_details.id}`}
+                                <LinkToStep
+                                  groupId={c.target.step_group_details.id}
+                                  stepId={c.target.step_details.id}
+                                  fieldId={get(
+                                    c,
+                                    "target.field_details.id",
+                                    null
+                                  )}
+                                  onClick={this.selectStep}
                                 >
                                   {c.target.step_details.name}
-                                </Link>
+                                </LinkToStep>
                               </div>
                             </div>
                           ) : null}
@@ -572,7 +568,7 @@ class Comments extends Component {
                                       padding: "2px 0px 3px"
                                     }}
                                   >
-                                    <i class="anticon anticon-paper-clip" />
+                                    <i className="anticon anticon-paper-clip" />
                                     &nbsp;
                                     <a href={msg.attachment}>
                                       {attachment_text}
@@ -649,6 +645,39 @@ class Comments extends Component {
     );
   }
 }
+
+/**
+ * Simple wrapper component that creates a link to the step
+ * that we want to navigate to.
+ *
+ * @param groupId Group ID of denoted target
+ * @param stepId Step ID of denoted target
+ * @param fieldId (Optional) Field ID of denoted target
+ * @param children React child component(s)
+ * @param onClick Function that will be called upon click with params
+ * @returns {React.DetailedReactHTMLElement<any, HTMLElement>[]}
+ * @private
+ */
+const LinkToStep = React.memo(
+  ({ groupId, stepId, fieldId, children, onClick }) => {
+    return (
+      <StyledLinkToStep
+        onClick={onClick.bind(null, {
+          groupId,
+          stepId,
+          fieldId
+        })}
+      >
+        {children}
+      </StyledLinkToStep>
+    );
+  }
+);
+
+const StyledLinkToStep = styled.span`
+  color: #148cd6;
+  cursor: pointer;
+`;
 
 const StyledHeadContainer = styled.div`
   padding: 54px 45px 41px 45px;

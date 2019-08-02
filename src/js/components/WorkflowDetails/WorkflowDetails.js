@@ -415,7 +415,7 @@ class WorkflowDetails extends Component {
                       toggleSidebar={this.callBackCollapser}
                       addComment={this.addComment}
                       gotoStep={this.fetchStepData}
-                      selectActiveStep={this.selectActiveStep}
+                      selectActiveStep={this.handleUpdateOfActiveStep}
                       changeFlag={this.changeFlag}
                       changeIntegrationStatus={this.changeIntegrationStatus}
                       {...this.props}
