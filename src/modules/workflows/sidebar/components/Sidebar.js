@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
-import ServerlessAuditListTabs from "../../../../js/components/Navbar/ServerlessAuditLog";
+import ServerlessAuditListTabs from "../../../../js/components/Navbar/ServerlessAuditListTabs";
 import AuditListTabs from "../../../../js/components/Navbar/audit_log";
 import {
   workflowDetailsActions,
