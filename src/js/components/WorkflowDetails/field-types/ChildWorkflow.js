@@ -1003,7 +1003,7 @@ class ChildWorkflowField2 extends Component {
     }
   };
 
-  findSorting() {
+  getSortingLabel() {
     const workflows = this.state.filteredChildWorkflow;
 
     if (
@@ -1015,6 +1015,18 @@ class ChildWorkflowField2 extends Component {
         ({ label }) => label === "sorting_primary_field"
       );
       return workflow ? workflow.display_label : "";
+    }
+  }
+
+  getSortingTooltipText() {
+    if (!this.state.sortingEnabled) {
+      return "";
+    }
+
+    if (this.state.sortOrderAsc) {
+      return `Low to high ${this.getSortingLabel()}`;
+    } else {
+      return `High to low ${this.getSortingLabel()}`;
     }
   }
 
@@ -1138,19 +1150,13 @@ class ChildWorkflowField2 extends Component {
                   : null}
 
                 {_.size(this.state.filteredChildWorkflow) ? (
-                  <Tooltip
-                    title={
-                      this.state.sortOrderAsc
-                        ? "High to low risk score"
-                        : "Low to high risk score"
-                    }
-                  >
+                  <Tooltip title={this.getSortingTooltipText()}>
                     <span
                       style={{ marginRight: 15, marginLeft: 15 }}
                       className="text-secondary text-anchor"
                       onClick={this.changeScoreOrder}
                     >
-                      {this.findSorting()}
+                      {this.getSortingLabel()}
                       {this.state.sortingEnabled ? (
                         <i className="material-icons t-14  text-middle">
                           {this.state.sortOrderAsc
