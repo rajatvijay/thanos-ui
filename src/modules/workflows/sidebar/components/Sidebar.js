@@ -141,18 +141,6 @@ class Sidebar extends Component {
       },
       onCancel() {}
     });
-    // if (
-    //   window.confirm(
-    //     intl.formatMessage({
-    //       id: "commonTextInstances.archiveConfirmText"
-    //     })
-    //   )
-    // ) {
-    //   const workflowId = this.props.workflowDetailsHeader[
-    //     this.props.workflowIdFromDetailsToSidebar
-    //   ].id;
-    //   this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
-    // }
   };
 
   // componentDidMount() {
