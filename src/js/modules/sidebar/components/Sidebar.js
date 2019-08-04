@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Select } from "antd";
+import { Layout, Select, Dropdown, Icon } from "antd";
 import TaskQueueList from "./TaskQueueList";
 import AlertList from "./AlertList";
 import { workflowFiltersActions, workflowKindActions } from "../../../actions";
@@ -9,7 +9,8 @@ import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
 
 const { Sider } = Layout;
-const Option = Select.Option;
+
+const SUB_MENU = ["TPI", "Donation Reciept", "BP", "All Other"];
 
 class Sidebar extends Component {
   state = {
@@ -45,8 +46,8 @@ class Sidebar extends Component {
     }
   }
 
-  handleChange = value => {
-    const id = parseInt(value, 10);
+  handleClick = ({ key }) => {
+    const id = parseInt(key, 10);
     const that = this;
     const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
       return item.id === id;
@@ -65,12 +66,88 @@ class Sidebar extends Component {
     this.props.dispatch(workflowKindActions.getStatusCount(tag));
   };
 
-  renderDropdownList = () => {
+  renderDropdownList = selectedKind => {
     const { workflowKind } = this.props.workflowKind;
     if (workflowKind) {
-      return workflowKind.map(function(item) {
-        return <Option key={`${item.id}`}>{item.name}</Option>;
-      });
+      return (
+        <div
+          onClick={this.handleClick}
+          className={css`
+            position: fixed;
+
+            width: 300px;
+            background-color: #0a3150;
+            max-height: 210px;
+            overflow: auto;
+
+            .ant-dropdown-menu-item > div {
+              color: rgba(255, 255, 255, 0.5);
+            }
+
+            .ant-dropdown-menu-item-active {
+              background-color: #104775;
+            }
+
+            .ant-dropdown-menu-item-active > div {
+              color: white !important;
+            }
+
+            .ant-dropdown,
+            .ant-dropdown-menu-item {
+              padding: 10px 18px;
+            }
+          `}
+        >
+          {workflowKind.map(function(item) {
+            return (
+              <>
+                <div
+                  // className={`${
+                  //   selectedKind && selectedKind.name === item.name
+                  //     ? "ant-dropdown-menu-item-active"
+                  //     : null
+                  // }`}
+                  style={{
+                    border: "none",
+                    color: "white",
+                    fontSize: 16
+                  }}
+                  key={`${item.id}`}
+                >
+                  <div
+                    className={css`
+                      height: 40px;
+                      color: white;
+                      width: 100%;
+                      font-size: 16px;
+                      padding: 8px 30px;
+                      cursor: pointer;
+                    `}
+                  >
+                    {item.name}
+                  </div>
+                  {SUB_MENU.map(menu => {
+                    return (
+                      <div
+                        className={css`
+                          height: 30px;
+                          color: rgb(255, 255, 255, 0.5);
+                          width: 100%;
+                          padding: 4px 30px 4px 45px;
+                          font-size: 14px;
+                          cursor: pointer;
+                        `}
+                      >
+                        {menu}
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            );
+          })}
+        </div>
+      );
     }
   };
 
@@ -132,18 +209,43 @@ class Sidebar extends Component {
         }}
       >
         <div
-          style={{
-            width: 300,
-            position: "fixed",
-            paddingBottom: 100,
-            height: "100%",
-            fontFamily: "Cabin",
-            minHeight: "110vh",
-            background: "#104775"
-          }}
+          className={css`
+            width: 300px;
+            padding-bottom: 100px;
+            height: 100%;
+            fontfamily: Cabin;
+            minheight: 110vh;
+            background: #104775;
+          `}
         >
           <div className="logo" />
-          <Select
+          <Dropdown
+            trigger={["click"]}
+            className={css`
+              background-color: #0a3150;
+              height: 65px;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              padding: 0px 28px;
+              font-size: 17px;
+              color: white;
+              align-items: center;
+              cursor: pointer;
+            `}
+            overlay={this.renderDropdownList(selectedKind)}
+          >
+            <div>
+              {selectedKind ? (
+                <>
+                  {selectedKind.name} <Icon type="down" />
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          </Dropdown>
+          {/* <Select
             dropdownStyle={{ position: "fixed" }}
             className={css`
               .ant-select-selection {
@@ -168,7 +270,7 @@ class Sidebar extends Component {
             onChange={this.handleChange}
           >
             {this.renderDropdownList()}
-          </Select>
+          </Select> */}
 
           <div
             style={{
