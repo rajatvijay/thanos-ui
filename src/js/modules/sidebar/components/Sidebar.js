@@ -5,12 +5,36 @@ import AlertList from "./AlertList";
 import { workflowFiltersActions, workflowKindActions } from "../../../actions";
 import { connect } from "react-redux";
 import { css } from "emotion";
+import styled from "@emotion/styled";
 import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
 
 const { Sider } = Layout;
 
 const SUB_MENU = ["TPI", "Donation Reciept", "BP", "All Other"];
+
+const FiltersHeading = styled.div`
+  height: 40;
+  color: white;
+  width: 100%;
+  fontsize: 16;
+  padding: 8px 28px;
+  cursor: pointer;
+  &:hover {
+    background-color: #104775;
+  }
+`;
+const SubMenuHeading = styled.div`
+  height: 30px;
+  color: rgb(255, 255, 255, 0.5);
+  width: 100%;
+  padding: 7px 30px 4px 45px;
+  font-size: 14px;
+  cursor: pointer;
+  &:hover {
+    color: #158bd6;
+  }
+`;
 
 class Sidebar extends Component {
   state = {
@@ -46,18 +70,19 @@ class Sidebar extends Component {
     }
   }
 
-  handleClick = ({ key }) => {
-    const id = parseInt(key, 10);
-    const that = this;
-    const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
-      return item.id === id;
-    });
+  handleClick = value => {
+    console.log(value);
+    // const id = parseInt(value, 10);
+    // const that = this;
+    // const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
+    //   return item.id === id;
+    // });
 
-    this.setState({ value: id });
-    const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
-    this.props.dispatch(workflowFiltersActions.setFilters(payload));
-    this.props.dispatch(workflowKindActions.setValue(metaValue));
-    that.fetchGroupData(metaValue.tag);
+    // this.setState({ value: id });
+    // const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
+    // this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    // this.props.dispatch(workflowKindActions.setValue(metaValue));
+    // that.fetchGroupData(metaValue.tag);
   };
 
   fetchGroupData = tag => {
@@ -102,11 +127,6 @@ class Sidebar extends Component {
             return (
               <>
                 <div
-                  // className={`${
-                  //   selectedKind && selectedKind.name === item.name
-                  //     ? "ant-dropdown-menu-item-active"
-                  //     : null
-                  // }`}
                   style={{
                     border: "none",
                     color: "white",
@@ -114,33 +134,17 @@ class Sidebar extends Component {
                   }}
                   key={`${item.id}`}
                 >
-                  <div
-                    className={css`
-                      height: 40px;
-                      color: white;
-                      width: 100%;
-                      font-size: 16px;
-                      padding: 8px 30px;
-                      cursor: pointer;
-                    `}
+                  <FiltersHeading
+                    className={`${
+                      selectedKind && selectedKind.name === item.name
+                        ? "ant-dropdown-menu-item-active"
+                        : null
+                    }`}
                   >
                     {item.name}
-                  </div>
+                  </FiltersHeading>
                   {SUB_MENU.map(menu => {
-                    return (
-                      <div
-                        className={css`
-                          height: 30px;
-                          color: rgb(255, 255, 255, 0.5);
-                          width: 100%;
-                          padding: 4px 30px 4px 45px;
-                          font-size: 14px;
-                          cursor: pointer;
-                        `}
-                      >
-                        {menu}
-                      </div>
-                    );
+                    return <SubMenuHeading>{menu}</SubMenuHeading>;
                   })}
                 </div>
               </>
