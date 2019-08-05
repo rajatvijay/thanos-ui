@@ -39,8 +39,9 @@ const SubMenuHeading = styled.div`
 class Sidebar extends Component {
   state = {
     activeFilter: [],
-    parent: null,
-    collapse: true
+    selectedSubHeading: null
+    // parent: null,
+    // collapse: true
   };
 
   componentDidMount() {
@@ -92,6 +93,7 @@ class Sidebar extends Component {
   };
 
   renderDropdownList = selectedKind => {
+    const { selectedSubHeading } = this.state;
     const { workflowKind } = this.props.workflowKind;
     if (workflowKind) {
       return (
@@ -144,7 +146,15 @@ class Sidebar extends Component {
                     {item.name}
                   </FiltersHeading>
                   {SUB_MENU.map(menu => {
-                    return <SubMenuHeading>{menu}</SubMenuHeading>;
+                    return (
+                      <SubMenuHeading>
+                        {selectedSubHeading === menu ? (
+                          <div>dadadsds</div>
+                        ) : (
+                          menu
+                        )}
+                      </SubMenuHeading>
+                    );
                   })}
                 </div>
               </>
