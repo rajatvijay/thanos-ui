@@ -26,6 +26,7 @@ export const workflowDetailsActions = {
   getById,
   getStepGroup,
   getStepFields,
+  getStepFieldsTimer,
   getComment,
   getStepVersionFields,
   setCurrentStepId,
@@ -111,6 +112,71 @@ function getStepGroup(id, isActive) {
   function failure(error) {
     return { type: workflowDetailsConstants.GET_STEPGROUPS_FAILURE, error };
   }
+}
+let TIME_IN_MS = 2000;
+
+function getStepFieldsTimer(step) {
+  const workflowId = step.workflowId;
+  const groupId = step.groupId;
+  const stepId = step.stepId;
+
+  console.log("here are steps", step);
+  if (!workflowId || !groupId || !stepId) {
+    Sentry.captureException(
+      new Error(`Get steps field called ${JSON.stringify(step)}`)
+    );
+    return () => {};
+  }
+  return dispatch => {
+    if (!step.doNotRefresh) {
+      dispatch(request(step));
+    }
+
+    workflowDetailsService
+      .getStepFields(step)
+      .then(stepFields => {
+        if (
+          stepFields.definition.available_user_tags &&
+          stepFields.definition.available_user_tags.some(
+            item => item === "Assignee"
+          )
+        ) {
+          dispatch(stepBodyActions.getAssignedUser(step.stepId));
+        }
+        setTimeout(function() {
+          if (status_code === "fetching") {
+            TIME_IN_MS *= 2;
+            if (TIME_IN_MS === 32000) {
+              return;
+            }
+            getStepFieldsTimer({ workflowId, groupId, stepId });
+          }
+          return;
+        }, TIME_IN_MS);
+        // console.log("fields", stepFields);
+        return dispatch(success({ ...stepFields }));
+      })
+      .catch(e => {
+        dispatch(failure(e, step));
+      });
+  };
+
+  function request(step) {
+    return { type: workflowStepConstants.GET_STEPFIELDS_REQUEST, step };
+  }
+  function success(stepFields, step) {
+    return {
+      type: workflowStepConstants.GET_STEPFIELDS_SUCCESS,
+      stepFields,
+      step
+    };
+  }
+  function failure(error, step) {
+    return { type: workflowStepConstants.GET_STEPFIELDS_FAILURE, error, step };
+  }
+  // return setTimeout(function() {
+  //   console.log("working");
+  // }, 3000);
 }
 
 //Get workflow step fileds data.
