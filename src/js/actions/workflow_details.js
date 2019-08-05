@@ -143,16 +143,16 @@ function getStepFieldsTimer(step) {
         ) {
           dispatch(stepBodyActions.getAssignedUser(step.stepId));
         }
-        setTimeout(function() {
-          if (status_code === "fetching") {
-            TIME_IN_MS *= 2;
-            if (TIME_IN_MS === 32000) {
-              return;
-            }
-            getStepFieldsTimer({ workflowId, groupId, stepId });
-          }
-          return;
-        }, TIME_IN_MS);
+        // setTimeout(function() {
+        //   if (status_code === "fetching") {
+        //     TIME_IN_MS *= 2;
+        //     if (TIME_IN_MS === 32000) {
+        //       return;
+        //     }
+        //     getStepFieldsTimer({ workflowId, groupId, stepId });
+        //   }
+        //   return;
+        // }, TIME_IN_MS);
         // console.log("fields", stepFields);
         return dispatch(success({ ...stepFields }));
       })
