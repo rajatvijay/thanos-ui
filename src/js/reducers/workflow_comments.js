@@ -27,7 +27,7 @@ export function workflowComments(state = {}, action) {
     case workflowCommentsConstants.ADD_COMMENTS_SUCCESS:
       return {
         adding_comment: false,
-        data: action.data
+        data: action.data || action.response
       };
     case workflowCommentsConstants.ADD_COMMENTS_FAILURE:
       return {
