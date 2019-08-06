@@ -34,7 +34,12 @@ export const WorkflowHeader = props => {
   const { workflow, isEmbedded } = props;
 
   const headerData = (
-    <Row type="flex" align="middle" className="lc-card-head">
+    <Row
+      type="flex"
+      align="middle"
+      className="lc-card-head"
+      style={{ padding: "0px 12px 0 12px" }}
+    >
       {props.isEmbedded ? (
         <Col span={1} className="text-left">
           <Checkbox
@@ -61,11 +66,11 @@ export const WorkflowHeader = props => {
         </Col>
       ) : null}
 
-      <Col span={isEmbedded ? 7 : 8} className="text-left ">
+      <Col span={isEmbedded ? 5 : 6} className="text-left ">
         <HeaderTitle {...props} />
       </Col>
 
-      <Col span={isEmbedded ? 4 : 6}>
+      <Col span={isEmbedded ? 6 : 8}>
         <GetMergedData {...props} />
       </Col>
 
@@ -426,7 +431,8 @@ export class GetMergedData extends React.Component {
               maxWidth: "100%",
               whiteSpace: "normal",
               wordBreak: "break-word",
-              overflow: "hidden"
+              overflow: "hidden",
+              whiteSpace: "nowrap"
             }}
           >
             <span className="t-cap">
