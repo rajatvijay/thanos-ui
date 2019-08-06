@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip, notification } from "antd";
 import _ from "lodash";
 import { authHeader } from "../../_helpers";
 import Moment from "react-moment";
@@ -8,9 +8,17 @@ import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
 import { apiBaseURL } from "../../../config";
+import { userUtilities } from "../../utils/user";
 
 const TabPane = Tabs.TabPane;
 
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
 class AuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
     edits: [
@@ -142,9 +150,23 @@ class AuditList extends Component {
     };
 
     fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(body => {
-        this.appendData(body);
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 403 || response.status === 401) {
+            userUtilities.postLogoutAction({ addNextURL: true });
+          }
+          throw Error(response.statusText);
+        } else {
+          response.json().then(data => {
+            this.appendData(data);
+          });
+        }
+      })
+      .catch(err => {
+        openNotificationWithIcon({
+          type: "error",
+          message: "Error in getting activity logs!"
+        });
       });
   };
 
