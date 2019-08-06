@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
+import {
+  Collapse,
+  Divider,
+  Drawer,
+  Dropdown,
+  Icon,
+  Layout,
+  Menu,
+  Modal
+} from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import ServerlessAuditListTabs from "../../../../js/components/Navbar/ServerlessAuditListTabs";
@@ -15,6 +24,7 @@ import LCData from "./LCData";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
+const confirm = Modal.confirm;
 
 class Sidebar extends Component {
   constructor(props) {
@@ -111,19 +121,26 @@ class Sidebar extends Component {
   };
 
   archiveWorkflow = () => {
-    const intl = this.props.intl;
-    if (
-      window.confirm(
-        intl.formatMessage({
-          id: "commonTextInstances.archiveConfirmText"
-        })
-      )
-    ) {
-      const workflowId = this.props.workflowDetailsHeader[
-        this.props.workflowIdFromDetailsToSidebar
-      ].id;
-      this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
-    }
+    const {
+      intl,
+      dispatch,
+      workflowDetailsHeader,
+      workflowIdFromDetailsToSidebar
+    } = this.props;
+    confirm({
+      title: intl.formatMessage({
+        id: "commonTextInstances.archiveConfirmText"
+      }),
+      content: intl.formatMessage({
+        id: "commonTextInstances.archiveConfirmContent"
+      }),
+      onOk() {
+        const workflowId =
+          workflowDetailsHeader[workflowIdFromDetailsToSidebar].id;
+        dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
+      },
+      onCancel() {}
+    });
   };
 
   // componentDidMount() {
