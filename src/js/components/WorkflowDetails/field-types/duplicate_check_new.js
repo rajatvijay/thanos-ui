@@ -41,54 +41,47 @@ class DuplicateCheckComp extends Component {
   };
 
   componentDidMount = () => {
-    this.getDuplicateWorkflow();
+    if (this.props.field.integration_json.status_code !== "fetching") {
+      this.getDuplicateWorkflow();
+    }
     if (
       this.props.currentStepFields &&
-      this.props.currentStepFields.currentStepFields
+      this.props.stepData &&
+      this.props.stepData.id &&
+      this.props.currentStepFields[this.props.stepData.id].currentStepFields
     ) {
       const {
         step_group: groupId,
         workflow: workflowId,
         id: stepId
-      } = this.props.currentStepFields.currentStepFields;
+      } = this.props.currentStepFields[
+        this.props.stepData.id
+      ].currentStepFields;
       this.props.dispatch(
-        workflowDetailsActions.getStepFields({
-          workflowId,
-          groupId,
-          stepId
-        })
+        workflowDetailsActions.getStepFields(
+          {
+            workflowId,
+            groupId,
+            stepId
+          },
+          true,
+          this.props.field.id
+        )
       );
     }
   };
 
-  componentDidUpdate = () => {
-    if (this.props.field.integration_json.status_code === "fetching") {
-      const {
-        step_group: groupId,
-        workflow: workflowId,
-        id: stepId
-      } = this.props.currentStepFields.currentStepFields;
-      this.props.dispatch(
-        workflowDetailsActions.getStepFields({
-          workflowId,
-          groupId,
-          stepId
-        })
-      );
-    }
-  };
-
-  componentWillReceiveProps = nextProps => {
-    const that = this;
-
+  componentDidUpdate(previousProps) {
     if (
-      this.props.field.integration_json !== nextProps.field.integration_json
+      this.props.field.integration_json.status_code !==
+        previousProps.field.integration_json.status_code &&
+      this.props.field.integration_json.status_code !== "fetching"
     ) {
-      setTimeout(function() {
-        that.getDuplicateWorkflow();
-      }, 1000);
+      // setTimeout(() => {
+      this.getDuplicateWorkflow();
+      // }, 1000);
     }
-  };
+  }
 
   getDuplicateWorkflow = () => {
     if (
@@ -123,7 +116,8 @@ class DuplicateCheckComp extends Component {
         .then(body => {
           this.setState({
             childWorkflow: body.results,
-            fetching: false
+            fetching: false,
+            error: null
           });
         });
     } else {
