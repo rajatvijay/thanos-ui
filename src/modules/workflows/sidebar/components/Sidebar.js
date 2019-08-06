@@ -24,14 +24,8 @@ class Sidebar extends Component {
       selectedStep
     } = props;
     super(props);
-
     this.state = {
-      current:
-        Object.values(props.workflowDetailsHeader).length &&
-        props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-          ? props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
-              .label
-          : null,
+      current: this.getWorkflowStatus(props, workflowIdFromDetailsToSidebar),
       showSidebar: false,
       isWorkflowPDFModalVisible: false,
       groupId: selectedGroup,
@@ -42,6 +36,16 @@ class Sidebar extends Component {
 
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
+  };
+
+  getWorkflowStatus = (props, workflowIdFromDetailsToSidebar) => {
+    return Object.values(props.workflowDetailsHeader).length &&
+      props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+      ? props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
+          .label ||
+          props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
+            .kind_display
+      : null;
   };
 
   callBackCollapser = (object_id, content_type) => {
@@ -351,10 +355,7 @@ class Sidebar extends Component {
 
                 <LCData
                   lcData={[...lc_data].splice(0, 3)}
-                  status={
-                    workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
-                      .label
-                  }
+                  status={this.state.current}
                 />
               </div>
             )}
