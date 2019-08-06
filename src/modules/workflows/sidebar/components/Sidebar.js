@@ -34,7 +34,7 @@ class Sidebar extends Component {
     } = props;
     super(props);
     this.state = {
-      current: this.getWorkflowStatus(props, workflowIdFromDetailsToSidebar),
+      current: this.getWorkflowStatus(workflowIdFromDetailsToSidebar),
       showSidebar: false,
       isWorkflowPDFModalVisible: false,
       groupId: selectedGroup,
@@ -47,13 +47,13 @@ class Sidebar extends Component {
     this.setState({ showSidebar: !this.state.showSidebar });
   };
 
-  getWorkflowStatus = (props, workflowIdFromDetailsToSidebar) => {
-    return Object.values(props.workflowDetailsHeader).length &&
-      props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-      ? props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
+  getWorkflowStatus = workflowIdFromDetailsToSidebar => {
+    return Object.values(this.props.workflowDetailsHeader).length &&
+      this.props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+      ? this.props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
           .label ||
-          props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
-            .kind_display
+          this.props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+            .status.kind_display
       : null;
   };
 
