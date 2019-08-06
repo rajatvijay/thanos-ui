@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
+import {
+  Collapse,
+  Divider,
+  Drawer,
+  Dropdown,
+  Icon,
+  Layout,
+  Menu,
+  Tooltip
+} from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import ServerlessAuditListTabs from "../../../../js/components/Navbar/ServerlessAuditListTabs";
@@ -330,13 +339,34 @@ class Sidebar extends Component {
                     alignItems: "center"
                   }}
                 >
-                  <div>
-                    <span style={{ color: "black", fontSize: 24 }}>
-                      {
+                  <div
+                    style={{
+                      maxWidth: "calc(100% - 40px)",
+                      lineHeight: "normal"
+                    }}
+                  >
+                    <Tooltip
+                      title={
                         workflowDetailsHeader[workflowIdFromDetailsToSidebar]
                           .name
                       }
-                    </span>
+                    >
+                      <span
+                        style={{
+                          maxWidth: "100%",
+                          color: "black",
+                          fontSize: 24,
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          display: "inline-block"
+                        }}
+                      >
+                        {
+                          workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+                            .name
+                        }
+                      </span>
+                    </Tooltip>
                     <br />
                     {this.renderParent()}
                   </div>
