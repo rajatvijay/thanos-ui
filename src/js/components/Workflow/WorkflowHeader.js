@@ -284,7 +284,7 @@ class HeaderOptions extends React.Component {
       this.props.workflow.status.kind_display;
 
     const status = (
-      <Tooltip title={statusLabel}>
+      <Tooltip title={statusLabel} placement="topRight">
         <div className="pd-left-sm status-text text-black t-12 text-right text-ellipsis">
           {statusLabel}
         </div>
