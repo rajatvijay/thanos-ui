@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
+import { injectIntl, FormattedMessage } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
 import { Dropdown, Icon, Input, Menu, notification, Tooltip } from "antd";
 import SelectLanguage from "./SelectLanguage";
@@ -245,7 +245,7 @@ class Header extends Component {
                     key="logout"
                     onClick={e => this.onLogout(e, "key")}
                   >
-                    Logout
+                    <FormattedMessage id={"loginPageInstances.logoutText"} />
                   </Menu.Item>
                 </Menu>
               }

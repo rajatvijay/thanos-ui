@@ -20,6 +20,7 @@ export default {
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
       createNewWorkflow: "Create new",
+      filterBy: "Filter By",
       advancedFilter: "Advanced filter",
       selectField: "Select Field",
       pleaseSelectField: "Please select field",
@@ -31,6 +32,7 @@ export default {
         contains: "Contains",
         not_contains: "Does not contain"
       },
+      advancedFilterMandatory: "Please choose all three fields",
       inputValue: "Input value",
       selectOperator: "Select operator",
       addFilterButtonText: "Add filter",
@@ -79,7 +81,9 @@ export default {
       oneTimePassword: "One time password",
       archiveConfirmText: "Are you sure you want to archive this workflow?",
       yes: "Yes",
-      no: "No"
+      no: "No",
+      clear: "Clear",
+      apply: "Apply"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -153,6 +157,7 @@ export default {
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
       createNewWorkflow: "Crear nuevo",
+      filterBy: "Filtrado Por",
       advancedFilter: "Filtro avanzado",
       selectField: "Seleccionar campo",
       pleaseSelectField: "Seleccionar el campo",
@@ -164,6 +169,7 @@ export default {
         contains: "Contiene",
         not_contains: "No contiene"
       },
+      advancedFilterMandatory: "Por favor elija los tres campos",
       inputValue: "Valor de entrada",
       selectOperator: "Seleccionar operador",
       addFilterButtonText: "Añadir filtro",
@@ -212,7 +218,9 @@ export default {
       oneTimePassword: "Contraseña de una sola vez",
       archiveConfirmText: "¿Seguro que quieres archivar este flujo de trabajo?",
       yes: "Sí",
-      no: "No"
+      no: "No",
+      clear: "Limpiar",
+      apply: "Aplicar"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por ",
@@ -300,6 +308,7 @@ export default {
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
       createNewWorkflow: "Créer un nouveau",
+      filterBy: "Filtrer Pary",
       advancedFilter: "Filtre avancé",
       selectField: "Choisir un champ",
       pleaseSelectField: "Veuillez sélectionner un champ",
@@ -311,6 +320,7 @@ export default {
         contains: "Contient",
         not_contains: "Ne contient pas"
       },
+      advancedFilterMandatory: "Veuillez choisir les trois champs",
       inputValue: "Valeur d'entrée",
       selectOperator: "Choisir un opérateur",
       addFilterButtonText: "Ajouter un filtre",
@@ -361,7 +371,9 @@ export default {
       archiveConfirmText:
         "Souhaitez-vous vraiment archiver ce flux de travaux ?",
       yes: "Oui",
-      no: "Non"
+      no: "Non",
+      clear: "Nettoyer",
+      apply: "Appliquer"
     },
     stepBodyFormInstances: {
       submittedBy: "Envoyé par ",
