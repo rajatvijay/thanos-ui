@@ -7,6 +7,7 @@ import moment from "moment";
 import { FormattedMessage } from "react-intl";
 import UserWorkflow from "./user-workflow";
 import WorkflowItem from "./WorkflowItem";
+import ChecklistModal from "./ChecklistModal";
 
 const { Content } = Layout;
 const PAGE_SIZE = 20;
@@ -152,6 +153,7 @@ class WorkflowList extends Component {
           }}
           className="workflow-list-wrapper"
         >
+          <ChecklistModal />
           {data.workflow && data.workflow.length > 0 ? (
             <div>
               <div
