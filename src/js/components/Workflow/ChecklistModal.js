@@ -1,21 +1,20 @@
 import React from "react";
-import { Modal, Layout, Checkbox, Button } from "antd";
+import { Modal, Checkbox, Button } from "antd";
 import { connect } from "react-redux";
-import _ from "lodash";
 import { css } from "emotion";
 import { withRouter } from "react-router-dom";
 import { authHeader } from "../../_helpers";
-
-const { Content } = Layout;
+import { get as lodashObjectGet, set as lodashObjectSet } from "lodash";
 
 class ChecklistModal extends React.Component {
   state = {
+    // TODO: Add a loading key and loader on the button
     visible: false,
-    workflowData: null,
-    parentWorkflow: [],
-    childWorkflow: {},
-    staticWorkflow: []
+    pdfConfig: null
   };
+
+  // To hold the user selection not the checkbox status
+  userSelection = {};
 
   componentDidMount = () => {
     this.fetchWorkflowDetails();
@@ -25,80 +24,48 @@ class ChecklistModal extends React.Component {
   };
 
   fetchWorkflowDetails = () => {
+    // TODO: Move this into a service
+    // TODO: In the error case, show a placeholder UI
     fetch(
       "https://af3e2827-dd97-40a5-bb17-befe64b64f54.mock.pstmn.io/api/v1/workflow/pdf/config/2133/?trigger_step=step_tag"
     )
       .then(response => response.json())
       .then(workflow => {
         this.setState({
-          workflowData: workflow
+          pdfConfig: workflow
         });
       });
   };
 
-  onSelectWorkflow = (e, step, workflowName) => {
-    const checked = e.target.checked;
-    const value = step.value;
-    if (checked && workflowName !== "childWorkflow") {
-      this.setState({
-        [workflowName]: [...this.state[workflowName], value]
-      });
-    } else if (checked && workflowName === "childWorkflow") {
-      if ([workflowName].length) {
-        this.setState({
-          [workflowName]: {
-            ...this.state[workflowName],
-            [value]: [value]
-          }
-        });
-      } else {
-        this.setState({
-          [workflowName]: {
-            ...this.state[workflowName],
-            [value]: [...this.state[workflowName][value], [value]]
-          }
-        });
-      }
-    } else if (!checked && workflowName === "childWorkflow") {
-      this.setState({
-        [workflowName]: {
-          ...this.state[workflowName],
-          [this.state[workflowName][value]]: [
-            ...this.state[workflowName][value].filter(function(child) {
-              return child !== step.value;
-            })
-          ]
-        }
-      });
-      if (Object.values(this.state[workflowName][value])) {
-        this.setState({
-          [workflowName]: { ...this.state[workflowName][value], undefined } // to be modified for deletion of key having empty array
-        });
-      }
+  getUserSelectionObjectPath = (parentTag, workflowType) => {
+    if (["PARENT_WORKFLOW", "STATIC_SECTIONS"].includes(workflowType)) {
+      return parentTag;
     } else {
-      this.setState({
-        [workflowName]: this.state[workflowName].filter(function(parent) {
-          return parent !== step.value;
-        })
-      });
+      return `childWorkflow.${parentTag}`;
     }
   };
 
-  calcTopPos = () => {
-    const { list } = this.props.expandedWorkflows;
-    const index = list.indexOf(this.props.workflow);
-    const style = {
-      left: "21vw",
-      margin: 0,
-      top: "calc((100vh - 600px) / 2)"
-    };
+  onSelectWorkflow = (e, tag, parentTag, workflowType) => {
+    const checked = e.target.checked;
+    const path = this.getUserSelectionObjectPath(parentTag, workflowType);
 
-    if (index > -1) {
-      const topPosition = (600 - index * 120).toString() + "px";
-      style.top = `calc((100vh - ${topPosition}) / 2)`;
+    if (checked) {
+      // Add
+      lodashObjectSet(this.userSelection, path, [
+        ...lodashObjectGet(this.userSelection, path, []),
+        tag
+      ]);
+    } else {
+      // Remove
+      lodashObjectSet(
+        this.userSelection,
+        path,
+        lodashObjectGet(this.userSelection, path, []).filter(
+          step => step !== tag
+        )
+      );
     }
-
-    return style;
+    console.log(this.userSelection);
   };
 
   handleOk = e => {
@@ -113,40 +80,43 @@ class ChecklistModal extends React.Component {
     });
   };
 
-  submit = () => {
-    const { parentWorkflow, staticWorkflow } = this.state;
+  handleSubmit = () => {
+    const { condfigId, workflowId } = this.props;
     const requestOptions = {
       method: "POST",
       headers: authHeader.post(),
       body: JSON.stringify({
-        config_id: 863,
-        workflow_id: 28157,
-        parent_steps_to_print: parentWorkflow,
-        child_steps_to_print: {
-          "grey-list": ["grey_list_information"]
-        },
-        static_sections: staticWorkflow,
+        config_id: condfigId || 863,
+        workflow_id: workflowId || 28157,
+        parent_steps_to_print: this.userSelection.parentWorkflow,
+        child_steps_to_print: this.userSelection.childWorkflow,
+        static_sections: this.userSelection.staticSections,
+
+        // TODO: Add checkboxes for them too (do this at the very end)
         include_flags: true,
         include_comments: true,
         include_archived_related_workflows: false
       })
     };
 
+    // TODO: Move this into a service
     fetch(
       "https://af3e2827-dd97-40a5-bb17-befe64b64f54.mock.pstmn.io/api/v1/workflow/pdf/print/",
       requestOptions
     )
       .then(function(response) {
         console.log(response);
+        // TODO: close modal on success, show notitifcation once successfull
       })
       .catch(function(error) {
+        // TODO: Don't close the modal, but shoe the notification for error
         console.log(error);
       });
   };
 
-  renderParentWorkflow = () => {
-    const { workflowData } = this.state;
-    return workflowData.results[0].parent_workflows.steps.map((step, key) => {
+  renderParentWorkflow = steps => {
+    if (!steps) return null;
+    return steps.map((step, key) => {
       return (
         <div key={key}>
           <Checkbox
@@ -155,7 +125,14 @@ class ChecklistModal extends React.Component {
               margin-left: 15px;
               margin-top: 3px;
             `}
-            onChange={e => this.onSelectWorkflow(e, step, "parentWorkflow")}
+            onChange={event =>
+              this.onSelectWorkflow(
+                event,
+                step.value,
+                "parentWorkflow",
+                "PARENT_WORKFLOW"
+              )
+            }
           >
             {step.label}
           </Checkbox>
@@ -164,9 +141,9 @@ class ChecklistModal extends React.Component {
     });
   };
 
-  renderChildWorkflow = () => {
-    const { workflowData } = this.state;
-    return workflowData.results[0].child_workflows.map((workflow, key) => {
+  renderChildWorkflow = workflows => {
+    if (!workflows) return null;
+    return workflows.map((workflow, key) => {
       return workflow.steps.map(step => (
         <div
           key={key}
@@ -181,7 +158,14 @@ class ChecklistModal extends React.Component {
               margin-left: 15px;
               margin-top: 3px;
             `}
-            onChange={e => this.onSelectWorkflow(e, step, "childWorkflow")}
+            onChange={event =>
+              this.onSelectWorkflow(
+                event,
+                step.value,
+                workflow.value,
+                "CHILD_WORKFLOW"
+              )
+            }
           >
             {step.label}
           </Checkbox>
@@ -190,9 +174,9 @@ class ChecklistModal extends React.Component {
     });
   };
 
-  renderStaticWorkflow = () => {
-    const { workflowData } = this.state;
-    return workflowData.results[0].extra_sections.map((section, key) => (
+  renderStaticWorkflow = sections => {
+    if (!sections) return null;
+    return sections.map((section, key) => (
       <div key={key}>
         <Checkbox
           className={css`
@@ -200,7 +184,14 @@ class ChecklistModal extends React.Component {
             margin-left: 15px;
             margin-top: 3px;
           `}
-          onChange={e => this.onSelectWorkflow(e, section, "staticWorkflow")}
+          onChange={event =>
+            this.onSelectWorkflow(
+              event,
+              section.value,
+              "staticSections",
+              "STATIC_SECTIONS"
+            )
+          }
         >
           {section.label}
         </Checkbox>
@@ -208,22 +199,16 @@ class ChecklistModal extends React.Component {
     ));
   };
 
+  // TODO: Remove the useless/copied classes and styes
   render = () => {
-    const {
-      workflowData,
-      parentWorkflow,
-      childWorkflow,
-      staticWorkflow
-    } = this.state;
-    console.log(this.state.childWorkflow);
+    const { pdfConfig, visible } = this.state;
     return (
       <Modal
-        // style={this.calcTopPos()}
         footer={null}
         bodyStyle={{ padding: 0, maxHeight: 600 }}
         width="77vw"
         destroyOnClose={true}
-        visible={this.state.visible}
+        visible={visible}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         className="workflow-modal"
@@ -238,16 +223,12 @@ class ChecklistModal extends React.Component {
               <div className="printOnly">
                 <div style={{ margin: "0px 35px" }}>
                   <div className="text-metal">
-                    <br />
-                    <br />
-                    {workflowData ? (
+                    {pdfConfig ? (
                       <>
-                        <h2>
-                          {workflowData.results[0].parent_workflows.label}
-                        </h2>
-                        {workflowData.results[0].parent_workflows
-                          ? this.renderParentWorkflow()
-                          : null}
+                        <h2>{pdfConfig.results[0].parent_workflows.label}</h2>
+                        {this.renderParentWorkflow(
+                          pdfConfig.results[0].parent_workflows.steps
+                        )}
                         <div
                           className={css`
                             display: flex;
@@ -256,9 +237,9 @@ class ChecklistModal extends React.Component {
                             width: 100%;
                           `}
                         >
-                          {workflowData.results[0].child_workflows
-                            ? this.renderChildWorkflow()
-                            : null}
+                          {this.renderChildWorkflow(
+                            pdfConfig.results[0].child_workflows
+                          )}
                         </div>
                         <div
                           className={css`
@@ -266,58 +247,33 @@ class ChecklistModal extends React.Component {
                           `}
                         >
                           <h2>Static Section</h2>
-                          {workflowData.results[0].extra_sections
-                            ? this.renderStaticWorkflow()
-                            : null}
+                          {this.renderStaticWorkflow(
+                            pdfConfig.results[0].extra_sections
+                          )}
                         </div>
                         <Button
-                          disabled={
-                            !parentWorkflow.length &&
-                            !Object.keys(childWorkflow).length &&
-                            !staticWorkflow.length
-                          }
                           className={css`
                             margin-top: 30px;
                           `}
-                          onClick={() => this.submit()}
+                          onClick={this.handleSubmit}
                           type="primary"
                         >
                           SUBMIT
                         </Button>
                       </>
                     ) : null}
-                    <br />
-                    <br />
-                    <br />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        {/* <div
-          onClick={() => this.submit()}
-          style={{
-            width: "100%",
-            position: "absolute",
-            backgroundColor: " #148CD6",
-            textAlign: "center",
-            padding: "10px 0px",
-            bottom: 0,
-            zIndex: 1,
-            fontSize: 18,
-            color: "white",
-            cursor: "pointer"
-          }}
-        >
-          SUBMIT
-        </div> */}
       </Modal>
     );
   };
 }
 
+// TODO: Do not connect this component
 function mapPropsToState(state) {
   const { workflowChildren, expandedWorkflows, minimalUI } = state;
   return {
