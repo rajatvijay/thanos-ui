@@ -49,4 +49,8 @@ export const validateUploadFile = ({ file }) => {
       Your file size is ${formatBytes({ bytes: file.size })}.`
     };
   }
+
+  return {
+    valid: true
+  };
 };
