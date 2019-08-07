@@ -80,6 +80,8 @@ export default {
       enterOtp: "Enter the one time password to verify your account",
       oneTimePassword: "One time password",
       archiveConfirmText: "Are you sure you want to archive this workflow?",
+      archiveConfirmContent:
+        "Note : Archived workflows will no longer be visible in the system",
       yes: "Yes",
       no: "No",
       clear: "Clear",
@@ -217,6 +219,7 @@ export default {
         "Ingrese la contraseña de un solo uso para verificar su cuenta ",
       oneTimePassword: "Contraseña de una sola vez",
       archiveConfirmText: "¿Seguro que quieres archivar este flujo de trabajo?",
+      archiveConfirmContent: "",
       yes: "Sí",
       no: "No",
       clear: "Limpiar",
@@ -370,6 +373,7 @@ export default {
       oneTimePassword: "Mot de passe unique",
       archiveConfirmText:
         "Souhaitez-vous vraiment archiver ce flux de travaux ?",
+      archiveConfirmContent: "",
       yes: "Oui",
       no: "Non",
       clear: "Nettoyer",

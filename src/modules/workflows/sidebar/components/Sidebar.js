@@ -7,6 +7,7 @@ import {
   Icon,
   Layout,
   Menu,
+  Modal,
   Tooltip
 } from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
@@ -25,6 +26,7 @@ import LCData from "./LCData";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
+const confirm = Modal.confirm;
 
 class Sidebar extends Component {
   constructor(props) {
@@ -127,19 +129,26 @@ class Sidebar extends Component {
   };
 
   archiveWorkflow = () => {
-    const intl = this.props.intl;
-    if (
-      window.confirm(
-        intl.formatMessage({
-          id: "commonTextInstances.archiveConfirmText"
-        })
-      )
-    ) {
-      const workflowId = this.props.workflowDetailsHeader[
-        this.props.workflowIdFromDetailsToSidebar
-      ].id;
-      this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
-    }
+    const {
+      intl,
+      dispatch,
+      workflowDetailsHeader,
+      workflowIdFromDetailsToSidebar
+    } = this.props;
+    confirm({
+      title: intl.formatMessage({
+        id: "commonTextInstances.archiveConfirmText"
+      }),
+      content: intl.formatMessage({
+        id: "commonTextInstances.archiveConfirmContent"
+      }),
+      onOk() {
+        const workflowId =
+          workflowDetailsHeader[workflowIdFromDetailsToSidebar].id;
+        dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
+      },
+      onCancel() {}
+    });
   };
 
   // componentDidMount() {
