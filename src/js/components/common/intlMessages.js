@@ -109,7 +109,7 @@ export default {
         "Sorry! We were unable to find the workflow you requested.",
       noStepInWorkflow:
         "Dear user, forms are still being processed in the system. Please try again later.",
-      noWorkflowDetails: "Please try again or reload to get the result."
+      noWorkflowDetails: "Oops! Seems like some issue. Click below to retry"
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
