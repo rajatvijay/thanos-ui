@@ -19,6 +19,7 @@ import {
 } from "../../../../js/actions";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
 import Permissions from "../../../common/permissions/constants";
+import { Link } from "react-router-dom";
 
 import LCData from "./LCData";
 
@@ -27,14 +28,9 @@ const Panel = Collapse.Panel;
 
 class Sidebar extends Component {
   constructor(props) {
-    const {
-      workflowIdFromDetailsToSidebar,
-      selectedGroup,
-      selectedStep
-    } = props;
+    const { selectedGroup, selectedStep } = props;
     super(props);
     this.state = {
-      current: this.getWorkflowStatus(workflowIdFromDetailsToSidebar),
       showSidebar: false,
       isWorkflowPDFModalVisible: false,
       groupId: selectedGroup,
@@ -47,15 +43,22 @@ class Sidebar extends Component {
     this.setState({ showSidebar: !this.state.showSidebar });
   };
 
-  getWorkflowStatus = workflowIdFromDetailsToSidebar => {
-    return Object.values(this.props.workflowDetailsHeader).length &&
-      this.props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-      ? this.props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
-          .label ||
-          this.props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-            .status.kind_display
-      : null;
-  };
+  get workflowStatus() {
+    const {
+      workflowDetailsHeader,
+      workflowIdFromDetailsToSidebar
+    } = this.props;
+    try {
+      const workflowStatusFromDetails =
+        workflowDetailsHeader[workflowIdFromDetailsToSidebar].status;
+      return (
+        workflowStatusFromDetails.label ||
+        workflowStatusFromDetails.kind_display
+      );
+    } catch (e) {
+      return null;
+    }
+  }
 
   callBackCollapser = (object_id, content_type) => {
     this.state.loading_sidebar = true;
@@ -189,13 +192,15 @@ class Sidebar extends Component {
       workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family
         .length > 1
     ) {
+      const parentWorkflow =
+        workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+          .workflow_family[0];
       return (
-        <span style={{ color: "gray", fontSize: 12 }}>
-          {
-            workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-              .workflow_family[0].name
-          }
-        </span>
+        <Link to={`/workflows/instances/${parentWorkflow.id}`}>
+          <span style={{ color: "gray", fontSize: 12 }}>
+            {parentWorkflow.name}
+          </span>
+        </Link>
       );
     }
   };
@@ -345,6 +350,8 @@ class Sidebar extends Component {
                       lineHeight: "normal"
                     }}
                   >
+                    {this.renderParent()}
+                    <br />
                     <Tooltip
                       title={
                         workflowDetailsHeader[workflowIdFromDetailsToSidebar]
@@ -367,8 +374,6 @@ class Sidebar extends Component {
                         }
                       </span>
                     </Tooltip>
-                    <br />
-                    {this.renderParent()}
                   </div>
                   <Dropdown
                     overlay={workflowActionMenu}
@@ -385,7 +390,7 @@ class Sidebar extends Component {
 
                 <LCData
                   lcData={[...lc_data].splice(0, 3)}
-                  status={this.state.current}
+                  status={this.workflowStatus}
                 />
               </div>
             )}
