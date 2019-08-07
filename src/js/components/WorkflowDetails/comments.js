@@ -23,8 +23,6 @@ import { workflowFiltersService } from "../../services";
 import styled from "@emotion/styled";
 import { css } from "emotion";
 import { status_filters } from "./EventStatuses";
-import { Link } from "react-router-dom";
-import { history } from "../../_helpers";
 
 const { toString, toContentState } = Mention;
 

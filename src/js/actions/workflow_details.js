@@ -8,7 +8,6 @@ import {
 } from "../constants";
 import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
-import _ from "lodash";
 import { history } from "../_helpers";
 import { notification } from "antd";
 import * as Sentry from "@sentry/browser";
