@@ -7,6 +7,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { apiBaseURL } from "../../../../config";
+import WorkflowList from "../../Workflow/workflow-list";
 
 const FormItem = Form.Item;
 
@@ -108,7 +109,11 @@ class DuplicateCheckComp extends Component {
     workflow_ids = workflow_ids.join(",");
 
     if (_.size(workflow_ids)) {
-      const url = apiBaseURL + "workflows-list/?workflow_ids=" + workflow_ids;
+      const url =
+        apiBaseURL +
+        "workflows-list/?workflow_ids=" +
+        workflow_ids +
+        "&limit=100";
       this.setState({ fetching: true });
 
       fetch(url, requestOptions)
@@ -171,27 +176,24 @@ class DuplicateCheckComp extends Component {
           ) : (
             <div className="workflow-list">
               {this.state.childWorkflow && this.state.childWorkflow.length ? (
-                this.state.childWorkflow.map((workflow, index) => {
-                  return (
-                    <div className="workflow-list-item paper " key={`${index}`}>
-                      <div className="collapse-wrapper">
-                        <div className="Collapsible">
-                          <span className="Collapsible__trigger is-closed">
-                            <div className="ant-collapse-item ant-collapse-no-arrow lc-card">
-                              <WorkflowHeader
-                                workflow={workflow}
-                                link={true}
-                                kind={""}
-                                statusView={true}
-                                config={this.props.config}
-                              />
-                            </div>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
+                <WorkflowList
+                  isEmbedded={true}
+                  sortAscending={false}
+                  {...this.props}
+                  workflow={{ workflow: this.state.childWorkflow }}
+                  statusView={true}
+                  kind={""}
+                  sortingEnabled={false}
+                  workflowKind={""}
+                  fieldExtra={field.definition.extra || null}
+                  addComment={this.props.addComment}
+                  // showCommentIcon={true}
+                  // bulkActionWorkflowChecked={
+                  //   this.state.bulkActionWorkflowChecked
+                  // }
+                  disableGrouping={true}
+                  //handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
+                />
               ) : (
                 <div>No duplicates found</div>
               )}

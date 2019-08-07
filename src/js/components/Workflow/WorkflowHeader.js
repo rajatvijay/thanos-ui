@@ -40,7 +40,7 @@ export const WorkflowHeader = props => {
       className="lc-card-head"
       style={{ padding: "0px 12px 0 12px" }}
     >
-      {props.isEmbedded ? (
+      {props.isEmbedded && props.bulkActionWorkflowChecked ? (
         <Col span={1} className="text-left">
           <Checkbox
             checked={
