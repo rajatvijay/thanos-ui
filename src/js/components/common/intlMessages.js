@@ -53,6 +53,7 @@ export default {
       emailSent: "Email sent.",
       clickHere: "Click here",
       clickToLogin: "Click here to Login",
+      reloadWorkflowDetails: "Reload",
       addButton: "Add",
       removeButton: "Remove",
       search: "Search",
@@ -107,7 +108,8 @@ export default {
       workflowNotFound:
         "Sorry! We were unable to find the workflow you requested.",
       noStepInWorkflow:
-        "Dear user, forms are still being processed in the system. Please try again later."
+        "Dear user, forms are still being processed in the system. Please try again later.",
+      noWorkflowDetails: "Please try again or reload to get the result."
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",

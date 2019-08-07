@@ -1,16 +1,34 @@
 import React from "react";
-import { Modal, Checkbox, Button } from "antd";
-import { connect } from "react-redux";
+import { Modal, Checkbox, Button, Icon } from "antd";
 import { css } from "emotion";
-import { withRouter } from "react-router-dom";
 import { authHeader } from "../../_helpers";
 import { get as lodashObjectGet, set as lodashObjectSet } from "lodash";
+import {
+  submitWorkflows,
+  fetchWorkflowDetails
+} from "../../services/checklistModalApi";
+import { notification } from "antd";
+import { FormattedMessage } from "react-intl";
+
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
+const META_INFO = [
+  { value: "include_flags", label: "Flags" },
+  { value: "include_comments", label: "Comments" },
+  { value: "include_archived_related_workflows", label: "Related Worflow" }
+];
 
 class ChecklistModal extends React.Component {
   state = {
-    // TODO: Add a loading key and loader on the button
     visible: false,
-    pdfConfig: null
+    pdfConfig: null,
+    loading: false,
+    error: false
   };
 
   // To hold the user selection not the checkbox status
@@ -21,20 +39,6 @@ class ChecklistModal extends React.Component {
     this.setState({
       visible: true
     });
-  };
-
-  fetchWorkflowDetails = () => {
-    // TODO: Move this into a service
-    // TODO: In the error case, show a placeholder UI
-    fetch(
-      "https://af3e2827-dd97-40a5-bb17-befe64b64f54.mock.pstmn.io/api/v1/workflow/pdf/config/2133/?trigger_step=step_tag"
-    )
-      .then(response => response.json())
-      .then(workflow => {
-        this.setState({
-          pdfConfig: workflow
-        });
-      });
   };
 
   getUserSelectionObjectPath = (parentTag, workflowType) => {
@@ -68,6 +72,11 @@ class ChecklistModal extends React.Component {
     console.log(this.userSelection);
   };
 
+  onSelectMetaInformation = (e, tag) => {
+    const checked = e.target.checked;
+    this.userSelection[tag] = checked;
+  };
+
   handleOk = e => {
     this.setState({
       visible: false
@@ -80,7 +89,15 @@ class ChecklistModal extends React.Component {
     });
   };
 
+  handleLoadingStatus = () => {
+    const { loading } = this.state;
+    this.setState({
+      loading: !loading
+    });
+  };
+
   handleSubmit = () => {
+    this.handleLoadingStatus();
     const { condfigId, workflowId } = this.props;
     const requestOptions = {
       method: "POST",
@@ -91,26 +108,51 @@ class ChecklistModal extends React.Component {
         parent_steps_to_print: this.userSelection.parentWorkflow,
         child_steps_to_print: this.userSelection.childWorkflow,
         static_sections: this.userSelection.staticSections,
-
-        // TODO: Add checkboxes for them too (do this at the very end)
-        include_flags: true,
-        include_comments: true,
-        include_archived_related_workflows: false
+        include_flags: this.userSelection.include_flags || false,
+        include_comments: this.userSelection.include_comments || false,
+        include_archived_related_workflows:
+          this.userSelection.include_archived_related_workflows || false
       })
     };
 
-    // TODO: Move this into a service
-    fetch(
-      "https://af3e2827-dd97-40a5-bb17-befe64b64f54.mock.pstmn.io/api/v1/workflow/pdf/print/",
-      requestOptions
-    )
-      .then(function(response) {
-        console.log(response);
-        // TODO: close modal on success, show notitifcation once successfull
+    submitWorkflows(requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          return openNotificationWithIcon({
+            type: "error",
+            message: "Error in performing the action!"
+          });
+        } else {
+          this.handleCancel();
+          this.handleLoadingStatus();
+          return openNotificationWithIcon({
+            type: "success",
+            message:
+              "Your request has been submitted, action will be performed shortly."
+          });
+        }
       })
-      .catch(function(error) {
-        // TODO: Don't close the modal, but shoe the notification for error
-        console.log(error);
+      .catch(() => {
+        openNotificationWithIcon({
+          type: "error",
+          message: "Please try again later!"
+        });
+        this.handleLoadingStatus();
+      });
+  };
+
+  fetchWorkflowDetails = () => {
+    fetchWorkflowDetails()
+      .then(workflow => {
+        this.setState({
+          pdfConfig: workflow,
+          error: false
+        });
+      })
+      .catch(() => {
+        this.setState({
+          error: true
+        });
       });
   };
 
@@ -199,13 +241,55 @@ class ChecklistModal extends React.Component {
     ));
   };
 
-  // TODO: Remove the useless/copied classes and styes
+  renderMetaInformation = () => {
+    return META_INFO.map((field, key) => (
+      <div
+        className={css`
+          width: 33%;
+        `}
+        key={key}
+      >
+        <Checkbox
+          className={css`
+            font-size: 17px;
+            margin-left: 15px;
+            margin-top: 3px;
+          `}
+          onChange={event => this.onSelectMetaInformation(event, field.value)}
+        >
+          {field.label}
+        </Checkbox>
+      </div>
+    ));
+  };
+
+  renderFetchAgain = () => {
+    return (
+      <div className="mr-top-lg text-center text-bold text-metal">
+        <FormattedMessage id="errorMessageInstances.noWorkflowDetails" />
+        <div
+          className={css`
+            margin-top: 15px;
+            cursor: pointer;
+          `}
+          onClick={() => this.fetchWorkflowDetails()}
+        >
+          <FormattedMessage
+            className="mr-bottom-lg"
+            id="commonTextInstances.reloadWorkflowDetails"
+          />
+          <Icon type="reload" style={{ marginLeft: "5px" }} />
+        </div>
+      </div>
+    );
+  };
+
   render = () => {
-    const { pdfConfig, visible } = this.state;
+    const { pdfConfig, visible, loading, error } = this.state;
     return (
       <Modal
         footer={null}
-        bodyStyle={{ padding: 0, maxHeight: 600 }}
+        bodyStyle={{ padding: "30px 0px", maxHeight: 530, overflowY: "auto" }}
         width="77vw"
         destroyOnClose={true}
         visible={visible}
@@ -213,45 +297,66 @@ class ChecklistModal extends React.Component {
         onCancel={this.handleCancel}
         className="workflow-modal"
       >
-        <div style={{ maxHeight: 600, overflowY: "auto", borderRadius: 5 }}>
+        <div style={{ borderRadius: 5 }}>
           <div
             style={{
               background: "white"
             }}
           >
             <div>
-              <div className="printOnly">
+              {error ? (
+                this.renderFetchAgain()
+              ) : (
                 <div style={{ margin: "0px 35px" }}>
-                  <div className="text-metal">
-                    {pdfConfig ? (
-                      <>
-                        <h2>{pdfConfig.results[0].parent_workflows.label}</h2>
-                        {this.renderParentWorkflow(
-                          pdfConfig.results[0].parent_workflows.steps
+                  {pdfConfig ? (
+                    <>
+                      <h2>{pdfConfig.results[0].parent_workflows.label}</h2>
+                      {this.renderParentWorkflow(
+                        pdfConfig.results[0].parent_workflows.steps
+                      )}
+                      <div
+                        className={css`
+                          display: flex;
+                          flex-direction: row;
+                          margin-top: 30px;
+                          width: 100%;
+                        `}
+                      >
+                        {this.renderChildWorkflow(
+                          pdfConfig.results[0].child_workflows
                         )}
-                        <div
-                          className={css`
-                            display: flex;
-                            flex-direction: row;
-                            margin-top: 30px;
-                            width: 100%;
-                          `}
-                        >
-                          {this.renderChildWorkflow(
-                            pdfConfig.results[0].child_workflows
-                          )}
-                        </div>
-                        <div
-                          className={css`
-                            margin-top: 30px;
-                          `}
-                        >
-                          <h2>Static Section</h2>
-                          {this.renderStaticWorkflow(
-                            pdfConfig.results[0].extra_sections
-                          )}
-                        </div>
+                      </div>
+                      <div
+                        className={css`
+                          margin-top: 30px;
+                        `}
+                      >
+                        <h2>Static Section</h2>
+                        {this.renderStaticWorkflow(
+                          pdfConfig.results[0].extra_sections
+                        )}
+                      </div>
+                      <div
+                        className={css`
+                          margin-top: 30px;
+                          display: flex;
+                          width: 100%;
+                        `}
+                      >
+                        {this.renderMetaInformation()}
+                      </div>
+                      <div
+                        className={css`
+                          .ant-btn-primary:focus,
+                          .ant-btn-primary:hover,
+                          .ant-btn-primary:active {
+                            background-color: #025fb5;
+                            border-color: #025fb5;
+                          }
+                        `}
+                      >
                         <Button
+                          loading={loading}
                           className={css`
                             margin-top: 30px;
                           `}
@@ -260,11 +365,11 @@ class ChecklistModal extends React.Component {
                         >
                           SUBMIT
                         </Button>
-                      </>
-                    ) : null}
-                  </div>
+                      </div>
+                    </>
+                  ) : null}
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -273,14 +378,4 @@ class ChecklistModal extends React.Component {
   };
 }
 
-// TODO: Do not connect this component
-function mapPropsToState(state) {
-  const { workflowChildren, expandedWorkflows, minimalUI } = state;
-  return {
-    workflowChildren,
-    expandedWorkflows,
-    minimalUI
-  };
-}
-
-export default withRouter(connect(mapPropsToState)(ChecklistModal));
+export default ChecklistModal;
