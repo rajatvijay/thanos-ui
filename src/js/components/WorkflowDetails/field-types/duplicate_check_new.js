@@ -41,42 +41,62 @@ class DuplicateCheckComp extends Component {
   };
 
   componentDidMount = () => {
+    // console.log("status"this.props.field.integration_json);
     this.getDuplicateWorkflow();
+
     if (
       this.props.currentStepFields &&
       this.props.currentStepFields.currentStepFields
     ) {
-      const {
-        step_group: groupId,
-        workflow: workflowId,
-        id: stepId
-      } = this.props.currentStepFields.currentStepFields;
-      this.props.dispatch(
-        workflowDetailsActions.getStepFields({
-          workflowId,
-          groupId,
-          stepId
-        })
-      );
+      this.getStepFields();
+      // const {
+      //   step_group: groupId,
+      //   workflow: workflowId,
+      //   id: stepId
+      // } = this.props.currentStepFields.currentStepFields;
+      // this.props.dispatch(
+      //   workflowDetailsActions.getStepFields({
+      //     workflowId,
+      //     groupId,
+      //     stepId
+      //   })
+      // );
     }
   };
 
-  componentDidUpdate = () => {
-    if (this.props.field.integration_json.status_code === "fetching") {
-      const {
-        step_group: groupId,
-        workflow: workflowId,
-        id: stepId
-      } = this.props.currentStepFields.currentStepFields;
-      this.props.dispatch(
-        workflowDetailsActions.getStepFields({
-          workflowId,
-          groupId,
-          stepId
-        })
-      );
-    }
+  getStepFields = () => {
+    // console.log("curentStepfields", this.props.currentStepFields);
+
+    const {
+      step_group: groupId,
+      workflow: workflowId,
+      id: stepId
+    } = this.props.currentStepFields.currentStepFields;
+    this.props.dispatch(
+      workflowDetailsActions.getStepFieldsTimer({
+        workflowId,
+        groupId,
+        stepId
+      })
+    );
   };
+
+  // componentDidUpdate = () => {
+  // if (this.props.field.integration_json.status_code === "fetching") {
+  // const {
+  //   step_group: groupId,
+  //   workflow: workflowId,
+  //   id: stepId
+  // } = this.props.currentStepFields.currentStepFields;
+  // this.props.dispatch(
+  //   workflowDetailsActions.getStepFields({
+  //     workflowId,
+  //     groupId,
+  //     stepId
+  //   })
+  // );
+  // }
+  // };
 
   componentWillReceiveProps = nextProps => {
     const that = this;
