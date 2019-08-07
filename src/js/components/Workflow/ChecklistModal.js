@@ -6,7 +6,7 @@ import { get as lodashObjectGet, set as lodashObjectSet } from "lodash";
 import {
   submitWorkflows,
   fetchWorkflowDetails
-} from "../../services/checklistModalApi";
+} from "../../services/workflowPdfApi";
 import { notification } from "antd";
 import { FormattedMessage } from "react-intl";
 
@@ -50,7 +50,7 @@ class ChecklistModal extends React.Component {
   };
 
   onSelectWorkflow = (e, tag, parentTag, workflowType) => {
-    const checked = e.target.checked;
+    const { checked } = e.target;
     const path = this.getUserSelectionObjectPath(parentTag, workflowType);
 
     if (checked) {
@@ -73,7 +73,7 @@ class ChecklistModal extends React.Component {
   };
 
   onSelectMetaInformation = (e, tag) => {
-    const checked = e.target.checked;
+    const { checked } = e.target;
     this.userSelection[tag] = checked;
   };
 
@@ -89,15 +89,10 @@ class ChecklistModal extends React.Component {
     });
   };
 
-  handleLoadingStatus = () => {
-    const { loading } = this.state;
-    this.setState({
-      loading: !loading
-    });
-  };
+  setLoding = loading => this.setState({ loading });
 
   handleSubmit = () => {
-    this.handleLoadingStatus();
+    this.setLoding("true");
     const { condfigId, workflowId } = this.props;
     const requestOptions = {
       method: "POST",
@@ -108,10 +103,10 @@ class ChecklistModal extends React.Component {
         parent_steps_to_print: this.userSelection.parentWorkflow,
         child_steps_to_print: this.userSelection.childWorkflow,
         static_sections: this.userSelection.staticSections,
-        include_flags: this.userSelection.include_flags || false,
-        include_comments: this.userSelection.include_comments || false,
-        include_archived_related_workflows:
-          this.userSelection.include_archived_related_workflows || false
+        include_flags: !!this.userSelection.include_flags,
+        include_comments: !!this.userSelection.include_comments,
+        include_archived_related_workflows: !!this.userSelection
+          .include_archived_related_workflows
       })
     };
 
@@ -124,7 +119,7 @@ class ChecklistModal extends React.Component {
           });
         } else {
           this.handleCancel();
-          this.handleLoadingStatus();
+          this.setLoding("false");
           return openNotificationWithIcon({
             type: "success",
             message:
@@ -137,7 +132,7 @@ class ChecklistModal extends React.Component {
           type: "error",
           message: "Please try again later!"
         });
-        this.handleLoadingStatus();
+        this.setLoding("false");
       });
   };
 
@@ -263,7 +258,7 @@ class ChecklistModal extends React.Component {
     ));
   };
 
-  renderFetchAgain = () => {
+  renderFetchFailPlaceholder = () => {
     return (
       <div className="mr-top-lg text-center text-bold text-metal">
         <FormattedMessage id="errorMessageInstances.noWorkflowDetails" />
@@ -305,7 +300,7 @@ class ChecklistModal extends React.Component {
           >
             <div>
               {error ? (
-                this.renderFetchAgain()
+                this.renderFetchFailPlaceholder()
               ) : (
                 <div style={{ margin: "0px 35px" }}>
                   {pdfConfig ? (
