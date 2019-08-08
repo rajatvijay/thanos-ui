@@ -569,111 +569,114 @@ class StepBodyForm extends Component {
         onSubmit={this.handleSubmit}
         className="step-form"
         autoComplete="off"
-        style={{
-          padding: "29px 44px 27px 37px",
-          marginBottom: "100px"
-        }}
       >
-        <div>
-          {showFieldVersion ? (
-            <div className=" mr-bottom">
-              <div className="version-item">
-                <span className="float-right">
-                  <Tooltip placement="topRight" title={"Hide version"}>
-                    <span
-                      className="text-anchor"
-                      onClick={this.props.versionToggle}
-                    >
-                      <i className="material-icons t-14 text-middle text-light ">
-                        close
-                      </i>
-                    </span>
-                  </Tooltip>
-                </span>
-                <div className="text-medium mr-bottom-sm">
-                  Version submitted on{" "}
-                  <Moment format="MM/DD/YYYY">
-                    <b>
-                      {" "}
-                      {
-                        this.props.stepVersionFields.stepVersionFields
-                          .completed_at
-                      }
-                    </b>
-                  </Moment>{" "}
-                  {this.props.stepVersionFields.stepVersionFields
-                    .completed_by ? (
-                    <span>
-                      by {"  "}
-                      {
-                        this.props.stepVersionFields.stepVersionFields
-                          .completed_by.email
-                      }
-                    </span>
-                  ) : null}
+        <div style={{ padding: "29px 44px 27px 37px" }}>
+          <div>
+            {showFieldVersion ? (
+              <div className=" mr-bottom">
+                <div className="version-item">
+                  <span className="float-right">
+                    <Tooltip placement="topRight" title={"Hide version"}>
+                      <span
+                        className="text-anchor"
+                        onClick={this.props.versionToggle}
+                      >
+                        <i className="material-icons t-14 text-middle text-light ">
+                          close
+                        </i>
+                      </span>
+                    </Tooltip>
+                  </span>
+                  <div className="text-medium mr-bottom-sm">
+                    Version submitted on{" "}
+                    <Moment format="MM/DD/YYYY">
+                      <b>
+                        {" "}
+                        {
+                          this.props.stepVersionFields.stepVersionFields
+                            .completed_at
+                        }
+                      </b>
+                    </Moment>{" "}
+                    {this.props.stepVersionFields.stepVersionFields
+                      .completed_by ? (
+                      <span>
+                        by {"  "}
+                        {
+                          this.props.stepVersionFields.stepVersionFields
+                            .completed_by.email
+                        }
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
 
-          {_.size(groupedField) ? (
-            <Tabs
-              defaultActiveKey="group_0"
-              onChange={this.callback}
-              className="paragraph-section"
-            >
-              {_.map(groupedField, function(group, index) {
-                return (
-                  <TabPane tab={group.label} key={"group_" + index}>
-                    {_.map(group.steps, function(field, index) {
-                      if (index !== 0) {
-                        const renderQueue = [];
-                        if (!rowGroup.canAccommodateField(field)) {
-                          // This field cannot be accommodated in the current group
-                          // render the current group and append this to next batch for rendering
-                          renderQueue.push(rowGroup.render());
+            {_.size(groupedField) ? (
+              <Tabs
+                defaultActiveKey="group_0"
+                onChange={this.callback}
+                className="paragraph-section"
+              >
+                {_.map(groupedField, function(group, index) {
+                  return (
+                    <TabPane tab={group.label} key={"group_" + index}>
+                      {_.map(group.steps, function(field, index) {
+                        if (index !== 0) {
+                          const renderQueue = [];
+                          if (!rowGroup.canAccommodateField(field)) {
+                            // This field cannot be accommodated in the current group
+                            // render the current group and append this to next batch for rendering
+                            renderQueue.push(rowGroup.render());
+                          }
+                          rowGroup.addToRenderGroup(field);
+                          if (
+                            rowGroup.shouldRender ||
+                            (index === group.steps.length - 1 &&
+                              rowGroup.hasElements)
+                          ) {
+                            // Row is full or
+                            // this is the last field & rowGroup still has elements remaining
+                            renderQueue.push(rowGroup.render());
+                          }
+                          return renderQueue;
                         }
-                        rowGroup.addToRenderGroup(field);
-                        if (
-                          rowGroup.shouldRender ||
-                          (index === group.steps.length - 1 &&
-                            rowGroup.hasElements)
-                        ) {
-                          // Row is full or
-                          // this is the last field & rowGroup still has elements remaining
-                          renderQueue.push(rowGroup.render());
-                        }
-                        return renderQueue;
-                      }
-                    })}
-                  </TabPane>
-                );
-              })}
-            </Tabs>
-          ) : (
-            _.map(orderedStep, function(field, index) {
-              const renderQueue = [];
-              if (!rowGroup.canAccommodateField(field)) {
-                // This field cannot be accommodated in the current group
-                // render the current group and append this to next batch for rendering
-                renderQueue.push(rowGroup.render());
-              }
-              rowGroup.addToRenderGroup(field);
-              if (
-                rowGroup.shouldRender ||
-                (index === orderedStep.length - 1 && rowGroup.hasElements)
-              ) {
-                // Row is full or
-                // this is the last field & rowGroup still has elements remaining
-                renderQueue.push(rowGroup.render());
-              }
-              return renderQueue;
-            })
-          )}
+                      })}
+                    </TabPane>
+                  );
+                })}
+              </Tabs>
+            ) : (
+              _.map(orderedStep, function(field, index) {
+                const renderQueue = [];
+                if (!rowGroup.canAccommodateField(field)) {
+                  // This field cannot be accommodated in the current group
+                  // render the current group and append this to next batch for rendering
+                  renderQueue.push(rowGroup.render());
+                }
+                rowGroup.addToRenderGroup(field);
+                if (
+                  rowGroup.shouldRender ||
+                  (index === orderedStep.length - 1 && rowGroup.hasElements)
+                ) {
+                  // Row is full or
+                  // this is the last field & rowGroup still has elements remaining
+                  renderQueue.push(rowGroup.render());
+                }
+                return renderQueue;
+              })
+            )}
+          </div>
         </div>
         <Divider className="no-margin" />
 
-        <div style={{ paddingTop: 30 }}>
+        <div
+          style={{
+            padding: "29px 44px 27px 37px",
+            marginBottom: "100px"
+          }}
+        >
           <Row>
             <Col span={8}>
               {this.props.stepData.completed_at ||
