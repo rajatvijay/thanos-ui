@@ -4,5 +4,5 @@
      docker:
        - image: circleci/node:7.8
      steps:
-       - checkout
+       - checkout circle_ci
        - run: echo "First congig"
