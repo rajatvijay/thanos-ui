@@ -2,6 +2,18 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
+workflows:
+  version: 2
+  main:
+jobs:
+  - build
+  - deploy-prod:
+      requires:
+        - build #alternately this could depend on deploy-dev to have a linear flow instead of split
+      filters:
+        branches:
+          only: circle_ci
+
 version: 2
 jobs:
   build:
