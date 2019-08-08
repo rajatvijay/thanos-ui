@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Tag, Tooltip, Modal } from "antd";
+import { Tag, Tooltip } from "antd";
 import _ from "lodash";
-import { Row, Col, Progress } from "antd";
+import { Row, Col } from "antd";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -165,165 +165,6 @@ function serp_search_html(record) {
   );
 }
 
-class EntityGroup extends Component {
-  constructor() {
-    super();
-    this.state = {
-      visible: false
-    };
-  }
-
-  showModal = () => {
-    this.setState({
-      visible: true
-    });
-  };
-
-  handleOk = e => {
-    this.setState({
-      visible: false
-    });
-  };
-
-  handleCancel = e => {
-    this.setState({
-      visible: false
-    });
-  };
-
-  render() {
-    const firstEntity = this.props.group[0];
-
-    return (
-      <Col
-        span={8}
-        className="mr-bottom-lg "
-        style={{ paddingLeft: "15px", paddingRight: "15px", minHeight: "70px" }}
-      >
-        <div className="mr-bottom-sm t-12">
-          <span
-            onClick={this.showModal}
-            className="text-anchor text-secondary t-12 float-right"
-          >
-            {this.props.group.length - 1 !== 0
-              ? "view all " + this.props.group.length
-              : ""}
-          </span>
-          {this.props.title}
-        </div>
-        <div className="t-14">
-          <EntityItem
-            title={
-              firstEntity.entity_metadata.wikipedia_url ? (
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={firstEntity.entity_metadata.wikipedia_url}
-                  className="text-secondary"
-                >
-                  {firstEntity.entity_name}
-                </a>
-              ) : (
-                <span>{firstEntity.entity_name}</span>
-              )
-            }
-            score={firstEntity.salience}
-          />
-
-          <Modal
-            title={this.props.title}
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            footer={<div />}
-            bodyStyle={{ height: "400px", overflow: "scroll" }}
-          >
-            <div className="mr-bottom text-medium">
-              <b>
-                <span className="float-right">Salience score</span>
-                <span>Entity name</span>
-              </b>
-            </div>
-
-            {_.map(
-              _.sortBy(this.props.group, [
-                function(o) {
-                  return o.entity_metadata.wikipedia_url;
-                }
-              ]),
-              function(entity, index) {
-                return (
-                  <div className="mr-bottom" key={`${index}`}>
-                    <EntityItem
-                      title={
-                        entity.entity_metadata.wikipedia_url ? (
-                          <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={entity.entity_metadata.wikipedia_url}
-                            className="text-secondary"
-                          >
-                            {entity.entity_name}
-                          </a>
-                        ) : (
-                          <span>{entity.entity_name}</span>
-                        )
-                      }
-                      score={entity.salience}
-                    />
-                  </div>
-                );
-              }
-            )}
-          </Modal>
-        </div>
-      </Col>
-    );
-  }
-}
-
-const getProgressPercent = ({ score }) => {
-  /**
-   * Scores range from -1 to 1, we normalize that to 0 to 2
-   * Finally dividing this by 2 will give us the actual percentage
-   */
-  const normalized_score = score + 1;
-  return (normalized_score * 100) / 2;
-};
-
-//Get color according to score
-const getProgressColor = ({ percent }) => {
-  let color = "#fd4d4a";
-  if (percent > 50) {
-    color = "#8bcd36";
-  }
-  return color;
-};
-
-const EntityItem = props => {
-  const percent = getProgressPercent({ score: props.score });
-
-  const i = (
-    <Row gutter={10}>
-      <Col span={18} className="text-light">
-        <div className="text-ellipsis">{props.title}</div>
-      </Col>
-      <Col span={6} className="text-right">
-        <Tooltip title={props.score}>
-          <Progress
-            size="small"
-            percent={percent}
-            strokeColor="#305ebe"
-            showInfo={false}
-          />
-        </Tooltip>
-      </Col>
-    </Row>
-  );
-
-  return i;
-};
-
 class DescriptionToggle extends Component {
   state = {
     show: false
@@ -381,8 +222,6 @@ function google_search_html(record, search) {
       return o.entity_type;
     }
   });
-
-  const progressPercent = getProgressPercent({ score: record.sentiment_score });
 
   const removeEntity = ["CONSUMER_GOOD", "WORK_OF_ART", "OTHER"];
 
@@ -466,34 +305,6 @@ function google_search_html(record, search) {
       <div className="mr-bottom-lg text-light">
         Published at: {record.published_at || "N/A"}
       </div>
-
-      <Row gutter={30}>
-        <Col span={8} className="mr-bottom-lg" style={{ minHeight: "60px" }}>
-          <div className="t-12 mr-bottom-sm text-uppercase">
-            Sentiment score:
-          </div>
-
-          <Progress
-            size="small"
-            percent={progressPercent}
-            strokeColor={getProgressColor({ percent: progressPercent })}
-            showInfo={false}
-          />
-        </Col>
-
-        <Col span={8} className="mr-bottom-lg" style={{ minHeight: "60px" }}>
-          <div className="t-12 mr-bottom-sm text-uppercase">
-            Sentiment Magnitude:
-          </div>
-
-          {parseFloat(record.sentiment_magnitude).toFixed(2)}
-        </Col>
-        {_.map(groupedData, function(group, key) {
-          if (!removeEntity.includes(key)) {
-            return <EntityGroup group={group} title={`entityGroup_${key}`} />;
-          }
-        })}
-      </Row>
     </div>
   );
 }
