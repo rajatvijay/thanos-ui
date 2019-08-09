@@ -165,9 +165,6 @@ function getStepFields(step, polling, fieldId) {
     ) {
       dispatch(stepBodyActions.getAssignedUser(step.stepId));
     }
-    if (stepFields.completed_at) {
-      dispatch(getStepGroup(stepFields.workflow, true));
-    }
     return dispatch(success({ ...stepFields }));
   }
   function failure(error, step) {
