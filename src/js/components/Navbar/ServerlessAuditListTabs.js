@@ -129,7 +129,8 @@ class AuditList extends Component {
         next: null
       },
       activityLoading: true,
-      initialLoad: true
+      initialLoad: true,
+      logErrorCode: null
     };
   }
 
@@ -143,19 +144,20 @@ class AuditList extends Component {
     serverlessAPIFetch(url, requestOptions(), "AUDIT_LOG")
       .then(response => {
         if (!response.ok) {
+          this.setState({
+            logErrorCode: response.status
+          });
           throw Error(response.statusText);
         } else {
           response.json().then(data => {
             this.appendData(data);
           });
+          this.setState({
+            logErrorCode: null
+          });
         }
       })
-      .catch(err => {
-        openNotificationWithIcon({
-          type: "error",
-          message: "Error in getting activity logs!"
-        });
-      });
+      .catch(err => {});
   };
 
   appendData = body => {
@@ -186,6 +188,29 @@ class AuditList extends Component {
           <div style={{ textAlign: "center" }}>
             <Icon type={"exclamation-circle"} />{" "}
             {`No activity log found for ${this.props.logType}`}
+          </div>
+        );
+      } else if (this.state.logErrorCode) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center"
+            }}
+          >
+            <p
+              style={{
+                marginBottom: "6px",
+                fontSize: "16px",
+                color: "#f44336"
+              }}
+            >
+              Something went wrong, please retry.
+            </p>
+            <Button type="primary" onClick={() => this.loadData()}>
+              Retry
+            </Button>
           </div>
         );
       } else {
