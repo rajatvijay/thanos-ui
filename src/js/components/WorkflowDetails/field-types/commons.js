@@ -373,7 +373,8 @@ function getIntegrationSearchButton(props) {
     csi: "Get CSI data",
     boeing_screening_status: "Update Screening Status",
     boeing_adjudication_status: "Update Adjudication Status",
-    krypton_ai_push: "Push AI data"
+    krypton_ai_push: "Push AI data",
+    adobe_sign: "Sign with AdobeSign"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];
