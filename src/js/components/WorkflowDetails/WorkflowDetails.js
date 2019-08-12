@@ -16,6 +16,7 @@ import {
 import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
+import { get as lodashGet } from "lodash";
 
 const { Content } = Layout;
 
@@ -80,6 +81,25 @@ class WorkflowDetails extends Component {
     if (stepId && groupId && displayProfile && !minimalUI) {
       this.setState({ displayProfile: false });
     }
+
+    if (this.isTheStepAutoSubmitted(prevProps, this.props, stepId)) {
+      this.props.getStepGroup(workflowId, true);
+    }
+  };
+
+  isTheStepAutoSubmitted = (previousProps, currentProps, stepId) => {
+    const previousCompletedBy = lodashGet(
+      previousProps,
+      `currentStepFields.${stepId}.currentStepFields.completed_by`
+    );
+    const currentCompletedBy = lodashGet(
+      currentProps,
+      `currentStepFields.${stepId}.currentStepFields.completed_by`
+    );
+    if (previousCompletedBy === null && currentCompletedBy !== null) {
+      return true;
+    }
+    return false;
   };
 
   updateCurrentActiveStep = () => {
@@ -499,5 +519,9 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { stepBodyActions, setWorkflowKeys }
+  {
+    stepBodyActions,
+    setWorkflowKeys,
+    getStepGroup: workflowDetailsActions.getStepGroup
+  }
 )(injectIntl(WorkflowDetails));

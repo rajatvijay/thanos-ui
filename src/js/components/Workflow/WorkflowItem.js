@@ -217,6 +217,7 @@ class WorkflowItem extends React.Component {
               workflow={workflow}
               stepId={this.state.selectedStep}
               groupId={this.state.selectedGroup}
+              toggleMinimalUI={this.props.toggleMinimalUI}
             />
             <div style={{ maxHeight: 600, overflowY: "scroll" }}>
               <WorkflowDetails
@@ -232,6 +233,7 @@ class WorkflowItem extends React.Component {
               workflowIdFromPropsForModal={this.props.workflow.id}
               stepId={this.state.selectedStep}
               groupId={this.state.selectedGroup}
+              toggleMinimalUI={this.props.toggleMinimalUI}
             />
           </Modal>
 

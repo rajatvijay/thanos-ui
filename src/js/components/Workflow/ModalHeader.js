@@ -1,11 +1,26 @@
 import React, { Component } from "react";
 import { HeaderLcData, GetMergedData } from "./WorkflowHeader";
 import FullScreen from "../../../images/fullScreenBlack.svg";
-import { Link } from "react-router-dom";
+import { history } from "../../_helpers";
 
 class ModalHeader extends Component {
+  handleExpand = e => {
+    e.preventDefault();
+    const { stepId, groupId, workflow } = this.props;
+    const link =
+      !stepId && !groupId
+        ? "/workflows/instances/" + workflow.id + "/"
+        : "/workflows/instances/" +
+          workflow.id +
+          "?step=" +
+          stepId +
+          "&group=" +
+          groupId;
+    this.props.toggleMinimalUI();
+    history.push(link);
+  };
   render() {
-    const { workflow, stepId, groupId } = this.props;
+    const { workflow } = this.props;
 
     return (
       <div
@@ -37,20 +52,9 @@ class ModalHeader extends Component {
 
           <span>{workflow.status.label}</span>
 
-          <Link
-            to={
-              !stepId && !groupId
-                ? "/workflows/instances/" + workflow.id + "/"
-                : "/workflows/instances/" +
-                  workflow.id +
-                  "?step=" +
-                  stepId +
-                  "&group=" +
-                  groupId
-            }
-          >
-            <img style={{ width: 20 }} src={FullScreen} alt="" />
-          </Link>
+          <a href="/" onClick={this.handleExpand}>
+            <img style={{ width: 20 }} src={FullScreen} alt="expand" />
+          </a>
         </div>
       </div>
     );
