@@ -27,7 +27,7 @@ class StepBody extends Component {
       stepCompletedBy: null,
       stepApprovedBy: null,
       printing: false,
-      showWorkflowPDFModal: false
+      showWorkflowPDFModal: true
     };
   }
 
@@ -142,11 +142,17 @@ class StepBody extends Component {
 
   componentDidUpdate(previousProps) {
     if (previousProps.stepId !== this.props.stepId) {
-      if (this.stepData.definition_tag === "review_executive_summary_step") {
-        this.setState({ showWorkflowPDFModal: true });
-      }
+      this.stepData &&
+        (this.stepData.definition_tag === "review_executive_summary_step" &&
+          this.setState({ showWorkflowPDFModal: true }));
     }
   }
+
+  handleModalVisibility = status => {
+    this.setState({
+      showWorkflowPDFModal: status
+    });
+  };
 
   render = () => {
     const {
@@ -157,6 +163,7 @@ class StepBody extends Component {
       deleteStepUser,
       workflowId
     } = this.props;
+    const { showWorkflowPDFModal } = this.state;
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
@@ -246,10 +253,12 @@ class StepBody extends Component {
 
     return (
       <div style={{ background: "#FFFFFF" }}>
-        {this.state.showWorkflowPDFModal && (
+        {this.state.showWorkflowPDFModal && this.stepData && (
           <ChecklistModal
             stepTag={this.stepData.definition_tag}
             workflowId={workflowId}
+            visible={showWorkflowPDFModal}
+            handleModalVisibility={this.handleModalVisibility}
           />
         )}
         {this.state.printing ? (
