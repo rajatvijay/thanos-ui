@@ -18,6 +18,7 @@ import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
 import StepAssignmentUsers from "./StepAssignmentUsers";
+import ChecklistModal from "../Workflow/ChecklistModal";
 
 class StepBody extends Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class StepBody extends Component {
     this.state = {
       stepCompletedBy: null,
       stepApprovedBy: null,
-      printing: false
+      printing: false,
+      showWorkflowPDFModal: false
     };
   }
 
@@ -130,6 +132,22 @@ class StepBody extends Component {
     return null;
   };
 
+  get stepData() {
+    try {
+      return this.props.currentStepFields[this.props.stepId].currentStepFields;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.stepId !== this.props.stepId) {
+      if (this.stepData.definition_tag === "review_executive_summary_step") {
+        this.setState({ showWorkflowPDFModal: true });
+      }
+    }
+  }
+
   render = () => {
     const {
       displayProfile,
@@ -228,6 +246,12 @@ class StepBody extends Component {
 
     return (
       <div style={{ background: "#FFFFFF" }}>
+        {this.state.showWorkflowPDFModal && (
+          <ChecklistModal
+            stepTag={this.stepData.definition_tag}
+            workflowId={workflowId}
+          />
+        )}
         {this.state.printing ? (
           <style
             dangerouslySetInnerHTML={{
