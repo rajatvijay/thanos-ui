@@ -88,7 +88,8 @@ class ChecklistModal extends React.Component {
   state = {
     pdfConfig: null,
     loading: false,
-    error: false
+    error: false,
+    tickMarkAtleastOne: false
   };
 
   // To hold the user selection not the checkbox status
@@ -109,6 +110,10 @@ class ChecklistModal extends React.Component {
   onSelectWorkflow = (e, tag, parentTag, workflowType) => {
     const { checked } = e.target;
     const path = this.getUserSelectionObjectPath(parentTag, workflowType);
+
+    this.setState({
+      tickMarkAtleastOne: false
+    });
 
     if (checked) {
       // Add
@@ -144,32 +149,54 @@ class ChecklistModal extends React.Component {
 
   setLoding = loading => this.setState({ loading });
 
+  validateSelection = () => {
+    const {
+      parentWorkflow,
+      childWorkflow,
+      staticSections
+    } = this.userSelection;
+    if (!parentWorkflow || !childWorkflow || !staticSections) {
+      this.setState({ tickMarkAtleastOne: true });
+      return true;
+    }
+  };
+
   handleSubmit = () => {
-    this.setLoding("true");
+    const {
+      parentWorkflow,
+      childWorkflow,
+      staticSections,
+      include_comments,
+      include_archived_related_workflows,
+      include_flags
+    } = this.userSelection;
+
+    if (this.validateSelection()) return;
+
+    this.setLoding(true);
     const { condfigId, workflowId } = this.props;
     const body = {
       config_id: condfigId || 863,
       workflow_id: workflowId || 28157,
-      parent_steps_to_print: this.userSelection.parentWorkflow,
-      child_steps_to_print: this.userSelection.childWorkflow,
-      static_sections: this.userSelection.staticSections,
-      include_flags: !!this.userSelection.include_flags,
-      include_comments: !!this.userSelection.include_comments,
-      include_archived_related_workflows: !!this.userSelection
-        .include_archived_related_workflows
+      parent_steps_to_print: parentWorkflow,
+      child_steps_to_print: childWorkflow,
+      static_sections: staticSections,
+      include_flags: !!include_flags,
+      include_comments: !!include_comments,
+      include_archived_related_workflows: !!include_archived_related_workflows
     };
 
     submitWorkflows(body)
       .then(response => {
         if (!response.ok) {
-          this.setLoding("false");
+          this.setLoding(false);
           return openNotificationWithIcon({
             type: "error",
             message: "Error in performing the action!"
           });
         } else {
           this.handleCancel();
-          this.setLoding("false");
+          this.setLoding(false);
           return openNotificationWithIcon({
             type: "success",
             message:
@@ -178,11 +205,11 @@ class ChecklistModal extends React.Component {
         }
       })
       .catch(() => {
+        this.setLoding(false);
         openNotificationWithIcon({
           type: "error",
           message: "Please try again later!"
         });
-        this.setLoding("false");
       });
   };
 
@@ -331,8 +358,8 @@ class ChecklistModal extends React.Component {
     );
   };
 
-  renderModalContent = () => {
-    const { pdfConfig, loading } = this.state;
+  renderWorkflowDetails = () => {
+    const { pdfConfig, loading, tickMarkAtleastOne } = this.state;
 
     return (
       <div style={{ margin: "0px 35px" }}>
@@ -385,12 +412,22 @@ class ChecklistModal extends React.Component {
           >
             SUBMIT
           </Button>
+          {tickMarkAtleastOne ? (
+            <span
+              className={css`
+                margin-left: 10px;
+                color: red;
+              `}
+            >
+              &#9432; Please select atleast one from all categories to continue.
+            </span>
+          ) : null}
         </div>
       </div>
     );
   };
 
-  fetchedDataIsEmpty = () => {
+  renderEmptyDataMessage = () => {
     return (
       <div className="mr-top-lg text-center text-bold text-metal">
         <FormattedMessage id="errorMessageInstances.resultIsEmpty" />
@@ -398,8 +435,19 @@ class ChecklistModal extends React.Component {
     );
   };
 
-  render = () => {
+  renderModalContent = () => {
     const { pdfConfig, error } = this.state;
+
+    return error
+      ? this.renderFetchFailPlaceholder()
+      : !!pdfConfig
+      ? !pdfConfig.results.length
+        ? this.renderEmptyDataMessage()
+        : this.renderWorkflowDetails()
+      : null;
+  };
+
+  render = () => {
     const { visible } = this.props;
     return (
       <Modal
@@ -418,15 +466,7 @@ class ChecklistModal extends React.Component {
               background: "white"
             }}
           >
-            <div>
-              {error
-                ? this.renderFetchFailPlaceholder()
-                : !!pdfConfig
-                ? !pdfConfig.results.length
-                  ? this.fetchedDataIsEmpty()
-                  : this.renderModalContent()
-                : null}
-            </div>
+            {this.renderModalContent()}
           </div>
         </div>
       </Modal>
