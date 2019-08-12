@@ -96,7 +96,7 @@ class WorkflowDetails extends Component {
       currentProps,
       `currentStepFields.${stepId}.currentStepFields.completed_by`
     );
-    if (previousCompletedBy === null && currentCompletedBy !== null) {
+    if (previousCompletedBy === null && !!currentCompletedBy) {
       return true;
     }
     return false;
