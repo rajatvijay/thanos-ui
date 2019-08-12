@@ -109,7 +109,9 @@ export default {
         "Sorry! We were unable to find the workflow you requested.",
       noStepInWorkflow:
         "Dear user, forms are still being processed in the system. Please try again later.",
-      noWorkflowDetails: "Oops! Seems like some issue. Click below to retry"
+      noWorkflowDetails: "Oops! Seems like some issue. Click below to retry",
+      resultIsEmpty:
+        "Looks like there is no config for this step. Please contact care@thevetted.com"
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",

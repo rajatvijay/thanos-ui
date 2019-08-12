@@ -10,6 +10,67 @@ import {
 import { notification } from "antd";
 import { FormattedMessage } from "react-intl";
 
+const WORKFLOW_DATA = {
+  count: 1,
+  next: null,
+  previous: null,
+  results: [
+    {
+      config_id: 863,
+      parent_workflows: {
+        label: "Entity",
+        value: "entity",
+        steps: [
+          {
+            label: "Screening Results",
+            value: "ln_step"
+          },
+          {
+            label: "Executive Summary",
+            value: "create-car"
+          },
+          {
+            label: "Other Alerts",
+            value: "greylist_step"
+          }
+        ]
+      },
+      child_workflows: [
+        {
+          label: "Grey List",
+          value: "grey-list",
+          steps: [
+            {
+              label: "Grey List Information",
+              value: "grey_list_information"
+            }
+          ]
+        },
+        {
+          label: "RDC Screening",
+          value: "rdc-screening",
+          steps: [
+            {
+              label: "Entity Details",
+              value: "inherited_fields"
+            }
+          ]
+        }
+      ],
+      extra_sections: [
+        {
+          label: "Cover Page",
+          value: "cover_page"
+        },
+        {
+          label: "Table Of Contents",
+          value: "table_of_contents"
+        }
+      ]
+    }
+  ]
+};
+
 const openNotificationWithIcon = data => {
   notification[data.type]({
     message: data.message,
@@ -25,7 +86,6 @@ const META_INFO = [
 
 class ChecklistModal extends React.Component {
   state = {
-    visible: false,
     pdfConfig: null,
     loading: false,
     error: false
@@ -36,9 +96,6 @@ class ChecklistModal extends React.Component {
 
   componentDidMount = () => {
     this.fetchWorkflowDetails();
-    this.setState({
-      visible: true
-    });
   };
 
   getUserSelectionObjectPath = (parentTag, workflowType) => {
@@ -77,16 +134,12 @@ class ChecklistModal extends React.Component {
     this.userSelection[tag] = checked;
   };
 
-  handleOk = e => {
-    this.setState({
-      visible: false
-    });
+  handleOk = () => {
+    this.props.handleModalVisibility(true);
   };
 
-  handleCancel = e => {
-    this.setState({
-      visible: false
-    });
+  handleCancel = () => {
+    this.props.handleModalVisibility(false);
   };
 
   setLoding = loading => this.setState({ loading });
@@ -94,25 +147,22 @@ class ChecklistModal extends React.Component {
   handleSubmit = () => {
     this.setLoding("true");
     const { condfigId, workflowId } = this.props;
-    const requestOptions = {
-      method: "POST",
-      headers: authHeader.post(),
-      body: JSON.stringify({
-        config_id: condfigId || 863,
-        workflow_id: workflowId || 28157,
-        parent_steps_to_print: this.userSelection.parentWorkflow,
-        child_steps_to_print: this.userSelection.childWorkflow,
-        static_sections: this.userSelection.staticSections,
-        include_flags: !!this.userSelection.include_flags,
-        include_comments: !!this.userSelection.include_comments,
-        include_archived_related_workflows: !!this.userSelection
-          .include_archived_related_workflows
-      })
+    const body = {
+      config_id: condfigId || 863,
+      workflow_id: workflowId || 28157,
+      parent_steps_to_print: this.userSelection.parentWorkflow,
+      child_steps_to_print: this.userSelection.childWorkflow,
+      static_sections: this.userSelection.staticSections,
+      include_flags: !!this.userSelection.include_flags,
+      include_comments: !!this.userSelection.include_comments,
+      include_archived_related_workflows: !!this.userSelection
+        .include_archived_related_workflows
     };
 
-    submitWorkflows(requestOptions)
+    submitWorkflows(body)
       .then(response => {
         if (!response.ok) {
+          this.setLoding("false");
           return openNotificationWithIcon({
             type: "error",
             message: "Error in performing the action!"
@@ -141,7 +191,8 @@ class ChecklistModal extends React.Component {
     fetchWorkflowDetails(stepTag)
       .then(workflow => {
         this.setState({
-          pdfConfig: workflow,
+          pdfConfig: WORKFLOW_DATA,
+          // pdfConfig: workflow,
           error: false
         });
       })
@@ -280,8 +331,76 @@ class ChecklistModal extends React.Component {
     );
   };
 
+  renderModalContent = () => {
+    const { pdfConfig, loading } = this.state;
+
+    return (
+      <div style={{ margin: "0px 35px" }}>
+        <h2>{pdfConfig.results[0].parent_workflows.label}</h2>
+        {this.renderParentWorkflow(pdfConfig.results[0].parent_workflows.steps)}
+        <div
+          className={css`
+            display: flex;
+            flex-direction: row;
+            margin-top: 30px;
+            width: 100%;
+          `}
+        >
+          {this.renderChildWorkflow(pdfConfig.results[0].child_workflows)}
+        </div>
+        <div
+          className={css`
+            margin-top: 30px;
+          `}
+        >
+          <h2>Static Section</h2>
+          {this.renderStaticWorkflow(pdfConfig.results[0].extra_sections)}
+        </div>
+        <div
+          className={css`
+            margin-top: 30px;
+            display: flex;
+            width: 100%;
+          `}
+        >
+          {this.renderMetaInformation()}
+        </div>
+        <div
+          className={css`
+            .ant-btn-primary:focus,
+            .ant-btn-primary:hover,
+            .ant-btn-primary:active {
+              background-color: #025fb5;
+              border-color: #025fb5;
+            }
+          `}
+        >
+          <Button
+            loading={loading}
+            className={css`
+              margin-top: 30px;
+            `}
+            onClick={this.handleSubmit}
+            type="primary"
+          >
+            SUBMIT
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  fetchedDataIsEmpty = () => {
+    return (
+      <div className="mr-top-lg text-center text-bold text-metal">
+        <FormattedMessage id="errorMessageInstances.resultIsEmpty" />
+      </div>
+    );
+  };
+
   render = () => {
-    const { pdfConfig, visible, loading, error } = this.state;
+    const { pdfConfig, error } = this.state;
+    const { visible } = this.props;
     return (
       <Modal
         footer={null}
@@ -300,72 +419,13 @@ class ChecklistModal extends React.Component {
             }}
           >
             <div>
-              {error ? (
-                this.renderFetchFailPlaceholder()
-              ) : (
-                <div style={{ margin: "0px 35px" }}>
-                  {pdfConfig ? (
-                    <>
-                      <h2>{pdfConfig.results[0].parent_workflows.label}</h2>
-                      {this.renderParentWorkflow(
-                        pdfConfig.results[0].parent_workflows.steps
-                      )}
-                      <div
-                        className={css`
-                          display: flex;
-                          flex-direction: row;
-                          margin-top: 30px;
-                          width: 100%;
-                        `}
-                      >
-                        {this.renderChildWorkflow(
-                          pdfConfig.results[0].child_workflows
-                        )}
-                      </div>
-                      <div
-                        className={css`
-                          margin-top: 30px;
-                        `}
-                      >
-                        <h2>Static Section</h2>
-                        {this.renderStaticWorkflow(
-                          pdfConfig.results[0].extra_sections
-                        )}
-                      </div>
-                      <div
-                        className={css`
-                          margin-top: 30px;
-                          display: flex;
-                          width: 100%;
-                        `}
-                      >
-                        {this.renderMetaInformation()}
-                      </div>
-                      <div
-                        className={css`
-                          .ant-btn-primary:focus,
-                          .ant-btn-primary:hover,
-                          .ant-btn-primary:active {
-                            background-color: #025fb5;
-                            border-color: #025fb5;
-                          }
-                        `}
-                      >
-                        <Button
-                          loading={loading}
-                          className={css`
-                            margin-top: 30px;
-                          `}
-                          onClick={this.handleSubmit}
-                          type="primary"
-                        >
-                          SUBMIT
-                        </Button>
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              )}
+              {error
+                ? this.renderFetchFailPlaceholder()
+                : !!pdfConfig
+                ? !pdfConfig.results.length
+                  ? this.fetchedDataIsEmpty()
+                  : this.renderModalContent()
+                : null}
             </div>
           </div>
         </div>
