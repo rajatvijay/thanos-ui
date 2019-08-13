@@ -962,7 +962,16 @@ const GetTabsFilter = props => {
       }
     ];
 
-    fList = fList.concat(categories);
+    const sanitizedData = [];
+
+    categories.forEach(category => {
+      const data = _.uniq(category.data, alert => {
+        return alert.label;
+      });
+      sanitizedData.push({ ...category, data: data, count: data.length });
+    });
+
+    fList = fList.concat(sanitizedData);
 
     _.map(data, function(i) {
       const categs = i["custom_counts"] || {};
