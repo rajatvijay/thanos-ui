@@ -16,22 +16,14 @@ const WORKFLOW_DATA = {
   previous: null,
   results: [
     {
-      config_id: 863,
+      config_id: 1805,
       parent_workflows: {
         label: "Entity",
         value: "entity",
         steps: [
           {
-            label: "Screening Results",
-            value: "ln_step"
-          },
-          {
-            label: "Executive Summary",
-            value: "create-car"
-          },
-          {
-            label: "Other Alerts",
-            value: "greylist_step"
+            label: "Review Report",
+            value: "review_executive_summary_step"
           }
         ]
       },
@@ -47,12 +39,26 @@ const WORKFLOW_DATA = {
           ]
         },
         {
+          label: "Grey List",
+          value: "grey-list",
+          steps: [
+            {
+              label: "Grey List Information",
+              value: "grey_list_information"
+            }
+          ]
+        },
+        {
           label: "RDC Screening",
           value: "rdc-screening",
           steps: [
             {
-              label: "Entity Details",
-              value: "inherited_fields"
+              label: "Internet Search - ABAC",
+              value: "google_search_abac"
+            },
+            {
+              label: "Internet Search - PEP",
+              value: "google_search_pep"
             }
           ]
         }
@@ -63,14 +69,17 @@ const WORKFLOW_DATA = {
           value: "cover_page"
         },
         {
-          label: "Table Of Contents",
-          value: "table_of_contents"
+          label: "Methodology",
+          value: "methodology"
+        },
+        {
+          label: "Glossary",
+          value: "glossary"
         }
       ]
     }
   ]
 };
-
 const openNotificationWithIcon = data => {
   notification[data.type]({
     message: data.message,
@@ -174,9 +183,10 @@ class ChecklistModal extends React.Component {
     if (this.validateSelection()) return;
 
     this.setLoding(true);
-    const { condfigId, workflowId } = this.props;
+    const { workflowId } = this.props;
+    const { config_id: configId } = this.state.pdfConfig.results[0];
     const body = {
-      config_id: condfigId || 863,
+      config_id: configId || 863,
       workflow_id: workflowId || 28157,
       parent_steps_to_print: parentWorkflow,
       child_steps_to_print: childWorkflow,
@@ -215,11 +225,12 @@ class ChecklistModal extends React.Component {
 
   fetchWorkflowDetails = () => {
     const { stepTag } = this.props;
-    fetchWorkflowDetails(stepTag)
+    fetchWorkflowDetails("review_executive_summary_step")
       .then(workflow => {
+        console.log(workflow);
         this.setState({
-          pdfConfig: WORKFLOW_DATA,
-          // pdfConfig: workflow,
+          // pdfConfig: WORKFLOW_DATA,
+          pdfConfig: workflow,
           error: false
         });
       })
@@ -260,33 +271,39 @@ class ChecklistModal extends React.Component {
   renderChildWorkflow = workflows => {
     if (!workflows) return null;
     return workflows.map((workflow, key) => {
-      return workflow.steps.map(step => (
+      return (
         <div
           key={key}
           className={css`
+            display: flex;
+            flex-direction: column;
             width: 50%;
+            margin-top: 20px;
           `}
         >
           <h2>{workflow.label}</h2>
-          <Checkbox
-            className={css`
-              font-size: 17px;
-              margin-left: 15px;
-              margin-top: 3px;
-            `}
-            onChange={event =>
-              this.onSelectWorkflow(
-                event,
-                step.value,
-                workflow.value,
-                "CHILD_WORKFLOW"
-              )
-            }
-          >
-            {step.label}
-          </Checkbox>
+
+          {workflow.steps.map(step => (
+            <Checkbox
+              className={css`
+                font-size: 17px;
+                margin-left: 15px !important;
+                margin-top: 3px;
+              `}
+              onChange={event =>
+                this.onSelectWorkflow(
+                  event,
+                  step.value,
+                  workflow.value,
+                  "CHILD_WORKFLOW"
+                )
+              }
+            >
+              {step.label}
+            </Checkbox>
+          ))}
         </div>
-      ));
+      );
     });
   };
 
@@ -369,6 +386,7 @@ class ChecklistModal extends React.Component {
           className={css`
             display: flex;
             flex-direction: row;
+            flex-wrap: wrap;
             margin-top: 30px;
             width: 100%;
           `}

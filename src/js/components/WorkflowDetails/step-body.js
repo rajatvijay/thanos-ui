@@ -36,7 +36,6 @@ class StepBody extends Component {
   };
   componentDidMount() {
     const { stepId } = this.props;
-
     this.props.getAssignedUser(stepId);
   }
 
@@ -141,10 +140,13 @@ class StepBody extends Component {
   }
 
   componentDidUpdate(previousProps) {
-    if (previousProps.stepId !== this.props.stepId) {
-      this.stepData &&
-        (this.stepData.definition_tag === "review_executive_summary_step" &&
-          this.setState({ showWorkflowPDFModal: true }));
+    if (this.stepData) {
+      // if (previousProps.stepId !== this.props.stepId) {
+      console.log("sassasa", this.stepData);
+      if (this.stepData.definition_tag === "car-qa") {
+        this.setState({ showWorkflowPDFModal: true });
+      }
+      // }
     }
   }
 

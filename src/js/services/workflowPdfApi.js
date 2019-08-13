@@ -8,7 +8,7 @@ export const fetchWorkflowDetails = stepTag => {
     credentials: "include"
   };
   return APIFetch(
-    `workflow/pdf/config/2133/?trigger_step=${stepTag}`,
+    `workflow/pdf/config/3720/?trigger_step=${stepTag}`,
     requestOptions
   ).then(response => response.json());
 };
