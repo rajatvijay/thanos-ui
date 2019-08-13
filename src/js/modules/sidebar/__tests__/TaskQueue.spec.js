@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import TaskQueue from "../components/TaskQueue";
+import { TaskQueue } from "../components/TaskQueue";
 
 test("should render workflow count under this task queue", () => {
   const fakeTaskQueue = { count: "test count" };
