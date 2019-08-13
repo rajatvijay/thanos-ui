@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import download from "downloadjs";
 import { apiBaseURL } from "../../../config";
 import { userUtilities } from "../../utils/user";
+import { injectIntl, FormattedMessage } from "react-intl";
 
 const TabPane = Tabs.TabPane;
 
@@ -19,7 +20,7 @@ const openNotificationWithIcon = data => {
     placement: "bottomLeft"
   });
 };
-class AuditListTabs extends Component {
+class _AuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
     edits: [
       "step_submitted",
@@ -78,7 +79,13 @@ class AuditListTabs extends Component {
         {Object.entries(AuditListTabs.ACTIVITY_ACTION_GROUPS).map(([key]) => {
           return (
             <TabPane
-              tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
+              tab={
+                <span style={{ textTransform: "capitalize" }}>
+                  <FormattedMessage
+                    id={"workflowsInstances.activityLog." + key + "Tab"}
+                  />
+                </span>
+              }
               key={key}
             >
               <AuditList
@@ -95,7 +102,8 @@ class AuditListTabs extends Component {
           key="download"
           tab={
             <span>
-              Download all <Icon type="download" />
+              <FormattedMessage id="workflowsInstances.activityLog.downloadTab" />{" "}
+              <Icon type="download" />
             </span>
           }
         >
@@ -109,7 +117,7 @@ class AuditListTabs extends Component {
             </span>
             <br />
             <div className="mr-top t-12 text-light">
-              Click above to download the activity log file.
+              <FormattedMessage id="workflowsInstances.activityLog.downloadText" />
             </div>
           </div>
         </TabPane>
@@ -117,6 +125,8 @@ class AuditListTabs extends Component {
     );
   };
 }
+
+const AuditListTabs = injectIntl(_AuditListTabs);
 
 AuditListTabs.propTypes = {
   id: PropTypes.number.isRequired

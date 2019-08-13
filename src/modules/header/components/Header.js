@@ -9,6 +9,9 @@ import { logout, workflowActions } from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
 import { siteOrigin } from "../../../config";
+import { languageConstants } from "../constants";
+import IntlTooltip from "../../../js/components/common/IntlTooltip";
+import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -55,7 +58,6 @@ class Header extends Component {
 
   getExportList = () => {
     const kind = this.props.workflowKind.workflowKind;
-
     return (
       <Dropdown
         placement="bottomCenter"
@@ -88,7 +90,7 @@ class Header extends Component {
                       >
                         {item.icon}
                       </i>
-                      {item.name}
+                      {getIntlBody(item, "name")}
                     </a>
                   </Menu.Item>
                 );
@@ -99,7 +101,7 @@ class Header extends Component {
         }
         trigger={["click"]}
       >
-        <Tooltip title="Export data" placement="left">
+        <IntlTooltip title={"tooltips.exportDataText"} placement="left">
           <span
             className="pd-ard-sm mr-right-lg "
             style={{
@@ -111,7 +113,7 @@ class Header extends Component {
           >
             <Icon type="download" />
           </span>
-        </Tooltip>
+        </IntlTooltip>
       </Dropdown>
     );
   };
@@ -217,7 +219,7 @@ class Header extends Component {
         >
           {showInsights ? (
             <span className="pd-ard-sm mr-right-lg ">
-              <Tooltip title="Show Reports" placement="left">
+              <IntlTooltip title={"tooltips.showReportsText"} placement="left">
                 <Link to="/reports/">
                   <i
                     className="material-icons text-middle text-anchor"
@@ -226,7 +228,7 @@ class Header extends Component {
                     trending_up
                   </i>
                 </Link>
-              </Tooltip>
+              </IntlTooltip>
             </span>
           ) : null}
 

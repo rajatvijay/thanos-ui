@@ -394,7 +394,8 @@ class OTPForm extends React.Component {
                     >
                       <span className="text-white">
                         <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                        {config.name} account
+                        {config.name}{" "}
+                        <FormattedMessage id="loginPageInstances.accountText" />
                       </span>
                     </a>
                   ) : (

@@ -23,6 +23,7 @@ import Permissions from "../../../common/permissions/constants";
 import { Link } from "react-router-dom";
 
 import LCData from "./LCData";
+import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
@@ -441,7 +442,7 @@ class Sidebar extends Component {
                 {/* {"panorama_fish_eye"} */}
                 info_outline
               </i>
-              Profile
+              <FormattedMessage id="workflowsInstances.profileText" />
             </p>
           </span>
 
@@ -514,7 +515,7 @@ class Sidebar extends Component {
                                     panorama_fish_eye
                                   </i>
                                 )}
-                                {stepgroup.definition.name}
+                                {getIntlBody(stepgroup.definition, "name")}
                               </span>
                               <span
                                 style={{

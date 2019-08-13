@@ -5,6 +5,7 @@ import { css } from "emotion";
 import { TaskQueue, DefaultTaskQueue } from "./TaskQueue";
 import user from "../../../../images/user.svg";
 import { stepBodyService } from "../../../services";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const INITIAL_SHOW_COUNT = 5;
 
@@ -116,7 +117,9 @@ class TaskQueueList extends Component {
     if (taskQueues && taskQueues.length) {
       return (
         <div>
-          <StyledTaskQueueHeading>TASK QUEUES</StyledTaskQueueHeading>
+          <StyledTaskQueueHeading>
+            <FormattedMessage id="mainSidebar.taskQueuesText" />
+          </StyledTaskQueueHeading>
           <ul
             className={css`
               padding: 0;
@@ -124,7 +127,13 @@ class TaskQueueList extends Component {
             `}
           >
             <DefaultTaskQueue
-              item={{ name: "My Tasks", count: myTasksCount, image: user }}
+              item={{
+                name: this.props.intl.formatMessage({
+                  id: "mainSidebar.myTasksText"
+                }),
+                count: myTasksCount,
+                image: user
+              }}
               loading={loadingMyTasksCount}
               onClick={this.toggleMyTaskFilter}
               isSelected={isMyTaskSelected}
@@ -145,12 +154,16 @@ class TaskQueueList extends Component {
   }
 }
 
-export default TaskQueueList;
+export default injectIntl(TaskQueueList);
 
 function ToggleListSizeButton({ showingAll, onClick }) {
   return (
     <StyledToggleListSizeContainer onClick={onClick}>
-      {showingAll ? "SHOW LESS" : "SHOW ALL"}
+      {showingAll ? (
+        <FormattedMessage id="mainSidebar.showLessText" />
+      ) : (
+        <FormattedMessage id="mainSidebar.showAllText" />
+      )}
     </StyledToggleListSizeContainer>
   );
 }
@@ -161,6 +174,7 @@ const StyledTaskQueueHeading = styled.h1`
   font-size: 12px;
   font-weight: bold;
   letter-spacing: 0.8px;
+  text-transform: uppercase;
 `;
 
 const StyledLastListItem = styled.li`
@@ -173,4 +187,5 @@ const StyledToggleListSizeContainer = styled.span`
   font-size: 12px;
   color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
+  text-transform: uppercase;
 `;

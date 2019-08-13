@@ -3,6 +3,7 @@ import { Icon, Spin } from "antd";
 import styled from "@emotion/styled";
 import { css } from "emotion";
 import Alerts from "./Alerts";
+import { FormattedMessage } from "react-intl";
 
 class AlertList extends Component {
   state = { selected: null };
@@ -68,7 +69,9 @@ class AlertList extends Component {
 
     return (
       <div>
-        <StyledAlertsHeading>ALERTS</StyledAlertsHeading>
+        <StyledAlertsHeading>
+          <FormattedMessage id="mainSidebar.alertsText" />
+        </StyledAlertsHeading>
         <div>
           <ul
             className={css`
@@ -92,4 +95,5 @@ const StyledAlertsHeading = styled.h1`
   font-size: 12px;
   font-weight: bold;
   letter-spacing: 0.8px;
+  text-transform: uppercase;
 `;

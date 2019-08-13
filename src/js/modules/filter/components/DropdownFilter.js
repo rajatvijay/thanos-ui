@@ -10,6 +10,7 @@ class DropdownFilter extends Component {
     return Array.isArray(data)
       ? data.map((item, index) => (
           <Option key={`option_${index}`} value={item.value}>
+            {console.log(item)}
             {item.label}
           </Option>
         ))

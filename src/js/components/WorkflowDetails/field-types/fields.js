@@ -27,6 +27,7 @@ import validator from "validator";
 import { ESign } from "./esign.js";
 import { apiBaseURL, siteOrigin } from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
+import { getIntlBody } from "../../../_helpers/intl-helpers";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -543,7 +544,7 @@ export const Paragraph = props => {
       ) : null}
       <span
         dangerouslySetInnerHTML={{
-          __html: getLink(props.field.definition.body)
+          __html: getLink(getIntlBody(props.field.definition))
         }}
       />
     </h2>

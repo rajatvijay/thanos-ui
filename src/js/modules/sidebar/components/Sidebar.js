@@ -7,6 +7,8 @@ import { connect } from "react-redux";
 import { css } from "emotion";
 import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
+import { injectIntl } from "react-intl";
+import { getIntlBody } from "../../../_helpers/intl-helpers";
 
 const { Sider } = Layout;
 const Option = Select.Option;
@@ -69,7 +71,7 @@ class Sidebar extends Component {
     const { workflowKind } = this.props.workflowKind;
     if (workflowKind) {
       return workflowKind.map(function(item) {
-        return <Option key={`${item.id}`}>{item.name}</Option>;
+        return <Option key={`${item.id}`}>{getIntlBody(item, "name")}</Option>;
       });
     }
   };
@@ -232,4 +234,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   { taskQueueCount }
-)(Sidebar);
+)(injectIntl(Sidebar));

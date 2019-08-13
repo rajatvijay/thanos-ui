@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Tag, Tooltip } from "antd";
 import _ from "lodash";
 import { Row, Col } from "antd";
+import IntlTooltip from "../../common/IntlTooltip";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -262,9 +263,14 @@ function google_search_html(record, search) {
     <div>
       <div className="mr-bottom t-16 text-medium gsearch-title">
         <span className="salience-icon">
-          <Tooltip
+          <IntlTooltip
             placement="topRight"
-            title={"Relevance score: " + record.relevance_score}
+            title={this.props.intl.formatMessage({
+              id: "tooltips.relevanceScoreText"
+            })}
+            values={{
+              score: record.relevance_score
+            }}
           >
             <span>
               <span
@@ -273,7 +279,7 @@ function google_search_html(record, search) {
                 }
               />
             </span>
-          </Tooltip>
+          </IntlTooltip>
         </span>
         <span dangerouslySetInnerHTML={{ __html: record.title }} />
         <span className="pd-right" />{" "}

@@ -7,6 +7,8 @@ import Moment from "react-moment";
 import "moment-timezone";
 import FieldItem from "./FieldItem";
 import { FormattedMessage, injectIntl } from "react-intl";
+import IntlTooltip from "../common/IntlTooltip";
+import { getIntlBody } from "../../_helpers/intl-helpers";
 
 const TabPane = Tabs.TabPane;
 const SIZE_33 = 4,
@@ -388,16 +390,19 @@ class StepBodyForm extends Component {
         const tooltip = (
           <span className="float-right ">
             {fieldReturn.answers[0].submitted_by_email ? (
-              <Tooltip
+              <IntlTooltip
                 placement="topRight"
-                title={
-                  "Answered by " + fieldReturn.answers[0].submitted_by_email
-                }
+                title={this.props.intl.formatMessage({
+                  id: "tooltips.answeredBy"
+                })}
+                values={{
+                  name: fieldReturn.answers[0].submitted_by_email
+                }}
               >
                 <i className="material-icons t-14 text-middle text-light">
                   history
                 </i>
-              </Tooltip>
+              </IntlTooltip>
             ) : (
               <span>
                 <i className="material-icons t-14 text-middle text-light">
@@ -554,7 +559,10 @@ class StepBodyForm extends Component {
         _.size(step.definition.extra) &&
         step.definition.extra.section
       ) {
-        const groupItem = { label: step.definition.body, steps: [step] };
+        const groupItem = {
+          label: getIntlBody(step.definition),
+          steps: [step]
+        };
         groupedField.push(groupItem);
       } else if (_.size(groupedField)) {
         const index = groupedField.length - 1;
@@ -576,7 +584,10 @@ class StepBodyForm extends Component {
               <div className=" mr-bottom">
                 <div className="version-item">
                   <span className="float-right">
-                    <Tooltip placement="topRight" title={"Hide version"}>
+                    <IntlTooltip
+                      placement="topRight"
+                      title={"tooltips.hideVersionText"}
+                    >
                       <span
                         className="text-anchor"
                         onClick={this.props.versionToggle}
@@ -585,10 +596,11 @@ class StepBodyForm extends Component {
                           close
                         </i>
                       </span>
-                    </Tooltip>
+                    </IntlTooltip>
                   </span>
                   <div className="text-medium mr-bottom-sm">
-                    Version submitted on{" "}
+                    <FormattedMessage id="stepBodyFormInstances.versionSubmittedOn" />
+                    {"  "}
                     <Moment format="MM/DD/YYYY">
                       <b>
                         {" "}
@@ -601,7 +613,8 @@ class StepBodyForm extends Component {
                     {this.props.stepVersionFields.stepVersionFields
                       .completed_by ? (
                       <span>
-                        by {"  "}
+                        <FormattedMessage id="commonTextInstances.by" />
+                        {"  "}
                         {
                           this.props.stepVersionFields.stepVersionFields
                             .completed_by.email

@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col } from "antd";
+import { FormattedMessage } from "react-intl";
 
 function LCData({ lcData, status }) {
   return (
@@ -15,7 +16,7 @@ function LCData({ lcData, status }) {
             lineHeight: "15px"
           }}
         >
-          STATUS
+          <FormattedMessage id="workflowsInstances.statusText" />
         </span>
         <br />
         <span

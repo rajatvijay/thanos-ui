@@ -4,6 +4,8 @@ import _ from "lodash";
 import Moment from "react-moment";
 import { URL_REGEX, ANCHOR_TAG_REGEX } from "../../../utils/contants";
 import Anchor from "../../common/Anchor";
+import IntlTooltip from "../../common/IntlTooltip";
+import { getIntlBody } from "../../../_helpers/intl-helpers";
 
 export const commonFunctions = {
   getLabel,
@@ -44,14 +46,14 @@ function getLabel(props, that) {
     props.field.answers.length !== 0 ? <GetAnsweredBy {...props} /> : null;
 
   const required = getRequired(props) ? (
-    <Tooltip title="Answer is required">
+    <IntlTooltip title={"tooltips.answerIsRequiredText"}>
       <i
         title="Answer required"
         className="material-icons t-13 text-middle text-light pd-right-sm"
       >
         panorama_fish_eye
       </i>
-    </Tooltip>
+    </IntlTooltip>
   ) : null;
 
   const commentClasses =
@@ -94,7 +96,7 @@ function getLabel(props, that) {
           </span>
         ) : (
           <span>
-            {props.field.definition.body} {helpText}
+            {getIntlBody(props.field.definition)} {helpText}
           </span>
         )}
       </span>
@@ -111,7 +113,7 @@ function getLabel(props, that) {
       <span className="label-with-action">
         {comment}
         {props.field.answers.length !== 0 ? answeredBy : required}
-        {props.field.definition.body} {helpText}
+        {getIntlBody(props.field.definition)} {helpText}
       </span>
     );
   }

@@ -91,8 +91,14 @@ class LoginForm extends React.Component {
   //client side data validation
   validate = data => {
     const errors = {};
-    if (!data.username) errors.username = "email can't be empty";
-    if (!data.password) errors.password = "Password can't be empty";
+    if (!data.username)
+      errors.username = this.props.intl.formatMessage({
+        id: "errorMessageInstances.emailMandatory"
+      });
+    if (!data.password)
+      errors.password = this.props.intl.formatMessage({
+        id: "errorMessageInstances.passwordMandatory"
+      });
     return errors;
   };
 
