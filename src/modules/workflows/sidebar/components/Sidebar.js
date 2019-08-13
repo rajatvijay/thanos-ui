@@ -507,6 +507,15 @@ class Sidebar extends Component {
                                   >
                                     check_circle
                                   </i>
+                                ) : stepgroup.overdue ? (
+                                  <Tooltip title="overdue">
+                                    <i
+                                      className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
+                                      style={{ color: "#d40000" }}
+                                    >
+                                      alarm
+                                    </i>
+                                  </Tooltip>
                                 ) : (
                                   <i
                                     className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
@@ -600,6 +609,15 @@ class Sidebar extends Component {
                                   >
                                     check_circle
                                   </i>
+                                ) : step.overdue ? (
+                                  <Tooltip title="overdue">
+                                    <i
+                                      className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+                                      style={{ color: "#d40000" }}
+                                    >
+                                      alarm
+                                    </i>
+                                  </Tooltip>
                                 ) : (
                                   <i
                                     className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
