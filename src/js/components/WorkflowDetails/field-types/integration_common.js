@@ -265,9 +265,7 @@ function google_search_html(record, search) {
         <span className="salience-icon">
           <IntlTooltip
             placement="topRight"
-            title={this.props.intl.formatMessage({
-              id: "tooltips.relevanceScoreText"
-            })}
+            title={"tooltips.relevanceScoreText"}
             values={{
               score: record.relevance_score
             }}

@@ -392,9 +392,7 @@ class StepBodyForm extends Component {
             {fieldReturn.answers[0].submitted_by_email ? (
               <IntlTooltip
                 placement="topRight"
-                title={this.props.intl.formatMessage({
-                  id: "tooltips.answeredBy"
-                })}
+                title={"tooltips.answeredBy"}
                 values={{
                   name: fieldReturn.answers[0].submitted_by_email
                 }}
