@@ -5,7 +5,11 @@ import { authHeader } from "../../../js/_helpers";
 import { Dropdown, Icon, Input, Menu, notification, Tooltip } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
-import { logout, workflowActions } from "../../../js/actions";
+import {
+  logout,
+  workflowActions,
+  changeSearchValue
+} from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
 import { siteOrigin } from "../../../config";
@@ -23,17 +27,12 @@ const openNotificationWithIcon = data => {
 
 class Header extends Component {
   state = {
-    searchInput: "",
     showSearchInputIcon: false
   };
 
-  onSearch = e => {
-    if (this.state.searchInput.length >= 3) {
-      if (e) {
-        this.props.dispatch(workflowActions.searchWorkflow(e));
-      } else {
-        this.props.dispatch(workflowActions.getAll());
-      }
+  onSearch = searchValue => {
+    if (searchValue.length >= 3) {
+      this.props.dispatch(workflowActions.searchWorkflow(searchValue));
     } else {
       openNotificationWithIcon({
         type: "error",
@@ -42,14 +41,9 @@ class Header extends Component {
     }
   };
 
-  onSearchChange = e => {
-    this.setState({ searchInput: e.target.value });
-  };
-
-  handleKeyPress = e => {
-    if (e.key === "Enter") {
-      this.onSearch(this.state.searchInput);
-    }
+  onSearchChange = event => {
+    const { value } = event.target;
+    this.props.dispatch(changeSearchValue(value));
   };
 
   onLogout = (event, key) => {
@@ -119,7 +113,7 @@ class Header extends Component {
   };
 
   render() {
-    const { searchInput } = this.state;
+    const { searchValue } = this.props.workflowSearch;
     const user = this.props.authentication.user;
     const supportedLaguanges = this.props.config.supported_languages;
     const regexForUrl = /\/instances\/[\d]+/;
@@ -186,18 +180,17 @@ class Header extends Component {
               suffix={
                 <Icon
                   type="search"
-                  onClick={() => this.onSearch(searchInput)}
+                  onClick={() => this.onSearch(searchValue)}
                   className="text-anchor"
                   style={{ fontSize: 20, color: "#000000", opacity: 0.3 }}
                 />
               }
-              value={searchInput}
+              value={searchValue}
               placeholder={this.props.intl.formatMessage({
                 id: "commonTextInstances.search"
               })}
               onChange={this.onSearchChange}
-              ref={node => (this.searchInput = node)}
-              onKeyPress={this.handleKeyPress}
+              onPressEnter={() => this.onSearch(searchValue)}
             />
           </div>
         ) : null}
@@ -282,14 +275,16 @@ function mapStateToProps(state) {
     authentication,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    workflowSearch
   } = state;
   return {
     workflowKind,
     authentication,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    workflowSearch
   };
 }
 

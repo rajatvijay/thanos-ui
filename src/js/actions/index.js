@@ -21,3 +21,4 @@ export { stepPreviewActions } from "./stepPreview";
 export { stepBodyActions } from "./stepBody";
 export { setWorkflowKeys } from "./workflowKeys";
 export { toggleMinimalUI } from "./toggleMinimalUI";
+export { changeSearchValue } from "./workflowSearch";
