@@ -224,13 +224,16 @@ class ChecklistModal extends React.Component {
   };
 
   fetchWorkflowDetails = () => {
-    const { stepTag } = this.props;
-    fetchWorkflowDetails("review_executive_summary_step")
+    const { definition } = this.props;
+    const stepTag = definition.tag;
+    const stepId = definition.id;
+    console.log(stepTag, stepId);
+    fetchWorkflowDetails(stepTag, stepId)
       .then(workflow => {
         console.log(workflow);
         this.setState({
-          // pdfConfig: WORKFLOW_DATA,
-          pdfConfig: workflow,
+          pdfConfig: WORKFLOW_DATA,
+          // pdfConfig: workflow,
           error: false
         });
       })

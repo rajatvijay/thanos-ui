@@ -142,7 +142,6 @@ class StepBody extends Component {
   componentDidUpdate(previousProps) {
     if (this.stepData) {
       // if (previousProps.stepId !== this.props.stepId) {
-      console.log("sassasa", this.stepData);
       if (this.stepData.definition_tag === "car-qa") {
         this.setState({ showWorkflowPDFModal: true });
       }
@@ -257,7 +256,7 @@ class StepBody extends Component {
       <div style={{ background: "#FFFFFF" }}>
         {this.state.showWorkflowPDFModal && this.stepData && (
           <ChecklistModal
-            stepTag={this.stepData.definition_tag}
+            definition={this.stepData.definition}
             workflowId={workflowId}
             visible={showWorkflowPDFModal}
             handleModalVisibility={this.handleModalVisibility}
