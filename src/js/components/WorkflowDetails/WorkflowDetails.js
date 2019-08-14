@@ -17,6 +17,7 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
+import { currentActiveStep } from "./utils/active-step";
 
 const { Content } = Layout;
 
@@ -37,7 +38,7 @@ class WorkflowDetails extends Component {
     this.state = {
       printing: false,
       dont: false,
-      firstLoad: true,
+      newWorkflow: params.get("new") === "true",
       currentStep: null,
       // TODO: Check why we need groupId check
       displayProfile: minimalUI ? true : !groupId
@@ -57,7 +58,7 @@ class WorkflowDetails extends Component {
       workflowKeys
     } = this.props;
 
-    const { displayProfile } = this.state;
+    const { displayProfile, newWorkflow } = this.state;
     const params = new URL(document.location).searchParams;
     const groupId = params.get("group");
     const stepId = params.get("step");
@@ -73,6 +74,30 @@ class WorkflowDetails extends Component {
       workflowKeys[workflowId].groupId !== groupId
     ) {
       this.handleUpdateOfActiveStep(groupId, stepId);
+    }
+    if (
+      _.get(prevProps, `workflowDetails["${workflowId}"].loading`, null) ===
+        true &&
+      _.get(this.props, `workflowDetails["${workflowId}"].loading`, null) !==
+        true &&
+      (newWorkflow || params.get("new") === "true")
+    ) {
+      // when workflow is loaded and it's a created workflow
+      // navigate to the first step of the first step group
+
+      const groups = _.get(
+        this.props,
+        `workflowDetails["${workflowId}"].workflowDetails.stepGroups`,
+        null
+      );
+      if (groups !== null) {
+        // has groups
+        const { groupId, stepId } = currentActiveStep(groups, workflowId);
+        if (groupId && stepId) this.handleUpdateOfActiveStep(groupId, stepId);
+      }
+      this.setState({
+        newWorkflow: false
+      });
     }
 
     if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
