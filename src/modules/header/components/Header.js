@@ -1,14 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { injectIntl } from "react-intl";
+import { injectIntl, FormattedMessage } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
 import { Dropdown, Icon, Input, Menu, notification, Tooltip } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
-import { logout, workflowActions } from "../../../js/actions";
+import {
+  logout,
+  workflowActions,
+  changeSearchValue
+} from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
 import { siteOrigin } from "../../../config";
+import { languageConstants } from "../constants";
+import IntlTooltip from "../../../js/components/common/IntlTooltip";
+import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -20,17 +27,12 @@ const openNotificationWithIcon = data => {
 
 class Header extends Component {
   state = {
-    searchInput: "",
     showSearchInputIcon: false
   };
 
-  onSearch = e => {
-    if (this.state.searchInput.length >= 3) {
-      if (e) {
-        this.props.dispatch(workflowActions.searchWorkflow(e));
-      } else {
-        this.props.dispatch(workflowActions.getAll());
-      }
+  onSearch = searchValue => {
+    if (searchValue.length >= 3) {
+      this.props.dispatch(workflowActions.searchWorkflow(searchValue));
     } else {
       openNotificationWithIcon({
         type: "error",
@@ -39,14 +41,9 @@ class Header extends Component {
     }
   };
 
-  onSearchChange = e => {
-    this.setState({ searchInput: e.target.value });
-  };
-
-  handleKeyPress = e => {
-    if (e.key === "Enter") {
-      this.onSearch(this.state.searchInput);
-    }
+  onSearchChange = event => {
+    const { value } = event.target;
+    this.props.dispatch(changeSearchValue(value));
   };
 
   onLogout = (event, key) => {
@@ -55,7 +52,6 @@ class Header extends Component {
 
   getExportList = () => {
     const kind = this.props.workflowKind.workflowKind;
-
     return (
       <Dropdown
         placement="bottomCenter"
@@ -88,7 +84,7 @@ class Header extends Component {
                       >
                         {item.icon}
                       </i>
-                      {item.name}
+                      {getIntlBody(item, "name")}
                     </a>
                   </Menu.Item>
                 );
@@ -99,7 +95,7 @@ class Header extends Component {
         }
         trigger={["click"]}
       >
-        <Tooltip title="Export data" placement="left">
+        <IntlTooltip title={"tooltips.exportDataText"} placement="left">
           <span
             className="pd-ard-sm mr-right-lg "
             style={{
@@ -111,13 +107,13 @@ class Header extends Component {
           >
             <Icon type="download" />
           </span>
-        </Tooltip>
+        </IntlTooltip>
       </Dropdown>
     );
   };
 
   render() {
-    const { searchInput } = this.state;
+    const { searchValue } = this.props.workflowSearch;
     const user = this.props.authentication.user;
     const supportedLaguanges = this.props.config.supported_languages;
     const regexForUrl = /\/instances\/[\d]+/;
@@ -184,18 +180,17 @@ class Header extends Component {
               suffix={
                 <Icon
                   type="search"
-                  onClick={() => this.onSearch(searchInput)}
+                  onClick={() => this.onSearch(searchValue)}
                   className="text-anchor"
                   style={{ fontSize: 20, color: "#000000", opacity: 0.3 }}
                 />
               }
-              value={searchInput}
+              value={searchValue}
               placeholder={this.props.intl.formatMessage({
                 id: "commonTextInstances.search"
               })}
               onChange={this.onSearchChange}
-              ref={node => (this.searchInput = node)}
-              onKeyPress={this.handleKeyPress}
+              onPressEnter={() => this.onSearch(searchValue)}
             />
           </div>
         ) : null}
@@ -217,7 +212,7 @@ class Header extends Component {
         >
           {showInsights ? (
             <span className="pd-ard-sm mr-right-lg ">
-              <Tooltip title="Show Reports" placement="left">
+              <IntlTooltip title={"tooltips.showReportsText"} placement="left">
                 <Link to="/reports/">
                   <i
                     className="material-icons text-middle text-anchor"
@@ -226,7 +221,7 @@ class Header extends Component {
                     trending_up
                   </i>
                 </Link>
-              </Tooltip>
+              </IntlTooltip>
             </span>
           ) : null}
 
@@ -245,7 +240,7 @@ class Header extends Component {
                     key="logout"
                     onClick={e => this.onLogout(e, "key")}
                   >
-                    Logout
+                    <FormattedMessage id={"loginPageInstances.logoutText"} />
                   </Menu.Item>
                 </Menu>
               }
@@ -280,14 +275,16 @@ function mapStateToProps(state) {
     authentication,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    workflowSearch
   } = state;
   return {
     workflowKind,
     authentication,
     config,
     languageSelector,
-    showFilterMenu
+    showFilterMenu,
+    workflowSearch
   };
 }
 

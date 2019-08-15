@@ -34,8 +34,13 @@ export const WorkflowHeader = props => {
   const { workflow, isEmbedded } = props;
 
   const headerData = (
-    <Row type="flex" align="middle" className="lc-card-head">
-      {props.isEmbedded ? (
+    <Row
+      type="flex"
+      align="middle"
+      className="lc-card-head"
+      style={{ padding: "0px 12px 0 12px" }}
+    >
+      {props.isEmbedded && props.bulkActionWorkflowChecked ? (
         <Col span={1} className="text-left">
           <Checkbox
             checked={
@@ -61,11 +66,11 @@ export const WorkflowHeader = props => {
         </Col>
       ) : null}
 
-      <Col span={isEmbedded ? 7 : 8} className="text-left ">
+      <Col span={isEmbedded ? 5 : 6} className="text-left ">
         <HeaderTitle {...props} />
       </Col>
 
-      <Col span={isEmbedded ? 4 : 6}>
+      <Col span={isEmbedded ? 6 : 8}>
         <GetMergedData {...props} />
       </Col>
 
@@ -279,7 +284,7 @@ class HeaderOptions extends React.Component {
       this.props.workflow.status.kind_display;
 
     const status = (
-      <Tooltip title={statusLabel}>
+      <Tooltip title={statusLabel} placement="topRight">
         <div className="pd-left-sm status-text text-black t-12 text-right text-ellipsis">
           {statusLabel}
         </div>
@@ -426,7 +431,8 @@ export class GetMergedData extends React.Component {
               maxWidth: "100%",
               whiteSpace: "normal",
               wordBreak: "break-word",
-              overflow: "hidden"
+              overflow: "hidden",
+              whiteSpace: "nowrap"
             }}
           >
             <span className="t-cap">

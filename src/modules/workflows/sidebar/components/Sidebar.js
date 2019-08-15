@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Collapse, Divider, Drawer, Dropdown, Icon, Layout, Menu } from "antd";
+import {
+  Collapse,
+  Divider,
+  Drawer,
+  Dropdown,
+  Icon,
+  Layout,
+  Menu,
+  Modal,
+  Tooltip
+} from "antd";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import ServerlessAuditListTabs from "../../../../js/components/Navbar/ServerlessAuditListTabs";
@@ -10,28 +20,20 @@ import {
 } from "../../../../js/actions";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
 import Permissions from "../../../common/permissions/constants";
+import { Link } from "react-router-dom";
 
 import LCData from "./LCData";
+import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
+const confirm = Modal.confirm;
 
 class Sidebar extends Component {
   constructor(props) {
-    const {
-      workflowIdFromDetailsToSidebar,
-      selectedGroup,
-      selectedStep
-    } = props;
+    const { selectedGroup, selectedStep } = props;
     super(props);
-
     this.state = {
-      current:
-        Object.values(props.workflowDetailsHeader).length &&
-        props.workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-          ? props.workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
-              .label
-          : null,
       showSidebar: false,
       isWorkflowPDFModalVisible: false,
       groupId: selectedGroup,
@@ -43,6 +45,23 @@ class Sidebar extends Component {
   toggleSidebar = () => {
     this.setState({ showSidebar: !this.state.showSidebar });
   };
+
+  get workflowStatus() {
+    const {
+      workflowDetailsHeader,
+      workflowIdFromDetailsToSidebar
+    } = this.props;
+    try {
+      const workflowStatusFromDetails =
+        workflowDetailsHeader[workflowIdFromDetailsToSidebar].status;
+      return (
+        workflowStatusFromDetails.label ||
+        workflowStatusFromDetails.kind_display
+      );
+    } catch (e) {
+      return null;
+    }
+  }
 
   callBackCollapser = (object_id, content_type) => {
     this.state.loading_sidebar = true;
@@ -111,19 +130,26 @@ class Sidebar extends Component {
   };
 
   archiveWorkflow = () => {
-    const intl = this.props.intl;
-    if (
-      window.confirm(
-        intl.formatMessage({
-          id: "commonTextInstances.archiveConfirmText"
-        })
-      )
-    ) {
-      const workflowId = this.props.workflowDetailsHeader[
-        this.props.workflowIdFromDetailsToSidebar
-      ].id;
-      this.props.dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
-    }
+    const {
+      intl,
+      dispatch,
+      workflowDetailsHeader,
+      workflowIdFromDetailsToSidebar
+    } = this.props;
+    confirm({
+      title: intl.formatMessage({
+        id: "commonTextInstances.archiveConfirmText"
+      }),
+      content: intl.formatMessage({
+        id: "commonTextInstances.archiveConfirmContent"
+      }),
+      onOk() {
+        const workflowId =
+          workflowDetailsHeader[workflowIdFromDetailsToSidebar].id;
+        dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
+      },
+      onCancel() {}
+    });
   };
 
   // componentDidMount() {
@@ -176,13 +202,15 @@ class Sidebar extends Component {
       workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family
         .length > 1
     ) {
+      const parentWorkflow =
+        workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+          .workflow_family[0];
       return (
-        <span style={{ color: "gray", fontSize: 12 }}>
-          {
-            workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-              .workflow_family[0].name
-          }
-        </span>
+        <Link to={`/workflows/instances/${parentWorkflow.id}`}>
+          <span style={{ color: "gray", fontSize: 12 }}>
+            {parentWorkflow.name}
+          </span>
+        </Link>
       );
     }
   };
@@ -285,7 +313,7 @@ class Sidebar extends Component {
               width={500}
               className="activity-log-drawer"
             >
-              {process.env.REACT_APP_CERTA_SERVELESS_CALL ? (
+              {process.env.REACT_APP_ACTIVITY_LOG_SERVERLESS ? (
                 <ServerlessAuditListTabs
                   id={[
                     ...this.props.workflowDetailsHeader[
@@ -326,15 +354,36 @@ class Sidebar extends Component {
                     alignItems: "center"
                   }}
                 >
-                  <div>
-                    <span style={{ color: "black", fontSize: 24 }}>
-                      {
+                  <div
+                    style={{
+                      maxWidth: "calc(100% - 40px)",
+                      lineHeight: "normal"
+                    }}
+                  >
+                    {this.renderParent()}
+                    <br />
+                    <Tooltip
+                      title={
                         workflowDetailsHeader[workflowIdFromDetailsToSidebar]
                           .name
                       }
-                    </span>
-                    <br />
-                    {this.renderParent()}
+                    >
+                      <span
+                        style={{
+                          maxWidth: "100%",
+                          color: "black",
+                          fontSize: 24,
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                          display: "inline-block"
+                        }}
+                      >
+                        {
+                          workflowDetailsHeader[workflowIdFromDetailsToSidebar]
+                            .name
+                        }
+                      </span>
+                    </Tooltip>
                   </div>
                   <Dropdown
                     overlay={workflowActionMenu}
@@ -351,10 +400,7 @@ class Sidebar extends Component {
 
                 <LCData
                   lcData={[...lc_data].splice(0, 3)}
-                  status={
-                    workflowDetailsHeader[workflowIdFromDetailsToSidebar].status
-                      .label
-                  }
+                  status={this.workflowStatus}
                 />
               </div>
             )}
@@ -396,7 +442,7 @@ class Sidebar extends Component {
                 {/* {"panorama_fish_eye"} */}
                 info_outline
               </i>
-              Profile
+              <FormattedMessage id="workflowsInstances.profileText" />
             </p>
           </span>
 
@@ -461,6 +507,15 @@ class Sidebar extends Component {
                                   >
                                     check_circle
                                   </i>
+                                ) : stepgroup.overdue ? (
+                                  <Tooltip title="overdue">
+                                    <i
+                                      className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
+                                      style={{ color: "#d40000" }}
+                                    >
+                                      alarm
+                                    </i>
+                                  </Tooltip>
                                 ) : (
                                   <i
                                     className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
@@ -469,7 +524,7 @@ class Sidebar extends Component {
                                     panorama_fish_eye
                                   </i>
                                 )}
-                                {stepgroup.definition.name}
+                                {getIntlBody(stepgroup.definition, "name")}
                               </span>
                               <span
                                 style={{
@@ -554,6 +609,15 @@ class Sidebar extends Component {
                                   >
                                     check_circle
                                   </i>
+                                ) : step.overdue ? (
+                                  <Tooltip title="overdue">
+                                    <i
+                                      className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+                                      style={{ color: "#d40000" }}
+                                    >
+                                      alarm
+                                    </i>
+                                  </Tooltip>
                                 ) : (
                                   <i
                                     className="material-icons t-14 pd-right-sm anticon anticon-check-circle"

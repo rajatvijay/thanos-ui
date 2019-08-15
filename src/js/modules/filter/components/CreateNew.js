@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Menu, Dropdown, Icon } from "antd";
 import { connect } from "react-redux";
 import { workflowKindActions, createWorkflow } from "../../../actions";
+import { injectIntl } from "react-intl";
+import { get as _get } from "lodash";
+import { getIntlBody } from "../../../_helpers/intl-helpers";
 
 class CreateNew extends Component {
   loadWorkflowKind = () => {
@@ -63,12 +66,12 @@ class CreateNew extends Component {
       <Menu className="kind-menu" theme="Light">
         {filteredWorkflow.map((item, index) => {
           return (
-            <Menu.Item key={"key-" + index}>
+            <Menu.Item key={`${item.id}`}>
               <div
                 onClick={() => this.handleWorkflowKindClick(item)}
                 className="kind-item"
               >
-                {item.name}
+                {getIntlBody(item, "name")}
               </div>
             </Menu.Item>
           );
@@ -122,4 +125,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(CreateNew);
+export default connect(mapStateToProps)(injectIntl(CreateNew));

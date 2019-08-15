@@ -150,7 +150,7 @@ class MagicForm extends React.Component {
                       {this.props.config.saml_url ? (
                         <React.Fragment>
                           <p style={{ color: "black" }}>
-                            Client User Login with Single Sign on
+                            <FormattedMessage id="loginPageInstances.clientSSOText" />
                           </p>
                           <a
                             className="ant-btn login-form-button ant-btn-primary btn-block text-white"

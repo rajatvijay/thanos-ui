@@ -3,6 +3,7 @@ import { Modal, Button, Input, Cascader, Divider, Icon } from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
 import { css } from "emotion";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const OPERATORS_TYPES = [
   { label: "Equal", value: "eq" },
@@ -173,14 +174,24 @@ class FilterPopup extends Component {
                 marginLeft: "28px"
               }}
             >
-              <span style={{ color: "#138BD6", cursor: "pointer" }}>
-                FILTER BY
+              <span
+                style={{
+                  color: "#138BD6",
+                  cursor: "pointer",
+                  textTransform: "uppercase"
+                }}
+              >
+                <FormattedMessage id={"workflowFiltersTranslated.filterBy"} />
               </span>
               <span
-                style={{ cursor: "pointer", marginRight: "38px" }}
+                style={{
+                  cursor: "pointer",
+                  marginRight: "38px",
+                  textTransform: "uppercase"
+                }}
                 onClick={this.props.onClear}
               >
-                CLEAR
+                <FormattedMessage id={"commonTextInstances.clear"} />
               </span>
             </div>
 
@@ -191,14 +202,18 @@ class FilterPopup extends Component {
                 value={status}
                 name="status"
                 data={this.getStatusTypes()}
-                placeholder="Status"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.filterPlaceholders.status"
+                })}
                 onFilterChange={onFilterChange}
               />
               <DropdownFilter
                 name="region"
                 value={region}
                 data={regionType.results}
-                placeholder="Market"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.filterPlaceholders.region"
+                })}
                 onFilterChange={onFilterChange}
               />
               <DropdownFilter
@@ -206,7 +221,10 @@ class FilterPopup extends Component {
                 name="business_unit"
                 value={business_unit}
                 data={businessType.results}
-                placeholder="Division"
+                placeholder={this.props.intl.formatMessage({
+                  id:
+                    "workflowFiltersTranslated.filterPlaceholders.business_unit"
+                })}
                 onFilterChange={onFilterChange}
               />
             </div>
@@ -220,14 +238,26 @@ class FilterPopup extends Component {
                 marginLeft: "28px"
               }}
             >
-              <span style={{ color: "#138BD6", cursor: "pointer" }}>
-                ADVANCED FILTERS
+              <span
+                style={{
+                  color: "#138BD6",
+                  cursor: "pointer",
+                  textTransform: "uppercase"
+                }}
+              >
+                <FormattedMessage
+                  id={"workflowFiltersTranslated.advancedFilter"}
+                />
               </span>
               <span
-                style={{ cursor: "pointer", marginRight: "38px" }}
+                style={{
+                  cursor: "pointer",
+                  marginRight: "38px",
+                  textTransform: "uppercase"
+                }}
                 onClick={this.onAdvClear}
               >
-                CLEAR
+                <FormattedMessage id={"commonTextInstances.clear"} />
               </span>
             </div>
 
@@ -267,7 +297,9 @@ class FilterPopup extends Component {
                 style={{ width: "100%" }}
                 options={fieldOptions}
                 onChange={arr => this.onFilterChange("field", arr)}
-                placeholder="Please select field"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.pleaseSelectField"
+                })}
                 className={css`
                   .ant-input {
                     padding-left: 0;
@@ -278,13 +310,17 @@ class FilterPopup extends Component {
               <DropdownFilter
                 data={OPERATORS_TYPES}
                 value={operator}
-                placeholder="Select Operator"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.selectOperator"
+                })}
                 name="operator"
                 onFilterChange={this.onFilterChange}
               />
 
               <Input
-                placeholder="Input Value"
+                placeholder={this.props.intl.formatMessage({
+                  id: "workflowFiltersTranslated.inputValue"
+                })}
                 value={text}
                 onChange={e => this.onFilterChange("text", e.target.value)}
                 style={{ paddingLeft: 0 }}
@@ -298,7 +334,7 @@ class FilterPopup extends Component {
               type="primary"
               onClick={this.onApply}
             >
-              Apply
+              <FormattedMessage id={"commonTextInstances.apply"} />
             </Button>
 
             <p
@@ -308,7 +344,9 @@ class FilterPopup extends Component {
                 textAlign: "center"
               }}
             >
-              please choose all three fields
+              <FormattedMessage
+                id={"workflowFiltersTranslated.advancedFilterMandatory"}
+              />
             </p>
           </div>
         </Modal>
@@ -325,4 +363,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(FilterPopup);
+export default connect(mapStateToProps)(injectIntl(FilterPopup));

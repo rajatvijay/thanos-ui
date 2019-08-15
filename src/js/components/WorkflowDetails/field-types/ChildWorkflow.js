@@ -301,7 +301,7 @@ class ChildWorkflowField2 extends Component {
   };
 
   getRelatedTypes = () => {
-    const related = this.props.workflowDetailsHeader.workflowDetailsHeader
+    const related = this.props.workflowDetailsHeader[this.props.workflowId]
       .definition.related_types;
 
     const that = this;

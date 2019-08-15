@@ -8,6 +8,8 @@ import { Tooltip, Icon } from "antd";
 import CreateNew from "./CreateNew";
 import { css } from "emotion";
 import { apiBaseURL } from "../../../../config";
+import { FormattedMessage, injectIntl } from "react-intl";
+import IntlTooltip from "../../../components/common/IntlTooltip";
 
 class Filter extends Component {
   state = {
@@ -260,10 +262,12 @@ class Filter extends Component {
                   opacity: 0.3,
                   letterSpacing: "0.38px",
                   lineHeight: "15px",
-                  fontSize: 13
+                  fontSize: 13,
+                  textTransform: "uppercase"
                 }}
               >
-                {this.props.workflow.count} RESULTS
+                {this.props.workflow.count}{" "}
+                <FormattedMessage id="mainFilterbar.resultsText" />
               </li>
             ) : null}
 
@@ -275,23 +279,24 @@ class Filter extends Component {
                   margin: "0px 40px 0px 10px",
                   letterSpacing: "0.38px",
                   lineHeight: "15px",
-                  fontSize: 13
+                  fontSize: 13,
+                  textTransform: "uppercase"
                 }}
               >
                 {this.props.workflowFilters.kind.meta
                   .is_sorting_field_enabled ? (
-                  <Tooltip
+                  <IntlTooltip
                     title={
                       this.state.sortOrderAsc
-                        ? "High to low risk score"
-                        : "Low to high risk score"
+                        ? "tooltips.highToLowRiskScoreText"
+                        : "tooltips.lowToHighRiskScoreText"
                     }
                   >
                     <span
                       className="text-secondary text-anchor"
                       onClick={this.changeScoreOrder}
                     >
-                      RISK
+                      <FormattedMessage id="mainFilterbar.riskText" />
                       {sortingEnabled ? (
                         <i className="material-icons t-14  text-middle">
                           {this.state.sortOrderAsc
@@ -300,7 +305,7 @@ class Filter extends Component {
                         </i>
                       ) : null}
                     </span>
-                  </Tooltip>
+                  </IntlTooltip>
                 ) : null}
               </li>
             )}
@@ -312,10 +317,11 @@ class Filter extends Component {
                 letterSpacing: "0.38px",
                 lineHeight: "15px",
                 fontSize: 13,
-                marginRight: 20
+                marginRight: 20,
+                textTransform: "uppercase"
               }}
             >
-              FILTER
+              <FormattedMessage id="mainFilterbar.filterText" />
               <span>{this.evaluateFilter()}</span>
               <Icon
                 style={{
@@ -364,4 +370,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Filter);
+export default connect(mapStateToProps)(injectIntl(Filter));

@@ -12,8 +12,11 @@ const { Content } = Layout;
 const PAGE_SIZE = 20;
 
 class WorkflowList extends Component {
-  handlePageChange = (page, rage) => {
-    const param = [{ label: "page", value: page }];
+  handlePageChange = page => {
+    const { searchValue } = this.props.workflowSearch;
+    const param = searchValue
+      ? [{ label: "page", value: page }, { label: "q", value: searchValue }]
+      : [{ label: "page", value: page }];
     this.props.dispatch(workflowActions.getAll(param));
   };
 
@@ -212,7 +215,8 @@ function mapPropsToState(state) {
     showFilterMenu,
     expandedWorkflows,
     config,
-    userWorkflowModal
+    userWorkflowModal,
+    workflowSearch
   } = state;
   return {
     workflowKind,
@@ -221,7 +225,8 @@ function mapPropsToState(state) {
     showFilterMenu,
     expandedWorkflows,
     config,
-    userWorkflowModal
+    userWorkflowModal,
+    workflowSearch
   };
 }
 

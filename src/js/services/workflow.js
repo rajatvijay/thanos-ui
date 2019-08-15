@@ -88,7 +88,7 @@ const pageUrl = filter => {
     g = g + "&" + i.label + "=" + i.value;
     return g;
   });
-  return url.toString();
+  return url.join("");
 };
 
 //GET WORKFLOW BY ID

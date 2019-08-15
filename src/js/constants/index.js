@@ -19,3 +19,4 @@ export { stepPreviewConstants } from "./stepPreview";
 export { stepBody } from "./stepBody";
 export { SET_WORKFLOW_KEYS } from "./workflowKeys";
 export { TOGGLE_MINIMALUI } from "./ToggleMinimalUI";
+export { WORKFLOW_SEARCH_VALUE_CHANGE } from "./workflowSearch";

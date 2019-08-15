@@ -15,11 +15,21 @@ export default {
       loadingConfigsText: "Loading configurations...",
       loadingFiltersText: "Loading filters...",
       fetchingDataText: "Fetching data...",
-      viewActivityLog: "View Activity Log"
+      viewActivityLog: "View Activity Log",
+      activityLog: {
+        editsTab: "Edits",
+        emailsTab: "Emails",
+        viewsTab: "Views",
+        alertsTab: "Alert",
+        downloadTab: "Download all",
+        downloadText: "Click above to download the activity log file."
+      },
+      profileText: "Profile"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
       createNewWorkflow: "Create new",
+      filterBy: "Filter By",
       advancedFilter: "Advanced filter",
       selectField: "Select Field",
       pleaseSelectField: "Please select field",
@@ -31,6 +41,7 @@ export default {
         contains: "Contains",
         not_contains: "Does not contain"
       },
+      advancedFilterMandatory: "Please choose all three fields",
       inputValue: "Input value",
       selectOperator: "Select operator",
       addFilterButtonText: "Add filter",
@@ -44,6 +55,28 @@ export default {
         business_unit: "Business",
         region: "Region"
       }
+    },
+    mainSidebar: {
+      taskQueuesText: "Task Queues",
+      alertsText: "Alerts",
+      myTasksText: "My Tasks",
+      showAllText: "Show all",
+      showLessText: "Show less"
+    },
+    mainFilterbar: {
+      resultsText: "Results",
+      riskText: "Risk",
+      filterText: "Filter"
+    },
+    tooltips: {
+      exportDataText: "Export data",
+      showReportsText: "Show Reports",
+      answeredBy: "Answered by {name}",
+      hideVersionText: "Hide version",
+      relevanceScoreText: "Relevance score: {score}",
+      highToLowRiskScoreText: "High to low risk score",
+      lowToHighRiskScoreText: "Low to high risk score",
+      answerIsRequiredText: "Answer is required"
     },
     commonTextInstances: {
       submitButtonText: "Submit",
@@ -79,8 +112,14 @@ export default {
       enterOtp: "Enter the one time password to verify your account",
       oneTimePassword: "One time password",
       archiveConfirmText: "Are you sure you want to archive this workflow?",
+      archiveConfirmContent:
+        "Note : Archived workflows will no longer be visible in the system",
       yes: "Yes",
-      no: "No"
+      no: "No",
+      clear: "Clear",
+      apply: "Apply",
+      by: "by",
+      expandView: "Expand View"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -95,7 +134,16 @@ export default {
       commentsButtonText:
         "{count, plural, =0 {Add comment/question} one {{count} comment} other {{count} comments}}",
       downloadWorkflowPDF: "Download Workflow PDF",
-      archiveWorkflow: "Archive Workflow"
+      archiveWorkflow: "Archive Workflow",
+      noComments: "No comments",
+      associationRisk: "Association & PEP Risk",
+      criminalRisk: "Criminal Risk",
+      financialRisk: "Financial Condition Risk",
+      legalRisk: "Legal Risk",
+      prohibitedEntitiesRisk: "Prohibited Entities Risk",
+      regulatorRisk: "Regulatory Risk",
+      reputationRisk: "Reputation Risk",
+      versionSubmittedOn: "Version submitted on"
     },
     errorMessageInstances: {
       magicLinkExpired: "We’re sorry, this link has expired.",
@@ -111,7 +159,9 @@ export default {
         "Dear user, forms are still being processed in the system. Please try again later.",
       noWorkflowDetails: "Oops! Seems like some issue. Click below to retry",
       resultIsEmpty:
-        "Looks like there is no config for this step. Please contact care@thevetted.com"
+        "Looks like there is no config for this step. Please contact care@thevetted.com",
+      emailMandatory: "E-Mail can't be empty",
+      passwordMandatory: "Password can't be empty"
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -128,7 +178,9 @@ export default {
         "Your contact information must be on file in order for you to complete this request.",
       goToLoginPage: "Go to login page",
       selectPreferedLanguage: " Choose language:",
-      goBack: "Go back"
+      goBack: "Go back",
+      accountText: "account",
+      clientSSOText: "Client User Login with Single Sign on"
     },
     userWorkflowInstances: {
       searchUser: "Search User",
@@ -137,6 +189,28 @@ export default {
     }
   },
   es: {
+    mainSidebar: {
+      taskQueuesText: "Colas de tareas",
+      alertsText: "Alertas",
+      myTasksText: "Mis tareas",
+      showAllText: "Mostrar todo",
+      showLessText: "Muestra menos"
+    },
+    mainFilterbar: {
+      resultsText: "Resultados",
+      riskText: "Riesgo",
+      filterText: "Filtrar"
+    },
+    tooltips: {
+      exportDataText: "Exportar datos",
+      showReportsText: "Mostrar informes",
+      answeredBy: "Respondido por {name}",
+      hideVersionText: "Ocultar versión",
+      relevanceScoreText: "Puntuación de relevancia: {score}",
+      highToLowRiskScoreText: "Puntaje de riesgo alto a bajo",
+      lowToHighRiskScoreText: "Puntaje de riesgo bajo a alto",
+      answerIsRequiredText: "La respuesta es requerida"
+    },
     workflowsInstances: {
       waitingDropdown: "Esperando ",
       detailsViewToggle: "Vista de detalles",
@@ -152,11 +226,22 @@ export default {
       loadingConfigsText: "Cargando configuraciones...",
       loadingFiltersText: "Cargando filtros...",
       fetchingDataText: "Obteniendo datos...",
-      viewActivityLog: "Ver registro de actividad"
+      viewActivityLog: "Ver registro de actividad",
+      activityLog: {
+        editsTab: "Ediciones",
+        emailsTab: "Correos electrónicos",
+        viewsTab: "Puntos de vista",
+        alertsTab: "Alerta",
+        downloadTab: "Descargar todo",
+        downloadText:
+          "Haga clic arriba para descargar el archivo de registro de actividad."
+      },
+      profileText: "Perfil"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
       createNewWorkflow: "Crear nuevo",
+      filterBy: "Filtrado Por",
       advancedFilter: "Filtro avanzado",
       selectField: "Seleccionar campo",
       pleaseSelectField: "Seleccionar el campo",
@@ -168,6 +253,7 @@ export default {
         contains: "Contiene",
         not_contains: "No contiene"
       },
+      advancedFilterMandatory: "Por favor elija los tres campos",
       inputValue: "Valor de entrada",
       selectOperator: "Seleccionar operador",
       addFilterButtonText: "Añadir filtro",
@@ -201,6 +287,8 @@ export default {
       scrollToTop: "Hasta arriba",
       reloadText: "recargar",
       loadingText: "cargando",
+      addComments: "Añadir comentario / pregunta",
+      commentsText: "comentarios",
       categoryText: "categoría",
       requestOneTimePasswordText: "Solicitar una contraseña de tiempo ",
       resendOneTimePasswordText: "volver a enviar una contraseña de tiempo ",
@@ -215,8 +303,14 @@ export default {
         "Ingrese la contraseña de un solo uso para verificar su cuenta ",
       oneTimePassword: "Contraseña de una sola vez",
       archiveConfirmText: "¿Seguro que quieres archivar este flujo de trabajo?",
+      archiveConfirmContent:
+        "Los flujos de trabajo archivados ya no serán visibles en el sistema",
       yes: "Sí",
-      no: "No"
+      no: "No",
+      clear: "Claro",
+      apply: "Aplicar",
+      by: "por",
+      expandView: "Expandir vista"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por ",
@@ -231,7 +325,16 @@ export default {
       commentsButtonText:
         "{count, plural, =0 {Añadir comentario/pregunta} one {{count} comentario} other {{count} comentarios}}",
       downloadWorkflowPDF: "Descargar Workflow PDF",
-      archiveWorkflow: "Archivo Workflow"
+      archiveWorkflow: "Archivo Workflow",
+      noComments: "Sin comentarios",
+      associationRisk: "Asociación y riesgo de PEP",
+      criminalRisk: "Riesgo criminal",
+      financialRisk: "Riesgo de condición financiera",
+      legalRisk: "Riesgo legal",
+      prohibitedEntitiesRisk: "Riesgo de entidades prohibidas",
+      regulatorRisk: "Riesgo regulatorio",
+      reputationRisk: "Riesgo de reputación",
+      versionSubmittedOn: "Versión presentada el"
     },
     errorMessageInstances: {
       magicLinkExpired: "Lo sentimos, este enlace ha caducado",
@@ -246,7 +349,9 @@ export default {
       workflowNotFound:
         "¡Lo siento! No hemos podido encontrar el flujo de trabajo que ha solicitado.",
       noStepInWorkflow:
-        "Estimado usuario, los formularios aún se están procesando en el sistema. Por favor, inténtelo de nuevo más tarde."
+        "Estimado usuario, los formularios aún se están procesando en el sistema. Por favor, inténtelo de nuevo más tarde.",
+      emailMandatory: "El correo electrónico no puede estar vacío",
+      passwordMandatory: "La contraseña no puede estar vacía"
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
@@ -264,7 +369,10 @@ export default {
         "Su información de contacto debe estar archivada para que pueda completar esta solicitud",
       goToLoginPage: "Ir a la página de inicio de sesión",
       selectPreferedLanguage: " Elige lengua:",
-      goBack: "Regresa"
+      goBack: "Regresa",
+      accountText: "cuenta",
+      clientSSOText:
+        "Inicio de sesión de usuario de cliente con inicio de sesión único"
     },
     userWorkflowInstances: {
       searchUser: "Buscar usuario",
@@ -284,6 +392,28 @@ export default {
   // added as a placeholder for future
   //},
   "fr-ca": {
+    mainSidebar: {
+      taskQueuesText: "Files d'attente",
+      alertsText: "Les alertes",
+      myTasksText: "Mes tâches",
+      showAllText: "Montre tout",
+      showLessText: "Montre moins"
+    },
+    mainFilterbar: {
+      resultsText: "Résultats",
+      riskText: "Risque",
+      filterText: "Filtre"
+    },
+    tooltips: {
+      exportDataText: "Exporter des données",
+      showReportsText: "Afficher les rapports",
+      answeredBy: "Répondu par {name}",
+      hideVersionText: "Masquer la version",
+      relevanceScoreText: "Score de pertinence: {score}",
+      highToLowRiskScoreText: "Score de risque élevé à faible",
+      lowToHighRiskScoreText: "Score de risque faible à élevé",
+      answerIsRequiredText: "La réponse est requise"
+    },
     workflowsInstances: {
       waitingDropdown: "En attente ",
       detailsViewToggle: "Vue détaillée",
@@ -299,11 +429,22 @@ export default {
       loadingConfigsText: "Chargement des configurations...",
       loadingFiltersText: "Chargement des filtres...",
       fetchingDataText: "Récupération des données...",
-      viewActivityLog: "Voir le journal d'activité"
+      viewActivityLog: "Voir le journal d'activité",
+      activityLog: {
+        editsTab: "Édite",
+        emailsTab: "Courriels",
+        viewsTab: "Des vues",
+        alertsTab: "Alerte",
+        downloadTab: "Tout télécharger",
+        downloadText:
+          "Cliquez ci-dessus pour télécharger le fichier journal d'activité."
+      },
+      profileText: "Profil"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
       createNewWorkflow: "Créer un nouveau",
+      filterBy: "Filtrer Pary",
       advancedFilter: "Filtre avancé",
       selectField: "Choisir un champ",
       pleaseSelectField: "Veuillez sélectionner un champ",
@@ -315,6 +456,7 @@ export default {
         contains: "Contient",
         not_contains: "Ne contient pas"
       },
+      advancedFilterMandatory: "Veuillez choisir les trois champs",
       inputValue: "Valeur d'entrée",
       selectOperator: "Choisir un opérateur",
       addFilterButtonText: "Ajouter un filtre",
@@ -364,8 +506,14 @@ export default {
       oneTimePassword: "Mot de passe unique",
       archiveConfirmText:
         "Souhaitez-vous vraiment archiver ce flux de travaux ?",
+      archiveConfirmContent:
+        "Les workflows archivés ne seront plus visibles dans le système",
       yes: "Oui",
-      no: "Non"
+      no: "Non",
+      clear: "Clair",
+      apply: "Appliquer",
+      by: "par",
+      expandView: "Développer la vue"
     },
     stepBodyFormInstances: {
       submittedBy: "Envoyé par ",
@@ -380,7 +528,16 @@ export default {
       commentsButtonText:
         "{count, plural, =0 {Add comment/question} un {{count} comment} autre {{count} comments}}",
       downloadWorkflowPDF: "Télécharger le PDF du flux de travail",
-      archiveWorkflow: "Archiver le flux de travail"
+      archiveWorkflow: "Archiver le flux de travail",
+      noComments: "Sans commentaires",
+      associationRisk: "Association et risque de PEP",
+      criminalRisk: "Risque criminel",
+      financialRisk: "Risque de situation financière",
+      legalRisk: "Risque juridique",
+      prohibitedEntitiesRisk: "Risque lié aux entités interdites",
+      regulatorRisk: "Risque réglementaire",
+      reputationRisk: "Risque de réputation",
+      versionSubmittedOn: "Version soumise le"
     },
     errorMessageInstances: {
       magicLinkExpired: "Nous sommes désolés, ce lien a expiré.",
@@ -395,7 +552,9 @@ export default {
       workflowNotFound:
         "Désolé! Nous n'avons pas pu trouver le flux de travail que vous avez demandé.",
       noStepInWorkflow:
-        "Cher utilisateur, les formulaires sont toujours en cours de traitement dans le système. Veuillez réessayer plus tard."
+        "Cher utilisateur, les formulaires sont toujours en cours de traitement dans le système. Veuillez réessayer plus tard.",
+      emailMandatory: "E-mail ne peut pas être vide",
+      passwordMandatory: "Le mot de passe ne peut pas être vide"
     },
     loginPageInstances: {
       oneTimeLink: "Entrez votre adresse de courriel professionnelle",
@@ -412,7 +571,9 @@ export default {
         "Vos coordonnées doivent figurer au dossier pour que vous puissiez remplir cette demande.",
       goToLoginPage: "Aller à la page de connexion",
       selectPreferedLanguage: " Choisissez la langue :",
-      goBack: "Revenir en arrière"
+      goBack: "Revenir en arrière",
+      accountText: "compte",
+      clientSSOText: "Connexion utilisateur client avec Single Sign on"
     },
     userWorkflowInstances: {
       searchUser: "Rechercher un utilisateur",

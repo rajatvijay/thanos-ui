@@ -11,7 +11,8 @@ import {
   Checkbox as AntCheckbox,
   Divider as AntDivider,
   Button,
-  Cascader
+  Cascader,
+  notification
 } from "antd";
 import _ from "lodash";
 import moment from "moment";
@@ -25,6 +26,8 @@ import { FormattedMessage } from "react-intl";
 import validator from "validator";
 import { ESign } from "./esign.js";
 import { apiBaseURL, siteOrigin } from "../../../../config";
+import { validateUploadFile } from "../../../utils/files";
+import { getIntlBody } from "../../../_helpers/intl-helpers";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -42,9 +45,16 @@ const {
   feedValue,
   getLink,
   getStyle,
-  isDisabled,
-  stringifyObjectValue
+  isDisabled
 } = commonFunctions;
+
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
 
 //Field Type Text
 export class Text extends Component {
@@ -412,8 +422,6 @@ export const Checkbox = props => {
 
 //Field Type Select
 export const Select = props => {
-  let stringifiedOptions = [];
-
   const single =
     props.field.definition.field_type === "single_select" ? true : false;
   let save = onFieldChange.bind(this, props);
@@ -430,10 +438,6 @@ export const Select = props => {
       ? props.field.answers[0].answer
       : stringToArray(props.field.answers[0])
     : stringToArray(props.field.definition.defaultValue);
-
-  if (options && options.length) {
-    stringifiedOptions = stringifyObjectValue(options);
-  }
 
   return (
     <FormItem
@@ -540,7 +544,7 @@ export const Paragraph = props => {
       ) : null}
       <span
         dangerouslySetInnerHTML={{
-          __html: getLink(props.field.definition.body)
+          __html: getLink(getIntlBody(props.field.definition))
         }}
       />
     </h2>
@@ -607,12 +611,21 @@ class FileUpload extends Component {
   };
 
   onUpload = e => {
-    this.setState({
-      filesList: e,
-      loading: true
-    });
-    const value = e[0];
-    this.props.onFieldChange(value, this.props, "file");
+    const file = e[0];
+    const { valid: isFileValid, error } = validateUploadFile({ file });
+    if (isFileValid) {
+      this.setState({
+        filesList: e,
+        loading: true
+      });
+      // TODO Back-end error is still not shown - need to show it
+      this.props.onFieldChange(file, this.props, "file");
+    } else {
+      openNotificationWithIcon({
+        type: "error",
+        message: error
+      });
+    }
   };
 
   removeFile = () => {

@@ -11,7 +11,9 @@ export const createWorkflow = payload => async dispatch => {
       type: workflowCreateConstants.CREATE_SUCCESS,
       workflowCreate: response
     });
-    history.push("/workflows/instances/" + response.id);
+    // This is handled in WorkflowDetails that makes it navigate it to first incomplete step.
+    const extra = "?new=true";
+    history.push("/workflows/instances/" + response.id + extra);
     dispatch(workflowActions.getAll());
   } catch (error) {
     dispatch({ type: workflowCreateConstants.CREATE_FAILURE, error });

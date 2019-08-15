@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip, notification } from "antd";
 import _ from "lodash";
 import { authHeader } from "../../_helpers";
 import Moment from "react-moment";
@@ -8,10 +8,19 @@ import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
 import { apiBaseURL } from "../../../config";
+import { userUtilities } from "../../utils/user";
+import { injectIntl, FormattedMessage } from "react-intl";
 
 const TabPane = Tabs.TabPane;
 
-class AuditListTabs extends Component {
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
+class _AuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
     edits: [
       "step_submitted",
@@ -70,7 +79,13 @@ class AuditListTabs extends Component {
         {Object.entries(AuditListTabs.ACTIVITY_ACTION_GROUPS).map(([key]) => {
           return (
             <TabPane
-              tab={<span style={{ textTransform: "capitalize" }}>{key}</span>}
+              tab={
+                <span style={{ textTransform: "capitalize" }}>
+                  <FormattedMessage
+                    id={"workflowsInstances.activityLog." + key + "Tab"}
+                  />
+                </span>
+              }
               key={key}
             >
               <AuditList
@@ -87,7 +102,8 @@ class AuditListTabs extends Component {
           key="download"
           tab={
             <span>
-              Download all <Icon type="download" />
+              <FormattedMessage id="workflowsInstances.activityLog.downloadTab" />{" "}
+              <Icon type="download" />
             </span>
           }
         >
@@ -101,7 +117,7 @@ class AuditListTabs extends Component {
             </span>
             <br />
             <div className="mr-top t-12 text-light">
-              Click above to download the activity log file.
+              <FormattedMessage id="workflowsInstances.activityLog.downloadText" />
             </div>
           </div>
         </TabPane>
@@ -109,6 +125,8 @@ class AuditListTabs extends Component {
     );
   };
 }
+
+const AuditListTabs = injectIntl(_AuditListTabs);
 
 AuditListTabs.propTypes = {
   id: PropTypes.number.isRequired
@@ -123,7 +141,8 @@ class AuditList extends Component {
         next: null
       },
       activityLoading: true,
-      initialLoad: true
+      initialLoad: true,
+      logErrorCode: null
     };
   }
 
@@ -142,9 +161,26 @@ class AuditList extends Component {
     };
 
     fetch(url, requestOptions)
-      .then(response => response.json())
-      .then(body => {
-        this.appendData(body);
+      .then(response => {
+        if (!response.ok) {
+          this.setState({
+            logErrorCode: response.status
+          });
+          if (response.status === 403 || response.status === 401) {
+            userUtilities.postLogoutAction({ addNextURL: true });
+          }
+          throw Error(response.statusText);
+        } else {
+          response.json().then(data => {
+            this.appendData(data);
+          });
+        }
+      })
+      .catch(err => {
+        // openNotificationWithIcon({
+        //   type: "error",
+        //   message: "Error in getting activity logs!"
+        // });
       });
   };
 
@@ -176,6 +212,29 @@ class AuditList extends Component {
           <div style={{ textAlign: "center" }}>
             <Icon type={"exclamation-circle"} />{" "}
             {`No activity log found for ${this.props.logType}`}
+          </div>
+        );
+      } else if (this.state.logErrorCode) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center"
+            }}
+          >
+            <p
+              style={{
+                marginBottom: "6px",
+                fontSize: "16px",
+                color: "#f44336"
+              }}
+            >
+              Something went wrong, please retry.
+            </p>
+            <Button type="primary" onClick={() => this.loadData()}>
+              Retry
+            </Button>
           </div>
         );
       } else {

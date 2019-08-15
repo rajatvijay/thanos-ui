@@ -8,7 +8,6 @@ import {
 } from "../constants";
 import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
-import _ from "lodash";
 import { history } from "../_helpers";
 import { notification } from "antd";
 import * as Sentry from "@sentry/browser";
@@ -114,7 +113,10 @@ function getStepGroup(id, isActive) {
 }
 
 //Get workflow step fileds data.
-function getStepFields(step) {
+// TODO: Refactor this into 2 separate functions
+// one for polling and other normal one that call single service function
+// This should be taken up when refactoring the data layer of the app
+function getStepFields(step, polling, fieldId) {
   // For Error tracking
   if (!step.workflowId || !step.groupId || !step.stepId) {
     Sentry.captureException(
@@ -122,6 +124,13 @@ function getStepFields(step) {
     );
     return () => {};
   }
+
+  // Polling Case
+  if (polling) {
+    return pollGetStepFields;
+  }
+
+  // General case w/o polling
   return dispatch => {
     if (!step.doNotRefresh) {
       dispatch(request(step));
@@ -130,19 +139,10 @@ function getStepFields(step) {
     workflowDetailsService
       .getStepFields(step)
       .then(stepFields => {
-        if (
-          stepFields.definition.available_user_tags &&
-          stepFields.definition.available_user_tags.some(
-            item => item === "Assignee"
-          )
-        ) {
-          dispatch(stepBodyActions.getAssignedUser(step.stepId));
-        }
-        console.log("fields", stepFields);
-        return dispatch(success({ ...stepFields }));
+        onSuccessfullResponse(stepFields, dispatch);
       })
       .catch(e => {
-        dispatch(failure(e, step));
+        onFailureResponse(e, dispatch);
       });
   };
 
@@ -156,8 +156,49 @@ function getStepFields(step) {
       step
     };
   }
+  function onSuccessfullResponse(stepFields, dispatch) {
+    if (
+      stepFields.definition.available_user_tags &&
+      stepFields.definition.available_user_tags.some(
+        item => item === "Assignee"
+      )
+    ) {
+      dispatch(stepBodyActions.getAssignedUser(step.stepId));
+    }
+    return dispatch(success({ ...stepFields }));
+  }
   function failure(error, step) {
     return { type: workflowStepConstants.GET_STEPFIELDS_FAILURE, error, step };
+  }
+  function onFailureResponse(error, dispatch) {
+    dispatch(failure(error, step));
+  }
+  function pollGetStepFields(dispatch) {
+    let incrementalPollingCounter = 1;
+    function callStepFieldsAPI() {
+      workflowDetailsService
+        .getStepFields(step)
+        .then(stepFields => {
+          // onSuccessfullResponse(stepFields, dispatch);
+          const currentField = stepFields.data_fields.find(
+            field => field.id === fieldId
+          );
+          onSuccessfullResponse(stepFields, dispatch);
+          if (
+            currentField.integration_json.status_code === "fetching" &&
+            incrementalPollingCounter < 32
+          ) {
+            setTimeout(callStepFieldsAPI, incrementalPollingCounter * 1000);
+            incrementalPollingCounter *= 2;
+          } else {
+            incrementalPollingCounter = 1;
+          }
+        })
+        .catch(e => {
+          onFailureResponse(e, dispatch);
+        });
+    }
+    callStepFieldsAPI();
   }
 }
 

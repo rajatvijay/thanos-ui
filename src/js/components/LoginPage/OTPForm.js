@@ -237,7 +237,9 @@ class OTPForm extends React.Component {
       <div className="login-form-box magic-box">
         <Row gutter={32}>
           <Col span={showRightBlock ? 12 : 24} className="block-left text-left">
-            <div className="login-top text-bold">Login using email only</div>
+            <div className="login-top text-bold">
+              <FormattedMessage id="loginPageInstances.loginUsingEmailOnly" />
+            </div>
 
             <div>
               <Form
@@ -362,8 +364,9 @@ class OTPForm extends React.Component {
               <div>
                 <div style={{ height: "260px" }}>
                   <div className="login-top text-bold">
-                    Login using your {config.saml_url ? " company " : null}{" "}
-                    username and password
+                    <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                    {config.saml_url ? " company " : null}{" "}
+                    <FormattedMessage id="loginPageInstances.customSAMLloginText2" />
                   </div>
                   <div className="logo">
                     <img
@@ -373,7 +376,9 @@ class OTPForm extends React.Component {
                     />
                   </div>
                   <div className="text-light t-16">
-                    Login using your {config.name} username and password
+                    <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
+                    {config.name}{" "}
+                    <FormattedMessage id="loginPageInstances.customSAMLloginText2" />
                   </div>
                 </div>
                 <div>
@@ -389,7 +394,8 @@ class OTPForm extends React.Component {
                     >
                       <span className="text-white">
                         <FormattedMessage id="loginPageInstances.customSAMLloginText1" />{" "}
-                        {config.name} account
+                        {config.name}{" "}
+                        <FormattedMessage id="loginPageInstances.accountText" />
                       </span>
                     </a>
                   ) : (

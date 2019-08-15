@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { userUtilities } from "./user";
-import { apiBaseURL } from "../../config";
+import { apiBaseURL, auditLogBaseURL } from "../../config";
 
 export const getValueFromCookie = name => {
   let cookieValue = null;
@@ -32,7 +32,32 @@ export const APIFetch = (...params) => {
   }
   params[0] = `${apiBaseURL}${params[0]}`;
   return fetch(...params).then(response => {
-    if (response.status === 403) {
+    if (response.status === 403 || response.status === 401) {
+      userUtilities.postLogoutAction({ addNextURL: true });
+    }
+    return response;
+  });
+};
+
+/**
+ * A fetch function that keeps the unauthorized users out for serverless API calls
+ * @param params
+ * @returns {Promise<Response | never>}
+ */
+export const serverlessAPIFetch = (...params) => {
+  if (params[0].startsWith("http") || params[0].startsWith("/")) {
+    throw new Error(
+      "Invalid URL provided to serverlessAPIFetch, must be a relative URL not starting with /"
+    );
+  }
+  let baseUrl;
+  if (params[2] === "AUDIT_LOG") {
+    baseUrl = auditLogBaseURL;
+  }
+
+  params[0] = `${baseUrl}${params[0]}`;
+  return fetch(...params).then(response => {
+    if (response.status === 403 || response.status === 401) {
       userUtilities.postLogoutAction({ addNextURL: true });
     }
     return response;

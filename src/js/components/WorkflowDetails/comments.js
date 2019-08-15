@@ -23,8 +23,6 @@ import { workflowFiltersService } from "../../services";
 import styled from "@emotion/styled";
 import { css } from "emotion";
 import { status_filters } from "./EventStatuses";
-import { Link } from "react-router-dom";
-import { history } from "../../_helpers";
 
 const { toString, toContentState } = Mention;
 
@@ -302,17 +300,27 @@ class Comments extends Component {
         onChange={that.changeRiskCode}
         className="comment-select"
       >
-        <Option value="Association & PEP Risk">Association & PEP Risk</Option>
-        <Option value="Criminal Risk">Criminal Risk</Option>
+        <Option value="Association & PEP Risk">
+          <FormattedMessage id="stepBodyFormInstances.associationRisk" />
+        </Option>
+        <Option value="Criminal Risk">
+          <FormattedMessage id="stepBodyFormInstances.criminalRisk" />
+        </Option>
         <Option value="Financial Condition Risk">
-          Financial Condition Risk
+          <FormattedMessage id="stepBodyFormInstances.financialRisk" />
         </Option>
-        <Option value="Legal Risk">Legal Risk</Option>
+        <Option value="Legal Risk">
+          <FormattedMessage id="stepBodyFormInstances.legalRisk" />
+        </Option>
         <Option value="Prohibited Entities Risk">
-          Prohibited Entities Risk
+          <FormattedMessage id="stepBodyFormInstances.prohibitedEntitiesRisk" />
         </Option>
-        <Option value="Regulatory Risk">Regulatory Risk</Option>
-        <Option value="Reputation Risk">Reputation Risk</Option>
+        <Option value="Regulatory Risk">
+          <FormattedMessage id="stepBodyFormInstances.regulatorRisk" />
+        </Option>
+        <Option value="Reputation Risk">
+          <FormattedMessage id="stepBodyFormInstances.reputationRisk" />
+        </Option>
       </Select>
     );
 
@@ -408,7 +416,9 @@ class Comments extends Component {
                     </Col>
                   </Row>
                 </StyledHeadContainer>
-                <StyledCommentContainer>No comments</StyledCommentContainer>
+                <StyledCommentContainer>
+                  <FormattedMessage id="stepBodyFormInstances.noComments" />
+                </StyledCommentContainer>
               </div>
             ) : (
               comments.results.map((c, index) => {

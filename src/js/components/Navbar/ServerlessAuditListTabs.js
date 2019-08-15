@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip, notification } from "antd";
 import _ from "lodash";
 import { requestOptions } from "../../services/auth-header-auditlog-service";
 import Moment from "react-moment";
@@ -7,9 +7,17 @@ import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
-import { auditLogBaseURL } from "../../../config";
+import { serverlessAPIFetch } from "../../utils/request";
 
 const TabPane = Tabs.TabPane;
+
+const openNotificationWithIcon = data => {
+  notification[data.type]({
+    message: data.message,
+    description: data.body,
+    placement: "bottomLeft"
+  });
+};
 
 class ServerlessAuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
@@ -44,10 +52,10 @@ class ServerlessAuditListTabs extends Component {
       return filename && (filename.match(/filename="(.*)"/) || []).pop();
     }
 
-    const url = `${auditLogBaseURL}workflows/activity/export?workflows=${
-      this.props.id
-    }`;
-    return fetch(url, requestOptions()).then(function(resp) {
+    const url = `workflows/activity/export?workflows=${this.props.id}`;
+    return serverlessAPIFetch(url, requestOptions(), "AUDIT_LOG").then(function(
+      resp
+    ) {
       resp.blob().then(function(blob) {
         // Allowing filename and MIME type to be decided by the backend
         // though it's possible to specify here
@@ -121,27 +129,35 @@ class AuditList extends Component {
         next: null
       },
       activityLoading: true,
-      initialLoad: true
+      initialLoad: true,
+      logErrorCode: null
     };
   }
 
   loadData = () => {
-    const initUrl = `${auditLogBaseURL}workflows/activity/?workflows=${
+    const initUrl = `workflows/activity/?workflows=${
       this.props.id
     }&actions=${this.props.actions.join(",")}`;
     const url = this.state.data.next
       ? `${initUrl}&from=${this.state.data.next}`
       : initUrl;
-
-    fetch(url, requestOptions())
-      .then(response => response.json())
-      .then(body => {
-        this.appendData(body);
+    serverlessAPIFetch(url, requestOptions(), "AUDIT_LOG")
+      .then(response => {
+        if (!response.ok) {
+          this.setState({
+            logErrorCode: response.status
+          });
+          throw Error(response.statusText);
+        } else {
+          response.json().then(data => {
+            this.appendData(data);
+          });
+          this.setState({
+            logErrorCode: null
+          });
+        }
       })
-      .catch(err => {
-        console.warn(err);
-        // TODO: Do something with error
-      });
+      .catch(err => {});
   };
 
   appendData = body => {
@@ -172,6 +188,29 @@ class AuditList extends Component {
           <div style={{ textAlign: "center" }}>
             <Icon type={"exclamation-circle"} />{" "}
             {`No activity log found for ${this.props.logType}`}
+          </div>
+        );
+      } else if (this.state.logErrorCode) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center"
+            }}
+          >
+            <p
+              style={{
+                marginBottom: "6px",
+                fontSize: "16px",
+                color: "#f44336"
+              }}
+            >
+              Something went wrong, please retry.
+            </p>
+            <Button type="primary" onClick={() => this.loadData()}>
+              Retry
+            </Button>
           </div>
         );
       } else {
@@ -305,7 +344,7 @@ const AuditContent = props => {
             } else if (item.action_type === "submitted") {
               icon = "check_circle_outline";
               color = "green";
-            } else if (item.action_type === "email") {
+            } else if (item.object_type === "email") {
               icon = "email";
               if (item.action_type === "rejected") {
                 color = "red";

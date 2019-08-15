@@ -1,6 +1,7 @@
 import { dunsFieldConstants } from "../constants";
 import { dunsFieldService } from "../services";
 import { notification } from "antd";
+// import { workflowDetailsActions } from "./workflow_details";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -22,12 +23,12 @@ function dunsSaveField(payload, stepId) {
   return dispatch => {
     dispatch(request(payload));
 
-    dunsFieldService
-      .saveDunsField(payload)
-      .then(
-        field => dispatch(success(field)),
-        error => dispatch(failure(error))
-      );
+    dunsFieldService.saveDunsField(payload).then(
+      field => {
+        dispatch(success(field));
+      },
+      error => dispatch(failure(error))
+    );
   };
 
   function request(payload) {

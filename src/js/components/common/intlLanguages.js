@@ -1,3 +1,6 @@
+import { getReduxKey } from "../../_helpers/store";
+import { languageConstants } from "../../constants";
+
 export default {
   endonyms: {
     en: "English",
@@ -7,6 +10,7 @@ export default {
     pt: "Português",
     ru: "русский",
     fr: "Français",
+    "fr-ca": "Français canadien",
     de: "Deutsche",
     ja: "日本語 (にほんご)",
     ko: "한국어",
@@ -25,6 +29,7 @@ export default {
     pt: "Portuguese",
     ru: "Russian",
     fr: "French",
+    "fr-ca": "Canadian French",
     de: "German",
     ja: "Japanese",
     ko: "Korean",
@@ -36,3 +41,11 @@ export default {
     "zh-tw": "Chinese (Traditional)"
   }
 };
+
+export const getUserLanguage = () =>
+  getReduxKey(
+    "authentication.user.prefered_language",
+    languageConstants.DEFAULT_LOCALE
+  )
+    .replace("-", "_")
+    .toLowerCase();

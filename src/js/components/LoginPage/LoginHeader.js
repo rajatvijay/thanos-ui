@@ -35,9 +35,15 @@ const LoginHeader = props => {
 };
 
 function mapStateToProps(state) {
-  const { config } = state;
+  const { config, languageSelector } = state;
+
+  // languageSelector is here only to trigger re-render when the language is
+  // changed, otherwise the text "Change language" doesn't reflect a change
+  // because there's no change in props
+
   return {
-    config: config
+    config: config,
+    languageSelector
   };
 }
 
