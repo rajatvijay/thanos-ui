@@ -1,14 +1,14 @@
 import { APIFetch } from "../utils/request";
 import { authHeader } from "../_helpers";
 
-export const fetchWorkflowDetails = (stepTag, stepId) => {
+export const fetchWorkflowDetails = (stepTag, definitionId) => {
   const requestOptions = {
     method: "GET",
     headers: authHeader.post(),
     credentials: "include"
   };
   return APIFetch(
-    `workflow/pdf/config/${stepId}/?trigger_step=${stepTag}`,
+    `workflow/pdf/config/${definitionId}/?trigger_step=${stepTag}`,
     requestOptions
   ).then(response => response.json());
 };

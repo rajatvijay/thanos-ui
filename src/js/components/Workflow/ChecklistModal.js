@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Checkbox, Button, Icon } from "antd";
 import { css } from "emotion";
-import { authHeader } from "../../_helpers";
 import { get as lodashObjectGet, set as lodashObjectSet } from "lodash";
 import {
   submitWorkflows,
@@ -10,76 +9,6 @@ import {
 import { notification } from "antd";
 import { FormattedMessage } from "react-intl";
 
-const WORKFLOW_DATA = {
-  count: 1,
-  next: null,
-  previous: null,
-  results: [
-    {
-      config_id: 1805,
-      parent_workflows: {
-        label: "Entity",
-        value: "entity",
-        steps: [
-          {
-            label: "Review Report",
-            value: "review_executive_summary_step"
-          }
-        ]
-      },
-      child_workflows: [
-        {
-          label: "Grey List",
-          value: "grey-list",
-          steps: [
-            {
-              label: "Grey List Information",
-              value: "grey_list_information"
-            }
-          ]
-        },
-        {
-          label: "Grey List",
-          value: "grey-list",
-          steps: [
-            {
-              label: "Grey List Information",
-              value: "grey_list_information"
-            }
-          ]
-        },
-        {
-          label: "RDC Screening",
-          value: "rdc-screening",
-          steps: [
-            {
-              label: "Internet Search - ABAC",
-              value: "google_search_abac"
-            },
-            {
-              label: "Internet Search - PEP",
-              value: "google_search_pep"
-            }
-          ]
-        }
-      ],
-      extra_sections: [
-        {
-          label: "Cover Page",
-          value: "cover_page"
-        },
-        {
-          label: "Methodology",
-          value: "methodology"
-        },
-        {
-          label: "Glossary",
-          value: "glossary"
-        }
-      ]
-    }
-  ]
-};
 const openNotificationWithIcon = data => {
   notification[data.type]({
     message: data.message,
@@ -182,7 +111,6 @@ class ChecklistModal extends React.Component {
 
     if (this.validateSelection()) return;
 
-    this.setLoding(true);
     const { workflowId } = this.props;
     const { config_id: configId } = this.state.pdfConfig.results[0];
     const body = {
@@ -196,6 +124,7 @@ class ChecklistModal extends React.Component {
       include_archived_related_workflows: !!include_archived_related_workflows
     };
 
+    this.setLoding(true);
     submitWorkflows(body)
       .then(response => {
         if (!response.ok) {
@@ -226,21 +155,24 @@ class ChecklistModal extends React.Component {
   fetchWorkflowDetails = () => {
     const { definition } = this.props;
     const stepTag = definition.tag;
-    const stepId = definition.id;
-    console.log(stepTag, stepId);
-    fetchWorkflowDetails(stepTag, stepId)
+    const definitionId = definition.id;
+    console.log(stepTag, definitionId);
+    this.setLoding(true);
+    fetchWorkflowDetails(stepTag, definitionId)
       .then(workflow => {
         console.log(workflow);
         this.setState({
-          pdfConfig: WORKFLOW_DATA,
-          // pdfConfig: workflow,
+          // pdfConfig: WORKFLOW_DATA,
+          pdfConfig: workflow,
           error: false
         });
+        this.setLoding(false);
       })
       .catch(() => {
         this.setState({
           error: true
         });
+        this.setLoding(false);
       });
   };
 
@@ -252,7 +184,7 @@ class ChecklistModal extends React.Component {
           <Checkbox
             className={css`
               font-size: 17px;
-              margin-left: 15px;
+              margin-left: 10px;
               margin-top: 3px;
             `}
             onChange={event =>
@@ -273,41 +205,60 @@ class ChecklistModal extends React.Component {
 
   renderChildWorkflow = workflows => {
     if (!workflows) return null;
-    return workflows.map((workflow, key) => {
-      return (
+    return (
+      <div
+        className={css`
+          width: 100%;
+          margin-top: 35px;
+        `}
+      >
+        <h2 style={{ fontSize: 18 }}>Child Workflows</h2>
         <div
-          key={key}
           className={css`
+            white-space: nowrap;
+            overflow-x: scroll;
             display: flex;
-            flex-direction: column;
-            width: 50%;
-            margin-top: 20px;
+            padding-bottom: 20px;
           `}
         >
-          <h2>{workflow.label}</h2>
+          {workflows.map((workflow, key) => {
+            return (
+              <div
+                key={key}
+                className={css`
+                  display: flex;
+                  flex-direction: column;
+                  width: 50%;
+                  margin-top: 20px;
+                `}
+              >
+                <h2 style={{ fontSize: 18 }}>{workflow.label}</h2>
 
-          {workflow.steps.map(step => (
-            <Checkbox
-              className={css`
-                font-size: 17px;
-                margin-left: 15px !important;
-                margin-top: 3px;
-              `}
-              onChange={event =>
-                this.onSelectWorkflow(
-                  event,
-                  step.value,
-                  workflow.value,
-                  "CHILD_WORKFLOW"
-                )
-              }
-            >
-              {step.label}
-            </Checkbox>
-          ))}
+                {workflow.steps.map(step => (
+                  <Checkbox
+                    className={css`
+                      font-size: 17px;
+                      margin-left: 10px !important;
+                      margin-top: 3px;
+                    `}
+                    onChange={event =>
+                      this.onSelectWorkflow(
+                        event,
+                        step.value,
+                        workflow.value,
+                        "CHILD_WORKFLOW"
+                      )
+                    }
+                  >
+                    {step.label}
+                  </Checkbox>
+                ))}
+              </div>
+            );
+          })}
         </div>
-      );
-    });
+      </div>
+    );
   };
 
   renderStaticWorkflow = sections => {
@@ -317,7 +268,7 @@ class ChecklistModal extends React.Component {
         <Checkbox
           className={css`
             font-size: 17px;
-            margin-left: 15px;
+            margin-left: 10px;
             margin-top: 3px;
           `}
           onChange={event =>
@@ -346,7 +297,7 @@ class ChecklistModal extends React.Component {
         <Checkbox
           className={css`
             font-size: 17px;
-            margin-left: 15px;
+            margin-left: 10px;
             margin-top: 3px;
           `}
           onChange={event => this.onSelectMetaInformation(event, field.value)}
@@ -383,7 +334,9 @@ class ChecklistModal extends React.Component {
 
     return (
       <div style={{ margin: "0px 35px" }}>
-        <h2>{pdfConfig.results[0].parent_workflows.label}</h2>
+        <h2 style={{ fontSize: 18 }}>
+          Parent Workflow: {pdfConfig.results[0].parent_workflows.label}
+        </h2>
         {this.renderParentWorkflow(pdfConfig.results[0].parent_workflows.steps)}
         <div
           className={css`
@@ -401,7 +354,7 @@ class ChecklistModal extends React.Component {
             margin-top: 30px;
           `}
         >
-          <h2>Static Section</h2>
+          <h2 style={{ fontSize: 18 }}>Static Section</h2>
           {this.renderStaticWorkflow(pdfConfig.results[0].extra_sections)}
         </div>
         <div

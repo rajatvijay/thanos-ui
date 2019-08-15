@@ -19,6 +19,7 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
 import StepAssignmentUsers from "./StepAssignmentUsers";
 import ChecklistModal from "../Workflow/ChecklistModal";
+import { get as lodashGet } from "lodash";
 
 class StepBody extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class StepBody extends Component {
       stepCompletedBy: null,
       stepApprovedBy: null,
       printing: false,
-      showWorkflowPDFModal: true
+      showWorkflowPDFModal: false
     };
   }
 
@@ -140,12 +141,22 @@ class StepBody extends Component {
   }
 
   componentDidUpdate(previousProps) {
-    if (this.stepData) {
-      // if (previousProps.stepId !== this.props.stepId) {
-      if (this.stepData.definition_tag === "car-qa") {
-        this.setState({ showWorkflowPDFModal: true });
-      }
-      // }
+    const previousStepTag = lodashGet(
+      previousProps,
+      `currentStepFields[${
+        previousProps.stepId
+      }].currentStepFields.definition_tag`
+    );
+    const currentStepTag = lodashGet(
+      this.props,
+      `currentStepFields[${this.props.stepId}].currentStepFields.definition_tag`
+    );
+
+    if (
+      previousStepTag !== currentStepTag &&
+      currentStepTag === "review_executive_summary_step"
+    ) {
+      this.setState({ showWorkflowPDFModal: true });
     }
   }
 
@@ -254,7 +265,7 @@ class StepBody extends Component {
 
     return (
       <div style={{ background: "#FFFFFF" }}>
-        {this.state.showWorkflowPDFModal && this.stepData && (
+        {this.stepData && (
           <ChecklistModal
             definition={this.stepData.definition}
             workflowId={workflowId}
