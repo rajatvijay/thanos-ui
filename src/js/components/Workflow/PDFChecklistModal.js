@@ -22,7 +22,7 @@ const META_INFO = [
   { value: "include_archived_related_workflows", label: "Related Worflow" }
 ];
 
-class ChecklistModal extends React.Component {
+class PDFChecklistModal extends React.Component {
   state = {
     pdfConfig: null,
     loading: false,
@@ -448,4 +448,4 @@ class ChecklistModal extends React.Component {
   };
 }
 
-export default ChecklistModal;
+export default PDFChecklistModal;

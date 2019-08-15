@@ -18,7 +18,7 @@ import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
 import StepAssignmentUsers from "./StepAssignmentUsers";
-import ChecklistModal from "../Workflow/ChecklistModal";
+import PDFChecklistModal from "../Workflow/PDFChecklistModal";
 import { get as lodashGet } from "lodash";
 
 class StepBody extends Component {
@@ -266,7 +266,7 @@ class StepBody extends Component {
     return (
       <div style={{ background: "#FFFFFF" }}>
         {this.stepData && (
-          <ChecklistModal
+          <PDFChecklistModal
             definition={this.stepData.definition}
             workflowId={workflowId}
             visible={showWorkflowPDFModal}
