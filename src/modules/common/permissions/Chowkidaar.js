@@ -14,7 +14,13 @@ const userHasPermission = ({ permissionsAllowed, permissionName }) =>
  * @returns {null|React.DetailedReactHTMLElement<any, HTMLElement>[]}
  * @private
  */
-const _Chowkidaar = ({ children, config, check, ...otherProps }) => {
+const _Chowkidaar = ({
+  children,
+  config,
+  check,
+  deniedElement,
+  ...otherProps
+}) => {
   if (
     userHasPermission({
       permissionsAllowed: config.permissions,
@@ -25,7 +31,7 @@ const _Chowkidaar = ({ children, config, check, ...otherProps }) => {
       return React.cloneElement(child, { ...otherProps, ...child.props });
     });
   } else {
-    return null; // TODO: or custom element that needs to be rendered
+    return deniedElement || null; // TODO: or custom element that needs to be rendered
   }
 };
 

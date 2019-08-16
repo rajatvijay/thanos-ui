@@ -24,7 +24,8 @@ export default {
         downloadTab: "Download all",
         downloadText: "Click above to download the activity log file."
       },
-      profileText: "Profile"
+      profileText: "Profile",
+      unauthorisedText: "You are not authorised to view this page."
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -232,7 +233,8 @@ export default {
         downloadText:
           "Haga clic arriba para descargar el archivo de registro de actividad."
       },
-      profileText: "Perfil"
+      profileText: "Perfil",
+      unauthorisedText: "No tienes autorización para ver esta página."
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
@@ -435,7 +437,8 @@ export default {
         downloadText:
           "Cliquez ci-dessus pour télécharger le fichier journal d'activité."
       },
-      profileText: "Profil"
+      profileText: "Profil",
+      unauthorisedText: "Vous n'êtes pas autorisé à voir cette page.."
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",

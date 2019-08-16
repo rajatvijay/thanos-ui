@@ -16,6 +16,8 @@ import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../modules/sidebar/components/Sidebar";
 import Filter from "../../modules/filter/components/Filter";
+import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../modules/common/permissions/constants";
 
 const { Content } = Layout;
 
@@ -177,7 +179,41 @@ class Workflow extends Component {
     }
   };
 
+  showMessage = (isLoading, loadingText) => {
+    let message = null;
+    if (isLoading) {
+      message = (
+        <div className="text-center text-bold mr-top-lg">
+          <Icon type="loading" style={{ fontSize: 24 }} />
+          <span className="text-normal pd-left">
+            {" "}
+            <FormattedMessage id={loadingText} />
+          </span>
+        </div>
+      );
+    } else if (this.props.workflow.loadingStatus === "failed") {
+      message = (
+        <div className="mr-top-lg text-center text-bold text-metal">
+          <FormattedMessage id="errorMessageInstances.noWorkflowsError" />.{" "}
+          <div className="mr-top-lg text-center text-bold text-metal">
+            <FormattedMessage id="errorMessageInstances.loggedOutError" />
+            <div
+              className="text-anchor text-anchor "
+              onClick={this.redirectLoginPage}
+            >
+              <FormattedMessage id="commonTextInstances.clickToLogin" />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return message;
+  };
+
   render = () => {
+    const { workflow, config, workflowKind } = this.props;
+
     if (this.props.workflow.loadingStatus === "failed") {
       // TODO the checkAuth method only reports status text: `403 Forbidden`
       // In future, we should relook at a better way to handle this
@@ -187,68 +223,73 @@ class Workflow extends Component {
       }
     }
 
-    return (
-      <Layout
-        className="workflow-container inner-container"
-        style={{ minHeight: "100vh" }}
-      >
-        <FilterSidebar />
-        <Sidebar {...this.props} />
-        <Layout>
-          <Content style={{ margin: "4vh 4vw" }}>
-            <Row className="clear">
-              <Filter />
+    const renderPrep = {
+      get isLoading() {
+        return config.loading || workflow.loading || workflowKind.loading;
+      },
 
-              {this.props.config.loading ||
-              this.props.workflow.loading ||
-              this.props.workflowKind.loading ? (
-                <div className="text-center text-bold mr-top-lg">
-                  <Icon type="loading" style={{ fontSize: 24 }} />
-                  <span className="text-normal pd-left">
-                    {" "}
-                    <FormattedMessage
-                      id={
-                        this.props.config.loading
-                          ? "workflowsInstances.loadingConfigsText"
-                          : this.props.workflowKind.loading
-                          ? "workflowsInstances.loadingFiltersText"
-                          : this.props.workflow.loading
-                          ? "workflowsInstances.fetchingDataText"
-                          : null
-                      }
-                    />
-                  </span>
-                </div>
-              ) : this.props.workflow.loadingStatus === "failed" ? (
-                <div className="mr-top-lg text-center text-bold text-metal">
-                  <FormattedMessage id="errorMessageInstances.noWorkflowsError" />
-                  .{" "}
-                  <div className="mr-top-lg text-center text-bold text-metal">
-                    <FormattedMessage id="errorMessageInstances.loggedOutError" />
-                    <div
-                      className="text-anchor text-anchor "
-                      onClick={this.redirectLoginPage}
-                    >
-                      <FormattedMessage id="commonTextInstances.clickToLogin" />
-                    </div>
-                  </div>
-                </div>
+      get getLoadingText() {
+        let text = null;
+        if (config.loading) text = "workflowsInstances.loadingConfigsText";
+        else if (workflowKind.loading)
+          text = "workflowsInstances.loadingFiltersText";
+        else if (workflow.loading) text = "workflowsInstances.fetchingDataText";
+        return text;
+      },
+
+      get notAllowedMessage() {
+        return (
+          <div style={{ paddingTop: "150px" }}>
+            <h4 className="text-center t-24 text-bold">
+              {!config ? (
+                "loading"
               ) : (
-                <div className="clearfix">
-                  <WorkflowList
-                    location={this.props.location}
-                    sortAscending={this.state.sortOrderAsc}
-                    profile={this.props.match}
-                    {...this.props}
-                    statusView={this.state.statusView}
-                    sortingEnabled={this.state.sortingEnabled}
-                  />
-                </div>
+                <FormattedMessage id={"workflowsInstances.unauthorisedText"} />
               )}
-            </Row>
-          </Content>
+            </h4>
+          </div>
+        );
+      }
+    };
+
+    const renderMessage = this.showMessage(
+      renderPrep.isLoading,
+      renderPrep.getLoadingText
+    );
+
+    return (
+      <Chowkidaar
+        check={Permissions.CAN_VIEW_DASHBOARD}
+        deniedElement={renderPrep.notAllowedMessage}
+      >
+        <Layout
+          className="workflow-container inner-container"
+          style={{ minHeight: "100vh" }}
+        >
+          <FilterSidebar />
+          <Sidebar {...this.props} />
+          <Layout>
+            <Content style={{ margin: "4vh 4vw" }}>
+              <Row className="clear">
+                <Filter />
+
+                {renderMessage || (
+                  <div className="clearfix">
+                    <WorkflowList
+                      location={this.props.location}
+                      sortAscending={this.state.sortOrderAsc}
+                      profile={this.props.match}
+                      {...this.props}
+                      statusView={this.state.statusView}
+                      sortingEnabled={this.state.sortingEnabled}
+                    />
+                  </div>
+                )}
+              </Row>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
+      </Chowkidaar>
     );
   };
 }

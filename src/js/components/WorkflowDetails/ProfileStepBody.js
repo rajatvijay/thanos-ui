@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col } from "antd";
+import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../modules/common/permissions/constants";
 
 class ProfileStepBody extends Component {
   renderDetails() {
@@ -45,7 +47,9 @@ class ProfileStepBody extends Component {
 
     return (
       <div style={{ margin: "40px 50px", height: "100vh" }}>
-        <Row>{this.renderDetails()}</Row>
+        <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+          <Row>{this.renderDetails()}</Row>
+        </Chowkidaar>
       </div>
     );
   }

@@ -398,10 +398,12 @@ class Sidebar extends Component {
                 </div>
                 <Divider style={{ margin: "10px 0" }} />
 
-                <LCData
-                  lcData={[...lc_data].splice(0, 3)}
-                  status={this.workflowStatus}
-                />
+                <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+                  <LCData
+                    lcData={[...lc_data].splice(0, 3)}
+                    status={this.workflowStatus}
+                  />
+                </Chowkidaar>
               </div>
             )}
           <span
