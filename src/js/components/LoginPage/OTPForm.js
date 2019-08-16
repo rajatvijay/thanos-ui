@@ -19,6 +19,7 @@ import { authHeader } from "../../_helpers";
 
 import { FormattedMessage, injectIntl } from "react-intl";
 import { apiBaseURL } from "../../../config";
+import showNotification from "../../../modules/common/notification";
 
 const FormItem = Form.Item;
 
@@ -106,14 +107,12 @@ class OTPForm extends React.Component {
 
   //opt request success notification
   showMessageSuccess = () => {
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message:
-        this.props.intl.formatMessage({
-          id: "commonTextInstances.oneTimePasswordSentText"
-        }) +
-        " " +
-        this.state.data.email
+      message: "commonTextInstances.oneTimePasswordSentText",
+      messageData: {
+        email: this.state.data.email
+      }
     });
   };
 

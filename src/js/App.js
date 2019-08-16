@@ -10,6 +10,7 @@ import { flattenMessages } from "./components/common/messageUtils";
 import { languageActions } from "./actions";
 import { languageConstants } from "./constants";
 import ErrorBoundary from "./components/common/ErrorBoundary";
+import { IntlCapture } from "../modules/common/notification";
 
 class App extends React.Component {
   componentDidMount() {
@@ -97,7 +98,10 @@ class App extends React.Component {
     return (
       <ErrorBoundary>
         <IntlProvider locale={locale} messages={messageTranslate}>
-          <Routes />
+          <React.Fragment>
+            <Routes />
+            <IntlCapture />
+          </React.Fragment>
         </IntlProvider>
       </ErrorBoundary>
     );

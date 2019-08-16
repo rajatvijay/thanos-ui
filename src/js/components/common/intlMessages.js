@@ -103,7 +103,7 @@ export default {
       requestOneTimePasswordText: "Request One-time password",
       resendOneTimePasswordText: "Resend One-time password",
       oneTimePasswordSentText:
-        "We have sent you an email. If you are a registered user, you will also find your one time password in the email sent to",
+        "We have sent you an email. If you are a registered user, you will also find your one time password in the email sent to {email}",
       unableToSendOneTimePassword: "Unable to send one time password to ",
       emailCantBeEmpty: "Email can't be empty",
       invalidEmpty: "Invalid email",
@@ -289,7 +289,7 @@ export default {
       requestOneTimePasswordText: "Solicitar una contraseña de tiempo ",
       resendOneTimePasswordText: "volver a enviar una contraseña de tiempo ",
       oneTimePasswordSentText:
-        "Te hemos enviado un correo electrónico. Si es un usuario registrado, también encontrará su contraseña única en el correo electrónico enviado a",
+        "Te hemos enviado un correo electrónico. Si es un usuario registrado, también encontrará su contraseña única en el correo electrónico enviado a {email}",
       unableToSendOneTimePassword:
         "No se puede enviar una contraseña de tiempo a ",
       emailCantBeEmpty: "El correo electrónico no puede estar vacío",
@@ -492,7 +492,7 @@ export default {
       requestOneTimePasswordText: "Demander un mot de passe unique",
       resendOneTimePasswordText: "Renvoyer le mot de passe unique",
       oneTimePasswordSentText:
-        "Nous vous avons envoyé un courriel. Si vous êtes un utilisateur enregistré, vous trouverez également votre mot de passe unique dans le courriel envoyé à",
+        "Nous vous avons envoyé un courriel. Si vous êtes un utilisateur enregistré, vous trouverez également votre mot de passe unique dans le courriel envoyé à {email}",
       unableToSendOneTimePassword:
         "Impossible d'envoyer un mot de passe unique à ",
       emailCantBeEmpty: "Le courriel ne peut être vide",
