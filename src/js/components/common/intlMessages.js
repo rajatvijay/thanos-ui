@@ -391,11 +391,11 @@ export default {
   //},
   "fr-ca": {
     mainSidebar: {
-      taskQueuesText: "Files d'attente",
-      alertsText: "Les alertes",
+      taskQueuesText: "Files d'attente des tâches",
+      alertsText: "Alertes",
       myTasksText: "Mes tâches",
-      showAllText: "Montre tout",
-      showLessText: "Montre moins"
+      showAllText: "Afficher tout",
+      showLessText: "Afficher moins"
     },
     mainFilterbar: {
       resultsText: "Résultats",
@@ -403,7 +403,7 @@ export default {
       filterText: "Filtre"
     },
     tooltips: {
-      exportDataText: "Exporter des données",
+      exportDataText: "Exporter les données",
       showReportsText: "Afficher les rapports",
       answeredBy: "Répondu par {name}",
       hideVersionText: "Masquer la version",
@@ -429,21 +429,21 @@ export default {
       fetchingDataText: "Récupération des données...",
       viewActivityLog: "Voir le journal d'activité",
       activityLog: {
-        editsTab: "Édite",
+        editsTab: "Modifications",
         emailsTab: "Courriels",
-        viewsTab: "Des vues",
+        viewsTab: "Vues",
         alertsTab: "Alerte",
-        downloadTab: "Tout télécharger",
+        downloadTab: "Télécharger tout",
         downloadText:
-          "Cliquez ci-dessus pour télécharger le fichier journal d'activité."
+          "Cliquez ci-dessus pour télécharger le fichier du journal d'activité"
       },
-      profileText: "Profil",
+      profileText: "Profile",
       unauthorisedText: "Vous n'êtes pas autorisé à voir cette page.."
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
       createNewWorkflow: "Créer un nouveau",
-      filterBy: "Filtrer Pary",
+      filterBy: "Trier par",
       advancedFilter: "Filtre avancé",
       selectField: "Choisir un champ",
       pleaseSelectField: "Veuillez sélectionner un champ",
@@ -489,7 +489,7 @@ export default {
       scrollToTop: "Défilement vers le haut",
       reloadText: "recharger",
       loadingText: "chargement",
-      addComments: "Ajouter un commentaire/une question",
+      addComments: "Ajouter commentaire/question",
       commentsText: "commentaires",
       categoryText: "Catégorie",
       requestOneTimePasswordText: "Demander un mot de passe unique",
@@ -506,10 +506,10 @@ export default {
       archiveConfirmText:
         "Souhaitez-vous vraiment archiver ce flux de travaux ?",
       archiveConfirmContent:
-        "Les workflows archivés ne seront plus visibles dans le système",
+        "Remarque : Les flux de travail archivés ne seront plus visibles dans le système",
       yes: "Oui",
       no: "Non",
-      clear: "Clair",
+      clear: "Effacer",
       apply: "Appliquer",
       by: "par",
       expandView: "Développer la vue"
@@ -528,7 +528,7 @@ export default {
         "{count, plural, =0 {Add comment/question} un {{count} comment} autre {{count} comments}}",
       downloadWorkflowPDF: "Télécharger le PDF du flux de travail",
       archiveWorkflow: "Archiver le flux de travail",
-      noComments: "Sans commentaires",
+      noComments: "Pas de commentaires",
       associationRisk: "Association et risque de PEP",
       criminalRisk: "Risque criminel",
       financialRisk: "Risque de situation financière",
@@ -552,7 +552,7 @@ export default {
         "Désolé! Nous n'avons pas pu trouver le flux de travail que vous avez demandé.",
       noStepInWorkflow:
         "Cher utilisateur, les formulaires sont toujours en cours de traitement dans le système. Veuillez réessayer plus tard.",
-      emailMandatory: "E-mail ne peut pas être vide",
+      emailMandatory: "Le courriel ne peut pas être vide",
       passwordMandatory: "Le mot de passe ne peut pas être vide"
     },
     loginPageInstances: {
@@ -572,7 +572,7 @@ export default {
       selectPreferedLanguage: " Choisissez la langue :",
       goBack: "Revenir en arrière",
       accountText: "compte",
-      clientSSOText: "Connexion utilisateur client avec Single Sign on"
+      clientSSOText: "Connexion utilisateur client avec SSO"
     },
     userWorkflowInstances: {
       searchUser: "Rechercher un utilisateur",
