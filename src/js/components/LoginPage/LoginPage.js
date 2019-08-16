@@ -25,6 +25,7 @@ class LoginPage extends React.Component {
     const supportedLaguanges = this.props.config.supported_languages;
 
     if (this.props.config.configuration) {
+      // TODO: check if this causes multiple reloads on logout
       if (
         !_.includes(this.props.config.configuration.client_auth_backends, 0)
       ) {
@@ -37,14 +38,8 @@ class LoginPage extends React.Component {
     }
 
     return (
-      <div
-        className="login login-container container-fluid"
-        id="login"
-        token={this.state.token}
-      >
-        <LoginHeader
-          showLanguage={_.isEmpty(supportedLaguanges) ? false : true}
-        />
+      <div id="login" className="login login-container container-fluid">
+        <LoginHeader showLanguage={!_.isEmpty(supportedLaguanges)} />
         <div className="login-overlay">
           <div className="d-flex justify-content-center align-items-center">
             <div className="login-box ">

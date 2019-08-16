@@ -1,21 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { injectIntl, FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
 import { Dropdown, Icon, Input, Menu, notification, Tooltip } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import {
+  changeSearchValue,
   logout,
-  workflowActions,
-  changeSearchValue
+  workflowActions
 } from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
-import { siteOrigin } from "../../../config";
-import { languageConstants } from "../constants";
 import IntlTooltip from "../../../js/components/common/IntlTooltip";
-import { getIntlBody } from "../../../js/_helpers/intl-helpers";
+import { exportWorkflow } from "../services";
+import { Chowkidaar } from "../../common/permissions/Chowkidaar";
+import Permissions from "../../common/permissions/constants";
+import { ExportWorkflowDropdown } from "./ExportWorkflowDropdown";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -27,7 +28,8 @@ const openNotificationWithIcon = data => {
 
 class Header extends Component {
   state = {
-    showSearchInputIcon: false
+    showSearchInputIcon: false,
+    loading: false
   };
 
   onSearch = searchValue => {
@@ -50,66 +52,35 @@ class Header extends Component {
     this.props.dispatch(logout());
   };
 
-  getExportList = () => {
-    const kind = this.props.workflowKind.workflowKind;
-    return (
-      <Dropdown
-        placement="bottomCenter"
-        icon={<Icon />}
-        overlay={
-          <Menu>
-            {_.map(kind, function(item, index) {
-              if (
-                !item.is_related_kind &&
-                _.includes(item.features, "add_workflow")
-              ) {
-                return (
-                  <Menu.Item key={`menu_${index}`}>
-                    <a
-                      href={
-                        siteOrigin +
-                        "/api/v1/workflow-kinds/" +
-                        item.tag +
-                        "/data-export/"
-                      }
-                      className="text-nounderline"
-                    >
-                      <i
-                        className="material-icons text-primary-dark"
-                        style={{
-                          width: "20px",
-                          fontSize: "14px",
-                          verticalAlign: "middle"
-                        }}
-                      >
-                        {item.icon}
-                      </i>
-                      {getIntlBody(item, "name")}
-                    </a>
-                  </Menu.Item>
-                );
-              }
-              return null;
-            })}
-          </Menu>
-        }
-        trigger={["click"]}
-      >
-        <IntlTooltip title={"tooltips.exportDataText"} placement="left">
-          <span
-            className="pd-ard-sm mr-right-lg "
-            style={{
-              fontSize: 24,
-              color: "#000000",
-              opacity: 0.3,
-              cursor: "pointer"
-            }}
-          >
-            <Icon type="download" />
-          </span>
-        </IntlTooltip>
-      </Dropdown>
-    );
+  onClickExport = async ({ kind }) => {
+    this.setState({
+      loading: true
+    });
+    try {
+      const response = await exportWorkflow({ kind });
+      if (response.ok) {
+        openNotificationWithIcon({
+          type: "success",
+          message:
+            "Your request for export has been accepted, it'll be mailed to you shortly"
+        });
+      } else {
+        const responseJSON = await response.json();
+        openNotificationWithIcon({
+          type: "error",
+          message: responseJSON["detail"]
+        });
+      }
+    } catch (err) {
+      openNotificationWithIcon({
+        type: "error",
+        message:
+          "An error occurred while processing your request, please try again later"
+      });
+    }
+    this.setState({
+      loading: false
+    });
   };
 
   render() {
@@ -117,9 +88,7 @@ class Header extends Component {
     const user = this.props.authentication.user;
     const supportedLaguanges = this.props.config.supported_languages;
     const regexForUrl = /\/instances\/[\d]+/;
-    const showExportOption =
-      this.props.config.permissions &&
-      this.props.config.permissions.includes("Can export workflow data");
+    const showExportOption = this.props.workflowKind.workflowKind;
     let showInsights = false;
 
     if (
@@ -225,9 +194,15 @@ class Header extends Component {
             </span>
           ) : null}
 
-          {this.props.workflowKind.workflowKind && showExportOption
-            ? this.getExportList()
-            : null}
+          {showExportOption ? (
+            <Chowkidaar check={Permissions.CAN_EXPORT_WORKFLOW_DATA}>
+              <ExportWorkflowDropdown
+                kinds={this.props.workflowKind.workflowKind}
+                loading={this.state.loading}
+                onClick={this.onClickExport}
+              />
+            </Chowkidaar>
+          ) : null}
 
           {_.isEmpty(supportedLaguanges) || <SelectLanguage navbar={true} />}
 

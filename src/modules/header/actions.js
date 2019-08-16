@@ -1,5 +1,5 @@
 import { languageConstants } from "./constants";
-import { updateSelectedLanguageService } from "./services";
+import { updateSelectedLanguage } from "./services";
 
 function setLanguage(message) {
   return { type: languageConstants.LANGUAGE, message };
@@ -8,9 +8,7 @@ function setLanguage(message) {
 const updateUserLanguage = payload => async dispatch => {
   dispatch({ type: languageConstants.CHANGE_LANGUAGE_REQUEST, payload });
   try {
-    const response = await updateSelectedLanguageService.updateSelectedLanguage(
-      payload
-    );
+    const response = await updateSelectedLanguage(payload);
     dispatch(setLanguage(payload));
     dispatch({
       type: languageConstants.CHANGE_LANGUAGE_SUCCESS,

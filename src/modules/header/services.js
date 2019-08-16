@@ -1,8 +1,9 @@
 import { authHeader } from "../../js/_helpers";
 import { apiBaseURL } from "../../config";
 import Godaam from "../../js/utils/storage";
+import { APIFetch } from "../../js/utils/request";
 
-function updateSelectedLanguage(payload) {
+export function updateSelectedLanguage(payload) {
   return new Promise(async (resolve, reject) => {
     const requestOptions = {
       method: "POST",
@@ -28,6 +29,16 @@ function updateSelectedLanguage(payload) {
   });
 }
 
+export const exportWorkflow = ({ kind }) => {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  return APIFetch(`workflow-kinds/${kind}/data-export/`, requestOptions);
+};
+
 function handleResponse(response) {
   if (!response.ok) {
     return Promise.reject(response.statusText);
@@ -35,7 +46,3 @@ function handleResponse(response) {
 
   return response.json();
 }
-
-export const updateSelectedLanguageService = {
-  updateSelectedLanguage
-};
