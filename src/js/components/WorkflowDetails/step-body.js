@@ -154,6 +154,7 @@ class StepBody extends Component {
 
     if (
       previousStepTag !== currentStepTag &&
+      // TODO: Make this config driven, VET-5412
       currentStepTag === "review_executive_summary_step"
     ) {
       this.setState({ showWorkflowPDFModal: true });

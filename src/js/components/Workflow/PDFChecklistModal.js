@@ -69,7 +69,6 @@ class PDFChecklistModal extends React.Component {
         )
       );
     }
-    console.log(this.userSelection);
   };
 
   onSelectMetaInformation = (e, tag) => {
@@ -114,8 +113,8 @@ class PDFChecklistModal extends React.Component {
     const { workflowId } = this.props;
     const { config_id: configId } = this.state.pdfConfig.results[0];
     const body = {
-      config_id: configId || 863,
-      workflow_id: workflowId || 28157,
+      config_id: configId,
+      workflow_id: workflowId,
       parent_steps_to_print: parentWorkflow,
       child_steps_to_print: childWorkflow,
       static_sections: staticSections,
@@ -156,11 +155,9 @@ class PDFChecklistModal extends React.Component {
     const { definition } = this.props;
     const stepTag = definition.tag;
     const definitionId = definition.id;
-    console.log(stepTag, definitionId);
     this.setLoding(true);
     fetchWorkflowDetails(stepTag, definitionId)
       .then(workflow => {
-        console.log(workflow);
         this.setState({
           // pdfConfig: WORKFLOW_DATA,
           pdfConfig: workflow,
@@ -181,12 +178,15 @@ class PDFChecklistModal extends React.Component {
     return steps.map((step, key) => {
       return (
         <div key={key}>
+          {/* TODO: Make this into a styled component */}
           <Checkbox
             className={css`
               font-size: 17px;
               margin-left: 10px;
               margin-top: 3px;
             `}
+            // TODO: Extract this into a separate component,
+            // so that render does not create a new function everytime
             onChange={event =>
               this.onSelectWorkflow(
                 event,
@@ -317,7 +317,7 @@ class PDFChecklistModal extends React.Component {
             margin-top: 15px;
             cursor: pointer;
           `}
-          onClick={() => this.fetchWorkflowDetails()}
+          onClick={this.fetchWorkflowDetails}
         >
           <FormattedMessage
             className="mr-bottom-lg"
