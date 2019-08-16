@@ -87,6 +87,7 @@ export default {
       emailSent: "Email sent.",
       clickHere: "Click here",
       clickToLogin: "Click here to Login",
+      reloadWorkflowDetails: "Reload",
       addButton: "Add",
       removeButton: "Remove",
       search: "Search",
@@ -157,6 +158,9 @@ export default {
         "Sorry! We were unable to find the workflow you requested.",
       noStepInWorkflow:
         "Dear user, forms are still being processed in the system. Please try again later.",
+      noWorkflowDetails: "Oops! Seems like some issue. Click below to retry",
+      resultIsEmpty:
+        "Looks like there is no config for this step. Please contact care@thevetted.com",
       emailMandatory: "E-Mail can't be empty",
       passwordMandatory: "Password can't be empty"
     },

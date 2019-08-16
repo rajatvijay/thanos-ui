@@ -18,6 +18,8 @@ import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
 import StepAssignmentUsers from "./StepAssignmentUsers";
+import PDFChecklistModal from "../Workflow/PDFChecklistModal";
+import { get as lodashGet } from "lodash";
 
 class StepBody extends Component {
   constructor(props) {
@@ -25,7 +27,8 @@ class StepBody extends Component {
     this.state = {
       stepCompletedBy: null,
       stepApprovedBy: null,
-      printing: false
+      printing: false,
+      showWorkflowPDFModal: false
     };
   }
 
@@ -34,7 +37,6 @@ class StepBody extends Component {
   };
   componentDidMount() {
     const { stepId } = this.props;
-
     this.props.getAssignedUser(stepId);
   }
 
@@ -130,6 +132,41 @@ class StepBody extends Component {
     return null;
   };
 
+  get stepData() {
+    try {
+      return this.props.currentStepFields[this.props.stepId].currentStepFields;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  componentDidUpdate(previousProps) {
+    const previousStepTag = lodashGet(
+      previousProps,
+      `currentStepFields[${
+        previousProps.stepId
+      }].currentStepFields.definition_tag`
+    );
+    const currentStepTag = lodashGet(
+      this.props,
+      `currentStepFields[${this.props.stepId}].currentStepFields.definition_tag`
+    );
+
+    if (
+      previousStepTag !== currentStepTag &&
+      // TODO: Make this config driven, VET-5412
+      currentStepTag === "review_executive_summary_step"
+    ) {
+      this.setState({ showWorkflowPDFModal: true });
+    }
+  }
+
+  handleModalVisibility = status => {
+    this.setState({
+      showWorkflowPDFModal: status
+    });
+  };
+
   render = () => {
     const {
       displayProfile,
@@ -139,6 +176,7 @@ class StepBody extends Component {
       deleteStepUser,
       workflowId
     } = this.props;
+    const { showWorkflowPDFModal } = this.state;
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
@@ -228,6 +266,14 @@ class StepBody extends Component {
 
     return (
       <div style={{ background: "#FFFFFF" }}>
+        {this.stepData && (
+          <PDFChecklistModal
+            definition={this.stepData.definition}
+            workflowId={workflowId}
+            visible={showWorkflowPDFModal}
+            handleModalVisibility={this.handleModalVisibility}
+          />
+        )}
         {this.state.printing ? (
           <style
             dangerouslySetInnerHTML={{
