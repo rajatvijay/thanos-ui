@@ -153,8 +153,9 @@ class PDFChecklistModal extends React.Component {
 
   fetchWorkflowDetails = () => {
     const { definition } = this.props;
-    const stepTag = definition.tag;
-    const definitionId = definition.id;
+    // TODO: Remove this hardcoding also
+    const stepTag = "pdf_modal";
+    const definitionId = definition.workflowdef;
     this.setLoding(true);
     fetchWorkflowDetails(stepTag, definitionId)
       .then(workflow => {
