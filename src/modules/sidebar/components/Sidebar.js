@@ -2,13 +2,16 @@ import React, { Component } from "react";
 import { Layout, Select } from "antd";
 import TaskQueueList from "./TaskQueueList";
 import AlertList from "./AlertList";
-import { workflowFiltersActions, workflowKindActions } from "../../../actions";
+import {
+  workflowFiltersActions,
+  workflowKindActions
+} from "../../../js/actions";
 import { connect } from "react-redux";
 import { css } from "emotion";
 import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
 import { injectIntl } from "react-intl";
-import { getIntlBody } from "../../../_helpers/intl-helpers";
+import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 
 const { Sider } = Layout;
 const Option = Select.Option;

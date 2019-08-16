@@ -3,8 +3,8 @@ import { Icon, Spin } from "antd";
 import styled from "@emotion/styled";
 import { css } from "emotion";
 import { TaskQueue, DefaultTaskQueue } from "./TaskQueue";
-import user from "../../../../images/user.svg";
-import { stepBodyService } from "../../../services";
+import user from "../../../images/user.svg";
+import { stepBodyService } from "../../../js/services";
 import { FormattedMessage, injectIntl } from "react-intl";
 
 const INITIAL_SHOW_COUNT = 5;

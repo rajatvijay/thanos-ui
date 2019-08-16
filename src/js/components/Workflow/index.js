@@ -14,8 +14,8 @@ import FilterSidebar from "./filter";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
-import Sidebar from "../../modules/sidebar/components/Sidebar";
-import Filter from "../../modules/filter/components/Filter";
+import Sidebar from "../../../modules/sidebar/components/Sidebar";
+import Filter from "../../../modules/filter/components/Filter";
 import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
 import Permissions from "../../../modules/common/permissions/constants";
 

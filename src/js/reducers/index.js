@@ -24,7 +24,7 @@ import { languageSelector } from "./internationalize";
 import { showFilterMenu, showPreviewSidebar } from "./navbar";
 import { stepPreviewFields } from "./stepPreview";
 import { userWorkflowModal } from "./user_workflow";
-import taskQueueCount from "../modules/sidebar/sidebarReducer";
+import taskQueueCount from "../../modules/sidebar/sidebarReducer";
 import stepUsers from "./stepBody";
 import workflowKeys from "./workflowKeys";
 import minimalUI from "./toggleMinimalUI";

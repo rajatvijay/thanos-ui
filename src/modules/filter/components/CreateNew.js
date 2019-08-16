@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Menu, Dropdown, Icon } from "antd";
 import { connect } from "react-redux";
-import { workflowKindActions, createWorkflow } from "../../../actions";
+import { workflowKindActions, createWorkflow } from "../../../js/actions";
 import { injectIntl } from "react-intl";
 import { get as _get } from "lodash";
-import { getIntlBody } from "../../../_helpers/intl-helpers";
+import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 
 class CreateNew extends Component {
   loadWorkflowKind = () => {

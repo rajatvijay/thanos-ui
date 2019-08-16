@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { renderWithReactIntl as render } from "../../common/testUtils";
 import AlertList from "../components/AlertList";
 
 test("should render loader when the data is loading", () => {

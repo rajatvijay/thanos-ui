@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { renderWithReactIntl as render } from "../../common/testUtils";
 import TaskQueueList from "../components/TaskQueueList";
 
 test("should render loading and no task queue when data is loading", () => {
