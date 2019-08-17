@@ -6,9 +6,9 @@ import { Dropdown, Icon, Input, Menu, notification, Tooltip } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import {
-  changeSearchValue,
   logout,
-  workflowActions
+  workflowActions,
+  changeSearchValue
 } from "../../../js/actions";
 import "../header.css";
 import { Link } from "react-router-dom";
@@ -34,7 +34,8 @@ class Header extends Component {
 
   onSearch = searchValue => {
     if (searchValue.length >= 3) {
-      this.props.dispatch(workflowActions.searchWorkflow(searchValue));
+      const page = 1;
+      this.props.dispatch(workflowActions.searchWorkflow(searchValue, page));
     } else {
       openNotificationWithIcon({
         type: "error",

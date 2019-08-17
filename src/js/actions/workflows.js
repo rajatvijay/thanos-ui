@@ -103,12 +103,12 @@ function _delete(id) {
   }
 }
 
-function searchWorkflow(query) {
+function searchWorkflow(query, page) {
   return dispatch => {
-    dispatch(request(query));
+    dispatch(request(query, page));
 
     workflowService
-      .searchWorkflow(query)
+      .searchWorkflow(query, page)
       .then(
         workflow => dispatch(success(workflow)),
         error => dispatch(failure(error))

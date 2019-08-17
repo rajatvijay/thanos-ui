@@ -102,15 +102,15 @@ function getById(id) {
   return APIFetch(`workflows/${id}/`, requestOptions).then(handleResponse);
 }
 
-function searchWorkflow(query) {
+function searchWorkflow(query, page) {
   const requestOptions = {
     method: "POST",
     headers: authHeader.post(),
     credentials: "include",
-    body: JSON.stringify({ q: query })
+    body: JSON.stringify({ q: query, kind: 20 })
   };
 
-  const url = "workflows-list/search/";
+  const url = `workflows-list/search/?page=${page}`;
 
   return APIFetch(url, requestOptions).then(handleResponse);
 }

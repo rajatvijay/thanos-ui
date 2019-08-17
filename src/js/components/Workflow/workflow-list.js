@@ -14,10 +14,12 @@ const PAGE_SIZE = 20;
 class WorkflowList extends Component {
   handlePageChange = page => {
     const { searchValue } = this.props.workflowSearch;
-    const param = searchValue
-      ? [{ label: "page", value: page }, { label: "q", value: searchValue }]
-      : [{ label: "page", value: page }];
-    this.props.dispatch(workflowActions.getAll(param));
+    const param = [{ label: "page", value: page }];
+    if (searchValue) {
+      this.props.dispatch(workflowActions.searchWorkflow(searchValue, page));
+    } else {
+      this.props.dispatch(workflowActions.getAll(param));
+    }
   };
 
   reload = () => {
