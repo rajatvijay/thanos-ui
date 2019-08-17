@@ -107,9 +107,8 @@ function searchWorkflow(query, page) {
     method: "POST",
     headers: authHeader.post(),
     credentials: "include",
-    body: JSON.stringify({ q: query, kind: 20 })
+    body: JSON.stringify({ q: query })
   };
-
   const url = `workflows-list/search/?page=${page}`;
 
   return APIFetch(url, requestOptions).then(handleResponse);
