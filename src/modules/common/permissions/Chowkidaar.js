@@ -2,7 +2,7 @@ import React from "react";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 
-const userHasPermission = ({ permissionsAllowed, permissionName }) =>
+const checkPermission = ({ permissionsAllowed, permissionName }) =>
   permissionsAllowed && permissionsAllowed.includes(permissionName);
 
 /**
@@ -10,28 +10,35 @@ const userHasPermission = ({ permissionsAllowed, permissionName }) =>
  * @param check Permission to check against
  * @param children Default prop provided by React
  * @param config Redux config state
+ * @param deniedElement Custom element to be shown if user doesn't have permissions
  * @param otherProps Props passed from parent
  * @returns {null|React.DetailedReactHTMLElement<any, HTMLElement>[]}
  * @private
  */
+
 const _Chowkidaar = ({
   children,
   config,
   check,
-  deniedElement,
+  deniedElement = null,
   ...otherProps
 }) => {
-  if (
-    userHasPermission({
-      permissionsAllowed: config.permissions,
-      permissionName: check
-    })
-  ) {
+  if (!config.permissions) {
+    // Permissions aren't loaded yet, don't show anything and wait for when they'll be loaded
+    return null;
+  }
+
+  const hasPermission = checkPermission({
+    permissionsAllowed: config.permissions,
+    permissionName: check
+  });
+
+  if (hasPermission) {
     return React.Children.map(children, child => {
       return React.cloneElement(child, { ...otherProps, ...child.props });
     });
   } else {
-    return deniedElement || null; // TODO: or custom element that needs to be rendered
+    return deniedElement;
   }
 };
 
@@ -46,4 +53,4 @@ function mapStateToProps(state) {
 
 const Chowkidaar = connect(mapStateToProps)(_Chowkidaar);
 
-export { Chowkidaar, userHasPermission };
+export { Chowkidaar, checkPermission };
