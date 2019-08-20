@@ -257,6 +257,12 @@ class Comments extends Component {
     const single_comments = size(comments.results) <= 1 ? true : false;
     const resultsCount = size(comments.results);
     const c = resultsCount ? comments.results[0] : [];
+    const commentsContainerStyle = single_comments
+      ? {
+          height: "calc(100vh - 400px)",
+          overflowY: "scroll"
+        }
+      : null;
 
     //ADJUDICATION SELECTION
     const adjudication = resultsCount ? (
@@ -427,13 +433,7 @@ class Comments extends Component {
                 }
 
                 return (
-                  <div
-                    key={`${c.object_id}`}
-                    style={{
-                      height: "calc(100vh - 400px)",
-                      overflowY: "scroll"
-                    }}
-                  >
+                  <div key={`${c.object_id}`} style={commentsContainerStyle}>
                     {/*///////HEADER///////*/}
                     <StyledHeadContainer>
                       <Row>
