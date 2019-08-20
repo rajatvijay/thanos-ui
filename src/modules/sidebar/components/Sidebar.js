@@ -59,6 +59,8 @@ class Sidebar extends Component {
 
     this.setState({ value: id });
     const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
+    const removePayload = { filterType: "stepgroupdef" };
+    this.props.dispatch(workflowFiltersActions.removeFilters(removePayload));
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
     this.props.dispatch(workflowKindActions.setValue(metaValue));
     that.fetchGroupData(metaValue.tag);
