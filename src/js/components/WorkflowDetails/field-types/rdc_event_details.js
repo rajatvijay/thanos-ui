@@ -131,7 +131,7 @@ const GetTable = props => {
       render: record => {
         return (
           <div>
-            {record.ReferenceDetail ? (
+            {record.ReferenceDetail && record.ReferenceDetail.length ? (
               <div className="mr-bottom-sm text-black">
                 <b>{record.ReferenceDetail[0].Headline}</b>
               </div>

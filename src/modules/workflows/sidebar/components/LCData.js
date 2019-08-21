@@ -1,8 +1,17 @@
 import React from "react";
 import { Row, Col } from "antd";
 import { FormattedMessage } from "react-intl";
+import { FormattedLCData } from "../../../../modules/common/FormattedLCData";
 
 function LCData({ lcData, status }) {
+  const style = {
+    color: "#000000",
+    fontSize: "12px",
+    letterSpacing: "-0.02px",
+    lineHeight: "29px",
+    wordWrap: "break-word"
+  };
+
   return (
     <Row style={{ "margin-bottom": 12 }}>
       <Col span={12}>
@@ -32,7 +41,7 @@ function LCData({ lcData, status }) {
         </span>
       </Col>
       {lcData.map((data, index) => (
-        <Col span={12}>
+        <Col span={12} key={`${index}`}>
           <span
             style={{
               opacity: 0.3,
@@ -46,17 +55,7 @@ function LCData({ lcData, status }) {
             {data.label}
           </span>
           <br />
-          <span
-            style={{
-              color: "#000000",
-              fontSize: "12px",
-              letterSpacing: "-0.02px",
-              lineHeight: "29px",
-              wordWrap: "break-word"
-            }}
-          >
-            {data.value}
-          </span>
+          <FormattedLCData data={data} style={style} />
         </Col>
       ))}
     </Row>

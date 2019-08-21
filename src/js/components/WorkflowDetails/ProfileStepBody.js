@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Row, Col } from "antd";
 import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
 import Permissions from "../../../modules/common/permissions/constants";
+import { FormattedLCData } from "../../../modules/common/FormattedLCData";
 
 class ProfileStepBody extends Component {
   renderDetails() {
@@ -10,6 +11,14 @@ class ProfileStepBody extends Component {
     const lc_data = workflowHead.lc_data.filter(
       item => item.display_type === "normal" && item.value
     );
+
+    const style = {
+      color: "#000000",
+      fontSize: "16px",
+      letterSpacing: "-0.02px",
+      lineHeight: "29px",
+      wordWrap: "break-word"
+    };
 
     return lc_data.map((data, index) => (
       <Col style={{ margin: "0px 0px 25px 0px" }} span={12} key={`${index}`}>
@@ -25,17 +34,7 @@ class ProfileStepBody extends Component {
           {data.label}
         </span>
         <br />
-        <span
-          style={{
-            color: "#000000",
-            fontSize: "16px",
-            letterSpacing: "-0.02px",
-            lineHeight: "29px",
-            wordWrap: "break-word"
-          }}
-        >
-          {data.value}
-        </span>
+        <FormattedLCData data={data} style={style} />
       </Col>
     ));
   }
