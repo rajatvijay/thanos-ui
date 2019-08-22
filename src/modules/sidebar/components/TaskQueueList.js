@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Icon, Spin } from "antd";
 import styled from "@emotion/styled";
 import { css } from "emotion";
@@ -6,12 +6,12 @@ import { TaskQueue, DefaultTaskQueue } from "./TaskQueue";
 import user from "../../../images/user.svg";
 import { stepBodyService } from "../../../js/services";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { get as lodashGet } from "lodash";
 
 const INITIAL_SHOW_COUNT = 5;
 
-class TaskQueueList extends Component {
+class TaskQueueList extends PureComponent {
   state = {
-    selected: null,
     showingAll: false,
     myTasksCount: null,
     loadingMyTasksCount: false
@@ -19,15 +19,14 @@ class TaskQueueList extends Component {
 
   onSelect = taskQueue => {
     const { onSelectTask } = this.props;
-    const { selected } = this.state;
+    const activeTaskQueue = lodashGet(
+      this.props,
+      "activeTaskQueue.stepgroupdef.filterValue.0",
+      null
+    );
 
-    if (selected === taskQueue.name) {
-      this.setState({ selected: null });
-      onSelectTask();
-    } else {
-      this.setState({ selected: taskQueue.name });
-      onSelectTask(taskQueue);
-    }
+    if (activeTaskQueue === taskQueue.id) onSelectTask();
+    else onSelectTask(taskQueue);
   };
 
   isTaskQueueVisible = taskQueue => {
@@ -53,19 +52,22 @@ class TaskQueueList extends Component {
 
   renderList = () => {
     const { taskQueues } = this.props;
-    const { selected, showingAll } = this.state;
-
+    const { showingAll } = this.state;
     const visibleTaskQueues = taskQueues.filter(this.isTaskQueueVisible);
     const restrictedTaskQueues = showingAll
       ? visibleTaskQueues
       : visibleTaskQueues.slice(0, INITIAL_SHOW_COUNT);
-
+    const activeTaskQueue = lodashGet(
+      this.props,
+      "activeTaskQueue.stepgroupdef.filterValue.0",
+      null
+    );
     return restrictedTaskQueues.map(taskQueue => (
       <TaskQueue
         key={`taskQueue_${taskQueue.id}`}
         item={taskQueue}
         onSelect={this.onSelect}
-        isSelected={selected === taskQueue.name}
+        isSelected={activeTaskQueue === taskQueue.id}
       />
     ));
   };
@@ -88,7 +90,6 @@ class TaskQueueList extends Component {
   render() {
     const { taskQueues, loading, isMyTaskSelected } = this.props;
     const { showingAll, loadingMyTasksCount, myTasksCount } = this.state;
-
     // Loading state
     if (loading) {
       return (

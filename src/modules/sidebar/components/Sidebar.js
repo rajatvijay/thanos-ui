@@ -35,17 +35,24 @@ class Sidebar extends Component {
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
-  componentWillUpdate(nextProps) {
-    if (
-      nextProps.workflowKind.workflowKind !==
-      this.props.workflowKind.workflowKind
-    ) {
-      const metaValue =
-        nextProps.workflowKind.workflowKind &&
-        nextProps.workflowKind.workflowKind[0];
-      if (metaValue) {
-        this.props.dispatch(workflowKindActions.setValue(metaValue));
-        this.setState({ value: metaValue.id });
+  componentDidUpdate(prevProps) {
+    const { workflowKind, selectedKindValue } = this.props;
+    const { workflowKind: prevWorkflowKind } = prevProps;
+
+    if (workflowKind.workflowKind && !prevWorkflowKind.workflowKind) {
+      // So, we just got workflow kinds populated.
+      // Now, we'll check if there's no selected workflow kind
+      // Or if the one selected is not available anymore,
+      // in which case, we'll assign a default one.
+      if (
+        !selectedKindValue ||
+        !workflowKind.workflowKind.find(
+          workflow => workflow.id === selectedKindValue.id
+        )
+      ) {
+        this.props.dispatch(
+          workflowKindActions.setValue(workflowKind.workflowKind[0])
+        );
       }
     }
   }
@@ -98,7 +105,9 @@ class Sidebar extends Component {
       filterType: "stepgroupdef",
       filterValue: value ? [value.id] : []
     };
-    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    if (!!value)
+      this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    else this.props.dispatch(workflowFiltersActions.removeFilters(payload));
   };
 
   onSelectMyTask = tag => {
@@ -122,12 +131,7 @@ class Sidebar extends Component {
 
   render() {
     const { isError } = this.props.workflowAlertGroupCount;
-    const selectedKind =
-      this.state.value &&
-      _.find(this.props.workflowKind.workflowKind, item => {
-        return item.id === this.state.value;
-      });
-
+    const { selectedKindValue } = this.props;
     return (
       <Sider
         width={300}
@@ -170,7 +174,7 @@ class Sidebar extends Component {
               }
             `}
             dropdownClassName="kind-select"
-            value={selectedKind && selectedKind.name}
+            value={selectedKindValue && selectedKindValue.name}
             style={{ width: "100%", display: "block" }}
             onChange={this.handleChange}
           >
@@ -193,6 +197,7 @@ class Sidebar extends Component {
             <div>
               <TaskQueueList
                 count={this.props.count}
+                activeTaskQueue={this.props.workflowFilters}
                 taskQueues={this.props.workflowGroupCount.stepgroupdef_counts}
                 loading={this.props.workflowAlertGroupCount.loading}
                 onSelectTask={this.onSelectTask}
@@ -220,6 +225,7 @@ function mapStateToProps(state) {
     workflowKind,
     workflowFilterType,
     workflowFilters,
+    workflowKindValue,
     config,
     languageSelector,
     showFilterMenu,
@@ -229,6 +235,7 @@ function mapStateToProps(state) {
     workflowKind,
     workflowFilterType,
     workflowFilters,
+    selectedKindValue: workflowKindValue.selectedKindValue,
     config,
     languageSelector,
     showFilterMenu,
