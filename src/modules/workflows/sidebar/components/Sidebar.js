@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 
 import LCData from "./LCData";
 import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
+import { get as lodashGet } from "lodash";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
@@ -152,14 +153,6 @@ class Sidebar extends Component {
     });
   };
 
-  // componentDidMount() {
-  //   // this.setState({
-  //   //   groupId: String(this.props.selectedGroup),
-  //   //   stepId: String(this.props.selectedStep)
-  //   // });
-  //   this.setState({groupId:null,stepId:null})
-  // }
-
   componentDidUpdate(prevProps, prevState) {
     if (
       this.props.selectedGroup !== prevProps.selectedGroup ||
@@ -215,6 +208,62 @@ class Sidebar extends Component {
     }
   };
 
+  workflowActionMenu = (
+    <Menu>
+      <Chowkidaar check={Permissions.CAN_VIEW_ACTIVITY_LOG}>
+        <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              restore
+            </i>{" "}
+            <FormattedMessage id="workflowsInstances.viewActivityLog" />
+          </span>
+        </Menu.Item>
+      </Chowkidaar>
+
+      <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
+        <span>
+          <i className="material-icons t-18 text-middle pd-right-sm">
+            chat_bubble
+          </i>{" "}
+          <FormattedMessage id="stepBodyFormInstances.viewComments" />
+        </span>
+      </Menu.Item>
+
+      <Menu.Item key={"pint"} onClick={this.printDiv}>
+        <span>
+          <i className="material-icons t-18 text-middle pd-right-sm">print</i>{" "}
+          <FormattedMessage id="stepBodyFormInstances.printText" />
+        </span>
+      </Menu.Item>
+
+      <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOW}>
+        <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
+          <span>
+            <i className="material-icons t-18 text-middle pd-right-sm">
+              archive
+            </i>{" "}
+            <FormattedMessage id="stepBodyFormInstances.archiveWorkflow" />
+          </span>
+        </Menu.Item>
+      </Chowkidaar>
+    </Menu>
+  );
+
+  get lcData() {
+    const { workflowIdFromDetailsToSidebar } = this.props;
+    const lcData = lodashGet(
+      this.props,
+      `workflowDetailsHeader[${workflowIdFromDetailsToSidebar}].lc_data`,
+      []
+    );
+    // TODO: Check why this logic is required
+    const visibelLcData = lcData.filter(
+      lc => lc.display_type === "normal" && lc.value
+    );
+    return visibelLcData;
+  }
+
   render() {
     const {
       workflowDetailsHeader,
@@ -224,58 +273,7 @@ class Sidebar extends Component {
       displayProfile
     } = this.props;
 
-    let lc_data =
-      Object.values(workflowDetailsHeader).length &&
-      workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-        ? workflowDetailsHeader[workflowIdFromDetailsToSidebar].lc_data
-        : [];
-    lc_data = lc_data.filter(
-      (data, index) => data.display_type === "normal" && data.value
-    );
-
     const { groupId, stepId } = this.state;
-
-    const workflowActionMenu = (
-      <Menu>
-        <Chowkidaar check={Permissions.CAN_VIEW_ACTIVITY_LOG}>
-          <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
-            <span>
-              <i className="material-icons t-18 text-middle pd-right-sm">
-                restore
-              </i>{" "}
-              <FormattedMessage id="workflowsInstances.viewActivityLog" />
-            </span>
-          </Menu.Item>
-        </Chowkidaar>
-
-        <Menu.Item key={"message"} onClick={this.openCommentSidebar}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">
-              chat_bubble
-            </i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.viewComments" />
-          </span>
-        </Menu.Item>
-
-        <Menu.Item key={"pint"} onClick={this.printDiv}>
-          <span>
-            <i className="material-icons t-18 text-middle pd-right-sm">print</i>{" "}
-            <FormattedMessage id="stepBodyFormInstances.printText" />
-          </span>
-        </Menu.Item>
-
-        <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOW}>
-          <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
-            <span>
-              <i className="material-icons t-18 text-middle pd-right-sm">
-                archive
-              </i>{" "}
-              <FormattedMessage id="stepBodyFormInstances.archiveWorkflow" />
-            </span>
-          </Menu.Item>
-        </Chowkidaar>
-      </Menu>
-    );
 
     return (
       <Sider
@@ -386,7 +384,7 @@ class Sidebar extends Component {
                     </Tooltip>
                   </div>
                   <Dropdown
-                    overlay={workflowActionMenu}
+                    overlay={this.workflowActionMenu}
                     className="child-workflow-dropdown"
                   >
                     <span className="pd-ard-sm text-metal text-anchor">
@@ -400,8 +398,9 @@ class Sidebar extends Component {
 
                 <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
                   <LCData
-                    lcData={[...lc_data].splice(0, 3)}
+                    lcData={[...this.lcData].splice(0, 3)}
                     status={this.workflowStatus}
+                    style={{ marginBottom: 15 }}
                   />
                 </Chowkidaar>
               </div>
@@ -653,7 +652,7 @@ class Sidebar extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const {
     workflowDetailsHeader,
     workflowDetails,
