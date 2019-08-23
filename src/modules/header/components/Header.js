@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
-import { Dropdown, Icon, Input, Menu, notification, Tooltip } from "antd";
+import { Dropdown, Icon, Input, Menu, notification, Divider } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import {
@@ -49,7 +49,7 @@ class Header extends Component {
     this.props.dispatch(changeSearchValue(value));
   };
 
-  onLogout = (event, key) => {
+  onLogout = event => {
     this.props.dispatch(logout());
   };
 
@@ -84,6 +84,23 @@ class Header extends Component {
     });
   };
 
+  supportLinks = () => {
+    const footerLinks = this.props.config.custom_ui_labels
+      ? this.props.config.custom_ui_labels.footer_links
+      : [];
+    if (footerLinks && footerLinks.length) {
+      return footerLinks.map(links => (
+        <Menu.Item key={links.label}>
+          <Link to={links.url} target="_blank">
+            {links.label}
+          </Link>
+        </Menu.Item>
+      ));
+    } else {
+      return null;
+    }
+  };
+
   render() {
     const { searchValue } = this.props.workflowSearch;
     const user = this.props.authentication.user;
@@ -101,7 +118,6 @@ class Header extends Component {
     ) {
       showInsights = true;
     }
-
     return (
       <div
         style={{
@@ -205,38 +221,30 @@ class Header extends Component {
             </Chowkidaar>
           ) : null}
 
-          {_.isEmpty(supportedLaguanges) || <SelectLanguage navbar={true} />}
-
           {user ? (
             <Dropdown
-              icon={<Icon />}
               overlay={
                 <Menu>
-                  <Menu.Item
-                    key="logout"
-                    onClick={e => this.onLogout(e, "key")}
-                  >
+                  {this.supportLinks()}
+                  <Menu.Divider style={{ margin: "6px 0px" }} />
+
+                  {/* <Menu.Item key="profile">Profile</Menu.Item> */}
+                  <SelectLanguage />
+                  <Menu.Item key="logout" onClick={this.onLogout}>
                     <FormattedMessage id={"loginPageInstances.logoutText"} />
                   </Menu.Item>
                 </Menu>
               }
               trigger={["click"]}
             >
-              <Tooltip title={user.email} placement="leftBottom">
-                <span className="pd-ard-sm mr-right-lg ">
-                  <i
-                    className="material-icons text-middle"
-                    style={{
-                      fontSize: 32,
-                      color: "#000000",
-                      opacity: 0.3,
-                      cursor: "pointer"
-                    }}
-                  >
-                    account_circle
-                  </i>
-                </span>
-              </Tooltip>
+              <Icon
+                type="ellipsis"
+                style={{
+                  fontSize: 30,
+                  color: "#000000",
+                  opacity: 0.3
+                }}
+              />
             </Dropdown>
           ) : null}
         </div>

@@ -1,74 +1,75 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Select, Tooltip } from "antd";
+import { Menu } from "antd";
 import { languageActions } from "../actions";
-import _ from "lodash";
 import languages from "../intlLanguages";
 import { languageConstants } from "../constants";
-
-const Option = Select.Option;
+import { css } from "emotion";
+import { FormattedMessage } from "react-intl";
+import { get as lodashGet } from "lodash";
 
 class SelectLanguage extends React.Component {
-  handleLanguageChange = value => {
-    if (this.props.authentication.user) {
-      this.props.dispatch(languageActions.updateUserLanguage(value));
-    }
+  handleLanguageChange = event => {
+    const { title } = event.target;
+    this.props.dispatch(languageActions.updateUserLanguage(title));
   };
-  render() {
-    if (this.props.languageSelector.loading) {
-      console.log(`Language change in progress, will need reload`);
-      this.languageChangeInprogress = true;
-    } else if (this.languageChangeInprogress) {
-      console.log(`Language change done, will reload`);
-      window.location.reload();
-    }
-    const user = this.props.authentication.user;
-    let preferredLanguage =
-      this.props.languageSelector.language ||
-      (user && user.prefered_language) ||
-      (navigator.languages && navigator.languages[0]) ||
-      navigator.language ||
-      navigator.userLanguage ||
-      languageConstants.DEFAULT_LOCALE;
-    if (!languages.endonyms[preferredLanguage]) {
-      preferredLanguage = preferredLanguage.split("-")[0];
-    }
-    const supportedLaguanges = this.props.config.supported_languages;
-    if (!_.includes(supportedLaguanges, preferredLanguage)) {
-      preferredLanguage = supportedLaguanges[0];
-    }
+
+  get preferredLanguage() {
+    return lodashGet(
+      this.props,
+      "authentication.user.prefered_language",
+      languageConstants.DEFAULT_LOCALE
+    );
+  }
+
+  renderLanguageMenuTitle = () => {
     return (
       <span>
-        <Select
-          defaultValue={preferredLanguage}
-          className="nav-lang-select"
-          onChange={this.handleLanguageChange}
-          style={{
-            width: "80px"
-          }}
-        >
-          {_.map(Object.keys(languages.endonyms), function(locale, index) {
-            return _.includes(supportedLaguanges, locale) ? (
-              <Option key={`option_${locale}`} value={locale}>
-                <Tooltip title={languages.endonyms[locale]} placement="leftTop">
-                  <span
-                    style={{
-                      textTransform: "uppercase",
-                      opacity: 0.3,
-                      color: "#000000",
-                      fontSize: "16px",
-                      letterSpacing: "-0.03px",
-                      textAlign: "right"
-                    }}
-                  >
-                    {locale}
-                  </span>
-                </Tooltip>
-              </Option>
-            ) : null;
-          })}
-        </Select>
+        <FormattedMessage id={"loginPageInstances.languageText"} />:{" "}
+        <span style={{ textTransform: "uppercase" }}>
+          {this.preferredLanguage}
+        </span>
       </span>
+    );
+  };
+
+  renderLanguageName = languageSymbol => {
+    const languageEndonym = languages.endonyms[languageSymbol];
+    return languageEndonym
+      ? `${languageSymbol}(${languageEndonym})`
+      : languageSymbol;
+  };
+
+  render() {
+    const { supported_languages: supportedLaguanges } = this.props.config;
+
+    if (!supportedLaguanges) return null;
+
+    return (
+      <Menu.SubMenu
+        {...this.props}
+        title={this.renderLanguageMenuTitle()}
+        className="header-menu"
+        onClick={this.handleLanguageChange}
+      >
+        <div style={{ height: "300px", overflow: "scroll" }}>
+          {supportedLaguanges.map((language, index) => (
+            <Menu.Item
+              {...this.props}
+              key={index}
+              title={language}
+              style={{ cursor: "pointer", padding: "10px" }}
+              className={css`
+                &:hover {
+                  background-color: #eee !important;
+                }
+              `}
+            >
+              {this.renderLanguageName(language)}
+            </Menu.Item>
+          ))}
+        </div>
+      </Menu.SubMenu>
     );
   }
 }

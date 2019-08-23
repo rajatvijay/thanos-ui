@@ -17,10 +17,11 @@
   &:hover,
   &:focus {
   }
-  &.btn-o, &.btn-o:hover {
+  &.btn-o,
+  &.btn-o:hover {
     background: transparent;
     color: @color-secondary;
-    border-color:@color-secondary;
+    border-color: @color-secondary;
   }
 }
 
@@ -170,28 +171,28 @@
   }
 }
 
-.kind-select{
+.kind-select {
   &.ant-select-dropdown {
-   border-radius: 0;
-   background-color: #0a3150;
-   color: white;
+    border-radius: 0;
+    background-color: #0a3150;
+    color: white;
   }
 
   .ant-select-dropdown-menu-item {
     padding: 10px 20px !important;
-    color: rgba(255,255,255, 0.5) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
     font-size: 18px !important;
   }
 
   .ant-select-dropdown-menu-item:hover,
-  .ant-select-dropdown-menu-item-active{
+  .ant-select-dropdown-menu-item-active {
     background-color: #07243b;
-    color: rgba(255,255,255, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
   }
 }
 
-
-.ant-select-dropdown-menu-item:first-child, .ant-select-dropdown-menu-item:last-child {
+.ant-select-dropdown-menu-item:first-child,
+.ant-select-dropdown-menu-item:last-child {
   border-radius: 0;
 }
 
@@ -199,9 +200,8 @@
 .ant-select-dropdown-menu-item-active,
 .ant-cascader-menu-item:hover {
   background-color: #07243b;
-  color: rgba(255,255,255, 1) !important;
+  color: rgba(255, 255, 255, 1) !important;
 }
-
 
 // input font over ride
 .ant-input {
@@ -269,7 +269,8 @@
   background: @color-secondary;
 }
 
-.ant-radio-group, .ant-checkbox-group {
+.ant-radio-group,
+.ant-checkbox-group {
   margin-top: 20px;
 }
 
@@ -354,12 +355,11 @@
   }
 }
 
-
 .ant-input-number:hover .ant-input-number-handler-wrap {
   border-left: none;
 }
 .step-form .ant-input-number-focused {
-  box-shadow:none;
+  box-shadow: none;
 }
 
 span.ant-radio + * {
@@ -418,22 +418,34 @@ span.ant-radio + * {
   border: 2px solid #fff;
 }
 
-
-
 //BTN EXTENSION
 .btn-sm {
   height: 29px;
   padding: 4 10px;
   font-size: 13px;
-  line-height:29px;
+  line-height: 29px;
   vertical-align: middle;
   border-radius: 4px;
 }
 
-
 //step sidebar ant collapse
 .ant-collapse > .ant-collapse-item:last-child,
-.ant-collapse > .ant-collapse-item:last-child > .ant-collapse-header{
-  border-radius:0px;
-  border-bottom:none;
+.ant-collapse > .ant-collapse-item:last-child > .ant-collapse-header {
+  border-radius: 0px;
+  border-bottom: none;
+}
+
+.header-menu {
+  .ant-dropdown-menu-submenu-title {
+    color: @color-text;
+    padding: 5px 18px;
+    &:hover {
+      text-decoration: none;
+      color: inherit;
+      background-color: @color-grey-lightest;
+    }
+    &:active {
+      background-color: @color-grey-lightest;
+    }
+  }
 }

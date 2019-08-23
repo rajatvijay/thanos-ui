@@ -170,6 +170,7 @@ export default {
       loginUsingEmailOnly: "Login using email only",
       loginText: "Login",
       logoutText: "Logout",
+      languageText: "Language",
       emailText: "email",
       passwordText: "password",
       orText: "or",
@@ -362,6 +363,7 @@ export default {
       loginUsingEmailOnly: "Iniciar sesión usando solo el correo electrónico",
       loginText: "Iniciar sesión",
       logoutText: "Cerrar sesión",
+      languageText: "Idioma",
       emailText: "email",
       passwordText: "contraseña",
       orText: "o",
@@ -568,6 +570,7 @@ export default {
       emailText: "courriel",
       passwordText: "mot de passe",
       orText: "ou",
+      languageText: "La langue",
       customSAMLloginText1: "Connectez-vous par votre ",
       customSAMLloginText2: "nom d'utilisateur et mot de passe",
       loginErrorMessage:

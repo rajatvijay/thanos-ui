@@ -14,6 +14,9 @@ const updateUserLanguage = payload => async dispatch => {
       type: languageConstants.CHANGE_LANGUAGE_SUCCESS,
       response: response
     });
+
+    // To relfect the selected language on the whole app and backend
+    window.location.reload();
   } catch (error) {
     // console.log(error);
     dispatch({ type: languageConstants.CHANGE_LANGUAGE_FAILURE, error });
