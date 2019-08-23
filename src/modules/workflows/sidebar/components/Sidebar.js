@@ -25,44 +25,32 @@ import { Link } from "react-router-dom";
 import LCData from "./LCData";
 import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
 import { get as lodashGet } from "lodash";
+import styled from "@emotion/styled";
+import { css } from "emotion";
 
 const { Sider } = Layout;
 const Panel = Collapse.Panel;
 const confirm = Modal.confirm;
 
 class Sidebar extends Component {
-  constructor(props) {
-    const { selectedGroup, selectedStep } = props;
-    super(props);
-    this.state = {
-      showSidebar: false,
-      isWorkflowPDFModalVisible: false,
-      groupId: selectedGroup,
-      stepId: selectedStep
-      //defaultSelected:true
-    };
-  }
-
-  toggleSidebar = () => {
-    this.setState({ showSidebar: !this.state.showSidebar });
+  state = {
+    showActivitySidebar: false,
+    isWorkflowPDFModalVisible: false,
+    selectedPanel: this.props.selectedGroup
   };
 
-  get workflowStatus() {
-    const {
-      workflowDetailsHeader,
-      workflowIdFromDetailsToSidebar
-    } = this.props;
-    try {
-      const workflowStatusFromDetails =
-        workflowDetailsHeader[workflowIdFromDetailsToSidebar].status;
-      return (
-        workflowStatusFromDetails.label ||
-        workflowStatusFromDetails.kind_display
-      );
-    } catch (e) {
-      return null;
-    }
-  }
+  toggleActivitySidebar = () => {
+    this.setState(({ showActivitySidebar }) => ({
+      showActivitySidebar: !showActivitySidebar
+    }));
+  };
+
+  // ==================================================================================================== //
+  // ==================================================================================================== //
+  // ==================================================================================================== //
+  // ==================================================================================================== //
+
+  // DIRTY CODE, SORRY!!
 
   callBackCollapser = (object_id, content_type) => {
     this.state.loading_sidebar = true;
@@ -70,44 +58,6 @@ class Sidebar extends Component {
     this.props.dispatch(
       workflowDetailsActions.getComment(object_id, content_type)
     );
-  };
-
-  openCommentSidebar = () => {
-    const { workflowIdFromDetailsToSidebar } = this.props;
-    const object_id = this.props.workflowDetailsHeader[
-      workflowIdFromDetailsToSidebar
-    ].id;
-    this.callBackCollapser(object_id, "all_data");
-  };
-
-  printDiv = () => {
-    const that = this;
-    this.setState({ printing: true });
-
-    setTimeout(function() {
-      const printContents = document.getElementById("StepBody").innerHTML;
-      const docHead = document.querySelector("head").innerHTML;
-
-      const body =
-        "<!DOCTYPE html><html><head>" +
-        "<title>" +
-        //that.props.currentStepFields.currentStepFields.definition.name +
-        "</title>" +
-        docHead +
-        "</head><body>" +
-        printContents +
-        "</body></html>";
-      const myWindow = window.open();
-      myWindow.document.write(body);
-      myWindow.document.close();
-      myWindow.focus();
-
-      setTimeout(function() {
-        myWindow.print();
-        myWindow.close();
-      }, 1000);
-      that.setState({ printing: false });
-    }, 500);
   };
 
   addComment = (payload, step_reload_payload) => {
@@ -124,6 +74,43 @@ class Sidebar extends Component {
     this.addComment(object_id, "workflow");
   };
 
+  openCommentSidebar = () => {
+    const { workflowIdFromDetailsToSidebar } = this.props;
+    const object_id = this.props.workflowDetailsHeader[
+      workflowIdFromDetailsToSidebar
+    ].id;
+    this.callBackCollapser(object_id, "all_data");
+  };
+
+  // ////////////////// ////////////////// ////////////////
+  // ////////////////// ////////////////// ////////////////
+  // ////////////////// ////////////////// ////////////////
+  // ////////////////// ////////////////// ////////////////
+
+  printDiv = () => {
+    setTimeout(function() {
+      const printContents = document.getElementById("StepBody").innerHTML;
+      const docHead = document.querySelector("head").innerHTML;
+
+      const body = `
+      <!DOCTYPE html>
+      <html>
+        <head>${docHead}</head>
+        <body>${printContents}</body>
+      </html>
+      `;
+      const printWindow = window.open();
+      printWindow.document.write(body);
+      printWindow.document.close();
+      printWindow.focus();
+
+      setTimeout(function() {
+        printWindow.print();
+        printWindow.close();
+      }, 1000);
+    }, 500);
+  };
+
   toggleWorkflowPDFModal = () => {
     this.setState(state => ({
       isWorkflowPDFModalVisible: !state.isWorkflowPDFModalVisible
@@ -131,12 +118,7 @@ class Sidebar extends Component {
   };
 
   archiveWorkflow = () => {
-    const {
-      intl,
-      dispatch,
-      workflowDetailsHeader,
-      workflowIdFromDetailsToSidebar
-    } = this.props;
+    const { intl, dispatch, workflowIdFromDetailsToSidebar } = this.props;
     confirm({
       title: intl.formatMessage({
         id: "commonTextInstances.archiveConfirmText"
@@ -145,73 +127,202 @@ class Sidebar extends Component {
         id: "commonTextInstances.archiveConfirmContent"
       }),
       onOk() {
-        const workflowId =
-          workflowDetailsHeader[workflowIdFromDetailsToSidebar].id;
-        dispatch(workflowDetailsActions.archiveWorkflow(workflowId));
+        dispatch(
+          workflowDetailsActions.archiveWorkflow(workflowIdFromDetailsToSidebar)
+        );
       },
       onCancel() {}
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      this.props.selectedGroup !== prevProps.selectedGroup ||
-      this.props.selectedStep !== prevProps.selectedStep
-    ) {
-      this.setState({
-        groupId: String(this.props.selectedGroup),
-        stepId: String(this.props.selectedStep)
-      });
-    }
-  }
-
   handleStepClick = (groupid, stepid) => {
-    this.setState({
-      groupId: String(groupid),
-      stepId: String(stepid)
-    });
     this.props.onUpdateOfActiveStep(groupid, stepid);
   };
 
-  onChangeOfCollapse = groupid => {
-    this.setState({ groupId: String(groupid) });
+  onChangeOfCollapse = panelId => {
+    this.setState({ selectedPanel: String(panelId) });
   };
 
   onProfileClick = () => {
-    if (this.state.stepId) {
-      this.setState({ stepId: null });
-      this.props.changeProfileDisplay(true);
-    }
+    this.props.changeProfileDisplay(true);
   };
 
-  renderParent = () => {
-    const {
-      workflowDetailsHeader,
-      workflowIdFromDetailsToSidebar
-    } = this.props;
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedGroup !== this.props.selectedGroup) {
+      this.setState({ selectedPanel: this.props.selectedGroup });
+    }
+  }
 
-    if (
-      workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family &&
-      workflowDetailsHeader[workflowIdFromDetailsToSidebar].workflow_family
-        .length > 1
-    ) {
-      const parentWorkflow =
-        workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-          .workflow_family[0];
+  // TODO: Convert them into selectors later
+  // ALL GETTERS
+
+  get currentWorkflow() {
+    const { workflowIdFromDetailsToSidebar } = this.props;
+    return lodashGet(
+      this.props,
+      `workflowDetailsHeader[${workflowIdFromDetailsToSidebar}]`,
+      null
+    );
+  }
+
+  get parentWorkflow() {
+    const family = lodashGet(this.currentWorkflow, `workflow_family`, null);
+    return family.length > 1 ? family[0] : null;
+  }
+
+  get lcData() {
+    const lcData = lodashGet(this.currentWorkflow, `lc_data`, []);
+    const visibelLcData = lcData.filter(
+      lc => lc.display_type === "normal" && lc.value
+    );
+    return visibelLcData;
+  }
+
+  get currentWorkflowName() {
+    return lodashGet(this.currentWorkflow, "name", null);
+  }
+
+  get childWorkflows() {
+    return lodashGet(this.currentWorkflow, "children", []);
+  }
+
+  get workflowStatus() {
+    return (
+      lodashGet(this.currentWorkflow, "status.label", null) ||
+      lodashGet(this.currentWorkflow, "status.kind_display", null)
+    );
+  }
+
+  get loadingSteps() {
+    return lodashGet(this.currentWorkflow, "loading", null);
+  }
+
+  get stepGroups() {
+    const { workflowDetails, workflowIdFromDetailsToSidebar } = this.props;
+    const stepGroups = lodashGet(
+      workflowDetails,
+      `[${workflowIdFromDetailsToSidebar}].workflowDetails.stepGroups.results`,
+      []
+    );
+    return stepGroups.filter(group => group.steps.length);
+  }
+
+  // ALL RENDER FUNCTIONS
+  renderParent = () => {
+    if (this.parentWorkflow) {
       return (
-        <Link to={`/workflows/instances/${parentWorkflow.id}`}>
+        <Link to={`/workflows/instances/${this.parentWorkflow.id}`}>
           <span style={{ color: "gray", fontSize: 12 }}>
-            {parentWorkflow.name}
+            {this.parentWorkflow.name}
           </span>
         </Link>
       );
     }
+    return null;
+  };
+
+  renderActivitySidebar = () => {
+    const { showActivitySidebar } = this.state;
+    const { workflowIdFromDetailsToSidebar } = this.props;
+    const childWorkflowIds = this.childWorkflows.map(({ id }) => id);
+    // TODO: Check why this is required?
+    if (!showActivitySidebar) return null;
+    return (
+      <Drawer
+        title="Activity log"
+        placement="right"
+        closable={true}
+        onClose={this.toggleActivitySidebar}
+        visible={showActivitySidebar}
+        width={500}
+        className="activity-log-drawer"
+      >
+        {process.env.REACT_APP_ACTIVITY_LOG_SERVERLESS ? (
+          <ServerlessAuditListTabs
+            id={[...childWorkflowIds, workflowIdFromDetailsToSidebar]}
+          />
+        ) : (
+          <AuditListTabs id={workflowIdFromDetailsToSidebar} />
+        )}
+      </Drawer>
+    );
+  };
+
+  renderSidebarHeader = () => {
+    return (
+      <StyledSidebarHeader>
+        <div
+          className={css`
+            max-width: calc(100% - 40px);
+            line-height: normal;
+          `}
+        >
+          {this.renderParent()}
+          <br />
+          <StyledWorkflowName>{this.currentWorkflowName}</StyledWorkflowName>
+        </div>
+        <Dropdown
+          overlay={this.workflowActionMenu}
+          className="child-workflow-dropdown"
+        >
+          <span className="pd-ard-sm text-metal text-anchor">
+            <i className="material-icons text-middle t-18 ">more_vert</i>
+          </span>
+        </Dropdown>
+      </StyledSidebarHeader>
+    );
+  };
+
+  renderLCData = () => {
+    return (
+      <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+        <LCData
+          // TODO: Optimization required
+          lcData={[...this.lcData].splice(0, 3)}
+          status={this.workflowStatus}
+          style={{ marginBottom: 15 }}
+        />
+      </Chowkidaar>
+    );
+  };
+
+  renderProfileStep = () => {
+    const { selectedGroup } = this.props;
+    const profileSelected = selectedGroup === null;
+    return (
+      <StyledCollapseItem
+        onClick={this.onProfileClick}
+        selected={profileSelected}
+      >
+        <i
+          className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+          fill="#FFF"
+          style={{
+            color: profileSelected ? "white" : "rgb(204, 204, 204)",
+            fontSize: 24
+          }}
+        >
+          info_outline
+        </i>
+        <FormattedMessage id="workflowsInstances.profileText" />
+      </StyledCollapseItem>
+    );
+  };
+
+  renderLoader = () => {
+    return (
+      <Icon
+        type="loading"
+        spin
+        style={{ position: "absolute", top: "12%", left: "50%" }}
+      />
+    );
   };
 
   workflowActionMenu = (
     <Menu>
       <Chowkidaar check={Permissions.CAN_VIEW_ACTIVITY_LOG}>
-        <Menu.Item key={"activity"} onClick={this.toggleSidebar}>
+        <Menu.Item key={"activity"} onClick={this.toggleActivitySidebar}>
           <span>
             <i className="material-icons t-18 text-middle pd-right-sm">
               restore
@@ -250,404 +361,40 @@ class Sidebar extends Component {
     </Menu>
   );
 
-  get lcData() {
-    const { workflowIdFromDetailsToSidebar } = this.props;
-    const lcData = lodashGet(
-      this.props,
-      `workflowDetailsHeader[${workflowIdFromDetailsToSidebar}].lc_data`,
-      []
-    );
-    // TODO: Check why this logic is required
-    const visibelLcData = lcData.filter(
-      lc => lc.display_type === "normal" && lc.value
-    );
-    return visibelLcData;
-  }
-
   render() {
-    const {
-      workflowDetailsHeader,
-      workflowDetails,
-      minimalUI,
-      workflowIdFromDetailsToSidebar,
-      displayProfile
-    } = this.props;
+    const { minimalUI, selectedStep } = this.props;
+    const { selectedPanel } = this.state;
 
-    const { groupId, stepId } = this.state;
+    // TODO: This check should be outside this component
+    if (!this.currentWorkflow) {
+      return null;
+    }
 
     return (
-      <Sider
-        width={330}
-        style={{
-          overflow: "scroll",
-          left: 0,
-          backgroundColor: "#FAFAFA",
-          padding: "30px",
-          paddingTop: 0,
-          paddingLeft: minimalUI ? "30px" : "55px",
-          zIndex: 0,
-          marginRight: minimalUI ? 0 : 35,
-          paddingRight: 0,
-          position: "relative",
-          marginTop: minimalUI ? 0 : 35
-        }}
-      >
-        <div
-          style={{
-            width: minimalUI ? 280 : "",
-            paddingBottom: 100,
-            height: "100%",
-            backgroundColor: "#FAFAFA"
-          }}
-        >
-          {this.state.showSidebar ? (
-            <Drawer
-              title="Activity log"
-              placement="right"
-              closable={true}
-              //style={{top:'64px'}}
-              onClose={this.toggleSidebar}
-              visible={this.state.showSidebar}
-              width={500}
-              className="activity-log-drawer"
-            >
-              {process.env.REACT_APP_ACTIVITY_LOG_SERVERLESS ? (
-                <ServerlessAuditListTabs
-                  id={[
-                    ...this.props.workflowDetailsHeader[
-                      workflowIdFromDetailsToSidebar
-                    ].children.map(item => item.id),
-                    workflowIdFromDetailsToSidebar
-                  ]}
-                />
-              ) : (
-                <AuditListTabs
-                  id={
-                    this.props.workflowDetailsHeader[
-                      workflowIdFromDetailsToSidebar
-                    ].id
-                  }
-                />
-              )}
-            </Drawer>
-          ) : null}
-          {!minimalUI &&
-            Object.values(workflowDetailsHeader).length &&
-            workflowDetailsHeader[workflowIdFromDetailsToSidebar] && (
-              <div>
-                <div
-                  style={{
-                    // color: "#000",
-                    padding: "25px 20px",
-                    cursor: "pointer",
-                    backgroundColor: "#fafafa",
-                    justifyContent: "space-between",
-                    display: "flex",
-                    //fontSize: 24,
-                    paddingBottom: 0,
-                    paddingLeft: 0,
-                    paddingRight: 0,
-                    letterSpacing: "-0.05px",
-                    lineHeight: "29px",
-                    alignItems: "center"
-                  }}
-                >
-                  <div
-                    style={{
-                      maxWidth: "calc(100% - 40px)",
-                      lineHeight: "normal"
-                    }}
-                  >
-                    {this.renderParent()}
-                    <br />
-                    <Tooltip
-                      title={
-                        workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-                          .name
-                      }
-                    >
-                      <span
-                        style={{
-                          maxWidth: "100%",
-                          color: "black",
-                          fontSize: 24,
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          display: "inline-block"
-                        }}
-                      >
-                        {
-                          workflowDetailsHeader[workflowIdFromDetailsToSidebar]
-                            .name
-                        }
-                      </span>
-                    </Tooltip>
-                  </div>
-                  <Dropdown
-                    overlay={this.workflowActionMenu}
-                    className="child-workflow-dropdown"
-                  >
-                    <span className="pd-ard-sm text-metal text-anchor">
-                      <i className="material-icons text-middle t-18 ">
-                        more_vert
-                      </i>
-                    </span>
-                  </Dropdown>
-                </div>
-                <Divider style={{ margin: "10px 0" }} />
+      <>
+        {this.renderActivitySidebar()}
+        <StyledSidebar width={330} minimalUI={minimalUI}>
+          {!minimalUI && this.renderSidebarHeader()}
 
-                <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
-                  <LCData
-                    lcData={[...this.lcData].splice(0, 3)}
-                    status={this.workflowStatus}
-                    style={{ marginBottom: 15 }}
-                  />
-                </Chowkidaar>
-              </div>
-            )}
-          <span
-            // to={`${history.location.pathname}?group=${
-            //   stepgroup.id
-            // }&step=${step.id}`}
-            style={{
-              color: "#000000",
-              textDecoration: "none",
-              cursor: "pointer"
-            }}
-            onClick={event => this.onProfileClick()}
-            // key={step.id}
-          >
-            <p
-              style={{
-                backgroundColor: displayProfile ? "#104774" : "#FAFAFA",
-                borderRadius: "50px",
-                paddingLeft: "7px",
-                paddingTop: "5px",
-                paddingBottom: "5px",
-                marginLeft: "-9px",
-                marginBottom: 8,
-                display: "flex",
-                alignItems: "center",
-                color: displayProfile ? "white" : "black",
-                fontSize: 14
-              }}
-            >
-              <i
-                className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                fill="#FFF"
-                style={{
-                  color: displayProfile ? "white" : "rgb(204, 204, 204)",
-                  fontSize: 24
-                }}
-              >
-                {/* {"panorama_fish_eye"} */}
-                info_outline
-              </i>
-              <FormattedMessage id="workflowsInstances.profileText" />
-            </p>
-          </span>
+          <Divider style={{ margin: "10px 0" }} />
 
-          {workflowDetails[workflowIdFromDetailsToSidebar] &&
-          workflowDetails[workflowIdFromDetailsToSidebar].loading ? (
-            <Icon
-              type="loading"
-              spin
-              style={{ position: "absolute", top: "12%", left: "50%" }}
-            />
+          {!minimalUI && this.renderLCData()}
+
+          {this.renderProfileStep()}
+
+          {this.loadingSteps ? (
+            this.renderLoader()
           ) : (
-            <div>
-              <Collapse
-                defaultActiveKey={[groupId]}
-                activeKey={groupId}
-                accordion
-                style={{
-                  borderLeft: "none",
-                  borderRight: "none",
-                  borderRadius: 0,
-                  marginBottom: 30
-                  //marginTop: minimalUI ? 0 : 41
-                }}
-                onChange={this.onChangeOfCollapse}
-                className="ant-collapse-content"
-              >
-                {workflowDetails[workflowIdFromDetailsToSidebar] &&
-                Object.values(workflowDetails).length &&
-                workflowDetails[workflowIdFromDetailsToSidebar].workflowDetails
-                  ? workflowDetails[
-                      workflowIdFromDetailsToSidebar
-                    ].workflowDetails.stepGroups.results
-                      .filter(group => group.steps.length)
-                      .map((stepgroup, index) => (
-                        <Panel
-                          key={`${stepgroup.id}`}
-                          showArrow={false}
-                          header={
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                backgroundColor: "#fafafa",
-                                marginLeft: "-14px"
-                              }}
-                            >
-                              <span
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  fontWeight: 500,
-                                  fontSize: 14
-                                }}
-                              >
-                                {stepgroup.steps.filter(
-                                  step => step.completed_by
-                                ).length === stepgroup.steps.length ? (
-                                  <i
-                                    className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-                                    style={{ color: "#00C89B" }}
-                                  >
-                                    check_circle
-                                  </i>
-                                ) : stepgroup.overdue ? (
-                                  <Tooltip title="overdue">
-                                    <i
-                                      className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-                                      style={{ color: "#d40000" }}
-                                    >
-                                      alarm
-                                    </i>
-                                  </Tooltip>
-                                ) : (
-                                  <i
-                                    className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-                                    style={{ color: "#CCCCCC" }}
-                                  >
-                                    panorama_fish_eye
-                                  </i>
-                                )}
-                                {getIntlBody(stepgroup.definition, "name")}
-                              </span>
-                              <span
-                                style={{
-                                  fontWeight: 500,
-                                  fontSize: "14px",
-                                  opacity: 0.2,
-                                  color: "#000000",
-                                  letterSpacing: "-0.03px",
-                                  lineHeight: "18px"
-                                }}
-                              >
-                                {
-                                  stepgroup.steps.filter(
-                                    step => step.completed_by
-                                  ).length
-                                }
-                                /{stepgroup.steps.length}
-                              </span>
-                            </div>
-                          }
-                        >
-                          {stepgroup.steps.map((step, index) => (
-                            <span
-                              key={`${step.id}`}
-                              style={
-                                groupId === stepgroup.id && stepId === step.id
-                                  ? {
-                                      backgroundColor: "#104774",
-                                      borderRadius: "16px",
-                                      paddingLeft: "10px",
-                                      paddingTop: "5px",
-                                      paddingBottom: "5px",
-                                      marginLeft: "-12px",
-                                      textDecoration: "none",
-                                      cursor: "pointer",
-                                      color: "#FFFFFF"
-                                    }
-                                  : {
-                                      backgroundColor: "#fafafa",
-                                      textDecoration: "none",
-                                      cursor: "pointer"
-                                    }
-                              }
-                              onClick={event =>
-                                this.handleStepClick(
-                                  stepgroup.id,
-                                  step.id,
-                                  event
-                                )
-                              }
-                            >
-                              <p
-                                style={
-                                  groupId === stepgroup.id.toString() &&
-                                  stepId === step.id.toString() &&
-                                  !displayProfile
-                                    ? {
-                                        backgroundColor: "#104774",
-                                        borderRadius: "16px",
-                                        paddingLeft: "10px",
-                                        paddingTop: "5px",
-                                        paddingBottom: "5px",
-                                        marginLeft: "-10px",
-                                        color: "#FFFFFF"
-                                      }
-                                    : {
-                                        backgroundColor: "#fafafa"
-                                        // marginLeft: "-14px"
-                                      }
-                                }
-                              >
-                                {step.completed_by ? (
-                                  <i
-                                    className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                                    fill="#FFF"
-                                    style={
-                                      groupId === stepgroup.id.toString() &&
-                                      stepId === step.id.toString()
-                                        ? { color: "#00C89B", fontSize: 14 }
-                                        : { color: "#00C89B" }
-                                    }
-                                  >
-                                    check_circle
-                                  </i>
-                                ) : step.overdue ? (
-                                  <Tooltip title="overdue">
-                                    <i
-                                      className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                                      style={{ color: "#d40000" }}
-                                    >
-                                      alarm
-                                    </i>
-                                  </Tooltip>
-                                ) : (
-                                  <i
-                                    className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-                                    fill="#FFF"
-                                    style={
-                                      groupId === stepgroup.id.toString() &&
-                                      stepId === step.id.toString()
-                                        ? { color: "#FFFFFF", fontSize: 14 }
-                                        : { color: "#CCCCCC" }
-                                    }
-                                  >
-                                    {groupId === stepgroup.id.toString() &&
-                                    stepId === step.id.toString()
-                                      ? "lens"
-                                      : "panorama_fish_eye"}
-                                  </i>
-                                )}
-                                {step.name}
-                              </p>
-                            </span>
-                          ))}
-                        </Panel>
-                      ))
-                  : null}
-              </Collapse>
-            </div>
+            <StepsSideBar
+              selectedPanelId={selectedPanel}
+              selectedStep={selectedStep}
+              stepGroups={this.stepGroups}
+              handleStepClick={this.handleStepClick}
+              onChangeOfCollapse={this.onChangeOfCollapse}
+            />
           )}
-        </div>
-      </Sider>
+        </StyledSidebar>
+      </>
     );
   }
 }
@@ -663,3 +410,244 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(injectIntl(Sidebar));
+
+class StepsSideBar extends Component {
+  renderStepGroupIcon(stepGroup) {
+    const allStepsCompleted = !stepGroup.steps.find(step => !step.completed_by);
+    const isOverdue = stepGroup.overdue;
+
+    if (allStepsCompleted) {
+      return (
+        <i
+          className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
+          style={{ color: "#00C89B" }}
+        >
+          check_circle
+        </i>
+      );
+    }
+
+    if (isOverdue) {
+      return (
+        <Tooltip title="Overdue">
+          <i
+            className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
+            style={{ color: "#d40000" }}
+          >
+            alarm
+          </i>
+        </Tooltip>
+      );
+    }
+
+    return (
+      <i
+        className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
+        style={{ color: "#CCCCCC" }}
+      >
+        panorama_fish_eye
+      </i>
+    );
+  }
+  renderStepsCountStatus(stepGroup) {
+    return (
+      <span
+        className={css`
+          font-weight: 500;
+          font-size: 14px;
+          opacity: 0.2;
+          color: #000000;
+          letter-spacing: -0.03px;
+          line-height: 18px;
+        `}
+      >
+        {stepGroup.steps.filter(step => step.completed_by).length}/
+        {stepGroup.steps.length}
+      </span>
+    );
+  }
+  renderStepGroup(stepGroup) {
+    return (
+      <div
+        className={css`
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background-color: #fafafa;
+          margin-left: -14px;
+        `}
+      >
+        <span
+          className={css`
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 14;
+          `}
+        >
+          {this.renderStepGroupIcon(stepGroup)}
+
+          {/* TODO: Kya hai, kyun hai yeh? */}
+          {getIntlBody(stepGroup.definition, "name")}
+        </span>
+        {this.renderStepsCountStatus(stepGroup)}
+      </div>
+    );
+  }
+
+  isStepSelected = step => {
+    const { selectedStep } = this.props;
+    // eslint-disable-next-line
+    return selectedStep == step.id;
+  };
+
+  isStepOverdue = step => !!step.overdue;
+
+  renderStepIcon = step => {
+    const isCompleted = !!step.completed_by;
+    const isSelected = this.isStepSelected(step);
+    const isOverdue = this.isStepOverdue(step);
+
+    if (isCompleted) {
+      return (
+        <i
+          className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+          fill="#FFF"
+          style={
+            isSelected
+              ? { color: "#00C89B", fontSize: 14 }
+              : { color: "#00C89B" }
+          }
+        >
+          check_circle
+        </i>
+      );
+    }
+
+    if (isOverdue) {
+      return (
+        <Tooltip title="overdue">
+          {/* TODO: Refactor all the icons */}
+          <i
+            className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+            style={{ color: "#d40000" }}
+          >
+            alarm
+          </i>
+        </Tooltip>
+      );
+    }
+
+    return (
+      <i
+        className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+        fill="#FFF"
+        style={
+          isSelected ? { color: "#FFFFFF", fontSize: 14 } : { color: "#CCCCCC" }
+        }
+      >
+        {isSelected ? "lens" : "panorama_fish_eye"}
+      </i>
+    );
+  };
+
+  renderSteps(step, stepGroup) {
+    const isSelected = this.isStepSelected(step);
+    return (
+      <StyledCollapseItem
+        onClick={event =>
+          this.props.handleStepClick(stepGroup.id, step.id, event)
+        }
+        selected={isSelected}
+      >
+        {this.renderStepIcon(step)}
+        {step.name}
+      </StyledCollapseItem>
+    );
+  }
+
+  render() {
+    const { stepGroups, selectedPanelId } = this.props;
+    return (
+      // <div>
+      <StyledCollapse
+        // TODO: Doesn't update group from query params
+        activeKey={selectedPanelId}
+        accordion
+        onChange={this.props.onChangeOfCollapse}
+        // className="ant-collapse-content"
+      >
+        {stepGroups.map(stepGroup => (
+          <Panel
+            key={stepGroup.id}
+            showArrow={false}
+            header={this.renderStepGroup(stepGroup)}
+          >
+            {stepGroup.steps.map(step => this.renderSteps(step, stepGroup))}
+          </Panel>
+        ))}
+      </StyledCollapse>
+      // </div>
+    );
+  }
+}
+
+const StyledSidebar = styled(Sider)`
+  overflow: scroll;
+  left: 0;
+  background-color: #fafafa;
+  padding: 30px;
+  padding-top: 0;
+  padding-left: ${({ minimalUI }) => (minimalUI ? "30px" : "55px")};
+  z-index: 0;
+  margin-right: ${({ minimalUI }) => (minimalUI ? 0 : 35)};
+  padding-right: 0;
+  position: relative;
+  margin-top: ${({ minimalUI }) => (minimalUI ? 0 : 35)};
+`;
+
+const StyledSidebarHeader = styled.div`
+  padding: 25px 20px;
+  cursor: pointer;
+  background-color: #fafafa;
+  justify-content: space-between;
+  display: flex;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  letter-spacing: -0.05px;
+  line-height: 29px;
+  align-items: center;
+`;
+
+const StyledWorkflowName = styled.span`
+  max-width: 100%;
+  color: black;
+  font-size: 24px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+`;
+
+const StyledCollapse = styled(Collapse)`
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  margin-bottom: 30;
+`;
+
+const StyledCollapseItem = styled.span`
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 50px;
+  padding-left: 7px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-left: -9px;
+  margin-bottom: 8;
+  display: flex;
+  align-items: center;
+  font-size: 14;
+  background-color: ${props => (props.selected ? "#104774" : "#FAFAFA")};
+  color: ${props => (props.selected ? "white" : "black")};
+`;

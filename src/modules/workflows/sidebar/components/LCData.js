@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col } from "antd";
-import { FormattedLCData } from "../../../../modules/common/FormattedLCData";
+import { FormattedLCData } from "../../../common/components/FormattedLCData";
 import styled from "@emotion/styled";
 import { css } from "emotion";
 
