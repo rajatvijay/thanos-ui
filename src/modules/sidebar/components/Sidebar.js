@@ -76,7 +76,6 @@ class Sidebar extends Component {
   fetchGroupData = tag => {
     this.props.dispatch(workflowKindActions.getCount(tag));
     this.props.dispatch(workflowKindActions.getAlertCount(tag));
-    this.props.dispatch(workflowKindActions.getStatusCount(tag));
   };
 
   renderDropdownList = () => {

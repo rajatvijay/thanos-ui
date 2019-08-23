@@ -46,7 +46,6 @@ class AlertFilter extends Component {
 
     if (_.isEmpty(this.props.workflowAlertGroupCount.stepgroupdef_counts)) {
       this.props.dispatch(workflowKindActions.getAlertCount(tag));
-      this.props.dispatch(workflowKindActions.getStatusCount(tag));
     }
   };
 
@@ -55,7 +54,6 @@ class AlertFilter extends Component {
 
     if (this.props.workflowFilters.kind !== prevProps.workflowFilters.kind) {
       this.props.dispatch(workflowKindActions.getAlertCount(tag));
-      this.props.dispatch(workflowKindActions.getStatusCount(tag));
     }
   };
 

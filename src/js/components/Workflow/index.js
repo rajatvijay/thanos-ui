@@ -107,7 +107,6 @@ class Workflow extends Component {
       this.props.dispatch(workflowKindActions.getAlertCount(defKind.tag));
       if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
         this.props.dispatch(workflowKindActions.getCount(defKind.tag));
-        this.props.dispatch(workflowKindActions.getStatusCount(defKind.tag));
       }
     } else {
       this.reloadWorkflowList();
