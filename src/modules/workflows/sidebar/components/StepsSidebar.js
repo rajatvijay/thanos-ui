@@ -151,9 +151,7 @@ class StepsSideBar extends Component {
     const isSelected = this.isStepSelected(step);
     return (
       <StyledCollapseItem
-        onClick={event =>
-          this.props.handleStepClick(stepGroup.id, step.id, event)
-        }
+        onClick={event => this.props.handleStepClick(stepGroup.id, step.id)}
         selected={isSelected}
       >
         {this.renderStepIcon(step)}

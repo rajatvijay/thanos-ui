@@ -39,10 +39,10 @@ class Sidebar extends Component {
     }));
   };
 
-  // ==================================================================================================== //
-  // ==================================================================================================== //
-  // ==================================================================================================== //
-  // ==================================================================================================== //
+  // ================================================================ //
+  // ================================================================ //
+  // ================================================================ //
+  // ================================================================ //
 
   // DIRTY CODE, SORRY!!
   callBackCollapser = (object_id, content_type) => {
@@ -75,10 +75,11 @@ class Sidebar extends Component {
     this.callBackCollapser(object_id, "all_data");
   };
 
-  // ////////////////// ////////////////// ////////////////
-  // ////////////////// ////////////////// ////////////////
-  // ////////////////// ////////////////// ////////////////
-  // ////////////////// ////////////////// ////////////////
+  // DIRTY CODE ENDS HERE!
+  // ================================================================ //
+  // ================================================================ //
+  // ================================================================ //
+  // ================================================================ //
 
   printDiv = () => {
     setTimeout(function() {
@@ -257,6 +258,7 @@ class Sidebar extends Component {
         <Dropdown
           overlay={this.workflowActionMenu}
           className="child-workflow-dropdown"
+          trigger={["click", "hover"]}
         >
           <span className="pd-ard-sm text-metal text-anchor">
             <i className="material-icons text-middle t-18 ">more_vert</i>
@@ -393,13 +395,8 @@ class Sidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const {
-    workflowDetailsHeader,
-    workflowDetails,
-    currentStepFields,
-    config
-  } = state;
-  return { workflowDetailsHeader, workflowDetails, currentStepFields, config };
+  const { workflowDetailsHeader, workflowDetails } = state;
+  return { workflowDetailsHeader, workflowDetails };
 }
 
 export default connect(mapStateToProps)(injectIntl(Sidebar));
