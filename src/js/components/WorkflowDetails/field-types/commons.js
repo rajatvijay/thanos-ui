@@ -378,7 +378,10 @@ function getIntegrationSearchButton(props) {
     boeing_adjudication_status: "Update Adjudication Status",
     krypton_ai_push: "Push AI data",
     adobe_sign: "Sign with AdobeSign",
-    amber_road: "Get Amberroad Data"
+    amber_road: "Get Amberroad Data",
+    general_config_1: "Get Data",
+    general_config_2: "Get Data",
+    general_config_3: "Get Data"
   };
 
   let button_name = type_button_map[props.field.definition.field_type];

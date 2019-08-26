@@ -205,6 +205,12 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "amber_road":
       return DnBCommon(props);
+    case "general_config_1":
+      return DnBCommon(props);
+    case "general_config_2":
+      return DnBCommon(props);
+    case "general_config_3":
+      return DnBCommon(props);
     default:
       return <Text {...props} />;
   }
