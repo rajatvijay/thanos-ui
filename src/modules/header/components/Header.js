@@ -108,7 +108,9 @@ class Header extends Component {
     const regexForUrl = /\/instances\/[\d]+/;
     const showExportOption = this.props.workflowKind.workflowKind;
     let showInsights = false;
-    const userProfileId = this.props.authentication.user.user_profile_workflow;
+    const userProfileId = user
+      ? this.props.authentication.user.user_profile_workflow
+      : null;
 
     if (
       user &&
