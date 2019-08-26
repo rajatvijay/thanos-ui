@@ -4,6 +4,7 @@ import { css } from "emotion";
 import { StyledCollapseItem, StyledCollapse } from "../styledComponents";
 
 import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
+import workflowAlert from "../../../../js/components/common/workflowAlert";
 
 const { Panel } = Collapse;
 
@@ -62,6 +63,13 @@ class StepsSideBar extends Component {
       </span>
     );
   }
+  renderStepGroupCount = stepGroup => {
+    const stepGroupCount = stepGroup.alerts.length;
+    const background = stepGroupCount
+      ? stepGroup.alerts[0].alert.category.color_label
+      : null;
+    return stepGroupCount ? workflowAlert(stepGroupCount, background) : null;
+  };
   renderStepGroup(stepGroup) {
     return (
       <div
@@ -86,7 +94,21 @@ class StepsSideBar extends Component {
           {/* TODO: Kya hai, kyun hai yeh? */}
           {getIntlBody(stepGroup.definition, "name")}
         </span>
-        {this.renderStepsCountStatus(stepGroup)}
+        <div
+          className={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <div
+            className={css`
+              margin-right: 8px;
+            `}
+          >
+            {this.renderStepGroupCount(stepGroup)}
+          </div>
+          {this.renderStepsCountStatus(stepGroup)}
+        </div>
       </div>
     );
   }
@@ -148,14 +170,31 @@ class StepsSideBar extends Component {
   };
 
   renderSteps(step, stepGroup) {
+    const stepCount = step.alerts.length;
+    const background = stepCount
+      ? step.alerts[0].alert.category.color_label
+      : null;
     const isSelected = this.isStepSelected(step);
     return (
       <StyledCollapseItem
+        className={css`
+          display: flex;
+          justify-content: space-between;
+        `}
         onClick={event => this.props.handleStepClick(stepGroup.id, step.id)}
         selected={isSelected}
       >
-        {this.renderStepIcon(step)}
-        {step.name}
+        <div>
+          {this.renderStepIcon(step)}
+          {step.name}
+        </div>
+        <div
+          className={css`
+            margin-right: 8px;
+          `}
+        >
+          {stepCount ? workflowAlert(stepCount, background) : null}
+        </div>
       </StyledCollapseItem>
     );
   }

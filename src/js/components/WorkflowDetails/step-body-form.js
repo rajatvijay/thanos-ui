@@ -533,7 +533,6 @@ class StepBodyForm extends Component {
           <Row gutter={60}>
             {_.map(fields, rawField => {
               const field = this.getFieldForRender(rawField);
-
               return (
                 <Col
                   key={"field-" + rawField.id}
@@ -567,6 +566,7 @@ class StepBodyForm extends Component {
         groupedField[index].steps.push(step);
       }
     });
+    console.log("sdadsadsa", this.props.stepData);
 
     return (
       <Form
