@@ -8,7 +8,6 @@ import {
   InputNumber,
   DatePicker,
   Select as AntSelect,
-  Checkbox as AntCheckbox,
   Divider as AntDivider,
   Button,
   Cascader,
@@ -31,7 +30,7 @@ import { getIntlBody } from "../../../_helpers/intl-helpers";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const Option = AntSelect.Option;
+const { OptGroup, Option } = AntSelect;
 const { TextArea } = Input;
 
 //Common utility fucntions bundled in one file commons.js//
@@ -45,7 +44,8 @@ const {
   feedValue,
   getLink,
   getStyle,
-  isDisabled
+  isDisabled,
+  convertValueToString
 } = commonFunctions;
 
 const openNotificationWithIcon = data => {
@@ -386,40 +386,6 @@ export const URL = props => {
   return <URL2 {...props} />;
 };
 
-//Field Type Checkbox
-const CheckboxGroup = AntCheckbox.Group;
-export const Checkbox = props => {
-  const defVal = [{ label: "Yes", value: "true" }];
-  const that = this;
-  return (
-    <FormItem
-      label={getLabel(props, that)}
-      className="from-label"
-      style={{ display: "block" }}
-      key={props.field.id}
-      hasFeedback
-      {...field_error(props)}
-    >
-      <CheckboxGroup
-        disabled={isDisabled(props)}
-        style={{ width: "100%" }}
-        options={
-          !_.isEmpty(props.field.definition.extra)
-            ? props.field.definition.extra
-            : defVal
-        }
-        onChange={onFieldChangeArray.bind(this, props)}
-        defaultValue={
-          props.field.answers[0]
-            ? stringToArray(props.field.answers[0])
-            : props.field.definition.defaultValue
-        }
-        {...feedValue(props)}
-      />
-    </FormItem>
-  );
-};
-
 //Field Type Select
 export const Select = props => {
   const single =
@@ -431,7 +397,7 @@ export const Select = props => {
   }
   const that = this;
 
-  const options = getExtra(props) || [];
+  const options = convertValueToString(getExtra(props)) || [];
 
   let answer = props.field.answers[0]
     ? single

@@ -4,7 +4,6 @@ import {
   Number,
   List,
   Date,
-  Checkbox,
   CascaderField,
   Email,
   Phone,
@@ -20,6 +19,8 @@ import {
   //Duns
 } from "./fields";
 
+import { GroupCheckbox } from "./fields/GroupCheckbox";
+import { Checkbox } from "./fields/Checkbox";
 import { Duns } from "./duns-search";
 import { UBO } from "./dnb_ubo";
 import { RDC } from "./dnb_rdc";
@@ -62,6 +63,8 @@ export const getFieldType = props => {
       return Date(props);
     case "checkbox":
       return Checkbox(props);
+    case "grouped_checkbox":
+      return GroupCheckbox(props);
     case "email":
       return Email(props);
     case "phone":

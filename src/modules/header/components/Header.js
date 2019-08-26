@@ -108,6 +108,7 @@ class Header extends Component {
     const regexForUrl = /\/instances\/[\d]+/;
     const showExportOption = this.props.workflowKind.workflowKind;
     let showInsights = false;
+    const userProfileId = this.props.authentication.user.user_profile_workflow;
 
     if (
       user &&
@@ -233,6 +234,16 @@ class Header extends Component {
                   <Menu.Item key="logout" onClick={this.onLogout}>
                     <FormattedMessage id={"loginPageInstances.logoutText"} />
                   </Menu.Item>
+
+                  {userProfileId ? (
+                    <Menu.Item key="profile">
+                      <Link to={`/workflows/instances/${userProfileId}`}>
+                        <FormattedMessage
+                          id={"workflowsInstances.profileText"}
+                        />
+                      </Link>
+                    </Menu.Item>
+                  ) : null}
                 </Menu>
               }
               trigger={["click"]}

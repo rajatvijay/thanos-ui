@@ -26,7 +26,8 @@ export const commonFunctions = {
   isDisabled,
   getAnsweredBy,
   isDnBIntegrationDataLoading,
-  stringifyObjectValue
+  stringifyObjectValue,
+  convertValueToString
 };
 
 //Utility func
@@ -533,4 +534,13 @@ function stringifyObjectValue(arry) {
   }
 
   return arry;
+}
+
+function convertValueToString(options) {
+  if (options && options.length) {
+    options.forEach(item => {
+      item.value = item.value + "";
+    });
+  }
+  return options;
 }
