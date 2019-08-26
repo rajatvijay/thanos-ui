@@ -188,7 +188,12 @@ class Sidebar extends Component {
   }
 
   get loadingSteps() {
-    return lodashGet(this.currentWorkflow, "loading", null);
+    const { workflowIdFromDetailsToSidebar } = this.props;
+    return lodashGet(
+      this.props,
+      `workflowDetails.[${workflowIdFromDetailsToSidebar}].loading`,
+      null
+    );
   }
 
   get stepGroups() {
@@ -309,7 +314,12 @@ class Sidebar extends Component {
       <Icon
         type="loading"
         spin
-        style={{ position: "absolute", top: "12%", left: "50%" }}
+        className={css`
+          font-size: 36px;
+          margin-top: 20px;
+          margin: 20px auto;
+          display: block;
+        `}
       />
     );
   };
@@ -362,7 +372,8 @@ class Sidebar extends Component {
 
     // TODO: This check should be outside this component
     if (!this.currentWorkflow) {
-      return null;
+      // NOTE: Added this styled component to not break the UI, empty state
+      return <StyledSidebar width={330} minimalUI={minimalUI} />;
     }
 
     return (

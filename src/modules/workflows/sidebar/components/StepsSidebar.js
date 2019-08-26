@@ -164,7 +164,8 @@ class StepsSideBar extends Component {
     const { stepGroups, selectedPanelId } = this.props;
     return (
       <StyledCollapse
-        activeKey={selectedPanelId}
+        // TODO: This should be handled in a better way
+        activeKey={String(selectedPanelId)}
         accordion
         onChange={this.props.onChangeOfCollapse}
       >
