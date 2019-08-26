@@ -74,7 +74,6 @@
     "extends": "react-app"
   },
   "devDependencies": {
-    "history": "^4.9.0",
     "husky": "^2.3.0",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
