@@ -120,7 +120,8 @@ export default {
       clear: "Clear",
       apply: "Apply",
       by: "by",
-      expandView: "Expand View"
+      expandView: "Expand View",
+      status: "Status"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",

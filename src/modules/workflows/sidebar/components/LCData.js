@@ -3,11 +3,19 @@ import { Row, Col } from "antd";
 import { FormattedLCData } from "../../../common/components/FormattedLCData";
 import styled from "@emotion/styled";
 import { css } from "emotion";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 function LCData({ lcData, status, ...restProps }) {
   return (
     <Row {...restProps}>
-      {status && <LCDataItem data={{ label: "Status", value: status }} />}
+      {status && (
+        <LCDataItem
+          data={{
+            label: <FormattedMessage id="commonTextInstances.status" />,
+            value: status
+          }}
+        />
+      )}
       {lcData.map(data => (
         <LCDataItem data={data} key={data.label} />
       ))}
@@ -15,7 +23,7 @@ function LCData({ lcData, status, ...restProps }) {
   );
 }
 
-export default LCData;
+export default injectIntl(LCData);
 
 // ========================================================================================== //
 // ========================================================================================== //
