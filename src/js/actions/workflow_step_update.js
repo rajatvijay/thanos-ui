@@ -375,9 +375,11 @@ function addComment(payload, step_reload_payload, isEmbedded) {
   }
 
   function failure(error) {
+    const errorMessage =
+      error.error || "Comment could not be posted at the moment";
     openNotificationWithIcon({
       type: "error",
-      message: "Failed to revert completion",
+      message: errorMessage,
       duration: 7
     });
     return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };

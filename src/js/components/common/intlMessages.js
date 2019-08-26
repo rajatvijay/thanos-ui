@@ -24,6 +24,11 @@ export default {
         downloadTab: "Download all",
         downloadText: "Click above to download the activity log file."
       },
+      comments: {
+        riskCodes: "Risk Codes",
+        changeFlag: "Change flag",
+        adjudication: "Adjudication"
+      },
       profileText: "Profile",
       unauthorisedText: "You are not authorised to view this page."
     },
@@ -238,6 +243,11 @@ export default {
         downloadText:
           "Haga clic arriba para descargar el archivo de registro de actividad."
       },
+      comments: {
+        riskCodes: "Códigos de riesgo",
+        changeFlag: "Cambiar bandera",
+        adjudication: "Adjudicación"
+      },
       profileText: "Perfil",
       unauthorisedText: "No tienes autorización para ver esta página."
     },
@@ -279,6 +289,7 @@ export default {
       emailSent: "Email enviado.",
       clickHere: "Haga clic aquí",
       clickToLogin: "Haga clic aquí para iniciar sesión",
+      reloadWorkflowDetails: "Recargar",
       addButton: "Añadir",
       removeButton: "Eliminar",
       search: "Buscar",
@@ -353,6 +364,10 @@ export default {
         "¡Lo siento! No hemos podido encontrar el flujo de trabajo que ha solicitado.",
       noStepInWorkflow:
         "Estimado usuario, los formularios aún se están procesando en el sistema. Por favor, inténtelo de nuevo más tarde.",
+      noWorkflowDetails:
+        "¡Uy! Parece un problema. Haga clic a continuación para volver a intentar",
+      resultIsEmpty:
+        "Parece que no hay configuración para este paso. Por favor, póngase en contacto con care@thevetted.com",
       emailMandatory: "El correo electrónico no puede estar vacío",
       passwordMandatory: "La contraseña no puede estar vacía"
     },
@@ -443,6 +458,11 @@ export default {
         downloadText:
           "Cliquez ci-dessus pour télécharger le fichier du journal d'activité"
       },
+      comments: {
+        riskCodes: "Codes de risque",
+        changeFlag: "Changer le drapeau",
+        adjudication: "Arbitrage"
+      },
       profileText: "Profile",
       unauthorisedText: "Vous n'êtes pas autorisé à voir cette page.."
     },
@@ -484,6 +504,7 @@ export default {
       emailSent: "Courriel envoyé.",
       clickHere: "Cliquez ici",
       clickToLogin: "Cliquez ici pour vous connecter",
+      reloadWorkflowDetails: "Rafraîchir",
       addButton: "Ajouter",
       removeButton: "Supprimer",
       search: "Rechercher",
@@ -558,6 +579,10 @@ export default {
         "Désolé! Nous n'avons pas pu trouver le flux de travail que vous avez demandé.",
       noStepInWorkflow:
         "Cher utilisateur, les formulaires sont toujours en cours de traitement dans le système. Veuillez réessayer plus tard.",
+      noWorkflowDetails:
+        "Oops! On dirait un problème. Cliquez ci-dessous pour réessayer",
+      resultIsEmpty:
+        "On dirait qu'il n'y a pas de configuration pour cette étape. S'il vous plaît contacter care@thevetted.com",
       emailMandatory: "Le courriel ne peut pas être vide",
       passwordMandatory: "Le mot de passe ne peut pas être vide"
     },

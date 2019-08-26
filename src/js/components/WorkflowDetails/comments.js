@@ -1,28 +1,28 @@
-import React, { Component } from "react";
-import moment from "moment";
+import styled from "@emotion/styled";
 import {
-  Layout,
-  Icon,
-  Select,
   Avatar,
   Button,
+  Cascader,
+  Col,
+  Icon,
+  Layout,
   Mention,
   Row,
-  Col,
-  Cascader,
-  Upload,
-  Tooltip
+  Select,
+  Tooltip,
+  Upload
 } from "antd";
-import { changeStatusActions } from "../../actions";
-import { integrationCommonFunctions } from "./field-types/integration_common";
-import { size, get } from "lodash";
-import Moment from "react-moment";
-import { FormattedMessage, injectIntl } from "react-intl";
-import MentionWithAttachments from "./MentionWithAttachments";
-import { workflowFiltersService } from "../../services";
-import styled from "@emotion/styled";
 import { css } from "emotion";
+import { get as lodashGet, size as lodashSize } from "lodash";
+import moment from "moment";
+import React, { Component } from "react";
+import { FormattedMessage, injectIntl } from "react-intl";
+import Moment from "react-moment";
+import { changeStatusActions } from "../../actions";
+import { workflowFiltersService } from "../../services";
 import { status_filters } from "./EventStatuses";
+import { integrationCommonFunctions } from "./field-types/integration_common";
+import MentionWithAttachments from "./MentionWithAttachments";
 
 const { toString, toContentState } = Mention;
 
@@ -30,27 +30,34 @@ const { Sider, Content } = Layout;
 const Option = Select.Option;
 
 class Comments extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      message: toContentState(""),
-      fileList: [],
-      uploading: false,
-      workflowStatuses: []
-    };
-    // call action
-  }
-
-  getWorkflowKind = ({ workflowComments }) => {
-    try {
-      return workflowComments.data.results[0].target.definition.kind;
-    } catch (e) {
-      return null;
-    }
+  state = {
+    message: toContentState(""),
+    fileList: [],
+    uploading: false,
+    workflowStatuses: []
   };
 
-  componentDidMount = () => {
-    const workflowKind = this.getWorkflowKind(this.props);
+  static getWorkflowKind({ workflowComments }) {
+    if (!workflowComments) return null;
+    return lodashGet(
+      workflowComments,
+      "data.results[0].target.definition.kind",
+      null
+    );
+  }
+
+  static extractAttachmentName(attachment) {
+    if (!attachment) return null;
+    let parts = attachment.split("/");
+    return parts[parts.length - 1].split("?")[0];
+  }
+
+  static getTarget(props) {
+    return lodashGet(props, "workflowComments.data.results.0.target", {});
+  }
+
+  componentDidMount() {
+    const workflowKind = Comments.getWorkflowKind(this.props);
 
     if (workflowKind) {
       workflowFiltersService
@@ -59,11 +66,11 @@ class Comments extends Component {
           this.setState({ workflowStatuses: response });
         });
     }
-  };
+  }
 
-  componentDidUpdate = previousProps => {
-    const currentWorkflowKind = this.getWorkflowKind(this.props);
-    const previousWorkflowKind = this.getWorkflowKind(previousProps);
+  componentDidUpdate(previousProps) {
+    const currentWorkflowKind = Comments.getWorkflowKind(this.props);
+    const previousWorkflowKind = Comments.getWorkflowKind(previousProps);
 
     if (currentWorkflowKind && currentWorkflowKind !== previousWorkflowKind) {
       workflowFiltersService
@@ -72,49 +79,55 @@ class Comments extends Component {
           this.setState({ workflowStatuses: response });
         });
     }
-  };
+  }
 
-  toggle = () => {
+  componentWillUnmount() {
     this.props.toggleSidebar();
-  };
+  }
 
   onChange = value => {
-    this.state.comment = toString(value);
-    this.setState({ message: value });
+    this.setState({ message: value, comment: toString(value) });
   };
 
-  addComment = (c, message, files) => {
+  addComment = (comment, message, files) => {
     let content_type = "step";
-    if (c.content_type === "integrationresult") {
+    if (comment.content_type === "integrationresult") {
       content_type = "integrationresult";
-    } else if (c.target.field_details) {
+    } else if (comment.target.field_details) {
       content_type = "field";
-    } else if (c.target.workflow_details) {
+    } else if (comment.target.workflow_details) {
       content_type = "workflow";
     }
 
     const { fileList: filesFromState } = this.state;
     const fileList = files && files.length ? files : filesFromState;
 
-    const workflowId = this.props.workflowId;
+    const { workflowId, workflowKeys } = this.props;
 
     const step_reload_payload = {
       workflowId: workflowId,
-      groupId: this.props.workflowKeys[workflowId].groupId,
-      stepId: this.props.workflowKeys[workflowId].stepId
+      groupId: workflowKeys[workflowId].groupId,
+      stepId: workflowKeys[workflowId].stepId
     };
 
+    let commentPayload = {
+      object_id: comment.object_id,
+      type: content_type,
+      message: message || this.state.comment,
+      attachment: lodashSize(fileList) ? fileList[0] : ""
+    };
+
+    if (!commentPayload.message && !commentPayload.attachment) {
+      // Don't post any comment if there's nothing in the payload
+      return;
+    }
+
     this.props.addComment(
-      {
-        object_id: c.object_id,
-        type: content_type,
-        message: message || this.state.comment,
-        attachment: size(fileList) ? fileList[0] : ""
-      },
+      commentPayload,
       step_reload_payload,
       this.props.isEmbedded
     );
-    this.setState({ message: toContentState(""), fileList: [] });
+    this.setState({ message: toContentState(""), comment: "", fileList: [] });
   };
 
   selectStep = ({ groupId, stepId, fieldId = null }) => {
@@ -131,12 +144,8 @@ class Comments extends Component {
 
   selectFlag = option => {
     const flag = option[0];
-    const reason = size(option) > 1 ? option[1] : "";
-    const comments = this.props.workflowComments
-      ? this.props.workflowComments.data
-      : {};
-    const target = size(comments.results) ? comments.results[0].target : {};
-
+    const reason = lodashSize(option) > 1 ? option[1] : "";
+    const target = Comments.getTarget(this.props);
     let payload = {};
     if (target.field_details) {
       payload = {
@@ -159,11 +168,8 @@ class Comments extends Component {
     this.props.changeFlag(payload);
   };
 
-  changeStatus = value => {
-    const comments = this.props.workflowComments
-      ? this.props.workflowComments.data
-      : {};
-    const target = size(comments.results) ? comments.results[0].target : {};
+  changeIntegrationStatus = value => {
+    const target = Comments.getTarget(this.props);
 
     if (!target.field_details.is_integration_type) {
       return;
@@ -182,10 +188,7 @@ class Comments extends Component {
   };
 
   changeRiskCode = value => {
-    const comments = this.props.workflowComments
-      ? this.props.workflowComments.data
-      : {};
-    const target = size(comments.results) ? comments.results[0].target : {};
+    const target = Comments.getTarget(this.props);
 
     if (!target.field_details.is_integration_type) {
       return;
@@ -202,10 +205,7 @@ class Comments extends Component {
   };
 
   changeWorkflowStatus = value => {
-    const comments = this.props.workflowComments
-      ? this.props.workflowComments.data
-      : {};
-    const target = size(comments.results) ? comments.results[0].target : {};
+    const target = Comments.getTarget(this.props);
 
     if (!target.workflow_details) {
       return;
@@ -250,106 +250,11 @@ class Comments extends Component {
   };
 
   render() {
-    const comments = this.props.workflowComments
-      ? this.props.workflowComments.data
-      : {};
-    const that = this;
-    const single_comments = size(comments.results) <= 1 ? true : false;
-    const resultsCount = size(comments.results);
-    const c = resultsCount ? comments.results[0] : [];
-    const commentsContainerStyle = single_comments
-      ? {
-          height: "calc(100vh - 400px)",
-          overflowY: "scroll"
-        }
-      : null;
+    const comments = lodashGet(this.props, "workflowComments.data", {});
+    const singleContext = lodashSize(comments.results) <= 1 ? true : false;
+    const { workflowStatuses, fileList } = this.state;
+    const { toggleSidebar } = this.props;
 
-    //ADJUDICATION SELECTION
-    const adjudication = resultsCount ? (
-      <div>
-        <div className="  t-16 text-light">Adjudication:</div>
-        <Cascader
-          style={{ width: "100%", marginTop: "6px" }}
-          options={this.sortedCommentFlag(c.target.comment_flag_options)}
-          onChange={that.selectFlag}
-          placeholder="Change flag"
-          className="comment-select"
-        />
-      </div>
-    ) : null;
-
-    //WORJKFLOW STATUS SELECT
-    const workflow_status_dropdown = (
-      <Select
-        placeholder="STATUS"
-        style={{ width: "100%" }}
-        onChange={that.changeWorkflowStatus}
-        className="comment-select"
-      >
-        {that.state.workflowStatuses.length > 0
-          ? that.state.workflowStatuses.map((v, index) => {
-              return (
-                <Option key={`${index}`} value={v.id}>
-                  {v.label}
-                </Option>
-              );
-            })
-          : null}
-      </Select>
-    );
-
-    //RISK CODES DROPDOWN
-    const risk_codes_dropdown = (
-      <Select
-        placeholder="RISK CODES"
-        style={{ width: "100%" }}
-        onChange={that.changeRiskCode}
-        className="comment-select"
-      >
-        <Option value="Association & PEP Risk">
-          <FormattedMessage id="stepBodyFormInstances.associationRisk" />
-        </Option>
-        <Option value="Criminal Risk">
-          <FormattedMessage id="stepBodyFormInstances.criminalRisk" />
-        </Option>
-        <Option value="Financial Condition Risk">
-          <FormattedMessage id="stepBodyFormInstances.financialRisk" />
-        </Option>
-        <Option value="Legal Risk">
-          <FormattedMessage id="stepBodyFormInstances.legalRisk" />
-        </Option>
-        <Option value="Prohibited Entities Risk">
-          <FormattedMessage id="stepBodyFormInstances.prohibitedEntitiesRisk" />
-        </Option>
-        <Option value="Regulatory Risk">
-          <FormattedMessage id="stepBodyFormInstances.regulatorRisk" />
-        </Option>
-        <Option value="Reputation Risk">
-          <FormattedMessage id="stepBodyFormInstances.reputationRisk" />
-        </Option>
-      </Select>
-    );
-
-    //INTEGRATIONM STATUS DROPWORN
-    const integration_status_dropdown = (
-      <Select
-        placeholder="STATUS"
-        style={{ width: "100%" }}
-        onChange={that.changeStatus}
-        className="comment-select"
-      >
-        {status_filters.map((item, index) => {
-          return (
-            <Option key={`${index}`} value={item.value}>
-              {item.text}
-            </Option>
-          );
-        })}
-      </Select>
-    );
-
-    // for comment attachments
-    const { fileList } = this.state;
     const props = {
       onRemove: file => {
         this.setState(state => {
@@ -369,18 +274,8 @@ class Comments extends Component {
     };
 
     return (
-      <Sider
+      <StyledSider
         className="comments-sidebar profile-sidebar sidebar-right animated slideInRight"
-        style={{
-          background: "#fff",
-          height: "calc(100vh - 60px)",
-          position: "fixed",
-          right: 0,
-          top: "60px",
-          overflowY: "auto",
-          overflowX: "hidden",
-          zIndex: 20
-        }}
         width="570"
         collapsed={false}
         collapsedWidth={0}
@@ -391,24 +286,12 @@ class Comments extends Component {
         <div className="comment-details" style={{ width: "570px" }}>
           <Content style={{ background: "#fdfdfd", paddingBottom: "50px" }}>
             {comments.results.length <= 0 ? (
-              <div
-                style={{
-                  height: "calc(100vh - 400px)",
-                  overflowY: "scroll"
-                }}
-              >
+              <CommentWrapper singleContext={true}>
                 {/*///////HEADER///////*/}
-                <StyledHeadContainer>
+                <StyledCommentHeader>
                   <Row>
                     <Col span={2}>
-                      <Icon
-                        type="close"
-                        onClick={this.toggle}
-                        className={css`
-                          font-size: 21px;
-                          float: left;
-                        `}
-                      />
+                      <StyledCloseIcon type="close" onClick={toggleSidebar} />
                     </Col>
                     <Col span={16}>
                       <div>
@@ -421,35 +304,49 @@ class Comments extends Component {
                       </div>
                     </Col>
                   </Row>
-                </StyledHeadContainer>
-                <StyledCommentContainer>
+                </StyledCommentHeader>
+                <div className="messages">
                   <FormattedMessage id="stepBodyFormInstances.noComments" />
-                </StyledCommentContainer>
-              </div>
+                </div>
+              </CommentWrapper>
             ) : (
-              comments.results.map((c, index) => {
-                if (!single_comments && !size(c.messages)) {
+              comments.results.map((commentContext, index) => {
+                if (!singleContext && !lodashSize(commentContext.messages)) {
                   return null;
                 }
 
+                const {
+                  object_id,
+                  messages,
+                  target: {
+                    field_details,
+                    step_group_details,
+                    step_details,
+                    workflow_details,
+                    comment_flag_options
+                  }
+                } = commentContext;
+
+                const { type, is_integration_type, id: fieldId = null } =
+                  field_details || {};
+
                 return (
-                  <div key={`${c.object_id}`} style={commentsContainerStyle}>
+                  <CommentWrapper
+                    key={`${object_id}`}
+                    singleContext={singleContext}
+                  >
                     {/*///////HEADER///////*/}
-                    <StyledHeadContainer>
+                    <StyledCommentHeader>
                       <Row>
                         <Col span={2}>
-                          <Icon
+                          <StyledCloseIcon
                             type="close"
-                            onClick={this.toggle}
-                            className={css`
-                              font-size: 21px;
-                              float: left;
-                            `}
+                            onClick={toggleSidebar}
                           />
                         </Col>
 
                         <Col span={16}>
-                          {c.target.step_group_details ? (
+                          {step_group_details ? (
                             <div>
                               <div className="t-22">
                                 {
@@ -459,199 +356,117 @@ class Comments extends Component {
                               </div>
 
                               <div className="text-lighter mr-top-sm">
-                                {c.target.step_group_details.name}
+                                {step_group_details.name}
                                 <Icon
                                   type="right"
                                   className="small pd-left-sm pd-right-sm"
                                 />
                                 <LinkToStep
-                                  groupId={c.target.step_group_details.id}
-                                  stepId={c.target.step_details.id}
-                                  fieldId={get(
-                                    c,
-                                    "target.field_details.id",
-                                    null
-                                  )}
+                                  groupId={step_group_details.id}
+                                  stepId={step_details.id}
+                                  fieldId={fieldId || null}
                                   onClick={this.selectStep}
                                 >
-                                  {c.target.step_details.name}
+                                  {step_details.name}
                                 </LinkToStep>
                               </div>
                             </div>
                           ) : null}
 
-                          <StyledHeadText>
-                            {integrationCommonFunctions.comment_answer_body(c)}
-                          </StyledHeadText>
+                          <StyledCommentHeaderText>
+                            {integrationCommonFunctions.comment_answer_body(
+                              commentContext
+                            )}
+                          </StyledCommentHeaderText>
                         </Col>
 
                         <Col span={6}>
-                          {c.target.workflow_details
-                            ? c.target.workflow_details
-                              ? workflow_status_dropdown
-                              : null
-                            : null}
+                          {workflow_details ? (
+                            <WorkflowStatusesDropdown
+                              changeWorkflowStatus={this.changeWorkflowStatus}
+                              workflowStatuses={workflowStatuses}
+                            />
+                          ) : null}
 
-                          {c.target.field_details &&
-                          c.target.field_details.is_integration_type
-                            ? integration_status_dropdown
-                            : null}
+                          {is_integration_type ? (
+                            <IntegrationStatusDropdown
+                              changeIntegrationStatus={
+                                this.changeIntegrationStatus
+                              }
+                            />
+                          ) : null}
 
-                          {c.target.field_details &&
-                          (c.target.field_details.type === "google_search" ||
-                            c.target.field_details.type ===
-                              "serp_google_search")
-                            ? risk_codes_dropdown
-                            : null}
+                          {type === "google_search" ||
+                          type === "serp_google_search" ? (
+                            <RiskCodesDropdown
+                              changeRiskCode={this.changeRiskCode}
+                            />
+                          ) : null}
                         </Col>
                       </Row>
-                    </StyledHeadContainer>
+                    </StyledCommentHeader>
 
                     {/*///////Comments List Body///////*/}
-                    <StyledCommentContainer>
-                      {c.messages
-                        ? c.messages.map(function(msg, index) {
-                            let attachment_text = null;
-                            if (msg.attachment) {
-                              attachment_text = msg.attachment.split("/")[
-                                msg.attachment.split("/").length - 1
-                              ];
-                              attachment_text = attachment_text.split("?")[0];
-                            }
-                            return (
-                              <div
-                                key={msg.id + "-" + index}
-                                className="mr-bottom"
-                              >
-                                <Avatar
-                                  size="small"
-                                  icon="user"
-                                  style={{ float: "left" }}
-                                />
-                                <div
-                                  style={{
-                                    marginLeft: "30px",
-                                    fontSize: "12px",
-                                    padding: "2px 0px 3px"
-                                  }}
-                                >
-                                  <b style={{ color: "#162c5b" }}>
-                                    {msg.posted_by.first_name !== ""
-                                      ? msg.posted_by.first_name
-                                      : msg.posted_by.email}
-                                  </b>
-                                  <span
-                                    style={{
-                                      fontSize: "11px",
-                                      marginLeft: "6px",
-                                      cursor: "pointer"
-                                    }}
-                                  >
-                                    <Tooltip
-                                      title={moment(msg.created_at).format()}
-                                    >
-                                      <Moment fromNow>{msg.created_at}</Moment>
-                                    </Tooltip>
-                                  </span>
-                                </div>
-                                <div
-                                  style={{
-                                    fontSize: "12px",
-                                    paddingLeft: "32px"
-                                  }}
-                                >
-                                  <div
-                                    className="Container"
-                                    dangerouslySetInnerHTML={{
-                                      __html: msg.message.replace(
-                                        /@([a-z\d_]+)/gi,
-                                        '<a class="mentions" href="/users/">@$1</a>'
-                                      )
-                                    }}
-                                  />
-                                </div>
-                                {msg.attachment ? (
-                                  <div
-                                    style={{
-                                      marginLeft: "30px",
-                                      fontSize: "12px",
-                                      padding: "2px 0px 3px"
-                                    }}
-                                  >
-                                    <i className="anticon anticon-paper-clip" />
-                                    &nbsp;
-                                    <a href={msg.attachment}>
-                                      {attachment_text}
-                                    </a>
-                                  </div>
-                                ) : null}
-                              </div>
-                            );
+                    <StyledCommentMessages>
+                      {messages
+                        ? messages.map(function(msg, index) {
+                            return <Message {...msg} />;
                           })
                         : null}
-                    </StyledCommentContainer>
+                    </StyledCommentMessages>
 
-                    {single_comments ? (
+                    {singleContext ? (
                       <div className="affix-bottom" style={{ width: "100%" }}>
                         <StyledAddCommentContainer>
                           <div>
-                            {(c.target.field_details ||
-                              c.target.workflow_details) &&
-                            comments.results
-                              ? adjudication
-                              : null}
+                            {(field_details || workflow_details) &&
+                            comments.results ? (
+                              <AdjudicationCascader
+                                options={this.sortedCommentFlag(
+                                  comment_flag_options
+                                )}
+                                onChange={this.selectFlag}
+                              />
+                            ) : null}
                           </div>
 
                           <div className="mr-top mr-bottom">
                             <MentionWithAttachments
-                              comment={c}
-                              addComment={that.addComment}
-                              placeholder={that.props.intl.formatMessage({
+                              comment={commentContext}
+                              addComment={this.addComment}
+                              placeholder={this.props.intl.formatMessage({
                                 id: "stepBodyFormInstances.enterComment"
                               })}
-                              onChange={that.onChange}
-                              message={that.state.message}
-                              addAttachement={that.addAttachementInState}
+                              onChange={this.onChange}
+                              message={this.state.message}
+                              addAttachement={this.addAttachementInState}
                             />
                           </div>
 
-                          <Row
-                            className={css`
-                              margin-top: 30px;
-                            `}
-                          >
+                          <StyledAddCommentFooter>
                             <Col span={20} className="text-right">
                               <Upload {...props}>
-                                <Icon
-                                  type="paper-clip"
-                                  style={{
-                                    fontSize: "20px",
-                                    verticalAlign: "middle"
-                                  }}
-                                />
+                                <StyledAttachmentIcon type="paper-clip" />
                               </Upload>
                             </Col>
 
-                            <Col span={4} className="">
-                              <Button
-                                type="primary"
-                                onClick={() => that.addComment.bind(this)(c)}
-                                style={{ float: "right" }}
-                              >
-                                <FormattedMessage id="stepBodyFormInstances.postButtonText" />
-                              </Button>
+                            <Col span={4}>
+                              <PostButton
+                                commentContext={commentContext}
+                                onClick={this.addComment}
+                              />
                             </Col>
-                          </Row>
+                          </StyledAddCommentFooter>
                         </StyledAddCommentContainer>
                       </div>
                     ) : null}
-                  </div>
+                  </CommentWrapper>
                 );
               })
             )}
           </Content>
         </div>
-      </Sider>
+      </StyledSider>
     );
   }
 }
@@ -684,32 +499,223 @@ const LinkToStep = React.memo(
   }
 );
 
+const PostButton = React.memo(({ commentContext, onClick, ...otherProps }) => (
+  <Button
+    style={{ width: "100%" }}
+    type="primary"
+    onClick={() => onClick(commentContext)}
+    {...otherProps}
+  >
+    <FormattedMessage id="stepBodyFormInstances.postButtonText" />
+  </Button>
+));
+
+const Message = React.memo(
+  ({ id, posted_by, created_at, attachment, message }) => (
+    <div key={"comment" + id} className="mr-bottom">
+      <Avatar size="small" icon="user" style={{ float: "left" }} />
+      <StyledMessageRow>
+        <b style={{ color: "#162c5b" }}>
+          {posted_by.first_name || posted_by.email}
+        </b>
+        <StyledCommentTimestamp>
+          <Tooltip title={moment(created_at).format()}>
+            <Moment fromNow>{created_at}</Moment>
+          </Tooltip>
+        </StyledCommentTimestamp>
+      </StyledMessageRow>
+      <StyledMessageBody>
+        <div
+          className="Container"
+          dangerouslySetInnerHTML={{
+            __html: message.replace(
+              /@([a-z\d_]+)/gi,
+              '<a class="mentions" href="/users/">@$1</a>'
+            )
+          }}
+        />
+      </StyledMessageBody>
+      {attachment ? (
+        <StyledMessageRow>
+          <i className="anticon anticon-paper-clip" />
+          &nbsp;
+          <a href={attachment}>{Comments.extractAttachmentName(attachment)}</a>
+        </StyledMessageRow>
+      ) : null}
+    </div>
+  )
+);
+
+const AdjudicationCascader = React.memo(
+  injectIntl(({ onChange, intl, options }) => (
+    <div>
+      <div className="t-16 text-light">
+        <FormattedMessage id="workflowsInstances.comments.adjudication" />:
+      </div>
+      <Cascader
+        style={{ width: "100%", marginTop: "6px" }}
+        options={options}
+        onChange={onChange}
+        placeholder={intl.formatMessage({
+          id: "workflowsInstances.comments.riskCodes"
+        })}
+        className="comment-select"
+      />
+    </div>
+  ))
+);
+
+const WorkflowStatusesDropdown = React.memo(
+  injectIntl(({ changeWorkflowStatus, workflowStatuses, intl }) => (
+    <Select
+      placeholder={intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.status"
+      })}
+      style={{ width: "100%" }}
+      onChange={changeWorkflowStatus}
+      className="comment-select"
+    >
+      {workflowStatuses.length > 0
+        ? workflowStatuses.map((status, index) => (
+            <Option key={`${index}`} value={status.id}>
+              {status.label}
+            </Option>
+          ))
+        : null}
+    </Select>
+  ))
+);
+
+const RiskCodesDropdown = React.memo(
+  injectIntl(({ changeRiskCode, intl }) => (
+    <Select
+      placeholder={intl
+        .formatMessage({ id: "workflowsInstances.comments.riskCodes" })
+        .toUpperCase()}
+      style={{ width: "100%" }}
+      onChange={changeRiskCode}
+      className="comment-select"
+    >
+      <Option value="Association & PEP Risk">
+        <FormattedMessage id="stepBodyFormInstances.associationRisk" />
+      </Option>
+      <Option value="Criminal Risk">
+        <FormattedMessage id="stepBodyFormInstances.criminalRisk" />
+      </Option>
+      <Option value="Financial Condition Risk">
+        <FormattedMessage id="stepBodyFormInstances.financialRisk" />
+      </Option>
+      <Option value="Legal Risk">
+        <FormattedMessage id="stepBodyFormInstances.legalRisk" />
+      </Option>
+      <Option value="Prohibited Entities Risk">
+        <FormattedMessage id="stepBodyFormInstances.prohibitedEntitiesRisk" />
+      </Option>
+      <Option value="Regulatory Risk">
+        <FormattedMessage id="stepBodyFormInstances.regulatorRisk" />
+      </Option>
+      <Option value="Reputation Risk">
+        <FormattedMessage id="stepBodyFormInstances.reputationRisk" />
+      </Option>
+    </Select>
+  ))
+);
+
+const IntegrationStatusDropdown = React.memo(
+  injectIntl(({ changeIntegrationStatus, intl }) => (
+    <Select
+      placeholder={intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.status"
+      })}
+      style={{ width: "100%" }}
+      onChange={changeIntegrationStatus}
+      className="comment-select"
+    >
+      {status_filters.map((item, index) => {
+        return (
+          <Option key={`${index}`} value={item.value}>
+            {item.text}
+          </Option>
+        );
+      })}
+    </Select>
+  ))
+);
+
+const StyledSider = styled(Sider)`
+  background: #fff;
+  height: calc(100vh - 60px);
+  position: fixed;
+  right: 0;
+  top: 60px;
+  overflow-y auto;
+  overflow-x: hidden;
+  z-index: 20;
+`;
+
 const StyledLinkToStep = styled.span`
   color: #148cd6;
   cursor: pointer;
 `;
 
-const StyledHeadContainer = styled.div`
+const CommentWrapper = styled.div`
+  height: ${({ singleContext }) =>
+    singleContext ? "calc(100vh - 400px);" : "auto"};
+  overflow-y: ${({ singleContext }) => (singleContext ? "scroll" : "auto")};
+`;
+
+const StyledCommentHeader = styled.div`
   padding: 54px 45px 41px 45px;
   border-bottom: 1px solid #979797;
 `;
 
-const StyledHeadText = styled.span`
+const StyledCloseIcon = styled(Icon)`
+  font-size: 21px;
+  float: left;
+`;
+
+const StyledCommentHeaderText = styled.span`
   font-size: 20px;
   letter-spacing: -0.04px;
   line-height: 24px;
   font-weight: bold;
 `;
 
-const StyledCommentContainer = styled.div`
+const StyledCommentMessages = styled.div`
   padding: 32px 54px;
-  max-height: calc(100vh - 430px);
+`;
+
+const StyledMessageBody = styled.div`
+  font-size: 12px;
+  padding-left: 32px;
+`;
+
+const StyledMessageRow = styled.div`
+  margin-left: 30px;
+  font-size: 12px;
+  padding: 2px 0px 3px;
+`;
+
+const StyledCommentTimestamp = styled.span`
+  font-size: 11px;
+  margin-left: 6px;
+  cursor: pointer;
 `;
 
 const StyledAddCommentContainer = styled.div`
   padding: 30px 46px 30px 30px;
   border-top: 1px solid #979797;
   background: #fafafa;
+`;
+
+const StyledAddCommentFooter = styled(Row)`
+  margin-top: 30px;
+`;
+
+const StyledAttachmentIcon = styled(Icon)`
+  font-size: 20px;
+  margin-right: 20px;
+  vertical-align: middle;
 `;
 
 export default injectIntl(Comments);
