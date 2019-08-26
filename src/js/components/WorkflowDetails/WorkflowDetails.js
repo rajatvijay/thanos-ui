@@ -276,7 +276,7 @@ class WorkflowDetails extends Component {
       history.replace(`/workflows/instances/${workflowId}`);
     }
 
-    setWorkflowKeys(workflowId);
+    setWorkflowKeys({ workflowId, step: null, groupId: null });
 
     this.setState({ displayProfile });
   };

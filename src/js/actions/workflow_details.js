@@ -86,10 +86,15 @@ function getStepGroup(id, isActive) {
             })
           );
         }
-        dispatch({
-          type: SET_WORKFLOW_KEYS,
-          payload: { workflowId, stepId, groupId }
-        });
+        // Moving to next step only in the full screen view
+        // This is done to avoid moving to first incomplete step in modal view,
+        // on the first load
+        if (!minimalUI) {
+          dispatch({
+            type: SET_WORKFLOW_KEYS,
+            payload: { workflowId, stepId, groupId }
+          });
+        }
         dispatch(success(stepGroups, id));
       },
       error => dispatch(failure(error))

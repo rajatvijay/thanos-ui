@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Row, Col } from "antd";
 import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
 import Permissions from "../../../modules/common/permissions/constants";
-import { FormattedLCData } from "../../../modules/common/FormattedLCData";
+import { FormattedLCData } from "../../../modules/common/components/FormattedLCData";
 
 class ProfileStepBody extends Component {
   renderDetails() {

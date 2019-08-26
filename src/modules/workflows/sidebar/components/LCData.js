@@ -1,65 +1,57 @@
 import React from "react";
 import { Row, Col } from "antd";
-import { FormattedMessage } from "react-intl";
-import { FormattedLCData } from "../../../../modules/common/FormattedLCData";
+import { FormattedLCData } from "../../../common/components/FormattedLCData";
+import styled from "@emotion/styled";
+import { css } from "emotion";
+import { FormattedMessage, injectIntl } from "react-intl";
 
-function LCData({ lcData, status }) {
-  const style = {
-    color: "#000000",
-    fontSize: "12px",
-    letterSpacing: "-0.02px",
-    lineHeight: "29px",
-    wordWrap: "break-word"
-  };
-
+function LCData({ lcData, status, ...restProps }) {
   return (
-    <Row style={{ "margin-bottom": 12 }}>
-      <Col span={12}>
-        <span
-          style={{
-            opacity: 0.3,
-            color: "#000000",
-            fontSize: "12px",
-            fontWeight: "bold",
-            letterSpacing: "-0.02px",
-            lineHeight: "15px"
+    <Row {...restProps}>
+      {status && (
+        <LCDataItem
+          data={{
+            label: <FormattedMessage id="commonTextInstances.status" />,
+            value: status
           }}
-        >
-          <FormattedMessage id="workflowsInstances.statusText" />
-        </span>
-        <br />
-        <span
-          style={{
-            color: "#000000",
-            fontSize: "12px",
-            letterSpacing: "-0.02px",
-            lineHeight: "29px",
-            wordWrap: "break-word"
-          }}
-        >
-          {status}
-        </span>
-      </Col>
-      {lcData.map((data, index) => (
-        <Col span={12} key={`${index}`}>
-          <span
-            style={{
-              opacity: 0.3,
-              color: "#000000",
-              fontSize: "12px",
-              fontWeight: "bold",
-              letterSpacing: "-0.02px",
-              lineHeight: "15px"
-            }}
-          >
-            {data.label}
-          </span>
-          <br />
-          <FormattedLCData data={data} style={style} />
-        </Col>
+        />
+      )}
+      {lcData.map(data => (
+        <LCDataItem data={data} key={data.label} />
       ))}
     </Row>
   );
 }
 
-export default LCData;
+export default injectIntl(LCData);
+
+// ========================================================================================== //
+// ========================================================================================== //
+// ========================================================================================== //
+// ========================================================================================== //
+
+const StyledLCDataLabel = styled.span`
+  opacity: 0.3;
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: -0.02px;
+  line-height: 12px;
+`;
+
+const LCDataItem = ({ data }) => (
+  <Col span={12}>
+    <StyledLCDataLabel>{data.label}</StyledLCDataLabel>
+    <br />
+    <FormattedLCData
+      data={data}
+      className={css`
+        color: #000000;
+        font-size: 12px;
+        letter-spacing: -0.02px;
+        line-height: 29px;
+        word-wrap: break-word;
+      `}
+    />
+  </Col>
+);
