@@ -383,11 +383,17 @@ export class GetMergedData extends React.Component {
     });
 
     _.forEach(data, function(v) {
-      if (v.display_type === "alert" && v.value) {
+      if (
+        (v.display_type === "alert" || v.display_type === "alert_status") &&
+        v.value
+      ) {
         alert_data.push(v);
       }
     });
 
+    var alert_data_filtered = _.filter(alert_data, function(obj) {
+      return obj.value !== "0" && obj.value !== "";
+    });
     const lc_data = _.filter(data, function(v) {
       return v.display_type === "normal";
     });
@@ -398,9 +404,9 @@ export class GetMergedData extends React.Component {
 
     const that = this;
 
-    const expander = data => {
+    const expander = alert_data => {
       const count = 2;
-      if (_.size(data) > count) {
+      if (_.size(alert_data) > count) {
         return (
           <span
             className="ant-tag v-tag pd-right "
@@ -408,7 +414,7 @@ export class GetMergedData extends React.Component {
             style={{ background: "#B2B2B2", color: "#fff" }}
           >
             {this.state.expanded ? "-" : "+"}
-            {_.size(data) - count}
+            {_.size(alert_data) - count}
           </span>
         );
       } else {
@@ -423,6 +429,7 @@ export class GetMergedData extends React.Component {
       } else {
         classes += " pd-right-lg";
       }
+      item.show_label = true;
       const tagLabel = (
         <span>
           <span
@@ -496,8 +503,11 @@ export class GetMergedData extends React.Component {
         <div className="overflow-wrapper">
           <div className="step-ui">
             <Row type="flex" align="middle">
-              {_.size(alert_data)
-                ? _.map(alert_data, function(item, index) {
+              {_.size(alert_data_filtered)
+                ? _.map(alert_data_filtered, function(item, index) {
+                    if (item.value === "0") {
+                      return true;
+                    }
                     const count = index + 1;
                     if (count < 3) {
                       return TagItem(item, index, true);
@@ -511,7 +521,7 @@ export class GetMergedData extends React.Component {
                       return TagItem(item, index, false);
                     }
                   })}
-              {expander(alert_data)}
+              {expander(alert_data_filtered)}
             </Row>
           </div>
         </div>
