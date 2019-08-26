@@ -5,6 +5,7 @@ import { dunsFieldActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import FinancialData from "./FinancialData";
 import LitigationData from "./LitigationData";
+import { AmberRoad } from "./fields/AmberRoad.js";
 
 const {
   getIntegrationSearchButton,
@@ -93,6 +94,7 @@ class DnBSearch extends Component {
         {integration === "dnb_litigation" ? (
           <LitigationData {...props} />
         ) : null}
+        {integration === "amber_road" ? <AmberRoad {...props} /> : null}
 
         <br />
       </div>

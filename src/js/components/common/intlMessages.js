@@ -193,6 +193,19 @@ export default {
       searchUser: "Search User",
       userFoundMessage: "User found, proceed to send invite to this workflow?",
       userNotFoundMessage: "Inviting new user for this workflow, continue?"
+    },
+    messages: {
+      noResult: "No result"
+    },
+    amberRoadInstances: {
+      name: "Name",
+      decision: "Decision",
+      phraseId: "Phrase Id",
+      matchScore: "Match Score",
+      phraseType: "Phrase Type",
+      rplType: "Rpl Type",
+      rplCountry: "Rpl Country Code",
+      entityId: "Entity Id"
     }
   },
   es: {
@@ -399,6 +412,19 @@ export default {
         "Usuario encontrado, proceder a enviar invitaciones a este flujo de trabajo?",
       userNotFoundMessage:
         "Invitando a un nuevo usuario para este flujo de trabajo, ¿continuar?"
+    },
+    messages: {
+      noResult: "Sin resultados"
+    },
+    amberRoadInstances: {
+      name: "Nombre",
+      decision: "Decisión",
+      phraseId: "ID De Frase",
+      matchScore: "Puntaje De Partido",
+      phraseType: "Tipo De Frase",
+      rplType: "Rpl Tipo",
+      rplCountry: "Rpl Código De País",
+      entityId: "ID De Entidad"
     }
   },
   "es-cl": {
@@ -610,8 +636,20 @@ export default {
       searchUser: "Rechercher un utilisateur",
       userFoundMessage:
         "Utilisateur trouvé, procédez à l'envoi de l'invitation à ce flux de travail?",
-      userNotFoundMessage:
-        "Invitation d'un nouvel utilisateur pour ce flux de travail, continuer?"
+      userNotFoundMessage: "Invteur pour ce flux de travail, continuer?"
+    },
+    messages: {
+      noResult: "Pas de résultat"
+    },
+    amberRoadInstances: {
+      name: "Prénom",
+      decision: "Décision",
+      phraseId: "Phrase Id",
+      matchScore: "Score de match",
+      phraseType: "Phrase Type",
+      rplType: "Rpl Tipo",
+      rplCountry: "Rpl Code Pays",
+      entityId: "Identifiant d'entité"
     }
   }
 };

@@ -107,7 +107,6 @@ export const getFieldType = props => {
       return UBO(props);
     case "dnb_ubo_graph":
       return UBOGraph(props);
-
     case "dnb_directors":
       return Directors(props);
     case "dnb_rdc":
@@ -203,6 +202,8 @@ export const getFieldType = props => {
     case "krypton_ai_push":
       return DnBCommon(props);
     case "adobe_sign":
+      return DnBCommon(props);
+    case "amber_road":
       return DnBCommon(props);
     default:
       return <Text {...props} />;
