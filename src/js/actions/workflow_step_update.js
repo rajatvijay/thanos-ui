@@ -1,5 +1,5 @@
 import {
-  workflowFieldConstants,
+  fieldConstants,
   workflowStepConstants,
   workflowCommentsConstants
 } from "../constants";
@@ -52,38 +52,39 @@ function saveField(payload, event_type) {
     workflowStepService
       .saveField(payload)
       .then(
-        field => dispatch(success(field, event_type)),
+        step => dispatch(success(step, event_type)),
         error => dispatch(failure(error, workflowId))
       );
   };
 
   function request(payload) {
     message.loading("", 10);
-    return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
+    return { type: fieldConstants.RESPONSE_SAVE_REQUEST, payload };
   }
 
   function remove_errors(payload, workflowId) {
     return {
-      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      type: fieldConstants.RESPONSE_SAVE_FAILURE,
       payload,
       workflowId
     };
   }
 
-  function success(field) {
+  function success(step) {
     message.destroy();
     // hack for to avoid response.json promise in case of failure
-    if (!field.id) {
-      return failure(field, workflowId);
+    if (!step.id) {
+      // TODO: Blechh! Step is not step, but the error we got
+      return failure(step, workflowId);
     }
 
-    return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
+    return { type: fieldConstants.RESPONSE_SAVE_SUCCESS, step };
   }
 
   function failure(error, workflowId) {
     message.destroy();
     return {
-      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      type: fieldConstants.RESPONSE_SAVE_FAILURE,
       error,
       workflowId
     };
@@ -106,19 +107,19 @@ function fetchFieldExtra(field, answerFunction) {
   };
 
   function request(field) {
-    return { type: workflowFieldConstants.FETCH_FIELD_EXTRA_REQUEST, field };
+    return { type: fieldConstants.FIELD_FETCH_EXTRA_REQUEST, field };
   }
 
   function success(field, extra) {
     return {
-      type: workflowFieldConstants.FETCH_FIELD_EXTRA_SUCCESS,
+      type: fieldConstants.FIELD_FETCH_EXTRA_SUCCESS,
       field,
       extra
     };
   }
 
   function failure(error) {
-    return { type: workflowFieldConstants.FETCH_FIELD_EXTRA_FAILURE, error };
+    return { type: fieldConstants.FIELD_FETCH_EXTRA_FAILURE, error };
   }
 }
 
@@ -131,30 +132,30 @@ function removeAttachment(payload, event_type) {
     workflowStepService
       .removeAttachment(payload)
       .then(
-        field => dispatch(success(field, event_type)),
+        step => dispatch(success(step, event_type)),
         error => dispatch(failure(error, workflowId))
       );
   };
 
   function request(payload) {
-    return { type: workflowFieldConstants.POST_FIELD_REQUEST, payload };
+    return { type: fieldConstants.RESPONSE_SAVE_REQUEST, payload };
   }
 
   function remove_errors(payload, workflowId) {
     return {
-      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      type: fieldConstants.RESPONSE_SAVE_FAILURE,
       payload,
       workflowId
     };
   }
 
-  function success(field) {
+  function success(step) {
     // hack for to avoid response.json promise in case of failure
-    if (!field.id) {
-      return failure(field);
+    if (!step.id) {
+      return failure(step);
     }
 
-    return { type: workflowFieldConstants.POST_FIELD_SUCCESS, field };
+    return { type: fieldConstants.RESPONSE_SAVE_SUCCESS, step };
   }
 
   function failure(error, workflowId) {
@@ -163,7 +164,7 @@ function removeAttachment(payload, event_type) {
       message: "Unable to save."
     });
     return {
-      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      type: fieldConstants.RESPONSE_SAVE_FAILURE,
       error,
       workflowId
     };
@@ -203,7 +204,7 @@ function submitStepData(payload) {
 
   function remove_errors(payload, workflowId) {
     return {
-      type: workflowFieldConstants.POST_FIELD_FAILURE,
+      type: fieldConstants.RESPONSE_SAVE_FAILURE,
       payload,
       workflowId
     };

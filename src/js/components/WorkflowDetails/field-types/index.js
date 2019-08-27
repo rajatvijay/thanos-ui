@@ -9,7 +9,6 @@ import {
   Phone,
   Paragraph,
   Break,
-  Select,
   Divider,
   URL,
   Attachment,
@@ -41,6 +40,7 @@ import { RDCEventDetails } from "./rdc_event_details.js";
 import { RDCAlertsMetadata } from "./rdc_alert_metadata.js";
 import S3URL from "./S3ObjectField.js";
 import React from "react";
+import { Select } from "../../../../modules/fields/components/select";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -76,9 +76,9 @@ export const getFieldType = props => {
     case "divider":
       return Divider(props);
     case "single_select":
-      return Select(props);
+      return <Select {...props} />;
     case "multi_select":
-      return Select(props);
+      return <Select {...props} />;
     case "cascader":
       return CascaderField(props);
     case "url":

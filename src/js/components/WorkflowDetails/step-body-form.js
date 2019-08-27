@@ -9,6 +9,7 @@ import FieldItem from "./FieldItem";
 import { FormattedMessage, injectIntl } from "react-intl";
 import IntlTooltip from "../common/IntlTooltip";
 import { getIntlBody } from "../../_helpers/intl-helpers";
+import { fieldActions } from "../../../modules/fields/actions";
 
 const TabPane = Tabs.TabPane;
 const SIZE_33 = 4,
@@ -70,6 +71,59 @@ class StepBodyForm extends Component {
       })
     );
   };
+
+  getExtraDataForDependentField = ({ field, answer }) => {
+    /**
+     *
+     */
+    // Check for `extra` (esp if loaded from `api_url`)
+    const extrasFromAPI = this.props.currentStepFields.extrasFromAPI || {};
+    const extra = extrasFromAPI[field.definition.tag] || field.definition.extra;
+    if (Array.isArray(extra)) {
+      // Find the item from `extra` for selected value
+      const extraJSON = extra.find(item => item.value === answer);
+      // If `extra` has fields other than `label` and `value`
+      if (extraJSON && Object.keys(extraJSON).length > 2) {
+        // Add as `extra_json` to enable mapping to other field responses
+        return extraJSON;
+      }
+    }
+  };
+
+  updateFieldExtraData = ({ field, data }) => {
+    const fieldExtra = this.getExtraDataForDependentField({
+      field,
+      answer: data.answer || ""
+    });
+    if (fieldExtra) {
+      data.extra_json = fieldExtra;
+    }
+  };
+
+  saveResponse = async ({ answer, field, workflowId }) => {
+    const data = {
+      answer,
+      workflowId,
+      fieldId: field.id
+    };
+
+    this.updateFieldExtraData({ data, field });
+    await this.props.dispatch(fieldActions.saveResponse(data));
+    this.updateDependentFields(field, answer, true);
+  };
+
+  clearResponse = async ({ responseId, field, workflowId }) => {
+    const data = {
+      responseId,
+      workflowId
+    };
+
+    this.updateFieldExtraData({ data, field });
+    await this.props.dispatch(fieldActions.clearResponse(data));
+    this.updateDependentFields(field, "", true);
+  };
+
+  saveAttachment = async ({ attachment, field, workflowId }) => {};
 
   ///////////////////////////////////////
   //ON Field Change save or update data//
@@ -151,20 +205,10 @@ class StepBodyForm extends Component {
       "cascader"
     ];
 
-    // Check for `extra` (esp if loaded from `api_url`)
-    const extrasFromAPI = this.props.currentStepFields.extrasFromAPI || {};
-    const extra =
-      extrasFromAPI[payload.field.definition.tag] ||
-      payload.field.definition.extra;
-    if (_.isArray(extra)) {
-      // Find the item from `extra` for selected value
-      const extra_json = _.find(extra, item => item.value === data.answer);
-      // If `extra` has fields other than `label` and `value`
-      if (extra_json && Object.keys(extra_json).length > 2) {
-        // Add as `extra_json` to enable mapping to other field responses
-        data.extra_json = extra_json;
-      }
-    }
+    this.updateFieldExtraData({
+      field: payload.field,
+      data
+    });
 
     if (saveNowType.includes(payload.field.definition.field_type)) {
       this.props.dispatch(workflowStepActions.saveField(data));
@@ -179,7 +223,7 @@ class StepBodyForm extends Component {
   }, 1500);
 
   updateDependentFields = (targetField, answer, clear) => {
-    _.map(this.props.stepData.data_fields, field => {
+    this.props.stepData.data_fields.map(field => {
       const extra = field.definition.extra;
       if (extra && extra.trigger_field_tag === targetField.definition.tag) {
         clear && this.clearFieldValue(field);
@@ -474,7 +518,9 @@ class StepBodyForm extends Component {
       dispatch: this.props.dispatch,
       intl: this.props.intl,
       permission: this.props.permission,
-      dynamicUserPerms: this.props.dynamicUserPerms
+      dynamicUserPerms: this.props.dynamicUserPerms,
+      saveResponse: this.saveResponse,
+      clearResponse: this.clearResponse
     };
 
     const rowGroup = {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
-import { Dropdown, Icon, Input, Menu, notification, Divider } from "antd";
+import { Dropdown, Icon, Input, Menu, notification } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import {

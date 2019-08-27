@@ -1,6 +1,6 @@
 import {
   workflowStepConstants as stepConstants,
-  workflowFieldConstants as fieldConstants,
+  fieldConstants,
   dunsFieldConstants
 } from "../constants";
 
@@ -70,17 +70,17 @@ export function currentStepFields(state = initialState, action) {
           error: action.error
         }
       };
-    case fieldConstants.POST_FIELD_SUCCESS:
+    case fieldConstants.RESPONSE_SAVE_SUCCESS:
       return {
         ...state,
-        [action.field.id]: {
+        [action.step.id]: {
           loading: false,
           isSubmitting: false,
-          currentStepFields: action.field,
+          currentStepFields: action.step,
           error: null
         }
       };
-    case fieldConstants.POST_FIELD_FAILURE:
+    case fieldConstants.RESPONSE_SAVE_FAILURE:
       return {
         ...state,
         [action.workflowId]: {
@@ -96,43 +96,22 @@ export function currentStepFields(state = initialState, action) {
     //Update step data on first/initial answer OR POST REQUEST//
     ////////////////////////////////////////////////////////////
     // TODO: Is this even required?
-    case fieldConstants.POST_FIELD_REQUEST:
+    case fieldConstants.RESPONSE_SAVE_REQUEST:
       return {
         ...state,
         loading: false
       };
 
-    //////////////////////////////////////////////////////
-    //Update step data on answer change OR PATCH REQUEST//
-    //////////////////////////////////////////////////////
-    case fieldConstants.PATCH_FIELD_REQUEST:
-      return {
-        ...state,
-        loading: false
-      };
-    case fieldConstants.PATCH_FIELD_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        currentStepFields: { ...action.field }
-      };
-    case fieldConstants.PATCH_FIELD_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.error
-      };
     // TODO: Fix the actions below this, when cleaning!
-
     /////////////////////////////
     //Update options for field //
     /////////////////////////////
-    case fieldConstants.FETCH_FIELD_EXTRA_REQUEST:
+    case fieldConstants.FIELD_FETCH_EXTRA_REQUEST:
       return {
         ...state,
         loading: false
       };
-    case fieldConstants.FETCH_FIELD_EXTRA_SUCCESS:
+    case fieldConstants.FIELD_FETCH_EXTRA_SUCCESS:
       const extrasFromAPI = state.extrasFromAPI || {};
       extrasFromAPI[action.field.definition.tag] = action.extra;
       return {
@@ -140,7 +119,7 @@ export function currentStepFields(state = initialState, action) {
         loading: false,
         extrasFromAPI: extrasFromAPI
       };
-    case fieldConstants.FETCH_FIELD_EXTRA_FAILURE:
+    case fieldConstants.FIELD_FETCH_EXTRA_FAILURE:
       return {
         ...state,
         loading: false,

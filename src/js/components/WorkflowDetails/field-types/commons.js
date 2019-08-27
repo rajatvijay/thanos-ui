@@ -26,7 +26,6 @@ export const commonFunctions = {
   isDisabled,
   getAnsweredBy,
   isDnBIntegrationDataLoading,
-  stringifyObjectValue,
   convertValueToString
 };
 
