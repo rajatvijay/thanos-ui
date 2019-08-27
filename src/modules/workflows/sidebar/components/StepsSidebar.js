@@ -4,7 +4,7 @@ import { css } from "emotion";
 import { StyledCollapseItem, StyledCollapse } from "../styledComponents";
 
 import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
-import workflowAlert from "../../../../js/components/common/workflowAlert";
+import ColoredCount from "../../../../js/components/common/coloredCount";
 
 const { Panel } = Collapse;
 
@@ -63,14 +63,14 @@ class StepsSideBar extends Component {
       </span>
     );
   }
-  renderStepGroupCount = stepGroup => {
-    const stepGroupCount = stepGroup.alerts.length;
-    const background = stepGroupCount
-      ? stepGroup.alerts[0].alert.category.color_label
-      : null;
-    return stepGroupCount ? workflowAlert(stepGroupCount, background) : null;
+  renderAlertsCount = data => {
+    const text = data.alerts.length;
+    const color = text ? data.alerts[0].alert.category.color_label : null;
+    return text ? <ColoredCount text={text} color={color} /> : null;
   };
   renderStepGroup(stepGroup) {
+    const { selectedPanelId } = this.props;
+
     return (
       <div
         className={css`
@@ -79,6 +79,11 @@ class StepsSideBar extends Component {
           justify-content: space-between;
           background-color: #fafafa;
           margin-left: -14px;
+
+          div.step-count-container {
+            display: flex;
+            align-items: center;
+          }
         `}
       >
         <span
@@ -94,19 +99,10 @@ class StepsSideBar extends Component {
           {/* TODO: Kya hai, kyun hai yeh? */}
           {getIntlBody(stepGroup.definition, "name")}
         </span>
-        <div
-          className={css`
-            display: flex;
-            align-items: center;
-          `}
-        >
-          <div
-            className={css`
-              margin-right: 8px;
-            `}
-          >
-            {this.renderStepGroupCount(stepGroup)}
-          </div>
+        <div className="step-count-container">
+          {selectedPanelId == stepGroup.id
+            ? null
+            : this.renderAlertsCount(stepGroup)}
           {this.renderStepsCountStatus(stepGroup)}
         </div>
       </div>
@@ -170,10 +166,7 @@ class StepsSideBar extends Component {
   };
 
   renderSteps(step, stepGroup) {
-    const stepCount = step.alerts.length;
-    const background = stepCount
-      ? step.alerts[0].alert.category.color_label
-      : null;
+    const text = step.alerts.length;
     const isSelected = this.isStepSelected(step);
     return (
       <StyledCollapseItem
@@ -188,13 +181,7 @@ class StepsSideBar extends Component {
           {this.renderStepIcon(step)}
           {step.name}
         </div>
-        <div
-          className={css`
-            margin-right: 8px;
-          `}
-        >
-          {stepCount ? workflowAlert(stepCount, background) : null}
-        </div>
+        {text ? this.renderAlertsCount(step) : null}
       </StyledCollapseItem>
     );
   }

@@ -566,7 +566,6 @@ class StepBodyForm extends Component {
         groupedField[index].steps.push(step);
       }
     });
-    console.log("sdadsadsa", this.props.stepData);
 
     return (
       <Form

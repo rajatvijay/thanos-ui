@@ -1,7 +1,7 @@
 import React from "react";
 import { css } from "emotion";
 
-const workflowAlert = (count, background) => {
+const ColoredCount = ({ text, color }) => {
   return (
     <span
       className={css`
@@ -9,7 +9,7 @@ const workflowAlert = (count, background) => {
         font-weight: 500;
         font-size: 13px;
         color: white;
-        background: ${background};
+        background: ${color};
         height: 20px;
         width: 20px;
         border-radius: 50%;
@@ -17,9 +17,9 @@ const workflowAlert = (count, background) => {
         line-height: 20px;
       `}
     >
-      {count}
+      {text}
     </span>
   );
 };
 
-export default workflowAlert;
+export default ColoredCount;
