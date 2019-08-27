@@ -25,16 +25,6 @@ class FilterPopup extends Component {
     advFitlers: []
   };
 
-  onClear = () => {
-    this.setState({
-      status: undefined,
-      region: undefined,
-      business_unit: undefined,
-      operator: undefined,
-      text: ""
-    });
-  };
-
   //CLEAR ALL ITEMS FROM ADVANCED FILTERS
   onAdvClear = () => {
     this.setState({ advFitlers: [] }, function() {

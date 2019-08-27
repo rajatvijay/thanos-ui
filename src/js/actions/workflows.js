@@ -10,7 +10,7 @@ export const workflowActions = {
   expandedWorkflowsList,
   showUserWorkflowModal,
   hideUserWorkflowModal,
-  clearAll
+  clear
 };
 
 function getAll(filter) {
@@ -19,20 +19,6 @@ function getAll(filter) {
 
     workflowService
       .getAll(filter)
-      .then(
-        workflow => dispatch(success(workflow)),
-        error => dispatch(failure(error))
-      );
-  };
-}
-
-function clearAll() {
-  return dispatch => {
-    dispatch(clear());
-    dispatch(request());
-
-    workflowService
-      .clearAll()
       .then(
         workflow => dispatch(success(workflow)),
         error => dispatch(failure(error))

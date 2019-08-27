@@ -39,7 +39,6 @@ class App extends React.Component {
       this.props.dispatch(
         languageActions.updateUserLanguage(user.prefered_language)
       );
-      console.log("Changing user's language:", user.prefered_language);
     }
     let locale =
       this.props.languageSelector.language ||
@@ -51,7 +50,6 @@ class App extends React.Component {
     try {
       addLocaleData(require(`react-intl/locale-data/${locale}`));
     } catch (e) {
-      console.log("Missing react support for:", locale);
       const reactLocale = locale.split("-")[0];
       addLocaleData(require(`react-intl/locale-data/${reactLocale}`));
     }
@@ -60,7 +58,6 @@ class App extends React.Component {
     );
     let messageTranslate = messagesDefaultLocale;
     if (!messages[locale]) {
-      console.log("Missing support for:", locale);
       locale = locale.split("-")[0];
     }
     if (messages[locale]) {
@@ -70,7 +67,6 @@ class App extends React.Component {
         const parentLocale = locale.split("-")[0];
         if (messages[parentLocale]) {
           // parent locale supported
-          console.log("Merging texts from parent locale:", parentLocale);
           messageTranslate = Object.assign(
             {},
             flattenMessages(messages[parentLocale]),
@@ -86,14 +82,11 @@ class App extends React.Component {
         },
         []
       );
-      missing.length && console.log("Missing translations for:", missing);
       messageTranslate = Object.assign(
         {},
         messagesDefaultLocale,
         messageTranslate
       );
-    } else {
-      console.log("Missing support for:", locale);
     }
     return (
       <ErrorBoundary>

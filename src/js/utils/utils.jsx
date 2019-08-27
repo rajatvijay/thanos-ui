@@ -171,7 +171,6 @@ Utils.prototype.toRGBA = function(color, _alpha) {
 };
 
 Utils.prototype.toHex = function(color) {
-  console.log(color.slice(5, -1));
   const rgba = _.map(color.slice(5, -1).split(","), function(val) {
     return Number(val);
   });
@@ -179,7 +178,6 @@ Utils.prototype.toHex = function(color) {
     g = rgba[1],
     b = rgba[2],
     a = rgba[3];
-  console.log(r, g, b, a);
   if (r > 255 || g > 255 || b > 255 || a > 255)
     throw Error("Invalid color component");
   return (

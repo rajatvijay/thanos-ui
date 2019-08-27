@@ -174,8 +174,6 @@ class OTPForm extends React.Component {
     this.setState({ errors: errors });
     if (Object.keys(errors).length === 0) {
       this.generateOtp();
-    } else {
-      console.log(this.state.errors);
     }
   };
 
@@ -207,9 +205,7 @@ class OTPForm extends React.Component {
         }
         return response;
       })
-      .catch(function(error) {
-        console.log(error);
-      });
+      .catch(function(error) {});
   };
 
   //returns article depending on first letter of passed param

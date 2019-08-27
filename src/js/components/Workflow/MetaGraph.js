@@ -55,7 +55,6 @@ class MetaGraph extends Component {
         }
       })
       .catch(function(error) {
-        console.log(error);
         that.setState({
           error: error,
           loading: false

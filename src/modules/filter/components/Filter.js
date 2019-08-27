@@ -119,7 +119,6 @@ class Filter extends Component {
       filterValue: [value]
     };
 
-    console.log("applying filter----");
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
@@ -141,7 +140,7 @@ class Filter extends Component {
       field: undefined,
       displayfilters: {}
     });
-    this.props.dispatch(workflowActions.clearAll());
+    this.props.dispatch(workflowActions.clear());
     this.handleModalClose();
   };
 

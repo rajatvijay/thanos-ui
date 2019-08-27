@@ -5,12 +5,10 @@ import WorkflowList from "./workflow-list";
 import {
   workflowActions,
   workflowFiltersActions,
-  configActions,
   logout,
   checkAuth,
   workflowKindActions
 } from "../../actions";
-import FilterSidebar from "./filter";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
@@ -38,14 +36,6 @@ class Workflow extends Component {
       this.checkAuth();
     }
 
-    if (
-      !this.props.config.configuration ||
-      this.props.config.error ||
-      this.props.config.permissions
-    ) {
-      this.props.dispatch(configActions.getConfig());
-    }
-
     if (!this.props.users.me || this.props.users.me.error) {
       if (!veryfiyClient(this.props.authentication.user.csrf)) {
         this.props.dispatch(logout());
@@ -54,6 +44,10 @@ class Workflow extends Component {
   }
 
   componentDidMount = () => {
+    this.props.dispatch(workflowKindActions.getAll());
+    this.props.dispatch(workflowFiltersActions.getStatusData());
+    this.props.dispatch(workflowFiltersActions.getRegionData());
+    this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
@@ -66,6 +60,10 @@ class Workflow extends Component {
   };
 
   componentDidUpdate = prevProps => {
+    if (this.props.workflowFilters !== prevProps.workflowFilters) {
+      this.props.dispatch(workflowActions.getAll());
+    }
+
     if (
       this.props.workflowKind.workflowKind !==
       prevProps.workflowKind.workflowKind
@@ -123,10 +121,6 @@ class Workflow extends Component {
 
   toggleWaitingFilter = () => {
     this.setState({ showWaitingFitler: !this.state.showWaitingFitler });
-  };
-
-  loadExportList = () => {
-    console.log("lodad");
   };
 
   toggleListView = status => {
@@ -265,7 +259,6 @@ class Workflow extends Component {
           className="workflow-container inner-container"
           style={{ minHeight: "100vh" }}
         >
-          <FilterSidebar />
           <Sidebar {...this.props} />
           <Layout>
             <Content style={{ margin: "4vh 4vw" }}>

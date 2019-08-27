@@ -279,9 +279,7 @@ class StepBodyForm extends Component {
           return "...";
         }
       },
-      function(error) {
-        console.log(error);
-      }
+      function(error) {}
     );
   };
 

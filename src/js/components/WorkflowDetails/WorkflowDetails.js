@@ -153,22 +153,9 @@ class WorkflowDetails extends Component {
     }
   };
 
-  reinitialize = () => {
-    this.getInitialData();
-  };
-
   getInitialData = () => {
     //Get workflow  basic data
-
     this.props.dispatch(workflowFiltersActions.getStatusData());
-
-    if (
-      !this.props.config.configuration ||
-      this.props.config.error ||
-      !_.size(this.props.config.permission)
-    ) {
-      this.props.dispatch(configActions.getConfig());
-    }
     window.scroll({
       top: 0,
       left: 0,
