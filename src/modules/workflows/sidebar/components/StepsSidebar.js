@@ -4,6 +4,7 @@ import { css } from "emotion";
 import { StyledCollapseItem, StyledCollapse } from "../styledComponents";
 
 import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
+import ColoredCount from "../../../../js/components/common/coloredCount";
 
 const { Panel } = Collapse;
 
@@ -62,6 +63,27 @@ class StepsSideBar extends Component {
       </span>
     );
   }
+  renderAlertsCount = data => {
+    const hasAlerts = !!data.alerts.length;
+    if (hasAlerts) {
+      const { count, color } = this.getAlertInfo(data);
+      return <ColoredCount text={count} color={color} />;
+    }
+    return null;
+  };
+
+  getAlertInfo(stepGroup) {
+    return {
+      count: stepGroup.alerts.length,
+      color: stepGroup.alerts[0].alert.category.color_label
+    };
+  }
+
+  isSelectedStepGroup = stepGroup => {
+    const { selectedPanelId } = this.props;
+    return stepGroup.id === selectedPanelId;
+  };
+
   renderStepGroup(stepGroup) {
     return (
       <div
@@ -71,6 +93,11 @@ class StepsSideBar extends Component {
           justify-content: space-between;
           background-color: #fafafa;
           margin-left: -14px;
+
+          div.step-count-container {
+            display: flex;
+            align-items: center;
+          }
         `}
       >
         <span
@@ -86,7 +113,11 @@ class StepsSideBar extends Component {
           {/* TODO: Kya hai, kyun hai yeh? */}
           {getIntlBody(stepGroup.definition, "name")}
         </span>
-        {this.renderStepsCountStatus(stepGroup)}
+        <div className="step-count-container">
+          {!this.isSelectedStepGroup(stepGroup) &&
+            this.renderAlertsCount(stepGroup)}
+          {this.renderStepsCountStatus(stepGroup)}
+        </div>
       </div>
     );
   }
@@ -148,14 +179,22 @@ class StepsSideBar extends Component {
   };
 
   renderSteps(step, stepGroup) {
+    const hasAlerts = ~~step.alerts.length;
     const isSelected = this.isStepSelected(step);
     return (
       <StyledCollapseItem
+        className={css`
+          display: flex;
+          justify-content: space-between;
+        `}
         onClick={event => this.props.handleStepClick(stepGroup.id, step.id)}
         selected={isSelected}
       >
-        {this.renderStepIcon(step)}
-        {step.name}
+        <div>
+          {this.renderStepIcon(step)}
+          {step.name}
+        </div>
+        {hasAlerts && this.renderAlertsCount(step)}
       </StyledCollapseItem>
     );
   }

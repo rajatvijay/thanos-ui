@@ -6,6 +6,7 @@ import { URL_REGEX, ANCHOR_TAG_REGEX } from "../../../utils/contants";
 import Anchor from "../../common/Anchor";
 import IntlTooltip from "../../common/IntlTooltip";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
+import FieldAlerts from "./FieldAlerts";
 
 export const commonFunctions = {
   getLabel,
@@ -63,26 +64,12 @@ function getLabel(props, that) {
   const comment = (
     <span className="float-right">
       <span className={commentClasses}>{addCommentBtn(that, props)}</span>
-      {props.field.alerts
-        ? props.field.alerts.map(function(item) {
-            return (
-              <Tag key={item.alert.id} className="v-tag alert-metal ">
-                {item.alert.category.name}{" "}
-                <i
-                  className="material-icons text-middle pd-left-sm"
-                  style={{
-                    fontSize: "12px",
-                    color: item.alert.category.color_label
-                  }}
-                >
-                  fiber_manual_records
-                </i>
-              </Tag>
-            );
-          })
-        : null}
     </span>
   );
+
+  const alerts = props.field.alerts ? (
+    <FieldAlerts alerts={props.field.alerts} />
+  ) : null;
 
   if (that) {
     const label = (
@@ -93,11 +80,11 @@ function getLabel(props, that) {
 
         {props.field.label_value ? (
           <span>
-            {props.field.label_value} {helpText}
+            {props.field.label_value} {helpText} {alerts}
           </span>
         ) : (
           <span>
-            {getIntlBody(props.field.definition)} {helpText}
+            {getIntlBody(props.field.definition)} {helpText} {alerts}
           </span>
         )}
       </span>
@@ -108,13 +95,13 @@ function getLabel(props, that) {
       <span className="label-with-action">
         {comment}
         {props.field.answers.length !== 0 ? answeredBy : required}
-        {props.field.label_value} {helpText}
+        {props.field.label_value} {helpText} {alerts}
       </span>
     ) : (
       <span className="label-with-action">
         {comment}
         {props.field.answers.length !== 0 ? answeredBy : required}
-        {getIntlBody(props.field.definition)} {helpText}
+        {getIntlBody(props.field.definition)} {helpText} {alerts}
       </span>
     );
   }
