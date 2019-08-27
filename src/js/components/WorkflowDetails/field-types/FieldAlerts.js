@@ -21,7 +21,7 @@ const FieldAlerts = ({ alerts }) => {
           return <FieldAlertItem alert={item} />;
         })}
       >
-        <Icon type="plus-circle" />
+        <Icon type="plus-circle" data-testid="plus-icon" />
       </Popover>
     </>
   );
