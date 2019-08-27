@@ -246,3 +246,130 @@ test("should render the selected step with proper styling", () => {
   const style = window.getComputedStyle(stepNode.parentElement);
   expect(style.backgroundColor).not.toBe("none");
 });
+
+test("should render alerts count on stepgroup when there is atleast one alert", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [],
+      overdue: false,
+      alerts: [
+        {
+          alert: {
+            category: {
+              color_label: "#ffffff"
+            }
+          }
+        }
+      ]
+    }
+  ];
+  const { queryByTestId } = render(
+    <StepsSidebar stepGroups={fakeStepGroups} />
+  );
+  expect(queryByTestId(/colored-count/i).innerHTML).toBe("1");
+});
+
+test("should not render alerts count on stepgroup when there are no alerts", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [],
+      overdue: false,
+      alerts: []
+    }
+  ];
+  const { queryByTestId } = render(
+    <StepsSidebar stepGroups={fakeStepGroups} />
+  );
+  expect(queryByTestId(/colored-count/i)).toBeNull();
+});
+
+test("should not render alerts count on stepgroup when when group is selected", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [],
+      overdue: false,
+      alerts: [
+        {
+          alert: {
+            category: {
+              color_label: "#ffffff"
+            }
+          }
+        }
+      ]
+    }
+  ];
+  const { queryByTestId } = render(
+    <StepsSidebar
+      stepGroups={fakeStepGroups}
+      selectedPanelId={fakeStepGroups[0].id}
+    />
+  );
+  expect(queryByTestId(/colored-count/i)).toBeNull();
+});
+
+test("should render alerts count on step when there is atleast one alert", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [
+            {
+              alert: {
+                category: {
+                  color_label: "#ffffff"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const { queryByTestId } = render(
+    <StepsSidebar
+      stepGroups={fakeStepGroups}
+      selectedPanelId={fakeStepGroups[0].id}
+    />
+  );
+
+  expect(queryByTestId(/colored-count/i).innerHTML).toBe("1");
+});
+
+test("should not render alerts count on step when there are no alerts", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: []
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const { queryByTestId } = render(
+    <StepsSidebar
+      stepGroups={fakeStepGroups}
+      selectedPanelId={fakeStepGroups[0].id}
+    />
+  );
+
+  expect(queryByTestId(/colored-count/i)).toBeNull();
+});
