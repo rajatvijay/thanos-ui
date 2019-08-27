@@ -248,7 +248,6 @@ class Header extends Component {
                   ) : null}
                 </Menu>
               }
-              trigger={["click"]}
             >
               <Icon
                 type="ellipsis"
