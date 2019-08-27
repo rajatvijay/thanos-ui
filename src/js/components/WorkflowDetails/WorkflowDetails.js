@@ -6,7 +6,6 @@ import _ from "lodash";
 import StepBody from "./step-body.js";
 import { history } from "../../_helpers";
 import {
-  configActions,
   setWorkflowKeys,
   stepBodyActions,
   workflowDetailsActions,

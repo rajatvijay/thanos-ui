@@ -7,7 +7,8 @@ import {
   workflowFiltersActions,
   logout,
   checkAuth,
-  workflowKindActions
+  workflowKindActions,
+  configActions
 } from "../../actions";
 import _ from "lodash";
 import { veryfiyClient } from "../../utils/verification";
@@ -54,6 +55,14 @@ class Workflow extends Component {
 
     if (this.props.workflowKind.workflowKind) {
       this.getDefaultKind();
+    }
+
+    if (
+      !this.props.config.configuration ||
+      this.props.config.error ||
+      this.props.config.permissions
+    ) {
+      this.props.dispatch(configActions.getConfig());
     }
 
     this.props.dispatch(workflowActions.expandedWorkflowsList([]));
