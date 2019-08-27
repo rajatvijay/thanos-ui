@@ -64,13 +64,27 @@ class StepsSideBar extends Component {
     );
   }
   renderAlertsCount = data => {
-    const text = data.alerts.length;
-    const color = text ? data.alerts[0].alert.category.color_label : null;
-    return text ? <ColoredCount text={text} color={color} /> : null;
+    const hasAlerts = !!data.alerts.length;
+    if (hasAlerts) {
+      const { count, color } = this.getAlertInfo(data);
+      return <ColoredCount text={count} color={color} />;
+    }
+    return null;
   };
-  renderStepGroup(stepGroup) {
-    const { selectedPanelId } = this.props;
 
+  getAlertInfo(stepGroup) {
+    return {
+      count: stepGroup.alerts.length,
+      color: stepGroup.alerts[0].alert.category.color_label
+    };
+  }
+
+  isSelectedStepGroup = stepGroup => {
+    const { selectedPanelId } = this.props;
+    return stepGroup.id === selectedPanelId;
+  };
+
+  renderStepGroup(stepGroup) {
     return (
       <div
         className={css`
@@ -100,9 +114,8 @@ class StepsSideBar extends Component {
           {getIntlBody(stepGroup.definition, "name")}
         </span>
         <div className="step-count-container">
-          {selectedPanelId == stepGroup.id
-            ? null
-            : this.renderAlertsCount(stepGroup)}
+          {!this.isSelectedStepGroup(stepGroup) &&
+            this.renderAlertsCount(stepGroup)}
           {this.renderStepsCountStatus(stepGroup)}
         </div>
       </div>
@@ -166,7 +179,7 @@ class StepsSideBar extends Component {
   };
 
   renderSteps(step, stepGroup) {
-    const text = step.alerts.length;
+    const hasAlerts = ~~step.alerts.length;
     const isSelected = this.isStepSelected(step);
     return (
       <StyledCollapseItem
@@ -181,7 +194,7 @@ class StepsSideBar extends Component {
           {this.renderStepIcon(step)}
           {step.name}
         </div>
-        {text ? this.renderAlertsCount(step) : null}
+        {hasAlerts && this.renderAlertsCount(step)}
       </StyledCollapseItem>
     );
   }
