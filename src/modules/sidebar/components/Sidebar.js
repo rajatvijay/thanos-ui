@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Select } from "antd";
+import { Layout } from "antd";
 import TaskQueueList from "./TaskQueueList";
 import AlertList from "./AlertList";
 import {
@@ -11,10 +11,105 @@ import { css } from "emotion";
 import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
 import { injectIntl } from "react-intl";
-import { getIntlBody } from "../../../js/_helpers/intl-helpers";
+import FilterDropdown from "../../../js/components/WorkflowDetails/FilterDropdown";
 
 const { Sider } = Layout;
-const Option = Select.Option;
+
+//sample data for now
+const field_tags_for_filter = [
+  {
+    attachment: null,
+    body: "CAR PDF",
+    body_de: "",
+    body_en: "CAR PDF",
+    body_es: "",
+    body_es_419: "",
+    body_es_cl: "",
+    body_fr: "",
+    body_fr_ca: "",
+    body_ind: "",
+    body_ja: "",
+    body_ko: "",
+    body_ms: "",
+    body_pt: "",
+    body_ru: "",
+    body_th: "",
+    body_vi: "",
+    body_zh_cn: "",
+    body_zh_tw: "",
+    created_at: "2019-08-20T13:02:10.945239Z",
+    data_json_path: "",
+    default_value: "",
+    disabled: true,
+    ext_is_required: false,
+    external_tag: null,
+    extra: {},
+    extra_de: {},
+    extra_en: {},
+    extra_es: {},
+    extra_es_419: {},
+    extra_es_cl: {},
+    extra_fr: {},
+    extra_fr_ca: {},
+    extra_ind: {},
+    extra_ja: {},
+    extra_ko: {},
+    extra_ms: {},
+    extra_pt: {},
+    extra_ru: {},
+    extra_th: {},
+    extra_vi: {},
+    extra_zh_cn: {},
+    extra_zh_tw: {},
+    field_type: "text",
+    help_text: "",
+    help_text_de: "",
+    help_text_en: "",
+    help_text_es: "",
+    help_text_es_419: "",
+    help_text_es_cl: "",
+    help_text_fr: "",
+    help_text_fr_ca: "",
+    help_text_ind: "",
+    help_text_ja: "",
+    help_text_ko: "",
+    help_text_ms: "",
+    help_text_pt: "",
+    help_text_ru: "",
+    help_text_th: "",
+    help_text_vi: "",
+    help_text_zh_cn: "",
+    help_text_zh_tw: "",
+    hidden: true,
+    id: 3472856,
+    is_encrypted: false,
+    is_filterable: true,
+    is_required: false,
+    jmes_path: "",
+    log_on_change: false,
+    meta: {},
+    model_field_name: null,
+    order: 10,
+    parent_json_field: null,
+    regex_error: "",
+    regex_value: "",
+    required_on_step_submit: false,
+    search_param_json: {},
+    size: 1,
+    source_csv_json: {},
+    source_mapping: null,
+    step: 101308,
+    tag: "workflow_pdf",
+    target_transliterate_field: "",
+    transliterate: false,
+    transliterate_lang_field: "",
+    transliterate_on_change: "",
+    updated_at: "2019-08-20T13:02:13.062099Z",
+    validation_type: "",
+    workflow_mapping: null,
+    workflowdef: 3798
+  }
+];
 
 class Sidebar extends Component {
   state = {
@@ -56,36 +151,6 @@ class Sidebar extends Component {
       }
     }
   }
-
-  handleChange = value => {
-    const id = parseInt(value, 10);
-    const that = this;
-    const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
-      return item.id === id;
-    });
-
-    this.setState({ value: id });
-    const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
-    const removePayload = { filterType: "stepgroupdef" };
-    this.props.dispatch(workflowFiltersActions.removeFilters(removePayload));
-    this.props.dispatch(workflowFiltersActions.setFilters(payload));
-    this.props.dispatch(workflowKindActions.setValue(metaValue));
-    that.fetchGroupData(metaValue.tag);
-  };
-
-  fetchGroupData = tag => {
-    this.props.dispatch(workflowKindActions.getCount(tag));
-    this.props.dispatch(workflowKindActions.getAlertCount(tag));
-  };
-
-  renderDropdownList = () => {
-    const { workflowKind } = this.props.workflowKind;
-    if (workflowKind) {
-      return workflowKind.map(function(item) {
-        return <Option key={`${item.id}`}>{getIntlBody(item, "name")}</Option>;
-      });
-    }
-  };
 
   onSelectAlert = value => {
     if (this.state.activeFilter[0] === value.tag) {
@@ -130,7 +195,7 @@ class Sidebar extends Component {
 
   render() {
     const { isError } = this.props.workflowAlertGroupCount;
-    const { selectedKindValue } = this.props;
+
     return (
       <Sider
         width={300}
@@ -142,43 +207,18 @@ class Sidebar extends Component {
         }}
       >
         <div
-          style={{
-            width: 300,
-            position: "fixed",
-            paddingBottom: 100,
-            height: "100%",
-            fontFamily: "Cabin",
-            minHeight: "110vh",
-            background: "#104775"
-          }}
+          className={css`
+            width: 300px;
+            padding-bottom: 100px;
+            height: 100%;
+            fontfamily: Cabin;
+            min-height: 110vh;
+            background: #104775;
+          `}
         >
           <div className="logo" />
-          <Select
-            dropdownStyle={{ position: "fixed" }}
-            className={css`
-              .ant-select-selection {
-                background-color: #0a3150;
-                border: none;
-                height: 65px;
-                color: white;
-                font-size: 18px;
-                padding-left: 10px;
-              }
-              .ant-select-selection-selected-value {
-                line-height: 65px;
-              }
-              .ant-select-arrow {
-                color: white;
-                margin-right: 10px;
-              }
-            `}
-            dropdownClassName="kind-select"
-            value={selectedKindValue && selectedKindValue.name}
-            style={{ width: "100%", display: "block" }}
-            onChange={this.handleChange}
-          >
-            {this.renderDropdownList()}
-          </Select>
+
+          <FilterDropdown fieldTags={field_tags_for_filter} />
 
           <div
             style={{
