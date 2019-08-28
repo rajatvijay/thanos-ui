@@ -10,6 +10,7 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import IntlTooltip from "../common/IntlTooltip";
 import { getIntlBody } from "../../_helpers/intl-helpers";
 import { fieldActions } from "../../../modules/fields/actions";
+import { requiredParam } from "../../../modules/common/errors";
 
 const TabPane = Tabs.TabPane;
 const SIZE_33 = 4,
@@ -72,7 +73,10 @@ class StepBodyForm extends Component {
     );
   };
 
-  getExtraDataForDependentField = ({ field, answer }) => {
+  getExtraDataForDependentField = ({
+    field = requiredParam("field"),
+    answer = requiredParam("answer")
+  }) => {
     /**
      *
      */
@@ -90,17 +94,25 @@ class StepBodyForm extends Component {
     }
   };
 
-  updateFieldExtraData = ({ field, data }) => {
+  updateFieldExtraData = ({
+    field = requiredParam("field"),
+    data = requiredParam("data"),
+    legacy = false
+  }) => {
     const fieldExtra = this.getExtraDataForDependentField({
       field,
       answer: data.answer || ""
     });
     if (fieldExtra) {
-      data.extra_json = fieldExtra;
+      data[legacy ? "extra_json" : "extraJSON"] = fieldExtra;
     }
   };
 
-  saveResponse = async ({ answer, field, workflowId }) => {
+  saveResponse = async ({
+    answer = requiredParam("answer"),
+    field = requiredParam("field"),
+    workflowId = requiredParam("workflowId")
+  }) => {
     const data = {
       answer,
       workflowId,
@@ -112,7 +124,11 @@ class StepBodyForm extends Component {
     this.updateDependentFields(field, answer, true);
   };
 
-  clearResponse = async ({ responseId, field, workflowId }) => {
+  clearResponse = async ({
+    responseId = requiredParam("responseId"),
+    field = requiredParam("field"),
+    workflowId = requiredParam("workflowId")
+  }) => {
     const data = {
       responseId,
       workflowId
@@ -207,7 +223,8 @@ class StepBodyForm extends Component {
 
     this.updateFieldExtraData({
       field: payload.field,
-      data
+      data,
+      legacy: true
     });
 
     if (saveNowType.includes(payload.field.definition.field_type)) {
