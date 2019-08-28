@@ -429,7 +429,6 @@ export class GetMergedData extends React.Component {
       } else {
         classes += " pd-right-lg";
       }
-      item.show_label = true;
       const tagLabel = (
         <span>
           <span
