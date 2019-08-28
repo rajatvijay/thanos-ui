@@ -4,7 +4,7 @@ import TaskQueueList from "../components/TaskQueueList";
 
 test("should render loading and no task queue when data is loading", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 29, name: "Test Task Queue" }
+    { tag: "tq10", count: 532, overdue_count: 29, name: "Test Task Queue" }
   ];
   const { getByTestId, queryByTestId } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={true} />
@@ -15,7 +15,7 @@ test("should render loading and no task queue when data is loading", () => {
 
 test("should not render 'Task Queue' heading when data is loading", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 29, name: "Test Task Queue" }
+    { tag: "tq10", count: 532, overdue_count: 29, name: "Test Task Queue" }
   ];
   const { queryByText } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={true} />
@@ -25,7 +25,7 @@ test("should not render 'Task Queue' heading when data is loading", () => {
 
 test("should render the heading 'Task Queues' when data is loaded and have atleast one task queue", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 29, name: "Test Task Queue" }
+    { tag: "tq10", count: 532, overdue_count: 29, name: "Test Task Queue" }
   ];
   const { getByText } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={false} />
@@ -43,12 +43,12 @@ test("should not render the heading 'Task Queues' when data is loaded and have n
 
 test("should render only the 5 task queues initially with 'Show All' button texts", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 52, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 53, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 54, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 55, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 51, count: 532, overdue_count: 29, name: "Test Task Queue" }
+    { tag: "tq10", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq11", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq12", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq13", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq14", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq15", count: 532, overdue_count: 29, name: "Test Task Queue" }
   ];
   const { queryByText, getByText, queryAllByTestId } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={false} />
@@ -60,12 +60,12 @@ test("should render only the 5 task queues initially with 'Show All' button text
 
 test("should render all the task queues when 'Show All' is clicked with 'Show Less' button text", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 52, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 53, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 54, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 55, count: 532, overdue_count: 29, name: "Test Task Queue" },
-    { id: 56, count: 532, overdue_count: 29, name: "Test Task Queue" }
+    { tag: "tq10", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq11", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq12", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq13", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq14", count: 532, overdue_count: 29, name: "Test Task Queue" },
+    { tag: "tq15", count: 532, overdue_count: 29, name: "Test Task Queue" }
   ];
   const { queryByText, getByText, queryAllByTestId } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={false} />
@@ -81,11 +81,11 @@ test("should render all the task queues when 'Show All' is clicked with 'Show Le
 
 test("should render task queue's name for all task queues initially", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 25, name: "Test Task Queue 1" },
-    { id: 52, count: 533, overdue_count: 26, name: "Test Task Queue 2" },
-    { id: 53, count: 534, overdue_count: 27, name: "Test Task Queue 3" },
-    { id: 54, count: 535, overdue_count: 28, name: "Test Task Queue 4" },
-    { id: 55, count: 536, overdue_count: 29, name: "Test Task Queue 5" }
+    { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" },
+    { tag: "tq11", count: 533, overdue_count: 26, name: "Test Task Queue 2" },
+    { tag: "tq12", count: 534, overdue_count: 27, name: "Test Task Queue 3" },
+    { tag: "tq13", count: 535, overdue_count: 28, name: "Test Task Queue 4" },
+    { tag: "tq14", count: 536, overdue_count: 29, name: "Test Task Queue 5" }
   ];
   const { getByText } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={false} />
@@ -99,11 +99,11 @@ test("should render task queue's name for all task queues initially", () => {
 
 test("should render workflow count for all task queues initially", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 25, name: "Test Task Queue 1" },
-    { id: 52, count: 533, overdue_count: 26, name: "Test Task Queue 2" },
-    { id: 53, count: 534, overdue_count: 27, name: "Test Task Queue 3" },
-    { id: 54, count: 535, overdue_count: 28, name: "Test Task Queue 4" },
-    { id: 55, count: 536, overdue_count: 29, name: "Test Task Queue 5" }
+    { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" },
+    { tag: "tq11", count: 533, overdue_count: 26, name: "Test Task Queue 2" },
+    { tag: "tq12", count: 534, overdue_count: 27, name: "Test Task Queue 3" },
+    { tag: "tq13", count: 535, overdue_count: 28, name: "Test Task Queue 4" },
+    { tag: "tq14", count: 536, overdue_count: 29, name: "Test Task Queue 5" }
   ];
   const { getByText } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={false} />
@@ -117,11 +117,11 @@ test("should render workflow count for all task queues initially", () => {
 
 test("should render overdue count for all task queues initially", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 25, name: "Test Task Queue 1" },
-    { id: 52, count: 533, overdue_count: 26, name: "Test Task Queue 2" },
-    { id: 53, count: 534, overdue_count: 27, name: "Test Task Queue 3" },
-    { id: 54, count: 535, overdue_count: 28, name: "Test Task Queue 4" },
-    { id: 55, count: 536, overdue_count: 29, name: "Test Task Queue 5" }
+    { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" },
+    { tag: "tq11", count: 533, overdue_count: 26, name: "Test Task Queue 2" },
+    { tag: "tq12", count: 534, overdue_count: 27, name: "Test Task Queue 3" },
+    { tag: "tq13", count: 535, overdue_count: 28, name: "Test Task Queue 4" },
+    { tag: "tq14", count: 536, overdue_count: 29, name: "Test Task Queue 5" }
   ];
   const { getByText } = render(
     <TaskQueueList taskQueues={fakeTaskQueues} loading={false} />
@@ -135,7 +135,7 @@ test("should render overdue count for all task queues initially", () => {
 
 test("should call onSelectTask with task queue when any one task queue is clicked once", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 25, name: "Test Task Queue 1" }
+    { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" }
   ];
   const onSelectTask = jest.fn();
   const { getByText } = render(
@@ -153,13 +153,13 @@ test("should call onSelectTask with task queue when any one task queue is clicke
 
 test("should call onSelectTask with nothing when an already selected task queue is clicked", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 25, name: "Test Task Queue 1" }
+    { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" }
   ];
   const onSelectTask = jest.fn();
   const TaskQueueListInstance = render(
     <TaskQueueList
       activeTaskQueue={{
-        stepgroupdef: { filterValue: [fakeTaskQueues[0].id] }
+        stepgroupdef: { filterValue: [fakeTaskQueues[0].tag] }
       }}
       taskQueues={fakeTaskQueues}
       loading={false}
@@ -173,13 +173,13 @@ test("should call onSelectTask with nothing when an already selected task queue 
 
 test("should apply proper styles to the selected task queue", () => {
   const fakeTaskQueues = [
-    { id: 51, count: 532, overdue_count: 25, name: "Test Task Queue 1" }
+    { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" }
   ];
   const onSelectTask = jest.fn();
   const TaskQueueListInstance = render(
     <TaskQueueList
       activeTaskQueue={{
-        stepgroupdef: { filterValue: [fakeTaskQueues[0].id] }
+        stepgroupdef: { filterValue: [fakeTaskQueues[0].tag] }
       }}
       taskQueues={fakeTaskQueues}
       loading={false}

@@ -102,7 +102,7 @@ class Sidebar extends Component {
   onSelectTask = value => {
     const payload = {
       filterType: "stepgroupdef",
-      filterValue: value ? [value.id] : []
+      filterValue: value ? [value.tag] : []
     };
     if (!!value)
       this.props.dispatch(workflowFiltersActions.setFilters(payload));
