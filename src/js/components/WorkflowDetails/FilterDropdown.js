@@ -26,16 +26,22 @@ const SubMenuHeading = styled.div`
   height: 30px;
   color: rgb(255, 255, 255, 0.5);
   width: 100%;
-  padding: 7px 30px 4px 45px;
+  padding: 7px 40px 4px;
   font-size: 14px;
   cursor: pointer;
   &:hover {
     color: #158bd6;
   }
+  div.active-sub-kind {
+    color: #158bd6;
+  }
 `;
 
 class FilterDropdown extends Component {
-  state = { value: "" };
+  state = {
+    value: "",
+    selectedSubKind: { label: "", value: "" }
+  };
   componentWillUpdate(nextProps) {
     if (
       nextProps.workflowKind.workflowKind !==
@@ -57,8 +63,10 @@ class FilterDropdown extends Component {
     const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
       return item.id === id;
     });
+    if (this.state.value !== kind.id) {
+      this.setState({ value: id, selectedSubKind: "" });
+    }
 
-    this.setState({ value: id });
     const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
     const removePayload = { filterType: "stepgroupdef" };
     this.props.dispatch(workflowFiltersActions.removeFilters(removePayload));
@@ -77,13 +85,21 @@ class FilterDropdown extends Component {
       filterValue: [tag],
       meta: menu
     };
+    this.setState({
+      value: id,
+      selectedSubKind: {
+        ...this.state.selectedSubKind,
+        label: menu.id,
+        value: getIntlBody(menu)
+      }
+    });
     const payload1 = { filterType: "kind", filterValue: [id], meta: menu };
     const removePayload = { filterType: "stepgroupdef" };
     this.props.dispatch(workflowFiltersActions.removeFilters(removePayload));
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
     this.props.dispatch(workflowFiltersActions.setFilters(payload1));
     this.props.dispatch(workflowKindActions.setValue(menu));
-    that.fetchGroupData(menu.tag);
+    that.fetchGroupData(kind.tag);
   };
 
   fetchGroupData = tag => {
@@ -92,78 +108,90 @@ class FilterDropdown extends Component {
   };
 
   renderDropdownList = selectedKind => {
-    // const { selectedSubHeading } = this.state;
-    const { fieldTags } = this.props;
+    const { selectedSubKind } = this.state;
     const { workflowKind } = this.props.workflowKind;
-    if (workflowKind) {
-      return (
-        <div
-          className={css`
-            position: fixed;
-            width: 300px;
-            background-color: #0a3150;
-            max-height: 210px;
-            overflow: auto;
-            .ant-dropdown-menu-item > div {
-              color: rgba(255, 255, 255, 0.5);
-            }
-            .ant-dropdown-menu-item-active {
-              background-color: #104775;
-            }
-            .ant-dropdown-menu-item-active > div {
-              color: white !important;
-            }
-            .ant-dropdown,
-            .ant-dropdown-menu-item {
-              padding: 10px 18px;
-            }
-          `}
-        >
-          {workflowKind.map(item => {
-            // console.log("menu", item);
-            return (
-              <>
-                <div
-                  style={{
-                    border: "none",
-                    color: "white",
-                    fontSize: 16
-                  }}
-                  key={`${item.id}`}
-                >
-                  <FiltersHeading
-                    onClick={() => this.handleSelectedKind(item)}
-                    className={`${
-                      selectedKind && selectedKind.name === item.name
-                        ? "ant-dropdown-menu-item-active"
-                        : null
-                    }`}
-                  >
-                    {item.name}
-                  </FiltersHeading>
-                  {item.field_tags_for_filter.map(menu => {
-                    return (
-                      <SubMenuHeading
-                        onClick={() => this.handleSelectedSubKind(item, menu)}
-                      >
-                        {/* to be implemented at the end*/}
 
-                        {/* {selectedSubHeading === menu ? (
-                          <div>dadadsds</div>
-                        ) : (
-                            {menu}
-                            )} */}
-                        {getIntlBody(menu)}
-                      </SubMenuHeading>
-                    );
-                  })}
-                </div>
-              </>
-            );
-          })}
-        </div>
-      );
-    }
+    return (
+      <div
+        className={css`
+          position: fixed;
+          width: 300px;
+          background-color: #0a3150;
+          max-height: 210px;
+          overflow: auto;
+          .ant-dropdown-menu-item > div {
+            color: rgba(255, 255, 255, 0.5);
+          }
+          .ant-dropdown-menu-item-active {
+            background-color: #104775;
+          }
+          .ant-dropdown-menu-item-active > div {
+            color: white !important;
+          }
+          .ant-dropdown,
+          .ant-dropdown-menu-item {
+            padding: 10px 18px;
+          }
+        `}
+      >
+        {workflowKind.map(item => {
+          return (
+            <>
+              <div
+                style={{
+                  border: "none",
+                  color: "white",
+                  fontSize: 16
+                }}
+                key={`${item.id}`}
+              >
+                <FiltersHeading
+                  onClick={() => this.handleSelectedKind(item)}
+                  className={`${
+                    selectedKind && selectedKind.name === item.name
+                      ? "ant-dropdown-menu-item-active"
+                      : null
+                  }`}
+                >
+                  {item.name}
+                </FiltersHeading>
+                {item.field_tags_for_filter.map(menu => {
+                  return (
+                    <SubMenuHeading
+                      onClick={() => this.handleSelectedSubKind(item, menu)}
+                    >
+                      {/* to be implemented at the end*/}
+
+                      <div
+                        className={
+                          selectedSubKind.label === menu.id
+                            ? "active-sub-kind"
+                            : null
+                        }
+                      >
+                        <div
+                          className={css`
+                            display: flex;
+                            justify-content: space-between;
+                          `}
+                        >
+                          <span>{getIntlBody(menu)}</span>
+                          <span>
+                            {selectedSubKind.label === menu.id ? (
+                              <Icon type="check" />
+                            ) : null}
+                          </span>
+                        </div>
+                      </div>
+                    </SubMenuHeading>
+                  );
+                })}
+              </div>
+            </>
+          );
+        })}
+      </div>
+    );
   };
 
   render() {
@@ -172,35 +200,55 @@ class FilterDropdown extends Component {
       _.find(this.props.workflowKind.workflowKind, item => {
         return item.id === this.state.value;
       });
-
-    return (
+    const { selectedSubKind } = this.state;
+    const { workflowKind } = this.props.workflowKind;
+    return workflowKind ? (
       <Dropdown
         trigger={["click"]}
         className={css`
           background-color: #0a3150;
-          height: 65px;
+          min-height: 65px;
           width: 100%;
-          display: flex;
-          justify-content: space-between;
           padding: 0px 28px;
           font-size: 17px;
           color: white;
           align-items: center;
           cursor: pointer;
+          display: flex;
+          justify-content: space-between;
         `}
         overlay={this.renderDropdownList(selectedKind)}
       >
         <div>
           {selectedKind ? (
             <>
-              {selectedKind.name} <Icon type="down" />
+              <div
+                className={css`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
+                {selectedKind.name}
+                <span
+                  className={css`
+                    height: 100%;
+                    align-items: center;
+                    margin-left: 10px;
+                    font-size: 14px;
+                    color: rgb(255, 255, 255, 0.5);
+                  `}
+                >
+                  {selectedSubKind.value}
+                </span>
+              </div>
+              <Icon type="down" />
             </>
           ) : (
             ""
           )}
         </div>
       </Dropdown>
-    );
+    ) : null;
   }
 }
 
