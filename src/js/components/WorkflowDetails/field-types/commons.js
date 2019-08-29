@@ -7,6 +7,7 @@ import Anchor from "../../common/Anchor";
 import IntlTooltip from "../../common/IntlTooltip";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
 import FieldAlerts from "./FieldAlerts";
+import { isAnswered } from "../../../../modules/fields/utils";
 
 export const commonFunctions = {
   getLabel,
@@ -70,12 +71,16 @@ function getLabel(props, that) {
     <FieldAlerts alerts={props.field.alerts} />
   ) : null;
 
+  const answeredByOrRequiredIndicator = isAnswered(props.field)
+    ? answeredBy
+    : required;
+
   if (that) {
     const label = (
       <span className="label-with-action">
         {comment}
 
-        {props.field.answers.length !== 0 ? answeredBy : required}
+        {answeredByOrRequiredIndicator}
 
         {props.field.label_value ? (
           <span>
@@ -93,13 +98,13 @@ function getLabel(props, that) {
     return props.field.label_value ? (
       <span className="label-with-action">
         {comment}
-        {props.field.answers.length !== 0 ? answeredBy : required}
+        {answeredByOrRequiredIndicator}
         {props.field.label_value} {helpText} {alerts}
       </span>
     ) : (
       <span className="label-with-action">
         {comment}
-        {props.field.answers.length !== 0 ? answeredBy : required}
+        {answeredByOrRequiredIndicator}
         {getIntlBody(props.field.definition)} {helpText} {alerts}
       </span>
     );

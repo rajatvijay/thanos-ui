@@ -38,3 +38,13 @@ export const isDisabled = props => {
     !hasResponseCUDPermission({ permissions: props.permissions })
   );
 };
+
+export const isAnswered = field => {
+  /**
+   * Checks if field is answered, as:
+   * If no answers exist for field, return false
+   * If answers exist for field, return true if answer is not empty
+   */
+  const answers = field.answers;
+  return answers.length !== 0 ? answers[0].answer !== "" : false;
+};
