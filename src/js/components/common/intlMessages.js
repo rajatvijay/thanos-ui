@@ -168,7 +168,8 @@ export default {
       resultIsEmpty:
         "Looks like there is no config for this step. Please contact care@thevetted.com",
       emailMandatory: "E-Mail can't be empty",
-      passwordMandatory: "Password can't be empty"
+      passwordMandatory: "Password can't be empty",
+      emptyComment: "Comment cannot be empty"
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -383,7 +384,8 @@ export default {
       resultIsEmpty:
         "Parece que no hay configuración para este paso. Por favor, póngase en contacto con care@thevetted.com",
       emailMandatory: "El correo electrónico no puede estar vacío",
-      passwordMandatory: "La contraseña no puede estar vacía"
+      passwordMandatory: "La contraseña no puede estar vacía",
+      emptyComment: "El comentario no puede estar vacío"
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
@@ -611,7 +613,8 @@ export default {
       resultIsEmpty:
         "On dirait qu'il n'y a pas de configuration pour cette étape. S'il vous plaît contacter care@thevetted.com",
       emailMandatory: "Le courriel ne peut pas être vide",
-      passwordMandatory: "Le mot de passe ne peut pas être vide"
+      passwordMandatory: "Le mot de passe ne peut pas être vide",
+      emptyComment: "Le commentaire ne peut pas être vide"
     },
     loginPageInstances: {
       oneTimeLink: "Entrez votre adresse de courriel professionnelle",
