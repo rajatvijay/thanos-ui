@@ -57,6 +57,7 @@ class FilterDropdown extends Component {
     const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
       return item.id === id;
     });
+
     this.setState({ value: id });
     const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
     const removePayload = { filterType: "stepgroupdef" };
@@ -66,20 +67,23 @@ class FilterDropdown extends Component {
     that.fetchGroupData(metaValue.tag);
   };
 
-  handleSelectedSubKind = menu => {
-    const id = menu.id;
-    console.log(menu);
-    // const that = this;
-    // const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
-    //   return item.id === id;
-    // });
-    // this.setState({ value: id });
-    // const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
-    // const removePayload = { filterType: "stepgroupdef" };
-    // this.props.dispatch(workflowFiltersActions.removeFilters(removePayload));
-    // this.props.dispatch(workflowFiltersActions.setFilters(payload));
-    // this.props.dispatch(workflowKindActions.setValue(metaValue));
-    // that.fetchGroupData(metaValue.tag);
+  handleSelectedSubKind = (kind, menu) => {
+    const id = kind.id;
+    const tag = menu.tag;
+    const that = this;
+
+    const payload = {
+      filterType: "field_def_tags",
+      filterValue: [tag],
+      meta: menu
+    };
+    const payload1 = { filterType: "kind", filterValue: [id], meta: menu };
+    const removePayload = { filterType: "stepgroupdef" };
+    this.props.dispatch(workflowFiltersActions.removeFilters(removePayload));
+    this.props.dispatch(workflowFiltersActions.setFilters(payload));
+    this.props.dispatch(workflowFiltersActions.setFilters(payload1));
+    this.props.dispatch(workflowKindActions.setValue(menu));
+    that.fetchGroupData(menu.tag);
   };
 
   fetchGroupData = tag => {
@@ -116,6 +120,7 @@ class FilterDropdown extends Component {
           `}
         >
           {workflowKind.map(item => {
+            // console.log("menu", item);
             return (
               <>
                 <div
@@ -136,10 +141,10 @@ class FilterDropdown extends Component {
                   >
                     {item.name}
                   </FiltersHeading>
-                  {fieldTags.map(menu => {
+                  {item.field_tags_for_filter.map(menu => {
                     return (
                       <SubMenuHeading
-                        onClick={() => this.handleSelectedSubKind(menu)}
+                        onClick={() => this.handleSelectedSubKind(item, menu)}
                       >
                         {/* to be implemented at the end*/}
 
