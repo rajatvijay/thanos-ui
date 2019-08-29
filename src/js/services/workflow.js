@@ -28,6 +28,7 @@ function getAll(filter) {
 
   const filters = store.getState().workflowFilters;
   const filterParams = getFilterParams(filters);
+  console.log("filters", filterParams);
   let url = `workflows-list/${filterParams}&lean=true`;
 
   if (filter) {
@@ -64,6 +65,7 @@ function getChildWorkflow(parent) {
 
 //CONSTRUCT PARAM FOR FILTERS
 const getFilterParams = filters => {
+  console.log("sdadadas", filters);
   let p = "?";
   _.map(filters, function(i, index) {
     const isFirst = index === 0 ? true : false;
