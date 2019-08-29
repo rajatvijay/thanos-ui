@@ -24,9 +24,14 @@ import { commonFunctions } from "./commons";
 import { FormattedMessage } from "react-intl";
 import validator from "validator";
 import { ESign } from "./esign.js";
-import { apiBaseURL, siteOrigin } from "../../../../config";
+import {
+  apiBaseURL,
+  siteOrigin,
+  supportedFieldFormats
+} from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
+import FormattedTextInput from "../../../../modules/common/components/FormattedTextInput";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -66,6 +71,21 @@ export class Text extends Component {
       : this.props.field.definition.defaultValue
   };
 
+  get format() {
+    // TODO:
+    // The condition below must be removed as soon as we are getting
+    // definition.extra.format === "duns"
+    if (
+      /d\-u\-n\-s\snumber/i.test(
+        _.get(this.props, "field.definition.body", null)
+      )
+    )
+      return supportedFieldFormats.duns;
+    return supportedFieldFormats[
+      _.get(this.props, "field.definition.extra.format", null)
+    ];
+  }
+
   componentDidUpdate(prevProps) {
     const inputText = this.props.decryptedData
       ? this.props.decryptedData.answer
@@ -86,14 +106,33 @@ export class Text extends Component {
     this.setState({ inputText: value });
     this.props.onFieldChange(e, this.props);
   };
+
+  onBlur = e => this.props.onFieldChange(e, this.props);
+
+  get inputProps() {
+    const { props } = this;
+    let rows = _.get(props, "field.definition.meta.height", 1);
+
+    let fieldProps = {
+      disabled: isDisabled(props),
+      autosize: { minRows: rows },
+      placeholder: props.field.placeholder,
+      value: this.state.inputText,
+      autoComplete: "new-password",
+      onChange: this.onChange,
+      onBlur: this.onBlur,
+      style: getStyle(props)
+    };
+
+    if (this.format) fieldProps.format = this.format;
+
+    return fieldProps;
+  }
+
   render() {
     const { props } = this;
 
-    let rows =
-      props.field.definition.meta && props.field.definition.meta.height
-        ? props.field.definition.meta.height
-        : 1;
-
+    let TextFieldComponent = this.format ? FormattedTextInput : TextArea;
     return (
       <FormItem
         label={getLabel(props, this)}
@@ -107,16 +146,7 @@ export class Text extends Component {
         autoComplete="new-password"
         {...field_error(props)}
       >
-        <TextArea
-          disabled={isDisabled(props)}
-          autosize={{ minRows: rows }}
-          placeholder={props.field.placeholder}
-          value={this.state.inputText}
-          autoComplete="new-password"
-          onChange={e => this.onChange(e)}
-          onBlur={e => props.onFieldChange(e, props)}
-          style={getStyle(props)}
-        />
+        <TextFieldComponent {...this.inputProps} />
       </FormItem>
     );
   }

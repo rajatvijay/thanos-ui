@@ -34,7 +34,7 @@ class ProfileStepBody extends Component {
           {data.label}
         </span>
         <br />
-        <FormattedLCData data={data} style={style} />
+        <FormattedLCData {...data} style={style} />
       </Col>
     ));
   }

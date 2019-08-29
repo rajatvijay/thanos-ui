@@ -3,6 +3,8 @@ import { Table, Icon } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
+import NumberFormat from "react-number-format";
+import { supportedFieldFormats } from "../../../../config";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -120,7 +122,14 @@ const GetTable = props => {
     {
       title: "D-U-N-S",
       dataIndex: "DUNSNumber",
-      key: "DUNSNumber"
+      key: "DUNSNumber",
+      render: record => (
+        <NumberFormat
+          displayType="text"
+          format={supportedFieldFormats.duns}
+          value={record}
+        />
+      )
     },
     {
       title: "Organization Name",

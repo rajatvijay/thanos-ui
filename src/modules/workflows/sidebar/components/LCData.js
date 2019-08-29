@@ -44,7 +44,7 @@ const LCDataItem = ({ data }) => (
     <StyledLCDataLabel>{data.label}</StyledLCDataLabel>
     <br />
     <FormattedLCData
-      data={data}
+      {...data}
       className={css`
         color: #000000;
         font-size: 12px;
