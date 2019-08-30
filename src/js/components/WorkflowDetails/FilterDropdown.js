@@ -7,7 +7,6 @@ import {
 import { connect } from "react-redux";
 import { css } from "emotion";
 import styled from "@emotion/styled";
-import _ from "lodash";
 import { injectIntl } from "react-intl";
 import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 import { get as lodashGet } from "lodash";
