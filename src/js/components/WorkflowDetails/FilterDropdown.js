@@ -11,32 +11,6 @@ import _ from "lodash";
 import { injectIntl } from "react-intl";
 import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 
-const FiltersHeading = styled.div`
-  height: 40;
-  color: white;
-  width: 100%;
-  fontsize: 16;
-  padding: 8px 28px;
-  cursor: pointer;
-  &:hover {
-    background-color: #104775;
-  }
-`;
-const SubMenuHeading = styled.div`
-  height: 30px;
-  color: rgb(255, 255, 255, 0.5);
-  width: 100%;
-  padding: 7px 40px 4px;
-  font-size: 14px;
-  cursor: pointer;
-  &:hover {
-    color: #158bd6;
-  }
-  div.active-sub-kind {
-    color: #158bd6;
-  }
-`;
-
 class FilterDropdown extends Component {
   state = {
     value: "",
@@ -261,3 +235,29 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(injectIntl(FilterDropdown));
+
+const FiltersHeading = styled.div`
+  height: 40;
+  color: white;
+  width: 100%;
+  font-size: 16;
+  padding: 8px 28px;
+  cursor: pointer;
+  &:hover {
+    background-color: #104775;
+  }
+`;
+const SubMenuHeading = styled.div`
+  height: 30px;
+  color: rgb(255, 255, 255, 0.5);
+  width: 100%;
+  padding: 7px 40px 4px;
+  font-size: 14px;
+  cursor: pointer;
+  &:hover {
+    color: #158bd6;
+  }
+  div.active-sub-kind {
+    color: #158bd6;
+  }
+`;
