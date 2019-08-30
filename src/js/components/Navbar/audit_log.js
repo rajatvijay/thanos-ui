@@ -27,7 +27,9 @@ class _AuditListTabs extends Component {
       "step_undo",
       "step_approved",
       "response_changed",
-      "child_workflow_created"
+      "child_workflow_created",
+      "task_assigned",
+      "task_unassigned"
     ],
     emails: ["sendgrid_email"],
     views: ["step_viewed", "workflow_viewed"],
