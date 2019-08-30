@@ -114,9 +114,10 @@ class Sidebar extends Component {
             width: 300px;
             padding-bottom: 100px;
             height: 100%;
-            fontfamily: Cabin;
+            font-family: Cabin;
             min-height: 110vh;
             background: #104775;
+            position: fixed;
           `}
         >
           <div className="logo" />
