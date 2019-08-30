@@ -13,41 +13,46 @@ import { get as lodashGet } from "lodash";
 
 class FilterDropdown extends Component {
   handleSelectedKind = kind => {
-    const kindPayload = {
+    const kindFilter = {
       filterType: "kind",
       filterValue: [kind.id],
       meta: kind
     };
-    this.clearOtherFitlers(["field_def_tags", "stepgroupdef"]);
-    this.props.dispatch(workflowFiltersActions.setFilters(kindPayload));
-    this.props.dispatch(workflowKindActions.setValue(kind));
+    this.clearFitlers(["field_def_tags", "stepgroupdef"]);
+    this.applyFilters([kindFilter]);
     this.fetchSidebarMeta(kind.tag);
   };
 
-  handleSelectedSubKind = (kind, subKind) => {
-    const { id: kindId } = kind;
-    const { tag } = subKind;
-
-    const fieldTagPayload = {
+  handleSelectedFieldAnswer = (kind, fieldTag, fieldAnswer) => {
+    const fieldTagFilter = {
       filterType: "field_def_tags",
-      filterValue: [tag],
-      meta: subKind
+      filterValue: [fieldTag.tag],
+      meta: fieldTag
     };
-    const kindPayload = {
+    const kindFitler = {
       filterType: "kind",
-      filterValue: [kindId],
-      meta: subKind
+      filterValue: [kind.id],
+      meta: fieldTag
     };
-    this.clearOtherFitlers(["stepgroupdef"]);
-    this.props.dispatch(workflowFiltersActions.setFilters(fieldTagPayload));
-    this.props.dispatch(workflowFiltersActions.setFilters(kindPayload));
-    this.props.dispatch(workflowKindActions.setValue(subKind));
+    const fieldAnswerFitler = {
+      filterType: "answer",
+      filterValue: [fieldAnswer.value],
+      meta: fieldAnswer
+    };
+    this.clearFitlers(["stepgroupdef"]);
+    this.applyFilters([kindFitler, fieldTagFilter, fieldAnswerFitler]);
     this.fetchSidebarMeta(kind.tag);
   };
 
-  clearOtherFitlers = filters => {
+  clearFitlers = filters => {
     filters.forEach(filterType => {
       this.props.dispatch(workflowFiltersActions.removeFilters({ filterType }));
+    });
+  };
+
+  applyFilters = filters => {
+    filters.forEach(filter => {
+      this.props.dispatch(workflowFiltersActions.setFilters(filter));
     });
   };
 
@@ -60,12 +65,78 @@ class FilterDropdown extends Component {
     this.props.dispatch(workflowKindActions.getAlertCount(tag));
   };
 
-  isSubKindSelected = subkind => {
-    return this.selectedSubKind && this.selectedSubKind.id === subkind.id;
+  isFieldAnswerSelected = (subkind, fieldAnswer) => {
+    if (this.selectedFieldTag && this.selectedFieldAnswer) {
+      return (
+        this.selectedFieldTag.id === subkind.id &&
+        this.selectedFieldAnswer.value === fieldAnswer.value
+      );
+    }
+    return null;
   };
 
   isKindSelected = kind => {
     return this.selectedKind && this.selectedKind.id === kind.id;
+  };
+
+  // All gettters and setters
+  get selectedFieldTag() {
+    return lodashGet(this.props, "workflowFilters.field_def_tags.meta", null);
+  }
+
+  get selectedKind() {
+    return lodashGet(this.props, "workflowFilters.kind.meta", null);
+  }
+
+  get selectedFieldAnswer() {
+    return lodashGet(this.props, "workflowFilters.answer.meta", null);
+  }
+
+  get loading() {
+    return lodashGet(this.props, "workflowKind.loading", false);
+  }
+
+  // TODO: Fix this
+  // lodashGet(this.props, "workflowFilters.kind.meta", null);
+  // the above expression has its display name
+  // sometimes in the `name` key and sometimes in the `body` key
+  getSelectedKindNameKey = () => {
+    return this.selectedKind.body ? "body" : "name";
+  };
+
+  // All render methods
+  renderSelectedItem = () => {
+    return (
+      <StyledSelectedItemContianer>
+        {this.selectedKind ? (
+          <>
+            <div>
+              {getIntlBody(this.selectedKind, this.getSelectedKindNameKey())}
+              {this.selectedFieldAnswer && this.renderSelectedFieldAnswer()}
+            </div>
+            <Icon type="down" />
+          </>
+        ) : (
+          ""
+        )}
+      </StyledSelectedItemContianer>
+    );
+  };
+
+  renderSelectedFieldAnswer = () => {
+    return (
+      <span
+        className={css`
+          height: 100%;
+          align-items: center;
+          margin-left: 10px;
+          font-size: 14px;
+          color: rgb(255, 255, 255, 0.5);
+        `}
+      >
+        {this.selectedFieldAnswer.label}
+      </span>
+    );
   };
 
   renderDropdownList = () => {
@@ -79,86 +150,38 @@ class FilterDropdown extends Component {
               {kind.name}
             </FiltersHeading>
             {this.isKindSelected(kind) && <StyledPostionedCheckIndicator />}
-            {
-              <ul
-                className={css`
-                  list-style-type: none;
-                  padding: 0;
-                `}
-              >
-                {kind.field_tags_for_filter.map(fieldTag => (
-                  <StyledRelativeLi>
-                    <SubMenuHeading
-                      onClick={() => this.handleSelectedSubKind(kind, fieldTag)}
-                    >
-                      {getIntlBody(fieldTag)}
-                    </SubMenuHeading>
-                    {this.isSubKindSelected(fieldTag) && (
-                      <StyledPostionedCheckIndicator />
-                    )}
-                  </StyledRelativeLi>
-                ))}
-              </ul>
-            }
+            <ul
+              className={css`
+                list-style-type: none;
+                padding: 0;
+              `}
+            >
+              {this.renderFieldAnswerList(kind.field_tags_for_filter, kind)}
+            </ul>
           </StyledRelativeLi>
         ))}
       </StyledListContainer>
     );
   };
 
-  get selectedSubKind() {
-    return lodashGet(this.props, "workflowFilters.field_def_tags.meta", null);
-  }
-
-  get selectedKind() {
-    return lodashGet(this.props, "workflowFilters.kind.meta", null);
-  }
-
-  // TODO: Fix this
-  // lodashGet(this.props, "workflowFilters.kind.meta", null);
-  // the above expression has its display name
-  // sometimes in the `name` key and sometimes in the `body` key
-  getSelectedKindNameKey = () => {
-    return this.selectedKind.body ? "body" : "name";
-  };
-
-  renderSelectedSubKind = () => {
-    return (
-      <span
-        className={css`
-          height: 100%;
-          align-items: center;
-          margin-left: 10px;
-          font-size: 14px;
-          color: rgb(255, 255, 255, 0.5);
-        `}
-      >
-        {getIntlBody(this.selectedSubKind)}
-      </span>
+  renderFieldAnswerList = (fieldTags, kind) => {
+    return fieldTags.map(fieldTag =>
+      getIntlBody(fieldTag, "extra").map(fieldAnswer => (
+        <StyledRelativeLi>
+          <SubMenuHeading
+            onClick={() =>
+              this.handleSelectedFieldAnswer(kind, fieldTag, fieldAnswer)
+            }
+          >
+            {fieldAnswer.label}
+          </SubMenuHeading>
+          {this.isFieldAnswerSelected(fieldTag, fieldAnswer) && (
+            <StyledPostionedCheckIndicator />
+          )}
+        </StyledRelativeLi>
+      ))
     );
   };
-
-  renderSelectedItem = () => {
-    return (
-      <StyledSelectedItemContianer>
-        {this.selectedKind ? (
-          <>
-            <div>
-              {getIntlBody(this.selectedKind, this.getSelectedKindNameKey())}
-              {this.selectedSubKind ? this.renderSelectedSubKind() : null}
-            </div>
-            <Icon type="down" />
-          </>
-        ) : (
-          ""
-        )}
-      </StyledSelectedItemContianer>
-    );
-  };
-
-  get loading() {
-    return lodashGet(this.props, "workflowKind.loading", false);
-  }
 
   render() {
     const { workflowKind } = this.props.workflowKind;
