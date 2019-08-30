@@ -18,29 +18,24 @@ class FilterDropdown extends Component {
       filterValue: [kind.id],
       meta: kind
     };
-    this.clearFitlers(["field_def_tags", "stepgroupdef"]);
+    this.clearFitlers(["stepgroupdef", "answer"]);
     this.applyFilters([kindFilter]);
     this.fetchSidebarMeta(kind.tag);
   };
 
   handleSelectedFieldAnswer = (kind, fieldTag, fieldAnswer) => {
-    const fieldTagFilter = {
-      filterType: "field_def_tags",
-      filterValue: [fieldTag.tag],
-      meta: fieldTag
-    };
     const kindFitler = {
       filterType: "kind",
       filterValue: [kind.id],
-      meta: fieldTag
+      meta: kind
     };
     const fieldAnswerFitler = {
       filterType: "answer",
-      filterValue: [fieldAnswer.value],
+      filterValue: [`${fieldTag.tag}__eq__${fieldAnswer.value}`],
       meta: fieldAnswer
     };
     this.clearFitlers(["stepgroupdef"]);
-    this.applyFilters([kindFitler, fieldTagFilter, fieldAnswerFitler]);
+    this.applyFilters([kindFitler, fieldAnswerFitler]);
     this.fetchSidebarMeta(kind.tag);
   };
 
@@ -65,18 +60,19 @@ class FilterDropdown extends Component {
     this.props.dispatch(workflowKindActions.getAlertCount(tag));
   };
 
-  isFieldAnswerSelected = (subkind, fieldAnswer) => {
-    if (this.selectedFieldTag && this.selectedFieldAnswer) {
-      return (
-        this.selectedFieldTag.id === subkind.id &&
-        this.selectedFieldAnswer.value === fieldAnswer.value
-      );
-    }
-    return null;
+  isFieldAnswerSelected = fieldAnswer => {
+    return (
+      this.selectedFieldAnswer &&
+      this.selectedFieldAnswer.value === fieldAnswer.value
+    );
   };
 
   isKindSelected = kind => {
-    return this.selectedKind && this.selectedKind.id === kind.id;
+    return (
+      this.selectedKind &&
+      this.selectedKind.id === kind.id &&
+      !this.selectedFieldAnswer
+    );
   };
 
   // All gettters and setters
@@ -175,7 +171,7 @@ class FilterDropdown extends Component {
           >
             {fieldAnswer.label}
           </SubMenuHeading>
-          {this.isFieldAnswerSelected(fieldTag, fieldAnswer) && (
+          {this.isFieldAnswerSelected(fieldAnswer) && (
             <StyledPostionedCheckIndicator />
           )}
         </StyledRelativeLi>
