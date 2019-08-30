@@ -8,7 +8,6 @@ import {
 } from "../../../js/actions";
 import { connect } from "react-redux";
 import { css } from "emotion";
-import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
 import { injectIntl } from "react-intl";
 import FilterDropdown from "../../../js/components/WorkflowDetails/FilterDropdown";

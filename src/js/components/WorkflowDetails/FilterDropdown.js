@@ -111,7 +111,6 @@ class FilterDropdown extends Component {
   }
 
   get selectedKind() {
-    console.log(lodashGet(this.props, "workflowFilters.kind.meta", null));
     return lodashGet(this.props, "workflowFilters.kind.meta", null);
   }
 
@@ -123,31 +122,30 @@ class FilterDropdown extends Component {
     return this.selectedKind.body ? "body" : "name";
   };
 
+  renderSelectedSubKind = () => {
+    return (
+      <span
+        className={css`
+          height: 100%;
+          align-items: center;
+          margin-left: 10px;
+          font-size: 14px;
+          color: rgb(255, 255, 255, 0.5);
+        `}
+      >
+        {getIntlBody(this.selectedSubKind)}
+      </span>
+    );
+  };
+
   renderSelectedItem = () => {
     return (
       <StyledSelectedItemContianer>
         {this.selectedKind ? (
           <>
-            <div
-              className={css`
-                display: flex;
-                align-items: center;
-              `}
-            >
+            <div>
               {getIntlBody(this.selectedKind, this.getSelectedKindNameKey())}
-              {this.selectedSubKind ? (
-                <span
-                  className={css`
-                    height: 100%;
-                    align-items: center;
-                    margin-left: 10px;
-                    font-size: 14px;
-                    color: rgb(255, 255, 255, 0.5);
-                  `}
-                >
-                  {getIntlBody(this.selectedSubKind)}
-                </span>
-              ) : null}
+              {this.selectedSubKind ? this.renderSelectedSubKind() : null}
             </div>
             <Icon type="down" />
           </>
