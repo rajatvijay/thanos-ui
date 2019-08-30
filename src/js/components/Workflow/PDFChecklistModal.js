@@ -117,7 +117,7 @@ class PDFChecklistModal extends React.Component {
       workflow_id: workflowId,
       parent_steps_to_print: parentWorkflow,
       child_steps_to_print: childWorkflow,
-      static_sections: staticSections,
+      extra_sections: staticSections,
       include_flags: !!include_flags,
       include_comments: !!include_comments,
       include_archived_related_workflows: !!include_archived_related_workflows
