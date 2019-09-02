@@ -24,6 +24,7 @@ import { injectIntl } from "react-intl";
 import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
+import { Pagination } from "antd";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -102,6 +103,12 @@ class VTag extends PureComponent {
   }
 }
 
+const requestOptions = {
+  method: "GET",
+  headers: authHeader.get(),
+  credentials: "include"
+};
+
 class ChildWorkflowField2 extends Component {
   constructor() {
     super();
@@ -119,7 +126,8 @@ class ChildWorkflowField2 extends Component {
       childWorkflow: null,
       sortOrderAsc: false,
       sortingEnabled: false,
-      sortBy: undefined
+      sortBy: undefined,
+      currentPage: 1
     };
     this.onFilterTagChange = this.onFilterTagChange.bind(this);
   }
@@ -184,16 +192,16 @@ class ChildWorkflowField2 extends Component {
     return searchParams.toString();
   };
 
-  getChildWorkflow = () => {
+  onPageChange = val => {
+    this.setState({ currentPage: val });
+    this.getChildWorkflow(val);
+  };
+
+  getChildWorkflow = page => {
     const parentId = this.props.workflowId;
 
     const kind = this.props.field.definition.extra.child_workflow_kind_id;
 
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
     const { sortBy } = this.state;
 
     // decide the query param for workflowId
@@ -214,7 +222,8 @@ class ChildWorkflowField2 extends Component {
       kind: `${kind}`,
       answer: `${valueFilter}`,
       ordering: sortBy,
-      child_kinds: true
+      child_kinds: true,
+      page: page || 1
     });
 
     const url = `${apiBaseURL}workflows-list/?${param}`;
@@ -228,6 +237,7 @@ class ChildWorkflowField2 extends Component {
           fetchEmpty: _.size(body.results) ? false : true,
           childWorkflow: body.results,
           filteredChildWorkflow: body.results,
+          childCount: body.count,
           fetching: false
         });
         this.createStatusFilterTag();
@@ -1143,7 +1153,11 @@ class ChildWorkflowField2 extends Component {
   render = () => {
     const { props } = this;
     const { field, workflowKind } = props;
-    const { bulkActionWorkflowChecked, childWorkflow } = this.state;
+    const {
+      bulkActionWorkflowChecked,
+      childWorkflow,
+      filteredChildWorkflow
+    } = this.state;
     const kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
     const workflowHeaderChild = childWorkflow ? childWorkflow : [];
 
@@ -1374,7 +1388,7 @@ class ChildWorkflowField2 extends Component {
               className="workflow-list workflows-list-embedded "
               style={{ margin: "2px" }}
             >
-              {_.size(this.state.filteredChildWorkflow) ? (
+              {_.size(filteredChildWorkflow) ? (
                 <WorkflowList
                   isEmbedded={true}
                   sortAscending={false}
@@ -1396,6 +1410,19 @@ class ChildWorkflowField2 extends Component {
               ) : (
                 <div>No results found</div>
               )}
+
+              {filteredChildWorkflow && this.state.childCount ? (
+                <div className="mr-bottom">
+                  <Pagination
+                    hideOnSinglePage={true}
+                    defaultCurrent={1}
+                    current={this.state.currentPage}
+                    total={this.state.childCount}
+                    defaultPageSize={100}
+                    onChange={this.onPageChange}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         )}
