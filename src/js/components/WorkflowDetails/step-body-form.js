@@ -11,6 +11,7 @@ import IntlTooltip from "../common/IntlTooltip";
 import { getIntlBody } from "../../_helpers/intl-helpers";
 import { fieldActions } from "../../../modules/fields/actions";
 import { requiredParam } from "../../../modules/common/errors";
+import { getFieldExtraFilters } from "./utils/getFieldExtraFilters";
 
 const TabPane = Tabs.TabPane;
 const SIZE_33 = 4,
@@ -565,6 +566,11 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         const fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
+        fieldParams.fieldExtraFilters = getFieldExtraFilters(
+          field,
+          that.props.extraFilters
+        );
+
         fieldParams.workflowId = that.props.workflowIdFromPropsForModal
           ? that.props.workflowIdFromPropsForModal
           : fieldParams.workflowId;

@@ -381,6 +381,7 @@ class StepBody extends Component {
                   ...this.props.currentStepFields[this.props.stepId]
                 }}
                 dispatch={this.props.dispatch}
+                extraFilters={this.props.extraFilters[workflowId] || null}
               />
             </div>
           ) : (
@@ -401,7 +402,8 @@ function mapStateToProps(state) {
     stepVersionFields,
     config,
     workflowDetailsHeader,
-    stepUsers
+    stepUsers,
+    extraFilters
   } = state;
   return {
     currentStepFields,
@@ -409,7 +411,8 @@ function mapStateToProps(state) {
     stepVersionFields,
     config,
     workflowDetailsHeader,
-    stepUsers
+    stepUsers,
+    extraFilters
   };
 }
 

@@ -92,6 +92,7 @@ class WorkflowList extends Component {
     const data = this.props.workflow;
     const currentPage = this.getCurrentPage();
     const groupedWorkflows = this.getGroupedWorkflows(currentPage);
+
     const ListCompletes = _.map(groupedWorkflows, (list, key) => {
       const listL = _.map(list, function(item, index) {
         return (
@@ -108,11 +109,7 @@ class WorkflowList extends Component {
             workflowChildren={that.props.workflowChildren}
             sortingEnabled={that.props.sortingEnabled}
             showFilterMenu={that.props.showFilterMenu}
-            fieldExtra={
-              that.props.field && that.props.field.definition.extra
-                ? that.props.field.definition.extra
-                : null
-            }
+            fieldExtra={that.props.fieldExtra}
             addComment={that.props.addComment || null}
             showCommentIcon={that.props.showCommentIcon}
             isEmbedded={that.props.isEmbedded}

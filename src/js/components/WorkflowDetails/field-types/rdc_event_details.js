@@ -4,6 +4,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { getEventItem } from "./rdc_alert_metadata";
 import { event_status, status_filters } from "../EventStatuses";
+import { isEmpty, map, includes, filter } from "lodash";
 
 const TabPane = Tabs.TabPane;
 
@@ -26,8 +27,28 @@ class RDCEventDetailComponent extends Component {
     );
   };
 
+  filterEventsByFlag = () => {
+    const selectedFlag = this.props.field.selected_flag;
+    const integrationJson = this.props.field.integration_json;
+    const flagTofilter = this.props.fieldExtraFilters.value;
+    const falsePositiveIdList = map(selectedFlag, flag => {
+      return flag.flag_detail.tag === flagTofilter
+        ? flag.integration_uid
+        : null;
+    });
+
+    integrationJson.data = _.filter(
+      integrationJson.data,
+      event => !includes(falsePositiveIdList, event.custom_hash)
+    );
+    return integrationJson;
+  };
+
   render = () => {
     const { field } = this.props;
+    const updatedIntegrationJson = this.props.fieldExtraFilters
+      ? this.filterEventsByFlag()
+      : field.integration_json;
 
     let final_html = null;
     if (
@@ -48,7 +69,7 @@ class RDCEventDetailComponent extends Component {
             <div className="mr-top-lg mr-bottom-lg">
               <GetTabsFilter
                 getComment={this.getComment}
-                jsonData={field.integration_json}
+                jsonData={updatedIntegrationJson}
                 commentCount={field.integration_comment_count}
                 flag_dict={field.selected_flag}
               />

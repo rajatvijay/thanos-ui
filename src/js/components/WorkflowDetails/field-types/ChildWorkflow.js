@@ -1384,7 +1384,7 @@ class ChildWorkflowField2 extends Component {
                   kind={workflowKind}
                   sortingEnabled={false}
                   workflowKind={workflowKind}
-                  fieldExtra={field.definition.extra || null}
+                  fieldExtra={props.field.definition.extra || null}
                   addComment={props.addComment}
                   showCommentIcon={true}
                   bulkActionWorkflowChecked={
