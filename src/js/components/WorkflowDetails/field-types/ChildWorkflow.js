@@ -461,7 +461,6 @@ class ChildWorkflowField2 extends Component {
     });
     alert_status_count["all"] = total_count;
 
-    const that = this;
     return _.map(alert_status_count, function(value, key) {
       return (
         <VTag
@@ -516,7 +515,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   createFilterTag = () => {
-    const { filteredChildWorkflow } = this.state;
     const filter_tag_count = {
       all: _.size(this.state.childWorkflow)
     };
@@ -834,7 +832,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   selectedFilter = () => {
-    const that = this;
     if (!_.size(this.state.selected_filters)) {
       return <span />;
     }
@@ -849,7 +846,7 @@ class ChildWorkflowField2 extends Component {
       <span>
         {" "}
         {_.map(this.state.selected_filters, (value, key) => {
-          if (key == "category") {
+          if (key === "category") {
             return _.map(value, category => {
               if (!category) {
                 return;
@@ -954,7 +951,7 @@ class ChildWorkflowField2 extends Component {
   //CREATE. KIND FILTER
   createKindFilter = () => {
     const { props } = this;
-    const { field, workflowKind } = props;
+    const { workflowKind } = props;
     const that = this;
     let filteredChildWorkflow = that.state.filteredChildWorkflow;
     const kindList = getChildKinds(

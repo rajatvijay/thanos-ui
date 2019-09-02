@@ -20,6 +20,7 @@ const _Chowkidaar = ({
   children,
   config,
   check,
+  dispatch, // We don't want dispatch goes to child with otherProps
   deniedElement = null,
   ...otherProps
 }) => {

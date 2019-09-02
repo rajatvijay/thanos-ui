@@ -435,7 +435,6 @@ export class GetMergedData extends React.Component {
             className={" ellip-small text-middle "}
             style={{
               maxWidth: "100%",
-              whiteSpace: "normal",
               wordBreak: "break-word",
               overflow: "hidden",
               whiteSpace: "nowrap"

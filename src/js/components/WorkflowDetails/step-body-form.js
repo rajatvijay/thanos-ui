@@ -240,7 +240,7 @@ class StepBodyForm extends Component {
   }, 1500);
 
   updateDependentFields = (targetField, answer, clear) => {
-    this.props.stepData.data_fields.map(field => {
+    this.props.stepData.data_fields.forEach(field => {
       const extra = field.definition.extra;
       if (extra && extra.trigger_field_tag === targetField.definition.tag) {
         clear && this.clearFieldValue(field);
@@ -542,6 +542,7 @@ class StepBodyForm extends Component {
 
     const rowGroup = {
       fields: [],
+      key: 0,
       get currentOccupancy() {
         return this.fields.reduce((accumulator, rawField) => {
           return accumulator + this.getSizeFraction(rawField);
@@ -557,6 +558,7 @@ class StepBodyForm extends Component {
         this.fields.push(field);
       },
       reset() {
+        this.key++;
         this.fields = [];
       },
 
@@ -591,7 +593,7 @@ class StepBodyForm extends Component {
 
         this.reset();
         return (
-          <Row gutter={60}>
+          <Row gutter={60} key={`group-${this.key}`}>
             {_.map(fields, rawField => {
               const field = this.getFieldForRender(rawField);
               return (

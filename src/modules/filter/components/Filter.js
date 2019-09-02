@@ -4,7 +4,7 @@ import { authHeader } from "../../../js/_helpers";
 
 import FilterPopup from "./FilterPopup";
 import { workflowFiltersActions, workflowActions } from "../../../js/actions";
-import { Tooltip, Icon } from "antd";
+import { Icon } from "antd";
 import CreateNew from "./CreateNew";
 import { css } from "emotion";
 import { apiBaseURL } from "../../../config";

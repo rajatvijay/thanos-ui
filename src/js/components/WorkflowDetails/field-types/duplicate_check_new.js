@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { authHeader } from "../../../_helpers";
-import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
 import { connect } from "react-redux";
 import { Form, Icon } from "antd";
 import _ from "lodash";

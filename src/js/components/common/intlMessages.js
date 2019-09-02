@@ -149,8 +149,7 @@ export default {
       legalRisk: "Legal Risk",
       prohibitedEntitiesRisk: "Prohibited Entities Risk",
       regulatorRisk: "Regulatory Risk",
-      reputationRisk: "Reputation Risk",
-      versionSubmittedOn: "Version submitted on"
+      reputationRisk: "Reputation Risk"
     },
     errorMessageInstances: {
       magicLinkExpired: "We’re sorry, this link has expired.",
@@ -362,8 +361,7 @@ export default {
       legalRisk: "Riesgo legal",
       prohibitedEntitiesRisk: "Riesgo de entidades prohibidas",
       regulatorRisk: "Riesgo regulatorio",
-      reputationRisk: "Riesgo de reputación",
-      versionSubmittedOn: "Versión presentada el"
+      reputationRisk: "Riesgo de reputación"
     },
     errorMessageInstances: {
       magicLinkExpired: "Lo sentimos, este enlace ha caducado",
@@ -591,8 +589,7 @@ export default {
       legalRisk: "Risque juridique",
       prohibitedEntitiesRisk: "Risque lié aux entités interdites",
       regulatorRisk: "Risque réglementaire",
-      reputationRisk: "Risque de réputation",
-      versionSubmittedOn: "Version soumise le"
+      reputationRisk: "Risque de réputation"
     },
     errorMessageInstances: {
       magicLinkExpired: "Nous sommes désolés, ce lien a expiré.",

@@ -373,13 +373,19 @@ class Sidebar extends Component {
     // TODO: This check should be outside this component
     if (!this.currentWorkflow) {
       // NOTE: Added this styled component to not break the UI, empty state
-      return <StyledSidebar width={330} minimalUI={minimalUI} />;
+
+      // NOTE2: Not passing minimalUI as is because passing boolean prop is
+      // not allowed. More details about the warning at
+      // https://github.com/styled-components/styled-components/issues/1198
+      return (
+        <StyledSidebar width={330} minimalui={minimalUI ? 1 : undefined} />
+      );
     }
 
     return (
       <>
         {this.renderActivitySidebar()}
-        <StyledSidebar width={330} minimalUI={minimalUI}>
+        <StyledSidebar width={330} minimalui={minimalUI ? 1 : undefined}>
           {!minimalUI && this.renderSidebarHeader()}
 
           <Divider style={{ margin: "10px 0" }} />

@@ -12,7 +12,6 @@ import {
   Tooltip,
   Upload
 } from "antd";
-import { css } from "emotion";
 import { get as lodashGet, size as lodashSize } from "lodash";
 import moment from "moment";
 import React, { Component } from "react";

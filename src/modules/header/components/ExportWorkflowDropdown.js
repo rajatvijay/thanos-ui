@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Dropdown, Icon, Menu } from "antd";
 import IntlTooltip from "../../../js/components/common/IntlTooltip";
+import Anchor from "../../../js/components/common/Anchor";
 
 class DropdownItem extends React.Component {
   handleClick = () => {
@@ -13,7 +14,7 @@ class DropdownItem extends React.Component {
 
     return (
       <Menu.Item {...menuProps}>
-        <a onClick={this.handleClick} className="text-nounderline">
+        <Anchor onClick={this.handleClick} className="text-nounderline">
           <i
             className="material-icons text-primary-dark"
             style={{
@@ -25,7 +26,7 @@ class DropdownItem extends React.Component {
             {kind.icon}
           </i>
           {kind.name}
-        </a>
+        </Anchor>
       </Menu.Item>
     );
   }

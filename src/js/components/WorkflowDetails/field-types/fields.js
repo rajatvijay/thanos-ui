@@ -35,7 +35,7 @@ import FormattedTextInput from "../../../../modules/common/components/FormattedT
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const { OptGroup, Option } = AntSelect;
+const { Option } = AntSelect;
 const { TextArea } = Input;
 
 //Common utility fucntions bundled in one file commons.js//
@@ -76,9 +76,7 @@ export class Text extends Component {
     // The condition below must be removed as soon as we are getting
     // definition.extra.format === "duns"
     if (
-      /d\-u\-n\-s\snumber/i.test(
-        _.get(this.props, "field.definition.body", null)
-      )
+      /d-u-n-s\snumber/i.test(_.get(this.props, "field.definition.body", null))
     )
       return supportedFieldFormats.duns;
     return supportedFieldFormats[

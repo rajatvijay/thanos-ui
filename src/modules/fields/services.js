@@ -21,8 +21,6 @@ function saveResponse({
   return APIFetch("responses/", requestOptions).then(handleResponse);
 }
 
-function saveAttachment({ attachment, field, workflow }) {}
-
 function clearResponse({ responseId = requiredParam("responseId"), payload }) {
   const requestOptions = {
     method: "POST",

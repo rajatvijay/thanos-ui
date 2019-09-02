@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tag, Tooltip } from "antd";
+import { Tag } from "antd";
 import _ from "lodash";
 import { Row, Col } from "antd";
 import IntlTooltip from "../../common/IntlTooltip";
@@ -212,20 +212,6 @@ class DescriptionToggle extends Component {
 }
 
 function google_search_html(record, search) {
-  const salienceSortedValues =
-    record.entity_data &&
-    record.entity_data.sort((a, b) => {
-      return b.salience - a.salience;
-    });
-
-  const groupedData = _.groupBy(salienceSortedValues, function(o) {
-    if (o.entity_type) {
-      return o.entity_type;
-    }
-  });
-
-  const removeEntity = ["CONSUMER_GOOD", "WORK_OF_ART", "OTHER"];
-
   const getRelevanceScore = score => {
     const s = parseFloat(score).toFixed(2);
     let icon = "nobar";

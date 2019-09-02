@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Divider, Table, Row, Col } from "antd";
+import { Divider, Row, Col } from "antd";
 import { FormattedMessage } from "react-intl";
 
 export class AmberRoad extends Component {

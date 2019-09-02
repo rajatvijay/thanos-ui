@@ -237,6 +237,7 @@ class PDFChecklistModal extends React.Component {
 
                 {workflow.steps.map(step => (
                   <Checkbox
+                    key={step}
                     className={css`
                       font-size: 17px;
                       margin-left: 10px !important;

@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { css } from "emotion";
 import { FormattedMessage, injectIntl } from "react-intl";
 
-function LCData({ lcData, status, ...restProps }) {
+function LCData({ lcData, status, dispatch, ...restProps }) {
   return (
     <Row {...restProps}>
       {status && (

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Form, Checkbox as AntCheckbox, Divider } from "antd";
+import React from "react";
+import { Form, Checkbox as AntCheckbox } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "../commons";
 
@@ -9,7 +9,6 @@ const FormItem = Form.Item;
 const {
   getLabel,
   getExtra,
-  onFieldChange,
   onFieldChangeArray,
   stringToArray,
   field_error,

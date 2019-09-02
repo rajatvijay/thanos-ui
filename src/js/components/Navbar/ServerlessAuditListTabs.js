@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip, notification } from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
 import { requestOptions } from "../../services/auth-header-auditlog-service";
 import Moment from "react-moment";
@@ -10,14 +10,6 @@ import download from "downloadjs";
 import { serverlessAPIFetch } from "../../utils/request";
 
 const TabPane = Tabs.TabPane;
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
 
 class ServerlessAuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {

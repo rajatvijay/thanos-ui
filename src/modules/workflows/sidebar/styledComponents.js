@@ -9,12 +9,12 @@ export const StyledSidebar = styled(Sider)`
   background-color: #fafafa;
   padding: 30px;
   padding-top: 0;
-  padding-left: ${({ minimalUI }) => (minimalUI ? "30px" : "55px")};
+  padding-left: ${({ minimalui }) => (minimalui ? "30px" : "55px")};
   z-index: 0;
-  margin-right: ${({ minimalUI }) => (minimalUI ? 0 : 35)};
+  margin-right: ${({ minimalui }) => (minimalui ? 0 : 35)};
   padding-right: 0;
   position: relative;
-  margin-top: ${({ minimalUI }) => (minimalUI ? 0 : 35)};
+  margin-top: ${({ minimalui }) => (minimalui ? 0 : 35)};
 `;
 
 export const StyledSidebarHeader = styled.div`

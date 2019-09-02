@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Form, Checkbox as AntCheckbox, Divider } from "antd";
 import { groupBy } from "lodash";
 import { commonFunctions } from "../commons";
@@ -10,7 +10,6 @@ const FormItem = Form.Item;
 const {
   getLabel,
   getExtra,
-  onFieldChange,
   onFieldChangeArray,
   stringToArray,
   field_error,
@@ -34,14 +33,12 @@ export class GroupedCheckbox extends Component {
   }
 
   onChecked = val => {
-    const { selectedValues } = this.state;
     this.setState({ selectedValues: val }, () => {
       onFieldChangeArray(this.props, val);
     });
   };
 
   componentDidUpdate = prevProps => {
-    const props = this.props;
     const updatedAnswer = stringToArray(this.props.field.answers[0]);
     if (prevProps.field.answers[0] !== this.props.field.answers[0]) {
       this.setState({ selectedValues: updatedAnswer });

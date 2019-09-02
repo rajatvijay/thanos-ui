@@ -207,7 +207,14 @@ const GetTable = props => {
     }
   ];
 
-  return <Table dataSource={data} pagination={false} columns={columns} />;
+  return (
+    <Table
+      dataSource={data}
+      pagination={false}
+      columns={columns}
+      rowKey={row => row.organization.duns}
+    />
+  );
 };
 
 export const DunsDirectPlus = props => {

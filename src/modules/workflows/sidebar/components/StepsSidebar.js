@@ -182,6 +182,7 @@ class StepsSideBar extends Component {
     const isSelected = this.isStepSelected(step);
     return (
       <StyledCollapseItem
+        key={"step" + step.id}
         className={css`
           display: flex;
           justify-content: space-between;
