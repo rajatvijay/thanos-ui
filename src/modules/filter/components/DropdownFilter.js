@@ -16,14 +16,27 @@ class DropdownFilter extends Component {
       : null;
   };
 
+  get searchableProps() {
+    // Just adding some props to make our select component searchable
+    return {
+      showSearch: true,
+      optionFilterProp: "children",
+      filterOption: (input, option) =>
+        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    };
+  }
+
   render() {
     const {
       name,
       onFilterChange,
       value,
       placeholder,
-      loading = false
+      loading = false,
+      searchable
     } = this.props;
+
+    const additionalProps = searchable ? this.searchableProps : {};
 
     return (
       <Select
@@ -37,6 +50,7 @@ class DropdownFilter extends Component {
             margin-left: 0;
           }
         `}
+        {...additionalProps}
       >
         {this.renderOptions()}
       </Select>

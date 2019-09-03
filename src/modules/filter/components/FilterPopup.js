@@ -196,6 +196,7 @@ class FilterPopup extends Component {
                   id: "workflowFiltersTranslated.filterPlaceholders.status"
                 })}
                 onFilterChange={onFilterChange}
+                searchable
               />
               <DropdownFilter
                 name="region"
@@ -205,6 +206,7 @@ class FilterPopup extends Component {
                   id: "workflowFiltersTranslated.filterPlaceholders.region"
                 })}
                 onFilterChange={onFilterChange}
+                searchable
               />
               <DropdownFilter
                 loading={businessType.loading}
@@ -216,6 +218,7 @@ class FilterPopup extends Component {
                     "workflowFiltersTranslated.filterPlaceholders.business_unit"
                 })}
                 onFilterChange={onFilterChange}
+                searchable
               />
             </div>
           </div>
