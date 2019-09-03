@@ -233,10 +233,6 @@ class Header extends Component {
 
                   {/* <Menu.Item key="profile">Profile</Menu.Item> */}
                   <SelectLanguage />
-                  <Menu.Item key="logout" onClick={this.onLogout}>
-                    <FormattedMessage id={"loginPageInstances.logoutText"} />
-                  </Menu.Item>
-
                   {userProfileId ? (
                     <Menu.Item key="profile">
                       <Link to={`/workflows/instances/${userProfileId}`}>
@@ -246,6 +242,9 @@ class Header extends Component {
                       </Link>
                     </Menu.Item>
                   ) : null}
+                  <Menu.Item key="logout" onClick={this.onLogout}>
+                    <FormattedMessage id={"loginPageInstances.logoutText"} />
+                  </Menu.Item>
                 </Menu>
               }
             >
