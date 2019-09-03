@@ -194,10 +194,10 @@ class ChildWorkflowField2 extends Component {
 
   onPageChange = val => {
     this.setState({ currentPage: val });
-    this.getChildWorkflow(val);
+    this.getChildWorkflow({ page: val });
   };
 
-  getChildWorkflow = page => {
+  getChildWorkflow = param => {
     const parentId = this.props.workflowId;
 
     const kind = this.props.field.definition.extra.child_workflow_kind_id;
@@ -215,18 +215,20 @@ class ChildWorkflowField2 extends Component {
       return;
     }
 
+    const pageNo = param && param.page;
+
     const valueFilter = this.getValuefilter();
-    const param = this.objToParam({
+    const urlParam = this.objToParam({
       limit: 100,
       [paramName]: parentId,
       kind: `${kind}`,
       answer: `${valueFilter}`,
       ordering: sortBy,
       child_kinds: true,
-      page: page || 1
+      page: pageNo || 1
     });
 
-    const url = `${apiBaseURL}workflows-list/?${param}`;
+    const url = `${apiBaseURL}workflows-list/?${urlParam}`;
 
     this.setState({ fetching: true });
 
