@@ -5,6 +5,7 @@ import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
 import NumberFormat from "react-number-format";
 import { supportedFieldFormats } from "../../../../config";
+import { FormattedMessage } from "react-intl";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -132,34 +133,34 @@ const GetTable = props => {
       )
     },
     {
-      title: "Organization Name",
+      title: <FormattedMessage id="fields.organizationName" />,
       dataIndex: "OrganizationPrimaryName[OrganizationName][$]",
       key: "OrganizationPrimaryName[OrganizationName][$]"
     },
     {
-      title: "Address",
+      title: <FormattedMessage id="fields.address" />,
       dataIndex: "PrimaryAddress[PrimaryTownName]",
       key: "PrimaryAddress[PrimaryTownName]"
     },
 
     {
-      title: "Tradestyle(s)",
+      title: <FormattedMessage id="fields.tradestyles" />,
       dataIndex: "tradeStyleNames[0][name]",
       key: "tradeStyleNames[0][name]"
     },
     {
-      title: "Location Type",
+      title: <FormattedMessage id="fields.locationType" />,
       dataIndex: "corporateLinkage[familytreeRolesPlayed][0][description]",
       key: "corporateLinkage[familytreeRolesPlayed][0][description]"
     },
 
     {
-      title: "Status",
+      title: <FormattedMessage id="commonTextInstances.status" />,
       dataIndex: "OperatingStatusText[$]",
       key: "OperatingStatusText[$]"
     },
     {
-      title: "Action",
+      title: <FormattedMessage id="fields.action" />,
       key: "index",
       render: record => (
         <span>

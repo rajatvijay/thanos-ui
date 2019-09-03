@@ -4,6 +4,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -116,7 +117,7 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "BENEFICIAL OWNERS",
+      title: <FormattedMessage id="fields.beneficialOwners" />,
       dataIndex: "PrimaryName",
       render: (text, record, index) => {
         return integrationCommonFunctions.dnb_ubo_html(record);
@@ -124,7 +125,7 @@ const GetTable = props => {
       key: "PrimaryName"
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       key: "ubo_index",
       render: record => {
         let flag_data = _.size(props.flag_dict[record.MemberID])
@@ -139,9 +140,16 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.MemberID]
-                ? props.commentCount[record.MemberID] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.MemberID] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[record.MemberID]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}

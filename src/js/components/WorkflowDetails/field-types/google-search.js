@@ -4,6 +4,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -89,7 +90,11 @@ class GoogleSrch extends Component {
 const GetTable = props => {
   // for error
   if (!props.jsonData.results) {
-    return <div className="text-center text-red">No result found!</div>;
+    return (
+      <div className="text-center text-red">
+        <FormattedMessage id="commonTextInstances.noResults" />
+      </div>
+    );
   }
 
   const data = props.jsonData.results.sort((a, b) => {
@@ -100,12 +105,21 @@ const GetTable = props => {
   });
 
   const title = (
-    <span className="text-metal">{`Found ${data.length} results`}</span>
+    <span className="text-metal">
+      <FormattedMessage
+        id="commonTextInstances.foundResults"
+        values={{
+          count: data.length
+        }}
+      />
+    </span>
   );
 
   const cate = (
     <div>
-      <span className="text-metal pd-right">Filter:</span>{" "}
+      <span className="text-metal pd-right">
+        <FormattedMessage id="mainFilterbar.filterText" />:
+      </span>{" "}
       {_.map(
         _.uniqBy(data, function(o) {
           if (o.category) {
@@ -160,7 +174,12 @@ const GetTable = props => {
               onClick={e => props.getComment(e, record)}
             >
               {props.commentCount[uid] ? (
-                props.commentCount[uid] + " comment(s)"
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[uid]
+                  }}
+                />
               ) : (
                 <i className="material-icons  t-18 text-secondary">
                   chat_bubble_outline

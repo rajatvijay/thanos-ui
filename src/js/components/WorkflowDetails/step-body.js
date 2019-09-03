@@ -205,8 +205,8 @@ class StepBody extends Component {
       locked_tag = (
         <div>
           <div data-show="true" className="ant-tag">
-            To initiate this step, please complete the following steps
-            first:&nbsp;
+            <FormattedMessage id="stepBodyFormInstances.toInitiateThis" />{" "}
+            :&nbsp;
             <b>{dependent_step_name.join(", ")}</b>
           </div>
         </div>
@@ -357,9 +357,13 @@ class StepBody extends Component {
                 <br />
                 <br />
                 <h3>{this.props.workflowHead.name}</h3>
-                <h4>Step: {stepData.name}</h4>
+                <h4>
+                  <FormattedMessage id="stepBodyFormInstances.step" /> :{" "}
+                  {stepData.name}
+                </h4>
                 <p>
-                  Printed on: <Moment format="MM/DD/YYYY">{Date.now()}</Moment>
+                  <FormattedMessage id="stepBodyFormInstances.printedOn" /> :{" "}
+                  <Moment format="MM/DD/YYYY">{Date.now()}</Moment>
                 </p>
                 <Divider />
               </div>

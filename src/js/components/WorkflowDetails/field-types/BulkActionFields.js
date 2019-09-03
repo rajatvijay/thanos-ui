@@ -155,7 +155,11 @@ class BulkActionFields extends Component {
     return (
       <Modal
         title={
-          this.props.actionDetail ? this.props.actionDetail.name : "Bulk Action"
+          this.props.actionDetail ? (
+            this.props.actionDetail.name
+          ) : (
+            <FormattedMessage id="fields.bulkAction" />
+          )
         }
         visible={this.props.open}
         onCancel={this.props.onCloseBulkActionModal}
@@ -168,7 +172,7 @@ class BulkActionFields extends Component {
             loading={this.state.isLoading}
             onClick={this.onSubmitClick}
           >
-            Submit
+            <FormattedMessage id="commonTextInstances.submitButtonText" />
           </Button>
         ]}
       >
@@ -201,7 +205,7 @@ class BulkActionFields extends Component {
             </div>
           </Form>
         ) : (
-          "Nothing to display"
+          <FormattedMessage id="commonTextInstances.nothingToDisplay" />
         )}
       </Modal>
     );

@@ -155,7 +155,9 @@ class LoginForm extends React.Component {
                 <FormItem
                   validateStatus={errors.password ? "error" : ""}
                   help={errors.password}
-                  label="Password"
+                  label={
+                    <FormattedMessage id="loginPageInstances.passwordLabel" />
+                  }
                 >
                   <Input
                     id="password"

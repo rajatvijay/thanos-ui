@@ -4,6 +4,7 @@ import { Button, Form, Row, Col, Input, notification } from "antd";
 import { commonFunctions } from "./commons";
 import { authHeader } from "../../../_helpers";
 import { apiBaseURL } from "../../../../config";
+import { injectIntl } from "react-intl";
 
 const FormItem = Form.Item;
 const { field_error, isDisabled } = commonFunctions;
@@ -134,6 +135,9 @@ class Doc extends Component {
   render = () => {
     const props = this.props;
     const { user } = props.authentication;
+    const {
+      intl: { formatMessage }
+    } = this.props;
 
     const defaultname = user.first_name
       ? user.first_name + (user.last_name ? " " + user.last_name : "")
@@ -154,7 +158,7 @@ class Doc extends Component {
           >
             <Input
               disabled={isDisabled(props)}
-              placeholder="Enter user name"
+              placeholder={formatMessage({ id: "fields.enterUserName" })}
               name="username"
               defaultValue={defaultname}
               autoComplete="new-password"
@@ -173,7 +177,7 @@ class Doc extends Component {
           >
             <Input
               disabled={isDisabled(props)}
-              placeholder="Enter user email"
+              placeholder={formatMessage({ id: "fields.enterUserEmail" })}
               name="useremail"
               defaultValue={defaultemail}
               autoComplete="new-password"
@@ -213,7 +217,7 @@ function mapStateToProps(state) {
   };
 }
 
-const Doc2 = connect(mapStateToProps)(Doc);
+const Doc2 = connect(mapStateToProps)(injectIntl(Doc));
 
 export const ESign = props => {
   return <Doc2 {...props} />;

@@ -4,7 +4,8 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { getEventItem } from "./rdc_alert_metadata";
 import { event_status, status_filters } from "../EventStatuses";
-import { isEmpty, map, includes, filter } from "lodash";
+import { map, includes } from "lodash";
+import { FormattedMessage } from "react-intl";
 
 const TabPane = Tabs.TabPane;
 
@@ -91,15 +92,35 @@ const buildDetails = obj => {
     return (
       <span key={"key-" + index}>
         <span>
-          &nbsp;<b>Source Name:</b> {rd["SourceName"]}
+          &nbsp;
+          <b>
+            <FormattedMessage id="fields.sourceName" />:
+          </b>{" "}
+          {rd["SourceName"]}
           <br />
-          &nbsp;<b>Source Type:</b> {rd["SourceTypeText"] || "-"}
+          &nbsp;
+          <b>
+            <FormattedMessage id="fields.sourceType" />:
+          </b>{" "}
+          {rd["SourceTypeText"] || "-"}
           <br />
-          &nbsp;<b>Publisher Name:</b> {rd["PublisherName"] || "-"}
+          &nbsp;
+          <b>
+            <FormattedMessage id="fields.publisherName" />:
+          </b>{" "}
+          {rd["PublisherName"] || "-"}
           <br />
-          &nbsp;<b>Publication Source:</b> {rd["PublicationSource"] || "-"}
+          &nbsp;
+          <b>
+            <FormattedMessage id="fields.publication" />:
+          </b>{" "}
+          {rd["PublicationSource"] || "-"}
           <br />
-          &nbsp;<b>Publication Date:</b> {rd["PublicationDate"] || "-"}
+          &nbsp;
+          <b>
+            <FormattedMessage id="fields.publicationDate" />:
+          </b>{" "}
+          {rd["PublicationDate"] || "-"}
           <br />
           &nbsp;<b>Headline:</b> {rd["Headline"] || "-"}
           <br />
@@ -125,14 +146,18 @@ const buildDetails = obj => {
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
         <div className="col-sm-12">
-          <h4 className="match-label ">Event Description:</h4>
+          <h4 className="match-label ">
+            <FormattedMessage id="fields.eventDescription" />:
+          </h4>
           <br />
           {getEventItem(obj, true)}
           <br />
         </div>
 
         <div className="col-sm-12">
-          <h4 className="match-label ">Reference Details:</h4>
+          <h4 className="match-label ">
+            <FormattedMessage id="fields.refDetail" />:
+          </h4>
           <br />
           <span className="match-value">{ref_details}</span>
           <br />
@@ -147,7 +172,7 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "Event Type",
+      title: <FormattedMessage id="fields.eventTypeText" />,
       key: "EventTypeText",
       render: record => {
         return (
@@ -163,35 +188,35 @@ const GetTable = props => {
       }
     },
     {
-      title: "Category",
+      title: <FormattedMessage id="fields.eventTypeCode" />,
       key: "EventTypeCode",
       render: record => {
         return <span className="text-lighter">{record.EventTypeCode}</span>;
       }
     },
     {
-      title: "Event Date",
+      title: <FormattedMessage id="fields.eventDate" />,
       key: "EventDate",
       render: record => {
         return <span className="text-lighter">{record.EventDate}</span>;
       }
     },
     {
-      title: "Event Sub Type",
+      title: <FormattedMessage id="fields.eventSubtypeText" />,
       key: "EventSubTypeText",
       render: record => {
         return <span className="text-lighter">{record.EventSubTypeText}</span>;
       }
     },
     {
-      title: "Event Sub Type Code",
+      title: <FormattedMessage id="fields.eventSubtypeCode" />,
       key: "EventSubTypeCode",
       render: record => {
         return <span className="text-lighter">{record.EventSubTypeCode}</span>;
       }
     },
     {
-      title: "Status",
+      title: <FormattedMessage id="commonTextInstances.status" />,
       key: "status",
       filters: status_filters,
       onFilter: (value, record) => {
@@ -218,7 +243,7 @@ const GetTable = props => {
       }
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       key: "ln_index",
       render: record => {
         const uid = record.custom_hash;
@@ -234,9 +259,16 @@ const GetTable = props => {
               className="ant-btn ant-btn-primary btn-o btn-sm"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[uid]
-                ? props.commentCount[uid] + " comment(s)"
-                : "Adjudicate"}
+              {props.commentCount[uid] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[uid]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
@@ -263,7 +295,11 @@ const GetTable = props => {
 const GetTabsFilter = props => {
   // error
   if (!_.size(props.jsonData.data)) {
-    return <div className="text-center text-green">No alerts found</div>;
+    return (
+      <div className="text-center text-green">
+        <FormattedMessage id="commonTextInstances.noAlertsFound" />
+      </div>
+    );
   }
 
   const data = props.jsonData.data;
@@ -276,7 +312,7 @@ const GetTabsFilter = props => {
   const getFilterData = data => {
     let fList = [
       {
-        label: "All",
+        label: <FormattedMessage id="commonTextInstances.all" />,
         value: "all",
         data: data,
         count: data.length,

@@ -8,6 +8,7 @@ import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { apiBaseURL } from "../../../../config";
 import WorkflowList from "../../Workflow/workflow-list";
 import { Pagination } from "antd";
+import { FormattedMessage } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -205,7 +206,9 @@ class DuplicateCheckComp extends Component {
               <Icon type="loading" style={{ fontSize: 24 }} />
             </div>
           ) : _.size(this.state.error) ? (
-            <div className="">No duplicates found</div>
+            <div>
+              <FormattedMessage id="workflowsInstances.noDuplicatesFound" />
+            </div>
           ) : (
             <div className="workflow-list">
               {childWorkflow && childWorkflow.count ? (
@@ -228,7 +231,9 @@ class DuplicateCheckComp extends Component {
                   //handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
                 />
               ) : (
-                <div>No duplicates found</div>
+                <div>
+                  <FormattedMessage id="workflowsInstances.noDuplicatesFound" />
+                </div>
               )}
             </div>
           )}

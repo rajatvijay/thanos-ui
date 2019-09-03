@@ -4,6 +4,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
 
 const {
   getIntegrationSearchButton,
@@ -103,14 +104,18 @@ const GetTable = props => {
   if (
     !_.size(props.jsonData.OrderProductResponseDetail.Product.MatchCandidate)
   ) {
-    return <div className="text-center text-red">No match found!</div>;
+    return (
+      <div className="text-center text-red">
+        <FormattedMessage id="commonTextInstances.noMatchFound" />!
+      </div>
+    );
   }
 
   const data = props.jsonData.OrderProductResponseDetail.Product.MatchCandidate;
 
   const columns = [
     {
-      title: "Potential Maches",
+      title: <FormattedMessage id="fields.potentialMatches" />,
       dataIndex: "PrimaryName",
       render: (text, record, index) => {
         return integrationCommonFunctions.dnb_livingston_html(record);
@@ -118,7 +123,7 @@ const GetTable = props => {
       key: "PrimaryName"
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       key: "livingston_index",
       render: record => {
         let flag_data = _.size(props.flag_dict[record.custom_hash])
@@ -133,9 +138,16 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.custom_hash]
-                ? props.commentCount[record.custom_hash] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.custom_hash] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[record.custom_hash]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
               <br />
               {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
             </span>

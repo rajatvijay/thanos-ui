@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Divider, Tag, Tabs, Tooltip } from "antd";
 import _ from "lodash";
 import { event_status } from "../EventStatuses";
+import { FormattedMessage } from "react-intl";
 
 const TabPane = Tabs.TabPane;
 
@@ -25,7 +26,7 @@ const buildDetails = obj => {
   const Column = props => {
     return (
       <Col span={props.column ? props.column : 24} className="pd-left pd-right">
-        <span className="dt-value text-medium">{props.label}</span>
+        <span className="dt-value text-medium">{props.label}:</span>
         <span className="dt-value pd-left">
           {props.value ? props.value : "-"}
         </span>
@@ -68,7 +69,13 @@ const buildDetails = obj => {
           </span>
         );
       });
-      return <Column column={12} label="Date of Birth:" value={dates} />;
+      return (
+        <Column
+          column={12}
+          label={<FormattedMessage id="fields.dateOfBirth" />}
+          value={dates}
+        />
+      );
     } else {
       return <div />;
     }
@@ -79,7 +86,11 @@ const buildDetails = obj => {
       return item.ParameterIdentificationNumber === "SEX";
     });
     return sexitem ? (
-      <Column column={12} label="Sex:" value={sexitem.ParameterValue} />
+      <Column
+        column={12}
+        label={<FormattedMessage id="fields.sex" />}
+        value={sexitem.ParameterValue}
+      />
     ) : (
       <div />
     );
@@ -129,30 +140,37 @@ const buildDetails = obj => {
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
         <Tabs defaultActiveKey="1" tabPosition="top">
-          <TabPane tab="Entity details & Alias" key="1">
+          <TabPane
+            tab={<FormattedMessage id="fields.entityDetailsAndAlias" />}
+            key="1"
+          >
             <Row gutter={16} className="mr-bottom-lg">
               {getImg()}
               <Column
                 column={12}
-                label="Entity Name:"
+                label={<FormattedMessage id="fields.entityName" />}
                 value={obj.EntityName || "-"}
               />
               <Column
                 column={12}
-                label="Entity id:"
+                label={<FormattedMessage id="fields.entityId" />}
                 value={obj.AlertEntityID || "-"}
               />
-              <Column column={12} label="Risk id:" value={getRisk() || "-"} />
               <Column
                 column={12}
-                label="PEP Rating:"
+                label={<FormattedMessage id="fields.riskId" />}
+                value={getRisk() || "-"}
+              />
+              <Column
+                column={12}
+                label={<FormattedMessage id="fields.pepRating" />}
                 value={getPepRating() || "-"}
               />
               {getBirthDate()}
               {getSex()}
               <Column
                 column={12}
-                label="PEP Type:"
+                label={<FormattedMessage id="fields.pepType" />}
                 value={getPepType() || "-"}
               />
             </Row>
@@ -174,7 +192,7 @@ const buildDetails = obj => {
             </Row>
           </TabPane>
 
-          <TabPane tab="Addresses" key="2">
+          <TabPane tab={<FormattedMessage id="fields.addresses" />} key="2">
             {_.map(obj.Address, function(address, index) {
               let wholeAddress = //STREET ADDRESS
                 address.StreetAddressLine &&
@@ -203,7 +221,7 @@ const buildDetails = obj => {
           </TabPane>
 
           {obj.EntityTypeText === "Person" ? (
-            <TabPane tab="Position" key="3">
+            <TabPane tab={<FormattedMessage id="fields.position" />} key="3">
               {obj.Positions && obj.Positions.Position
                 ? _.map(obj.Positions.Position, function(position, index) {
                     return <RowItem key={`${index}`} text={position} />;
@@ -212,7 +230,7 @@ const buildDetails = obj => {
             </TabPane>
           ) : null}
 
-          <TabPane tab="Riskography" key="4">
+          <TabPane tab={<FormattedMessage id="fields.riskography" />} key="4">
             <Row gutter={16} className="mr-bottom-lg">
               {_.map(obj.NonspecificParameterDetail, function(item) {
                 if (item.ParameterIdentificationNumber === "RGP") {
@@ -232,7 +250,10 @@ const buildDetails = obj => {
           </TabPane>
 
           {obj.EntityTypeText === "Person" ? (
-            <TabPane tab="Relationship" key="6">
+            <TabPane
+              tab={<FormattedMessage id="fields.relationship" />}
+              key="6"
+            >
               {_.map(obj.Relationships, function(relationship, index) {
                 return (
                   <RowItem
@@ -241,22 +262,26 @@ const buildDetails = obj => {
                       <Row>
                         <Column
                           column={12}
-                          label="Name:"
+                          label={<FormattedMessage id="fields.name" />}
                           value={relationship.EntityName}
                         />
                         <Column
                           column={12}
-                          label="Relationship:"
+                          label={<FormattedMessage id="fields.relationship" />}
                           value={relationship.RelationshipType}
                         />
                         <Column
                           column={12}
-                          label="Relationship Direction:"
+                          label={
+                            <FormattedMessage id="fields.relationshipDirection" />
+                          }
                           value={relationship.RelationshipDirection}
                         />
                         <Column
                           column={12}
-                          label="Entity Sys ID:"
+                          label={
+                            <FormattedMessage id="fields.alertEntitySysId" />
+                          }
                           value={relationship.AlertEntitySystemID}
                         />
                       </Row>
@@ -267,23 +292,23 @@ const buildDetails = obj => {
             </TabPane>
           ) : null}
 
-          <TabPane tab="Source" key="7">
+          <TabPane tab={<FormattedMessage id="fields.source" />} key="7">
             {_.map(referenceBuilder(obj), function(refItem, index) {
               return (
                 <Row key={`${index}`} className="mr-bottom-lg">
                   <Column
                     column={12}
-                    label="SourceName:"
+                    label={<FormattedMessage id="fields.sourceName" />}
                     value={refItem.SourceName || "-"}
                   />
                   <Column
                     column={12}
-                    label="Headline:"
+                    label={<FormattedMessage id="fields.headline" />}
                     value={refItem.Headline || "-"}
                   />
                   <Column
                     column={12}
-                    label="Web page:"
+                    label={<FormattedMessage id="fields.webpage" />}
                     value={
                       (
                         <a
@@ -298,17 +323,17 @@ const buildDetails = obj => {
                   />
                   <Column
                     column={12}
-                    label="Source type:"
+                    label={<FormattedMessage id="fields.sourceType" />}
                     value={refItem.SourceTypeText || "-"}
                   />
                   <Column
                     column={12}
-                    label="Publisher Name:"
+                    label={<FormattedMessage id="fields.publisherName" />}
                     value={refItem.PublisherName || "-"}
                   />
                   <Column
                     column={12}
-                    label="Publication:"
+                    label={<FormattedMessage id="fields.publication" />}
                     value={refItem.PublicationSource || "-"}
                   />
                   <br />
@@ -321,17 +346,17 @@ const buildDetails = obj => {
               <Row className="mr-bottom-lg">
                 <Column
                   column={12}
-                  label="SourceName:"
+                  label={<FormattedMessage id="fields.sourceName" />}
                   value={obj.ReferenceDetail.SourceName || "-"}
                 />
                 <Column
                   column={12}
-                  label="Headline:"
+                  label={<FormattedMessage id="fields.headline" />}
                   value={obj.ReferenceDetail.Headline || "-"}
                 />
                 <Column
                   column={12}
-                  label="Web page:"
+                  label={<FormattedMessage id="fields.webpage" />}
                   value={
                     (
                       <a
@@ -346,17 +371,17 @@ const buildDetails = obj => {
                 />
                 <Column
                   column={12}
-                  label="Source type:"
+                  label={<FormattedMessage id="fields.sourceType" />}
                   value={obj.ReferenceDetail.SourceTypeText || "-"}
                 />
                 <Column
                   column={12}
-                  label="Publisher Name:"
+                  label={<FormattedMessage id="fields.publisherName" />}
                   value={obj.ReferenceDetail.PublisherName || "-"}
                 />
                 <Column
                   column={12}
-                  label="Publication:"
+                  label={<FormattedMessage id="fields.publication" />}
                   value={obj.ReferenceDetail.PublicationSource || "-"}
                 />
                 <br />
@@ -425,7 +450,7 @@ export const getEventItem = (refItem, hideHeader) => {
                     {item.SourceName ? (
                       <Block
                         column={4}
-                        label="Source Name:"
+                        label={<FormattedMessage id="fields.sourceName" />}
                         value={item.SourceName}
                       />
                     ) : null}
@@ -433,7 +458,7 @@ export const getEventItem = (refItem, hideHeader) => {
                     {item.SourceTypeText ? (
                       <Block
                         column={4}
-                        label="Source type:"
+                        label={<FormattedMessage id="fields.sourceType" />}
                         value={item.SourceTypeText || "-"}
                       />
                     ) : null}
@@ -441,7 +466,7 @@ export const getEventItem = (refItem, hideHeader) => {
                     {item.PublisherName ? (
                       <Block
                         column={4}
-                        label="Publisher Name:"
+                        label={<FormattedMessage id="fields.publisherName" />}
                         value={item.PublisherName || "-"}
                       />
                     ) : null}
@@ -449,7 +474,7 @@ export const getEventItem = (refItem, hideHeader) => {
                     {item.PublicationSource ? (
                       <Block
                         column={4}
-                        label="Publication:"
+                        label={<FormattedMessage id="fields.publication" />}
                         value={item.PublicationSource || "-"}
                       />
                     ) : null}
@@ -463,20 +488,20 @@ export const getEventItem = (refItem, hideHeader) => {
       <Row>
         <Block
           column={4}
-          label="Event Date:"
+          label={<FormattedMessage id="fields.eventDate" />}
           value={refItem.EventDate || "-"}
           className="mr-bottom-sm"
         />
         <Block
           column={4}
-          label="Event Type Text:"
+          label={<FormattedMessage id="fields.eventTypeText" />}
           value={refItem.EventTypeText || "-"}
           className="mr-bottom-sm"
         />
 
         <Block
           column={4}
-          label="Event Type Code:"
+          label={<FormattedMessage id="fields.eventTypeCode" />}
           value={getAbbr(refItem.EventTypeCode, refItem.EventSubTypeCode)}
           className="mr-bottom-sm"
         />
@@ -484,7 +509,7 @@ export const getEventItem = (refItem, hideHeader) => {
         {refItem.krypton_category ? (
           <Block
             column={4}
-            label="CAR Risk Code:"
+            label={<FormattedMessage id="fields.carRiskCode" />}
             value={
               <Tag className="alert-tag-item"> {refItem.krypton_category}</Tag>
             }
@@ -495,7 +520,7 @@ export const getEventItem = (refItem, hideHeader) => {
         {refItem.krypton_status ? (
           <Block
             column={4}
-            label="Status:"
+            label={<FormattedMessage id="commonTextInstances.status" />}
             value={
               refItem.krypton_status ? (
                 <Tag
@@ -519,14 +544,14 @@ export const getEventItem = (refItem, hideHeader) => {
 
         <Block
           column={4}
-          label="Event SubType Text:"
+          label={<FormattedMessage id="fields.eventSubtypeText" />}
           value={refItem.EventSubTypeText || "-"}
           className="mr-bottom-sm"
         />
 
         <Block
           column={4}
-          label="Postal Code:"
+          label={<FormattedMessage id="fields.postalCode" />}
           value={refItem.PostalCode || "-"}
           className="mr-bottom-sm"
         />
@@ -574,7 +599,9 @@ export class EventDetailComp extends Component {
       <div>
         {_.size(obj.custom_counts) ? (
           <div className="mr-bottom-lg mr-top-lg">
-            <span className="text-metal pd-right-sm">Filter by: </span>
+            <span className="text-metal pd-right-sm">
+              <FormattedMessage id="workflowFiltersTranslated.filterBy" />:{" "}
+            </span>
 
             {_.map(obj.custom_counts, function(v, k) {
               return (

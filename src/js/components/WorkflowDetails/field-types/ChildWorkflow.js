@@ -20,7 +20,7 @@ import {
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
-import { injectIntl } from "react-intl";
+import { injectIntl, FormattedMessage } from "react-intl";
 import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
@@ -386,7 +386,11 @@ class ChildWorkflowField2 extends Component {
       >
         <span className="pd-ard-sm text-secondary text-anchor">
           <i className="material-icons">add</i>{" "}
-          {this.state.fetching ? "loadin..." : null}
+          {this.state.fetching
+            ? this.props.intl
+                .formatMessage({ id: "commonTextInstances.loading" })
+                .toUpperCase() + "..."
+            : null}
         </span>
       </Dropdown>
     );
@@ -400,7 +404,9 @@ class ChildWorkflowField2 extends Component {
 
     return (
       <Select
-        placeholder="Adjudication Code"
+        placeholder={this.props.intl.formatMessage({
+          id: "workflowsInstances.adjudicationCode"
+        })}
         onChange={that.onFilterTagChange.bind(that, "flag")}
         style={{ width: "150px" }}
         size="small"
@@ -963,7 +969,11 @@ class ChildWorkflowField2 extends Component {
   //CREATE. KIND FILTER
   createKindFilter = () => {
     const { props } = this;
-    const { workflowKind } = props;
+    const {
+      field,
+      workflowKind,
+      intl: { formatMessage }
+    } = props;
     const that = this;
     let filteredChildWorkflow = that.state.filteredChildWorkflow;
     const kindList = getChildKinds(
@@ -984,7 +994,7 @@ class ChildWorkflowField2 extends Component {
       <div>
         {kindList.length > 0 ? (
           <VTag
-            label={`All (${allCount})`}
+            label={`${formatMessage({ id: "commonTextInstances.all" })} (${allCount})`}
             key={"all"}
             selected={selected === "" ? true : false}
             tag={"kind"}
@@ -1104,7 +1114,7 @@ class ChildWorkflowField2 extends Component {
     });
 
     if (!commonBulkActions.length) {
-      return "No Bulk Action Available";
+      return <FormattedMessage id="workflowsInstances.noBulkActions" />;
     } else {
       return (
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -1146,9 +1156,13 @@ class ChildWorkflowField2 extends Component {
     }
 
     if (this.state.sortOrderAsc) {
-      return `Low to high ${this.getSortingLabel()}`;
+      return `${this.props.intl.formatMessage({
+        id: "tooltips.lowToHigh"
+      })} ${this.getSortingLabel()}`;
     } else {
-      return `High to low ${this.getSortingLabel()}`;
+      return `${this.props.intl.formatMessage({
+        id: "tooltips.highToLow"
+      })} ${this.getSortingLabel()}`;
     }
   }
 
@@ -1253,7 +1267,7 @@ class ChildWorkflowField2 extends Component {
                     {this.state.childWorkflow
                       ? this.state.childWorkflow.length
                       : 0}{" "}
-                    results{" "}
+                    <FormattedMessage id="commonTextInstances.results" />{" "}
                   </span>
                 ) : null}
 
@@ -1263,7 +1277,7 @@ class ChildWorkflowField2 extends Component {
                       className="mr-left-lg text-lighter text-anchor"
                       onClick={this.onToggleFilters}
                     >
-                      Filters{" "}
+                      <FormattedMessage id="commonTextInstances.filters" />{" "}
                       <i className=" t-14 text-middle material-icons">
                         keyboard_arrow_down
                       </i>
@@ -1298,7 +1312,7 @@ class ChildWorkflowField2 extends Component {
               <Col span={8} className="text-right small">
                 <span
                   onClick={this.getChildWorkflow}
-                  title="Reload"
+                  title={"Reload"}
                   className="child-workflow-dropdown pd-ard-sm mr-right-sm text-secondary text-anchor"
                 >
                   <i className="material-icons">refresh</i>
@@ -1337,13 +1351,17 @@ class ChildWorkflowField2 extends Component {
 
                       {/*Concerns ala CATEGORY FILTER*/}
                       <FilterComponent
-                        label="Concerns"
+                        label={
+                          <FormattedMessage id="workflowFiltersTranslated.concerns" />
+                        }
                         filter={this.createFilterTag()}
                       />
 
                       {/*KIND FILTER*/}
                       <FilterComponent
-                        label="Type"
+                        label={
+                          <FormattedMessage id="workflowFiltersTranslated.type" />
+                        }
                         filter={this.createKindFilter()}
                       />
 
@@ -1357,14 +1375,18 @@ class ChildWorkflowField2 extends Component {
 
                       {/*STATUS FILTER*/}
                       <FilterComponent
-                        label="Status"
+                        label={
+                          <FormattedMessage id="commonTextInstances.status" />
+                        }
                         filter={this.createStatusFilterTag()}
                       />
 
                       {/*EXCLUDED FILTERS*/}
                       {this.state.excluded_filters ? (
                         <FilterComponent
-                          label="Excluded"
+                          label={
+                            <FormattedMessage id="workflowFiltersTranslated.excluded" />
+                          }
                           filter={this.excludedFilter()}
                         />
                       ) : null}
@@ -1372,7 +1394,9 @@ class ChildWorkflowField2 extends Component {
                       {/*SELECTED FILTERS */}
                       {_.size(this.state.selected_filters) ? (
                         <FilterComponent
-                          label="Filtered"
+                          label={
+                            <FormattedMessage id="workflowFiltersTranslated.filtered" />
+                          }
                           filter={this.selectedFilter()}
                         />
                       ) : null}
@@ -1410,7 +1434,9 @@ class ChildWorkflowField2 extends Component {
                   handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
                 />
               ) : (
-                <div>No results found</div>
+                <div>
+                  <FormattedMessage id="commonTextInstances.noResults" />
+                </div>
               )}
 
               {filteredChildWorkflow && this.state.childCount ? (

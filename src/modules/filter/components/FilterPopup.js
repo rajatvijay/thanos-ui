@@ -6,11 +6,36 @@ import { css } from "emotion";
 import { FormattedMessage, injectIntl } from "react-intl";
 
 const OPERATORS_TYPES = [
-  { label: "Equal", value: "eq" },
-  { label: "Not equal", value: "not_eq" },
-  { label: "Has value", value: "is_set" },
-  { label: "Contains", value: "contains" },
-  { label: "Does not contain", value: "not_contains" }
+  {
+    label: (
+      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.eq" />
+    ),
+    value: "eq"
+  },
+  {
+    label: (
+      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_eq" />
+    ),
+    value: "not_eq"
+  },
+  {
+    label: (
+      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.is_set" />
+    ),
+    value: "is_set"
+  },
+  {
+    label: (
+      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.contains" />
+    ),
+    value: "contains"
+  },
+  {
+    label: (
+      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_containsÎ" />
+    ),
+    value: "not_contains"
+  }
 ];
 
 class FilterPopup extends Component {

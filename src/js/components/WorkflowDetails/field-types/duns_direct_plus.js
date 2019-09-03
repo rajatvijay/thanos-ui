@@ -5,6 +5,7 @@ import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
 import NumberFormat from "react-number-format";
 import { supportedFieldFormats } from "../../../../config";
+import { FormattedMessage } from "react-intl";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -137,13 +138,13 @@ const GetTable = props => {
       )
     },
     {
-      title: "Organization Name",
+      title: <FormattedMessage id="fields.organizationName" />,
       dataIndex: "organization[primaryName]",
       key: "organization[primaryName]"
     },
 
     {
-      title: "Tradestyle(s)",
+      title: <FormattedMessage id="fields.tradestyles" />,
       dataIndex: "organization[tradeStyleNames]",
       render: (text, data, index) => {
         if (_.size(data.tradeStyleNames)) {
@@ -157,14 +158,14 @@ const GetTable = props => {
     },
 
     {
-      title: "Location Type",
+      title: <FormattedMessage id="fields.locationType" />,
       dataIndex:
         "organization[corporateLinkage][familytreeRolesPlayed][0][description]",
       key:
         "organization[corporateLinkage][familytreeRolesPlayed][0][description]"
     },
     {
-      title: "Address",
+      title: <FormattedMessage id="fields.address" />,
       dataIndex: "organization[primaryAddress][addressCountry]['name']",
       render: (text, data, index) => {
         if (_.size(data.organization.primaryAddress)) {
@@ -186,13 +187,13 @@ const GetTable = props => {
       key: "organization[primaryAddress][addressCountry]['name']"
     },
     {
-      title: "Status",
+      title: <FormattedMessage id="commonTextInstances.status" />,
       dataIndex:
         "organization[dunsControlStatus][operatingStatus][description]",
       key: "organization[dunsControlStatus][operatingStatus][description]"
     },
     {
-      title: "Action",
+      title: <FormattedMessage id="fields.action" />,
       key: "index",
       render: record => (
         <span>
@@ -200,7 +201,7 @@ const GetTable = props => {
             className="text-secondary text-anchor"
             onClick={() => props.selectItem(record)}
           >
-            Select
+            <FormattedMessage id="commonTextInstances.select" />
           </span>
         </span>
       )

@@ -4,6 +4,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
 
 const {
   getIntegrationSearchButton,
@@ -99,7 +100,7 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "Search results",
+      title: <FormattedMessage id="commonTextInstances.searchResults" />,
       dataIndex: "result",
       render: (text, record, index) => {
         return integrationCommonFunctions.serp_search_html(record);
@@ -107,7 +108,7 @@ const GetTable = props => {
       key: "title"
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       width: 140,
       key: "google_index",
       render: record => {
@@ -123,9 +124,16 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.custom_hash]
-                ? props.commentCount[record.custom_hash] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.custom_hash] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[record.custom_hash]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}

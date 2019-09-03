@@ -3,9 +3,9 @@ import Godaam from "./storage";
 
 export const goToPrevStep = () => {
   const customHistory = JSON.parse(Godaam.customHistory);
-  const histObj = customHistory.pop();
+  const histObj = customHistory ? customHistory.pop() : null;
 
-  const url = `${histObj.pathname}${histObj.search}`;
+  const url = histObj ? `${histObj.pathname}${histObj.search}` : "/";
 
   history.push(url);
 };

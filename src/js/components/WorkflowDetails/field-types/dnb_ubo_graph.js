@@ -4,6 +4,7 @@ import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
 import { Icon } from "antd";
 import $ from "jquery";
+import { FormattedMessage } from "react-intl";
 
 window.$ = window.jquery = $;
 
@@ -92,7 +93,7 @@ class DnbUBOGraph extends Component {
     } else {
       return (
         <div className="pd-ard t-16 mr-bottom-lg">
-          No matching results
+          <FormattedMessage id="commonTextInstances.noMatchFound" />
           <br />
           <br />
         </div>

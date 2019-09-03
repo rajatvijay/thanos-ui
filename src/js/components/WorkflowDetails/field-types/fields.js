@@ -272,7 +272,7 @@ class Email2 extends React.Component {
 
     if (this.state.isValidEamil === false) {
       return {
-        help: "Invalid email",
+        help: <FormattedMessage id="errorMessageInstances.invalidEmail" />,
         validateStatus: "error"
       };
     } else {
@@ -307,7 +307,6 @@ class Email2 extends React.Component {
               : props.field.definition.defaultValue
           }
           autoComplete="new-password"
-          message="The input is not valid email"
           onChange={e => this.onChangeValidate(e)}
           onBlur={e => this.onChangeValidate(e)}
           title={"E-Mail"}
@@ -344,7 +343,7 @@ class URL2 extends React.Component {
 
     if (this.state.isValidUrl === false) {
       return {
-        help: "Invalid url",
+        help: <FormattedMessage id="errorMessageInstances.invalidURL" />,
         validateStatus: "error"
       };
     } else {
@@ -371,7 +370,6 @@ class URL2 extends React.Component {
             prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
             type="url"
             autoComplete="new-password"
-            message="The input is not valid email"
             onChange={e => this.onChangeValidate(e)}
             defaultValue={
               props.field.answers[0]
@@ -676,7 +674,7 @@ class FileUpload extends Component {
                   </i>
                 </p>
                 <p className="ant-upload-text">
-                  Click or drag file to this area to upload
+                  <FormattedMessage id="fields.dragFile" />
                 </p>
               </div>
             ) : (
@@ -694,13 +692,13 @@ class FileUpload extends Component {
 
         {this.state.encrypted ? (
           <div className="masked-input mr-bottom">
-            {"Masked"}
+            <FormattedMessage id="fields.masked" />
             {this.props.decryptURL ? (
               <span
                 className="float-right text-anchor"
                 onClick={this.showDecryptURL}
               >
-                Show
+                <FormattedMessage id="fields.show" />
               </span>
             ) : null}
           </div>
@@ -805,7 +803,7 @@ class AttachmentDownload extends Component {
               rel="noopener noreferrer"
               className="ant-btn-primary"
             >
-              Download file
+              <FormattedMessage id="fields.downloadFile" />
             </Button>
           ) : (
             <Button
@@ -814,7 +812,7 @@ class AttachmentDownload extends Component {
               loading={this.state.fetching}
               className="ant-btn-primary"
             >
-              Download file
+              <FormattedMessage id="fields.downloadFile" />
             </Button>
           )}
         </FormItem>
