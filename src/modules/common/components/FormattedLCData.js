@@ -34,7 +34,7 @@ const LCIcon = React.memo(({ value, className }) => (
     target="_blank"
     rel="noopener noreferrer"
   >
-    {value}
+    <i className="material-icons">picture_as_pdf</i>
   </a>
 ));
 
