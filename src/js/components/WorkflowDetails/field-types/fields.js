@@ -310,6 +310,7 @@ class Email2 extends React.Component {
           message="The input is not valid email"
           onChange={e => this.onChangeValidate(e)}
           onBlur={e => this.onChangeValidate(e)}
+          title={"E-Mail"}
           {...feedValue(props)}
         />
       </FormItem>
