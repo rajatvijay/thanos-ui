@@ -270,8 +270,13 @@ const GetTable = props => {
                 <FormattedMessage id="commonTextInstances.addComments" />
               )}
             </span>
-            <br />
-            {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
+
+            {flag_name ? (
+              <div className="mr-top-sm">
+                {" "}
+                <Tag style={css}>{flag_name}</Tag>
+              </div>
+            ) : null}
           </span>
         );
       }

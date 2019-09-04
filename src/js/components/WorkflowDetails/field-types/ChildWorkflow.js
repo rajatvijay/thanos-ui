@@ -25,6 +25,7 @@ import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
 import { Pagination } from "antd";
+import Godaam from "../../../utils/storage";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -142,6 +143,8 @@ class ChildWorkflowField2 extends Component {
     } else {
       this.prepFetchChildData();
     }
+
+    this.filterByUserGroup();
   };
 
   componentDidUpdate = prevProps => {
@@ -179,6 +182,24 @@ class ChildWorkflowField2 extends Component {
     } catch (e) {
       return null;
     }
+  };
+
+  //FITLER BY USER GROUP
+  filterByUserGroup = () => {
+    const user = JSON.parse(Godaam.user); //GET USER DATA FROM LOCAL STORAGE
+    const userGroups = user.groups; //
+    const extra = _.get(this.props, "field.definition.extra", {}); //GET EXTRA FILTERS FROM DEF
+    const userGroupFilters = extra.filter_by_user_groups || null; //FIND USER GROUP FILTER
+    const filter = !userGroupFilters ? extra.filter : null;
+    const currentGroup =
+      userGroupFilters &&
+      _.find(userGroups, group => userGroupFilters[group.name]); //MATCH CURRENT GROUP BETWEEN USER DATA AND EXTRA CONFIG
+    const currentGroupFilter = _.find(
+      userGroupFilters,
+      (group, key) => currentGroup.name === key
+    ); //FIND FILTER FROM CURRENT GROUP
+    const excluded_filters = _.get(currentGroupFilter, "exclude_filters", []);
+    this.setState({ userGroupFilter: currentGroupFilter, excluded_filters });
   };
 
   objToParam = query => {
@@ -773,6 +794,7 @@ class ChildWorkflowField2 extends Component {
       });
       return true;
     }
+
     let filtered_workflow = [];
     _.map(that.state.filteredChildWorkflow, function(cw) {
       let found = cw;
@@ -798,7 +820,8 @@ class ChildWorkflowField2 extends Component {
         if (key === "flag" && fval) {
           if (
             _.size(cw.selected_flag[cw.id]) &&
-            cw.selected_flag[cw.id]["flag_detail"]["label"] === fval
+            (cw.selected_flag[cw.id]["flag_detail"]["label"] === fval || //It could either match to label or tag
+              cw.selected_flag[cw.id]["flag_detail"]["tag"] === fval)
           ) {
             found = null;
             return true;
@@ -1211,6 +1234,9 @@ class ChildWorkflowField2 extends Component {
       );
     };
 
+    const fieldExtra =
+      this.state.userGroupFilter || props.field.definition.extra;
+
     return (
       <FormItem
         label={""}
@@ -1244,11 +1270,11 @@ class ChildWorkflowField2 extends Component {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  paddingLeft: "30px"
+                  paddingLeft: "15px"
                 }}
               >
                 {_.size(this.state.filteredChildWorkflow) ? (
-                  <span style={{ marginRight: "10.5px" }}>
+                  <span style={{ marginRight: "15px" }}>
                     <Checkbox
                       className={css`
                         .ant-checkbox-inner {
@@ -1426,7 +1452,7 @@ class ChildWorkflowField2 extends Component {
                   kind={workflowKind}
                   sortingEnabled={false}
                   workflowKind={workflowKind}
-                  fieldExtra={props.field.definition.extra || null}
+                  fieldExtra={fieldExtra}
                   addComment={props.addComment}
                   showCommentIcon={true}
                   bulkActionWorkflowChecked={
