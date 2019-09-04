@@ -194,10 +194,9 @@ class ChildWorkflowField2 extends Component {
     const currentGroup =
       userGroupFilters &&
       _.find(userGroups, group => userGroupFilters[group.name]); //MATCH CURRENT GROUP BETWEEN USER DATA AND EXTRA CONFIG
-    const currentGroupFilter = _.find(
-      userGroupFilters,
-      (group, key) => currentGroup.name === key
-    ); //FIND FILTER FROM CURRENT GROUP
+    const currentGroupFilter =
+      currentGroup &&
+      _.find(userGroupFilters, (group, key) => currentGroup.name === key); //FIND FILTER FROM CURRENT GROUP
     const excluded_filters = _.get(currentGroupFilter, "exclude_filters", []);
     this.setState({ userGroupFilter: currentGroupFilter, excluded_filters });
   };
