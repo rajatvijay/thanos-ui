@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tooltip, Collapse } from "antd";
+import { Tooltip, Collapse, Icon } from "antd";
 import { css } from "emotion";
 import { get as lodashGet } from "lodash";
 import { StyledCollapseItem, StyledCollapse } from "../styledComponents";
@@ -133,6 +133,24 @@ class StepsSideBar extends Component {
     const isCompleted = !!step.completed_by;
     const isSelected = this.isStepSelected(step);
     const isOverdue = this.isStepOverdue(step);
+    const isLocked = step.is_locked;
+
+    if (isLocked) {
+      const selectedStyle = isSelected
+        ? { color: "#ffffff" }
+        : { color: "#7f7f7f" };
+
+      return (
+        <i
+          data-testid="step-locked-icon"
+          className="material-icons t-14 anticon pd-right-sm anticon-check-circle"
+          fill="#FFF"
+          style={selectedStyle}
+        >
+          lock
+        </i>
+      );
+    }
 
     if (isCompleted) {
       return (

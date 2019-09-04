@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import {
   Icon,
   Menu,
@@ -8,7 +8,8 @@ import {
   Row,
   Col,
   Tag,
-  Spin
+  Spin,
+  Alert
 } from "antd";
 import { connect } from "react-redux";
 import StepBodyForm from "./step-body-form";
@@ -20,6 +21,7 @@ import ProfileStepBody from "./ProfileStepBody";
 import StepAssignmentUsers from "./StepAssignmentUsers";
 import PDFChecklistModal from "../Workflow/PDFChecklistModal";
 import { get as lodashGet } from "lodash";
+import styled from "@emotion/styled";
 
 class StepBody extends Component {
   constructor(props) {
@@ -167,6 +169,14 @@ class StepBody extends Component {
     });
   };
 
+  get dependentSteps() {
+    return lodashGet(
+      this.props.currentStepFields[this.props.stepId],
+      "currentStepFields.definition.dependent_steps",
+      []
+    );
+  }
+
   render = () => {
     const {
       displayProfile,
@@ -193,24 +203,6 @@ class StepBody extends Component {
         .currentStepFields;
     } else {
       stepData = {};
-    }
-
-    let locked_tag = null;
-
-    if (stepData && stepData.is_locked) {
-      const dependent_steps = stepData.definition.dependent_steps;
-      const dependent_step_name = _.map(dependent_steps, function(ds) {
-        return ds["label"];
-      });
-      locked_tag = (
-        <div>
-          <div data-show="true" className="ant-tag">
-            <FormattedMessage id="stepBodyFormInstances.toInitiateThis" />{" "}
-            :&nbsp;
-            <b>{dependent_step_name.join(", ")}</b>
-          </div>
-        </div>
-      );
     }
 
     let step_comment_btn = null;
@@ -315,7 +307,6 @@ class StepBody extends Component {
             }}
           />
         )}
-
         <Row style={{ padding: "29px 44px 27px 37px" }}>
           <Col span={16}>
             <span className="t-18 text-black">
@@ -326,14 +317,15 @@ class StepBody extends Component {
                 : stepData.name}
             </span>
           </Col>
-          <Col span={8}>
-            {locked_tag}
-            {locked_tag ? <br /> : null}
-            {!loading ? step_comment_btn : null}
-          </Col>
+          <Col span={8}>{!loading ? step_comment_btn : null}</Col>
         </Row>
 
         <Divider className="no-margin" />
+        <LockedAlert
+          isLocked={stepData.is_locked}
+          dependentSteps={this.dependentSteps}
+          workflowId={this.props.workflowId}
+        />
 
         <div>
           {displayProfile ? (
@@ -424,3 +416,88 @@ export default connect(
   mapStateToProps,
   stepBodyActions
 )(injectIntl(StepBody));
+
+const LockedAlertComponent = React.memo(
+  ({ dependentSteps, isLocked, stepGroups, workflowId }) => {
+    if (!isLocked || !dependentSteps || dependentSteps.length === 0)
+      return null;
+    const [links, setLinks] = useState({});
+
+    useEffect(() => {
+      // Filter out the steps that are dependent and not completed;
+      // Create link to those steps.
+      let links = {};
+      const dependentStepsDefinitionIds = dependentSteps.map(
+        step => step.value
+      );
+
+      // Let's go through each step group looking for incomplete steps
+      stepGroups.map(stepGroup => {
+        // Now lets find the incomplete dependent steps that exist in this step group
+        stepGroup.steps.map(step => {
+          const key = step.definition.toString();
+          if (!step.completed_at && dependentStepsDefinitionIds.includes(key)) {
+            // We gave one of the incomplete dependent steps.
+            // Create a link to that step.
+            links[key] = `/workflows/instances/${workflowId}?group=${
+              stepGroup.id
+            }&step=${step.id}`;
+          }
+        });
+      });
+
+      // Saving the links in state.
+      setLinks(links);
+    }, dependentSteps); // Will not update until dependentSteps' reference changes
+
+    const stepLabels = dependentSteps.map(step =>
+      links[step.value] ? (
+        <li key={step.label}>
+          <StyledAnchorTag href={links[step.value]} rel="noopener noreferrer">
+            {step.label}
+          </StyledAnchorTag>
+        </li>
+      ) : (
+        <li key={step.label}>{step.label}</li>
+      )
+    );
+
+    return (
+      <Row style={{ padding: "29px 37px 12px 37px" }}>
+        <Col span={24}>
+          <Alert
+            message={
+              <FormattedMessage id="stepBodyFormInstances.stepIsLocked" />
+            }
+            description={
+              <>
+                <FormattedMessage id="stepBodyFormInstances.toInitiatePleaseComplete" />
+                :
+                <br />
+                <ul>{stepLabels}</ul>
+              </>
+            }
+            type="error"
+            showIcon
+          />
+        </Col>
+      </Row>
+    );
+  }
+);
+
+const lockedAlertMapStateToProps = (state, ownProps) => {
+  return {
+    stepGroups: lodashGet(
+      state.workflowDetails,
+      `${ownProps.workflowId}.workflowDetails.stepGroups.results`,
+      []
+    )
+  };
+};
+
+const LockedAlert = connect(lockedAlertMapStateToProps)(LockedAlertComponent);
+
+const StyledAnchorTag = styled.a`
+  color: #000;
+`;

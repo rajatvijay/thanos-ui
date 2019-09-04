@@ -186,8 +186,8 @@ export default {
       reputationRisk: "Reputation Risk",
       printedOn: "Printed On",
       step: "Step",
-      toInitiateThis:
-        "To initiate this step, please complete the following steps first"
+      stepIsLocked: "This step is locked",
+      toInitiatePleaseComplete: "To unlock, please complete the following steps"
     },
     errorMessageInstances: {
       magicLinkExpired: "We’re sorry, this link has expired.",
@@ -583,8 +583,9 @@ export default {
       reputationRisk: "Riesgo de reputación",
       printedOn: "Impreso en",
       step: "Paso",
-      toInitiateThis:
-        "Para iniciar este paso, complete primero los siguientes pasos"
+      stepIsLocked: "Este paso está bloqueado",
+      toInitiatePleaseComplete:
+        "Para desbloquear, complete los siguientes pasos"
     },
     errorMessageInstances: {
       magicLinkExpired: "Lo sentimos, este enlace ha caducado",
@@ -996,8 +997,9 @@ export default {
       reputationRisk: "Risque de réputation",
       printedOn: "Imprimé sur",
       step: "Étape",
-      toInitiateThis:
-        "Pour lancer cette étape, veuillez d'abord compléter les étapes suivantes"
+      stepIsLocked: "Cette étape est verrouillée",
+      toInitiatePleaseComplete:
+        "Pour déverrouiller, s'il vous plaît suivez les étapes suivantes"
     },
     errorMessageInstances: {
       magicLinkExpired: "Nous sommes désolés, ce lien a expiré.",
