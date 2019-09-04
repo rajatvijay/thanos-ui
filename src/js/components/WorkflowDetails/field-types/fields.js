@@ -378,6 +378,7 @@ class URL2 extends React.Component {
                 : props.field.definition.defaultValue
             }
             style={isDisabled(props) ? nonDisableStyle : disableStyle}
+            target="_blank"
           >
             <Input
               disabled={isDisabled(props)}
