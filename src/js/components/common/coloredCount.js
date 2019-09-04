@@ -16,6 +16,7 @@ const ColoredCount = ({ text, color, ...restProps }) => {
         border-radius: 50%;
         text-align: center;
         line-height: 20px;
+        margin-right: 5px;
       `}
       data-testid="colored-count"
     >

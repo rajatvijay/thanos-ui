@@ -3,11 +3,11 @@ import Sidebar from "../components/Sidebar";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { workflowDetailsHeader } from "../../../../js/reducers/workflow_details_header";
-import { config } from "../../../../js/reducers/config";
+import { permissions } from "../../../common/permissions/reducer";
 import { renderWithReactIntl } from "../../../common/testUtils";
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent } from "@testing-library/react";
-import Permissions from "../../../common/permissions/constants";
+import Permissions from "../../../common/permissions/permissionsList";
 
 // Fake Data
 const fakeWorkflowId = 3120;
@@ -15,7 +15,7 @@ const fakeWorkflowName = "Current Workflow";
 
 // Tests start here
 test("should render current workflow name", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -23,7 +23,7 @@ test("should render current workflow name", () => {
         workflow_family: []
       }
     },
-    config: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -34,7 +34,7 @@ test("should render current workflow name", () => {
 });
 
 test("should render parent workflow name and link when there is workflow family", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const fakeParentWorkflow = { name: "Parent Workflow", id: 2120 };
   const fakeCurrentWorkflow = { name: fakeWorkflowName, id: fakeWorkflowId };
   const store = createStore(rootReducer, {
@@ -44,7 +44,7 @@ test("should render parent workflow name and link when there is workflow family"
         workflow_family: [fakeParentWorkflow, fakeCurrentWorkflow]
       }
     },
-    config: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -62,7 +62,7 @@ test("should render parent workflow name and link when there is workflow family"
 });
 
 test("should render options menu", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -70,7 +70,7 @@ test("should render options menu", () => {
         workflow_family: []
       }
     },
-    config: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -84,7 +84,7 @@ test("should render options menu", () => {
 });
 
 test("should render options menu with view comments and, print without any permissions", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -92,7 +92,7 @@ test("should render options menu with view comments and, print without any permi
         workflow_family: []
       }
     },
-    config: {}
+    permissions: {}
   });
   const { queryByText, queryAllByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -110,7 +110,7 @@ test("should render options menu with view comments and, print without any permi
 });
 
 test("should render options menu with activity log option when user has permission", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -118,7 +118,7 @@ test("should render options menu with activity log option when user has permissi
         workflow_family: []
       }
     },
-    config: {
+    permissions: {
       permissions: [Permissions.CAN_VIEW_ACTIVITY_LOG]
     }
   });
@@ -137,7 +137,7 @@ test("should render options menu with activity log option when user has permissi
 });
 
 test("should render options menu with archive option when user has permission", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -145,8 +145,8 @@ test("should render options menu with archive option when user has permission", 
         workflow_family: []
       }
     },
-    config: {
-      permissions: [Permissions.CAN_ARCHIVE_WORKFLOW]
+    permissions: {
+      permissions: [Permissions.CAN_ARCHIVE_WORKFLOWS]
     }
   });
   const { queryByText } = renderWithReactIntl(
@@ -164,7 +164,7 @@ test("should render options menu with archive option when user has permission", 
 });
 
 test("should not render archive workflow option when user dont have permission", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -172,7 +172,7 @@ test("should not render archive workflow option when user dont have permission",
         workflow_family: []
       }
     },
-    config: {
+    permissions: {
       permissions: []
     }
   });
@@ -191,7 +191,7 @@ test("should not render archive workflow option when user dont have permission",
 });
 
 test("should not render view activiyt log option when user dont have permission", () => {
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -199,7 +199,7 @@ test("should not render view activiyt log option when user dont have permission"
         workflow_family: []
       }
     },
-    config: {
+    permissions: {
       permissions: []
     }
   });
@@ -219,7 +219,7 @@ test("should not render view activiyt log option when user dont have permission"
 
 test("should render status of the workflow when user has permission", () => {
   const fakeWorkflowStatus = "Workflow Status";
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -228,7 +228,7 @@ test("should render status of the workflow when user has permission", () => {
         status: { label: fakeWorkflowStatus }
       }
     },
-    config: {
+    permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
     }
   });
@@ -245,7 +245,7 @@ test("should render status of the workflow when user has permission", () => {
 
 test("should render status of the workflow when user dont has permission", () => {
   const fakeWorkflowStatus = "Workflow Status";
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -254,7 +254,7 @@ test("should render status of the workflow when user dont has permission", () =>
         status: { label: fakeWorkflowStatus }
       }
     },
-    config: {
+    permissions: {
       permissions: []
     }
   });
@@ -276,7 +276,7 @@ test("should render exactly 3 lc data when user has permission", () => {
     { label: "LC 3 label", value: "LC 3 value", display_type: "normal" },
     { label: "LC 4 label", value: "LC 4 value", display_type: "normal" }
   ];
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -285,7 +285,7 @@ test("should render exactly 3 lc data when user has permission", () => {
         lc_data: fakeLCData
       }
     },
-    config: {
+    permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
     }
   });
@@ -310,7 +310,7 @@ test("should not render any lc data when user dont has permission", () => {
     { label: "LC 3 label", value: "LC 3 value", display_type: "normal" },
     { label: "LC 4 label", value: "LC 4 value", display_type: "normal" }
   ];
-  const rootReducer = combineReducers({ workflowDetailsHeader, config });
+  const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
@@ -319,7 +319,7 @@ test("should not render any lc data when user dont has permission", () => {
         lc_data: fakeLCData
       }
     },
-    config: {
+    permissions: {
       permissions: []
     }
   });
@@ -346,7 +346,7 @@ test("should not render any LC data in modal, even though the user has permissio
   ];
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    config
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -356,7 +356,7 @@ test("should not render any LC data in modal, even though the user has permissio
         lc_data: fakeLCData
       }
     },
-    config: {
+    permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
     }
   });

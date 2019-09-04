@@ -9,7 +9,7 @@ import {
   workflowStepActions
 } from "../../../../js/actions";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
-import Permissions from "../../../common/permissions/constants";
+import Permissions from "../../../common/permissions/permissionsList";
 import { Link } from "react-router-dom";
 import {
   StyledSidebarHeader,
@@ -353,7 +353,7 @@ class Sidebar extends Component {
         </span>
       </Menu.Item>
 
-      <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOW}>
+      <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOWS}>
         <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
           <span>
             <i className="material-icons t-18 text-middle pd-right-sm">

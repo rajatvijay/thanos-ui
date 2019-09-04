@@ -2,7 +2,7 @@ import {
   checkPermissionOverlap,
   PERMISSION_OVERLAP_METHODS
 } from "../../modules/common/permissions/utils";
-import Permissions from "../../modules/common/permissions/constants";
+import Permissions from "../../modules/common/permissions/permissionsList";
 
 /**
  * The sole purpose of this file is to write the cross-cutting utilities

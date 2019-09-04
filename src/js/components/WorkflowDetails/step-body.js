@@ -366,7 +366,7 @@ class StepBody extends Component {
                 version={this.props.stepVersionFields}
                 showVersion={this.state.showVersion}
                 versionToggle={this.versionToggle}
-                permission={this.props.config.permissions}
+                permission={this.props.permissions.permissions}
                 isSubmitting={
                   this.props.currentStepFields[this.props.stepId] &&
                   this.props.currentStepFields[this.props.stepId].isSubmitting
@@ -399,6 +399,7 @@ function mapStateToProps(state) {
     config,
     workflowDetailsHeader,
     stepUsers,
+    permissions,
     extraFilters
   } = state;
   return {
@@ -408,6 +409,7 @@ function mapStateToProps(state) {
     config,
     workflowDetailsHeader,
     stepUsers,
+    permissions,
     extraFilters
   };
 }

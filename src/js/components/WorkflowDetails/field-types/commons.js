@@ -7,6 +7,8 @@ import Anchor from "../../common/Anchor";
 import IntlTooltip from "../../common/IntlTooltip";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
 import FieldAlerts from "./FieldAlerts";
+import { checkPermission } from "../../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../../modules/common/permissions/permissionsList";
 import { isAnswered } from "../../../../modules/fields/utils";
 import { FormattedMessage } from "react-intl";
 
@@ -432,9 +434,18 @@ function isDisabled(props) {
     props.completed ||
     props.is_locked ||
     props.field.definition.disabled ||
-    !_.includes(props.permission, "Can add response") ||
-    !_.includes(props.permission, "Can change response") ||
-    !_.includes(props.permission, "Can delete response")
+    !checkPermission({
+      permissionsAllowed: props.permission,
+      permissionName: Permissions.CAN_ADD_RESPONSE
+    }) ||
+    !checkPermission({
+      permissionsAllowed: props.permission,
+      permissionName: Permissions.CAN_CHANGE_RESPONSE
+    }) ||
+    !checkPermission({
+      permissionsAllowed: props.permission,
+      permissionName: Permissions.CAN_DELETE_RESPONSE
+    })
       ? true
       : false;
 

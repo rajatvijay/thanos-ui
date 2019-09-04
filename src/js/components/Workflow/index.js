@@ -16,7 +16,7 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../../modules/sidebar/components/Sidebar";
 import Filter from "../../../modules/filter/components/Filter";
 import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
-import Permissions from "../../../modules/common/permissions/constants";
+import Permissions from "../../../modules/common/permissions/permissionsList";
 
 const { Content } = Layout;
 
@@ -49,6 +49,7 @@ class Workflow extends Component {
     this.props.dispatch(workflowFiltersActions.getStatusData());
     this.props.dispatch(workflowFiltersActions.getRegionData());
     this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
+
     if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
@@ -57,15 +58,9 @@ class Workflow extends Component {
       this.getDefaultKind();
     }
 
-    if (
-      !this.props.config.configuration ||
-      this.props.config.error ||
-      this.props.config.permissions
-    ) {
+    if (!this.props.config.configuration || this.props.config.error) {
       this.props.dispatch(configActions.getConfig());
     }
-
-    this.props.dispatch(workflowActions.expandedWorkflowsList([]));
   };
 
   componentDidUpdate = prevProps => {

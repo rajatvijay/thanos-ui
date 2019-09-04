@@ -11,6 +11,8 @@ import IntlTooltip from "../common/IntlTooltip";
 import { getIntlBody } from "../../_helpers/intl-helpers";
 import { fieldActions } from "../../../modules/fields/actions";
 import { requiredParam } from "../../../modules/common/errors";
+import { checkPermission } from "../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../modules/common/permissions/permissionsList";
 import { getFieldExtraFilters } from "./utils/getFieldExtraFilters";
 
 const TabPane = Tabs.TabPane;
@@ -394,7 +396,10 @@ class StepBodyForm extends Component {
         <div className=" step-status-box pd-top-sm">
           {step.completed_at ? this.getCompletedBy(step) : null}
 
-          {_.includes(this.props.permission, "Can undo a step") ? (
+          {checkPermission({
+            permissionsAllowed: this.props.permission,
+            permissionName: Permissions.CAN_UNDO_A_STEP
+          }) ? (
             <span>
               <Divider type="vertical" />
               <span
@@ -760,7 +765,10 @@ class StepBodyForm extends Component {
             <Col span={8}>
               {this.props.stepData.completed_at ||
               this.props.stepData.is_locked ||
-              !_.includes(this.props.permission, "Can submit a step") ||
+              !checkPermission({
+                permissionsAllowed: this.props.permission,
+                permissionName: Permissions.CAN_SUBMIT_A_STEP
+              }) ||
               !editable ? (
                 <Button
                   type="primary "

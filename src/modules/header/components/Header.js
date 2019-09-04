@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import IntlTooltip from "../../../js/components/common/IntlTooltip";
 import { exportWorkflow } from "../services";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
-import Permissions from "../../common/permissions/constants";
+import Permissions from "../../common/permissions/permissionsList";
 import { ExportWorkflowDropdown } from "./ExportWorkflowDropdown";
 
 const openNotificationWithIcon = data => {

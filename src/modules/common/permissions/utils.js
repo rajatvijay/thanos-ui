@@ -12,7 +12,7 @@ export const checkPermissionOverlap = ({
   permissionsToCheck = requiredParam("permissionsToCheck"),
   method = requiredParam("method")
 }) => {
-  return permissionsToCheck[method](permission =>
-    allowedPermissions.includes(permission)
+  return permissionsToCheck[method](
+    permission => permission && allowedPermissions.includes(permission)
   );
 };

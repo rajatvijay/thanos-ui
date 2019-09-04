@@ -4,6 +4,8 @@ import WorkflowItem from "./WorkflowItem";
 import { Tabs, Checkbox, notification } from "antd";
 import { authHeader } from "../../_helpers";
 import { apiBaseURL } from "../../../config";
+import { checkPermission } from "../../../modules/common/permissions/Chowkidaar";
+import Permission from "../../../modules/common/permissions/permissionsList";
 
 const TabPane = Tabs.TabPane;
 
@@ -152,9 +154,10 @@ class GetChildWorkflow extends Component {
               )
             }
             disabled={
-              !this.props.config.permissions.includes(
-                "Can checkmark related workflows"
-              ) ||
+              checkPermission({
+                permissionsAllowed: this.props.permission,
+                permissionName: Permission.CAN_CHECKMARK_RELATED_WORKFLOWS
+              }) ||
               !regexForUrl.test(document.location.pathname) ||
               this.state.isLoading
             }
@@ -171,6 +174,7 @@ class GetChildWorkflow extends Component {
     const cbtn = (
       <span style={{ paddingRight: "20px" }}>{props.createButton}</span>
     );
+
     return (
       <Tabs tabBarExtraContent={cbtn}>
         {_.map(this.state.relatedKinds, (kind, key) => {
