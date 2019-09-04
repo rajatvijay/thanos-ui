@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { Form, Divider, Row, Col, Button, Tooltip, Tabs } from "antd";
+import {
+  Form,
+  Divider,
+  Row,
+  Col,
+  Button,
+  Tooltip,
+  Tabs,
+  Icon,
+  message
+} from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
@@ -59,6 +69,11 @@ class StepBodyForm extends Component {
   componentDidMount = () => {
     this.updateAllAPIFields();
   };
+
+  componentWillUnmount() {
+    // To remove any stray loading messages.
+    message.destroy();
+  }
 
   versionToggle = () => {
     this.setState({ showVersion: !this.state.showVersion });
@@ -785,6 +800,7 @@ class StepBodyForm extends Component {
                     className="no-print pd-ard"
                     onClick={this.handleSubmit}
                     disabled={this.props.isSubmitting}
+                    loading={this.props.isSubmitting}
                   >
                     {this.props.isSubmitting ? (
                       <FormattedMessage id="commonTextInstances.submittingButtonText" />
