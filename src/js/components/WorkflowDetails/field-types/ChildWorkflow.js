@@ -198,7 +198,10 @@ class ChildWorkflowField2 extends Component {
       currentGroup &&
       _.find(userGroupFilters, (group, key) => currentGroup.name === key); //FIND FILTER FROM CURRENT GROUP
     const excluded_filters = _.get(currentGroupFilter, "exclude_filters", []);
-    this.setState({ userGroupFilter: currentGroupFilter, excluded_filters });
+
+    if (currentGroupFilter) {
+      this.setState({ userGroupFilter: currentGroupFilter, excluded_filters });
+    }
   };
 
   objToParam = query => {
