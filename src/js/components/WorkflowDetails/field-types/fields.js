@@ -414,6 +414,7 @@ class URL2 extends React.Component {
                       ? props.field.answers[0].answer
                       : props.field.definition.defaultValue
                   }
+                  target="_blank"
                 >
                   {props.field.answers[0]
                     ? props.field.answers[0].answer
