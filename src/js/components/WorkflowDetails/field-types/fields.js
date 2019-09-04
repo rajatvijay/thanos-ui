@@ -354,6 +354,13 @@ class URL2 extends React.Component {
   render = () => {
     const props = this.props;
     const that = this;
+    const disableStyle = {
+      pointerEvents: "none",
+      cursor: "default"
+    };
+    const nonDisableStyle = {
+      cursor: "pointer"
+    };
     return (
       <FormItem
         label={getLabel(props, that)}
@@ -364,21 +371,32 @@ class URL2 extends React.Component {
         {...this.fielderror(props)}
       >
         {!props.completed ? (
-          <Input
-            disabled={isDisabled(props)}
-            placeholder={props.field.placeholder}
-            prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
-            type="url"
-            autoComplete="new-password"
-            onChange={e => this.onChangeValidate(e)}
-            defaultValue={
+          <a
+            href={
               props.field.answers[0]
                 ? props.field.answers[0].answer
                 : props.field.definition.defaultValue
             }
-            onBlur={e => this.onChangeValidate(e)}
-            {...feedValue(props)}
-          />
+            style={isDisabled(props) ? nonDisableStyle : disableStyle}
+          >
+            <Input
+              disabled={isDisabled(props)}
+              placeholder={props.field.placeholder}
+              prefix={
+                <Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />
+              }
+              type="url"
+              autoComplete="new-password"
+              onChange={e => this.onChangeValidate(e)}
+              defaultValue={
+                props.field.answers[0]
+                  ? props.field.answers[0].answer
+                  : props.field.definition.defaultValue
+              }
+              onBlur={e => this.onChangeValidate(e)}
+              {...feedValue(props)}
+            />
+          </a>
         ) : (
           <span>
             <span className="ant-input-affix-wrapper">

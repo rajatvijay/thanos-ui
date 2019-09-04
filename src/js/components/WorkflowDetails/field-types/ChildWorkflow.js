@@ -994,7 +994,9 @@ class ChildWorkflowField2 extends Component {
       <div>
         {kindList.length > 0 ? (
           <VTag
-            label={`${formatMessage({ id: "commonTextInstances.all" })} (${allCount})`}
+            label={`${formatMessage({
+              id: "commonTextInstances.all"
+            })} (${allCount})`}
             key={"all"}
             selected={selected === "" ? true : false}
             tag={"kind"}

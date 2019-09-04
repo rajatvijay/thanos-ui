@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Select } from "antd";
 import { languageActions } from "../../actions";
-import _ from "lodash";
 import languages from "../common/intlLanguages";
 import { languageConstants } from "../../constants";
 import { get as lodashGet } from "lodash";
