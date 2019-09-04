@@ -8,6 +8,7 @@ phases:
     commands:
       - echo Installing yarn...
       - yarn install --pure
+      - echo "REACT_APP_CERTA_ENV=$REACT_APP_CERTA_ENV\nREACT_APP_RECAPTCHA_ENABLED=$REACT_APP_RECAPTCHA_ENABLED\nREACT_APP_API_ORIGIN=$REACT_APP_API_ORIGIN\nREACT_APP_AUDIT_LOG_BASE_URL=$REACT_APP_AUDIT_LOG_BASE_URL\nREACT_APP_ACTIVITY_LOG_SERVERLESS=$REACT_APP_ACTIVITY_LOG_SERVERLESS" > .env
   build:
     commands:
       - CI=false yarn build
