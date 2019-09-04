@@ -14,11 +14,18 @@ class LoginSelectLanguage extends React.Component {
   };
 
   get preferredLanguage() {
-    return lodashGet(
+    const preferredLanguage = lodashGet(
       this.props,
       "authentication.user.prefered_language",
       languageConstants.DEFAULT_LOCALE
     );
+    const selectedLangugage = lodashGet(
+      this.props,
+      "languageSelector.language",
+      preferredLanguage
+    );
+
+    return selectedLangugage;
   }
 
   renderLanguageName = languageSymbol => {
