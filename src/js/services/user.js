@@ -120,8 +120,7 @@ export const logout = async () => {
       "X-Requested-With": "XMLHttpRequest",
       ...authHeader.get()
     },
-    credentials: "include",
-    mode: "no-cors"
+    credentials: "include"
   };
   return await APIFetch("users/logout/", requestOptions);
 };
@@ -140,8 +139,8 @@ function checkAuth() {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
-    credentials: "include"
-    // mode: "manual"
+    credentials: "include",
+    mode: "manual"
   };
 
   return APIFetch("users/me/?format=json", requestOptions)
