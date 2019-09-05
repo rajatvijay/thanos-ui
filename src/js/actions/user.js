@@ -93,12 +93,16 @@ export const tokenLogin = (token, next) => async dispatch => {
 };
 
 export const logout = () => async dispatch => {
-  const response = await userLogout();
-  if (response.ok) {
-    dispatch({ type: userConstants.LOGOUT });
-    Godaam.user = null;
-    userUtilities.postLogoutAction();
-  } else {
+  try {
+    const response = await userLogout();
+    if (response.ok) {
+      dispatch({ type: userConstants.LOGOUT });
+      Godaam.user = null;
+      userUtilities.postLogoutAction();
+    } else {
+      dispatch({ type: userConstants.LOGOUT_FAILURE });
+    }
+  } catch (err) {
     dispatch({ type: userConstants.LOGOUT_FAILURE });
   }
 };
