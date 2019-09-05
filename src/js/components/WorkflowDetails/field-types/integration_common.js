@@ -308,6 +308,7 @@ function google_search_html(record, search) {
           target="_blank"
           rel="noopener noreferrer"
           className="text-secondary"
+          style={{ wordBreak: "break-all" }}
         >
           {record.link}
         </a>
