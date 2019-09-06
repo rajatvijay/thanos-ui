@@ -141,7 +141,7 @@ class DuplicateCheckComp extends Component {
         workflow_ids +
         "&page=" +
         pageNumber +
-        "&limit=100";
+        "&limit=100&lean=True";
 
       this.fetchWorkflows(url);
     } else {
