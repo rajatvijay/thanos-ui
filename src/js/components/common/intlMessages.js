@@ -120,7 +120,7 @@ export default {
       loadingText: "loading",
       addComments: "Add comment/question",
       commentsText:
-        "{count, number} {count, plural, one {comment}, other {comments}}",
+        "{count, number} {count, plural, one {comment} other {comments}}",
       categoryText: "Category",
       requestOneTimePasswordText: "Request One-time password",
       resendOneTimePasswordText: "Resend One-time password",

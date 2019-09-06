@@ -25,11 +25,10 @@ import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
 import { Pagination } from "antd";
-import Godaam from "../../../utils/storage";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
-const { field_error } = commonFunctions;
+const { field_error, getUserGroupFilter } = commonFunctions;
 
 //MOVE TO UTILS
 const getKindName = (kindId, workflowKind) => {
@@ -144,7 +143,15 @@ class ChildWorkflowField2 extends Component {
       this.prepFetchChildData();
     }
 
-    this.filterByUserGroup();
+    const currentUserGroupFilter = getUserGroupFilter(
+      this.props.field.definition.extra
+    );
+    const excludedFilters =
+      currentUserGroupFilter &&
+      _.get(currentUserGroupFilter, "exclude_filters", []);
+    if (excludedFilters) {
+      this.setState({ excluded_filters: excludedFilters });
+    }
   };
 
   componentDidUpdate = prevProps => {
@@ -181,26 +188,6 @@ class ChildWorkflowField2 extends Component {
       return "parent_workflow_id";
     } catch (e) {
       return null;
-    }
-  };
-
-  //FITLER BY USER GROUP
-  filterByUserGroup = () => {
-    const user = JSON.parse(Godaam.user); //GET USER DATA FROM LOCAL STORAGE
-    const userGroups = user.groups; //
-    const extra = _.get(this.props, "field.definition.extra", {}); //GET EXTRA FILTERS FROM DEF
-    const userGroupFilters = extra.filter_by_user_groups || null; //FIND USER GROUP FILTER
-    const filter = !userGroupFilters ? extra.filter : null;
-    const currentGroup =
-      userGroupFilters &&
-      _.find(userGroups, group => userGroupFilters[group.name]); //MATCH CURRENT GROUP BETWEEN USER DATA AND EXTRA CONFIG
-    const currentGroupFilter =
-      currentGroup &&
-      _.find(userGroupFilters, (group, key) => currentGroup.name === key); //FIND FILTER FROM CURRENT GROUP
-    const excluded_filters = _.get(currentGroupFilter, "exclude_filters", []);
-
-    if (currentGroupFilter) {
-      this.setState({ userGroupFilter: currentGroupFilter, excluded_filters });
     }
   };
 
@@ -1236,8 +1223,8 @@ class ChildWorkflowField2 extends Component {
       );
     };
 
-    const fieldExtra =
-      this.state.userGroupFilter || props.field.definition.extra;
+    const fieldExtra = props.field.definition.extra;
+    const hideResultsCount = props.field.definition.extra.hide_total_count;
 
     return (
       <FormItem
@@ -1292,7 +1279,8 @@ class ChildWorkflowField2 extends Component {
                   </span>
                 ) : null}
 
-                {!this.state.bulkActionWorkflowChecked.length ? (
+                {!this.state.bulkActionWorkflowChecked.length &&
+                !hideResultsCount ? (
                   <span className="text-lighter">
                     {this.state.childWorkflow
                       ? this.state.childWorkflow.length

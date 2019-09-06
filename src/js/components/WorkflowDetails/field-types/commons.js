@@ -11,6 +11,7 @@ import { checkPermission } from "../../../../modules/common/permissions/Chowkida
 import Permissions from "../../../../modules/common/permissions/permissionsList";
 import { isAnswered } from "../../../../modules/fields/utils";
 import { FormattedMessage } from "react-intl";
+import Godaam from "../../../utils/storage";
 
 export const commonFunctions = {
   getLabel,
@@ -30,7 +31,8 @@ export const commonFunctions = {
   fieldFlagDropdown,
   isDisabled,
   isDnBIntegrationDataLoading,
-  convertValueToString
+  convertValueToString,
+  getUserGroupFilter
 };
 
 //Utility func
@@ -503,4 +505,31 @@ function convertValueToString(options) {
     });
   }
   return options;
+}
+
+//GET FILTER FOR CURRENT USER GROUP FROM CONFIG
+function getUserGroupFilter(extra) {
+  if (!extra) {
+    return;
+  }
+
+  const user = JSON.parse(Godaam.user); //GET USER DATA FROM LOCAL STORAGE
+  const userGroups = user.groups;
+  const userGroupFilters = extra.filter_by_user_groups || null; //FIND USER GROUP FILTER
+
+  if (!userGroupFilters) {
+    return;
+  }
+
+  //MATCH CURRENT GROUP BETWEEN USER DATA AND EXTRA CONFIG
+  const currentGroup =
+    userGroupFilters &&
+    _.find(userGroups, group => userGroupFilters[group.name]);
+
+  //FIND FILTER FROM CURRENT GROUP
+  const currentUserGroupFilter =
+    currentGroup &&
+    _.find(userGroupFilters, (group, key) => currentGroup.name === key);
+
+  return currentUserGroupFilter;
 }

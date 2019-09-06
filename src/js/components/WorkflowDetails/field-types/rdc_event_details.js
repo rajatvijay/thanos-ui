@@ -9,7 +9,7 @@ import { FormattedMessage } from "react-intl";
 
 const TabPane = Tabs.TabPane;
 
-const { isDnBIntegrationDataLoading } = commonFunctions;
+const { isDnBIntegrationDataLoading, getUserGroupFilter } = commonFunctions;
 
 class RDCEventDetailComponent extends Component {
   constructor() {
@@ -29,9 +29,15 @@ class RDCEventDetailComponent extends Component {
   };
 
   filterEventsByFlag = () => {
+    const currentFilters =
+      getUserGroupFilter(this.props.field.definition.extra) ||
+      this.props.field.definition.extra;
+    const filter =
+      currentFilters &&
+      _.find(currentFilters.filters, item => item.type === "selected_flag");
     const selectedFlag = this.props.field.selected_flag;
     const integrationJson = this.props.field.integration_json;
-    const flagTofilter = this.props.fieldExtraFilters.value;
+    const flagTofilter = filter.value;
     const falsePositiveIdList = map(selectedFlag, flag => {
       return flag.flag_detail.tag === flagTofilter
         ? flag.integration_uid
@@ -42,12 +48,14 @@ class RDCEventDetailComponent extends Component {
       integrationJson.data,
       event => !includes(falsePositiveIdList, event.custom_hash)
     );
+
     return integrationJson;
   };
 
   render = () => {
     const { field } = this.props;
-    const updatedIntegrationJson = this.props.fieldExtraFilters
+
+    const updatedIntegrationJson = this.props.field.definition.extra
       ? this.filterEventsByFlag()
       : field.integration_json;
 
@@ -69,6 +77,7 @@ class RDCEventDetailComponent extends Component {
           {_.size(field.integration_json) ? (
             <div className="mr-top-lg mr-bottom-lg">
               <GetTabsFilter
+                intl={this.props.intl}
                 getComment={this.getComment}
                 jsonData={updatedIntegrationJson}
                 commentCount={field.integration_comment_count}
@@ -79,7 +88,6 @@ class RDCEventDetailComponent extends Component {
         </div>
       );
     }
-
     return <div style={{ marginBottom: "50px" }}>{final_html}</div>;
   };
 }
@@ -253,6 +261,7 @@ const GetTable = props => {
         flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
         const css = flag_data.extra || {};
         const flag_name = flag_data.label || null;
+
         return (
           <span>
             <span
@@ -262,9 +271,7 @@ const GetTable = props => {
               {props.commentCount[uid] ? (
                 <FormattedMessage
                   id="commonTextInstances.commentsText"
-                  values={{
-                    count: props.commentCount[uid]
-                  }}
+                  values={{ count: props.commentCount[uid] }}
                 />
               ) : (
                 <FormattedMessage id="commonTextInstances.addComments" />
@@ -317,7 +324,7 @@ const GetTabsFilter = props => {
   const getFilterData = data => {
     let fList = [
       {
-        label: <FormattedMessage id="commonTextInstances.all" />,
+        label: props.intl.formatMessage({ id: "commonTextInstances.all" }),
         value: "all",
         data: data,
         count: data.length,
