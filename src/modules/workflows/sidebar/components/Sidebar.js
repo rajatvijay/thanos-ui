@@ -15,7 +15,8 @@ import {
   StyledSidebarHeader,
   StyledWorkflowName,
   StyledCollapseItem,
-  StyledSidebar
+  StyledSidebar,
+  StyledBreadCrumbItem
 } from "../styledComponents";
 import StepsSideBar from "./StepsSidebar";
 
@@ -159,9 +160,14 @@ class Sidebar extends Component {
     );
   }
 
-  get parentWorkflow() {
+  get workflowFamily() {
     const family = lodashGet(this.currentWorkflow, `workflow_family`, null);
-    return family.length > 1 ? family[0] : null;
+
+    // Removing the last element since it will always be the workflow itself
+    const familyCopy = [...family];
+    familyCopy.pop();
+
+    return familyCopy.length ? familyCopy : null;
   }
 
   get lcData() {
@@ -207,15 +213,18 @@ class Sidebar extends Component {
   }
 
   // ALL RENDER FUNCTIONS
-  renderParent = () => {
-    if (this.parentWorkflow) {
-      return (
-        <Link to={`/workflows/instances/${this.parentWorkflow.id}`}>
-          <span style={{ color: "gray", fontSize: 12 }}>
-            {this.parentWorkflow.name}
-          </span>
-        </Link>
-      );
+  renderBreadcrumbs = () => {
+    if (this.workflowFamily) {
+      return this.workflowFamily.map((family, index) => (
+        <React.Fragment key={family.id}>
+          <Link to={`/workflows/instances/${family.id}`}>
+            <StyledBreadCrumbItem>{family.name}</StyledBreadCrumbItem>
+          </Link>
+          {index === this.workflowFamily.length - 1 ? null : (
+            <StyledBreadCrumbItem>></StyledBreadCrumbItem>
+          )}
+        </React.Fragment>
+      ));
     }
     return null;
   };
@@ -256,7 +265,7 @@ class Sidebar extends Component {
             line-height: normal;
           `}
         >
-          {this.renderParent()}
+          {this.renderBreadcrumbs()}
           <br />
           <StyledWorkflowName>{this.currentWorkflowName}</StyledWorkflowName>
         </div>

@@ -33,15 +33,23 @@ test("should render current workflow name", () => {
   expect(queryByText("Current Workflow")).toBeInTheDocument();
 });
 
-test("should render parent workflow name and link when there is workflow family", () => {
+test("should render all workflows' name and link when from the workflow family", () => {
   const rootReducer = combineReducers({ workflowDetailsHeader, permissions });
   const fakeParentWorkflow = { name: "Parent Workflow", id: 2120 };
+  const fakeGranparentWorkflow = {
+    name: "Fake Grand Parent Workflow",
+    id: 1120
+  };
   const fakeCurrentWorkflow = { name: fakeWorkflowName, id: fakeWorkflowId };
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
         name: fakeWorkflowName,
-        workflow_family: [fakeParentWorkflow, fakeCurrentWorkflow]
+        workflow_family: [
+          fakeGranparentWorkflow,
+          fakeParentWorkflow,
+          fakeCurrentWorkflow
+        ]
       }
     },
     permissions: {}
@@ -53,12 +61,22 @@ test("should render parent workflow name and link when there is workflow family"
       </BrowserRouter>
     </Provider>
   );
+
+  // Parent
   expect(
     queryByText(fakeParentWorkflow.name).parentElement.href.includes(
       `/workflows/instances/${fakeParentWorkflow.id}`
     )
   ).not.toBe(false);
   expect(queryByText(fakeParentWorkflow.name)).toBeInTheDocument();
+
+  // Grand Parent
+  expect(
+    queryByText(fakeGranparentWorkflow.name).parentElement.href.includes(
+      `/workflows/instances/${fakeGranparentWorkflow.id}`
+    )
+  ).not.toBe(false);
+  expect(queryByText(fakeGranparentWorkflow.name)).toBeInTheDocument();
 });
 
 test("should render options menu", () => {
