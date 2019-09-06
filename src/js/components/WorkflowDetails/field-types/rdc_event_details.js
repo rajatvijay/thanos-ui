@@ -37,8 +37,13 @@ class RDCEventDetailComponent extends Component {
       _.find(currentFilters.filters, item => item.type === "selected_flag");
     const selectedFlag = this.props.field.selected_flag;
     const integrationJson = this.props.field.integration_json;
-    const flagTofilter = filter.value;
+    const flagTofilter = filter && filter.value;
+
     const falsePositiveIdList = map(selectedFlag, flag => {
+      if (!flagTofilter) {
+        return;
+      }
+
       return flag.flag_detail.tag === flagTofilter
         ? flag.integration_uid
         : null;

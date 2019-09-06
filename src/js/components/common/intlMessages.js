@@ -149,7 +149,7 @@ export default {
       results: "Results",
       all: "All",
       foundResults:
-        "Found {count, number} {count, plural, one {result}, other {results}}",
+        "Found {count, number} {count, plural, one {result} other {results}}",
       noResults: "No results found",
       nothingToDisplay: "Nothing to display",
       noMatchFound: "No match found",
@@ -515,7 +515,7 @@ export default {
       loadingText: "cargando",
       addComments: "Añadir comentario / pregunta",
       commentsText:
-        "{count, number} {count, plural, one {comentario}, other {comentarios}}",
+        "{count, number} {count, plural, one {comentario} other {comentarios}}",
       categoryText: "categoría",
       requestOneTimePasswordText: "Solicitar una contraseña de tiempo ",
       resendOneTimePasswordText: "volver a enviar una contraseña de tiempo ",
@@ -929,7 +929,7 @@ export default {
       loadingText: "chargement",
       addComments: "Ajouter commentaire/question",
       commentsText:
-        "{count, number} {count, plural, one {commentaire}, other {commentaires}}",
+        "{count, number} {count, plural, one {commentaire} other {commentaires}}",
       categoryText: "Catégorie",
       requestOneTimePasswordText: "Demander un mot de passe unique",
       resendOneTimePasswordText: "Renvoyer le mot de passe unique",
