@@ -202,6 +202,7 @@ export const Number = props => {
         type="number"
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
+        step="1"
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
