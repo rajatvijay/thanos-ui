@@ -232,6 +232,7 @@ class ChildWorkflowField2 extends Component {
       limit: 100,
       [paramName]: parentId,
       kind: `${kind}`,
+      lean: "True",
       answer: `${valueFilter}`,
       ordering: sortBy,
       child_kinds: true,
