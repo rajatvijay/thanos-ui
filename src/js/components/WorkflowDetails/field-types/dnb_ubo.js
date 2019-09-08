@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Icon, Tag } from "antd";
+import { Table, Icon, Tag, Alert } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
@@ -59,6 +59,17 @@ class DnbUBO extends Component {
           <div className="text-center mr-top-lg">
             <Icon type={"loading"} />
           </div>
+        </div>
+      );
+    } else if (field.integration_json.status_code === "error") {
+      final_html = (
+        <div>
+          <Alert
+            message={
+              field.integration_json.status_message || "Something went wrong"
+            }
+            type="error"
+          />
         </div>
       );
     } else if (

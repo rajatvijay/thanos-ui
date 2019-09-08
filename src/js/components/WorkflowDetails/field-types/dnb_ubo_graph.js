@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
-import { Icon } from "antd";
+import { Icon, Alert } from "antd";
 import $ from "jquery";
 import { FormattedMessage } from "react-intl";
 
@@ -124,6 +124,17 @@ class DnbUBOGraph extends Component {
           <div className="text-center mr-top-lg">
             <Icon type={"loading"} />
           </div>
+        </div>
+      );
+    } else if (field.integration_json.status_code === "error") {
+      final_html = (
+        <div>
+          <Alert
+            message={
+              field.integration_json.status_message || "Something went wrong"
+            }
+            type="error"
+          />
         </div>
       );
     } else if (
