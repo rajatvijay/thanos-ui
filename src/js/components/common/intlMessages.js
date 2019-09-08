@@ -137,7 +137,7 @@ export default {
         "Note : Archived workflows will no longer be visible in the system",
       yes: "Yes",
       no: "No",
-      clear: "Clear",
+      clear: "Clear All",
       apply: "Apply",
       by: "by",
       expandView: "Expand View",
