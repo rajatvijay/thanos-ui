@@ -58,6 +58,11 @@ class FilterPopup extends Component {
     this.props.onModalClose();
   };
 
+  onClear = () => {
+    this.props.onClear();
+    this.onAdvClear();
+  };
+
   updateAdvanceFilterTextValue = e => {
     const { value } = e.target;
     this.setState({ text: value });
@@ -161,213 +166,203 @@ class FilterPopup extends Component {
     const { businessType, regionType } = workflowFilterType;
 
     return (
-      <div>
-        <Modal
-          footer={null}
-          closable={false}
-          visible={visible}
-          maskClosable={true}
-          className={css`
-            max-width: 320px;
-            .ant-modal-content {
-              border-radius: 0;
-              padding-left: 0;
-              padding-right: 0;
-            }
-            .ant-modal-body {
-              padding-left: 0;
-              padding-right: 0;
-            }
-          `}
-          onCancel={onModalClose}
+      <div
+        style={{
+          height: "270px",
+          width: "975px",
+          backgroundColor: "#FFFFFF",
+          borderBottom: "1px solid #e8e8e8"
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingLeft: 28,
+            paddingRight: 28
+          }}
         >
-          <div>
+          <DropdownFilter
+            value={status}
+            name="status"
+            data={this.getStatusTypes()}
+            placeholder={this.props.intl.formatMessage({
+              id: "workflowFiltersTranslated.filterPlaceholders.status"
+            })}
+            onFilterChange={onFilterChange}
+            searchable
+            style={{
+              width: "130px"
+            }}
+          />
+          <DropdownFilter
+            name="region"
+            value={region}
+            data={regionType.results}
+            placeholder={this.props.intl.formatMessage({
+              id: "workflowFiltersTranslated.filterPlaceholders.region"
+            })}
+            onFilterChange={onFilterChange}
+            searchable
+          />
+          <DropdownFilter
+            loading={businessType.loading}
+            name="business_unit"
+            value={business_unit}
+            data={businessType.results}
+            placeholder={this.props.intl.formatMessage({
+              id: "workflowFiltersTranslated.filterPlaceholders.business_unit"
+            })}
+            onFilterChange={onFilterChange}
+            searchable
+          />
+        </div>
+
+        <div style={{ marginTop: "20px", paddingLeft: 28, paddingRight: 28 }}>
+          <span
+            style={{
+              color: "#138BD6",
+              cursor: "pointer",
+              textTransform: "uppercase"
+            }}
+          >
+            <FormattedMessage id={"workflowFiltersTranslated.advancedFilter"} />
+          </span>
+
+          {this.state.advFitlers.length > 0 ? (
             <div
+              className="advanced-fitlers-list"
               style={{
-                justifyContent: "space-between",
-                display: "flex",
-                marginLeft: "28px"
+                margin: 28
               }}
             >
-              <span
-                style={{
-                  color: "#138BD6",
-                  cursor: "pointer",
-                  textTransform: "uppercase"
-                }}
-              >
-                <FormattedMessage id={"workflowFiltersTranslated.filterBy"} />
-              </span>
-              <span
-                style={{
-                  cursor: "pointer",
-                  marginRight: "38px",
-                  textTransform: "uppercase"
-                }}
-                onClick={this.props.onClear}
-              >
-                <FormattedMessage id={"commonTextInstances.clear"} />
-              </span>
-            </div>
-
-            <Divider />
-
-            <div style={{ margin: 28 }}>
-              <DropdownFilter
-                value={status}
-                name="status"
-                data={this.getStatusTypes()}
-                placeholder={this.props.intl.formatMessage({
-                  id: "workflowFiltersTranslated.filterPlaceholders.status"
-                })}
-                onFilterChange={onFilterChange}
-                searchable
-              />
-              <DropdownFilter
-                name="region"
-                value={region}
-                data={regionType.results}
-                placeholder={this.props.intl.formatMessage({
-                  id: "workflowFiltersTranslated.filterPlaceholders.region"
-                })}
-                onFilterChange={onFilterChange}
-                searchable
-              />
-              <DropdownFilter
-                loading={businessType.loading}
-                name="business_unit"
-                value={business_unit}
-                data={businessType.results}
-                placeholder={this.props.intl.formatMessage({
-                  id:
-                    "workflowFiltersTranslated.filterPlaceholders.business_unit"
-                })}
-                onFilterChange={onFilterChange}
-                searchable
-              />
-            </div>
-          </div>
-
-          <div style={{ marginTop: "46px" }}>
-            <div
-              style={{
-                justifyContent: "space-between",
-                display: "flex",
-                marginLeft: "28px"
-              }}
-            >
-              <span
-                style={{
-                  color: "#138BD6",
-                  cursor: "pointer",
-                  textTransform: "uppercase"
-                }}
-              >
-                <FormattedMessage
-                  id={"workflowFiltersTranslated.advancedFilter"}
-                />
-              </span>
-              <span
-                style={{
-                  cursor: "pointer",
-                  marginRight: "38px",
-                  textTransform: "uppercase"
-                }}
-                onClick={this.onAdvClear}
-              >
-                <FormattedMessage id={"commonTextInstances.clear"} />
-              </span>
-            </div>
-
-            <Divider />
-            {this.state.advFitlers.length > 0 ? (
-              <div className="advanced-fitlers-list" style={{ margin: 28 }}>
-                {this.state.advFitlers.map((item, index) => {
-                  return (
+              {this.state.advFitlers.map((item, index) => {
+                return (
+                  <span
+                    key={`item_${index}`}
+                    className="t-12 text-middle text-light  ant-tag v-tag pd-right"
+                    style={{
+                      wordBreak: "break-word",
+                      height: "auto",
+                      whiteSpace: "normal"
+                    }}
+                  >
                     <span
-                      key={`item_${index}`}
-                      className="t-12 text-middle text-light  ant-tag v-tag pd-right"
-                      style={{
-                        wordBreak: "break-word",
-                        height: "auto",
-                        whiteSpace: "normal"
-                      }}
+                      title="Remove this filter"
+                      className="pd-ard float-right"
+                      onClick={e => this.removeAdvFilter(index)}
                     >
-                      <span
-                        title="Remove this filter"
-                        className="pd-ard float-right"
-                        onClick={e => this.removeAdvFilter(index)}
-                      >
-                        <Icon type="close" />
-                      </span>
-                      <span className="pd-right-sm">{item.field}</span>
-                      <span className="pd-right-sm">{item.operator}</span>
-                      <span className="pd-right-sm">{item.text}</span>
+                      <Icon type="close" />
                     </span>
-                  );
-                })}
-              </div>
-            ) : null}
-
-            <div style={{ margin: 28 }}>
-              <Cascader
-                value={field}
-                style={{ width: "100%" }}
-                options={fieldOptions}
-                onChange={arr => this.onFilterChange("field", arr)}
-                placeholder={this.props.intl.formatMessage({
-                  id: "workflowFiltersTranslated.pleaseSelectField"
-                })}
-                className={css`
-                  .ant-input {
-                    padding-left: 0;
-                  }
-                `}
-              />
-
-              <DropdownFilter
-                data={OPERATORS_TYPES}
-                value={operator}
-                placeholder={this.props.intl.formatMessage({
-                  id: "workflowFiltersTranslated.selectOperator"
-                })}
-                name="operator"
-                onFilterChange={this.onFilterChange}
-              />
-
-              <Input
-                placeholder={this.props.intl.formatMessage({
-                  id: "workflowFiltersTranslated.inputValue"
-                })}
-                value={text}
-                onChange={e => this.onFilterChange("text", e.target.value)}
-                style={{ paddingLeft: 0 }}
-              />
+                    <span className="pd-right-sm">{item.field}</span>
+                    <span className="pd-right-sm">{item.operator}</span>
+                    <span className="pd-right-sm">{item.text}</span>
+                  </span>
+                );
+              })}
             </div>
-          </div>
+          ) : null}
 
-          <div style={{ margin: 30, marginBottom: 12 }}>
-            <Button
-              style={{ width: "100%", borderRadius: 3 }}
-              type="primary"
-              onClick={this.onApply}
-            >
-              <FormattedMessage id={"commonTextInstances.apply"} />
-            </Button>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center"
+            }}
+          >
+            <Cascader
+              value={field}
+              style={{ width: "100%", marginRight: "40px" }}
+              options={fieldOptions}
+              onChange={arr => this.onFilterChange("field", arr)}
+              placeholder={this.props.intl.formatMessage({
+                id: "workflowFiltersTranslated.pleaseSelectField"
+              })}
+              className={css`
+                .ant-input {
+                  padding-left: 0;
+                }
+              `}
+            />
 
-            <p
-              style={{
-                color: "red",
-                display: showError ? "block" : "none",
-                textAlign: "center"
-              }}
-            >
-              <FormattedMessage
-                id={"workflowFiltersTranslated.advancedFilterMandatory"}
-              />
-            </p>
+            <DropdownFilter
+              data={OPERATORS_TYPES}
+              value={operator}
+              placeholder={this.props.intl.formatMessage({
+                id: "workflowFiltersTranslated.selectOperator"
+              })}
+              name="operator"
+              onFilterChange={this.onFilterChange}
+            />
+
+            <Input
+              placeholder={this.props.intl.formatMessage({
+                id: "workflowFiltersTranslated.inputValue"
+              })}
+              value={text}
+              onChange={e => this.onFilterChange("text", e.target.value)}
+              style={{ paddingLeft: 0, width: "100%", marginRight: "40px" }}
+            />
           </div>
-        </Modal>
+        </div>
+        <Divider style={{ marginTop: 7 }} />
+        <div
+          style={{
+            marginBottom: 12,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            paddingLeft: 28,
+            paddingRight: 28
+          }}
+        >
+          <Button
+            style={{ width: "70px", borderRadius: 3, marginRight: 12 }}
+            type="primary"
+            onClick={this.onApply}
+          >
+            <FormattedMessage id={"commonTextInstances.apply"} />
+          </Button>
+
+          <Button
+            style={{
+              width: "95px",
+              borderRadius: 3,
+              color: "#148cd6",
+              borderColor: "#148cd6",
+              marginRight: 12
+            }}
+            onClick={this.onClear}
+          >
+            <FormattedMessage id={"commonTextInstances.clear"} />
+          </Button>
+
+          <Button
+            style={{
+              width: "95px",
+              borderRadius: 3,
+              color: "#148cd6",
+              borderColor: "#148cd6",
+              marginRight: 12
+            }}
+            onClick={onModalClose}
+          >
+            <FormattedMessage id={"commonTextInstances.cancel"} />
+          </Button>
+
+          <p
+            style={{
+              color: "red",
+              display: showError ? "block" : "none",
+              textAlign: "center"
+            }}
+          >
+            <FormattedMessage
+              id={"workflowFiltersTranslated.advancedFilterMandatory"}
+            />
+          </p>
+        </div>
       </div>
     );
   }

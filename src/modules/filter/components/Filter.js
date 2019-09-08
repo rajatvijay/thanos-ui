@@ -29,13 +29,7 @@ class Filter extends Component {
 
   showModal = () => {
     this.setState({
-      visible: true
-    });
-  };
-
-  handleOk = e => {
-    this.setState({
-      visible: false
+      visible: !this.state.visible
     });
   };
 
@@ -230,107 +224,114 @@ class Filter extends Component {
     const { sortingEnabled } = this.state;
 
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #DBDBDB",
-          alignItems: "center"
-        }}
-      >
-        <div>
-          <ul
-            className={css`
-              li {
-                display: inline-block;
-              }
-            `}
-            style={{
-              listStyle: "none",
-              color: "#000",
-              cursor: "pointer",
-              padding: 0,
-              marginBottom: 0
-            }}
-          >
-            {this.props.workflow.count || this.props.workflow.count === 0 ? (
+      <>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #DBDBDB",
+            alignItems: "center"
+          }}
+        >
+          <div>
+            <ul
+              className={css`
+                li {
+                  display: inline-block;
+                }
+              `}
+              style={{
+                listStyle: "none",
+                color: "#000",
+                cursor: "pointer",
+                padding: 0,
+                marginBottom: 0
+              }}
+            >
+              {this.props.workflow.count || this.props.workflow.count === 0 ? (
+                <li
+                  style={{
+                    margin: "0px 30px 0px 0px",
+                    color: "#000000",
+                    opacity: 0.3,
+                    letterSpacing: "0.38px",
+                    lineHeight: "15px",
+                    fontSize: 13,
+                    textTransform: "uppercase"
+                  }}
+                >
+                  {this.props.workflow.count}{" "}
+                  <FormattedMessage id="mainFilterbar.resultsText" />
+                </li>
+              ) : null}
+
+              {/* TODO: Separate as a private component */}
+              {this.props.workflow.loading ? null : this.props.workflow
+                  .loadingStatus === "failed" ? null : (
+                <li
+                  style={{
+                    margin: "0px 40px 0px 10px",
+                    letterSpacing: "0.38px",
+                    lineHeight: "15px",
+                    fontSize: 13,
+                    textTransform: "uppercase"
+                  }}
+                >
+                  {this.props.workflowFilters.kind.meta
+                    .is_sorting_field_enabled ? (
+                    <IntlTooltip
+                      title={
+                        this.state.sortOrderAsc
+                          ? "tooltips.highToLowRiskScoreText"
+                          : "tooltips.lowToHighRiskScoreText"
+                      }
+                    >
+                      <span
+                        className="text-secondary text-anchor"
+                        onClick={this.changeScoreOrder}
+                      >
+                        <FormattedMessage id="mainFilterbar.riskText" />
+                        {sortingEnabled ? (
+                          <i className="material-icons t-14  text-middle">
+                            {this.state.sortOrderAsc
+                              ? "keyboard_arrow_up"
+                              : "keyboard_arrow_down"}
+                          </i>
+                        ) : null}
+                      </span>
+                    </IntlTooltip>
+                  ) : null}
+                </li>
+              )}
               <li
+                onClick={() => this.showModal()}
                 style={{
-                  margin: "0px 30px 0px 0px",
                   color: "#000000",
                   opacity: 0.3,
                   letterSpacing: "0.38px",
                   lineHeight: "15px",
                   fontSize: 13,
+                  marginRight: 20,
                   textTransform: "uppercase"
                 }}
               >
-                {this.props.workflow.count}{" "}
-                <FormattedMessage id="mainFilterbar.resultsText" />
+                <FormattedMessage id="mainFilterbar.filterText" />
+                <span>{this.evaluateFilter()}</span>
+                <Icon
+                  style={{
+                    fontSize: 10,
+                    marginLeft: 6
+                  }}
+                  type="down"
+                />
               </li>
-            ) : null}
-
-            {/* TODO: Separate as a private component */}
-            {this.props.workflow.loading ? null : this.props.workflow
-                .loadingStatus === "failed" ? null : (
-              <li
-                style={{
-                  margin: "0px 40px 0px 10px",
-                  letterSpacing: "0.38px",
-                  lineHeight: "15px",
-                  fontSize: 13,
-                  textTransform: "uppercase"
-                }}
-              >
-                {this.props.workflowFilters.kind.meta
-                  .is_sorting_field_enabled ? (
-                  <IntlTooltip
-                    title={
-                      this.state.sortOrderAsc
-                        ? "tooltips.highToLowRiskScoreText"
-                        : "tooltips.lowToHighRiskScoreText"
-                    }
-                  >
-                    <span
-                      className="text-secondary text-anchor"
-                      onClick={this.changeScoreOrder}
-                    >
-                      <FormattedMessage id="mainFilterbar.riskText" />
-                      {sortingEnabled ? (
-                        <i className="material-icons t-14  text-middle">
-                          {this.state.sortOrderAsc
-                            ? "keyboard_arrow_up"
-                            : "keyboard_arrow_down"}
-                        </i>
-                      ) : null}
-                    </span>
-                  </IntlTooltip>
-                ) : null}
-              </li>
-            )}
-            <li
-              onClick={() => this.showModal()}
-              style={{
-                color: "#000000",
-                opacity: 0.3,
-                letterSpacing: "0.38px",
-                lineHeight: "15px",
-                fontSize: 13,
-                marginRight: 20,
-                textTransform: "uppercase"
-              }}
-            >
-              <FormattedMessage id="mainFilterbar.filterText" />
-              <span>{this.evaluateFilter()}</span>
-              <Icon
-                style={{
-                  fontSize: 10,
-                  marginLeft: 6
-                }}
-                type="down"
-              />
-            </li>
-          </ul>
+            </ul>
+          </div>
+          <div>
+            <CreateNew />
+          </div>
+        </div>
+        {this.state.visible ? (
           <FilterPopup
             filterState={this.state}
             onModalClose={this.handleModalClose}
@@ -339,11 +340,8 @@ class Filter extends Component {
             onApply={this.onApply}
             applyFilters={this.applyFilters}
           />
-        </div>
-        <div>
-          <CreateNew />
-        </div>
-      </div>
+        ) : null}
+      </>
     );
   }
 }

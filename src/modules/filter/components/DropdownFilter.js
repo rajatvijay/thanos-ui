@@ -43,7 +43,12 @@ class DropdownFilter extends Component {
         loading={!!loading}
         value={value}
         placeholder={placeholder}
-        style={{ display: "block", margin: "20px 0px" }}
+        style={{
+          display: "block",
+          margin: "20px 0px",
+          width: "100%",
+          marginRight: "40px"
+        }}
         onChange={select => onFilterChange(name, select)}
         className={css`
           .ant-select-selection__rendered {
