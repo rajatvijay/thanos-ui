@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { HeaderLcData, GetMergedData } from "./WorkflowHeader";
 import FullScreen from "../../../images/fullScreenBlack.svg";
-import { history } from "../../_helpers";
+import { history } from "../../../js/_helpers";
 
 class ModalHeader extends Component {
   handleExpand = e => {

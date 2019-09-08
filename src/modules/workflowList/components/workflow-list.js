@@ -1,26 +1,28 @@
 import React, { Component } from "react";
 import { Layout, Pagination } from "antd";
-import { workflowActions } from "../../actions";
+import { workflowActions } from "../../../js/actions";
 import _ from "lodash";
 import { connect } from "react-redux";
 import moment from "moment";
 import { FormattedMessage, injectIntl } from "react-intl";
-import UserWorkflow from "./user-workflow";
+import UserWorkflow from "../../../js/components/Workflow/user-workflow";
 import WorkflowItem from "./WorkflowItem";
 
 const { Content } = Layout;
 const PAGE_SIZE = 20;
 
 class WorkflowList extends Component {
-  handlePageChange = page => {
-    const { searchValue } = this.props.workflowSearch;
-    const param = [{ label: "page", value: page }];
-    if (searchValue) {
-      this.props.dispatch(workflowActions.searchWorkflow(searchValue, page));
-    } else {
-      this.props.dispatch(workflowActions.getAll(param));
-    }
-  };
+  // TODO: Move this to the PaginationWrapper
+  // RWR: Pagination for workflow list
+  // handlePageChange = page => {
+  //   const { searchValue } = this.props.workflowSearch;
+  //   const param = [{ label: "page", value: page }];
+  //   if (searchValue) {
+  //     this.props.dispatch(workflowActions.searchWorkflow(searchValue, page));
+  //   } else {
+  //     this.props.dispatch(workflowActions.getAll(param));
+  //   }
+  // };
 
   reload = () => {
     this.props.dispatch(workflowActions.getAll());
@@ -46,6 +48,10 @@ class WorkflowList extends Component {
     );
   };
 
+  // RWR: Grouping workflows with occurrence day
+  // RWR: Showing human readable rand
+  // RWR: Don;t show rank in case of embedded/child workflows
+  // RWR: Disable grouping is also available
   getGroupedWorkflows = currentPage => {
     const { disableGrouping, isEmbedded, workflow } = this.props;
     const workflows = isEmbedded
@@ -78,6 +84,7 @@ class WorkflowList extends Component {
     return moment(occurrence.created_at).format("MMM");
   };
 
+  // RWR: Pagination, get current page
   getCurrentPage = () => {
     const workflowData = this.props.workflow;
     let page = 1;
@@ -97,8 +104,10 @@ class WorkflowList extends Component {
     const currentPage = this.getCurrentPage();
     const groupedWorkflows = this.getGroupedWorkflows(currentPage);
 
+    // TODO: Move this into separate functions
     const ListCompletes = _.map(groupedWorkflows, (list, key) => {
       const listL = _.map(list, function(item, index) {
+        // TODO: Send only the required props
         return (
           <WorkflowItem
             location={that.props.location}
@@ -144,7 +153,7 @@ class WorkflowList extends Component {
             </div>
           ) : null}
 
-          <div className="">{listL}</div>
+          <div>{listL}</div>
         </span>
       );
     });
@@ -152,15 +161,18 @@ class WorkflowList extends Component {
     return (
       <div>
         <Content
-          style={{
-            overflow: "initial",
-            padding: 0
-          }}
-          className="workflow-list-wrapper"
+          style={
+            {
+              // overflow: "initial",
+              // padding: 0
+            }
+          }
+          // className="workflow-list-wrapper"
         >
           {data.workflow && data.workflow.length > 0 ? (
             <div>
               <div
+                // RWR: Diff class for embedded and not embedded workflow list
                 className={
                   "workflow-list " +
                   (_.size(this.props.expandedWorkflows.list)
@@ -171,8 +183,11 @@ class WorkflowList extends Component {
               >
                 {ListCompletes}
               </div>
+
+              {/* TODO: Move this into PaginationWrapper  */}
               <div className="mr-top-lg text-center pd-bottom-lg">
                 <Pagination
+                  // RWR: Hide pagination when there is only one page
                   style={{
                     display:
                       data.workflow && data.workflow.length < data.count
@@ -187,6 +202,8 @@ class WorkflowList extends Component {
               </div>
             </div>
           ) : (
+            // TODO: Handle the empty state
+            // RWR: No workflow to show message
             <div className="text-center text-medium text-metal">
               {" "}
               <FormattedMessage id="errorMessageInstances.noWorkflowsToShow" />{" "}
@@ -198,6 +215,7 @@ class WorkflowList extends Component {
               </span>
             </div>
           )}
+          {/* RWR: Render user workflow, also find a better way to do this */}
           <UserWorkflow
             visible={this.props.userWorkflowModal.visible}
             kinds={this.props.workflowKind}

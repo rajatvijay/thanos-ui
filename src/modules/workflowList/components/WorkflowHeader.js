@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import _ from "lodash";
 import { Row, Col, Tooltip, Checkbox, Popover } from "antd";
-import { LCDataValue } from "../../../modules/common/components/LCDataValue";
+import { LCDataValue } from "../../common/components/LCDataValue";
 import { css } from "emotion";
 
 //////////////////
@@ -12,6 +12,8 @@ import { css } from "emotion";
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
 
+// TODO: Value of the sortingPrimayKey name
+// TODO: To specify the value according to which sorting is done
 function displaySortingKey(workflow) {
   const obj =
     Array.isArray(workflow.definition.extra_fields_json) &&
@@ -37,9 +39,10 @@ export const WorkflowHeader = props => {
     <Row
       type="flex"
       align="middle"
-      className="lc-card-head"
+      // className="lc-card-head"
       style={{ padding: "0px 12px 0 12px" }}
     >
+      {/* TODO: Checkox for bulkAction */}
       {props.isEmbedded && props.bulkActionWorkflowChecked ? (
         <Col span={1} className="text-left">
           <Checkbox
@@ -110,6 +113,7 @@ export const WorkflowHeader = props => {
       type="flex"
       align="middle"
     >
+      {/* TODO: Check what isExpanded is used for */}
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
     </Row>
   );
@@ -127,6 +131,7 @@ const createFamilyListForBreadcrums = family => {
   ));
 };
 
+// TODO: Contians, workflow name and breadcrums
 const HeaderTitle = props => {
   const { workflow } = props;
   const { family } = workflow;
@@ -207,6 +212,7 @@ const HeaderTitle = props => {
   }
 };
 
+// TODO: Used in modal header and this file only
 export const HeaderLcData = props => {
   const subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal";
@@ -241,6 +247,7 @@ export const HeaderLcData = props => {
   );
 };
 
+// TODO: used for adjudications and comments section
 class HeaderOptions extends React.Component {
   constructor(props) {
     super(props);
@@ -348,6 +355,8 @@ class HeaderOptions extends React.Component {
   };
 }
 
+// TODO: Used in modal header and this file only
+// TODO: This is complicated as FUCK!, tackle at the very end
 export class GetMergedData extends React.Component {
   constructor(props) {
     super(props);
@@ -528,6 +537,7 @@ export class GetMergedData extends React.Component {
   }
 }
 
+// TODO: Color according to the risk value
 const getScoreColor = riskValue => {
   const value = parseInt(riskValue, 10);
   if (value >= 7) {

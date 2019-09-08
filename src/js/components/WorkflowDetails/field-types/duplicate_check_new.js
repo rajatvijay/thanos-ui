@@ -6,7 +6,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { apiBaseURL } from "../../../../config";
-import WorkflowList from "../../Workflow/workflow-list";
+import WorkflowList from "../../../../modules/workflowList/components/workflow-list";
 import { Pagination } from "antd";
 import { FormattedMessage } from "react-intl";
 
