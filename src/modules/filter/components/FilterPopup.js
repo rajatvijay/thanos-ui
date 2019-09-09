@@ -32,7 +32,7 @@ const OPERATORS_TYPES = [
   },
   {
     label: (
-      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_containsÎ" />
+      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_contains" />
     ),
     value: "not_contains"
   }
