@@ -152,7 +152,6 @@ class FilterPopup extends Component {
       workflowFilterType,
       filterState,
       onFilterChange,
-
       onModalClose
     } = this.props;
 
@@ -191,134 +190,6 @@ class FilterPopup extends Component {
           borderBottom: "1px solid #e8e8e8"
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingLeft: 28,
-            paddingRight: 28
-          }}
-        >
-          <DropdownFilter
-            value={status}
-            name="status"
-            data={this.getStatusTypes()}
-            placeholder={this.props.intl.formatMessage({
-              id: "workflowFiltersTranslated.filterPlaceholders.status"
-            })}
-            onFilterChange={onFilterChange}
-            searchable
-            style={{
-              width: "130px"
-            }}
-          />
-          <DropdownFilter
-            name="region"
-            value={region}
-            data={regionType.results}
-            placeholder={regionPlaceholder}
-            onFilterChange={onFilterChange}
-            searchable
-          />
-          <DropdownFilter
-            loading={businessType.loading}
-            name="business_unit"
-            value={business_unit}
-            data={businessType.results}
-            placeholder={businessPlaceholder}
-            onFilterChange={onFilterChange}
-            searchable
-          />
-        </div>
-
-        <div style={{ marginTop: "20px", paddingLeft: 28, paddingRight: 28 }}>
-          <span
-            style={{
-              color: "#138BD6",
-              cursor: "pointer",
-              textTransform: "uppercase"
-            }}
-          >
-            <FormattedMessage id={"workflowFiltersTranslated.advancedFilter"} />
-          </span>
-
-          {this.state.advFitlers.length > 0 ? (
-            <div
-              className="advanced-fitlers-list"
-              style={{
-                margin: 28
-              }}
-            >
-              {this.state.advFitlers.map((item, index) => {
-                return (
-                  <span
-                    key={`item_${index}`}
-                    className="t-12 text-middle text-light  ant-tag v-tag pd-right"
-                    style={{
-                      wordBreak: "break-word",
-                      height: "auto",
-                      whiteSpace: "normal"
-                    }}
-                  >
-                    <span
-                      title="Remove this filter"
-                      className="pd-ard float-right"
-                      onClick={e => this.removeAdvFilter(index)}
-                    >
-                      <Icon type="close" />
-                    </span>
-                    <span className="pd-right-sm">{item.field}</span>
-                    <span className="pd-right-sm">{item.operator}</span>
-                    <span className="pd-right-sm">{item.text}</span>
-                  </span>
-                );
-              })}
-            </div>
-          ) : null}
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center"
-            }}
-          >
-            <Cascader
-              value={field}
-              style={{ width: "100%", marginRight: "40px" }}
-              options={fieldOptions}
-              onChange={arr => this.onFilterChange("field", arr)}
-              placeholder={this.props.intl.formatMessage({
-                id: "workflowFiltersTranslated.pleaseSelectField"
-              })}
-              className={css`
-                .ant-input {
-                  padding-left: 0;
-                }
-              `}
-            />
-
-            <DropdownFilter
-              data={OPERATORS_TYPES}
-              value={operator}
-              placeholder={this.props.intl.formatMessage({
-                id: "workflowFiltersTranslated.selectOperator"
-              })}
-              name="operator"
-              onFilterChange={this.onFilterChange}
-            />
-
-            <Input
-              placeholder={this.props.intl.formatMessage({
-                id: "workflowFiltersTranslated.inputValue"
-              })}
-              value={text}
-              onChange={e => this.onFilterChange("text", e.target.value)}
-              style={{ paddingLeft: 0, width: "100%", marginRight: "40px" }}
-            />
-          </div>
-        </div>
         <Divider style={{ marginTop: 7 }} />
         <div
           style={{
@@ -391,3 +262,150 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(injectIntl(FilterPopup));
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+const BasicFilters = injectIntl(
+  ({
+    selectedStatus,
+    selectedRegion,
+    selectedBusinessUnit,
+    statuses,
+    regions,
+    businessUnits,
+    onFilterChange
+  }) => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingLeft: 28,
+        paddingRight: 28
+      }}
+    >
+      <DropdownFilter
+        value={selectedStatus}
+        name="status"
+        data={statuses.data}
+        loading={statuses.isLoading}
+        placeholder={
+          <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.status" />
+        }
+        onChange={onFilterChange("status")}
+        searchable
+        // style={{
+        //   width: "130px"
+        // }}
+      />
+      <DropdownFilter
+        value={selectedRegion}
+        loading={regions.isLoading}
+        data={regions.data}
+        placeholder={
+          <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.region" />
+        }
+        onChange={onFilterChange("region")}
+        searchable
+      />
+      <DropdownFilter
+        loading={businessUnits.isLoading}
+        value={selectedBusinessUnit}
+        data={businessUnits.data}
+        placeholder={
+          <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.business_unit" />
+        }
+        onChange={onFilterChange("businessUnit")}
+        searchable
+      />
+    </div>
+  )
+);
+
+class AdvancedFilters extends Component {
+  state = {
+    currentAdvFiliter: {}
+  };
+  handleApply = field => value => {
+    const { currentAdvFiliter } = this.state;
+    const updatedCurrentAdvFilters = {
+      ...currentAdvFiliter,
+      [field]: value
+    };
+
+    // Update it in the state
+    this.setState({
+      currentAdvFiliter: updatedCurrentAdvFilters
+    });
+
+    // If the user has selected all the 3 value
+    // update it in the state
+    if (
+      updatedCurrentAdvFilters.field &&
+      updatedCurrentAdvFilters.operator &&
+      updatedCurrentAdvFilters.text
+    ) {
+      this.props.onApply(updatedCurrentAdvFilters);
+    }
+  };
+
+  render() {
+    const { advancedFilterOptions } = this.props;
+    return (
+      <div style={{ marginTop: "20px", paddingLeft: 28, paddingRight: 28 }}>
+        <span
+          style={{
+            color: "#138BD6",
+            cursor: "pointer",
+            textTransform: "uppercase"
+          }}
+        >
+          <FormattedMessage id={"workflowFiltersTranslated.advancedFilter"} />
+        </span>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center"
+          }}
+        >
+          <Cascader
+            style={{ width: "100%", marginRight: "40px" }}
+            options={advancedFilterOptions}
+            onChange={this.handleApply("field")}
+            placeholder={
+              <FormattedMessage id="workflowFiltersTranslated.pleaseSelectField" />
+            }
+            // TODO: Check if this is required
+            // className={css`
+            //   .ant-input {
+            //     padding-left: 0;
+            //   }
+            // `}
+          />
+
+          <DropdownFilter
+            data={OPERATORS_TYPES}
+            placeholder={
+              <FormattedMessage id="workflowFiltersTranslated.selectOperator" />
+            }
+            name="operator"
+            onChange={this.handleApply("operator")}
+          />
+
+          <Input
+            placeholder={
+              <FormattedMessage id="workflowFiltersTranslated.inputValue" />
+            }
+            onChange={e => this.handleApply("text")(e.target.value)}
+            style={{ paddingLeft: 0, width: "100%", marginRight: "40px" }}
+          />
+        </div>
+      </div>
+    );
+  }
+}
