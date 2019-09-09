@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import { Select } from "antd";
-import { css } from "emotion";
+// import { css } from "emotion";
 
 const Option = Select.Option;
 
 class DropdownFilter extends Component {
   renderOptions = () => {
     const { data } = this.props;
-    return Array.isArray(data)
-      ? data.map((item, index) => (
-          <Option key={`option_${index}`} value={item.value}>
-            {item.label}
-          </Option>
-        ))
-      : null;
+    return Array.isArray(data) ? this.makeOptionsCmp(data) : null;
   };
 
-  get searchableProps() {
+  makeOptionsCmp = data => {
+    return data.map((item, index) => (
+      <Option key={`option_${index}`} value={item.value}>
+        {item.label}
+      </Option>
+    ));
+  };
+
+  get searchProps() {
     // Just adding some props to make our select component searchable
     return {
       showSearch: true,
@@ -28,34 +30,31 @@ class DropdownFilter extends Component {
 
   render() {
     const {
-      name,
-      onFilterChange,
-      value,
-      placeholder,
-      loading = false,
-      searchable
+      style = {},
+      data, // Extacting out data, since it should not be a part of the restProps
+      searchable,
+      ...restProps
     } = this.props;
 
-    const additionalProps = searchable ? this.searchableProps : {};
+    const searchProps = searchable ? this.searchProps : {};
 
     return (
       <Select
-        loading={!!loading}
-        value={value}
-        placeholder={placeholder}
         style={{
           display: "block",
           margin: "20px 0px",
           width: "100%",
-          marginRight: "40px"
+          marginRight: "40px",
+          ...style
         }}
-        onChange={select => onFilterChange(name, select)}
-        className={css`
-          .ant-select-selection__rendered {
-            margin-left: 0;
-          }
-        `}
-        {...additionalProps}
+        // TODO: Check if this is required
+        // className={css`
+        //   .ant-select-selection__rendered {
+        //     margin-left: 0;
+        //   }
+        // `}
+        {...restProps}
+        {...searchProps}
       >
         {this.renderOptions()}
       </Select>
