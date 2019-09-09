@@ -5,7 +5,7 @@ import {
   getChildWorkflow,
   workflowKindService,
   requestWorflowPDF
-} from "../../services";
+} from "../../../js/services";
 
 const CheckboxGroup = Checkbox.Group;
 
