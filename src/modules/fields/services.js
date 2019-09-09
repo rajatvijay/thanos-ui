@@ -1,4 +1,4 @@
-import { authHeader } from "../../js/_helpers";
+import { authHeader, handleResponse } from "../../js/_helpers";
 import { APIFetch } from "../../js/utils/request";
 import { requiredParam } from "../common/errors";
 
@@ -38,14 +38,6 @@ function clearResponse({ responseId = requiredParam("responseId"), payload }) {
   return APIFetch(`responses/${responseId}/clear/`, requestOptions).then(
     handleResponse
   );
-}
-
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
 }
 
 export const fieldService = {

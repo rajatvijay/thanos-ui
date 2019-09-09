@@ -289,7 +289,6 @@ export default {
   CAN_ADD_SITE: "Can add site",
   CAN_CHANGE_SITE: "Can change site",
   CAN_DELETE_SITE: "Can delete site",
-  CAN_VIEW_ALERTS: "Can View Alerts",
   CAN_CHANGE_ALERT_SUBSCRIBER: "Can change alert subscriber",
   CAN_DELETE_ALERT_SUBSCRIBER: "Can delete alert subscriber",
   CAN_ADD_INTEGRATION_POLLING_CONSTRAINT:

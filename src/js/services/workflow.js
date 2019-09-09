@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
 import _ from "lodash";
 import { store } from "../_helpers";
 import { APIFetch } from "../utils/request";
@@ -136,13 +136,4 @@ function updateWorkflow({ id, payload }) {
   };
 
   return APIFetch(`workflows/${id}/`, requestOptions).then(handleResponse);
-}
-
-// COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
 }

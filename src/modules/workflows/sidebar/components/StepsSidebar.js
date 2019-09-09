@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tooltip, Collapse, Icon } from "antd";
+import { Tooltip, Collapse } from "antd";
 import { css } from "emotion";
 import { get as lodashGet } from "lodash";
 import { StyledCollapseItem, StyledCollapse } from "../styledComponents";

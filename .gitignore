@@ -29,6 +29,3 @@ src/js/_helpers/api-url-local.js
 src/js/_helpers/auth-header.js
 src/js/services/user.js
 yarn.lock
-src/js/_helpers/api-url-local.js
-src/js/_helpers/auth-header.js
-src/js/services/user.js

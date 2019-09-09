@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { authHeader } from "../../../_helpers";
 import { connect } from "react-redux";
 import { Form, Icon } from "antd";

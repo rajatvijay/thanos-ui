@@ -1,16 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import {
-  Form,
-  Divider,
-  Row,
-  Col,
-  Button,
-  Tooltip,
-  Tabs,
-  Icon,
-  message
-} from "antd";
+import { Form, Divider, Row, Col, Button, Tooltip, Tabs, message } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";

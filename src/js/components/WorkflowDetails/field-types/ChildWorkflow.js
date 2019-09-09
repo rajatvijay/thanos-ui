@@ -983,7 +983,6 @@ class ChildWorkflowField2 extends Component {
   createKindFilter = () => {
     const { props } = this;
     const {
-      field,
       workflowKind,
       intl: { formatMessage }
     } = props;
