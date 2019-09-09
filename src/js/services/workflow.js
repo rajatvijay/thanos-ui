@@ -38,7 +38,7 @@ function getAll(filter) {
   // This is super a bad hack
   // But a quick win over doing a lot of minor fixes and refactoring
   // Doing this specifically for VET-5267
-  // Remove the kind filter in case of my task
+  // Description: Remove the kind filter in case of my task
   // In case of any questions, please contact rajat@thevetted.com
   if (url.includes("user-step-tag")) {
     const searchString = url.split("?")[1];
