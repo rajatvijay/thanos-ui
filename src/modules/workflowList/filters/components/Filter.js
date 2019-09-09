@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { authHeader } from "../../../js/_helpers";
+import { authHeader } from "../../../../js/_helpers";
 
 import FilterPopup from "./FilterPopup";
-import { workflowFiltersActions, workflowActions } from "../../../js/actions";
+import {
+  workflowFiltersActions,
+  workflowActions
+} from "../../../../js/actions";
 import { Icon } from "antd";
 import CreateNew from "./CreateNew";
 import { css } from "emotion";
 import styled from "@emotion/styled";
-import { apiBaseURL } from "../../../config";
 import { FormattedMessage, injectIntl } from "react-intl";
-import IntlTooltip from "../../../js/components/common/IntlTooltip";
 import { get as lodashGet } from "lodash";
+import { apiBaseURL } from "../../../../config";
+import IntlTooltip from "../../../../js/components/common/IntlTooltip";
 
 class Filter extends Component {
   state = {

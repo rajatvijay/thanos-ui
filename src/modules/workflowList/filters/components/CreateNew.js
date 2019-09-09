@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Menu, Dropdown, Icon } from "antd";
 import { connect } from "react-redux";
-import { workflowKindActions, createWorkflow } from "../../../js/actions";
+import { workflowKindActions, createWorkflow } from "../../../../js/actions";
 import { injectIntl } from "react-intl";
 import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 import { getVisibleWorkflowKinds } from "../createNew.selector";

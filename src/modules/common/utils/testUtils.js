@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { IntlProvider } from "react-intl";
-import { flattenMessages } from "../../js/components/common/messageUtils";
-import inltMessages from "../../js/components/common/intlMessages";
+import { flattenMessages } from "../../../js/components/common/messageUtils";
+import inltMessages from "../../../js/components/common/intlMessages";
 
 const DEFAULT_LOCALE = "en";
 
