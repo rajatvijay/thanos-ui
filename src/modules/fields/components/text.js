@@ -63,7 +63,7 @@ export class Text extends Component {
 
   onBlur = e => {
     const { value } = e.target;
-    if (value === this.initialAnswer.answer) {
+    if (this.initialAnswer && value === this.initialAnswer.answer) {
       return;
     }
 
@@ -120,7 +120,7 @@ export class Text extends Component {
         autoComplete="new-password"
         {...field_error(props)}
       >
-        <TextFieldComponent {...this.inputProps} allowClear />
+        <TextFieldComponent {...this.inputProps} />
       </FormItem>
     );
   }
