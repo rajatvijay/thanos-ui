@@ -130,9 +130,9 @@ class FilterPopup extends Component {
       const selectedKind = this.props.workflowKindValue.selectedKindValue;
       if (selectedKind && selectedKind.available_statuses) {
         // This will maintain the order of statuses as defined for the kind
-        return selectedKind.available_statuses.map(statusId =>
-          allStatuses.find(status => status.id === statusId)
-        );
+        return selectedKind.available_statuses
+          .map(statusId => allStatuses.find(status => status.id === statusId))
+          .sort((a, b) => (a.label > b.label ? 1 : a.label < b.label ? -1 : 0));
       }
     } catch (e) {}
     return [];
