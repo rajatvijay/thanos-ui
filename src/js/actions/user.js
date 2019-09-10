@@ -93,12 +93,11 @@ export const tokenLogin = (token, next) => async dispatch => {
 };
 
 export const logout = () => async dispatch => {
-  const response = await userLogout();
-  if (response.ok) {
+  try {
+    const response = await userLogout();
     dispatch({ type: userConstants.LOGOUT });
-    Godaam.user = null;
-    userUtilities.postLogoutAction();
-  } else {
+    userUtilities.postLogoutAction({ redirectURL: response.redirect_url });
+  } catch (err) {
     dispatch({ type: userConstants.LOGOUT_FAILURE });
   }
 };
