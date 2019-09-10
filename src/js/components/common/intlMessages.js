@@ -214,7 +214,8 @@ export default {
       invalidEmail: "Invalid E-mail",
       invalidURL: "Invalid URL",
       selectAtLeastOneCategory:
-        "Please select atleast one from all categories to continue."
+        "Please select atleast one from all categories to continue.",
+      somethingWentWrong: "Something went wrong."
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -619,7 +620,8 @@ export default {
       invalidEmail: "Email inválido",
       invalidURL: "URL invalida",
       selectAtLeastOneCategory:
-        "Seleccione al menos una de todas las categorías para continuar"
+        "Seleccione al menos una de todas las categorías para continuar",
+      somethingWentWrong: "Quelque chose s'est mal passé."
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
@@ -1037,7 +1039,8 @@ export default {
       invalidEmail: "Email invalide",
       invalidURL: "URL invalide",
       selectAtLeastOneCategory:
-        "Veuillez en sélectionner au moins une dans toutes les catégories pour continuer."
+        "Veuillez en sélectionner au moins une dans toutes les catégories pour continuer.",
+      somethingWentWrong: "Algo salió mal."
     },
     loginPageInstances: {
       oneTimeLink: "Entrez votre adresse de courriel professionnelle",

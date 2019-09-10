@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Tag } from "antd";
+import { Tag, Alert } from "antd";
 import _ from "lodash";
-import { Row, Col } from "antd";
+import { Row, Col, Icon } from "antd";
 import IntlTooltip from "../../common/IntlTooltip";
 import { FormattedMessage } from "react-intl";
 

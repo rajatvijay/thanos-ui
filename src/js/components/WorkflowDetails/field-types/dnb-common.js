@@ -6,11 +6,9 @@ import { commonFunctions } from "./commons";
 import FinancialData from "./FinancialData";
 import LitigationData from "./LitigationData";
 import { AmberRoad } from "./fields/AmberRoad.js";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
-const {
-  getIntegrationSearchButton,
-  isDnBIntegrationDataLoading
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 
@@ -38,7 +36,7 @@ class DnBSearch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
     let integration = null;
     const props = {
       field: field,
@@ -51,36 +49,28 @@ class DnBSearch extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      isDnBIntegrationDataLoading(this.props)
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
-        </div>
-      );
-    }
+    const showResultText =
+      props.field.integration_json.OrderProductResponse &&
+      props.field.integration_json.OrderProductResponse.TransactionResult
+        .ResultText !== "Success";
 
-    if (_.size(props.field.integration_json)) {
-      if (
-        props.field.integration_json.OrderProductResponse &&
-        props.field.integration_json.OrderProductResponse.TransactionResult
-          .ResultText !== "Success"
-      ) {
-        final_html = (
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={showResultText}
+      >
+        <div className="mr-top-lg mr-bottom-lg">
           <div className="text-center text-red">
             {
               props.field.integration_json.OrderProductResponse
                 .TransactionResult.ResultText
             }
           </div>
-        );
-      }
-    }
+        </div>
+      </IntegrationLoadingWrapper>
+    );
 
     if (_.size(props.field.integration_json)) {
       integration = this.props.field.definition.field_type;
@@ -89,13 +79,13 @@ class DnBSearch extends Component {
     return (
       <div>
         {getFields(props)}
-        {final_html}
+        {finalHTML}
+
         {integration === "dnb_financials" ? <FinancialData {...props} /> : null}
         {integration === "dnb_litigation" ? (
           <LitigationData {...props} />
         ) : null}
         {integration === "amber_road" ? <AmberRoad {...props} /> : null}
-
         <br />
       </div>
     );

@@ -5,6 +5,7 @@ import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
 import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -37,7 +38,7 @@ class GoogleSrch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
     const props = {
       field: field,
       onSearch: this.onSearch,
@@ -47,41 +48,28 @@ class GoogleSrch extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={"default"}
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            getComment={this.getComment}
+            jsonData={field.integration_json}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+            onSearch={this.onSearch}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          <div className="mr-top-lg mr-bottom-lg google-search-table">
-            <GetTable
-              getComment={this.getComment}
-              jsonData={field.integration_json}
-              commentCount={field.integration_comment_count}
-              flag_dict={field.selected_flag}
-              onSearch={this.onSearch}
-            />
-          </div>
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };

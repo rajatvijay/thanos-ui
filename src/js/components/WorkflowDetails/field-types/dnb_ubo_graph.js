@@ -5,6 +5,7 @@ import { dunsFieldActions } from "../../../actions";
 import { Icon, Alert } from "antd";
 import $ from "jquery";
 import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 window.$ = window.jquery = $;
 
@@ -102,7 +103,7 @@ class DnbUBOGraph extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -113,41 +114,20 @@ class DnbUBOGraph extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
-        </div>
-      );
-    } else if (field.integration_json.status_code === "error") {
-      final_html = (
-        <div>
-          <Alert
-            message={
-              field.integration_json.status_message || "Something went wrong"
-            }
-            type="error"
-          />
-        </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = <div>{this.renderGraph(field)}</div>;
-    }
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={"default"}
+      >
+        <div>{this.renderGraph(field)}</div>
+      </IntegrationLoadingWrapper>
+    );
 
     return (
-      <div id="ubo-container">
-        {getFields(props)}
-        {final_html}
+      <div>
+        {getFields(props)} {finalHTML}
       </div>
     );
   };

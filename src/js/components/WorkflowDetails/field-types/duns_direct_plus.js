@@ -6,6 +6,7 @@ import { dunsFieldActions } from "../../../actions";
 import NumberFormat from "react-number-format";
 import { supportedFieldFormats } from "../../../../config";
 import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -54,7 +55,7 @@ class DunsSearch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -67,42 +68,31 @@ class DunsSearch extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      (this.props.currentStepFields[this.props.stepData.id] &&
-        this.props.currentStepFields[this.props.stepData.id]
-          .integration_data_loading) ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const params = {
+      currentStepFields: this.props.currentStepFields,
+      step: this.props.field.step,
+      field: this.props.field
+    };
+
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check="default"
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            selectItem={this.selectItem}
+            jsonData={field.integration_json}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                selectItem={this.selectItem}
-                jsonData={field.integration_json}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
