@@ -32,7 +32,11 @@ export default {
       adjudicationCode: "Adjutication Code",
       noBulkActions: "No bulk actions available",
       profileText: "Profile",
-      unauthorisedText: "You are not authorised to view this page.",
+      unauthorisedText: {
+        unauthorisedPageText: "You are not authorised to view this page.",
+        generateSessionText:
+          "Please use the link in email to generate another login session"
+      },
       noDuplicatesFound: "No duplicates found",
       flagsText: "Flags",
       relatedWorkflowsText: "Related Workflows",
@@ -449,7 +453,11 @@ export default {
         adjudication: "Adjudicación"
       },
       profileText: "Perfil",
-      unauthorisedText: "No tienes autorización para ver esta página.",
+      unauthorisedText: {
+        unauthorisedPageText: "No tienes autorización para ver esta página.",
+        generateSessionText:
+          "Utilice el enlace en el correo electrónico para generar otra sesión de inicio de sesión."
+      },
       adjudicationCode: "Código de Adjuticación",
       noBulkActions: "No hay acciones masivas disponibles",
       noDuplicatesFound: "No se encontraron duplicados",
@@ -863,7 +871,11 @@ export default {
         adjudication: "Arbitrage"
       },
       profileText: "Profile",
-      unauthorisedText: "Vous n'êtes pas autorisé à voir cette page..",
+      unauthorisedText: {
+        unauthorisedPageText: "Vous n'êtes pas autorisé à voir cette page..",
+        generateSessionText:
+          "S'il vous plaît utilisez le lien dans l'email pour générer une autre session de connexion."
+      },
       adjudicationCode: "Code d'adjudication",
       noBulkActions: "Aucune action en masse disponible",
       noDuplicatesFound: "Aucun doublon trouvé",

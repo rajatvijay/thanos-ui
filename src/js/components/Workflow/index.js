@@ -209,6 +209,7 @@ class Workflow extends Component {
   };
 
   render = () => {
+    const that = this;
     const { workflow, config, workflowKind } = this.props;
 
     if (this.props.workflow.loadingStatus === "failed") {
@@ -241,7 +242,22 @@ class Workflow extends Component {
               {!config ? (
                 "loading"
               ) : (
-                <FormattedMessage id={"workflowsInstances.unauthorisedText"} />
+                <div>
+                  <FormattedMessage
+                    id={
+                      "workflowsInstances.unauthorisedText.unauthorisedPageText"
+                    }
+                  />
+                  <br />
+                  {that.props.authentication &&
+                  that.props.authentication.user.kind === 2 ? (
+                    <FormattedMessage
+                      id={
+                        "workflowsInstances.unauthorisedText.generateSessionText"
+                      }
+                    />
+                  ) : null}
+                </div>
               )}
             </h4>
           </div>
