@@ -61,9 +61,9 @@ class DnbRDC extends Component {
         check={"default"}
       >
         <div className="mr-top-lg mr-bottom-lg">
-          <GetTable
-            jsonData={field.integration_json}
+          <GetTabsFilter
             getComment={this.getComment}
+            jsonData={field.integration_json}
             commentCount={field.integration_comment_count}
             flag_dict={field.selected_flag}
           />
