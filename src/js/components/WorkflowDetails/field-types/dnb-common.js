@@ -50,6 +50,7 @@ class DnBSearch extends Component {
     };
 
     const showResultText =
+      _.size(props.field.integration_json) &&
       props.field.integration_json.OrderProductResponse &&
       props.field.integration_json.OrderProductResponse.TransactionResult
         .ResultText !== "Success";
@@ -63,10 +64,9 @@ class DnBSearch extends Component {
       >
         <div className="mr-top-lg mr-bottom-lg">
           <div className="text-center text-red">
-            {
+            {showResultText &&
               props.field.integration_json.OrderProductResponse
-                .TransactionResult.ResultText
-            }
+                .TransactionResult.ResultText}
           </div>
         </div>
       </IntegrationLoadingWrapper>
