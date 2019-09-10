@@ -55,7 +55,7 @@ const IntegrationLoadingWrapper = ({
       return React.cloneElement(child, { ...otherProps, ...child.props });
     });
   } else {
-    return noResult;
+    return null;
   }
 };
 

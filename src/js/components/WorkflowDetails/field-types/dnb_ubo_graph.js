@@ -126,7 +126,7 @@ class DnbUBOGraph extends Component {
     );
 
     return (
-      <div>
+      <div id="ubo-container">
         {getFields(props)} {finalHTML}
       </div>
     );
