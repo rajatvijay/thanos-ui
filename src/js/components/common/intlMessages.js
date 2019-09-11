@@ -42,7 +42,8 @@ export default {
       relatedWorkflowsText: "Related Workflows",
       parentWorkflow: "Parent Workflow",
       childWorkflows: "Child Workflows",
-      staticSection: "Static Section"
+      staticSection: "Static Section",
+      createWorkflow: "Create new workflow"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -215,7 +216,10 @@ export default {
       invalidURL: "Invalid URL",
       selectAtLeastOneCategory:
         "Please select atleast one from all categories to continue.",
-      somethingWentWrong: "Something went wrong."
+      somethingWentWrong: "Something went wrong.",
+      errorCode: "Error Code: {errorCode}",
+      ws001:
+        "There’s a problem with the configuration of workflow, please check with the site admin."
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -466,7 +470,8 @@ export default {
       relatedWorkflowsText: "Flujos de trabajo relacionados",
       parentWorkflow: "Flujo de trabajo principal",
       childWorkflows: "Flujos de trabajo secundarios",
-      staticSection: "Sección estática"
+      staticSection: "Sección estática",
+      createWorkflow: "Crear nuevo flujo de trabajo"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
@@ -621,7 +626,10 @@ export default {
       invalidURL: "URL invalida",
       selectAtLeastOneCategory:
         "Seleccione al menos una de todas las categorías para continuar",
-      somethingWentWrong: "Quelque chose s'est mal passé."
+      somethingWentWrong: "Quelque chose s'est mal passé.",
+      errorCode: "Código de error: {errorCode}",
+      ws001:
+        "Hay un problema con la configuración del flujo de trabajo, consulte con el administrador del sitio"
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
@@ -885,7 +893,8 @@ export default {
       relatedWorkflowsText: "Flux de travaux associés",
       parentWorkflow: "Flux de travail parent",
       childWorkflows: "Flux de travail enfants",
-      staticSection: "Section statique"
+      staticSection: "Section statique",
+      createWorkflow: "Créer un nouveau flux de travail"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
@@ -1040,7 +1049,10 @@ export default {
       invalidURL: "URL invalide",
       selectAtLeastOneCategory:
         "Veuillez en sélectionner au moins une dans toutes les catégories pour continuer.",
-      somethingWentWrong: "Algo salió mal."
+      somethingWentWrong: "Algo salió mal.",
+      errorCode: "Code d'erreur: {errorCode}",
+      ws001:
+        "Il y a un problème avec la configuration du workflow, veuillez vérifier avec l'administrateur du site."
     },
     loginPageInstances: {
       oneTimeLink: "Entrez votre adresse de courriel professionnelle",
