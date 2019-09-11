@@ -87,8 +87,10 @@ class DnbUBOGraph extends Component {
 
   renderGraph = field => {
     if (
-      _.size(field.integration_json) &&
-      field.integration_json.OrderProductResponse.OrderProductResponseDetail
+      _.has(
+        field,
+        "integration_json.OrderProductResponse.OrderProductResponseDetail"
+      )
     ) {
       return <div id="GraphContainer" />;
     } else {

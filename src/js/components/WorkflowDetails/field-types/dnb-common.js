@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Icon } from "antd";
-import _ from "lodash";
+import { size, has } from "lodash";
 import { dunsFieldActions } from "../../../actions";
 import { commonFunctions } from "./commons";
 import FinancialData from "./FinancialData";
@@ -50,8 +50,10 @@ class DnBSearch extends Component {
     };
 
     const showResultText =
-      _.size(props.field.integration_json) &&
-      props.field.integration_json.OrderProductResponse &&
+      has(
+        props.field,
+        "integration_json.OrderProductResponse.TransactionResult.ResultText"
+      ) &&
       props.field.integration_json.OrderProductResponse.TransactionResult
         .ResultText !== "Success";
 
@@ -72,7 +74,7 @@ class DnBSearch extends Component {
       </IntegrationLoadingWrapper>
     );
 
-    if (_.size(props.field.integration_json)) {
+    if (size(props.field.integration_json)) {
       integration = this.props.field.definition.field_type;
     }
 

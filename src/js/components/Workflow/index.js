@@ -10,7 +10,7 @@ import {
   workflowKindActions,
   configActions
 } from "../../actions";
-import _ from "lodash";
+import { isEmpty, has } from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../../modules/sidebar/components/Sidebar";
@@ -50,7 +50,7 @@ class Workflow extends Component {
     this.props.dispatch(workflowFiltersActions.getRegionData());
     this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
 
-    if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+    if (!isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
 
@@ -107,7 +107,7 @@ class Workflow extends Component {
         })
       );
       this.props.dispatch(workflowKindActions.getAlertCount(defKind.tag));
-      if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+      if (isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
         this.props.dispatch(workflowKindActions.getCount(defKind.tag));
       }
     } else {
@@ -221,6 +221,10 @@ class Workflow extends Component {
       }
     }
 
+    const hasSupplierUser =
+      has(this.props, "authentication.user.kind") &&
+      this.props.authentication.user.kind === 2;
+
     const renderPrep = {
       get isLoading() {
         return config.loading || workflow.loading || workflowKind.loading;
@@ -249,14 +253,13 @@ class Workflow extends Component {
                     }
                   />
                   <br />
-                  {that.props.authentication &&
-                  that.props.authentication.user.kind === 2 ? (
+                  {hasSupplierUser && (
                     <FormattedMessage
                       id={
                         "workflowsInstances.unauthorisedText.generateSessionText"
                       }
                     />
-                  ) : null}
+                  )}
                 </div>
               )}
             </h4>
