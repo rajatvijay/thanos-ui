@@ -56,10 +56,10 @@ const ErrorPage = ({ onSubmitFeedback, onGoHome }) => {
             <StyledHeading>Oops!</StyledHeading>
           </StyledHeader>
           <StyledDescription>
-            Sorry! It looks like something went wrong on our end. We've already
-            notified our engineers and they're looking into it. Meanwhile,
-            please consider submitting feedback regarding the actions that led
-            you here.
+            Sorry! It looks like something isn’t working. Our engineering team
+            has been notified. Thanks for your patience as they work through to
+            get this running back up again. In the meantime please consider
+            submitting feedback on the the actions that led you here.
           </StyledDescription>
           <StyledFooter>
             <StyledButton onClick={onGoHome}>GO HOME</StyledButton>
