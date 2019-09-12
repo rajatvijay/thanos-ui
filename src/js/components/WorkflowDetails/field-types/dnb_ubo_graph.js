@@ -86,8 +86,10 @@ class DnbUBOGraph extends Component {
 
   renderGraph = field => {
     if (
-      _.size(field.integration_json) &&
-      field.integration_json.OrderProductResponse.OrderProductResponseDetail
+      _.has(
+        field,
+        "field.integration_json.OrderProductResponse.OrderProductResponseDetail"
+      )
     ) {
       return <div id="GraphContainer" />;
     } else {
@@ -115,7 +117,7 @@ class DnbUBOGraph extends Component {
 
     let final_html = null;
     if (
-      this.props.currentStepFields.integration_data_loading ||
+      this.props.currentStepFields[field.step].integration_data_loading ||
       field.integration_json.status_message ===
         "Fetching data for this field..."
     ) {

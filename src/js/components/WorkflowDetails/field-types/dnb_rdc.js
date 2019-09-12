@@ -55,7 +55,7 @@ class DnbRDC extends Component {
 
     let final_html = null;
     if (
-      this.props.currentStepFields.integration_data_loading ||
+      this.props.currentStepFields[field.step].integration_data_loading ||
       field.integration_json.status_message ===
         "Fetching data for this field..."
     ) {
@@ -924,8 +924,12 @@ const GetTable = props => {
 const GetTabsFilter = props => {
   // for error
   if (
+    _.has(
+      props,
+      "jsonData.SearchComplianceAlertsResponse.TransactionResult.ResultID"
+    ) &&
     props.jsonData.SearchComplianceAlertsResponse.TransactionResult.ResultID !==
-    "PD021"
+      "PD021"
   ) {
     return (
       <div className="text-center text-red">

@@ -51,6 +51,14 @@ class DnBSearch extends Component {
       permission: this.props.permission
     };
 
+    const showResultText =
+      _.has(
+        props.field,
+        "integration_json.OrderProductResponse.TransactionResult.ResultText"
+      ) &&
+      props.field.integration_json.OrderProductResponse.TransactionResult
+        .ResultText !== "Success";
+
     let final_html = null;
     if (
       this.props.currentStepFields.integration_data_loading ||
@@ -65,21 +73,14 @@ class DnBSearch extends Component {
       );
     }
 
-    if (_.size(props.field.integration_json)) {
-      if (
-        props.field.integration_json.OrderProductResponse &&
-        props.field.integration_json.OrderProductResponse.TransactionResult
-          .ResultText !== "Success"
-      ) {
-        final_html = (
-          <div className="text-center text-red">
-            {
-              props.field.integration_json.OrderProductResponse
-                .TransactionResult.ResultText
-            }
-          </div>
-        );
-      }
+    if (showResultText) {
+      final_html = (
+        <div className="text-center text-red">
+          {showResultText &&
+            props.field.integration_json.OrderProductResponse.TransactionResult
+              .ResultText}
+        </div>
+      );
     }
 
     if (_.size(props.field.integration_json)) {
