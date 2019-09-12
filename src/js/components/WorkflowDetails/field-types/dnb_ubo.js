@@ -92,8 +92,12 @@ class DnbUBO extends Component {
 const GetTable = props => {
   // for error
   if (
+    _.has(
+      props,
+      "jsonData.OrderProductResponse.TransactionResult.ResultText"
+    ) &&
     props.jsonData.OrderProductResponse.TransactionResult.ResultText !==
-    "Success"
+      "Success"
   ) {
     return (
       <div className="text-center text-red">
