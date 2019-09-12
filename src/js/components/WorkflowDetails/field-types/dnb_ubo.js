@@ -107,6 +107,10 @@ const GetTable = props => {
   }
 
   if (
+    _.has(
+      props.jsonData.OrderProductResponse.OrderProductResponseDetail.Product
+        .Organization.Linkage.BeneficialOwnership.BeneficialOwners
+    ) &&
     !_.size(
       props.jsonData.OrderProductResponse.OrderProductResponseDetail.Product
         .Organization.Linkage.BeneficialOwnership.BeneficialOwners
