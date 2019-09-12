@@ -91,6 +91,14 @@ class DnbUBO extends Component {
 
 const GetTable = props => {
   // for error
+  if (props.jsonData.status_code === "error") {
+    return (
+      <div className="text-center text-red">
+        {props.jsonData.status_message}
+      </div>
+    );
+  }
+
   if (
     _.has(
       props,
