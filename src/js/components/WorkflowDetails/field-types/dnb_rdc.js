@@ -72,7 +72,7 @@ class DnbRDC extends Component {
     ) {
       final_html = (
         <div>
-          {_.size(field.integration_json) ? (
+          {_.has(field, "integration_json.SearchComplianceAlertsResponse") ? (
             <div className="mr-top-lg mr-bottom-lg">
               <GetTabsFilter
                 getComment={this.getComment}
@@ -923,6 +923,7 @@ const GetTable = props => {
 
 const GetTabsFilter = props => {
   // for error
+
   if (
     _.has(
       props,
