@@ -367,15 +367,21 @@ class ChildWorkflowField2 extends Component {
   };
 
   renderAddButton = () => {
-    if (
-      this.props.workflowKind.loading ||
-      this.props.stepData.completed_at ||
-      this.props.stepData.is_locked
-    ) {
+    // Show Loading when the workflow kinds are loading
+    if (this.props.workflowKind.loading) {
       return (
         <StyledLoadingContainer>
           <Icon type="loading" style={{ color: "#148cd6", fontSize: "18px" }} />
         </StyledLoadingContainer>
+      );
+    }
+
+    // Show disabled + button when the step is either locked or completed
+    if (this.props.stepData.completed_at || this.props.stepData.is_locked) {
+      return (
+        <span className="disabled child-workflow-dropdown pd-ard-sm text-lighter">
+          <i className="material-icons">add</i>
+        </span>
       );
     }
 
