@@ -73,6 +73,7 @@ class RDCEventDetailComponent extends Component {
                 jsonData={updatedIntegrationJson}
                 commentCount={field.integration_comment_count}
                 flag_dict={field.selected_flag}
+                intl={this.props.intl}
               />
             </div>
           ) : null}
@@ -317,7 +318,7 @@ const GetTabsFilter = props => {
   const getFilterData = data => {
     let fList = [
       {
-        label: <FormattedMessage id="commonTextInstances.all" />,
+        label: props.intl.formatMessage({ id: "commonTextInstances.all" }),
         value: "all",
         data: data,
         count: data.length,
