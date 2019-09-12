@@ -61,6 +61,12 @@ class DnbUBO extends Component {
           </div>
         </div>
       );
+    } else if (field.integration_json.status_code === "status_code") {
+      final_html = (
+        <div>
+          {field.integration_json.status_message || "Something went wrong"}
+        </div>
+      );
     } else if (
       _.size(field.integration_json) &&
       !field.integration_json.selected_match
