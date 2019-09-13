@@ -107,12 +107,12 @@ export const Number = props => {
         type="number"
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
-        step="1"
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
+        parser={value => parseInt(value, 10)}
         {...feedValue(props)}
         autoComplete="new-password"
         onChange={onFieldChange.bind(this, props)}
