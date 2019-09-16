@@ -10,7 +10,8 @@ export const workflowActions = {
   expandedWorkflowsList,
   showUserWorkflowModal,
   hideUserWorkflowModal,
-  clear
+  clear,
+  updateParentExtraFilters
 };
 
 function getAll(filter) {
@@ -165,5 +166,15 @@ function hideUserWorkflowModal() {
   return {
     type: workflowConstants.HIDE_USER_WORKFLOW_MODAL,
     workflowID: null
+  };
+}
+
+function updateParentExtraFilters(extraFilters, workflowId) {
+  return dispatch => {
+    dispatch({
+      type: workflowConstants.UPDATE_PARENT_EXTRA_FILTER,
+      extraFilters: extraFilters,
+      workflowId: workflowId
+    });
   };
 }

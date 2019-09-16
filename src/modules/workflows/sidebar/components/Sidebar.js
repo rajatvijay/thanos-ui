@@ -9,13 +9,14 @@ import {
   workflowStepActions
 } from "../../../../js/actions";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
-import Permissions from "../../../common/permissions/constants";
+import Permissions from "../../../common/permissions/permissionsList";
 import { Link } from "react-router-dom";
 import {
   StyledSidebarHeader,
   StyledWorkflowName,
   StyledCollapseItem,
-  StyledSidebar
+  StyledSidebar,
+  StyledBreadCrumbItem
 } from "../styledComponents";
 import StepsSideBar from "./StepsSidebar";
 
@@ -159,9 +160,14 @@ class Sidebar extends Component {
     );
   }
 
-  get parentWorkflow() {
+  get workflowFamily() {
     const family = lodashGet(this.currentWorkflow, `workflow_family`, null);
-    return family.length > 1 ? family[0] : null;
+
+    // Removing the last element since it will always be the workflow itself
+    const familyCopy = [...family];
+    familyCopy.pop();
+
+    return familyCopy.length ? familyCopy : null;
   }
 
   get lcData() {
@@ -207,15 +213,18 @@ class Sidebar extends Component {
   }
 
   // ALL RENDER FUNCTIONS
-  renderParent = () => {
-    if (this.parentWorkflow) {
-      return (
-        <Link to={`/workflows/instances/${this.parentWorkflow.id}`}>
-          <span style={{ color: "gray", fontSize: 12 }}>
-            {this.parentWorkflow.name}
-          </span>
-        </Link>
-      );
+  renderBreadcrumbs = () => {
+    if (this.workflowFamily) {
+      return this.workflowFamily.map((family, index) => (
+        <React.Fragment key={family.id}>
+          <Link to={`/workflows/instances/${family.id}`}>
+            <StyledBreadCrumbItem>{family.name}</StyledBreadCrumbItem>
+          </Link>
+          {index === this.workflowFamily.length - 1 ? null : (
+            <StyledBreadCrumbItem>></StyledBreadCrumbItem>
+          )}
+        </React.Fragment>
+      ));
     }
     return null;
   };
@@ -256,7 +265,7 @@ class Sidebar extends Component {
             line-height: normal;
           `}
         >
-          {this.renderParent()}
+          {this.renderBreadcrumbs()}
           <br />
           <StyledWorkflowName>{this.currentWorkflowName}</StyledWorkflowName>
         </div>
@@ -353,7 +362,7 @@ class Sidebar extends Component {
         </span>
       </Menu.Item>
 
-      <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOW}>
+      <Chowkidaar check={Permissions.CAN_ARCHIVE_WORKFLOWS}>
         <Menu.Item key={"archive"} onClick={this.archiveWorkflow}>
           <span>
             <i className="material-icons t-18 text-middle pd-right-sm">
@@ -373,13 +382,19 @@ class Sidebar extends Component {
     // TODO: This check should be outside this component
     if (!this.currentWorkflow) {
       // NOTE: Added this styled component to not break the UI, empty state
-      return <StyledSidebar width={330} minimalUI={minimalUI} />;
+
+      // NOTE2: Not passing minimalUI as is because passing boolean prop is
+      // not allowed. More details about the warning at
+      // https://github.com/styled-components/styled-components/issues/1198
+      return (
+        <StyledSidebar width={330} minimalui={minimalUI ? 1 : undefined} />
+      );
     }
 
     return (
       <>
         {this.renderActivitySidebar()}
-        <StyledSidebar width={330} minimalUI={minimalUI}>
+        <StyledSidebar width={330} minimalui={minimalUI ? 1 : undefined}>
           {!minimalUI && this.renderSidebarHeader()}
 
           <Divider style={{ margin: "10px 0" }} />

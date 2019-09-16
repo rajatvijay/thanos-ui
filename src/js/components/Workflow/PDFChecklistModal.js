@@ -17,9 +17,18 @@ const openNotificationWithIcon = data => {
   });
 };
 const META_INFO = [
-  { value: "include_flags", label: "Flags" },
-  { value: "include_comments", label: "Comments" },
-  { value: "include_archived_related_workflows", label: "Related Worflow" }
+  {
+    value: "include_flags",
+    label: "workflowsInstances.flagsText"
+  },
+  {
+    value: "include_comments",
+    label: "workflowsInstances.commentsText"
+  },
+  {
+    value: "include_archived_related_workflows",
+    label: "workflowsInstances.relatedWorkflowsText"
+  }
 ];
 
 class PDFChecklistModal extends React.Component {
@@ -117,7 +126,7 @@ class PDFChecklistModal extends React.Component {
       workflow_id: workflowId,
       parent_steps_to_print: parentWorkflow,
       child_steps_to_print: childWorkflow,
-      static_sections: staticSections,
+      extra_sections: staticSections,
       include_flags: !!include_flags,
       include_comments: !!include_comments,
       include_archived_related_workflows: !!include_archived_related_workflows
@@ -213,7 +222,9 @@ class PDFChecklistModal extends React.Component {
           margin-top: 35px;
         `}
       >
-        <h2 style={{ fontSize: 18 }}>Child Workflows</h2>
+        <h2 style={{ fontSize: 18 }}>
+          <FormattedMessage id="workflowsInstances.childWorkflows" />
+        </h2>
         <div
           className={css`
             white-space: nowrap;
@@ -237,6 +248,7 @@ class PDFChecklistModal extends React.Component {
 
                 {workflow.steps.map(step => (
                   <Checkbox
+                    key={step}
                     className={css`
                       font-size: 17px;
                       margin-left: 10px !important;
@@ -303,7 +315,7 @@ class PDFChecklistModal extends React.Component {
           `}
           onChange={event => this.onSelectMetaInformation(event, field.value)}
         >
-          {field.label}
+          <FormattedMessage id={field.label} />
         </Checkbox>
       </div>
     ));
@@ -336,7 +348,8 @@ class PDFChecklistModal extends React.Component {
     return (
       <div style={{ margin: "0px 35px" }}>
         <h2 style={{ fontSize: 18 }}>
-          Parent Workflow: {pdfConfig.results[0].parent_workflows.label}
+          <FormattedMessage id="workflowsInstances.parentWorkflow" />:{" "}
+          {pdfConfig.results[0].parent_workflows.label}
         </h2>
         {this.renderParentWorkflow(pdfConfig.results[0].parent_workflows.steps)}
         <div
@@ -355,7 +368,9 @@ class PDFChecklistModal extends React.Component {
             margin-top: 30px;
           `}
         >
-          <h2 style={{ fontSize: 18 }}>Static Section</h2>
+          <h2 style={{ fontSize: 18 }}>
+            <FormattedMessage id="workflowsInstances.staticSection" />
+          </h2>
           {this.renderStaticWorkflow(pdfConfig.results[0].extra_sections)}
         </div>
         <div
@@ -385,7 +400,7 @@ class PDFChecklistModal extends React.Component {
             onClick={this.handleSubmit}
             type="primary"
           >
-            SUBMIT
+            <FormattedMessage id="commonTextInstances.submitButtonText" />
           </Button>
           {tickMarkAtleastOne ? (
             <span
@@ -394,7 +409,8 @@ class PDFChecklistModal extends React.Component {
                 color: red;
               `}
             >
-              &#9432; Please select atleast one from all categories to continue.
+              &#9432;{" "}
+              <FormattedMessage id="errorMessageInstances.selectAtLeastOneCategory" />
             </span>
           ) : null}
         </div>

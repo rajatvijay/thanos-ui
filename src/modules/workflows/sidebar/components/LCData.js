@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { css } from "emotion";
 import { FormattedMessage, injectIntl } from "react-intl";
 
-function LCData({ lcData, status, ...restProps }) {
+function LCData({ lcData, status, dispatch, ...restProps }) {
   return (
     <Row {...restProps}>
       {status && (
@@ -44,7 +44,7 @@ const LCDataItem = ({ data }) => (
     <StyledLCDataLabel>{data.label}</StyledLCDataLabel>
     <br />
     <FormattedLCData
-      data={data}
+      {...data}
       className={css`
         color: #000000;
         font-size: 12px;

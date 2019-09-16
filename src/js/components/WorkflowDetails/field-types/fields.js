@@ -30,8 +30,7 @@ import { getIntlBody } from "../../../_helpers/intl-helpers";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const { OptGroup, Option } = AntSelect;
-const { TextArea } = Input;
+const { Option } = AntSelect;
 
 //Common utility fucntions bundled in one file commons.js//
 const {
@@ -55,72 +54,6 @@ const openNotificationWithIcon = data => {
     placement: "bottomLeft"
   });
 };
-
-//Field Type Text
-export class Text extends Component {
-  state = {
-    inputText: this.props.decryptedData
-      ? this.props.decryptedData.answer
-      : this.props.field.answers[0]
-      ? this.props.field.answers[0].answer
-      : this.props.field.definition.defaultValue
-  };
-
-  componentDidUpdate(prevProps) {
-    const inputText = this.props.decryptedData
-      ? this.props.decryptedData.answer
-      : this.props.field.answers[0]
-      ? this.props.field.answers[0].answer
-      : this.props.field.definition.defaultValue;
-    const prevInputText = prevProps.decryptedData
-      ? prevProps.decryptedData.answer
-      : prevProps.field.answers[0]
-      ? prevProps.field.answers[0].answer
-      : prevProps.field.definition.defaultValue;
-    if (inputText !== prevInputText) {
-      this.setState({ inputText });
-    }
-  }
-  onChange = e => {
-    const { value } = e.target;
-    this.setState({ inputText: value });
-    this.props.onFieldChange(e, this.props);
-  };
-  render() {
-    const { props } = this;
-
-    let rows =
-      props.field.definition.meta && props.field.definition.meta.height
-        ? props.field.definition.meta.height
-        : 1;
-
-    return (
-      <FormItem
-        label={getLabel(props, this)}
-        className={
-          "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
-        }
-        style={{ display: "block" }}
-        key={props.field.id}
-        message=""
-        hasFeedback
-        autoComplete="new-password"
-        {...field_error(props)}
-      >
-        <TextArea
-          disabled={isDisabled(props)}
-          autosize={{ minRows: rows }}
-          placeholder={props.field.placeholder}
-          value={this.state.inputText}
-          autoComplete="new-password"
-          onChange={e => this.onChange(e)}
-          onBlur={e => props.onFieldChange(e, props)}
-          style={getStyle(props)}
-        />
-      </FormItem>
-    );
-  }
-}
 
 //Field Type Boolean
 export const Bool = props => {
@@ -179,6 +112,7 @@ export const Number = props => {
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
+        parser={value => parseInt(value, 10)}
         {...feedValue(props)}
         autoComplete="new-password"
         onChange={onFieldChange.bind(this, props)}
@@ -244,7 +178,7 @@ class Email2 extends React.Component {
 
     if (this.state.isValidEamil === false) {
       return {
-        help: "Invalid email",
+        help: <FormattedMessage id="errorMessageInstances.invalidEmail" />,
         validateStatus: "error"
       };
     } else {
@@ -279,9 +213,9 @@ class Email2 extends React.Component {
               : props.field.definition.defaultValue
           }
           autoComplete="new-password"
-          message="The input is not valid email"
           onChange={e => this.onChangeValidate(e)}
           onBlur={e => this.onChangeValidate(e)}
+          title={"E-Mail"}
           {...feedValue(props)}
         />
       </FormItem>
@@ -315,7 +249,7 @@ class URL2 extends React.Component {
 
     if (this.state.isValidUrl === false) {
       return {
-        help: "Invalid url",
+        help: <FormattedMessage id="errorMessageInstances.invalidURL" />,
         validateStatus: "error"
       };
     } else {
@@ -336,22 +270,53 @@ class URL2 extends React.Component {
         {...this.fielderror(props)}
       >
         {!props.completed ? (
-          <Input
-            disabled={isDisabled(props)}
-            placeholder={props.field.placeholder}
-            prefix={<Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />}
-            type="url"
-            autoComplete="new-password"
-            message="The input is not valid email"
-            onChange={e => this.onChangeValidate(e)}
-            defaultValue={
-              props.field.answers[0]
-                ? props.field.answers[0].answer
-                : props.field.definition.defaultValue
-            }
-            onBlur={e => this.onChangeValidate(e)}
-            {...feedValue(props)}
-          />
+          isDisabled(props) ? (
+            <a
+              href={
+                props.field.answers[0]
+                  ? props.field.answers[0].answer
+                  : props.field.definition.defaultValue
+              }
+              style={{ cursor: "pointer" }}
+              target="_blank"
+            >
+              <Input
+                disabled={isDisabled(props)}
+                placeholder={props.field.placeholder}
+                prefix={
+                  <Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />
+                }
+                type="url"
+                autoComplete="new-password"
+                onChange={e => this.onChangeValidate(e)}
+                defaultValue={
+                  props.field.answers[0]
+                    ? props.field.answers[0].answer
+                    : props.field.definition.defaultValue
+                }
+                onBlur={e => this.onChangeValidate(e)}
+                {...feedValue(props)}
+              />
+            </a>
+          ) : (
+            <Input
+              disabled={isDisabled(props)}
+              placeholder={props.field.placeholder}
+              prefix={
+                <Icon type="global" style={{ color: "rgba(0,0,0,.25)" }} />
+              }
+              type="url"
+              autoComplete="new-password"
+              onChange={e => this.onChangeValidate(e)}
+              defaultValue={
+                props.field.answers[0]
+                  ? props.field.answers[0].answer
+                  : props.field.definition.defaultValue
+              }
+              onBlur={e => this.onChangeValidate(e)}
+              {...feedValue(props)}
+            />
+          )
         ) : (
           <span>
             <span className="ant-input-affix-wrapper">
@@ -368,6 +333,7 @@ class URL2 extends React.Component {
                       ? props.field.answers[0].answer
                       : props.field.definition.defaultValue
                   }
+                  target="_blank"
                 >
                   {props.field.answers[0]
                     ? props.field.answers[0].answer
@@ -647,7 +613,7 @@ class FileUpload extends Component {
                   </i>
                 </p>
                 <p className="ant-upload-text">
-                  Click or drag file to this area to upload
+                  <FormattedMessage id="fields.dragFile" />
                 </p>
               </div>
             ) : (
@@ -665,13 +631,13 @@ class FileUpload extends Component {
 
         {this.state.encrypted ? (
           <div className="masked-input mr-bottom">
-            {"Masked"}
+            <FormattedMessage id="fields.masked" />
             {this.props.decryptURL ? (
               <span
                 className="float-right text-anchor"
                 onClick={this.showDecryptURL}
               >
-                Show
+                <FormattedMessage id="fields.show" />
               </span>
             ) : null}
           </div>
@@ -776,7 +742,7 @@ class AttachmentDownload extends Component {
               rel="noopener noreferrer"
               className="ant-btn-primary"
             >
-              Download file
+              <FormattedMessage id="fields.downloadFile" />
             </Button>
           ) : (
             <Button
@@ -785,7 +751,7 @@ class AttachmentDownload extends Component {
               loading={this.state.fetching}
               className="ant-btn-primary"
             >
-              Download file
+              <FormattedMessage id="fields.downloadFile" />
             </Button>
           )}
         </FormItem>

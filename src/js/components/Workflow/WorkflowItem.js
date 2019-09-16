@@ -226,6 +226,7 @@ class WorkflowItem extends React.Component {
                 minimalUI={this.props.minimalUI}
                 workflowIdFromPropsForModal={this.props.workflow.id}
                 setParameter={this.setParameter}
+                fieldExtra={this.props.fieldExtra}
               />
             </div>
 

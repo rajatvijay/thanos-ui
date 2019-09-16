@@ -11,7 +11,7 @@ import React from "react";
 export default function(props) {
   const { href, children = [], ...otherProps } = props;
   const additionalProps = {};
-  if (!!href === false || href === "#" || href === "javascript:void(0)") {
+  if (!!href === false || href === "#" || href.startsWith("javascript")) {
     additionalProps.onClick = e => e.preventDefault();
   } else {
     additionalProps.href = href;

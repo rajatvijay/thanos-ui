@@ -1,7 +1,13 @@
-import { authHeader } from "../../js/_helpers";
+import { authHeader, handleResponse } from "../../js/_helpers";
 import { APIFetch } from "../../js/utils/request";
+import { requiredParam } from "../common/errors";
 
-function saveResponse({ answer, fieldId, workflowId }) {
+function saveResponse({
+  answer = requiredParam("answer"),
+  field = requiredParam("field"),
+  workflow = requiredParam("workflow"),
+  extra_json
+}) {
   const requestOptions = {
     method: "POST",
     headers: {
@@ -9,15 +15,13 @@ function saveResponse({ answer, fieldId, workflowId }) {
       "Content-Type": "application/json"
     },
     credentials: "include",
-    body: JSON.stringify({ answer, field: fieldId, workflow: workflowId })
+    body: JSON.stringify(arguments[0])
   };
 
   return APIFetch("responses/", requestOptions).then(handleResponse);
 }
 
-function saveAttachment({ attachment, field, workflow }) {}
-
-function clearResponse({ responseId, fieldId, workflowId }) {
+function clearResponse({ responseId = requiredParam("responseId"), payload }) {
   const requestOptions = {
     method: "POST",
     headers: {
@@ -27,17 +31,13 @@ function clearResponse({ responseId, fieldId, workflowId }) {
     credentials: "include"
   };
 
+  if (payload) {
+    requestOptions.body = payload;
+  }
+
   return APIFetch(`responses/${responseId}/clear/`, requestOptions).then(
     handleResponse
   );
-}
-
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
 }
 
 export const fieldService = {

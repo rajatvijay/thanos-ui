@@ -43,9 +43,19 @@ export class Select extends Component {
     return this.isSingleSelect ? "default" : "multiple";
   }
 
+  isBeingCleared = value => {
+    /**
+     * On clearing field,
+     * For single-select, value is sent as undefined
+     * For multi-select, value is sent as empty array
+     */
+    return this.initialAnswer && this.isSingleSelect
+      ? value === undefined
+      : value.length === 0;
+  };
+
   onChange = (value, options) => {
-    if (this.initialAnswer && value.length === 0) {
-      // Response is being cleared
+    if (this.isBeingCleared(value)) {
       this.props.clearResponse({
         responseId: this.initialAnswer.id,
         field: this.props.field,

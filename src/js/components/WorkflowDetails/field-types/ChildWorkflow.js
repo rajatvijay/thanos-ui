@@ -6,9 +6,7 @@ import { css } from "emotion";
 import {
   Form,
   Button,
-  Dropdown,
   Row,
-  Menu,
   Col,
   Icon,
   Tooltip,
@@ -20,14 +18,18 @@ import {
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
-import { injectIntl } from "react-intl";
+import { injectIntl, FormattedMessage } from "react-intl";
 import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
+import { Pagination } from "antd";
+import IntlTooltip from "../../common/IntlTooltip";
+import showNotification from "../../../../modules/common/notification";
+import styled from "@emotion/styled";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
-const { field_error } = commonFunctions;
+const { field_error, getUserGroupFilter } = commonFunctions;
 
 //MOVE TO UTILS
 const getKindName = (kindId, workflowKind) => {
@@ -102,6 +104,12 @@ class VTag extends PureComponent {
   }
 }
 
+const requestOptions = {
+  method: "GET",
+  headers: authHeader.get(),
+  credentials: "include"
+};
+
 class ChildWorkflowField2 extends Component {
   constructor() {
     super();
@@ -119,7 +127,8 @@ class ChildWorkflowField2 extends Component {
       childWorkflow: null,
       sortOrderAsc: false,
       sortingEnabled: false,
-      sortBy: undefined
+      sortBy: undefined,
+      currentPage: 1
     };
     this.onFilterTagChange = this.onFilterTagChange.bind(this);
   }
@@ -133,6 +142,16 @@ class ChildWorkflowField2 extends Component {
       this.setState({ kindChecked: true });
     } else {
       this.prepFetchChildData();
+    }
+
+    const currentUserGroupFilter = getUserGroupFilter(
+      this.props.field.definition.extra
+    );
+    const excludedFilters =
+      currentUserGroupFilter &&
+      _.get(currentUserGroupFilter, "exclude_filters", []);
+    if (excludedFilters) {
+      this.setState({ excluded_filters: excludedFilters });
     }
   };
 
@@ -184,16 +203,16 @@ class ChildWorkflowField2 extends Component {
     return searchParams.toString();
   };
 
-  getChildWorkflow = () => {
+  onPageChange = val => {
+    this.setState({ currentPage: val });
+    this.getChildWorkflow({ page: val });
+  };
+
+  getChildWorkflow = param => {
     const parentId = this.props.workflowId;
 
     const kind = this.props.field.definition.extra.child_workflow_kind_id;
 
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
     const { sortBy } = this.state;
 
     // decide the query param for workflowId
@@ -207,17 +226,21 @@ class ChildWorkflowField2 extends Component {
       return;
     }
 
+    const pageNo = param && param.page;
+
     const valueFilter = this.getValuefilter();
-    const param = this.objToParam({
+    const urlParam = this.objToParam({
       limit: 100,
       [paramName]: parentId,
       kind: `${kind}`,
+      lean: "True",
       answer: `${valueFilter}`,
       ordering: sortBy,
-      child_kinds: true
+      child_kinds: true,
+      page: pageNo || 1
     });
 
-    const url = `${apiBaseURL}workflows-list/?${param}`;
+    const url = `${apiBaseURL}workflows-list/?${urlParam}`;
 
     this.setState({ fetching: true });
 
@@ -228,6 +251,7 @@ class ChildWorkflowField2 extends Component {
           fetchEmpty: _.size(body.results) ? false : true,
           childWorkflow: body.results,
           filteredChildWorkflow: body.results,
+          childCount: body.count,
           fetching: false
         });
         this.createStatusFilterTag();
@@ -289,11 +313,48 @@ class ChildWorkflowField2 extends Component {
     return filter;
   };
 
-  onChildSelect = e => {
-    const kindTag = e.key;
-    const kind = this.props.workflowKind.workflowKind.find(
-      kind => kind.tag === kindTag
+  get relatedWorkflowKind() {
+    const relatedTypes = this.props.workflowDetailsHeader[this.props.workflowId]
+      .definition.related_types;
+
+    // In case where the related types is not defined
+    // or the workflow kinds are not loaded yet.
+    if (
+      !Array.isArray(relatedTypes) ||
+      relatedTypes.length === 0 ||
+      !Array.isArray(this.props.workflowKind.workflowKind) ||
+      this.props.workflowKind.workflowKind.length === 0
+    )
+      return null;
+
+    // Search creteria for the eligible related kind that can be added
+    const relatedKind = this.props.workflowKind.workflowKind.filter(
+      kind =>
+        relatedTypes.includes(kind.tag) &&
+        kind.is_related_kind &&
+        Array.isArray(kind.features) &&
+        kind.features.includes("add_workflow") &&
+        this.props.field.definition.extra.child_workflow_kind_id === kind.id
     );
+
+    return relatedKind[0] || null;
+  }
+
+  onChildSelect = e => {
+    const kind = this.relatedWorkflowKind;
+    if (!kind) {
+      showNotification({
+        type: "error",
+        message: "errorMessageInstances.ws001",
+        description: "errorMessageInstances.errorCode",
+        descriptionData: {
+          errorCode: "WS001"
+        }
+      });
+      return null;
+    }
+
+    const kindTag = kind.tag;
     const payload = {
       status: kind && kind.default_status,
       kind: kindTag,
@@ -305,78 +366,34 @@ class ChildWorkflowField2 extends Component {
     this.props.dispatch(createWorkflow(payload));
   };
 
-  getRelatedTypes = () => {
-    const related = this.props.workflowDetailsHeader[this.props.workflowId]
-      .definition.related_types;
-
-    const that = this;
-
-    let relatedType = [];
-    if (related.length !== 0) {
-      related.map(function(rtc) {
-        _.filter(that.props.workflowKind.workflowKind, function(kind) {
-          if (kind.tag === rtc) {
-            relatedType.push(kind);
-          }
-        });
-      });
+  renderAddButton = () => {
+    // Show Loading when the workflow kinds are loading
+    if (this.props.workflowKind.loading) {
+      return (
+        <StyledLoadingContainer>
+          <Icon type="loading" style={{ color: "#148cd6", fontSize: "18px" }} />
+        </StyledLoadingContainer>
+      );
     }
 
-    return relatedType;
-  };
-
-  getKindMenu = () => {
-    const that = this;
-    let workflowKindFiltered = [];
-    const relatedKind = this.getRelatedTypes();
-
-    if (relatedKind.length) {
-      relatedKind.map(function(item) {
-        if (
-          item.is_related_kind &&
-          _.includes(item.features, "add_workflow") &&
-          that.props.field.definition.extra.child_workflow_kind_id === item.id
-        ) {
-          workflowKindFiltered.push(item);
-        }
-      });
-    }
-
-    if (_.isEmpty(workflowKindFiltered)) {
-      return null;
-    }
-
-    const menu = (
-      <Menu onClick={this.onChildSelect}>
-        {_.map(workflowKindFiltered, function(item, index) {
-          return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-        })}
-      </Menu>
-    );
-
-    return menu;
-  };
-
-  getAddMenu = () => {
-    const kindMenu = this.getKindMenu();
-    if (!kindMenu) {
-      return null;
-    }
-
-    return this.props.stepData.completed_at ||
-      this.props.stepData.is_locked ? null : (
-      <Dropdown
-        overlay={kindMenu}
-        className="child-workflow-dropdown"
-        placement="bottomRight"
-        size="small"
-        disabled={this.props.currentStepFields.isSubmitting}
-      >
-        <span className="pd-ard-sm text-secondary text-anchor">
-          <i className="material-icons">add</i>{" "}
-          {this.state.fetching ? "loadin..." : null}
+    // Show disabled + button when the step is either locked or completed
+    if (this.props.stepData.completed_at || this.props.stepData.is_locked) {
+      return (
+        <span className="disabled child-workflow-dropdown pd-ard-sm text-lighter">
+          <i className="material-icons">add</i>
         </span>
-      </Dropdown>
+      );
+    }
+
+    return (
+      <IntlTooltip title="workflowsInstances.createWorkflow">
+        <span
+          className="pd-ard-sm text-secondary text-anchor"
+          onClick={this.onChildSelect}
+        >
+          <i className="material-icons">add</i>
+        </span>
+      </IntlTooltip>
     );
   };
 
@@ -388,7 +405,9 @@ class ChildWorkflowField2 extends Component {
 
     return (
       <Select
-        placeholder="Adjudication Code"
+        placeholder={this.props.intl.formatMessage({
+          id: "workflowsInstances.adjudicationCode"
+        })}
         onChange={that.onFilterTagChange.bind(that, "flag")}
         style={{ width: "150px" }}
         size="small"
@@ -461,7 +480,6 @@ class ChildWorkflowField2 extends Component {
     });
     alert_status_count["all"] = total_count;
 
-    const that = this;
     return _.map(alert_status_count, function(value, key) {
       return (
         <VTag
@@ -516,7 +534,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   createFilterTag = () => {
-    const { filteredChildWorkflow } = this.state;
     const filter_tag_count = {
       all: _.size(this.state.childWorkflow)
     };
@@ -757,6 +774,7 @@ class ChildWorkflowField2 extends Component {
       });
       return true;
     }
+
     let filtered_workflow = [];
     _.map(that.state.filteredChildWorkflow, function(cw) {
       let found = cw;
@@ -782,7 +800,8 @@ class ChildWorkflowField2 extends Component {
         if (key === "flag" && fval) {
           if (
             _.size(cw.selected_flag[cw.id]) &&
-            cw.selected_flag[cw.id]["flag_detail"]["label"] === fval
+            (cw.selected_flag[cw.id]["flag_detail"]["label"] === fval || //It could either match to label or tag
+              cw.selected_flag[cw.id]["flag_detail"]["tag"] === fval)
           ) {
             found = null;
             return true;
@@ -834,7 +853,6 @@ class ChildWorkflowField2 extends Component {
   };
 
   selectedFilter = () => {
-    const that = this;
     if (!_.size(this.state.selected_filters)) {
       return <span />;
     }
@@ -849,7 +867,7 @@ class ChildWorkflowField2 extends Component {
       <span>
         {" "}
         {_.map(this.state.selected_filters, (value, key) => {
-          if (key == "category") {
+          if (key === "category") {
             return _.map(value, category => {
               if (!category) {
                 return;
@@ -954,7 +972,10 @@ class ChildWorkflowField2 extends Component {
   //CREATE. KIND FILTER
   createKindFilter = () => {
     const { props } = this;
-    const { field, workflowKind } = props;
+    const {
+      workflowKind,
+      intl: { formatMessage }
+    } = props;
     const that = this;
     let filteredChildWorkflow = that.state.filteredChildWorkflow;
     const kindList = getChildKinds(
@@ -975,7 +996,9 @@ class ChildWorkflowField2 extends Component {
       <div>
         {kindList.length > 0 ? (
           <VTag
-            label={`All (${allCount})`}
+            label={`${formatMessage({
+              id: "commonTextInstances.all"
+            })} (${allCount})`}
             key={"all"}
             selected={selected === "" ? true : false}
             tag={"kind"}
@@ -1095,7 +1118,7 @@ class ChildWorkflowField2 extends Component {
     });
 
     if (!commonBulkActions.length) {
-      return "No Bulk Action Available";
+      return <FormattedMessage id="workflowsInstances.noBulkActions" />;
     } else {
       return (
         <div style={{ display: "flex", flexDirection: "row" }}>
@@ -1137,16 +1160,24 @@ class ChildWorkflowField2 extends Component {
     }
 
     if (this.state.sortOrderAsc) {
-      return `Low to high ${this.getSortingLabel()}`;
+      return `${this.props.intl.formatMessage({
+        id: "tooltips.lowToHigh"
+      })} ${this.getSortingLabel()}`;
     } else {
-      return `High to low ${this.getSortingLabel()}`;
+      return `${this.props.intl.formatMessage({
+        id: "tooltips.highToLow"
+      })} ${this.getSortingLabel()}`;
     }
   }
 
   render = () => {
     const { props } = this;
     const { field, workflowKind } = props;
-    const { bulkActionWorkflowChecked, childWorkflow } = this.state;
+    const {
+      bulkActionWorkflowChecked,
+      childWorkflow,
+      filteredChildWorkflow
+    } = this.state;
     const kindList = workflowKind.workflowKind ? workflowKind.workflowKind : [];
     const workflowHeaderChild = childWorkflow ? childWorkflow : [];
 
@@ -1182,6 +1213,9 @@ class ChildWorkflowField2 extends Component {
       );
     };
 
+    const fieldExtra = props.field.definition.extra;
+    const hideResultsCount = props.field.definition.extra.hide_total_count;
+
     return (
       <FormItem
         label={""}
@@ -1215,11 +1249,11 @@ class ChildWorkflowField2 extends Component {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  paddingLeft: "30px"
+                  paddingLeft: "15px"
                 }}
               >
                 {_.size(this.state.filteredChildWorkflow) ? (
-                  <span style={{ marginRight: "10.5px" }}>
+                  <span style={{ marginRight: "15px" }}>
                     <Checkbox
                       className={css`
                         .ant-checkbox-inner {
@@ -1235,12 +1269,13 @@ class ChildWorkflowField2 extends Component {
                   </span>
                 ) : null}
 
-                {!this.state.bulkActionWorkflowChecked.length ? (
+                {!this.state.bulkActionWorkflowChecked.length &&
+                !hideResultsCount ? (
                   <span className="text-lighter">
                     {this.state.childWorkflow
                       ? this.state.childWorkflow.length
                       : 0}{" "}
-                    results{" "}
+                    <FormattedMessage id="commonTextInstances.results" />{" "}
                   </span>
                 ) : null}
 
@@ -1250,7 +1285,7 @@ class ChildWorkflowField2 extends Component {
                       className="mr-left-lg text-lighter text-anchor"
                       onClick={this.onToggleFilters}
                     >
-                      Filters{" "}
+                      <FormattedMessage id="commonTextInstances.filters" />{" "}
                       <i className=" t-14 text-middle material-icons">
                         keyboard_arrow_down
                       </i>
@@ -1285,14 +1320,14 @@ class ChildWorkflowField2 extends Component {
               <Col span={8} className="text-right small">
                 <span
                   onClick={this.getChildWorkflow}
-                  title="Reload"
+                  title={"Reload"}
                   className="child-workflow-dropdown pd-ard-sm mr-right-sm text-secondary text-anchor"
                 >
                   <i className="material-icons">refresh</i>
                 </span>
 
                 {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
-                  this.getAddMenu()
+                  this.renderAddButton()
                 ) : (
                   <span className="disabled child-workflow-dropdown pd-ard-sm text-lighter">
                     <i className="material-icons">add</i>{" "}
@@ -1324,13 +1359,17 @@ class ChildWorkflowField2 extends Component {
 
                       {/*Concerns ala CATEGORY FILTER*/}
                       <FilterComponent
-                        label="Concerns"
+                        label={
+                          <FormattedMessage id="workflowFiltersTranslated.concerns" />
+                        }
                         filter={this.createFilterTag()}
                       />
 
                       {/*KIND FILTER*/}
                       <FilterComponent
-                        label="Type"
+                        label={
+                          <FormattedMessage id="workflowFiltersTranslated.type" />
+                        }
                         filter={this.createKindFilter()}
                       />
 
@@ -1344,14 +1383,18 @@ class ChildWorkflowField2 extends Component {
 
                       {/*STATUS FILTER*/}
                       <FilterComponent
-                        label="Status"
+                        label={
+                          <FormattedMessage id="commonTextInstances.status" />
+                        }
                         filter={this.createStatusFilterTag()}
                       />
 
                       {/*EXCLUDED FILTERS*/}
                       {this.state.excluded_filters ? (
                         <FilterComponent
-                          label="Excluded"
+                          label={
+                            <FormattedMessage id="workflowFiltersTranslated.excluded" />
+                          }
                           filter={this.excludedFilter()}
                         />
                       ) : null}
@@ -1359,7 +1402,9 @@ class ChildWorkflowField2 extends Component {
                       {/*SELECTED FILTERS */}
                       {_.size(this.state.selected_filters) ? (
                         <FilterComponent
-                          label="Filtered"
+                          label={
+                            <FormattedMessage id="workflowFiltersTranslated.filtered" />
+                          }
                           filter={this.selectedFilter()}
                         />
                       ) : null}
@@ -1377,7 +1422,7 @@ class ChildWorkflowField2 extends Component {
               className="workflow-list workflows-list-embedded "
               style={{ margin: "2px" }}
             >
-              {_.size(this.state.filteredChildWorkflow) ? (
+              {_.size(filteredChildWorkflow) ? (
                 <WorkflowList
                   isEmbedded={true}
                   sortAscending={false}
@@ -1387,7 +1432,7 @@ class ChildWorkflowField2 extends Component {
                   kind={workflowKind}
                   sortingEnabled={false}
                   workflowKind={workflowKind}
-                  fieldExtra={field.definition.extra || null}
+                  fieldExtra={fieldExtra}
                   addComment={props.addComment}
                   showCommentIcon={true}
                   bulkActionWorkflowChecked={
@@ -1397,8 +1442,23 @@ class ChildWorkflowField2 extends Component {
                   handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
                 />
               ) : (
-                <div>No results found</div>
+                <div>
+                  <FormattedMessage id="commonTextInstances.noResults" />
+                </div>
               )}
+
+              {filteredChildWorkflow && this.state.childCount ? (
+                <div className="mr-bottom">
+                  <Pagination
+                    hideOnSinglePage={true}
+                    defaultCurrent={1}
+                    current={this.state.currentPage}
+                    total={this.state.childCount}
+                    defaultPageSize={100}
+                    onChange={this.onPageChange}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         )}
@@ -1424,3 +1484,8 @@ const ChildWorkflowFieldComponent = connect(mapPropsToState)(
 export const ChildWorkflowField = props => {
   return <ChildWorkflowFieldComponent {...props} />;
 };
+
+const StyledLoadingContainer = styled.span`
+  display: inline-block;
+  transform: translateY(-4px);
+`;

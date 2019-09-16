@@ -2,6 +2,7 @@ import React from "react";
 import { Row, Col, Divider, Collapse } from "antd";
 import _ from "lodash";
 import { NumberFormat } from "../../../_helpers/NumberFormat";
+import { FormattedMessage } from "react-intl";
 
 const Panel = Collapse.Panel;
 const FinancialData = props => {
@@ -124,26 +125,32 @@ const FinancialData = props => {
             return (
               <Panel
                 header={
-                  "Financial Statement for " +
-                  (shd.FinancialStatementToDate
-                    ? shd.FinancialStatementToDate["$"]
-                    : "-")
+                  <span>
+                    <FormattedMessage id="fields.financialStatementFor" />{" "}
+                    {shd.FinancialStatementToDate
+                      ? shd.FinancialStatementToDate["$"]
+                      : "-"}
+                  </span>
                 }
                 key={"panel-" + index}
                 style={customPanelStyle}
               >
                 <div key={b.custom_hash}>
                   <div className="table table-striped data-table">
-                    <RowHead label="Statement Details" />
+                    <RowHead
+                      label={<FormattedMessage id="fields.statementDetails" />}
+                    />
 
                     <Row gutter={24}>
                       <Column
-                        label={"Financial Statement To Date"}
+                        label={
+                          <FormattedMessage id="fields.financialStatementToDate" />
+                        }
                         value={shd.FinancialStatementToDate["$"]}
                         column={12}
                       />
                       <Column
-                        label={"Unit Of Size Text"}
+                        label={<FormattedMessage id="fields.unitOfSizeText" />}
                         value={
                           shd.UnitOfSizeText ? shd.UnitOfSizeText["$"] : "-"
                         }
@@ -153,12 +160,14 @@ const FinancialData = props => {
 
                     <Row gutter={24}>
                       <Column
-                        label={"Currency Code"}
+                        label={<FormattedMessage id="fields.currencyCode" />}
                         value={shd.CurrencyISOAlpha3Code || "-"}
                         column={12}
                       />
                       <Column
-                        label={"Financial Period Duration"}
+                        label={
+                          <FormattedMessage id="fields.financialPeriodDuration" />
+                        }
                         value={shd.FinancialPeriodDuration || "-"}
                         column={12}
                       />
@@ -167,7 +176,9 @@ const FinancialData = props => {
                     <div>
                       {_.size(bs_assets) ? (
                         <RowHead
-                          label="Balance Sheet Assets"
+                          label={
+                            <FormattedMessage id="fields.balanceSheetAssets" />
+                          }
                           className="mr-top-lg mr-bottom-lg"
                         />
                       ) : null}
@@ -175,7 +186,9 @@ const FinancialData = props => {
                       {_.size(bs_assets) ? (
                         <Row gutter={24}>
                           <Column
-                            label={"Total Current Assets Amount"}
+                            label={
+                              <FormattedMessage id="fields.totalCurrentAssetAmount" />
+                            }
                             value={
                               bs_assets.TotalCurrentAssetsAmount ? (
                                 <NumberFormat
@@ -200,13 +213,17 @@ const FinancialData = props => {
                     ) ? (
                       <FinSection
                         list={bs_assets.LongTermAssets.StatementItem}
-                        header="Long Term Assets Statements"
+                        header={
+                          <FormattedMessage id="fields.longTermAssetsStatements" />
+                        }
                       />
                     ) : null}
 
                     <Row gutter={24}>
                       <Column
-                        label={"Total Assets Amount"}
+                        label={
+                          <FormattedMessage id="fields.totalAssetsAmount" />
+                        }
                         value={
                           bs.TotalAssetsAmount ? (
                             <NumberFormat value={bs.TotalAssetsAmount["$"]} />
@@ -218,7 +235,9 @@ const FinancialData = props => {
                       />
 
                       <Column
-                        label={"Total Current Liabilities Amount"}
+                        label={
+                          <FormattedMessage id="fields.totalCurrentLoabilitiesAmount" />
+                        }
                         value={
                           lb.TotalCurrentLiabilitiesAmount ? (
                             <NumberFormat
@@ -234,7 +253,9 @@ const FinancialData = props => {
 
                     <Row gutter={24}>
                       <Column
-                        label={"Total Equity Amount"}
+                        label={
+                          <FormattedMessage id="fields.totalEquityAmount" />
+                        }
                         value={
                           lb.TotalEquityAmount ? (
                             <NumberFormat value={lb.TotalEquityAmount["$"]} />
@@ -249,20 +270,22 @@ const FinancialData = props => {
                     {_.size(lb.Equity && lb.Equity.StatementItem) ? (
                       <FinSection
                         list={lb.Equity.StatementItem}
-                        header="Equity"
+                        header={<FormattedMessage id="fields.equity" />}
                       />
                     ) : null}
 
                     {_.size(pnl.StatementItem) ? (
                       <FinSection
                         list={pnl.StatementItem}
-                        header="Profit And Loss Statement"
+                        header={
+                          <FormattedMessage id="fields.profileLossStatement" />
+                        }
                       />
                     ) : null}
 
                     {_.size(fr) && _.size(fr.FinancialRatioCategory) ? (
                       <RowHead
-                        label="Financial Ratios"
+                        label={<FormattedMessage id="fields.financialRatios" />}
                         className="mr-top-lg mr-bottom-lg"
                       />
                     ) : null}
@@ -293,7 +316,9 @@ const FinancialData = props => {
                       : null}
 
                     <br />
-                    <Divider>END</Divider>
+                    <Divider>
+                      <FormattedMessage id="commonTextInstances.end" />
+                    </Divider>
                     <br />
                   </div>
                 </div>
@@ -303,7 +328,7 @@ const FinancialData = props => {
         </Collapse>
       ) : (
         <div className="text-center mr-ard-lg t-18 text-medium text-grey">
-          Financial data not available
+          <FormattedMessage id="fields.financialDataNA" />
         </div>
       )}
     </div>

@@ -10,13 +10,13 @@ import {
   workflowKindActions,
   configActions
 } from "../../actions";
-import _ from "lodash";
+import { isEmpty, has } from "lodash";
 import { veryfiyClient } from "../../utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
 import Sidebar from "../../../modules/sidebar/components/Sidebar";
 import Filter from "../../../modules/filter/components/Filter";
 import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
-import Permissions from "../../../modules/common/permissions/constants";
+import Permissions from "../../../modules/common/permissions/permissionsList";
 
 const { Content } = Layout;
 
@@ -49,7 +49,8 @@ class Workflow extends Component {
     this.props.dispatch(workflowFiltersActions.getStatusData());
     this.props.dispatch(workflowFiltersActions.getRegionData());
     this.props.dispatch(workflowFiltersActions.getBusinessUnitData());
-    if (!_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+
+    if (!isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
       this.setState({ defKind: true });
     }
 
@@ -57,15 +58,9 @@ class Workflow extends Component {
       this.getDefaultKind();
     }
 
-    if (
-      !this.props.config.configuration ||
-      this.props.config.error ||
-      this.props.config.permissions
-    ) {
+    if (!this.props.config.configuration || this.props.config.error) {
       this.props.dispatch(configActions.getConfig());
     }
-
-    this.props.dispatch(workflowActions.expandedWorkflowsList([]));
   };
 
   componentDidUpdate = prevProps => {
@@ -112,7 +107,7 @@ class Workflow extends Component {
         })
       );
       this.props.dispatch(workflowKindActions.getAlertCount(defKind.tag));
-      if (_.isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
+      if (isEmpty(this.props.workflowGroupCount.stepgroupdef_counts)) {
         this.props.dispatch(workflowKindActions.getCount(defKind.tag));
       }
     } else {
@@ -214,6 +209,7 @@ class Workflow extends Component {
   };
 
   render = () => {
+    const that = this;
     const { workflow, config, workflowKind } = this.props;
 
     if (this.props.workflow.loadingStatus === "failed") {
@@ -224,6 +220,10 @@ class Workflow extends Component {
         return;
       }
     }
+
+    const hasSupplierUser =
+      has(this.props, "authentication.user.kind") &&
+      this.props.authentication.user.kind === 2;
 
     const renderPrep = {
       get isLoading() {
@@ -246,7 +246,21 @@ class Workflow extends Component {
               {!config ? (
                 "loading"
               ) : (
-                <FormattedMessage id={"workflowsInstances.unauthorisedText"} />
+                <div>
+                  <FormattedMessage
+                    id={
+                      "workflowsInstances.unauthorisedText.unauthorisedPageText"
+                    }
+                  />
+                  <br />
+                  {hasSupplierUser && (
+                    <FormattedMessage
+                      id={
+                        "workflowsInstances.unauthorisedText.generateSessionText"
+                      }
+                    />
+                  )}
+                </div>
               )}
             </h4>
           </div>

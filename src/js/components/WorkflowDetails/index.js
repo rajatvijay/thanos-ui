@@ -44,6 +44,27 @@ class WorkflowDetailsRoot extends Component {
         this.replaceLastHistory(location);
       }
     }
+
+    const { workflowItem, extraFilters } = this.props;
+
+    //LOOK FOR EXTRA FILTERS PASSED ON BY PARENT
+    //IF EXTRA FILTER IS AVAILABLE IN PROPS BUT
+    //NOT IN REDUX STATE THEN DISPATCH TO UPDATE THE FILTER
+
+    //NOTE: FIELDEXTRAFILTER CAN BE AVAILABLE FOR
+    //THE CURRENT FIELD AS WE BUT WE ARE LOOKING FOR
+    //EXTRA FILTER PASSED ON BY PARENT
+    const hasNotUpdatedExtraFilters =
+      this.props.fieldExtra && workflowItem && !extraFilters[workflowItem.id];
+
+    if (hasNotUpdatedExtraFilters) {
+      this.props.dispatch(
+        workflowActions.updateParentExtraFilters(
+          this.props.fieldExtra,
+          workflowItem.id
+        )
+      );
+    }
   };
 
   componentWillUnMount = () => {
@@ -126,6 +147,7 @@ class WorkflowDetailsRoot extends Component {
   render = () => {
     const { workflowId } = this.state;
     const { minimalUI, workflowIdFromPropsForModal } = this.props;
+
     if (workflowId) {
       return (
         <div>
@@ -153,7 +175,8 @@ function mapPropsToState(state) {
     authentication,
     users,
     workflowDetailsHeader,
-    workflowDetails
+    workflowDetails,
+    extraFilters
   } = state;
 
   //Send to component
@@ -161,7 +184,8 @@ function mapPropsToState(state) {
     workflowDetailsHeader,
     authentication,
     users,
-    workflowDetails
+    workflowDetails,
+    extraFilters
   };
 }
 

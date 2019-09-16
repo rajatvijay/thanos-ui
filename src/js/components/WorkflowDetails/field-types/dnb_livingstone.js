@@ -4,11 +4,10 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
-const {
-  getIntegrationSearchButton,
-  isDnBIntegrationDataLoading
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {
@@ -39,7 +38,7 @@ class DnbLivingstone extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -50,41 +49,27 @@ class DnbLivingstone extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      isDnBIntegrationDataLoading(this.props)
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={"default"}
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            jsonData={field.integration_json}
+            getComment={this.getComment}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                jsonData={field.integration_json}
-                getComment={this.getComment}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
@@ -103,14 +88,18 @@ const GetTable = props => {
   if (
     !_.size(props.jsonData.OrderProductResponseDetail.Product.MatchCandidate)
   ) {
-    return <div className="text-center text-red">No match found!</div>;
+    return (
+      <div className="text-center text-red">
+        <FormattedMessage id="commonTextInstances.noMatchFound" />!
+      </div>
+    );
   }
 
   const data = props.jsonData.OrderProductResponseDetail.Product.MatchCandidate;
 
   const columns = [
     {
-      title: "Potential Maches",
+      title: <FormattedMessage id="fields.potentialMatches" />,
       dataIndex: "PrimaryName",
       render: (text, record, index) => {
         return integrationCommonFunctions.dnb_livingston_html(record);
@@ -118,7 +107,7 @@ const GetTable = props => {
       key: "PrimaryName"
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       key: "livingston_index",
       render: record => {
         let flag_data = _.size(props.flag_dict[record.custom_hash])
@@ -133,9 +122,16 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.custom_hash]
-                ? props.commentCount[record.custom_hash] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.custom_hash] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[record.custom_hash]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
               <br />
               {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
             </span>

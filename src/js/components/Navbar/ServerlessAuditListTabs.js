@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip, notification } from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
 import { requestOptions } from "../../services/auth-header-auditlog-service";
 import Moment from "react-moment";
@@ -11,14 +11,6 @@ import { serverlessAPIFetch } from "../../utils/request";
 
 const TabPane = Tabs.TabPane;
 
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
-
 class ServerlessAuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
     edits: [
@@ -26,7 +18,10 @@ class ServerlessAuditListTabs extends Component {
       "step_undo",
       "step_approved",
       "response_changed",
-      "child_workflow_created"
+      "child_workflow_created",
+      "task_assigned",
+      "task_unassigned",
+      "workflow_status_changed"
     ],
     emails: ["sendgrid_email"],
     views: ["step_viewed", "workflow_viewed"],

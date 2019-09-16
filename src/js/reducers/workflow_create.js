@@ -10,7 +10,7 @@ const openNotificationWithIcon = data => {
 };
 
 const success = () => {
-  message.loading("Preparing forms ...", 12.5);
+  message.loading("Preparing forms ...", 0);
 };
 
 export function workflowCreate(state = {}, action) {

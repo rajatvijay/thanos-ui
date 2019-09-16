@@ -12,7 +12,6 @@ import {
   Tooltip,
   Upload
 } from "antd";
-import { css } from "emotion";
 import { get as lodashGet, size as lodashSize } from "lodash";
 import moment from "moment";
 import React, { Component } from "react";
@@ -23,6 +22,7 @@ import { workflowFiltersService } from "../../services";
 import { status_filters } from "./EventStatuses";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import MentionWithAttachments from "./MentionWithAttachments";
+import showNotification from "../../../modules/common/notification";
 
 const { toString, toContentState } = Mention;
 
@@ -117,11 +117,18 @@ class Comments extends Component {
       attachment: lodashSize(fileList) ? fileList[0] : ""
     };
 
-    if (!commentPayload.message && !commentPayload.attachment) {
+    if (
+      (!commentPayload.message || !commentPayload.message.trim()) &&
+      !commentPayload.attachment
+    ) {
       // Don't post any comment if there's nothing in the payload
+      showNotification({
+        type: "error",
+        message: "errorMessageInstances.emptyComment",
+        key: "BLANK_COMMENT"
+      });
       return;
     }
-
     this.props.addComment(
       commentPayload,
       step_reload_payload,

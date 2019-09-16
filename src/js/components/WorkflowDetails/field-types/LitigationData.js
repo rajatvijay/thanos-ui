@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col, Collapse } from "antd";
 import _ from "lodash";
+import { FormattedMessage } from "react-intl";
 
 const Panel = Collapse.Panel;
 const LitigationData = props => {
@@ -50,7 +51,14 @@ const LitigationData = props => {
           {_.map(suit_list, function(b, index) {
             return (
               <Panel
-                header={"Litigation Statement for " + b.FilingStatusDate.$}
+                header={
+                  <FormattedMessage
+                    id="fields.litigationStatement"
+                    values={{
+                      content: b.FilingStatusDate.$
+                    }}
+                  />
+                }
                 key={"panel-" + index}
                 style={customPanelStyle}
               >
@@ -58,24 +66,30 @@ const LitigationData = props => {
                   <div className="table table-striped data-table">
                     <Row>
                       <InfoRow
-                        label="Court Assigned Number"
+                        label={
+                          <FormattedMessage id="fields.courtAssignedNumber" />
+                        }
                         value={b.CourtAssignedNumber}
                         col={12}
                       />
                       <InfoRow
-                        label="Filing Date"
+                        label={<FormattedMessage id="fields.filingDate" />}
                         value={b.FilingDate["$"]}
                         col={12}
                       />
                     </Row>
                     <Row>
                       <InfoRow
-                        label="Filing Status Date"
+                        label={
+                          <FormattedMessage id="fields.filingStatusDate" />
+                        }
                         value={b.FilingStatusDate["$"]}
                         col={12}
                       />
                       <InfoRow
-                        label="Filing Status Text"
+                        label={
+                          <FormattedMessage id="fields.filingStatusText" />
+                        }
                         value={
                           b.FilingStatusText ? b.FilingStatusText["$"] : "-"
                         }
@@ -84,24 +98,28 @@ const LitigationData = props => {
                     </Row>
                     <Row>
                       <InfoRow
-                        label="Filing Amount"
+                        label={<FormattedMessage id="fields.filingAmount" />}
                         value={b.FilingAmount ? b.FilingAmount["$"] : "-"}
                         col={12}
                       />
                       <InfoRow
-                        label="Received Date"
+                        label={<FormattedMessage id="fields.receivedDate" />}
                         value={b.ReceivedDate ? b.ReceivedDate["$"] : "-"}
                         col={12}
                       />
                     </Row>
                     <Row>
                       <InfoRow
-                        label="Filing Medium Description"
+                        label={
+                          <FormattedMessage id="fields.filingMediumDesc" />
+                        }
                         value={b.FilingMediumDescription || "-"}
                         col={12}
                       />
                       <InfoRow
-                        label="Filing Office Name"
+                        label={
+                          <FormattedMessage id="fields.filingOfficeName" />
+                        }
                         value={b.FilingOfficeName || "-"}
                         col={12}
                       />
@@ -112,7 +130,8 @@ const LitigationData = props => {
                         <br />
                         <Col span={24}>
                           <span className="dt-label">
-                            Role Players ({_.size(b.RolePlayer)})
+                            {<FormattedMessage id="fields.rolePlayers" />} (
+                            {_.size(b.RolePlayer)})
                           </span>
                         </Col>
                         <br />
@@ -136,12 +155,16 @@ const LitigationData = props => {
                         <div key={`${index}`}>
                           <Row>
                             <InfoRow
-                              label="Role Player Name"
+                              label={
+                                <FormattedMessage id="fields.rolePlayerName" />
+                              }
                               value={rp.RolePlayerName || "-"}
                               col={12}
                             />
                             <InfoRow
-                              label="RolePlayerTypeText"
+                              label={
+                                <FormattedMessage id="fields.rolePlayerTypeText" />
+                              }
                               value={
                                 rp.RolePlayerTypeText
                                   ? rp.RolePlayerTypeText["$"]
@@ -152,7 +175,9 @@ const LitigationData = props => {
                           </Row>
                           <Row>
                             <InfoRow
-                              label="Role Player Address"
+                              label={
+                                <FormattedMessage id="fields.rolePlayerAddress" />
+                              }
                               value={addr}
                               col={24}
                             />
@@ -168,7 +193,7 @@ const LitigationData = props => {
         </Collapse>
       ) : (
         <div className="text-center mr-ard-lg t-18 text-medium text-grey">
-          Litigation data not available
+          <FormattedMessage id="fields.litigationDataNA" />
         </div>
       )}
     </div>

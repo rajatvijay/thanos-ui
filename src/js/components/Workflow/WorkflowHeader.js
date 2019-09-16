@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import _ from "lodash";
 import { Row, Col, Tooltip, Checkbox, Popover } from "antd";
-import { ProcessLcData } from "./ProcessLcData";
+import { LCDataValue } from "../../../modules/common/components/LCDataValue";
 import { css } from "emotion";
 
 //////////////////
@@ -225,14 +225,14 @@ export const HeaderLcData = props => {
         <Tooltip
           title={
             <span>
-              {subtext[1].label}: {ProcessLcData(subtext[1])}
+              {subtext[1].label}: <LCDataValue {...subtext[1]} />
             </span>
           }
         >
           <span className="t-cap">
             {subtext[1].show_label ? subtext[1].label + ": " : ""}
           </span>
-          {ProcessLcData(subtext[1])}
+          <LCDataValue {...subtext[1]} />
         </Tooltip>
       ) : (
         ""
@@ -429,14 +429,12 @@ export class GetMergedData extends React.Component {
       } else {
         classes += " pd-right-lg";
       }
-      item.show_label = true;
       const tagLabel = (
         <span>
           <span
             className={" ellip-small text-middle "}
             style={{
               maxWidth: "100%",
-              whiteSpace: "normal",
               wordBreak: "break-word",
               overflow: "hidden",
               whiteSpace: "nowrap"
@@ -446,7 +444,7 @@ export class GetMergedData extends React.Component {
               {item.show_label || (is_alert && item.link) ? item.label : ""}
               {item.link ? "" : item.show_label ? ": " : ""}
             </span>
-            {ProcessLcData(item, is_alert) || ""}
+            <LCDataValue {...item} isAlert={is_alert} />
           </span>
         </span>
       );

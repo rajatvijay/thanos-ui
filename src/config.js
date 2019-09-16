@@ -15,3 +15,7 @@ export const siteOrigin = `${document.location.origin}`;
 export const apiBaseURL = `${apiOrigin}/api/v1/`;
 
 export const auditLogBaseURL = process.env.REACT_APP_AUDIT_LOG_BASE_URL;
+
+export const supportedFieldFormats = {
+  duns: "##-###-####"
+};

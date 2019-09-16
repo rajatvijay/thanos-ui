@@ -1,6 +1,7 @@
 import { message } from "antd";
 import { fieldConstants } from "./constants";
 import { fieldService } from "./services";
+import { requiredParam } from "../common/errors";
 
 const removeErrors = ({ workflowId }) => {
   return {
@@ -29,8 +30,20 @@ const fieldSaveErrorAction = (error, workflowId) => {
   };
 };
 
-const saveResponse = ({ answer, fieldId, workflowId }) => {
-  const payload = { answer, fieldId, workflowId };
+const saveResponse = ({
+  answer = requiredParam("answer"),
+  fieldId = requiredParam("fieldId"),
+  workflowId = requiredParam("workflowId"),
+  extraJSON
+}) => {
+  const payload = {
+    answer,
+    field: fieldId,
+    workflow: workflowId
+  };
+  if (extraJSON) {
+    payload.extra_json = extraJSON;
+  }
   return dispatch => {
     dispatch(removeErrors({ workflowId }));
     dispatch(fieldSaveRequestAction(payload));
@@ -44,13 +57,17 @@ const saveResponse = ({ answer, fieldId, workflowId }) => {
   };
 };
 
-const clearResponse = ({ workflowId, responseId }) => {
+const clearResponse = ({
+  workflowId = requiredParam("workflowId"),
+  responseId = requiredParam("responseId"),
+  payload
+}) => {
   return dispatch => {
     dispatch(removeErrors({ workflowId }));
     dispatch(fieldSaveRequestAction({}));
 
     fieldService
-      .clearResponse({ responseId })
+      .clearResponse({ responseId, payload })
       .then(
         step => dispatch(fieldSaveSuccessAction(step)),
         error => dispatch(fieldSaveErrorAction(error, workflowId))

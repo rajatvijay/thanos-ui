@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Select } from "antd";
+import { Layout } from "antd";
 import TaskQueueList from "./TaskQueueList";
 import AlertList from "./AlertList";
 import {
@@ -8,13 +8,11 @@ import {
 } from "../../../js/actions";
 import { connect } from "react-redux";
 import { css } from "emotion";
-import _ from "lodash";
 import { taskQueueCount } from "../sidebarActions";
 import { injectIntl } from "react-intl";
-import { getIntlBody } from "../../../js/_helpers/intl-helpers";
+import FilterDropdown from "../../../js/components/WorkflowDetails/FilterDropdown";
 
 const { Sider } = Layout;
-const Option = Select.Option;
 
 class Sidebar extends Component {
   state = {
@@ -57,36 +55,6 @@ class Sidebar extends Component {
     }
   }
 
-  handleChange = value => {
-    const id = parseInt(value, 10);
-    const that = this;
-    const metaValue = _.find(this.props.workflowKind.workflowKind, item => {
-      return item.id === id;
-    });
-
-    this.setState({ value: id });
-    const payload = { filterType: "kind", filterValue: [id], meta: metaValue };
-    const removePayload = { filterType: "stepgroupdef" };
-    this.props.dispatch(workflowFiltersActions.removeFilters(removePayload));
-    this.props.dispatch(workflowFiltersActions.setFilters(payload));
-    this.props.dispatch(workflowKindActions.setValue(metaValue));
-    that.fetchGroupData(metaValue.tag);
-  };
-
-  fetchGroupData = tag => {
-    this.props.dispatch(workflowKindActions.getCount(tag));
-    this.props.dispatch(workflowKindActions.getAlertCount(tag));
-  };
-
-  renderDropdownList = () => {
-    const { workflowKind } = this.props.workflowKind;
-    if (workflowKind) {
-      return workflowKind.map(function(item) {
-        return <Option key={`${item.id}`}>{getIntlBody(item, "name")}</Option>;
-      });
-    }
-  };
-
   onSelectAlert = value => {
     if (this.state.activeFilter[0] === value.tag) {
       this.setState({ activeFilter: [] }, function() {
@@ -102,7 +70,7 @@ class Sidebar extends Component {
   onSelectTask = value => {
     const payload = {
       filterType: "stepgroupdef",
-      filterValue: value ? [value.id] : []
+      filterValue: value ? [value.tag] : []
     };
     if (!!value)
       this.props.dispatch(workflowFiltersActions.setFilters(payload));
@@ -130,7 +98,7 @@ class Sidebar extends Component {
 
   render() {
     const { isError } = this.props.workflowAlertGroupCount;
-    const { selectedKindValue } = this.props;
+
     return (
       <Sider
         width={300}
@@ -142,43 +110,19 @@ class Sidebar extends Component {
         }}
       >
         <div
-          style={{
-            width: 300,
-            position: "fixed",
-            paddingBottom: 100,
-            height: "100%",
-            fontFamily: "Cabin",
-            minHeight: "110vh",
-            background: "#104775"
-          }}
+          className={css`
+            width: 300px;
+            padding-bottom: 100px;
+            height: 100%;
+            font-family: Cabin;
+            min-height: 110vh;
+            background: #104775;
+            position: fixed;
+          `}
         >
           <div className="logo" />
-          <Select
-            dropdownStyle={{ position: "fixed" }}
-            className={css`
-              .ant-select-selection {
-                background-color: #0a3150;
-                border: none;
-                height: 65px;
-                color: white;
-                font-size: 18px;
-                padding-left: 10px;
-              }
-              .ant-select-selection-selected-value {
-                line-height: 65px;
-              }
-              .ant-select-arrow {
-                color: white;
-                margin-right: 10px;
-              }
-            `}
-            dropdownClassName="kind-select"
-            value={selectedKindValue && selectedKindValue.name}
-            style={{ width: "100%", display: "block" }}
-            onChange={this.handleChange}
-          >
-            {this.renderDropdownList()}
-          </Select>
+
+          <FilterDropdown />
 
           <div
             style={{

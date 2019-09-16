@@ -1,4 +1,4 @@
-import { authHeader } from "../../js/_helpers";
+import { authHeader, handleResponse } from "../../js/_helpers";
 import { apiBaseURL } from "../../config";
 import Godaam from "../../js/utils/storage";
 import { APIFetch } from "../../js/utils/request";
@@ -38,11 +38,3 @@ export const exportWorkflow = ({ kind }) => {
 
   return APIFetch(`workflow-kinds/${kind}/data-export/`, requestOptions);
 };
-
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
-}

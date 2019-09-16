@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip, notification } from "antd";
+import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
 import _ from "lodash";
 import { authHeader } from "../../_helpers";
 import Moment from "react-moment";
@@ -13,13 +13,6 @@ import { injectIntl, FormattedMessage } from "react-intl";
 
 const TabPane = Tabs.TabPane;
 
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
 class _AuditListTabs extends Component {
   static ACTIVITY_ACTION_GROUPS = {
     edits: [
@@ -27,7 +20,10 @@ class _AuditListTabs extends Component {
       "step_undo",
       "step_approved",
       "response_changed",
-      "child_workflow_created"
+      "child_workflow_created",
+      "task_assigned",
+      "task_unassigned",
+      "workflow_status_changed"
     ],
     emails: ["sendgrid_email"],
     views: ["step_viewed", "workflow_viewed"],

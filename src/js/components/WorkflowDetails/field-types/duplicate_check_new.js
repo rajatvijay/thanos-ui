@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { authHeader } from "../../../_helpers";
-import { WorkflowHeader } from "../../Workflow/WorkflowHeader";
 import { connect } from "react-redux";
 import { Form, Icon } from "antd";
 import _ from "lodash";
@@ -8,10 +7,19 @@ import { commonFunctions } from "./commons";
 import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { apiBaseURL } from "../../../../config";
 import WorkflowList from "../../Workflow/workflow-list";
+import { Pagination } from "antd";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const FormItem = Form.Item;
 
 const { getIntegrationSearchButton } = commonFunctions;
+
+const requestOptions = {
+  method: "GET",
+  headers: authHeader.get(),
+  credentials: "include"
+};
 
 //Field Type DUNS SEARCH
 const getFields = props => {
@@ -26,7 +34,8 @@ class DuplicateCheckComp extends Component {
       field: null,
       childWorkflow: null,
       fetching: false,
-      error: null
+      error: null,
+      currentPage: 1
     };
   }
 
@@ -72,7 +81,7 @@ class DuplicateCheckComp extends Component {
     }
   };
 
-  componentDidUpdate(previousProps) {
+  componentDidUpdate = previousProps => {
     if (
       this.props.field.integration_json.status_code !==
         previousProps.field.integration_json.status_code &&
@@ -82,9 +91,32 @@ class DuplicateCheckComp extends Component {
       this.getDuplicateWorkflow();
       // }, 1000);
     }
-  }
+  };
 
-  getDuplicateWorkflow = () => {
+  onPageChange = val => {
+    this.setState({ currentPage: val });
+    this.getDuplicateWorkflow(val);
+  };
+
+  fetchWorkflows = url => {
+    this.setState({ fetching: true });
+    fetch(url, requestOptions)
+      .then(response => response.json())
+      .then(body => {
+        this.setState({
+          childWorkflow: body,
+          fetching: false,
+          error: null
+        });
+      })
+      .catch(function(error) {
+        this.setState({ error });
+        console.log(error);
+      });
+  };
+
+  getDuplicateWorkflow = page => {
+    let pageNumber = page || 1;
     if (
       !_.size(this.props.field.integration_json) &&
       !_.size(this.props.field.integration_json.data)
@@ -92,11 +124,6 @@ class DuplicateCheckComp extends Component {
       return;
     }
     const duplicate_data = this.props.field.integration_json.data;
-    const requestOptions = {
-      method: "GET",
-      headers: authHeader.get(),
-      credentials: "include"
-    };
 
     let workflow_ids = [];
 
@@ -113,25 +140,20 @@ class DuplicateCheckComp extends Component {
         apiBaseURL +
         "workflows-list/?workflow_ids=" +
         workflow_ids +
-        "&limit=100";
-      this.setState({ fetching: true });
+        "&page=" +
+        pageNumber +
+        "&limit=100&lean=True";
 
-      fetch(url, requestOptions)
-        .then(response => response.json())
-        .then(body => {
-          this.setState({
-            childWorkflow: body.results,
-            fetching: false,
-            error: null
-          });
-        });
+      this.fetchWorkflows(url);
     } else {
       this.setState({ error: "No duplicates found" });
     }
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
+    const { childWorkflow } = this.state;
+
     const props = {
       field: field,
       onSearch: this.onSearch,
@@ -140,25 +162,16 @@ class DuplicateCheckComp extends Component {
       completed: this.props.completed,
       permission: this.props.permission
     };
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_code === "fetching"
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
-        </div>
-      );
-    } else if (field.integration_json.status_code === "error") {
-      final_html = <div>{field.integration_json.status_message}</div>;
-    } else if (
-      _.size(field.integration_json) &&
-      _.size(field.integration_json.data)
-    ) {
-      final_html = (
+
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={
+          _.size(field.integration_json) && _.size(field.integration_json.data)
+        }
+      >
         <FormItem
           className={
             "from-label " +
@@ -167,20 +180,35 @@ class DuplicateCheckComp extends Component {
           style={{ display: "block" }}
           key={props.field.id}
         >
+          {childWorkflow && childWorkflow.count ? (
+            <div className="mr-bottom">
+              {" "}
+              <Pagination
+                defaultCurrent={1}
+                current={this.state.currentPage}
+                total={childWorkflow.count}
+                defaultPageSize={100}
+                onChange={this.onPageChange}
+              />
+            </div>
+          ) : null}
+
           {this.state.fetching ? (
             <div className="text-center mr-top-lg">
               <Icon type="loading" style={{ fontSize: 24 }} />
             </div>
           ) : _.size(this.state.error) ? (
-            <div className="">No duplicates found</div>
+            <div>
+              <FormattedMessage id="workflowsInstances.noDuplicatesFound" />
+            </div>
           ) : (
             <div className="workflow-list">
-              {this.state.childWorkflow && this.state.childWorkflow.length ? (
+              {childWorkflow && childWorkflow.count ? (
                 <WorkflowList
                   isEmbedded={true}
                   sortAscending={false}
                   {...this.props}
-                  workflow={{ workflow: this.state.childWorkflow }}
+                  workflow={{ workflow: childWorkflow.results }}
                   statusView={true}
                   kind={""}
                   sortingEnabled={false}
@@ -195,17 +223,19 @@ class DuplicateCheckComp extends Component {
                   //handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
                 />
               ) : (
-                <div>No duplicates found</div>
+                <div>
+                  <FormattedMessage id="workflowsInstances.noDuplicatesFound" />
+                </div>
               )}
             </div>
           )}
         </FormItem>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };

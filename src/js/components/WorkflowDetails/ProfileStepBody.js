@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col } from "antd";
 import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
-import Permissions from "../../../modules/common/permissions/constants";
+import Permissions from "../../../modules/common/permissions/permissionsList";
 import { FormattedLCData } from "../../../modules/common/components/FormattedLCData";
 
 class ProfileStepBody extends Component {
@@ -34,7 +34,7 @@ class ProfileStepBody extends Component {
           {data.label}
         </span>
         <br />
-        <FormattedLCData data={data} style={style} />
+        <FormattedLCData {...data} style={style} />
       </Col>
     ));
   }

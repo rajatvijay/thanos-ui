@@ -69,6 +69,12 @@ function normalizeData(data) {
   return arr;
 }
 
+function sortData(data) {
+  return data.sort((a, b) =>
+    a.label > b.label ? 1 : a.label < b.label ? -1 : 0
+  );
+}
+
 //ADD THE TYPES OF FILTER AVAILABLE TO REDUX STORE
 export function workflowFilterType(state = initialDataState, action) {
   switch (action.type) {
@@ -106,7 +112,10 @@ export function workflowFilterType(state = initialDataState, action) {
       return {
         ...state,
         loading: false,
-        businessType: { loading: false, ...action.workflowFilterBusiness }
+        businessType: {
+          loading: false,
+          results: sortData(action.workflowFilterBusiness.results)
+        }
       };
 
     case workflowFiltersConstants.GET_BUSINESS_UNIT_FAILURE:
@@ -127,7 +136,10 @@ export function workflowFilterType(state = initialDataState, action) {
       return {
         ...state,
         loading: false,
-        regionType: { loading: false, ...action.workflowFilterRegion }
+        regionType: {
+          loading: false,
+          results: sortData(action.workflowFilterRegion.results)
+        }
       };
 
     case workflowFiltersConstants.GET_REGION_FAILURE:

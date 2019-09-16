@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Tag, Tooltip } from "antd";
+import { Tag, Alert } from "antd";
 import _ from "lodash";
-import { Row, Col } from "antd";
+import { Row, Col, Icon } from "antd";
 import IntlTooltip from "../../common/IntlTooltip";
+import { FormattedMessage } from "react-intl";
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -104,39 +105,52 @@ function lexisnexis_html(record) {
   }
   return (
     <div>
-      Name: {record.BestName.$}
+      <FormattedMessage id="fields.name" />: {record.BestName.$}
       <br />
-      Unique ID: {record.EntityUniqueID.$}
+      <FormattedMessage id="fields.uniqueId" />: {record.EntityUniqueID.$}
       <br />
-      Score: {record.BestNameScore.$}
+      <FormattedMessage id="fields.score" />: {record.BestNameScore.$}
       <br />
-      Entity Type:{" "}
+      <FormattedMessage id="fields.entityType" />:{" "}
       {_.size(record.EntityDetails) ? record.EntityDetails.EntityType.$ : "-"}
       <br />
-      Reason Listed: {record.ReasonListed ? record.ReasonListed.$ : "-"}
+      <FormattedMessage id="fields.reasonListed" />:{" "}
+      {record.ReasonListed ? record.ReasonListed.$ : "-"}
       <br />
-      False Positive:{" "}
-      {record.FalsePositive
-        ? record.FalsePositive.$ === true
-          ? "True"
-          : "False"
-        : "-"}
+      <FormattedMessage id="fields.falsePositive" />:{" "}
+      {record.FalsePositive ? (
+        record.FalsePositive.$ === true ? (
+          <FormattedMessage id="fields.true" />
+        ) : (
+          <FormattedMessage id="fields.false" />
+        )
+      ) : (
+        "-"
+      )}
       <br />
-      True Match:{" "}
-      {record.TrueMatch
-        ? record.TrueMatch.$ === true
-          ? "True"
-          : "False"
-        : "-"}
+      <FormattedMessage id="fields.trueMatch" />:{" "}
+      {record.TrueMatch ? (
+        record.TrueMatch.$ === true ? (
+          <FormattedMessage id="fields.true" />
+        ) : (
+          <FormattedMessage id="fields.false" />
+        )
+      ) : (
+        "-"
+      )}
       <br />
-      Added To Accept List:{" "}
-      {record.AddedToAcceptList
-        ? record.AddedToAcceptList.$ === true
-          ? "True"
-          : "False"
-        : "-"}
+      <FormattedMessage id="fields.addedToAcceptList" />:{" "}
+      {record.AddedToAcceptList ? (
+        record.AddedToAcceptList.$ === true ? (
+          <FormattedMessage id="fields.true" />
+        ) : (
+          <FormattedMessage id="fields.false" />
+        )
+      ) : (
+        "-"
+      )}
       <br />
-      Address: {addr}
+      <FormattedMessage id="fields.address" />: {addr}
       <br />
     </div>
   );
@@ -158,7 +172,7 @@ function serp_search_html(record) {
       </div>
       {_.size(record.sentiment_analysis) ? (
         <div>
-          Sentiments:{" "}
+          <FormattedMessage id="fields.sentiments" />:{" "}
           <Tag className="">{record.sentiment_analysis.Sentiment}</Tag>
         </div>
       ) : null}
@@ -189,7 +203,18 @@ class DescriptionToggle extends Component {
         onClick={this.onToggle}
         className="text-secondary text-underline text-anchor pd-left-sm"
       >
-        {this.state.show ? " ...show less" : " show more..."}
+        {this.state.show ? (
+          <>
+            {" ..."}
+            <FormattedMessage id="fields.showLess" />
+          </>
+        ) : (
+          <>
+            {" "}
+            <FormattedMessage id="fields.showMore" />
+            {"..."}
+          </>
+        )}
       </span>
     );
 
@@ -212,20 +237,6 @@ class DescriptionToggle extends Component {
 }
 
 function google_search_html(record, search) {
-  const salienceSortedValues =
-    record.entity_data &&
-    record.entity_data.sort((a, b) => {
-      return b.salience - a.salience;
-    });
-
-  const groupedData = _.groupBy(salienceSortedValues, function(o) {
-    if (o.entity_type) {
-      return o.entity_type;
-    }
-  });
-
-  const removeEntity = ["CONSUMER_GOOD", "WORK_OF_ART", "OTHER"];
-
   const getRelevanceScore = score => {
     const s = parseFloat(score).toFixed(2);
     let icon = "nobar";
@@ -297,6 +308,7 @@ function google_search_html(record, search) {
           target="_blank"
           rel="noopener noreferrer"
           className="text-secondary"
+          style={{ wordBreak: "break-all" }}
         >
           {record.link}
         </a>
@@ -307,7 +319,8 @@ function google_search_html(record, search) {
       </div>
 
       <div className="mr-bottom-lg text-light">
-        Published at: {record.published_at || "N/A"}
+        <FormattedMessage id="fields.publishedAt" />:{" "}
+        {record.published_at || "N/A"}
       </div>
     </div>
   );
@@ -351,33 +364,34 @@ function dnb_ubo_html(record) {
       <table>
         <tbody>
           <tr>
-            <td style={{ width: "50%" }}>D-U-N-S No: {record.DUNSNumber}</td>
+            <td style={{ width: "50%" }}>D-U-N-S #: {record.DUNSNumber}</td>
             <td style={{ width: "50%" }}>
-              Member ID: {record.MemberID || "-"}
+              <FormattedMessage id="fields.memberId" />:{" "}
+              {record.MemberID || "-"}
             </td>
           </tr>
           <tr>
             <td>
-              Type:{" "}
+              <FormattedMessage id="fields.type" />:{" "}
               {record.SubjectTypeDescription
                 ? record.SubjectTypeDescription["$"]
                 : "-"}
             </td>
             <td>
-              Legal Form:{" "}
+              <FormattedMessage id="fields.legalForm" />:{" "}
               {record.LegalFormText ? record.LegalFormText["$"] : "-"}
             </td>
           </tr>
           <tr>
             <td>
-              Address: <br />
+              <FormattedMessage id="fields.address" />: <br />
               {addr_arr.join(", ") || "-"}
             </td>
           </tr>
           {record.BeneficialOwnershipPercentage ? (
             <tr>
               <td>
-                Beneficial Ownership Percentage:&nbsp;
+                <FormattedMessage id="fields.beneficialOwnershipPercentage" />:{" "}
                 {record.BeneficialOwnershipPercentage || "-"}
               </td>
             </tr>
@@ -385,7 +399,7 @@ function dnb_ubo_html(record) {
           {record.DirectOwnershipPercentage ? (
             <tr>
               <td>
-                Ownership Percentage:&nbsp;
+                <FormattedMessage id="fields.ownershipPercentage" />:{" "}
                 {record.DirectOwnershipPercentage || "-"}
               </td>
             </tr>
@@ -402,7 +416,9 @@ function dnb_directors_html(record) {
     positions = (
       <span>
         <div>
-          <b>Positions:</b>
+          <b>
+            <FormattedMessage id="fields.positions" />:
+          </b>
         </div>
         <div>
           {_.map(record.Position, function(p, index) {
@@ -416,15 +432,20 @@ function dnb_directors_html(record) {
   return (
     <div>
       <div>
-        <b>Name</b>:{" "}
+        <b>
+          <FormattedMessage id="fields.name" />
+        </b>
+        :{" "}
         {record.PrincipalName && record.PrincipalName.FullName
           ? record.PrincipalName.FullName.$
           : "-"}
       </div>
       {record.MostSeniorPrincipalIndicator ? (
         <div>
-          <b>Most Senior Principal Indicator</b>:{" "}
-          {record.MostSeniorPrincipalIndicator === true ? "True" : "False"}
+          <b>
+            <FormattedMessage id="fields.mostSeniorPrincipalIndicator" />
+          </b>
+          : {record.MostSeniorPrincipalIndicator === true ? "True" : "False"}
         </div>
       ) : null}
 
@@ -432,14 +453,18 @@ function dnb_directors_html(record) {
 
       {_.size(record.PrincipalName.OrganizationPrimaryName) ? (
         <div>
-          <b>Organization Primary Name</b>:{" "}
-          {record.PrincipalName.OrganizationPrimaryName.OrganizationName.$}
+          <b>
+            <FormattedMessage id="fields.orgPrimaryName" />
+          </b>
+          : {record.PrincipalName.OrganizationPrimaryName.OrganizationName.$}
         </div>
       ) : null}
       {_.size(record.PrincipalName.OrganizationRegisteredName) ? (
         <div>
-          <b>Organization Registered Name</b>:{" "}
-          {record.PrincipalName.OrganizationRegisteredName.OrganizationName.$}
+          <b>
+            <FormattedMessage id="fields.orgRegisteredName" />
+          </b>
+          : {record.PrincipalName.OrganizationRegisteredName.OrganizationName.$}
         </div>
       ) : null}
     </div>
@@ -455,9 +480,14 @@ function dnb_livingston_html(record) {
         {_.map(screening_names, function(name, index) {
           return (
             <span key={`${index}`}>
-              <span>Name: {name.SubjectName}</span>
+              <span>
+                <FormattedMessage id="fields.name" />: {name.SubjectName}
+              </span>
               <br />
-              <span>Match Strength: {name.MatchStrengthValue}</span>
+              <span>
+                <FormattedMessage id="fields.matchStrength" />:{" "}
+                {name.MatchStrengthValue}
+              </span>
               <br />
               <br />
             </span>
@@ -475,10 +505,18 @@ function dnb_livingston_html(record) {
         <table>
           <tbody>
             <tr>
-              <th>Document Date</th>
-              <th>Effective Date</th>
-              <th>Expiration Date</th>
-              <th>Citation</th>
+              <th>
+                <FormattedMessage id="fields.docDate" />
+              </th>
+              <th>
+                <FormattedMessage id="fields.effectiveDate" />
+              </th>
+              <th>
+                <FormattedMessage id="fields.expiryDate" />
+              </th>
+              <th>
+                <FormattedMessage id="fields.citation" />
+              </th>
             </tr>
             {_.map(citations, function(c, index) {
               return (
@@ -505,15 +543,20 @@ function dnb_livingston_html(record) {
   return (
     <div>
       <b>
-        RPL Type:{" "}
+        <FormattedMessage id="fields.rplType" />:{" "}
         <a target="_blank" rel="noopener noreferrer" href={doc_link}>
           {record.ScreeningListType}
         </a>
       </b>{" "}
       <br />
-      <b>Match Strength Value: {record.MatchStrengthValue}</b> <br />
       <b>
-        Screening List Country: {record.ScreeningListCountryISOAlpha2Code}
+        <FormattedMessage id="fields.matchStrengthValue" />:{" "}
+        {record.MatchStrengthValue}
+      </b>{" "}
+      <br />
+      <b>
+        <FormattedMessage id="fields.screeningListCountry" />:{" "}
+        {record.ScreeningListCountryISOAlpha2Code}
       </b>{" "}
       <br />
       <br />
@@ -521,7 +564,9 @@ function dnb_livingston_html(record) {
         <tbody>
           <tr>
             <td style={{ width: "40%" }}>
-              <b>Screening Names:</b>
+              <b>
+                <FormattedMessage id="fields.screeningNames" />:
+              </b>
               <br />
               {screening_names_html}
             </td>
@@ -554,46 +599,70 @@ function tr_results_html(record) {
     <div>
       <div>
         {" "}
-        <b>Matched Term:</b> {record.matchedTerm}{" "}
+        <b>
+          <FormattedMessage id="fields.matchedTerm" />:
+        </b>{" "}
+        {record.matchedTerm}{" "}
       </div>
       <div>
         {" "}
-        <b>Match Strength:</b> {record.matchStrength}{" "}
+        <b>
+          <FormattedMessage id="fields.matchStrength" />:
+        </b>{" "}
+        {record.matchStrength}{" "}
       </div>
       <div>
         {" "}
-        <b>Matched Name Type:</b> {record.matchedNameType}{" "}
+        <b>
+          <FormattedMessage id="fields.matchedNameType" />:
+        </b>{" "}
+        {record.matchedNameType}{" "}
       </div>
       <div>
         {" "}
-        <b>Category:</b>{" "}
+        <b>
+          <FormattedMessage id="commonTextInstances.categoryText" />:
+        </b>{" "}
         {_.size(record.categories) ? record.categories[0] : "-"}{" "}
       </div>
       <div>
         {" "}
-        <b>Created on:</b>{" "}
+        <b>
+          <FormattedMessage id="commonTextInstances.createdOn" />:
+        </b>{" "}
         {record.creationDate
           ? new Date(record.creationDate).toUTCString()
           : "-"}{" "}
       </div>
       <div>
         {" "}
-        <b>Modified on:</b>{" "}
+        <b>
+          <FormattedMessage id="commonTextInstances.modifiedOn" />:
+        </b>{" "}
         {record.modificationDate
           ? new Date(record.modificationDate).toUTCString()
           : "-"}{" "}
       </div>
       <div>
         {" "}
-        <b>Reference Id:</b> {record.referenceId}{" "}
+        <b>
+          <FormattedMessage id="fields.refId" />:
+        </b>{" "}
+        {record.referenceId}{" "}
       </div>
       <div>
         {" "}
-        <b>Sources:</b> {_.size(record.sources) ? record.sources[0] : "-"}{" "}
+        <b>
+          <FormattedMessage id="fields.sources" />:
+        </b>{" "}
+        {_.size(record.sources) ? record.sources[0] : "-"}{" "}
       </div>
       <div>
         {" "}
-        <b>Result Id:</b> {record.resultId}{" "}
+        <b>
+          <FormattedMessage id="fields.resultId" />:
+        </b>{" "}
+        {record.resultId}{" "}
       </div>
       <div>
         <div />
@@ -624,33 +693,53 @@ function dnb_rdc_html(record) {
     <div>
       <Row type="flex" justify="space-between">
         <Col span={11}>
-          <InfoRow label="Name" value={record.EntityName} />
-          <InfoRow label="Risk Score" value={record.RiskScore} />
           <InfoRow
-            label="Name Match Score (%)"
+            label={<FormattedMessage id="fields.name" />}
+            value={record.EntityName}
+          />
+          <InfoRow
+            label={<FormattedMessage id="fields.riskScore" />}
+            value={record.RiskScore}
+          />
+          <InfoRow
+            label={
+              <>
+                <FormattedMessage id="fields.nameMatchScore" />
+                {" (%)"}
+              </>
+            }
             value={
               record.rosette_name_match_score
                 ? parseInt(record.rosette_name_match_score.score * 100)
                 : "-"
             }
           />
-          <InfoRow label="Entity Type" value={record.EntityTypeText} />
+          <InfoRow
+            label={<FormattedMessage id="fields.entityType" />}
+            value={record.EntityTypeText}
+          />
         </Col>
 
         <Col span={11} offset={2}>
-          <InfoRow label="Alert Entity ID" value={record.AlertEntityID} />
           <InfoRow
-            label="Alert Entity System ID"
+            label={<FormattedMessage id="fields.alertEntityId" />}
+            value={record.AlertEntityID}
+          />
+          <InfoRow
+            label={<FormattedMessage id="fields.alertEntitySysId" />}
             value={record.AlertEntitySystemID}
           />
-          <InfoRow label="Risk class (CVIP)" value={record.CVIP} />
+          <InfoRow
+            label={<FormattedMessage id="fields.riskClassCvip" />}
+            value={record.CVIP}
+          />
         </Col>
       </Row>
 
       <Row type="flex" justify="space-between">
         <Col span={11}>
           <InfoRow
-            label="Reference Detail"
+            label={<FormattedMessage id="fields.alias" />}
             value={
               _.size(record.ReferenceDetail) || false ? (
                 <div>
@@ -672,7 +761,9 @@ function dnb_rdc_html(record) {
         </Col>
 
         <Col span={11} offset={2}>
-          <div className="mr-bottom">Alias </div>
+          <div className="mr-bottom">
+            <FormattedMessage id="fields.alias" />{" "}
+          </div>
           {alias_html ? alias_html : null}
         </Col>
       </Row>

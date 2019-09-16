@@ -1,11 +1,17 @@
 import React from "react";
-import { Button, Row, Col, Icon, Tag, Menu, Dropdown, Tooltip } from "antd";
+import { Button, Row, Col, Icon, Menu, Dropdown, Tooltip } from "antd";
 import _ from "lodash";
 import Moment from "react-moment";
 import { URL_REGEX, ANCHOR_TAG_REGEX } from "../../../utils/contants";
 import Anchor from "../../common/Anchor";
 import IntlTooltip from "../../common/IntlTooltip";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
+import FieldAlerts from "./FieldAlerts";
+import { checkPermission } from "../../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../../modules/common/permissions/permissionsList";
+import { isAnswered } from "../../../../modules/fields/utils";
+import { FormattedMessage } from "react-intl";
+import Godaam from "../../../utils/storage";
 
 export const commonFunctions = {
   getLabel,
@@ -24,9 +30,8 @@ export const commonFunctions = {
   getIntegrationSearchButton,
   fieldFlagDropdown,
   isDisabled,
-  getAnsweredBy,
-  isDnBIntegrationDataLoading,
-  convertValueToString
+  convertValueToString,
+  getUserGroupFilter
 };
 
 //Utility func
@@ -62,41 +67,31 @@ function getLabel(props, that) {
   const comment = (
     <span className="float-right">
       <span className={commentClasses}>{addCommentBtn(that, props)}</span>
-      {props.field.alerts
-        ? props.field.alerts.map(function(item) {
-            return (
-              <Tag key={item.alert.id} className="v-tag alert-metal ">
-                {item.alert.category.name}{" "}
-                <i
-                  className="material-icons text-middle pd-left-sm"
-                  style={{
-                    fontSize: "12px",
-                    color: item.alert.category.color_label
-                  }}
-                >
-                  fiber_manual_records
-                </i>
-              </Tag>
-            );
-          })
-        : null}
     </span>
   );
+
+  const alerts = props.field.alerts ? (
+    <FieldAlerts alerts={props.field.alerts} />
+  ) : null;
+
+  const answeredByOrRequiredIndicator = isAnswered(props.field)
+    ? answeredBy
+    : required;
 
   if (that) {
     const label = (
       <span className="label-with-action">
         {comment}
 
-        {props.field.answers.length !== 0 ? answeredBy : required}
+        {answeredByOrRequiredIndicator}
 
         {props.field.label_value ? (
           <span>
-            {props.field.label_value} {helpText}
+            {props.field.label_value} {helpText} {alerts}
           </span>
         ) : (
           <span>
-            {getIntlBody(props.field.definition)} {helpText}
+            {getIntlBody(props.field.definition)} {helpText} {alerts}
           </span>
         )}
       </span>
@@ -106,14 +101,14 @@ function getLabel(props, that) {
     return props.field.label_value ? (
       <span className="label-with-action">
         {comment}
-        {props.field.answers.length !== 0 ? answeredBy : required}
-        {props.field.label_value} {helpText}
+        {answeredByOrRequiredIndicator}
+        {props.field.label_value} {helpText} {alerts}
       </span>
     ) : (
       <span className="label-with-action">
         {comment}
-        {props.field.answers.length !== 0 ? answeredBy : required}
-        {getIntlBody(props.field.definition)} {helpText}
+        {answeredByOrRequiredIndicator}
+        {getIntlBody(props.field.definition)} {helpText} {alerts}
       </span>
     );
   }
@@ -440,9 +435,18 @@ function isDisabled(props) {
     props.completed ||
     props.is_locked ||
     props.field.definition.disabled ||
-    !_.includes(props.permission, "Can add response") ||
-    !_.includes(props.permission, "Can change response") ||
-    !_.includes(props.permission, "Can delete response")
+    !checkPermission({
+      permissionsAllowed: props.permission,
+      permissionName: Permissions.CAN_ADD_RESPONSE
+    }) ||
+    !checkPermission({
+      permissionsAllowed: props.permission,
+      permissionName: Permissions.CAN_CHANGE_RESPONSE
+    }) ||
+    !checkPermission({
+      permissionsAllowed: props.permission,
+      permissionName: Permissions.CAN_DELETE_RESPONSE
+    })
       ? true
       : false;
 
@@ -453,44 +457,23 @@ function isDisabled(props) {
   }
 }
 
-function getAnsweredBy(props) {
-  if (props.field.answers[0] && props.field.answers[0].submitted_by) {
-    const answer = props.field.answers[0];
-    const ans = (
-      <span>
-        Answered by{" "}
-        {answer.submitted_by.first_name +
-          " " +
-          answer.submitted_by.last_name +
-          " "}
-        ( {answer.submitted_by.email}) on{" "}
-        <Moment format="MM/DD/YYYY">{answer.updated_at}</Moment>
-      </span>
-    );
-    return (
-      <Tooltip placement="topLeft" title={ans}>
-        <i className="material-icons t-13 text-middle text-green pd-right-sm">
-          check_circle
-        </i>
-      </Tooltip>
-    );
-  } else {
-    return;
-  }
-}
-
 const GetAnsweredBy = props => {
   if (props.field.answers[0] && props.field.answers[0].submitted_by) {
-    const answer = props.field.answers[0];
+    const {
+      submitted_by: { first_name, last_name, email },
+      updated_at
+    } = props.field.answers[0];
+
     const ans = (
       <span>
-        Answered by{" "}
-        {answer.submitted_by.first_name +
-          " " +
-          answer.submitted_by.last_name +
-          " "}
-        ( {answer.submitted_by.email}) on{" "}
-        <Moment format="MM/DD/YYYY">{answer.updated_at}</Moment>
+        <FormattedMessage
+          id="commonTextInstances.answeredByOn"
+          values={{
+            name: first_name + " " + last_name,
+            email,
+            date: <Moment format="MM/DD/YYYY">{updated_at}</Moment>
+          }}
+        />
       </span>
     );
     return (
@@ -505,40 +488,6 @@ const GetAnsweredBy = props => {
   }
 };
 
-function isDnBIntegrationDataLoading(props) {
-  return (
-    props.currentStepFields.integration_data_loading ||
-    (props.integration_json &&
-      props.integration_json.status_message ===
-        "Fetching data for this field...")
-  );
-}
-
-function stringifyObjectValue(arry) {
-  let hasNumber = false;
-  const fristObj = arry[0];
-
-  //check if object has number type value
-  Object.keys(fristObj).forEach(key => {
-    if (typeof fristObj[key] === "number") {
-      hasNumber = true;
-    }
-  });
-
-  if (hasNumber) {
-    //convert number type to string
-    arry.forEach(obj => {
-      Object.keys(obj).forEach(key => {
-        if (typeof obj[key] === "number") {
-          obj[key] = "" + obj[key];
-        }
-      });
-    });
-  }
-
-  return arry;
-}
-
 function convertValueToString(options) {
   if (options && options.length) {
     options.forEach(item => {
@@ -546,4 +495,31 @@ function convertValueToString(options) {
     });
   }
   return options;
+}
+
+//GET FILTER FOR CURRENT USER GROUP FROM CONFIG
+function getUserGroupFilter(extra) {
+  if (!extra) {
+    return;
+  }
+
+  const user = JSON.parse(Godaam.user); //GET USER DATA FROM LOCAL STORAGE
+  const userGroups = user.groups;
+  const userGroupFilters = extra.filter_by_user_groups || null; //FIND USER GROUP FILTER
+
+  if (!userGroupFilters) {
+    return;
+  }
+
+  //MATCH CURRENT GROUP BETWEEN USER DATA AND EXTRA CONFIG
+  const currentGroup =
+    userGroupFilters &&
+    _.find(userGroups, group => userGroupFilters[group.name]);
+
+  //FIND FILTER FROM CURRENT GROUP
+  const currentUserGroupFilter =
+    currentGroup &&
+    _.find(userGroupFilters, (group, key) => currentGroup.name === key);
+
+  return currentUserGroupFilter;
 }

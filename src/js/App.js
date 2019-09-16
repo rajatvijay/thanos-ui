@@ -75,13 +75,6 @@ class App extends React.Component {
         }
       }
 
-      const missing = Object.keys(messagesDefaultLocale).reduce(
-        (missing, key) => {
-          messageTranslate[key] || missing.push(key);
-          return missing;
-        },
-        []
-      );
       messageTranslate = Object.assign(
         {},
         messagesDefaultLocale,

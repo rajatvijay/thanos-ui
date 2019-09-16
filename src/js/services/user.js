@@ -122,7 +122,7 @@ export const logout = async () => {
     },
     credentials: "include"
   };
-  return await APIFetch("users/logout/", requestOptions);
+  return await APIFetch("users/logout/", requestOptions).then(handleResponse);
 };
 
 export const sendEmailAuthToken = async (email, next) => {
@@ -139,8 +139,7 @@ function checkAuth() {
   const requestOptions = {
     method: "GET",
     headers: authHeader.get(),
-    credentials: "include",
-    mode: "manual"
+    credentials: "include"
   };
 
   return APIFetch("users/me/?format=json", requestOptions)

@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
 import _ from "lodash";
 import { store } from "../_helpers";
 import { APIFetch } from "../utils/request";
@@ -34,6 +34,19 @@ function getAll(filter) {
     const params = pageUrl(filter);
     url += params;
   }
+
+  // This is super a bad hack
+  // But a quick win over doing a lot of minor fixes and refactoring
+  // Doing this specifically for VET-5267
+  // Description: Remove the kind filter in case of my task
+  // In case of any questions, please contact rajat@thevetted.com
+  if (url.includes("user-step-tag")) {
+    const searchString = url.split("?")[1];
+    const searchParams = new URLSearchParams(searchString);
+    searchParams.delete("kind");
+    url = `workflows-list/?${searchParams.toString()}`;
+  }
+
   return APIFetch(url, requestOptions).then(handleResponse);
 }
 
@@ -136,13 +149,4 @@ function updateWorkflow({ id, payload }) {
   };
 
   return APIFetch(`workflows/${id}/`, requestOptions).then(handleResponse);
-}
-
-// COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
 }

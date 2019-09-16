@@ -3,13 +3,12 @@ import { Row, Col, Table, Icon, Tag, Tooltip, Collapse } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const Panel = Collapse.Panel;
 
-const {
-  getIntegrationSearchButton,
-  isDnBIntegrationDataLoading
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {
@@ -40,7 +39,7 @@ class DnbRDCAlerts extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -51,41 +50,27 @@ class DnbRDCAlerts extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      isDnBIntegrationDataLoading(this.props)
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check="default"
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            getComment={this.getComment}
+            jsonData={field.integration_json}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                getComment={this.getComment}
-                jsonData={field.integration_json}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
@@ -95,7 +80,7 @@ const buildDetails = obj => {
   const Column = props => {
     return (
       <Col span={props.column ? props.column : 24} className="pd-left pd-right">
-        <span className="dt-value text-medium">{props.label}</span>
+        <span className="dt-value text-medium">{props.label}:</span>
         <span className="dt-value pd-left">
           {props.value ? props.value : "-"}
         </span>
@@ -260,26 +245,34 @@ const buildDetails = obj => {
     <div className="dnb-rdc-wrapper">
       <div className="match-item company-item">
         <Row className="mr-bottom-lg">
-          <Column column={12} label="Alert Entity ID:" value={obj.entityId} />
           <Column
             column={12}
-            label="Source name:"
+            label={<FormattedMessage id="fields.alertEntityId" />}
+            value={obj.entityId}
+          />
+          <Column
+            column={12}
+            label={<FormattedMessage id="fields.sourceName" />}
             value={obj.source.sourceName || "-"}
           />
 
           <Column
             column={12}
-            label="Source  date"
+            label={<FormattedMessage id="fields.sourceDate" />}
             value={obj.source.entityDt || "-"}
           />
 
           <Column
             column={12}
-            label="Source format"
+            label={<FormattedMessage id="fields.sourceFormat" />}
             value={obj.source.format || "-"}
           />
 
-          <Column column={12} label="System Id" value={obj.sysId || "-"} />
+          <Column
+            column={12}
+            label={<FormattedMessage id="fields.systemId" />}
+            value={obj.sysId || "-"}
+          />
           <Column
             column={12}
             label="URL"
@@ -293,7 +286,11 @@ const buildDetails = obj => {
 
         <Collapse accordion bordered={false}>
           <Panel
-            header={<div className="match-title t-16 -text-bold">Event</div>}
+            header={
+              <div className="match-title t-16 -text-bold">
+                <FormattedMessage id="fields.event" />
+              </div>
+            }
             key="event"
             style={customPanelStyle}
           >
@@ -306,7 +303,9 @@ const buildDetails = obj => {
                         {refItem.category.categoryCode ? (
                           <Column
                             column={12}
-                            label="Category:"
+                            label={
+                              <FormattedMessage id="commonTextInstances.categoryText" />
+                            }
                             value={
                               refItem.category.categoryCode +
                               " / " +
@@ -318,7 +317,7 @@ const buildDetails = obj => {
                         {refItem.eventDesc ? (
                           <Column
                             column={12}
-                            label="Description:"
+                            label={<FormattedMessage id="fields.description" />}
                             value={refItem.eventDesc || "-"}
                           />
                         ) : null}
@@ -326,7 +325,7 @@ const buildDetails = obj => {
                         {refItem.eventDt ? (
                           <Column
                             column={12}
-                            label="Event date:"
+                            label={<FormattedMessage id="fields.eventDate" />}
                             value={refItem.eventDt || "-"}
                           />
                         ) : null}
@@ -334,7 +333,7 @@ const buildDetails = obj => {
                         {refItem.subCategory ? (
                           <Column
                             column={12}
-                            label="Sub category:"
+                            label={<FormattedMessage id="fields.subCategory" />}
                             value={
                               refItem.subCategory.categoryCode +
                                 " / " +
@@ -358,7 +357,9 @@ const buildDetails = obj => {
 
           <Panel
             header={
-              <div className="match-title t-16 -text-bold">Addresses</div>
+              <div className="match-title t-16 -text-bold">
+                <FormattedMessage id="fields.addresses" />
+              </div>
             }
             key="address"
             style={customPanelStyle}
@@ -369,12 +370,12 @@ const buildDetails = obj => {
                   <div key={`${index}`}>
                     <Column
                       column={12}
-                      label="Locator Type:"
+                      label={<FormattedMessage id="fields.locatorType" />}
                       value={getAbbr(address.locatorTyp) || "-"}
                     />
                     <Column
                       column={12}
-                      label="Country Code:"
+                      label={<FormattedMessage id="fields.countryCode" />}
                       value={address.countryCode.countryCodeValue || "-"}
                     />
                   </div>
@@ -388,7 +389,9 @@ const buildDetails = obj => {
 
           <Panel
             header={
-              <div className="match-title t-16 -text-bold">Attribute</div>
+              <div className="match-title t-16 -text-bold">
+                <FormattedMessage id="fields.attribute" />
+              </div>
             }
             key="attribute"
             style={customPanelStyle}
@@ -398,13 +401,13 @@ const buildDetails = obj => {
                 <Row gutter={16} className="mr-bottom-lg" key={`${index}`}>
                   <Column
                     column={12}
-                    label="Attribute Code:"
+                    label={<FormattedMessage id="fields.attributeCode" />}
                     value={arrtitem.attCode + " / " + arrtitem.attDesc || "-"}
                   />
 
                   <Column
                     column={12}
-                    label="Attribute value:"
+                    label={<FormattedMessage id="fields.attributeValue" />}
                     value={arrtitem.attVal || "-"}
                   />
 
@@ -416,7 +419,11 @@ const buildDetails = obj => {
           </Panel>
 
           <Panel
-            header={<div className="match-title t-16 -text-bold">Alias</div>}
+            header={
+              <div className="match-title t-16 -text-bold">
+                <FormattedMessage id="fields.alias" />
+              </div>
+            }
             key="4"
             style={customPanelStyle}
           >
@@ -425,12 +432,12 @@ const buildDetails = obj => {
                 <Row gutter={16} className="mr-bottom-lg" key={`${index}`}>
                   <Column
                     column={12}
-                    label={aliasItem.aliasTyp + ":"}
+                    label={aliasItem.aliasTyp}
                     value={aliasItem.aliasName || "-"}
                   />
                   <Column
                     column={12}
-                    label={aliasItem.aliasTyp + ":"}
+                    label={aliasItem.aliasTyp}
                     value={aliasItem.aliasName || "-"}
                   />
 

@@ -25,7 +25,7 @@ class TaskQueueList extends PureComponent {
       null
     );
 
-    if (activeTaskQueue === taskQueue.id) onSelectTask();
+    if (activeTaskQueue === taskQueue.tag) onSelectTask();
     else onSelectTask(taskQueue);
   };
 
@@ -64,10 +64,10 @@ class TaskQueueList extends PureComponent {
     );
     return restrictedTaskQueues.map(taskQueue => (
       <TaskQueue
-        key={`taskQueue_${taskQueue.id}`}
+        key={`taskQueue_${taskQueue.tag}`}
         item={taskQueue}
         onSelect={this.onSelect}
-        isSelected={activeTaskQueue === taskQueue.id}
+        isSelected={activeTaskQueue === taskQueue.tag}
       />
     ));
   };

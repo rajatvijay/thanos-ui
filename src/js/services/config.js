@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
 import { apiBaseURL } from "../../config";
 
 export const configService = {
@@ -15,11 +15,4 @@ function getConfig() {
   return fetch(apiBaseURL + "customers/configuration/", requestOptions).then(
     handleResponse
   );
-}
-
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-  return response.json();
 }

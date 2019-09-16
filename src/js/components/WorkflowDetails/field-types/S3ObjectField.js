@@ -3,6 +3,7 @@ import validator from "validator";
 import { commonFunctions } from "./commons";
 import { Icon, Form, Input } from "antd";
 import _ from "lodash";
+import { FormattedMessage } from "react-intl";
 
 const FormItem = Form.Item;
 
@@ -27,7 +28,7 @@ class S3URL extends React.Component {
 
     if (this.state.isValidURL === false) {
       return {
-        help: "Invalid URL",
+        help: <FormattedMessage id="errorMessageInstances.invalidURL" />,
         validateStatus: "error"
       };
     } else {

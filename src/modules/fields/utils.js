@@ -2,7 +2,7 @@ import {
   checkPermissionOverlap,
   PERMISSION_OVERLAP_METHODS
 } from "../../modules/common/permissions/utils";
-import Permissions from "../../modules/common/permissions/constants";
+import Permissions from "../../modules/common/permissions/permissionsList";
 
 /**
  * The sole purpose of this file is to write the cross-cutting utilities
@@ -37,4 +37,14 @@ export const isDisabled = props => {
     props.field.definition.disabled ||
     !hasResponseCUDPermission({ permissions: props.permissions })
   );
+};
+
+export const isAnswered = field => {
+  /**
+   * Checks if field is answered, as:
+   * If no answers exist for field, return false
+   * If answers exist for field, return true if answer is not empty
+   */
+  const answers = field.answers;
+  return answers.length !== 0 ? answers[0].answer !== "" : false;
 };

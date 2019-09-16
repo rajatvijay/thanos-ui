@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { Tooltip, Collapse } from "antd";
 import { css } from "emotion";
+import { get as lodashGet } from "lodash";
 import { StyledCollapseItem, StyledCollapse } from "../styledComponents";
 
 import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
+import ColoredCount from "../../../../js/components/common/coloredCount";
 
 const { Panel } = Collapse;
 
+// TODO: SelectedPanelId flow needs to be refactored
 class StepsSideBar extends Component {
   renderStepGroupIcon(stepGroup) {
     const allStepsCompleted = !stepGroup.steps.find(step => !step.completed_by);
@@ -62,6 +65,27 @@ class StepsSideBar extends Component {
       </span>
     );
   }
+  renderAlertsCount = data => {
+    const hasAlerts = !!lodashGet(data, "alerts.length", 0);
+    if (hasAlerts) {
+      const { count, color } = this.getAlertInfo(data);
+      return <ColoredCount text={count} color={color} />;
+    }
+    return null;
+  };
+
+  getAlertInfo(stepGroup) {
+    return {
+      count: stepGroup.alerts.length,
+      color: stepGroup.alerts[0].alert.category.color_label
+    };
+  }
+
+  isSelectedStepGroup = stepGroup => {
+    const { selectedPanelId } = this.props;
+    return Number(stepGroup.id) === Number(selectedPanelId);
+  };
+
   renderStepGroup(stepGroup) {
     return (
       <div
@@ -83,10 +107,16 @@ class StepsSideBar extends Component {
         >
           {this.renderStepGroupIcon(stepGroup)}
 
-          {/* TODO: Kya hai, kyun hai yeh? */}
           {getIntlBody(stepGroup.definition, "name")}
         </span>
-        {this.renderStepsCountStatus(stepGroup)}
+        <div>
+          {this.isSelectedStepGroup(stepGroup) ? null : (
+            <span style={{ marginRight: 5 }}>
+              {this.renderAlertsCount(stepGroup)}
+            </span>
+          )}
+          {this.renderStepsCountStatus(stepGroup)}
+        </div>
       </div>
     );
   }
@@ -103,6 +133,24 @@ class StepsSideBar extends Component {
     const isCompleted = !!step.completed_by;
     const isSelected = this.isStepSelected(step);
     const isOverdue = this.isStepOverdue(step);
+    const isLocked = step.is_locked;
+
+    if (isLocked) {
+      const selectedStyle = isSelected
+        ? { color: "#ffffff" }
+        : { color: "#7f7f7f" };
+
+      return (
+        <i
+          data-testid="step-locked-icon"
+          className="material-icons t-14 anticon pd-right-sm anticon-check-circle"
+          fill="#FFF"
+          style={selectedStyle}
+        >
+          lock
+        </i>
+      );
+    }
 
     if (isCompleted) {
       return (
@@ -147,18 +195,27 @@ class StepsSideBar extends Component {
     );
   };
 
-  renderSteps(step, stepGroup) {
+  renderSteps = (step, stepGroup) => {
+    const hasAlerts = !!lodashGet(step, "alerts.length", 0);
     const isSelected = this.isStepSelected(step);
     return (
       <StyledCollapseItem
+        key={"step" + step.id}
+        className={css`
+          display: flex;
+          justify-content: space-between;
+        `}
         onClick={event => this.props.handleStepClick(stepGroup.id, step.id)}
         selected={isSelected}
       >
-        {this.renderStepIcon(step)}
-        {step.name}
+        <div>
+          {this.renderStepIcon(step)}
+          {step.name}
+        </div>
+        {hasAlerts && this.renderAlertsCount(step)}
       </StyledCollapseItem>
     );
-  }
+  };
 
   render() {
     const { stepGroups, selectedPanelId } = this.props;

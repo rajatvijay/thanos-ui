@@ -10,12 +10,11 @@ import {
   workflowActions,
   changeSearchValue
 } from "../../../js/actions";
-import "../header.css";
 import { Link } from "react-router-dom";
 import IntlTooltip from "../../../js/components/common/IntlTooltip";
 import { exportWorkflow } from "../services";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
-import Permissions from "../../common/permissions/constants";
+import Permissions from "../../common/permissions/permissionsList";
 import { ExportWorkflowDropdown } from "./ExportWorkflowDropdown";
 
 const openNotificationWithIcon = data => {
@@ -159,6 +158,7 @@ class Header extends Component {
           <div
             className="search-box"
             style={{ flexBasis: "300px", marginLeft: "56px" }}
+            data-testid="search-bar"
           >
             <Input
               style={{
@@ -230,13 +230,7 @@ class Header extends Component {
                 <Menu>
                   {this.supportLinks()}
                   <Menu.Divider style={{ margin: "6px 0px" }} />
-
-                  {/* <Menu.Item key="profile">Profile</Menu.Item> */}
                   <SelectLanguage />
-                  <Menu.Item key="logout" onClick={this.onLogout}>
-                    <FormattedMessage id={"loginPageInstances.logoutText"} />
-                  </Menu.Item>
-
                   {userProfileId ? (
                     <Menu.Item key="profile">
                       <Link to={`/workflows/instances/${userProfileId}`}>
@@ -246,9 +240,11 @@ class Header extends Component {
                       </Link>
                     </Menu.Item>
                   ) : null}
+                  <Menu.Item key="logout" onClick={this.onLogout}>
+                    <FormattedMessage id={"loginPageInstances.logoutText"} />
+                  </Menu.Item>
                 </Menu>
               }
-              trigger={["click"]}
             >
               <Icon
                 type="ellipsis"
