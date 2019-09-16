@@ -107,6 +107,7 @@ class WorkflowDetails extends Component {
     }
 
     if (this.isTheStepAutoSubmitted(prevProps, this.props, stepId)) {
+      this.props.dispatch(workflowDetailsActions.getById(workflowId));
       this.props.getStepGroup(workflowId, true);
     }
   };

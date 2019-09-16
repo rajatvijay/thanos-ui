@@ -199,6 +199,7 @@ function submitStepData(payload) {
   };
 
   function request() {
+    message.loading("Submitting step...", 0);
     return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
 
@@ -215,6 +216,7 @@ function submitStepData(payload) {
     if (!stepData.id) {
       return failure("error", stepData);
     }
+    message.destroy();
     openNotificationWithIcon({
       type: "success",
       message: "Submitted successfully"
@@ -224,6 +226,7 @@ function submitStepData(payload) {
   }
 
   function failure(error, payload) {
+    message.destroy();
     openNotificationWithIcon({
       type: "error",
       message: "Failed to submit step."

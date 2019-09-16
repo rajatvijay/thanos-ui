@@ -4,11 +4,10 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
-const {
-  getIntegrationSearchButton,
-  isDnBIntegrationDataLoading
-} = commonFunctions;
+const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {
@@ -38,7 +37,7 @@ class SerpSrch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -49,41 +48,27 @@ class SerpSrch extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      isDnBIntegrationDataLoading(this.props)
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check="default"
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            getComment={this.getComment}
+            jsonData={field.integration_json}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                getComment={this.getComment}
-                jsonData={field.integration_json}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
@@ -99,7 +84,7 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "Search results",
+      title: <FormattedMessage id="commonTextInstances.searchResults" />,
       dataIndex: "result",
       render: (text, record, index) => {
         return integrationCommonFunctions.serp_search_html(record);
@@ -107,7 +92,7 @@ const GetTable = props => {
       key: "title"
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       width: 140,
       key: "google_index",
       render: record => {
@@ -123,9 +108,16 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.custom_hash]
-                ? props.commentCount[record.custom_hash] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.custom_hash] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[record.custom_hash]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}

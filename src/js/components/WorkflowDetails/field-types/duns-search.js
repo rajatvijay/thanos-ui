@@ -5,6 +5,8 @@ import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
 import NumberFormat from "react-number-format";
 import { supportedFieldFormats } from "../../../../config";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -49,7 +51,7 @@ class DunsSearch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -62,40 +64,25 @@ class DunsSearch extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={"default"}
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            selectItem={this.selectItem}
+            jsonData={field.integration_json}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                selectItem={this.selectItem}
-                jsonData={field.integration_json}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
@@ -132,34 +119,34 @@ const GetTable = props => {
       )
     },
     {
-      title: "Organization Name",
+      title: <FormattedMessage id="fields.organizationName" />,
       dataIndex: "OrganizationPrimaryName[OrganizationName][$]",
       key: "OrganizationPrimaryName[OrganizationName][$]"
     },
     {
-      title: "Address",
+      title: <FormattedMessage id="fields.address" />,
       dataIndex: "PrimaryAddress[PrimaryTownName]",
       key: "PrimaryAddress[PrimaryTownName]"
     },
 
     {
-      title: "Tradestyle(s)",
+      title: <FormattedMessage id="fields.tradestyles" />,
       dataIndex: "tradeStyleNames[0][name]",
       key: "tradeStyleNames[0][name]"
     },
     {
-      title: "Location Type",
+      title: <FormattedMessage id="fields.locationType" />,
       dataIndex: "corporateLinkage[familytreeRolesPlayed][0][description]",
       key: "corporateLinkage[familytreeRolesPlayed][0][description]"
     },
 
     {
-      title: "Status",
+      title: <FormattedMessage id="commonTextInstances.status" />,
       dataIndex: "OperatingStatusText[$]",
       key: "OperatingStatusText[$]"
     },
     {
-      title: "Action",
+      title: <FormattedMessage id="fields.action" />,
       key: "index",
       render: record => (
         <span>

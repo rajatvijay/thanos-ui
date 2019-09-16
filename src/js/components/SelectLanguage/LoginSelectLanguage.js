@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Select, Tooltip } from "antd";
+import { Select } from "antd";
 import { languageActions } from "../../actions";
-import _ from "lodash";
 import languages from "../common/intlLanguages";
 import { languageConstants } from "../../constants";
+import { get as lodashGet } from "lodash";
 
 const Option = Select.Option;
 
@@ -12,57 +12,48 @@ class LoginSelectLanguage extends React.Component {
   handleLanguageChangeLogin = value => {
     this.props.dispatch(languageActions.setLanguage(value));
   };
-  render() {
-    let preferredLanguage =
-      this.props.languageSelector.language ||
-      (navigator.languages && navigator.languages[0]) ||
-      navigator.language ||
-      navigator.userLanguage ||
-      languageConstants.DEFAULT_LOCALE;
-    if (!languages.endonyms[preferredLanguage]) {
-      preferredLanguage = preferredLanguage.split("-")[0];
-    }
 
-    const supportedLaguanges = this.props.config.supported_languages;
-    if (
-      supportedLaguanges &&
-      !_.includes(supportedLaguanges, preferredLanguage)
-    ) {
-      preferredLanguage = supportedLaguanges[0];
-    }
+  get preferredLanguage() {
+    const preferredLanguage = lodashGet(
+      this.props,
+      "authentication.user.prefered_language",
+      languageConstants.DEFAULT_LOCALE
+    );
+    const selectedLangugage = lodashGet(
+      this.props,
+      "languageSelector.language",
+      preferredLanguage
+    );
+
+    return selectedLangugage;
+  }
+
+  renderLanguageName = languageSymbol => {
+    const languageEndonym = languages.endonyms[languageSymbol];
+    return languageEndonym
+      ? `${languageSymbol}(${languageEndonym})`
+      : languageSymbol;
+  };
+
+  render() {
+    const { supported_languages: supportedLaguanges } = this.props.config;
+
+    if (!supportedLaguanges) return null;
     return (
       <span>
         <Select
-          defaultValue={preferredLanguage}
+          defaultValue={this.preferredLanguage}
           style={{
-            paddingTop: "20px"
+            paddingTop: "20px",
+            width: "180px"
           }}
           onChange={this.handleLanguageChangeLogin}
         >
-          {_.map(
-            Object.keys(languages.endonyms),
-
-            function(locale, index) {
-              return (
-                _.includes(supportedLaguanges, locale) && (
-                  <Option key={locale} value={locale}>
-                    <Tooltip
-                      title={languages.endonyms[locale]}
-                      placement="leftTop"
-                    >
-                      <span className="f16">
-                        <span
-                          className={"flag " + locale}
-                          title={languages.endonyms[locale]}
-                        />
-                      </span>{" "}
-                      {locale}
-                    </Tooltip>
-                  </Option>
-                )
-              );
-            }
-          )}
+          {supportedLaguanges.map(locale => (
+            <Option key={locale} value={locale}>
+              {this.renderLanguageName(locale)}
+            </Option>
+          ))}
         </Select>
       </span>
     );

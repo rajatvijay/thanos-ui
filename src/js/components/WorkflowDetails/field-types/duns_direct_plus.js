@@ -5,6 +5,8 @@ import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
 import NumberFormat from "react-number-format";
 import { supportedFieldFormats } from "../../../../config";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -53,7 +55,7 @@ class DunsSearch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -66,42 +68,31 @@ class DunsSearch extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      (this.props.currentStepFields[this.props.stepData.id] &&
-        this.props.currentStepFields[this.props.stepData.id]
-          .integration_data_loading) ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const params = {
+      currentStepFields: this.props.currentStepFields,
+      step: this.props.field.step,
+      field: this.props.field
+    };
+
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check="default"
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            selectItem={this.selectItem}
+            jsonData={field.integration_json}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                selectItem={this.selectItem}
-                jsonData={field.integration_json}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
@@ -137,13 +128,13 @@ const GetTable = props => {
       )
     },
     {
-      title: "Organization Name",
+      title: <FormattedMessage id="fields.organizationName" />,
       dataIndex: "organization[primaryName]",
       key: "organization[primaryName]"
     },
 
     {
-      title: "Tradestyle(s)",
+      title: <FormattedMessage id="fields.tradestyles" />,
       dataIndex: "organization[tradeStyleNames]",
       render: (text, data, index) => {
         if (_.size(data.tradeStyleNames)) {
@@ -157,14 +148,14 @@ const GetTable = props => {
     },
 
     {
-      title: "Location Type",
+      title: <FormattedMessage id="fields.locationType" />,
       dataIndex:
         "organization[corporateLinkage][familytreeRolesPlayed][0][description]",
       key:
         "organization[corporateLinkage][familytreeRolesPlayed][0][description]"
     },
     {
-      title: "Address",
+      title: <FormattedMessage id="fields.address" />,
       dataIndex: "organization[primaryAddress][addressCountry]['name']",
       render: (text, data, index) => {
         if (_.size(data.organization.primaryAddress)) {
@@ -186,13 +177,13 @@ const GetTable = props => {
       key: "organization[primaryAddress][addressCountry]['name']"
     },
     {
-      title: "Status",
+      title: <FormattedMessage id="commonTextInstances.status" />,
       dataIndex:
         "organization[dunsControlStatus][operatingStatus][description]",
       key: "organization[dunsControlStatus][operatingStatus][description]"
     },
     {
-      title: "Action",
+      title: <FormattedMessage id="fields.action" />,
       key: "index",
       render: record => (
         <span>
@@ -200,7 +191,7 @@ const GetTable = props => {
             className="text-secondary text-anchor"
             onClick={() => props.selectItem(record)}
           >
-            Select
+            <FormattedMessage id="commonTextInstances.select" />
           </span>
         </span>
       )

@@ -4,6 +4,8 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -36,7 +38,7 @@ class GoogleSrch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
     const props = {
       field: field,
       onSearch: this.onSearch,
@@ -46,41 +48,28 @@ class GoogleSrch extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={"default"}
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            getComment={this.getComment}
+            jsonData={field.integration_json}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+            onSearch={this.onSearch}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          <div className="mr-top-lg mr-bottom-lg google-search-table">
-            <GetTable
-              getComment={this.getComment}
-              jsonData={field.integration_json}
-              commentCount={field.integration_comment_count}
-              flag_dict={field.selected_flag}
-              onSearch={this.onSearch}
-            />
-          </div>
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
@@ -89,7 +78,11 @@ class GoogleSrch extends Component {
 const GetTable = props => {
   // for error
   if (!props.jsonData.results) {
-    return <div className="text-center text-red">No result found!</div>;
+    return (
+      <div className="text-center text-red">
+        <FormattedMessage id="commonTextInstances.noResults" />
+      </div>
+    );
   }
 
   const data = props.jsonData.results.sort((a, b) => {
@@ -100,12 +93,21 @@ const GetTable = props => {
   });
 
   const title = (
-    <span className="text-metal">{`Found ${data.length} results`}</span>
+    <span className="text-metal">
+      <FormattedMessage
+        id="commonTextInstances.foundResults"
+        values={{
+          count: data.length
+        }}
+      />
+    </span>
   );
 
   const cate = (
     <div>
-      <span className="text-metal pd-right">Filter:</span>{" "}
+      <span className="text-metal pd-right">
+        <FormattedMessage id="mainFilterbar.filterText" />:
+      </span>{" "}
       {_.map(
         _.uniqBy(data, function(o) {
           if (o.category) {
@@ -160,7 +162,12 @@ const GetTable = props => {
               onClick={e => props.getComment(e, record)}
             >
               {props.commentCount[uid] ? (
-                props.commentCount[uid] + " comment(s)"
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[uid]
+                  }}
+                />
               ) : (
                 <i className="material-icons  t-18 text-secondary">
                   chat_bubble_outline

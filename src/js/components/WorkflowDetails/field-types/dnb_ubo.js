@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Table, Icon, Tag } from "antd";
+import { Table, Icon, Tag, Alert } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const { getIntegrationSearchButton } = commonFunctions;
 
@@ -36,7 +38,7 @@ class DnbUBO extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
@@ -47,42 +49,27 @@ class DnbUBO extends Component {
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={"default"}
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTable
+            jsonData={field.integration_json}
+            getComment={this.getComment}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+          />
         </div>
-      );
-    } else if (
-      _.size(field.integration_json) &&
-      !field.integration_json.selected_match
-    ) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTable
-                getComment={this.getComment}
-                jsonData={field.integration_json}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };
@@ -116,7 +103,7 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "BENEFICIAL OWNERS",
+      title: <FormattedMessage id="fields.beneficialOwners" />,
       dataIndex: "PrimaryName",
       render: (text, record, index) => {
         return integrationCommonFunctions.dnb_ubo_html(record);
@@ -124,7 +111,7 @@ const GetTable = props => {
       key: "PrimaryName"
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       key: "ubo_index",
       render: record => {
         let flag_data = _.size(props.flag_dict[record.MemberID])
@@ -139,9 +126,16 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.MemberID]
-                ? props.commentCount[record.MemberID] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.MemberID] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[record.MemberID]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}

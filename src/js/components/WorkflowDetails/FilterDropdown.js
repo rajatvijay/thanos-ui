@@ -161,8 +161,10 @@ class FilterDropdown extends Component {
   };
 
   renderFieldAnswerList = (fieldTags, kind) => {
-    return fieldTags.map(fieldTag =>
-      getIntlBody(fieldTag, "extra").map(fieldAnswer => (
+    return fieldTags.map(fieldTag => {
+      const extra = getIntlBody(fieldTag, "extra");
+      if (!extra.length || !Object.keys(extra).length) return null;
+      return extra.map(fieldAnswer => (
         <StyledRelativeLi>
           <SubMenuHeading
             onClick={() =>
@@ -175,8 +177,8 @@ class FilterDropdown extends Component {
             <StyledPostionedCheckIndicator />
           )}
         </StyledRelativeLi>
-      ))
-    );
+      ));
+    });
   };
 
   render() {

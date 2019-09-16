@@ -1,5 +1,4 @@
 import {
-  Text,
   Bool,
   Number,
   List,
@@ -41,6 +40,7 @@ import { RDCAlertsMetadata } from "./rdc_alert_metadata.js";
 import S3URL from "./S3ObjectField.js";
 import React from "react";
 import { Select } from "../../../../modules/fields/components/select";
+import { Text } from "../../../../modules/fields/components/text";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {
@@ -120,6 +120,8 @@ export const getFieldType = props => {
     case "dnb_cmpcvf":
       return DnBCommon(props);
     case "dnb_familytree":
+      return DnBCommon(props);
+    case "dnb_familytree_branch":
       return DnBCommon(props);
     case "dnb_livingstone":
       return Livingstone(props);

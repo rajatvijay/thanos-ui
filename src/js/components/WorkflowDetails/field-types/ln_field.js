@@ -3,13 +3,13 @@ import { Row, Col, Table, Icon, Divider, Tabs, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
+import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const TabPane = Tabs.TabPane;
-
 const { getIntegrationSearchButton } = commonFunctions;
 
 //Field Type DUNS SEARCH
-
 const getFields = props => {
   return getIntegrationSearchButton(props);
 };
@@ -41,51 +41,39 @@ class LexisNexisSearch extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const props = {
       field: field,
       onSearch: this.onSearch,
-      currentStepFields: this.props.currentStepFields,
+      currentStepFields: currentStepFields,
       is_locked: this.props.is_locked,
       completed: this.props.completed,
       permission: this.props.permission
     };
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_message ===
-        "Fetching data for this field..."
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check="default"
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTabsFilter
+            getComment={this.getComment}
+            jsonData={field.integration_json}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+          />
         </div>
-      );
-    } else if (_.size(field.integration_json)) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTabsFilter
-                getComment={this.getComment}
-                jsonData={field.integration_json}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div style={{ marginBottom: "50px" }}>
         {getFields(props)}
-        {final_html}
+        {finalHTML}
       </div>
     );
   };
@@ -360,12 +348,12 @@ const GetTable = props => {
 
   const columns = [
     {
-      title: "Name",
+      title: <FormattedMessage id="fields.name" />,
       dataIndex: "EntityName[$]",
       key: "EntityName[$]"
     },
     {
-      title: "Addresses",
+      title: <FormattedMessage id="fields.addresses" />,
       dataIndex: "EntityDetails[Addresses][EntityAddress]",
       render: (text, record, index) => {
         if (!_.isEmpty(text)) {
@@ -385,29 +373,29 @@ const GetTable = props => {
       key: "EntityDetails[Addresses][EntityAddress][Country][$]"
     },
     {
-      title: "Entity type",
+      title: <FormattedMessage id="fields.entityType" />,
       dataIndex: "[EntityDetails][EntityType][$]",
       key: "[EntityDetails][EntityType][$]"
     },
     {
-      title: "Date listed",
+      title: <FormattedMessage id="fields.dateListed" />,
       dataIndex: "[EntityDetails][DateListed][$]",
       key: "[EntityDetails][DateListed][$]"
     },
     {
-      title: "Reason listed",
+      title: <FormattedMessage id="fields.reasonListed" />,
       dataIndex: "[EntityDetails][ReasonListed][$]",
       key: "[EntityDetails][ReasonListed][$]"
     },
 
     {
-      title: "Score",
+      title: <FormattedMessage id="fields.score" />,
       dataIndex: "BestNameScore[$]",
       key: "BestNameScore[$]",
       defaultSortOrder: "descend"
     },
     {
-      title: "Comments",
+      title: <FormattedMessage id="workflowsInstances.commentsText" />,
       key: "ln_index",
       render: record => {
         let flag_data = _.size(props.flag_dict[record.EntityUniqueID["$"]])
@@ -422,9 +410,16 @@ const GetTable = props => {
               className="text-secondary text-anchor"
               onClick={e => props.getComment(e, record)}
             >
-              {props.commentCount[record.EntityUniqueID["$"]]
-                ? props.commentCount[record.EntityUniqueID["$"]] + " comment(s)"
-                : "Add comment"}
+              {props.commentCount[record.EntityUniqueID["$"]] ? (
+                <FormattedMessage
+                  id="commonTextInstances.commentsText"
+                  values={{
+                    count: props.commentCount[record.EntityUniqueID["$"]]
+                  }}
+                />
+              ) : (
+                <FormattedMessage id="commonTextInstances.addComments" />
+              )}
             </span>
             <br />
             {flag_name ? <Tag style={css}>{flag_name}</Tag> : null}
@@ -451,7 +446,11 @@ const GetTable = props => {
 const GetTabsFilter = props => {
   // error
   if (props.jsonData.Envelope.Body.Fault) {
-    return <div className="text-center text-green">No match found</div>;
+    return (
+      <div className="text-center text-green">
+        <FormattedMessage id="commonTextInstances.noMatchFound" />
+      </div>
+    );
   }
 
   let data = [];
@@ -460,7 +459,11 @@ const GetTabsFilter = props => {
       props.jsonData.Envelope.Body.SearchResponse.SearchResult.Records
         .ResultRecord.Watchlist.Matches.WLMatch;
   } catch (err) {
-    return <div className="text-center text-red">No matches found!</div>;
+    return (
+      <div className="text-center text-red">
+        <FormattedMessage id="commonTextInstances.noMatchesFound" />!
+      </div>
+    );
   }
 
   if (!Array.isArray(data)) {
@@ -470,25 +473,50 @@ const GetTabsFilter = props => {
   const getFilterData = data => {
     const fList = [
       {
-        label: "All",
+        label: <FormattedMessage id="commonTextInstances.all" />,
         value: "all",
         data: data,
         count: data.length,
         tabBarStyle: { color: "red" }
       },
-      { label: "Sanctions", value: "sanction", data: [], count: 0 },
+      {
+        label: <FormattedMessage id="fields.sanctions" />,
+        value: "sanction",
+        data: [],
+        count: 0
+      },
       { label: "SOE", value: "soe", data: [], count: 0 },
       { label: "PEP", value: "pep", data: [], count: 0 },
-      { label: "Enforcement", value: "enforcement", data: [], count: 0 },
-      { label: "Registrations", value: "registrations", data: [], count: 0 },
-      { label: "Adverse Media", value: "adverse media", data: [], count: 0 },
       {
-        label: "Associated Entity",
+        label: <FormattedMessage id="fields.enforcement" />,
+        value: "enforcement",
+        data: [],
+        count: 0
+      },
+      {
+        label: <FormattedMessage id="fields.registrations" />,
+        value: "registrations",
+        data: [],
+        count: 0
+      },
+      {
+        label: <FormattedMessage id="fields.adverseMedia" />,
+        value: "adverse media",
+        data: [],
+        count: 0
+      },
+      {
+        label: <FormattedMessage id="fields.associatedEntity" />,
         value: "associatedentity",
         data: [],
         count: 0
       },
-      { label: "Others", value: "others", data: [], count: 0 }
+      {
+        label: <FormattedMessage id="fields.others" />,
+        value: "others",
+        data: [],
+        count: 0
+      }
     ];
 
     _.map(data, function(i) {

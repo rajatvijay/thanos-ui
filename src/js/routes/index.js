@@ -10,14 +10,16 @@ import { injectIntl } from "react-intl";
 import queryString from "query-string";
 import RouteSwitch from "./RouteSwitch";
 import Godaam from "../utils/storage";
+import { permissionActions } from "../../modules/common/permissions/actions";
 
 function mapStateToProps(state) {
-  const { config, users, languageSelector, nextUrl } = state;
+  const { config, users, languageSelector, nextUrl, permissions } = state;
   return {
     users,
     config,
     nextUrl,
-    languageSelector
+    languageSelector,
+    permissions
   };
 }
 
@@ -61,6 +63,14 @@ class MainRoutes extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.config.name !== prevProps.config.name) {
       document.title = _.upperFirst(this.props.config.name) || "Vetted";
+    }
+
+    if (
+      Godaam.user &&
+      !this.props.permissions.loading &&
+      !Object.keys(this.props.permissions.permissions).length
+    ) {
+      this.props.dispatch(permissionActions.getPermissions());
     }
   }
 

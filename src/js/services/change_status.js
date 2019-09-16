@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
 import { apiBaseURL } from "../../config";
 
 export const changeStatusService = {
@@ -23,13 +23,4 @@ function update(payload) {
     payload.workflowId +
     "/change-status/?format=json";
   return fetch(url, requestOptions).then(handleResponse);
-}
-
-//COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
 }

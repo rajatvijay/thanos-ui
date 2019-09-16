@@ -1,30 +1,30 @@
 import React, { Component } from "react";
 import { Divider, Row, Col } from "antd";
 import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../../utils/IntegrationLoadingWrapper";
 
 export class AmberRoad extends Component {
   render() {
-    const fieldJson = this.props.field.integration_json;
+    const { field, currentStepFields } = this.props;
+    const fieldJson = field.integration_json;
 
-    let final_html = null;
-
-    if (
-      !fieldJson.PartnerRecord.Entities.Entity ||
-      fieldJson.PartnerRecord.Entities.Entity.length === 0
-    ) {
-      final_html = (
-        <div className="text-center text-medium pd-ard-sm text-light">
-          {" "}
-          <FormattedMessage id="messages.noResult" />
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={
+          fieldJson.PartnerRecord.Entities.Entity &&
+          fieldJson.PartnerRecord.Entities.Entity.length > 0
+        }
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <InfoTable entities={fieldJson.PartnerRecord.Entities.Entity} />
         </div>
-      );
-    } else {
-      const entities = fieldJson.PartnerRecord.Entities.Entity;
+      </IntegrationLoadingWrapper>
+    );
 
-      final_html = <InfoTable entities={entities} />;
-    }
-
-    return final_html;
+    return finalHTML;
   }
 }
 

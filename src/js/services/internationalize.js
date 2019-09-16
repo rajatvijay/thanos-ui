@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
 import { apiBaseURL } from "../../config";
 
 function updateSelectedLanguage(payload) {
@@ -11,14 +11,6 @@ function updateSelectedLanguage(payload) {
 
   const url = apiBaseURL + "users/change_prefered_language/";
   return fetch(url, requestOptions).then(handleResponse);
-}
-
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
 }
 
 export const updateSelectedLanguageService = {

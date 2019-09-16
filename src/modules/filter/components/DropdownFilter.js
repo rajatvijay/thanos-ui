@@ -16,27 +16,46 @@ class DropdownFilter extends Component {
       : null;
   };
 
+  get searchableProps() {
+    // Just adding some props to make our select component searchable
+    return {
+      showSearch: true,
+      optionFilterProp: "children",
+      filterOption: (input, option) =>
+        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    };
+  }
+
   render() {
     const {
       name,
       onFilterChange,
       value,
       placeholder,
-      loading = false
+      loading = false,
+      searchable
     } = this.props;
+
+    const additionalProps = searchable ? this.searchableProps : {};
 
     return (
       <Select
         loading={!!loading}
         value={value}
         placeholder={placeholder}
-        style={{ display: "block", margin: "20px 0px" }}
+        style={{
+          display: "block",
+          margin: "20px 0px",
+          width: "100%",
+          marginRight: "40px"
+        }}
         onChange={select => onFilterChange(name, select)}
         className={css`
           .ant-select-selection__rendered {
             margin-left: 0;
           }
         `}
+        {...additionalProps}
       >
         {this.renderOptions()}
       </Select>

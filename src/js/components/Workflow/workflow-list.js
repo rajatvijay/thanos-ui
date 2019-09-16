@@ -4,7 +4,7 @@ import { workflowActions } from "../../actions";
 import _ from "lodash";
 import { connect } from "react-redux";
 import moment from "moment";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import UserWorkflow from "./user-workflow";
 import WorkflowItem from "./WorkflowItem";
 
@@ -63,13 +63,17 @@ class WorkflowList extends Component {
     const thisMonth = moment().startOf("month");
 
     if (moment(occurrence.created_at).isAfter(today)) {
-      return "Today";
+      return this.props.intl.formatMessage({ id: "commonTextInstances.today" });
     }
     if (moment(occurrence.created_at).isAfter(thisWeek)) {
-      return "This week";
+      return this.props.intl.formatMessage({
+        id: "commonTextInstances.thisWeek"
+      });
     }
     if (moment(occurrence.created_at).isAfter(thisMonth)) {
-      return "This month";
+      return this.props.intl.formatMessage({
+        id: "commonTextInstances.thisMonth"
+      });
     }
     return moment(occurrence.created_at).format("MMM");
   };
@@ -92,6 +96,7 @@ class WorkflowList extends Component {
     const data = this.props.workflow;
     const currentPage = this.getCurrentPage();
     const groupedWorkflows = this.getGroupedWorkflows(currentPage);
+
     const ListCompletes = _.map(groupedWorkflows, (list, key) => {
       const listL = _.map(list, function(item, index) {
         return (
@@ -108,11 +113,7 @@ class WorkflowList extends Component {
             workflowChildren={that.props.workflowChildren}
             sortingEnabled={that.props.sortingEnabled}
             showFilterMenu={that.props.showFilterMenu}
-            fieldExtra={
-              that.props.field && that.props.field.definition.extra
-                ? that.props.field.definition.extra
-                : null
-            }
+            fieldExtra={that.props.fieldExtra}
             addComment={that.props.addComment || null}
             showCommentIcon={that.props.showCommentIcon}
             isEmbedded={that.props.isEmbedded}
@@ -232,4 +233,4 @@ function mapPropsToState(state) {
   };
 }
 
-export default connect(mapPropsToState)(WorkflowList);
+export default connect(mapPropsToState)(injectIntl(WorkflowList));

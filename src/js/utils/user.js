@@ -23,19 +23,29 @@ const removeCookies = () => {
   }
 };
 
-const postLogoutAction = ({ addNextURL = false } = {}) => {
+const postLogoutAction = ({ addNextURL = false, redirectURL = "" } = {}) => {
   Godaam.clear();
   removeCookies();
-  openNotificationWithIcon({
-    type: "warning",
-    message: "You've been logged out, redirecting to login page.."
-  });
-  const newURL = addNextURL
-    ? `/login/?next=${new URL(window.location.href).pathname}`
-    : `/login/`;
-  setTimeout(() => {
-    window.location.href = newURL;
-  }, 1000);
+  if (redirectURL) {
+    // In case of SSO, we get a redirect URL, that needs to be hit to ensure
+    // user is logged out from the IdP as well.
+    openNotificationWithIcon({
+      type: "warning",
+      message: "You're being logged out.."
+    });
+    window.location.href = redirectURL;
+  } else {
+    openNotificationWithIcon({
+      type: "warning",
+      message: "You've been logged out, redirecting to login page.."
+    });
+    const newURL = addNextURL
+      ? `/login/?next=${new URL(window.location.href).pathname}`
+      : `/login/`;
+    setTimeout(() => {
+      window.location.href = newURL;
+    }, 1000);
+  }
 };
 
 export const userUtilities = {

@@ -5,6 +5,7 @@ import { authHeader } from "../../_helpers";
 import { getFieldType } from "./field-types";
 import { commonFunctions } from "./field-types/commons";
 import { apiBaseURL } from "../../../config";
+import { checkPermission } from "../../../modules/common/permissions/Chowkidaar";
 
 const FormItem = Form.Item;
 const { getLabel, field_error } = commonFunctions;
@@ -69,11 +70,15 @@ class FieldItem extends Component {
     const dynamicUserPerm = this.props.fieldParams.dynamicUserPerms;
     let showButton = false;
 
+    const permissionsAllowed = this.props.fieldParams.permission;
+    const permissionName = "decrypt_fields";
+    const canDecryptFeild = checkPermission({
+      permissionsAllowed,
+      permissionName
+    });
+
     if (
-      _.includes(
-        this.props.fieldParams.permission,
-        "Can decrypt fields in a step"
-      ) ||
+      canDecryptFeild ||
       (dynamicUserPerm &&
         _.size(dynamicUserPerm.third_party_vendor) &&
         _.includes(dynamicUserPerm.third_party_vendor, "decrypt_fields"))

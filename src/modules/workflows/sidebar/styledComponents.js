@@ -62,3 +62,9 @@ export const StyledCollapseItem = styled.span`
   background-color: ${props => (props.selected ? "#104774" : "#FAFAFA")};
   color: ${props => (props.selected ? "white" : "black")};
 `;
+
+export const StyledBreadCrumbItem = styled.span`
+  color: gray;
+  font-size: 12px;
+  margin-right: 6px;
+`;

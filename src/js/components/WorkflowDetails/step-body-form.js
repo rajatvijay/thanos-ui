@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { Form, Divider, Row, Col, Button, Tooltip, Tabs } from "antd";
+import { Form, Divider, Row, Col, Button, Tooltip, Tabs, message } from "antd";
 import { workflowStepActions } from "../../actions";
 import { userService } from "../../services";
 import Moment from "react-moment";
@@ -11,6 +11,9 @@ import IntlTooltip from "../common/IntlTooltip";
 import { getIntlBody } from "../../_helpers/intl-helpers";
 import { fieldActions } from "../../../modules/fields/actions";
 import { requiredParam } from "../../../modules/common/errors";
+import { checkPermission } from "../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../modules/common/permissions/permissionsList";
+import { getFieldExtraFilters } from "./utils/getFieldExtraFilters";
 
 const TabPane = Tabs.TabPane;
 const SIZE_33 = 4,
@@ -56,6 +59,11 @@ class StepBodyForm extends Component {
   componentDidMount = () => {
     this.updateAllAPIFields();
   };
+
+  componentWillUnmount() {
+    // To remove any stray loading messages.
+    message.destroy();
+  }
 
   versionToggle = () => {
     this.setState({ showVersion: !this.state.showVersion });
@@ -393,7 +401,10 @@ class StepBodyForm extends Component {
         <div className=" step-status-box pd-top-sm">
           {step.completed_at ? this.getCompletedBy(step) : null}
 
-          {_.includes(this.props.permission, "Can undo a step") ? (
+          {checkPermission({
+            permissionsAllowed: this.props.permission,
+            permissionName: Permissions.CAN_UNDO_A_STEP
+          }) ? (
             <span>
               <Divider type="vertical" />
               <span
@@ -565,6 +576,11 @@ class StepBodyForm extends Component {
       getFieldForRender(field) {
         const fieldParams = Object.assign({}, param);
         fieldParams["field"] = field;
+        fieldParams.fieldExtraFilters = getFieldExtraFilters(
+          field,
+          that.props.extraFilters
+        );
+
         fieldParams.workflowId = that.props.workflowIdFromPropsForModal
           ? that.props.workflowIdFromPropsForModal
           : fieldParams.workflowId;
@@ -754,7 +770,10 @@ class StepBodyForm extends Component {
             <Col span={8}>
               {this.props.stepData.completed_at ||
               this.props.stepData.is_locked ||
-              !_.includes(this.props.permission, "Can submit a step") ||
+              !checkPermission({
+                permissionsAllowed: this.props.permission,
+                permissionName: Permissions.CAN_SUBMIT_A_STEP
+              }) ||
               !editable ? (
                 <Button
                   type="primary "
@@ -771,6 +790,7 @@ class StepBodyForm extends Component {
                     className="no-print pd-ard"
                     onClick={this.handleSubmit}
                     disabled={this.props.isSubmitting}
+                    loading={this.props.isSubmitting}
                   >
                     {this.props.isSubmitting ? (
                       <FormattedMessage id="commonTextInstances.submittingButtonText" />
