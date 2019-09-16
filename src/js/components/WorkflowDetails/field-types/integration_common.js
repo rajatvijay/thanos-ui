@@ -252,23 +252,7 @@ function google_search_html(record, search) {
     return icon;
   };
 
-  const keywordHighlight = (string, keyword) => {
-    const marked = `<mark><b>${keyword}</b></mark>`;
-    const regEsc = /^[a-zA-Z ]*$/g;
-
-    if (keyword && keyword.match(regEsc)) {
-      return string.replace(new RegExp(keyword, "gi"), marked);
-    } else {
-      return string;
-    }
-  };
-
-  const snippet = record.snippet;
-  let highlighted = snippet;
-
-  _.forEach(record.matched_keywords, function(keyword) {
-    highlighted = keywordHighlight(highlighted, keyword);
-  });
+  const { snippet } = record;
 
   return (
     <div>
@@ -300,7 +284,7 @@ function google_search_html(record, search) {
       </div>
       <div
         className="mr-bottom text-light"
-        dangerouslySetInnerHTML={{ __html: highlighted }}
+        dangerouslySetInnerHTML={{ __html: snippet }}
       />
       <div className="mr-bottom-lg">
         <a
