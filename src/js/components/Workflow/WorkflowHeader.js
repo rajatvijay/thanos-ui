@@ -489,7 +489,11 @@ export class GetMergedData extends React.Component {
       return (
         <Tooltip
           key={`${index}`}
-          title={item.label + ": " + (item.value || "")}
+          title={
+            <>
+              {item.label}: <LCDataValue {...item} />
+            </>
+          }
         >
           {tagWrapper}
         </Tooltip>

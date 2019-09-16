@@ -1,7 +1,7 @@
 import React from "react";
 import FormattedTextInput from "./FormattedTextInput";
 import { supportedFieldFormats } from "../../../config";
-import { Tag } from "antd";
+import { Tag, Tooltip } from "antd";
 
 //Checks for different type of lc data and renders accordingly
 export const FormattedLCData = React.memo(props => {
@@ -44,13 +44,21 @@ const LCIcon = React.memo(({ value, className }) => (
 ));
 
 const LCFormattedText = React.memo(({ value, className, format }) => (
-  <span title={value} className={className}>
+  <Tooltip
+    title={
+      <FormattedTextInput
+        displayType="text"
+        format={supportedFieldFormats[format]}
+        value={value}
+      />
+    }
+  >
     <FormattedTextInput
       displayType="text"
       format={supportedFieldFormats[format]}
       value={value}
     />
-  </span>
+  </Tooltip>
 ));
 
 const LCSimpleText = React.memo(({ value, className }) => (
