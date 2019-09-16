@@ -367,6 +367,11 @@ class ChildWorkflowField2 extends Component {
   };
 
   renderAddButton = () => {
+    //Return empty if no related workflow kind is present
+    if (!this.relatedWorkflowKind) {
+      return null;
+    }
+
     // Show Loading when the workflow kinds are loading
     if (this.props.workflowKind.loading) {
       return (
