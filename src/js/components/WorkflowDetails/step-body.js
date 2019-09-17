@@ -141,6 +141,18 @@ class StepBody extends Component {
       return null;
     }
   }
+  shouldDisplayPDFModal = () => {
+    const stepId = this.props.stepId;
+    return (
+      _.get(this.props.currentStepFields, [
+        stepId,
+        "currentStepFields",
+        "definition",
+        "extra",
+        "display_pdf_modal"
+      ]) || false
+    );
+  };
 
   componentDidUpdate(previousProps) {
     const previousStepTag = lodashGet(
@@ -153,12 +165,7 @@ class StepBody extends Component {
       this.props,
       `currentStepFields[${this.props.stepId}].currentStepFields.definition_tag`
     );
-
-    if (
-      previousStepTag !== currentStepTag &&
-      // TODO: Make this config driven, VET-5412
-      currentStepTag === "generate_step"
-    ) {
+    if (previousStepTag !== currentStepTag && this.shouldDisplayPDFModal()) {
       this.setState({ showWorkflowPDFModal: true });
     }
   }
