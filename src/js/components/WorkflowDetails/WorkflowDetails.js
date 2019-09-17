@@ -17,6 +17,7 @@ import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
 import { currentActiveStep } from "./utils/active-step";
+import NextStepPlaceholder from "./NextStepPlaceholder";
 
 const { Content } = Layout;
 
@@ -334,6 +335,104 @@ class WorkflowDetails extends Component {
     return error;
   }
 
+  getNextStep = () => {
+    const { stepId: currentStepId, groupId: currentGroupId } = lodashGet(
+      this.props,
+      `workflowKeys[${this.workflowId}]`,
+      {}
+    );
+    const allStepGroups = lodashGet(
+      this.props,
+      `workflowDetails[${this.workflowId}].workflowDetails.stepGroups.results`,
+      []
+    );
+
+    // TODO: Can be optimized using memoization
+    const allVisibleStepGroups = allStepGroups.filter(
+      stepGroup => !!stepGroup.steps.length
+    );
+
+    // Steps hasn't been loaded yet
+    if (!allVisibleStepGroups.length) {
+      return [null, null];
+    }
+
+    // User is on the profile step
+    if (!currentStepId && !currentGroupId) {
+      return [allVisibleStepGroups[0].id, allVisibleStepGroups[0].steps[0].id];
+    }
+
+    // Find the index of currentStepGroup and currentStep
+    let currentStepGroupIndex, currentStepIndex;
+    allVisibleStepGroups.forEach((group, groupIndex) => {
+      if (group.id === Number(currentGroupId)) {
+        currentStepGroupIndex = groupIndex;
+        group.steps.forEach((step, stepIndex) => {
+          if (step.id === Number(currentStepId)) {
+            currentStepIndex = stepIndex;
+          }
+        });
+      }
+    });
+
+    const nextStep =
+      allVisibleStepGroups[currentStepGroupIndex].steps[currentStepIndex + 1];
+
+    // If we have the next step in the same group
+    if (nextStep) {
+      return [currentGroupId, nextStep.id];
+    }
+
+    const nextStepGroup = allVisibleStepGroups[currentStepGroupIndex + 1];
+
+    // Take the user to the first step of the next stepgroup
+    if (nextStepGroup) {
+      return [nextStepGroup.id, nextStepGroup.steps[0].id];
+    }
+
+    // User is already on the last step group and last step
+    return [null, null];
+  };
+
+  handleOnInView = () => {
+    const [nextStepGroup, nextStep] = this.getNextStep();
+    if (!nextStepGroup && !nextStep) {
+      return;
+    }
+    this.handleUpdateOfActiveStep(nextStepGroup, nextStep);
+  };
+
+  get selectedGroup() {
+    return lodashGet(
+      this.props,
+      `workflowKeys[${this.workflowId}].groupId`,
+      null
+    );
+  }
+
+  get selectedStep() {
+    return lodashGet(
+      this.props,
+      `workflowKeys[${this.workflowId}].stepId`,
+      null
+    );
+  }
+
+  get isLoadingStepData() {
+    return (
+      lodashGet(
+        this.props,
+        `currentStepFields[${this.selectedStep}].loading`,
+        false
+      ) ||
+      lodashGet(
+        this.props,
+        `workflowDetails[${this.workflowId}].workflowDetails.loading`,
+        false
+      )
+    );
+  }
+
   render = () => {
     const {
       minimalUI,
@@ -370,16 +469,8 @@ class WorkflowDetails extends Component {
               {this.showBackButton() && this.renderBackButton()}
 
               <SidebarView
-                selectedGroup={
-                  workflowKeys[this.workflowId]
-                    ? workflowKeys[this.workflowId].groupId
-                    : null
-                }
-                selectedStep={
-                  workflowKeys[this.workflowId]
-                    ? workflowKeys[this.workflowId].stepId
-                    : null
-                }
+                selectedGroup={this.selectedGroup}
+                selectedStep={this.selectedStep}
                 minimalUI={minimalUI}
                 workflowIdFromDetailsToSidebar={this.workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
@@ -428,6 +519,7 @@ class WorkflowDetails extends Component {
                       />
                     )}
                   </div>
+                  <NextStepPlaceholder onInView={this.handleOnInView} />
                 </div>
 
                 {!minimalUI && (

@@ -15,6 +15,12 @@ export const StyledSidebar = styled(Sider)`
   padding-right: 0;
   position: relative;
   margin-top: ${({ minimalui }) => (minimalui ? 0 : 35)};
+
+  /* Make the sidebar fixed */
+  .ant-layout-sider-children {
+    position: fixed;
+    overflow-y: scroll;
+  }
 `;
 
 export const StyledSidebarHeader = styled.div`

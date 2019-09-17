@@ -144,6 +144,11 @@ function getStepFields(step, polling, fieldId) {
       .getStepFields(step)
       .then(stepFields => {
         onSuccessfullResponse(stepFields, dispatch);
+        // Scroll to top when the step fields are loaded
+        // Side effect, belongs to the async actions (thunks)
+        window.scrollTo({
+          top: 0
+        });
       })
       .catch(e => {
         onFailureResponse(e, dispatch);
