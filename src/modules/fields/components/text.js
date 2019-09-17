@@ -59,10 +59,12 @@ export class Text extends Component {
   onChange = e => {
     const { value } = e.target;
     this.setState({ inputText: value });
+    this.props.validateAnswer(this.props.field, value);
   };
 
   onBlur = e => {
     const { value } = e.target;
+    const error = this.props.error[this.props.field.id];
     if (this.initialAnswer && value === this.initialAnswer.answer) {
       return;
     }
@@ -73,7 +75,7 @@ export class Text extends Component {
         field: this.props.field,
         workflowId: this.props.workflowId
       });
-    } else {
+    } else if (!error) {
       this.props.saveResponse({
         answer: value,
         field: this.props.field,
@@ -104,9 +106,7 @@ export class Text extends Component {
 
   render() {
     const { props } = this;
-
     let TextFieldComponent = this.format ? FormattedTextInput : TextArea;
-
     return (
       <FormItem
         label={getLabel(props, this)}
