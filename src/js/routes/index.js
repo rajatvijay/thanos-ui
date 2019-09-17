@@ -2,7 +2,7 @@ import React from "react";
 import { Router } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
-import _ from "lodash";
+import { upperFirst, includes, get } from "lodash";
 import { configActions, userActions, checkAuth } from "../actions";
 import Header from "../../modules/header/components";
 import "antd/dist/antd.css";
@@ -62,20 +62,22 @@ class MainRoutes extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.config.name !== prevProps.config.name) {
-      document.title = _.upperFirst(this.props.config.name) || "Vetted";
+      const name = this.props.config.name || "Vetted";
+      document.title = name.charAt(0).toUpperCase() + name.slice(1);
     }
 
     if (
       Godaam.user &&
       !this.props.permissions.loading &&
-      !Object.keys(this.props.permissions.permissions).length
+      !Object.keys(get(this.props, "permissions.permissions", {})).length
     ) {
       this.props.dispatch(permissionActions.getPermissions());
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    document.title = _.upperFirst(this.props.config.name) || "Vetted";
+    const name = this.props.config.name || "Vetted";
+    document.title = name.charAt(0).toUpperCase() + name.slice(1);
   }
 
   render() {
@@ -97,7 +99,7 @@ class MainRoutes extends React.Component {
               ) : (
                 <div>
                   {Godaam.user ||
-                  !_.includes(history.location.pathname, "/login") ? (
+                  !includes(history.location.pathname, "/login") ? (
                     <Header />
                   ) : null}
                   <RouteSwitch {...this.props} />
