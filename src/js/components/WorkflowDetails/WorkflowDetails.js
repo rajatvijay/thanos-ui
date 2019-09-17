@@ -35,8 +35,6 @@ class WorkflowDetails extends Component {
 
     super(props);
     this.state = {
-      printing: false,
-      dont: false,
       newWorkflow: params.get("new") === "true",
       currentStep: null,
       // TODO: Check why we need groupId check
@@ -270,6 +268,72 @@ class WorkflowDetails extends Component {
 
   ////Comment functions ends///////
 
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+
+  get workflowId() {
+    const { workflowIdFromPropsForModal } = this.props;
+    return (
+      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10)
+    );
+  }
+
+  showComments = () => {
+    const commentsData = lodashGet(this.props, "workflowComments.data", null);
+    return commentsData && commentsData.results && !commentsData.isEmbedded;
+  };
+
+  showBackButton = () => {
+    return (
+      this.props.workflow &&
+      this.props.workflow.workflow_family &&
+      this.props.workflow.workflow_family.length <= 1 &&
+      !this.props.minimalUI
+    );
+  };
+
+  renderBackButton = () => {
+    return (
+      <div
+        style={{
+          backgroundColor: "#104774",
+          width: "75px",
+          paddingTop: "28px"
+        }}
+      >
+        <span
+          onClick={goToPrevStep}
+          className="text-anchor pd-ard-sm "
+          style={{ padding: 15 }}
+        >
+          <i
+            className="material-icons text-secondary"
+            style={{
+              fontSize: "40px",
+              verticalAlign: "middle",
+              color: "#fff"
+            }}
+          >
+            chevron_left
+          </i>
+        </span>
+      </div>
+    );
+  };
+
+  getLoadingError() {
+    const { workflowDetailsHeader } = this.props;
+    const error = [];
+    error[0] = !!workflowDetailsHeader.error;
+    error[1] =
+      workflowDetailsHeader.error === "Not Found"
+        ? "errorMessageInstances.workflowNotFound"
+        : workflowDetailsHeader.error;
+    return error;
+  }
+
   render = () => {
     const {
       minimalUI,
@@ -278,67 +342,15 @@ class WorkflowDetails extends Component {
       workflowKeys
     } = this.props;
     const { displayProfile } = this.state;
+    const [hasError, errorMessage] = this.getLoadingError();
 
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    //   //calculate activit step
-
-    const comment_data = this.props.workflowComments.data;
-
-    let error = this.props.workflowDetailsHeader.error || this.state.error;
-    if (error === "Not Found") {
-      error = "errorMessageInstances.workflowNotFound";
-    }
-    // error can be an ID from intlMessages or text to be displayed.
-    // If ID is not found, it is rendered as text by default.
-
-    let showBackButtom = true;
-
-    if (
-      this.props.workflow &&
-      this.props.workflow.workflow_family &&
-      this.props.workflow.workflow_family.length <= 1
-    ) {
-      showBackButtom = false;
-    }
-
-    const BackButton = () => {
-      if (showBackButtom && !minimalUI) {
-        return (
-          <div
-            style={{
-              backgroundColor: "#104774",
-              width: "75px",
-              paddingTop: "28px"
-            }}
-          >
-            <span
-              onClick={goToPrevStep}
-              className="text-anchor pd-ard-sm "
-              style={{ padding: 15 }}
-            >
-              <i
-                className="material-icons text-secondary"
-                style={{
-                  fontSize: "40px",
-                  verticalAlign: "middle",
-                  color: "#fff"
-                }}
-              >
-                chevron_left
-              </i>
-            </span>
-          </div>
-        );
-      } else {
-        return <span />;
-      }
-    };
-
-    if (_.size(error)) {
+    if (hasError) {
       // LAYOUT PLACE HOLDER
       return (
-        <PlaceHolder error={error} showFilterMenu={this.props.showFilterMenu} />
+        <PlaceHolder
+          error={errorMessage}
+          showFilterMenu={this.props.showFilterMenu}
+        />
       );
     } else {
       return (
@@ -355,21 +367,21 @@ class WorkflowDetails extends Component {
                 marginTop: minimalUI ? 80 : 0
               }}
             >
-              <BackButton />
+              {this.showBackButton() && this.renderBackButton()}
 
               <SidebarView
                 selectedGroup={
-                  workflowKeys[workflowId]
-                    ? workflowKeys[workflowId].groupId
+                  workflowKeys[this.workflowId]
+                    ? workflowKeys[this.workflowId].groupId
                     : null
                 }
                 selectedStep={
-                  workflowKeys[workflowId]
-                    ? workflowKeys[workflowId].stepId
+                  workflowKeys[this.workflowId]
+                    ? workflowKeys[this.workflowId].stepId
                     : null
                 }
                 minimalUI={minimalUI}
-                workflowIdFromDetailsToSidebar={workflowId}
+                workflowIdFromDetailsToSidebar={this.workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
                 displayProfile={displayProfile}
                 changeProfileDisplay={this.changeProfileDisplay}
@@ -390,27 +402,31 @@ class WorkflowDetails extends Component {
                       margin: minimalUI ? "0px 24px 0px 0px" : "24px"
                     }}
                   >
-                    <StepBody
-                      stepId={
-                        workflowKeys[workflowId]
-                          ? workflowKeys[workflowId].stepId
-                          : null
-                      }
-                      workflowId={workflowId}
-                      workflowIdFromPropsForModal={workflowIdFromPropsForModal}
-                      toggleSidebar={this.callBackCollapser}
-                      changeFlag={this.changeFlag}
-                      getIntegrationComments={this.getIntegrationComments}
-                      workflowHead={
-                        minimalUI
-                          ? workflowItem
-                          : this.props.workflowDetailsHeader[workflowId]
-                          ? this.props.workflowDetailsHeader[workflowId]
-                          : null
-                      }
-                      dispatch={this.props.dispatch}
-                      displayProfile={this.state.displayProfile}
-                    />
+                    {!this.props.hideStepBody && (
+                      <StepBody
+                        stepId={
+                          workflowKeys[this.workflowId]
+                            ? workflowKeys[this.workflowId].stepId
+                            : null
+                        }
+                        workflowId={this.workflowId}
+                        workflowIdFromPropsForModal={
+                          workflowIdFromPropsForModal
+                        }
+                        toggleSidebar={this.callBackCollapser}
+                        changeFlag={this.changeFlag}
+                        getIntegrationComments={this.getIntegrationComments}
+                        workflowHead={
+                          minimalUI
+                            ? workflowItem
+                            : this.props.workflowDetailsHeader[this.workflowId]
+                            ? this.props.workflowDetailsHeader[this.workflowId]
+                            : null
+                        }
+                        dispatch={this.props.dispatch}
+                        displayProfile={this.state.displayProfile}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -437,10 +453,7 @@ class WorkflowDetails extends Component {
                     </Tooltip>
                   </div>
                 )}
-                {comment_data &&
-                comment_data.results &&
-                // comment_data.results. &&
-                !comment_data.isEmbedded ? (
+                {this.showComments() && (
                   <div>
                     <Comments
                       object_id={this.state.object_id}
@@ -453,7 +466,7 @@ class WorkflowDetails extends Component {
                       {...this.props}
                     />
                   </div>
-                ) : null}
+                )}
               </Content>
             </Layout>
           </Layout>
