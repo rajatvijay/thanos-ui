@@ -279,6 +279,7 @@ class URL2 extends React.Component {
               }
               style={{ cursor: "pointer" }}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <Input
                 disabled={isDisabled(props)}
@@ -334,6 +335,7 @@ class URL2 extends React.Component {
                       : props.field.definition.defaultValue
                   }
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {props.field.answers[0]
                     ? props.field.answers[0].answer

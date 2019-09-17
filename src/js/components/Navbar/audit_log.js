@@ -257,7 +257,15 @@ AuditList.propTypes = {
   logType: PropTypes.string.isRequired
 };
 
-const ActivityLogSimple = ({ item }) => {
+const Timestamp = React.memo(({ timestamp }) => (
+  <span className="small text-light">
+    <Tooltip title={moment(new Date(timestamp)).format()}>
+      <Moment fromNow>{timestamp}</Moment>
+    </Tooltip>
+  </span>
+));
+
+const ActivityLogSimple = React.memo(({ item }) => {
   return (
     <div>
       <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
@@ -265,16 +273,12 @@ const ActivityLogSimple = ({ item }) => {
       </a>{" "}
       {item.action.type} {item.object.name}
       <br />
-      <span className="small text-light">
-        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
-          <Moment fromNow>{item.actiontime.datetime}</Moment>
-        </Tooltip>
-      </span>
+      <Timestamp timestamp={item.actiontime.datetime} />
     </div>
   );
-};
+});
 
-const ActivityLogEmail = ({ item }) => {
+const ActivityLogEmail = React.memo(({ item }) => {
   return (
     <p className="pd-left-sm">
       Email{" "}
@@ -284,14 +288,10 @@ const ActivityLogEmail = ({ item }) => {
         {item.actor.email}
       </a>
       <br />
-      <span className="small text-light">
-        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
-          <Moment fromNow>{item.actiontime.datetime}</Moment>
-        </Tooltip>
-      </span>
+      <Timestamp timestamp={item.actiontime.datetime} />
     </p>
   );
-};
+});
 
 class ActivityLogCollapsible extends Component {
   constructor(props) {

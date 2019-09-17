@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Icon } from "antd";
 import { size, has } from "lodash";
 import { dunsFieldActions } from "../../../actions";
 import { commonFunctions } from "./commons";

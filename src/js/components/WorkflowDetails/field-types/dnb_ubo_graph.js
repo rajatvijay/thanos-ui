@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
-import { Icon, Alert } from "antd";
 import $ from "jquery";
 import { FormattedMessage } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Icon, Tabs, Tag } from "antd";
+import { Table, Tabs, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { getEventItem } from "./rdc_alert_metadata";

@@ -46,34 +46,28 @@ class Sidebar extends Component {
   // ================================================================ //
 
   // DIRTY CODE, SORRY!!
-  callBackCollapser = (object_id, content_type) => {
-    this.state.loading_sidebar = true;
-    this.state.object_id = object_id;
+  callBackCollapser = (objectId, content_type) => {
     this.props.dispatch(
-      workflowDetailsActions.getComment(object_id, content_type)
+      workflowDetailsActions.getComment(objectId, content_type)
     );
   };
 
   addComment = (payload, step_reload_payload) => {
-    this.state.adding_comment = true;
-    this.state.object_id = payload.object_id;
     this.props.dispatch(
       workflowStepActions.addComment(payload, step_reload_payload)
     );
   };
 
-  getComment = object_id => {
-    this.state.loading_sidebar = true;
-    this.state.object_id = object_id;
-    this.addComment(object_id, "workflow");
+  getComment = objectId => {
+    this.addComment(objectId, "workflow");
   };
 
   openCommentSidebar = () => {
     const { workflowIdFromDetailsToSidebar } = this.props;
-    const object_id = this.props.workflowDetailsHeader[
+    const objectId = this.props.workflowDetailsHeader[
       workflowIdFromDetailsToSidebar
     ].id;
-    this.callBackCollapser(object_id, "all_data");
+    this.callBackCollapser(objectId, "all_data");
   };
 
   // DIRTY CODE ENDS HERE!

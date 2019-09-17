@@ -34,13 +34,6 @@ const IntegrationLoadingWrapper = ({
     </div>
   );
 
-  const noResult = (
-    <div className="text-center text-medium pd-ard-sm text-light mr-top-lg mr-bottom-lg">
-      {" "}
-      <FormattedMessage id="messages.noResult" />
-    </div>
-  );
-
   const checked =
     check === "default"
       ? size(field.integration_json) && !field.integration_json.selected_match

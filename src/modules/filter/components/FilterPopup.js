@@ -157,7 +157,6 @@ class FilterPopup extends Component {
     } = this.props;
 
     const {
-      visible,
       fieldOptions,
       status,
       region,

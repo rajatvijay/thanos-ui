@@ -40,46 +40,59 @@ class SelectLanguage extends React.Component {
       : languageSymbol;
   };
 
+  get sanitizedProps() {
+    const otherProps = { ...this.props };
+    delete otherProps.authentication;
+    delete otherProps.dispatch;
+    delete otherProps.config;
+    return otherProps;
+  }
+
   render() {
     const { supported_languages: supportedLaguanges } = this.props.config;
-
     if (!supportedLaguanges) return null;
-
     return (
       <Menu.SubMenu
-        {...this.props}
+        {...this.sanitizedProps}
         title={this.renderLanguageMenuTitle()}
         className="header-menu"
         onClick={this.handleLanguageChange}
       >
-        <div style={{ height: "300px", overflow: "scroll" }}>
-          {supportedLaguanges.map((language, index) => (
-            <Menu.Item
-              {...this.props}
-              key={index}
-              title={language}
-              style={{ cursor: "pointer", padding: "10px" }}
-              className={css`
-                &:hover {
-                  background-color: #eee !important;
-                }
-              `}
-            >
-              {this.renderLanguageName(language)}
-            </Menu.Item>
-          ))}
-        </div>
+        <>
+          {/** This is to avoid SubMenu passing it's prop to div and therefore prevent the warning */}
+          <div
+            style={{
+              height: "300px",
+              overflow: "scroll"
+            }}
+          >
+            {supportedLaguanges.map((language, index) => (
+              <Menu.Item
+                {...this.sanitizedProps}
+                key={index}
+                title={language}
+                style={{ cursor: "pointer", padding: "10px" }}
+                className={css`
+                  &:hover {
+                    background-color: #eee !important;
+                  }
+                `}
+              >
+                {this.renderLanguageName(language)}
+              </Menu.Item>
+            ))}
+          </div>
+        </>
       </Menu.SubMenu>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { config, authentication, languageSelector } = state;
+  const { config, authentication } = state;
   return {
     config,
-    authentication,
-    languageSelector
+    authentication
   };
 }
 
