@@ -66,6 +66,7 @@ class WorkflowDetails extends Component {
       workflowKeys[workflowId].groupId !== groupId
     ) {
       this.handleUpdateOfActiveStep(groupId, stepId);
+      return;
     }
 
     const workflowDetailsLoaded =
@@ -89,9 +90,10 @@ class WorkflowDetails extends Component {
       this.setState({
         newWorkflow: false
       });
+      return;
     }
 
-    if (workflowDetailsLoaded) {
+    if (workflowDetailsLoaded && !groupId && !stepId) {
       // If steps are JUST loaded, we want to load the initial step
       this.loadInitialStep();
       return;
