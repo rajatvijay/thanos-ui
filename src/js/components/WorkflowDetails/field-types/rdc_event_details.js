@@ -375,6 +375,8 @@ const GetTabsFilter = props => {
   );
 };
 
-export const RDCEventDetails = injectIntl(props => {
-  return <RDCEventDetailComponent {...props} />;
-});
+const IntlRDCEventDetailComponent = injectIntl(RDCEventDetailComponent);
+
+export const RDCEventDetails = props => {
+  return <IntlRDCEventDetailComponent {...props} />;
+};
