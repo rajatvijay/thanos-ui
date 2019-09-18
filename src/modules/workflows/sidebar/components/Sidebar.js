@@ -239,7 +239,7 @@ class Sidebar extends Component {
         width={500}
         className="activity-log-drawer"
       >
-        {process.env.REACT_APP_ACTIVITY_LOG_SERVERLESS ? (
+        {process.env.REACT_APP_ACTIVITY_LOG_SERVERLESS === "true" ? (
           <ServerlessAuditListTabs
             id={[...childWorkflowIds, workflowIdFromDetailsToSidebar]}
           />
