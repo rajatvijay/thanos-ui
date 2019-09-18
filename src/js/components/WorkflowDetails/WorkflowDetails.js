@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Tooltip } from "antd";
 import SidebarView from "../../../modules/workflows/sidebar/components";
-// import _ from "lodash";
 import StepBody from "./step-body.js";
 import { history } from "../../_helpers";
 import {
@@ -15,11 +14,7 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import {
-  // currentActiveStep,
-  getStepAndFromConfig,
-  getPreviousAndNextSteps
-} from "./utils/active-step";
+import { getStepAndFromConfig } from "./utils/active-step";
 import NextStepPlaceholder from "./NextStepPlaceholder";
 
 const { Content } = Layout;
@@ -116,16 +111,21 @@ class WorkflowDetails extends Component {
     return currentGroupId === null && currentStepId == null;
   }
 
+  // TODO: Should be optimized
+  get allSteps() {
+    return this.stepGroups.flatMap(group => group.steps).map(step => step.id);
+  }
+
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 
   state = {
-    currentStepId: null,
-    currentGroupId: null,
-    nextStepId: null,
-    nextGroupId: null
+    currentStepId: null
+    // currentGroupId: null,
+    // nextStepId: null,
+    // nextGroupId: null
   };
 
   componentDidMount() {
@@ -195,31 +195,11 @@ class WorkflowDetails extends Component {
   };
 
   updateStepsInState = ({ currentGroupId, currentStepId }) => {
-    // Precalculate next step and next group
-    const [nextStepId, nextGroupId] = getPreviousAndNextSteps(
-      currentGroupId,
-      currentStepId,
-      this.stepGroups
-    );
     this.setState({
-      nextGroupId,
-      nextStepId,
       currentGroupId,
       currentStepId
     });
   };
-
-  componentDidUpdate(previousProps) {
-    console.log(previousProps.location.search, this.props.location.search);
-    // On update of URL, (query params)
-    if (previousProps.location !== this.props.location) {
-      // Get new step and group
-      const searchParams = new URLSearchParams(this.props.location.search);
-      const currentStepId = searchParams.get("step");
-      const currentGroupId = searchParams.get("group");
-      this.updateStepsInState({ currentStepId, currentGroupId });
-    }
-  }
 
   isTheStepAutoSubmitted = (previousProps, currentProps, stepId) => {
     const previousCompletedBy = lodashGet(
@@ -234,13 +214,6 @@ class WorkflowDetails extends Component {
       return true;
     }
     return false;
-  };
-
-  isParentWorkflow = () => {
-    return (
-      this.props.workflowDetailsHeader.workflowDetailsHeader.workflow_family
-        .length === 1
-    );
   };
 
   /////////////////////////////////////////////////////////////////////////////////
@@ -302,28 +275,25 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowDetailsActions.getStepFields(payload));
   };
 
-  handleUpdateOfActiveStep = (groupId, stepId) => {
+  handleUpdateOfActiveStep = (groupId, stepId, softUpdate = false) => {
     // URL should be changed when in expand view
     if (!this.props.minimalUI) {
-      if (groupId === null && stepId === null) {
-        history.replace({
-          search: ""
-        });
-      } else {
-        const searchParams = new URLSearchParams({
-          group: groupId,
-          step: stepId
-        });
-        history.replace({
-          search: searchParams.toString()
-        });
-      }
-    } else {
-      this.updateStepsInState({
-        currentGroupId: groupId,
-        currentStepId: stepId
+      const isProfileStep = groupId === null && stepId === null;
+      const searchParams = isProfileStep
+        ? ""
+        : new URLSearchParams({
+            group: groupId,
+            step: stepId
+          });
+      history.replace({
+        search: searchParams.toString(),
+        state: softUpdate
       });
     }
+    this.updateStepsInState({
+      currentGroupId: groupId,
+      currentStepId: stepId
+    });
 
     // Fetch the step Data
     this.getStepDetailsData({
@@ -386,16 +356,15 @@ class WorkflowDetails extends Component {
     return error;
   }
 
-  handleOnInView = () => {
-    const [nextStepGroup, nextStep] = this.getNextStep();
-    if (!nextStepGroup && !nextStep) {
-      return;
+  handleOnInView = (stepId, groupId) => {
+    if (!stepId && !groupId) {
+      return this.handleUpdateOfActiveStep(null, null);
     }
-    this.handleUpdateOfActiveStep(nextStepGroup, nextStep);
+    this.handleUpdateOfActiveStep(groupId, stepId);
   };
 
   render = () => {
-    const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
+    const { minimalUI, workflowItem } = this.props;
     const { currentStepId, currentGroupId } = this.state;
     const [hasError, errorMessage] = this.getLoadingError();
 
@@ -449,26 +418,41 @@ class WorkflowDetails extends Component {
                       margin: minimalUI ? "0px 24px 0px 0px" : "24px"
                     }}
                   >
-                    {!this.props.hideStepBody && (
-                      <StepBody
-                        stepId={currentStepId}
-                        workflowId={this.workflowId}
-                        toggleSidebar={this.callBackCollapser}
-                        changeFlag={this.changeFlag}
-                        getIntegrationComments={this.getIntegrationComments}
-                        workflowHead={
-                          minimalUI
-                            ? workflowItem
-                            : this.props.workflowDetailsHeader[this.workflowId]
-                            ? this.props.workflowDetailsHeader[this.workflowId]
-                            : null
-                        }
-                        dispatch={this.props.dispatch}
-                        displayProfile={this.displayProfile}
-                      />
-                    )}
+                    {/* TODO: Clean the JSX */}
+                    {!this.props.hideStepBody &&
+                      this.stepGroups.map(group => {
+                        return group.steps.map((step, index) => (
+                          <NextStepPlaceholder
+                            onInViewCallback={() =>
+                              this.handleOnInView(step.id, group.id)
+                            }
+                          >
+                            <StepBody
+                              stepId={step.id}
+                              workflowId={this.workflowId}
+                              toggleSidebar={this.callBackCollapser}
+                              changeFlag={this.changeFlag}
+                              getIntegrationComments={
+                                this.getIntegrationComments
+                              }
+                              workflowHead={
+                                minimalUI
+                                  ? workflowItem
+                                  : this.props.workflowDetailsHeader[
+                                      this.workflowId
+                                    ]
+                                  ? this.props.workflowDetailsHeader[
+                                      this.workflowId
+                                    ]
+                                  : null
+                              }
+                              dispatch={this.props.dispatch}
+                              displayProfile={this.displayProfile}
+                            />
+                          </NextStepPlaceholder>
+                        ));
+                      })}
                   </div>
-                  <NextStepPlaceholder onInView={this.handleOnInView} />
                 </div>
 
                 {!minimalUI && (

@@ -2,6 +2,9 @@ import React, { Component, createRef } from "react";
 import { css } from "emotion";
 
 class NextStepPlaceholder extends Component {
+  state = {
+    inView: false
+  };
   rootRef = createRef();
 
   componentDidMount() {
@@ -20,8 +23,8 @@ class NextStepPlaceholder extends Component {
   onComesInViewport = entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        // let elem = entry.target;
-        // this.props.onInView();
+        this.props.onInViewCallback();
+        this.setState({ inView: true });
       }
     });
   };
@@ -31,19 +34,19 @@ class NextStepPlaceholder extends Component {
   }
 
   render() {
-    const { style = {} } = this.props;
+    const { children, style = {} } = this.props;
+    const { inView } = this.state;
     return (
       <div
         ref={this.rootRef}
         className={css`
-          box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.12);
-          margin: 25px;
-          padding: 20px;
           background: white;
           min-height: 500px;
         `}
         style={style}
-      ></div>
+      >
+        {inView && children}
+      </div>
     );
   }
 }
