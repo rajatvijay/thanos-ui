@@ -293,22 +293,28 @@ class Sidebar extends Component {
     const { selectedGroup } = this.props;
     const profileSelected = selectedGroup === null;
     return (
-      <StyledCollapseItem
-        onClick={this.onProfileClick}
-        selected={profileSelected}
-      >
-        <i
-          className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-          fill="#FFF"
-          style={{
-            color: profileSelected ? "white" : "rgb(204, 204, 204)",
-            fontSize: 24
-          }}
+      <>
+        <StyledCollapseItem
+          onClick={this.onProfileClick}
+          selected={profileSelected}
+          data-testid="profile-step"
         >
-          info_outline
-        </i>
-        <FormattedMessage id="workflowsInstances.profileText" />
-      </StyledCollapseItem>
+          <i
+            className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+            fill="#FFF"
+            style={{
+              color: profileSelected ? "white" : "rgb(204, 204, 204)",
+              fontSize: 24
+            }}
+          >
+            info_outline
+          </i>
+          <FormattedMessage id="workflowsInstances.profileText" />
+        </StyledCollapseItem>
+        <Divider
+          style={{ margin: 0, marginTop: "12px", backgroundColor: "#d9d9d9" }}
+        />
+      </>
     );
   };
 
@@ -372,6 +378,7 @@ class Sidebar extends Component {
   render() {
     const { minimalUI, selectedStep } = this.props;
     const { selectedPanel } = this.state;
+    const showProfile = !!this.lcData.length;
 
     // TODO: This check should be outside this component
     if (!this.currentWorkflow) {
@@ -395,7 +402,7 @@ class Sidebar extends Component {
 
           {!minimalUI && this.renderLCData()}
 
-          {this.renderProfileStep()}
+          {showProfile && this.renderProfileStep()}
 
           {this.loadingSteps ? (
             this.renderLoader()

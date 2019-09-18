@@ -15,48 +15,47 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import { currentActiveStep } from "./utils/active-step";
+import { currentActiveStep, getStepId } from "./utils/active-step";
 
 const { Content } = Layout;
 
 class WorkflowDetails extends Component {
   constructor(props) {
-    const { minimalUI, setWorkflowKeys, workflowIdFromPropsForModal } = props;
+    super(props);
+    const { minimalUI, setWorkflowKeys } = props;
     const params = new URL(document.location).searchParams;
-
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(props.match.params.id, 10);
 
     const groupId = params.get("group");
     const stepId = params.get("step");
 
-    setWorkflowKeys({ workflowId, stepId, groupId });
+    setWorkflowKeys({ workflowId: this.workflowId, stepId, groupId });
 
-    super(props);
     this.state = {
       newWorkflow: params.get("new") === "true",
       currentStep: null,
       // TODO: Check why we need groupId check
-      displayProfile: minimalUI ? true : !groupId
+      displayProfile: minimalUI && this.lcData.length ? true : !groupId
     };
   }
 
+  get stepGroups() {
+    return _.get(
+      this.props,
+      `workflowDetails["${this.workflowId}"].workflowDetails.stepGroups`,
+      null
+    );
+  }
+
   componentDidUpdate = prevProps => {
-    const {
-      workflowIdFromPropsForModal,
-      match,
-      minimalUI,
-      workflowKeys
-    } = this.props;
+    const { match, minimalUI, workflowKeys } = this.props;
 
     const { displayProfile, newWorkflow } = this.state;
     const params = new URL(document.location).searchParams;
     const groupId = params.get("group");
     const stepId = params.get("step");
     //SET WORKFLOW ID FROM ROUTER
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-
+    const workflowId = this.workflowId;
+    const stepGroups = this.stepGroups;
     if (
       groupId && // these can be null when new Child WF is created
       stepId && // which has params ?new=true, until next refresh
@@ -68,29 +67,34 @@ class WorkflowDetails extends Component {
     ) {
       this.handleUpdateOfActiveStep(groupId, stepId);
     }
-    if (
+
+    const workflowDetailsLoaded =
       _.get(prevProps, `workflowDetails["${workflowId}"].loading`, null) ===
         true &&
       _.get(this.props, `workflowDetails["${workflowId}"].loading`, null) !==
-        true &&
+        true;
+
+    if (
+      workflowDetailsLoaded &&
       (newWorkflow || params.get("new") === "true")
     ) {
       // when workflow is loaded and it's a created workflow
       // navigate to the first step of the first step group
 
-      const groups = _.get(
-        this.props,
-        `workflowDetails["${workflowId}"].workflowDetails.stepGroups`,
-        null
-      );
-      if (groups !== null) {
-        // has groups
-        const { groupId, stepId } = currentActiveStep(groups, workflowId);
+      if (stepGroups !== null) {
+        // has this.stepGroups
+        const { groupId, stepId } = currentActiveStep(stepGroups, workflowId);
         if (groupId && stepId) this.handleUpdateOfActiveStep(groupId, stepId);
       }
       this.setState({
         newWorkflow: false
       });
+    }
+
+    if (workflowDetailsLoaded) {
+      // If steps are JUST loaded, we want to load the initial step
+      this.loadInitialStep();
+      return;
     }
 
     if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
@@ -103,6 +107,34 @@ class WorkflowDetails extends Component {
     if (this.isTheStepAutoSubmitted(prevProps, this.props, stepId)) {
       this.props.dispatch(workflowDetailsActions.getById(workflowId));
       this.props.getStepGroup(workflowId, true);
+    }
+  };
+
+  /**
+   * This is intended to load the first step that the user must see when the
+   * workflow is opened. The priorities is as :
+   * - If we've a step tag and that step is accessible, we go to that
+   * - Or, if we have data on Profile, we don't do, and it already loads that
+   * - And finally, if none of that meets, we go to first acceissible step.
+   */
+  loadInitialStep = () => {
+    const defaultStepTag = lodashGet(
+      this.props,
+      "workflowItem.definition.default_step",
+      null
+    );
+
+    const { groupId, stepId, firstGroupId, firstStepId } = getStepId(
+      defaultStepTag,
+      this.stepGroups
+    );
+    if (groupId && stepId) {
+      // found the step, let's load that.
+      this.handleUpdateOfActiveStep(groupId, stepId);
+    } else if (!this.lcData.length) {
+      // if we don't have profile data, then we should just load
+      // the default first accessible step
+      this.handleUpdateOfActiveStep(firstGroupId, firstStepId);
     }
   };
 
@@ -188,9 +220,7 @@ class WorkflowDetails extends Component {
   };
 
   handleUpdateOfActiveStep = (groupId, stepId) => {
-    const workflowId =
-      this.props.workflowIdFromPropsForModal ||
-      parseInt(this.props.match.params.id, 10);
+    const workflowId = this.workflowId;
     const { setWorkflowKeys } = this.props;
 
     if (!this.props.minimalUI && groupId && stepId) {
@@ -201,44 +231,55 @@ class WorkflowDetails extends Component {
     setWorkflowKeys({ workflowId, stepId, groupId });
 
     this.setState({ displayProfile: false });
-    this.getStepDetailsData(
-      this.props.workflowIdFromPropsForModal ||
-        Number(this.props.match.params.id),
-      groupId,
-      stepId
-    );
+    this.getStepDetailsData(workflowId, groupId, stepId);
 
     if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
   };
 
   changeProfileDisplay = displayProfile => {
-    const { setWorkflowKeys, workflowIdFromPropsForModal } = this.props;
-
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-
+    const { setWorkflowKeys } = this.props;
+    const workflowId = this.workflowId;
     if (!this.props.minimalUI) {
       history.replace(`/workflows/instances/${workflowId}`);
     }
-
     setWorkflowKeys({ workflowId, step: null, groupId: null });
 
     this.setState({ displayProfile });
   };
 
-  ////Comment functions ends///////
+  get lcData() {
+    const { minimalUI, workflowItem, workflowDetailsHeader } = this.props;
 
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
+    const workflow = minimalUI
+      ? workflowItem
+      : lodashGet(workflowDetailsHeader, this.workflowId, null);
+
+    // If we get a null in workflow, we should return [].
+    if (!workflow) return [];
+
+    // Check if we don't have any lc_data at all, then we return [] as well.
+    if (!Array.isArray(workflow.lc_data) || workflow.lc_data.length === 0)
+      return [];
+
+    // finally we check if we have something worth showing.
+    const displayData = workflow.lc_data.filter(
+      lc_data => lc_data.value && lc_data.display_type === "normal"
+    );
+
+    return displayData;
+  }
 
   get workflowId() {
-    const { workflowIdFromPropsForModal } = this.props;
     return (
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10)
+      this.props.workflowIdFromPropsForModal ||
+      parseInt(this.props.match.params.id, 10)
     );
   }
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
 
   showComments = () => {
     const commentsData = lodashGet(this.props, "workflowComments.data", null);
