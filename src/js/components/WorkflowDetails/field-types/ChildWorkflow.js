@@ -141,7 +141,7 @@ class ChildWorkflowField2 extends Component {
       this.props.dispatch(workflowKindActions.getAll());
       this.setState({ kindChecked: true });
     } else {
-      this.prepFetchChildData();
+      this.getChildWorkflow();
     }
 
     const currentUserGroupFilter = getUserGroupFilter(
@@ -162,18 +162,21 @@ class ChildWorkflowField2 extends Component {
       !this.state.fetching &&
       !this.state.fetchEmpty
     ) {
-      this.prepFetchChildData();
+      this.getChildWorkflow();
     }
   };
 
-  prepFetchChildData = () => {
-    if (this.props.field.definition.extra["exclude_filters"]) {
-      this.state.excluded_filters = this.props.field.definition.extra[
-        "exclude_filters"
-      ];
+  // TODO: This needs to be tested.
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let state = null;
+    if (nextProps.field.definition.extra["exclude_filters"]) {
+      state = {};
+      state.excluded_filters =
+        nextProps.field.definition.extra["exclude_filters"];
     }
-    this.getChildWorkflow();
-  };
+
+    return state;
+  }
 
   getQueryParamForChildWorkflows = () => {
     try {
@@ -510,7 +513,7 @@ class ChildWorkflowField2 extends Component {
 
     // getting workflow status count
     filteredChildWorkflow &&
-      filteredChildWorkflow.map(function(value, key) {
+      filteredChildWorkflow.forEach((value, key) => {
         const wstatus = value["status"]["label"];
         if (workflow_status_count[wstatus]) {
           workflow_status_count[wstatus] += 1;
@@ -551,7 +554,7 @@ class ChildWorkflowField2 extends Component {
     // getting lc data alerts status count
     let total_count = 0;
     if (this.state.childWorkflow) {
-      this.state.childWorkflow.map(function(val, key) {
+      this.state.childWorkflow.forEach(function(val, key) {
         _.map(val.lc_data, function(tag, i) {
           if (tag.display_type !== "alert") {
             return true;
@@ -683,9 +686,9 @@ class ChildWorkflowField2 extends Component {
     const that = this;
     const selected_filters = this.state.selected_filters;
     if (!_.size(selected_filters)) {
-      this.state.filteredChildWorkflow = that.state.childWorkflow;
-      this.setState({ filteredChildWorkflow: that.state.childWorkflow });
-      this.excludeWorkflows();
+      this.setState({ filteredChildWorkflow: that.state.childWorkflow }, () => {
+        this.excludeWorkflows();
+      });
       return true;
     }
     let filtered_workflow = [];
@@ -765,9 +768,9 @@ class ChildWorkflowField2 extends Component {
       );
     });
 
-    this.state.filteredChildWorkflow = intersection_workflows; // not working if i remove this
-    this.setState({ filteredChildWorkflow: intersection_workflows });
-    this.excludeWorkflows();
+    this.setState({ filteredChildWorkflow: intersection_workflows }, () => {
+      this.excludeWorkflows();
+    });
   };
 
   excludeWorkflows = () => {

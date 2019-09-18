@@ -254,13 +254,11 @@ class HeaderOptions extends React.Component {
     this.setState({ showSidebar: !this.state.showSidebar });
   };
 
-  getComment = (object_id, e) => {
+  getComment = (objectId, e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    this.state.loading_sidebar = true;
-    this.state.object_id = object_id;
-    this.props.addComment(object_id, "workflow");
+    this.props.addComment(objectId, "workflow");
   };
 
   toggleWorkflowPDFModal = () => {

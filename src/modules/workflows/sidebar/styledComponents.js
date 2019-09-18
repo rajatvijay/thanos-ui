@@ -48,6 +48,7 @@ export const StyledWorkflowName = styled.span`
 
 export const StyledCollapse = styled(Collapse)`
   border-left: none;
+  border-top: none;
   border-right: none;
   border-radius: 0;
   margin-bottom: 30;

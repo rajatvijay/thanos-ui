@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Table, Icon } from "antd";
-import _ from "lodash";
+import { Table } from "antd";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
 import NumberFormat from "react-number-format";

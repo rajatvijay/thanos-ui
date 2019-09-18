@@ -153,7 +153,6 @@ class StepBodyForm extends Component {
   //ON Field Change save or update data//
   //////////////////////////////////////
   onFieldChange = (event, payload, calculated) => {
-    const id = payload.field.id;
     let ans = null;
 
     if (calculated) {
@@ -201,6 +200,11 @@ class StepBodyForm extends Component {
 
   validateAnswer = (field, ans) => {
     const regex_value = field.regex_value || field.definition.regex_value;
+
+    if (!regex_value) {
+      return true;
+    }
+
     const id = field.id;
     const re = new RegExp(regex_value);
     const error = this.state.error;
@@ -211,13 +215,12 @@ class StepBodyForm extends Component {
       if (!isValidAnswer) {
         error[id] = field.regex_error;
         this.setState({ error: error });
-        return false;
       } else {
         error[id] = "";
         this.setState({ error: error });
-        return true;
       }
     }
+    return isValidAnswer;
   };
 
   //////////////////////////////////////

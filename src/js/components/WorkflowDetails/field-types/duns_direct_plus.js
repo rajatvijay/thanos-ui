@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Icon } from "antd";
+import { Table } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
@@ -66,12 +66,6 @@ class DunsSearch extends Component {
       is_locked: this.props.is_locked,
       completed: this.props.completed,
       permission: this.props.permission
-    };
-
-    const params = {
-      currentStepFields: this.props.currentStepFields,
-      step: this.props.field.step,
-      field: this.props.field
     };
 
     const finalHTML = (

@@ -32,7 +32,7 @@ class Header extends Component {
   };
 
   onSearch = searchValue => {
-    if (searchValue.length >= 3) {
+    if (searchValue && searchValue.length >= 3) {
       const page = 1;
       this.props.dispatch(workflowActions.searchWorkflow(searchValue, page));
     } else {

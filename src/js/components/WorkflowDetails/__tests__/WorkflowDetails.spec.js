@@ -8,7 +8,7 @@ import workflowKeys from "../../../../js/reducers/workflowKeys";
 import { permissions } from "../../../../modules/common/permissions/reducer";
 import { renderWithReactIntl } from "../../../../modules/common/testUtils";
 import { BrowserRouter } from "react-router-dom";
-import { fireEvent } from "@testing-library/react";
+import { fireEvent, queryByText } from "@testing-library/react";
 import Permissions from "../../../../modules/common/permissions/permissionsList";
 
 // Fake Data
@@ -1181,7 +1181,8 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
         name: fakeWorkflowName,
-        workflow_family: []
+        workflow_family: [],
+        lc_data: [{ value: "Some value", display_type: "normal" }]
       }
     },
     permissions: {},
@@ -1235,7 +1236,8 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
     workflowDetailsHeader: {
       [fakeWorkflowId]: {
         name: fakeWorkflowName,
-        workflow_family: []
+        workflow_family: [],
+        lc_data: [{ value: "Some value", display_type: "normal" }]
       }
     },
     permissions: {},
@@ -1451,4 +1453,122 @@ test("should not render alerts count on step when there are no alerts", () => {
   fireEvent.click(groupElement);
 
   expect(queryByTestId(/colored-count/i)).toBeNull();
+});
+
+test("should not display profile if the lc_data is empty, instead first step should be selected", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: []
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowKeys,
+    workflowDetails
+  });
+  const store = createStore(rootReducer, {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: []
+      }
+    },
+    permissions: {},
+    workflowKeys: {
+      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
+    },
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  });
+
+  const { queryByTestId } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+      />
+    </Provider>
+  );
+
+  expect(queryByTestId(/profile-step/i)).toBeNull();
+});
+
+test("should display profile and should be selected, if the lc_data is not empty", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: []
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowKeys,
+    workflowDetails
+  });
+  const store = createStore(rootReducer, {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: [],
+        lc_data: [{ value: "Some value", display_type: "normal" }]
+      }
+    },
+    permissions: {},
+    workflowKeys: {
+      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
+    },
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  });
+
+  const { queryByTestId } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+        minimalUI={true}
+      />
+    </Provider>
+  );
+
+  const profileStep = queryByTestId(/profile-step/i);
+
+  expect(profileStep).not.toBeNull();
 });

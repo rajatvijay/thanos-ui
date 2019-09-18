@@ -209,7 +209,6 @@ class Workflow extends Component {
   };
 
   render = () => {
-    const that = this;
     const { workflow, config, workflowKind } = this.props;
 
     if (this.props.workflow.loadingStatus === "failed") {
