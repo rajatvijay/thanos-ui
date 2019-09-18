@@ -2,7 +2,7 @@ import React from "react";
 import { Router } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "../_helpers";
-import { upperFirst, includes, get } from "lodash";
+import { includes, get } from "lodash";
 import { configActions, userActions, checkAuth } from "../actions";
 import Header from "../../modules/header/components";
 import "antd/dist/antd.css";

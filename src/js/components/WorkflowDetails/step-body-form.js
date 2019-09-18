@@ -153,7 +153,6 @@ class StepBodyForm extends Component {
   //ON Field Change save or update data//
   //////////////////////////////////////
   onFieldChange = (event, payload, calculated) => {
-    const id = payload.field.id;
     let ans = null;
 
     if (calculated) {

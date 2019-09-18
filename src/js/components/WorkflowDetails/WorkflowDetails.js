@@ -9,7 +9,6 @@ import {
   setWorkflowKeys,
   stepBodyActions,
   workflowDetailsActions,
-  workflowFiltersActions,
   workflowStepActions
 } from "../../actions";
 import Comments from "./comments";
@@ -42,11 +41,6 @@ class WorkflowDetails extends Component {
     };
   }
 
-  componentDidMount = () => {
-    // TODO: Why??
-    this.getInitialData();
-  };
-
   componentDidUpdate = prevProps => {
     const {
       workflowIdFromPropsForModal,
@@ -64,6 +58,8 @@ class WorkflowDetails extends Component {
       workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
 
     if (
+      groupId && // these can be null when new Child WF is created
+      stepId && // which has params ?new=true, until next refresh
       !minimalUI &&
       match &&
       workflowKeys[workflowId] &&
@@ -123,42 +119,6 @@ class WorkflowDetails extends Component {
       return true;
     }
     return false;
-  };
-
-  updateCurrentActiveStep = () => {
-    const {
-      workflowIdFromPropsForModal,
-      minimalUI,
-      displayProfile
-    } = this.props;
-
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    //   workflowId
-    //calculate activit step
-    const stepTrack = {
-      workflowId,
-      groupId: this.state.selectedGroup,
-      stepId: this.state.selectedStep
-    };
-
-    if (
-      !displayProfile &&
-      !minimalUI &&
-      !this.props.currentStepFields[stepTrack.stepId]
-    ) {
-      this.fetchStepData(stepTrack);
-    }
-  };
-
-  getInitialData = () => {
-    //Get workflow  basic data
-    this.props.dispatch(workflowFiltersActions.getStatusData());
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
-    });
   };
 
   selectActiveStep = (step_id, stepGroup_id) => {

@@ -432,7 +432,7 @@ class PDFChecklistModal extends React.Component {
     return error
       ? this.renderFetchFailPlaceholder()
       : !!pdfConfig
-      ? !pdfConfig.results.length
+      ? !Array.isArray(pdfConfig.results) || !pdfConfig.results.length
         ? this.renderEmptyDataMessage()
         : this.renderWorkflowDetails()
       : null;

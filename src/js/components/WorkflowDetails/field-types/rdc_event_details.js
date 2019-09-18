@@ -5,7 +5,7 @@ import { commonFunctions } from "./commons";
 import { getEventItem } from "./rdc_alert_metadata";
 import { event_status, status_filters } from "../EventStatuses";
 import { map, includes } from "lodash";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const TabPane = Tabs.TabPane;
@@ -375,6 +375,6 @@ const GetTabsFilter = props => {
   );
 };
 
-export const RDCEventDetails = props => {
+export const RDCEventDetails = injectIntl(props => {
   return <RDCEventDetailComponent {...props} />;
-};
+});
