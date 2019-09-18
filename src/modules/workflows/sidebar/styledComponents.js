@@ -20,6 +20,8 @@ export const StyledSidebar = styled(Sider)`
   .ant-layout-sider-children {
     position: fixed;
     overflow-y: scroll;
+    max-width: 300px;
+    min-width: 300px;
   }
 `;
 

@@ -146,6 +146,7 @@ class WorkflowDetails extends Component {
         stepId: currentStepId,
         groupId: currentGroupId
       } = this.decideCurrentStep();
+      console.log("componentDidMount", currentStepId, currentGroupId);
 
       // To update state and do more side effects
       this.handleUpdateOfActiveStep(currentGroupId, currentStepId);
@@ -182,7 +183,7 @@ class WorkflowDetails extends Component {
 
     // Third priority is given to lc data
     // first step should ne visible if there is no lc data
-    if (!this.lcData) {
+    if (!this.lcData.length) {
       return {
         groupId: this.stepGroups[0].id,
         stepId: this.stepGroups[0].steps[0].id
@@ -193,6 +194,21 @@ class WorkflowDetails extends Component {
     return { stepId: null, groupId: null };
   };
 
+  updateStepsInState = ({ currentGroupId, currentStepId }) => {
+    // Precalculate next step and next group
+    const [nextStepId, nextGroupId] = getPreviousAndNextSteps(
+      currentGroupId,
+      currentStepId,
+      this.stepGroups
+    );
+    this.setState({
+      nextGroupId,
+      nextStepId,
+      currentGroupId,
+      currentStepId
+    });
+  };
+
   componentDidUpdate(previousProps) {
     console.log(previousProps.location.search, this.props.location.search);
     // On update of URL, (query params)
@@ -201,19 +217,7 @@ class WorkflowDetails extends Component {
       const searchParams = new URLSearchParams(this.props.location.search);
       const currentStepId = searchParams.get("step");
       const currentGroupId = searchParams.get("group");
-
-      // Precalculate next step and next group
-      const [nextStepId, nextGroupId] = getPreviousAndNextSteps(
-        currentGroupId,
-        currentStepId,
-        this.stepGroups
-      );
-      this.setState({
-        nextGroupId,
-        nextStepId,
-        currentGroupId,
-        currentStepId
-      });
+      this.updateStepsInState({ currentStepId, currentGroupId });
     }
   }
 
@@ -314,6 +318,11 @@ class WorkflowDetails extends Component {
           search: searchParams.toString()
         });
       }
+    } else {
+      this.updateStepsInState({
+        currentGroupId: groupId,
+        currentStepId: stepId
+      });
     }
 
     // Fetch the step Data
@@ -322,9 +331,6 @@ class WorkflowDetails extends Component {
       groupId,
       stepId
     });
-
-    // TODO: Remove this when list page is refactored
-    if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
   };
 
   handleProfileClick = () => {

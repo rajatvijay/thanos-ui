@@ -21,7 +21,7 @@ class NextStepPlaceholder extends Component {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         // let elem = entry.target;
-        this.props.onInView();
+        // this.props.onInView();
       }
     });
   };
