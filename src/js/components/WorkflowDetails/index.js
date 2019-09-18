@@ -96,8 +96,9 @@ class WorkflowDetailsRoot extends Component {
     //Get workflow  basic data
     const { workflowId } = this.state;
 
-    this.props.dispatch(workflowDetailsActions.getById(workflowId));
-    this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
+    //
+    // this.props.dispatch(workflowDetailsActions.getById(workflowId));
+    // this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
   };
 
   updateCustomHistory = url => {

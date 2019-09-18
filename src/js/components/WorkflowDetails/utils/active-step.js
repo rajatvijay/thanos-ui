@@ -60,13 +60,13 @@ export const currentActiveStep = (stepData, workflowId) => {
     //FAIL SAFE
     //if no active step could be calculated for any reason
     //this will choose first step of first group as active
-    const { firstGroupId, firstStepId } = getStepId(null, stepData);
-
-    return {
-      workflowId: workflowId,
-      groupId: firstGroupId,
-      stepId: firstStepId
-    };
+    // TODO: See if this is actually required
+    // const { firstGroupId, firstStepId } = getStepId(null, stepData);
+    // return {
+    //   workflowId: workflowId,
+    //   groupId: firstGroupId,
+    //   stepId: firstStepId
+    // };
   }
 };
 
@@ -83,52 +83,59 @@ export const currentActiveStep = (stepData, workflowId) => {
  * as a fallback we have firstGroupId and firstStepId which contains the groupId
  * and stepId for the first accessible step to handle fallback cases.
  */
-export const getStepId = (tag, stepData) => {
-  let firstGroupId = null; // to store a fallback group ID
-  let firstStepId = null; // to store a step ID for the fallbout group ID
+export const getStepAndFromConfig = (tag, stepGroups) => {
+  for (let group of stepGroups) {
+    const step = group.steps.find(step => step.definition_tag === tag);
+    if (step) {
+      return { stepId: step.id, groupId: group.id };
+    }
+  }
+  return { stepId: null, groupId: null };
+};
 
-  let groupId = null; // to store target group
-  let stepId = null; // to store target step of target group
-
-  if (stepData.results) {
-    // if we have results, we will filter out step groups that have steps in them.
-    const stepGroups = stepData.results.filter(
-      stepGroup => stepGroup.steps.length
-    );
-
-    // Now for every step group, we iterate to find the first step group
-    // that we can use.
-    stepGroups.every(stepGroup => {
-      // Let's go through the steps in this step group
-      stepGroup.steps.every(step => {
-        // For fallback, we just keep a set of first groups's ID and it's first
-        // step ID, that is accessible to the user.
-        if (!firstStepId) {
-          firstGroupId = stepGroup.id;
-          firstStepId = step.id;
-        }
-
-        // Now look for the step tag
-        if (tag && step.definition_tag === tag) {
-          // if we've found the step that we were looking for
-          groupId = stepGroup.id;
-          stepId = step.id;
-        }
-
-        return !stepId; // continue loop if not found
-      });
-
-      // Now if we're found a step, we will break the loop, otherwise, it'll
-      // continue to the next step group.
-      return !stepId;
-    });
+export const getPreviousAndNextSteps = (
+  currentGroupId,
+  currentStepId,
+  allVisibleStepGroups
+) => {
+  // Steps hasn't been loaded yet
+  if (!allVisibleStepGroups.length) {
+    return [null, null];
   }
 
-  // We return whatever we have
-  return {
-    groupId,
-    stepId,
-    firstGroupId,
-    firstStepId
-  };
+  // User is on the profile step
+  if (!currentStepId && !currentGroupId) {
+    return [allVisibleStepGroups[0].id, allVisibleStepGroups[0].steps[0].id];
+  }
+
+  // Find the index of currentStepGroup and currentStep
+  let currentStepGroupIndex, currentStepIndex;
+  allVisibleStepGroups.forEach((group, groupIndex) => {
+    if (group.id === Number(currentGroupId)) {
+      currentStepGroupIndex = groupIndex;
+      group.steps.forEach((step, stepIndex) => {
+        if (step.id === Number(currentStepId)) {
+          currentStepIndex = stepIndex;
+        }
+      });
+    }
+  });
+
+  const nextStep =
+    allVisibleStepGroups[currentStepGroupIndex].steps[currentStepIndex + 1];
+
+  // If we have the next step in the same group
+  if (nextStep) {
+    return [currentGroupId, nextStep.id];
+  }
+
+  const nextStepGroup = allVisibleStepGroups[currentStepGroupIndex + 1];
+
+  // Take the user to the first step of the next stepgroup
+  if (nextStepGroup) {
+    return [nextStepGroup.id, nextStepGroup.steps[0].id];
+  }
+
+  // User is already on the last step group and last step
+  return [null, null];
 };

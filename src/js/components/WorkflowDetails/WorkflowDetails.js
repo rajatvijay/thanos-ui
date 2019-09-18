@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout, Tooltip } from "antd";
 import SidebarView from "../../../modules/workflows/sidebar/components";
-import _ from "lodash";
+// import _ from "lodash";
 import StepBody from "./step-body.js";
 import { history } from "../../_helpers";
 import {
@@ -15,129 +15,207 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import { currentActiveStep, getStepId } from "./utils/active-step";
+import {
+  // currentActiveStep,
+  getStepAndFromConfig,
+  getPreviousAndNextSteps
+} from "./utils/active-step";
 import NextStepPlaceholder from "./NextStepPlaceholder";
 
 const { Content } = Layout;
 
 class WorkflowDetails extends Component {
-  constructor(props) {
-    super(props);
-    const { minimalUI, setWorkflowKeys } = props;
-    const params = new URL(document.location).searchParams;
+  // Getters
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  get stepGroups() {
+    return lodashGet(
+      this.props,
+      `workflowDetails["${this.workflowId}"].workflowDetails.stepGroups.results`,
+      []
+    ).filter(group => !!group.steps.length);
+  }
 
-    const groupId = params.get("group");
-    const stepId = params.get("step");
+  get lcData() {
+    const { minimalUI, workflowItem, workflowDetailsHeader } = this.props;
 
-    setWorkflowKeys({ workflowId: this.workflowId, stepId, groupId });
+    const workflow = minimalUI
+      ? workflowItem
+      : lodashGet(workflowDetailsHeader, this.workflowId, null);
 
-    this.state = {
-      newWorkflow: params.get("new") === "true",
-      currentStep: null,
-      // TODO: Check why we need groupId check
-      displayProfile: minimalUI && this.lcData.length ? true : !groupId
+    // If we get a null in workflow, we should return [].
+    if (!workflow) return [];
+
+    // Check if we don't have any lc_data at all, then we return [] as well.
+    if (!Array.isArray(workflow.lc_data) || workflow.lc_data.length === 0)
+      return [];
+
+    // finally we check if we have something worth showing.
+    const displayData = workflow.lc_data.filter(
+      lc_data => lc_data.value && lc_data.display_type === "normal"
+    );
+
+    return displayData;
+  }
+
+  get workflowId() {
+    return (
+      this.props.workflowIdFromPropsForModal ||
+      parseInt(this.props.match.params.id, 10)
+    );
+  }
+
+  get selectedGroup() {
+    return lodashGet(
+      this.props,
+      `workflowKeys[${this.workflowId}].groupId`,
+      null
+    );
+  }
+
+  get selectedStep() {
+    return lodashGet(
+      this.props,
+      `workflowKeys[${this.workflowId}].stepId`,
+      null
+    );
+  }
+
+  get isLoadingStepData() {
+    return (
+      lodashGet(
+        this.props,
+        `currentStepFields[${this.selectedStep}].loading`,
+        false
+      ) ||
+      lodashGet(
+        this.props,
+        `workflowDetails[${this.workflowId}].workflowDetails.loading`,
+        false
+      )
+    );
+  }
+
+  get stepAndGroupFromURL() {
+    const searchString = lodashGet(this.props, "location.search", "");
+    const urlParams = new URLSearchParams(searchString);
+    return {
+      stepId: urlParams.get("step"),
+      groupId: urlParams.get("group")
     };
   }
 
-  get stepGroups() {
-    return _.get(
-      this.props,
-      `workflowDetails["${this.workflowId}"].workflowDetails.stepGroups`,
-      null
-    );
+  get defaultStepTag() {
+    return lodashGet(this.props, "workflowItem.definition.default_step", null);
   }
 
-  componentDidUpdate = prevProps => {
-    const { match, minimalUI, workflowKeys } = this.props;
+  get displayProfile() {
+    const { currentGroupId, currentStepId } = this.state;
+    return currentGroupId === null && currentStepId == null;
+  }
 
-    const { displayProfile, newWorkflow } = this.state;
-    const params = new URL(document.location).searchParams;
-    const groupId = params.get("group");
-    const stepId = params.get("step");
-    //SET WORKFLOW ID FROM ROUTER
-    const workflowId = this.workflowId;
-    const stepGroups = this.stepGroups;
-    if (
-      groupId && // these can be null when new Child WF is created
-      stepId && // which has params ?new=true, until next refresh
-      !minimalUI &&
-      match &&
-      workflowKeys[workflowId] &&
-      workflowKeys[workflowId].stepId !== stepId &&
-      workflowKeys[workflowId].groupId !== groupId
-    ) {
-      this.handleUpdateOfActiveStep(groupId, stepId);
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+  state = {
+    currentStepId: null,
+    currentGroupId: null,
+    nextStepId: null,
+    nextGroupId: null
+  };
+
+  componentDidMount() {
+    // Get basic details about the workflow
+    const basicWorkflowDetailsPromise = this.props.dispatch(
+      workflowDetailsActions.getById(this.workflowId)
+    );
+
+    // Get all steps
+    const stepsDataPromise = this.props.dispatch(
+      workflowDetailsActions.getStepGroup(this.workflowId)
+    );
+
+    Promise.all([basicWorkflowDetailsPromise, stepsDataPromise]).then(() => {
+      // The component has been re-rendered here with the data from the API
+      // Think :tongue_stuck_out:
+      const {
+        stepId: currentStepId,
+        groupId: currentGroupId
+      } = this.decideCurrentStep();
+
+      // To update state and do more side effects
+      this.handleUpdateOfActiveStep(currentGroupId, currentStepId);
+    });
+  }
+
+  // This is one big ass method to decide what step should be rendered
+  decideCurrentStep = () => {
+    const {
+      stepId: stepIdFromURL,
+      groupId: groupIdFromURL
+    } = this.stepAndGroupFromURL;
+
+    // Always give first priority to the URL params
+    if (stepIdFromURL && groupIdFromURL) {
+      return {
+        stepId: stepIdFromURL,
+        groupId: groupIdFromURL
+      };
     }
 
-    const workflowDetailsLoaded =
-      _.get(prevProps, `workflowDetails["${workflowId}"].loading`, null) ===
-        true &&
-      _.get(this.props, `workflowDetails["${workflowId}"].loading`, null) !==
-        true;
+    // Second priority is given to the step from the config
+    // if ther is any
+    if (this.defaultStepTag) {
+      const {
+        stepId: defaultStepId,
+        groupId: defaultGroupId
+      } = getStepAndFromConfig(this.defaultStepTag, this.stepGroups);
 
-    if (
-      workflowDetailsLoaded &&
-      (newWorkflow || params.get("new") === "true")
-    ) {
-      // when workflow is loaded and it's a created workflow
-      // navigate to the first step of the first step group
-
-      if (stepGroups !== null) {
-        // has this.stepGroups
-        const { groupId, stepId } = currentActiveStep(stepGroups, workflowId);
-        if (groupId && stepId) this.handleUpdateOfActiveStep(groupId, stepId);
+      if (defaultStepId && defaultGroupId) {
+        return { stepId: defaultStepId, groupId: defaultGroupId };
       }
+    }
+
+    // Third priority is given to lc data
+    // first step should ne visible if there is no lc data
+    if (!this.lcData) {
+      return {
+        groupId: this.stepGroups[0].id,
+        stepId: this.stepGroups[0].steps[0].id
+      };
+    }
+
+    // Lastly if there is nothing set profile as the selected step
+    return { stepId: null, groupId: null };
+  };
+
+  componentDidUpdate(previousProps) {
+    console.log(previousProps.location.search, this.props.location.search);
+    // On update of URL, (query params)
+    if (previousProps.location !== this.props.location) {
+      // Get new step and group
+      const searchParams = new URLSearchParams(this.props.location.search);
+      const currentStepId = searchParams.get("step");
+      const currentGroupId = searchParams.get("group");
+
+      // Precalculate next step and next group
+      const [nextStepId, nextGroupId] = getPreviousAndNextSteps(
+        currentGroupId,
+        currentStepId,
+        this.stepGroups
+      );
       this.setState({
-        newWorkflow: false
+        nextGroupId,
+        nextStepId,
+        currentGroupId,
+        currentStepId
       });
     }
-
-    if (workflowDetailsLoaded) {
-      // If steps are JUST loaded, we want to load the initial step
-      this.loadInitialStep();
-      return;
-    }
-
-    if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
-      this.setState({ displayProfile: true });
-    }
-    if (stepId && groupId && displayProfile && !minimalUI) {
-      this.setState({ displayProfile: false });
-    }
-
-    if (this.isTheStepAutoSubmitted(prevProps, this.props, stepId)) {
-      this.props.dispatch(workflowDetailsActions.getById(workflowId));
-      this.props.getStepGroup(workflowId, true);
-    }
-  };
-
-  /**
-   * This is intended to load the first step that the user must see when the
-   * workflow is opened. The priorities is as :
-   * - If we've a step tag and that step is accessible, we go to that
-   * - Or, if we have data on Profile, we don't do, and it already loads that
-   * - And finally, if none of that meets, we go to first acceissible step.
-   */
-  loadInitialStep = () => {
-    const defaultStepTag = lodashGet(
-      this.props,
-      "workflowItem.definition.default_step",
-      null
-    );
-
-    const { groupId, stepId, firstGroupId, firstStepId } = getStepId(
-      defaultStepTag,
-      this.stepGroups
-    );
-    if (groupId && stepId) {
-      // found the step, let's load that.
-      this.handleUpdateOfActiveStep(groupId, stepId);
-    } else if (!this.lcData.length) {
-      // if we don't have profile data, then we should just load
-      // the default first accessible step
-      this.handleUpdateOfActiveStep(firstGroupId, firstStepId);
-    }
-  };
+  }
 
   isTheStepAutoSubmitted = (previousProps, currentProps, stepId) => {
     const previousCompletedBy = lodashGet(
@@ -154,18 +232,6 @@ class WorkflowDetails extends Component {
     return false;
   };
 
-  selectActiveStep = (step_id, stepGroup_id) => {
-    this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
-  };
-
-  fetchStepData = payload => {
-    const payloadWithMeta = {
-      ...payload,
-      fromEmbedded: this.props.fromEmbedded
-    };
-    this.props.dispatch(workflowDetailsActions.getStepFields(payloadWithMeta));
-  };
-
   isParentWorkflow = () => {
     return (
       this.props.workflowDetailsHeader.workflowDetailsHeader.workflow_family
@@ -173,7 +239,11 @@ class WorkflowDetails extends Component {
     );
   };
 
-  ////Comment functions begins///////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
   /// this will be moved to another component///
   callBackCollapser = (objectId, content_type, isEmbeddedDetails) => {
     // TODO: Here it's called with no parameters when the comment section is
@@ -210,81 +280,55 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
 
-  getStepDetailsData = (workflowId, groupId, stepId) => {
-    const stepTrack = {
-      workflowId,
-      groupId,
-      stepId
-    };
-
-    this.fetchStepData(stepTrack);
-  };
-
-  handleUpdateOfActiveStep = (groupId, stepId) => {
-    const workflowId = this.workflowId;
-    const { setWorkflowKeys } = this.props;
-
-    if (!this.props.minimalUI && groupId && stepId) {
-      history.replace(
-        `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
-      );
-    }
-    setWorkflowKeys({ workflowId, stepId, groupId });
-
-    this.setState({ displayProfile: false });
-    this.getStepDetailsData(workflowId, groupId, stepId);
-
-    if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
-  };
-
-  changeProfileDisplay = displayProfile => {
-    const { setWorkflowKeys } = this.props;
-    const workflowId = this.workflowId;
-    if (!this.props.minimalUI) {
-      history.replace(`/workflows/instances/${workflowId}`);
-    }
-    setWorkflowKeys({ workflowId, step: null, groupId: null });
-
-    this.setState({ displayProfile });
-  };
-
-  get lcData() {
-    const { minimalUI, workflowItem, workflowDetailsHeader } = this.props;
-
-    const workflow = minimalUI
-      ? workflowItem
-      : lodashGet(workflowDetailsHeader, this.workflowId, null);
-
-    // If we get a null in workflow, we should return [].
-    if (!workflow) return [];
-
-    // Check if we don't have any lc_data at all, then we return [] as well.
-    if (!Array.isArray(workflow.lc_data) || workflow.lc_data.length === 0)
-      return [];
-
-    // finally we check if we have something worth showing.
-    const displayData = workflow.lc_data.filter(
-      lc_data => lc_data.value && lc_data.display_type === "normal"
-    );
-
-    return displayData;
-  }
-
-  get workflowId() {
-    return (
-      this.props.workflowIdFromPropsForModal ||
-      parseInt(this.props.match.params.id, 10)
-    );
-  }
-
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-
   showComments = () => {
     const commentsData = lodashGet(this.props, "workflowComments.data", null);
     return commentsData && commentsData.results && !commentsData.isEmbedded;
+  };
+
+  selectActiveStep = (step_id, stepGroup_id) => {
+    this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
+  };
+
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
+  getStepDetailsData = payload => {
+    this.props.dispatch(workflowDetailsActions.getStepFields(payload));
+  };
+
+  handleUpdateOfActiveStep = (groupId, stepId) => {
+    // URL should be changed when in expand view
+    if (!this.props.minimalUI) {
+      if (groupId === null && stepId === null) {
+        history.replace({
+          search: ""
+        });
+      } else {
+        const searchParams = new URLSearchParams({
+          group: groupId,
+          step: stepId
+        });
+        history.replace({
+          search: searchParams.toString()
+        });
+      }
+    }
+
+    // Fetch the step Data
+    this.getStepDetailsData({
+      workflowId: this.workflowId,
+      groupId,
+      stepId
+    });
+
+    // TODO: Remove this when list page is refactored
+    if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
+  };
+
+  handleProfileClick = () => {
+    this.handleUpdateOfActiveStep(null, null);
   };
 
   showBackButton = () => {
@@ -336,65 +380,6 @@ class WorkflowDetails extends Component {
     return error;
   }
 
-  getNextStep = () => {
-    const { stepId: currentStepId, groupId: currentGroupId } = lodashGet(
-      this.props,
-      `workflowKeys[${this.workflowId}]`,
-      {}
-    );
-    const allStepGroups = lodashGet(
-      this.props,
-      `workflowDetails[${this.workflowId}].workflowDetails.stepGroups.results`,
-      []
-    );
-
-    // TODO: Can be optimized using memoization
-    const allVisibleStepGroups = allStepGroups.filter(
-      stepGroup => !!stepGroup.steps.length
-    );
-
-    // Steps hasn't been loaded yet
-    if (!allVisibleStepGroups.length) {
-      return [null, null];
-    }
-
-    // User is on the profile step
-    if (!currentStepId && !currentGroupId) {
-      return [allVisibleStepGroups[0].id, allVisibleStepGroups[0].steps[0].id];
-    }
-
-    // Find the index of currentStepGroup and currentStep
-    let currentStepGroupIndex, currentStepIndex;
-    allVisibleStepGroups.forEach((group, groupIndex) => {
-      if (group.id === Number(currentGroupId)) {
-        currentStepGroupIndex = groupIndex;
-        group.steps.forEach((step, stepIndex) => {
-          if (step.id === Number(currentStepId)) {
-            currentStepIndex = stepIndex;
-          }
-        });
-      }
-    });
-
-    const nextStep =
-      allVisibleStepGroups[currentStepGroupIndex].steps[currentStepIndex + 1];
-
-    // If we have the next step in the same group
-    if (nextStep) {
-      return [currentGroupId, nextStep.id];
-    }
-
-    const nextStepGroup = allVisibleStepGroups[currentStepGroupIndex + 1];
-
-    // Take the user to the first step of the next stepgroup
-    if (nextStepGroup) {
-      return [nextStepGroup.id, nextStepGroup.steps[0].id];
-    }
-
-    // User is already on the last step group and last step
-    return [null, null];
-  };
-
   handleOnInView = () => {
     const [nextStepGroup, nextStep] = this.getNextStep();
     if (!nextStepGroup && !nextStep) {
@@ -403,45 +388,9 @@ class WorkflowDetails extends Component {
     this.handleUpdateOfActiveStep(nextStepGroup, nextStep);
   };
 
-  get selectedGroup() {
-    return lodashGet(
-      this.props,
-      `workflowKeys[${this.workflowId}].groupId`,
-      null
-    );
-  }
-
-  get selectedStep() {
-    return lodashGet(
-      this.props,
-      `workflowKeys[${this.workflowId}].stepId`,
-      null
-    );
-  }
-
-  get isLoadingStepData() {
-    return (
-      lodashGet(
-        this.props,
-        `currentStepFields[${this.selectedStep}].loading`,
-        false
-      ) ||
-      lodashGet(
-        this.props,
-        `workflowDetails[${this.workflowId}].workflowDetails.loading`,
-        false
-      )
-    );
-  }
-
   render = () => {
-    const {
-      minimalUI,
-      workflowIdFromPropsForModal,
-      workflowItem,
-      workflowKeys
-    } = this.props;
-    const { displayProfile } = this.state;
+    const { minimalUI, workflowIdFromPropsForModal, workflowItem } = this.props;
+    const { currentStepId, currentGroupId } = this.state;
     const [hasError, errorMessage] = this.getLoadingError();
 
     if (hasError) {
@@ -470,13 +419,13 @@ class WorkflowDetails extends Component {
               {this.showBackButton() && this.renderBackButton()}
 
               <SidebarView
-                selectedGroup={this.selectedGroup}
-                selectedStep={this.selectedStep}
+                selectedGroup={currentGroupId}
+                selectedStep={currentStepId}
                 minimalUI={minimalUI}
                 workflowIdFromDetailsToSidebar={this.workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
-                displayProfile={displayProfile}
-                changeProfileDisplay={this.changeProfileDisplay}
+                displayProfile={this.displayProfile}
+                changeProfileDisplay={this.handleProfileClick}
               />
               <Content
                 style={{
@@ -496,15 +445,8 @@ class WorkflowDetails extends Component {
                   >
                     {!this.props.hideStepBody && (
                       <StepBody
-                        stepId={
-                          workflowKeys[this.workflowId]
-                            ? workflowKeys[this.workflowId].stepId
-                            : null
-                        }
+                        stepId={currentStepId}
                         workflowId={this.workflowId}
-                        workflowIdFromPropsForModal={
-                          workflowIdFromPropsForModal
-                        }
                         toggleSidebar={this.callBackCollapser}
                         changeFlag={this.changeFlag}
                         getIntegrationComments={this.getIntegrationComments}
@@ -516,7 +458,7 @@ class WorkflowDetails extends Component {
                             : null
                         }
                         dispatch={this.props.dispatch}
-                        displayProfile={this.state.displayProfile}
+                        displayProfile={this.displayProfile}
                       />
                     )}
                   </div>

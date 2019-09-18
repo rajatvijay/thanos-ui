@@ -591,8 +591,8 @@ class StepBodyForm extends Component {
           that.props.extraFilters
         );
 
-        fieldParams.workflowId = that.props.workflowIdFromPropsForModal
-          ? that.props.workflowIdFromPropsForModal
+        fieldParams.workflowId = that.props.workflowId
+          ? that.props.workflowId
           : fieldParams.workflowId;
         return (
           <FieldItem stepData={that.props.stepData} fieldParams={fieldParams} />
