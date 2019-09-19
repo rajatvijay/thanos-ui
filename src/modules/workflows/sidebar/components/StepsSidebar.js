@@ -86,20 +86,20 @@ class StepsSideBar extends Component {
     return Number(stepGroup.id) === Number(selectedPanelId);
   };
 
-  isCompleteStepGroupAssigned = (steps, assignedSteps = []) => {
+  isAnyStepGroupAssigned = (steps, assignedSteps = []) => {
     const normalizedAssignedSteps = assignedSteps.map(step => step.step);
-    return steps.every(step => normalizedAssignedSteps.includes(step.id));
+    return steps.some(step => normalizedAssignedSteps.includes(step.id));
   };
 
   renderGroupUserTagIcon = stepGroup => {
     const { stepUserTagData } = this.props;
 
-    const isAllStepAssigned = this.isCompleteStepGroupAssigned(
+    const isAnyStepAssigned = this.isAnyStepGroupAssigned(
       stepGroup.steps,
       stepUserTagData
     );
 
-    if (!isAllStepAssigned) {
+    if (!isAnyStepAssigned) {
       return null;
     }
 
