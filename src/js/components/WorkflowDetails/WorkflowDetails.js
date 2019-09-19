@@ -15,7 +15,7 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import { getStepAndFromConfig } from "./utils/active-step";
+import { getStepAndGroupFromConfig } from "./utils/active-step";
 import LazyLoadHOC from "./LazyLoadHOC";
 import WhenInViewHOC from "./WhenInViewHOC";
 import { css } from "emotion";
@@ -148,7 +148,7 @@ class WorkflowDetails extends Component {
       const {
         stepId: defaultStepId,
         groupId: defaultGroupId
-      } = getStepAndFromConfig(this.defaultStepTag, this.stepGroups);
+      } = getStepAndGroupFromConfig(this.defaultStepTag, this.stepGroups);
 
       if (defaultStepId && defaultGroupId) {
         return { stepId: defaultStepId, groupId: defaultGroupId };

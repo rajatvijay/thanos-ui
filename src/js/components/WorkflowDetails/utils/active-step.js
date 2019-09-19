@@ -60,30 +60,15 @@ export const currentActiveStep = (stepData, workflowId) => {
     //FAIL SAFE
     //if no active step could be calculated for any reason
     //this will choose first step of first group as active
-    // TODO: See if this is actually required
-    // const { firstGroupId, firstStepId } = getStepId(null, stepData);
-    // return {
-    //   workflowId: workflowId,
-    //   groupId: firstGroupId,
-    //   stepId: firstStepId
-    // };
+    return {
+      workflowId: workflowId,
+      groupId: stepData.results[0].id,
+      stepId: stepData.results[0].steps[0].id
+    };
   }
 };
 
-/**
- * This function will return the Group ID and Step ID for the step that we're
- * looking for, based on it's tag. If not found, it'll return the first
- * accessible step's ID and it's Group ID.
- *
- * @param {string} tag step tag that we're looking for
- * @param {object} stepData step groups data
- *
- * @returns {object} {groupId, stepId, firstGroupId, firstStepId} where groupId
- * and stepId are for the step that have the tag that we were looking for, and
- * as a fallback we have firstGroupId and firstStepId which contains the groupId
- * and stepId for the first accessible step to handle fallback cases.
- */
-export const getStepAndFromConfig = (tag, stepGroups) => {
+export const getStepAndGroupFromConfig = (tag, stepGroups) => {
   for (let group of stepGroups) {
     const step = group.steps.find(step => step.definition_tag === tag);
     if (step) {
