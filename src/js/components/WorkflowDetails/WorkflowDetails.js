@@ -30,7 +30,7 @@ const { Content } = Layout;
  * [x] On click of step from sidebar
  * [] Animation when the height expands
  * [] Animation when the step changes
- * [] Show step name before loading the step data
+ * [x] Show step name before loading the step data
  * [x] UI fixes
  */
 
@@ -350,25 +350,18 @@ class WorkflowDetails extends Component {
           onInViewCallback={() => this.handleOnInView(null, null)}
           defaultElem={this.nextStepPlaceholder}
           threshold={0.2}
+          rootStyle={{ marginBottom: 40 }}
         >
-          {/* FIXME: 
-              This styling should not be its part, but can't
-              restyle step body form now :pensive: 
-
-              See if this can be moved to stepbody now :confused:
-          */}
-          <div style={{ marginBottom: 40 }}>
-            <StepBody
-              stepId={null}
-              workflowId={this.workflowId}
-              toggleSidebar={this.callBackCollapser}
-              changeFlag={this.changeFlag}
-              getIntegrationComments={this.getIntegrationComments}
-              workflowHead={this.worklfowHead}
-              dispatch={this.props.dispatch}
-              displayProfile={true}
-            />
-          </div>
+          <StepBody
+            stepId={null}
+            workflowId={this.workflowId}
+            toggleSidebar={this.callBackCollapser}
+            changeFlag={this.changeFlag}
+            getIntegrationComments={this.getIntegrationComments}
+            workflowHead={this.worklfowHead}
+            dispatch={this.props.dispatch}
+            displayProfile={true}
+          />
         </LazyLoadHOC>
       </WhenInViewHOC>
     );
@@ -386,25 +379,19 @@ class WorkflowDetails extends Component {
             onInViewCallback={() => this.handleOnInView(step.id, group.id)}
             key={step.id}
             defaultElem={this.nextStepPlaceholder}
+            rootStyle={{ marginBottom: 40 }}
           >
-            {/* FIXME: 
-              This styling should not be its part, but can't
-              restyle step body form now :pensive: 
-
-              See if this can be moved to stepbody now :confused:
-            */}
-            <div style={{ marginBottom: 40 }}>
-              <StepBody
-                stepId={step.id}
-                workflowId={this.workflowId}
-                toggleSidebar={this.callBackCollapser}
-                changeFlag={this.changeFlag}
-                getIntegrationComments={this.getIntegrationComments}
-                workflowHead={this.worklfowHead}
-                dispatch={this.props.dispatch}
-                displayProfile={false}
-              />
-            </div>
+            <StepBody
+              stepId={step.id}
+              workflowId={this.workflowId}
+              toggleSidebar={this.callBackCollapser}
+              changeFlag={this.changeFlag}
+              getIntegrationComments={this.getIntegrationComments}
+              workflowHead={this.worklfowHead}
+              dispatch={this.props.dispatch}
+              displayProfile={false}
+              stepName={step.name}
+            />
           </LazyLoadHOC>
         </WhenInViewHOC>
       ));
