@@ -27,7 +27,7 @@ const { Content } = Layout;
  * [] Quick view testing
  * [] All other todos
  * [x] Smooth user experience while scrolling down
- * [] On click of step from sidebar
+ * [x] On click of step from sidebar
  * [] Animation when the height expands
  * [] Animation when the step changes
  * [] Show step name before loading the step data
@@ -76,7 +76,7 @@ class WorkflowDetails extends Component {
       );
 
       // To update state and do more side effects
-      this.handleUpdateOfActiveStep(currentGroupId, currentStepId);
+      this.scrollElementIntoView(currentGroupId, currentStepId);
     });
   }
 
@@ -208,18 +208,24 @@ class WorkflowDetails extends Component {
         search: searchParams.toString()
       });
     }
-    this.updateStepsInState({
-      stepId,
-      groupId
+    this.setState({
+      currentStepId: stepId,
+      currentGroupId: groupId
     });
   };
 
-  updateStepsInState = ({ groupId, stepId }) => {
-    wdLog("updateStepsInState", groupId, stepId);
-    this.setState({
-      currentGroupId: groupId,
-      currentStepId: stepId
-    });
+  scrollElementIntoView = (groupId, stepId) => {
+    // Using 0 when null and/or undefined, assuming the user wants to navigate to the profile step
+    const elemId = `#step_body_${groupId || 0}_${stepId || 0}`;
+    const stepNode = document.querySelector(elemId);
+    if (stepNode) {
+      // Scrolling it to 80px from top
+      const y = stepNode.offsetTop - 80;
+      window.scrollTo({
+        top: y,
+        left: 0
+      });
+    }
   };
 
   // TODO: Don't forget to take care of this case
@@ -252,7 +258,7 @@ class WorkflowDetails extends Component {
   // Handles the click on profile
   // Just the update the current step and group
   handleProfileClick = () => {
-    this.handleUpdateOfActiveStep(null, null);
+    this.scrollElementIntoView(null, null);
   };
 
   getLoadingError() {
@@ -336,7 +342,10 @@ class WorkflowDetails extends Component {
 
   renderProfileStep = () => {
     return (
-      <WhenInViewHOC onInViewCallback={() => this.handlTouchTop(null, null)}>
+      <WhenInViewHOC
+        id="step_body_0_0"
+        onInViewCallback={() => this.handlTouchTop(null, null)}
+      >
         <LazyLoadHOC
           onInViewCallback={() => this.handleOnInView(null, null)}
           defaultElem={this.nextStepPlaceholder}
@@ -369,6 +378,7 @@ class WorkflowDetails extends Component {
     return this.stepGroups.map(group => {
       return group.steps.map(step => (
         <WhenInViewHOC
+          id={`step_body_${group.id}_${step.id}`}
           onInViewCallback={() => this.handlTouchTop(step.id, group.id)}
         >
           <LazyLoadHOC
@@ -430,7 +440,7 @@ class WorkflowDetails extends Component {
               selectedStep={currentStepId}
               minimalUI={minimalUI}
               workflowIdFromDetailsToSidebar={this.workflowId}
-              onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
+              onUpdateOfActiveStep={this.scrollElementIntoView}
               displayProfile={this.displayProfile(
                 currentStepId,
                 currentGroupId
@@ -457,7 +467,7 @@ class WorkflowDetails extends Component {
                     toggleSidebar={this.callBackCollapser}
                     addComment={this.addComment}
                     gotoStep={this.fetchStepData}
-                    selectActiveStep={this.handleUpdateOfActiveStep}
+                    selectActiveStep={this.scrollElementIntoView}
                     changeFlag={this.changeFlag}
                     changeIntegrationStatus={this.changeIntegrationStatus}
                     {...this.props}

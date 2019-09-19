@@ -49,8 +49,14 @@ class WhenInViewHOC extends Component {
   }
 
   render() {
-    const { children } = this.props;
-    return <div ref={this.rootRef}>{children}</div>;
+    // It requires id,
+    // to make it `forcefully` come in view
+    const { children, id } = this.props;
+    return (
+      <div id={id} ref={this.rootRef}>
+        {children}
+      </div>
+    );
   }
 }
 
