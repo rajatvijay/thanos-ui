@@ -42,7 +42,8 @@ const wdLog = namespacedLogger("WorkflowDetails");
 class WorkflowDetails extends Component {
   state = {
     currentGroupId: null,
-    currentStepId: null
+    currentStepId: null,
+    hasLoadedAllData: false
   };
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -74,8 +75,10 @@ class WorkflowDetails extends Component {
         currentGroupId
       );
 
-      // To update state and do more side effects
-      this.scrollElementIntoView(currentGroupId, currentStepId);
+      this.setState({ hasLoadedAllData: true }, () => {
+        // To update state and do more side effects
+        this.scrollElementIntoView(currentGroupId, currentStepId);
+      });
     });
   }
 
@@ -189,6 +192,12 @@ class WorkflowDetails extends Component {
   // Set the passed groupId and stepId as the current step and group
   handleUpdateOfActiveStep = (groupId, stepId) => {
     wdLog("handleUpdateOfActiveStep", groupId, stepId);
+
+    // Don't update any data until all the data is loaded
+    if (!this.state.hasLoadedAllData) {
+      return;
+    }
+
     // URL should be changed when in expand view
     if (!this.props.minimalUI) {
       const isProfileStep = this.displayProfile(stepId, groupId);
