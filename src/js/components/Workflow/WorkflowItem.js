@@ -12,6 +12,7 @@ import WorkflowDetails from "../WorkflowDetails";
 import ModalHeader from "./ModalHeader";
 import ModalFooter from "./ModalFooter";
 import { withRouter } from "react-router-dom";
+import { MODAL_WIDTH } from "../WorkflowDetails/utils/constants";
 
 class WorkflowItem extends React.Component {
   state = {
@@ -206,7 +207,7 @@ class WorkflowItem extends React.Component {
             style={this.calcTopPos()}
             footer={null}
             bodyStyle={{ padding: 0, maxHeight: 600 }}
-            width="77vw"
+            width={MODAL_WIDTH}
             destroyOnClose={true}
             visible={this.state.visible}
             onOk={this.handleOk}

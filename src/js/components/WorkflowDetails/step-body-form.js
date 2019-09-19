@@ -772,8 +772,7 @@ class StepBodyForm extends Component {
 
         <div
           style={{
-            padding: "29px 44px 27px 37px",
-            marginBottom: "100px"
+            padding: "29px 44px 27px 37px"
           }}
         >
           <Row>

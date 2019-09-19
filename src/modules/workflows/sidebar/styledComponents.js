@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
 import { Collapse, Layout } from "antd";
+import {
+  WORKFLOW_DETAILS_SIDEBAR_WIDTH,
+  WORKFLOW_DETAILS_SIDEBAR_PADDING
+} from "../../../js/components/WorkflowDetails/utils/constants";
 
 const { Sider } = Layout;
 
 export const StyledSidebar = styled(Sider)`
-  overflow: scroll;
+  /* overflow: scroll;
   left: 0;
   background-color: #fafafa;
   padding: 30px;
@@ -14,21 +18,28 @@ export const StyledSidebar = styled(Sider)`
   margin-right: ${({ minimalui }) => (minimalui ? 0 : 35)};
   padding-right: 0;
   position: relative;
-  margin-top: ${({ minimalui }) => (minimalui ? 0 : 35)};
+  margin-top: ${({ minimalui }) => (minimalui ? 0 : 35)}; */
+
+  /* Overriding the background color from antd-component */
+  background-color: #f6f7f9;
 
   /* Make the sidebar fixed */
   .ant-layout-sider-children {
     position: fixed;
     overflow-y: scroll;
-    max-width: 300px;
-    min-width: 300px;
+    width: ${WORKFLOW_DETAILS_SIDEBAR_WIDTH};
+    padding: 0 ${WORKFLOW_DETAILS_SIDEBAR_PADDING};
+  }
+
+  .ant-collapse,.ant-collapse-content {
+    background-color: transparent;
   }
 `;
 
 export const StyledSidebarHeader = styled.div`
   padding: 25px 20px;
   cursor: pointer;
-  background-color: #fafafa;
+  /* background-color: #fafafa; */
   justify-content: space-between;
   display: flex;
   padding-bottom: 0;
@@ -68,7 +79,7 @@ export const StyledCollapseItem = styled.span`
   display: flex;
   align-items: center;
   font-size: 14;
-  background-color: ${props => (props.selected ? "#104774" : "#FAFAFA")};
+  background-color: ${props => (props.selected ? "#104774" : "transparent")};
   color: ${props => (props.selected ? "white" : "black")};
 `;
 

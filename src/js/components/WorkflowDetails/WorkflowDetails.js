@@ -16,6 +16,29 @@ import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
 import { getStepAndFromConfig } from "./utils/active-step";
 import NextStepPlaceholder from "./NextStepPlaceholder";
+import { css } from "emotion";
+import {
+  WORKFLOW_DETAILS_CONTAINER_PADDING_RIGHT,
+  WORKFLOW_DETAILS_CONTAINER_PADDING_LEFT,
+  BACK_BUTTON_WIDTH,
+  BACK_BUTTON_MARGIN_RIGHT,
+  MODAL_WIDTH,
+  WORKFLOW_DETAILS_SIDEBAR_WIDTH,
+  WORKFLOW_DETAILS_SIDEBAR_PADDING
+} from "./utils/constants";
+
+/**
+ * TODOs:
+ * [] Scroll up syncing of step with sidebar
+ * [] Quick view testing
+ * [] All other todos
+ * [] Smooth user experience while scrolling down
+ */
+
+const namespacedLogger = (namespace, turnOff = false) => (...args) =>
+  !turnOff && console.debug(namespace, ...args);
+
+const wdLog = namespacedLogger("WorkflowDetails");
 
 const { Content } = Layout;
 
@@ -62,26 +85,11 @@ class WorkflowDetails extends Component {
     );
   }
 
-  get selectedGroup() {
-    return lodashGet(
-      this.props,
-      `workflowKeys[${this.workflowId}].groupId`,
-      null
-    );
-  }
-
-  get selectedStep() {
-    return lodashGet(
-      this.props,
-      `workflowKeys[${this.workflowId}].stepId`,
-      null
-    );
-  }
-
   get isLoadingStepData() {
     return (
       lodashGet(
         this.props,
+        // TODO: Fix this
         `currentStepFields[${this.selectedStep}].loading`,
         false
       ) ||
@@ -106,11 +114,6 @@ class WorkflowDetails extends Component {
     return lodashGet(this.props, "workflowItem.definition.default_step", null);
   }
 
-  get displayProfile() {
-    const { currentGroupId, currentStepId } = this.state;
-    return currentGroupId === null && currentStepId == null;
-  }
-
   // TODO: Should be optimized
   get allSteps() {
     return this.stepGroups.flatMap(group => group.steps).map(step => step.id);
@@ -120,13 +123,6 @@ class WorkflowDetails extends Component {
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
-
-  state = {
-    currentStepId: null
-    // currentGroupId: null,
-    // nextStepId: null,
-    // nextGroupId: null
-  };
 
   componentDidMount() {
     // Get basic details about the workflow
@@ -139,6 +135,7 @@ class WorkflowDetails extends Component {
       workflowDetailsActions.getStepGroup(this.workflowId)
     );
 
+    wdLog("resolving details and stepgroups api calls");
     Promise.all([basicWorkflowDetailsPromise, stepsDataPromise]).then(() => {
       // The component has been re-rendered here with the data from the API
       // Think :tongue_stuck_out:
@@ -146,7 +143,12 @@ class WorkflowDetails extends Component {
         stepId: currentStepId,
         groupId: currentGroupId
       } = this.decideCurrentStep();
-      console.log("componentDidMount", currentStepId, currentGroupId);
+      wdLog(
+        "componentDidMount",
+        "current step and group will be",
+        currentStepId,
+        currentGroupId
+      );
 
       // To update state and do more side effects
       this.handleUpdateOfActiveStep(currentGroupId, currentStepId);
@@ -194,13 +196,16 @@ class WorkflowDetails extends Component {
     return { stepId: null, groupId: null };
   };
 
+  // TODO: Remove this fn
   updateStepsInState = ({ currentGroupId, currentStepId }) => {
-    this.setState({
-      currentGroupId,
-      currentStepId
-    });
+    // wdLog("updateStepsInState", currentGroupId, currentStepId);
+    // this.setState({
+    //   currentGroupId,
+    //   currentStepId
+    // });
   };
 
+  // TODO: Don't forget to take care of this case
   isTheStepAutoSubmitted = (previousProps, currentProps, stepId) => {
     const previousCompletedBy = lodashGet(
       previousProps,
@@ -215,6 +220,10 @@ class WorkflowDetails extends Component {
     }
     return false;
   };
+
+  displayProfile(stepId, groupId) {
+    return stepId === null && groupId == null;
+  }
 
   /////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
@@ -272,22 +281,28 @@ class WorkflowDetails extends Component {
   /////////////////////////////////////////////////////////////////////////////////
 
   getStepDetailsData = payload => {
+    wdLog("getStepDetailsData", "fetching step data", JSON.stringify(payload));
     this.props.dispatch(workflowDetailsActions.getStepFields(payload));
   };
 
-  handleUpdateOfActiveStep = (groupId, stepId, softUpdate = false) => {
+  handleUpdateOfActiveStep = (groupId, stepId) => {
+    wdLog("handleUpdateOfActiveStep", groupId, stepId);
     // URL should be changed when in expand view
     if (!this.props.minimalUI) {
-      const isProfileStep = groupId === null && stepId === null;
+      const isProfileStep = this.displayProfile(stepId, groupId);
       const searchParams = isProfileStep
         ? ""
         : new URLSearchParams({
             group: groupId,
             step: stepId
           });
+      wdLog(
+        "handleUpdateOfActiveStep",
+        "redirecting to url",
+        searchParams.toString()
+      );
       history.replace({
-        search: searchParams.toString(),
-        state: softUpdate
+        search: searchParams.toString()
       });
     }
     this.updateStepsInState({
@@ -308,17 +323,18 @@ class WorkflowDetails extends Component {
   };
 
   showBackButton = () => {
-    return (
-      this.props.workflow &&
-      this.props.workflow.workflow_family &&
-      this.props.workflow.workflow_family.length <= 1 &&
-      !this.props.minimalUI
-    );
+    return !this.props.minimalUI;
   };
 
   renderBackButton = () => {
     return (
       <div
+        className={css`
+          background-color: #104774;
+          width: ${BACK_BUTTON_WIDTH};
+          padding-top: 30px;
+          margin-right: ${BACK_BUTTON_MARGIN_RIGHT};
+        `}
         style={{
           backgroundColor: "#104774",
           width: "75px",
@@ -356,16 +372,36 @@ class WorkflowDetails extends Component {
     return error;
   }
 
+  // Only fetches the data
   handleOnInView = (stepId, groupId) => {
+    wdLog("handleOnInView", stepId, groupId);
+    // if (!stepId && !groupId) {
+    //   return this.handleUpdateOfActiveStep(null, null);
+    // }
+    // this.handleUpdateOfActiveStep(groupId, stepId);
+
     if (!stepId && !groupId) {
-      return this.handleUpdateOfActiveStep(null, null);
+      return;
     }
-    this.handleUpdateOfActiveStep(groupId, stepId);
+    this.getStepDetailsData({ workflowId: this.workflowId, stepId, groupId });
+  };
+
+  getStepsContainerWidth = () => {
+    const { minimalUI } = this.props;
+    const contianerWidth = minimalUI ? MODAL_WIDTH : "100vw";
+    return `calc(${contianerWidth} - ${BACK_BUTTON_WIDTH}  - ${BACK_BUTTON_MARGIN_RIGHT} - ${WORKFLOW_DETAILS_SIDEBAR_WIDTH} - ${WORKFLOW_DETAILS_CONTAINER_PADDING_RIGHT})`;
+  };
+
+  getStepContainerLeftPosition = () => {
+    return `calc(${BACK_BUTTON_WIDTH} + ${BACK_BUTTON_MARGIN_RIGHT} + ${WORKFLOW_DETAILS_SIDEBAR_WIDTH})`;
   };
 
   render = () => {
     const { minimalUI, workflowItem } = this.props;
-    const { currentStepId, currentGroupId } = this.state;
+    const {
+      stepId: currentStepId,
+      groupId: currentGroupId
+    } = this.stepAndGroupFromURL;
     const [hasError, errorMessage] = this.getLoadingError();
 
     if (hasError) {
@@ -380,120 +416,137 @@ class WorkflowDetails extends Component {
       return (
         <div>
           <Layout
-            className="workflow-details-container inner-container"
-            style={{ top: minimalUI ? 0 : 60 }}
+            className={css`
+              min-height: 100vh;
+              padding: 60px ${WORKFLOW_DETAILS_CONTAINER_PADDING_RIGHT} 0
+                ${WORKFLOW_DETAILS_CONTAINER_PADDING_LEFT};
+            `}
           >
-            <Layout
-              style={{
-                background: "#FAFAFA",
-                minHeight: "100vh",
-                padding: minimalUI ? "30px 0px" : 0,
-                marginTop: minimalUI ? 80 : 0
-              }}
+            {this.showBackButton() && this.renderBackButton()}
+
+            <SidebarView
+              selectedGroup={currentGroupId}
+              selectedStep={currentStepId}
+              minimalUI={minimalUI}
+              workflowIdFromDetailsToSidebar={this.workflowId}
+              onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
+              displayProfile={this.displayProfile(
+                currentStepId,
+                currentGroupId
+              )}
+              changeProfileDisplay={this.handleProfileClick}
+            />
+            <Content
+              className={css`
+                width: ${this.getStepsContainerWidth()};
+                margin-top: 12px;
+                padding-left: 10px;
+                /* position: absolute; */
+                /* left: ${this.getStepContainerLeftPosition()}; */
+              `}
             >
-              {this.showBackButton() && this.renderBackButton()}
-
-              <SidebarView
-                selectedGroup={currentGroupId}
-                selectedStep={currentStepId}
-                minimalUI={minimalUI}
-                workflowIdFromDetailsToSidebar={this.workflowId}
-                onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
-                displayProfile={this.displayProfile}
-                changeProfileDisplay={this.handleProfileClick}
-              />
-              <Content
-                style={{
-                  width: "50%",
-                  marginTop: minimalUI ? 0 : 12,
-                  paddingLeft: "10px"
-                }}
-              >
-                <div className="printOnly ">
-                  <div
-                    className="mr-ard-lg"
-                    id="StepBody"
-                    style={{
-                      background: "#FAFAFA",
-                      margin: minimalUI ? "0px 24px 0px 0px" : "24px"
-                    }}
+              <div className="printOnly ">
+                <div
+                  style={{
+                    background: "transparent",
+                    margin: minimalUI ? "0px 24px 0px 0px" : "24px"
+                  }}
+                >
+                  {/* For the profile step */}
+                  <NextStepPlaceholder
+                    onInViewCallback={() => this.handleOnInView(null, null)}
                   >
-                    {/* TODO: Clean the JSX */}
-                    {!this.props.hideStepBody &&
-                      this.stepGroups.map(group => {
-                        return group.steps.map((step, index) => (
-                          <NextStepPlaceholder
-                            onInViewCallback={() =>
-                              this.handleOnInView(step.id, group.id)
-                            }
-                          >
-                            <StepBody
-                              stepId={step.id}
-                              workflowId={this.workflowId}
-                              toggleSidebar={this.callBackCollapser}
-                              changeFlag={this.changeFlag}
-                              getIntegrationComments={
-                                this.getIntegrationComments
-                              }
-                              workflowHead={
-                                minimalUI
-                                  ? workflowItem
-                                  : this.props.workflowDetailsHeader[
-                                      this.workflowId
-                                    ]
-                                  ? this.props.workflowDetailsHeader[
-                                      this.workflowId
-                                    ]
-                                  : null
-                              }
-                              dispatch={this.props.dispatch}
-                              displayProfile={this.displayProfile}
-                            />
-                          </NextStepPlaceholder>
-                        ));
-                      })}
-                  </div>
-                </div>
-
-                {!minimalUI && (
-                  <div className="text-right pd-ard mr-ard-md">
-                    <Tooltip
-                      title={this.props.intl.formatMessage({
-                        id: "commonTextInstances.scrollToTop"
-                      })}
-                      placement="topRight"
-                    >
-                      <span
-                        className="text-anchor"
-                        onClick={() => {
-                          window.scroll({
-                            top: 0,
-                            left: 0,
-                            behavior: "smooth"
-                          });
-                        }}
-                      >
-                        <i className="material-icons">arrow_upward</i>
-                      </span>
-                    </Tooltip>
-                  </div>
-                )}
-                {this.showComments() && (
-                  <div>
-                    <Comments
-                      object_id={this.state.object_id}
+                    <StepBody
+                      stepId={null}
+                      workflowId={this.workflowId}
                       toggleSidebar={this.callBackCollapser}
-                      addComment={this.addComment}
-                      gotoStep={this.fetchStepData}
-                      selectActiveStep={this.handleUpdateOfActiveStep}
                       changeFlag={this.changeFlag}
-                      changeIntegrationStatus={this.changeIntegrationStatus}
-                      {...this.props}
+                      getIntegrationComments={this.getIntegrationComments}
+                      workflowHead={
+                        minimalUI
+                          ? workflowItem
+                          : this.props.workflowDetailsHeader[this.workflowId]
+                          ? this.props.workflowDetailsHeader[this.workflowId]
+                          : null
+                      }
+                      dispatch={this.props.dispatch}
+                      displayProfile={true}
                     />
-                  </div>
-                )}
-              </Content>
-            </Layout>
+                  </NextStepPlaceholder>
+                  {/* TODO: Clean the JSX */}
+                  {!this.props.hideStepBody &&
+                    this.stepGroups.map(group => {
+                      return group.steps.map(step => (
+                        <NextStepPlaceholder
+                          onInViewCallback={() =>
+                            this.handleOnInView(step.id, group.id)
+                          }
+                          key={step.id}
+                        >
+                          <StepBody
+                            stepId={step.id}
+                            workflowId={this.workflowId}
+                            toggleSidebar={this.callBackCollapser}
+                            changeFlag={this.changeFlag}
+                            getIntegrationComments={this.getIntegrationComments}
+                            workflowHead={
+                              minimalUI
+                                ? workflowItem
+                                : this.props.workflowDetailsHeader[
+                                    this.workflowId
+                                  ]
+                                ? this.props.workflowDetailsHeader[
+                                    this.workflowId
+                                  ]
+                                : null
+                            }
+                            dispatch={this.props.dispatch}
+                            displayProfile={false}
+                          />
+                        </NextStepPlaceholder>
+                      ));
+                    })}
+                </div>
+              </div>
+
+              {!minimalUI && (
+                <div className="text-right pd-ard mr-ard-md">
+                  <Tooltip
+                    title={this.props.intl.formatMessage({
+                      id: "commonTextInstances.scrollToTop"
+                    })}
+                    placement="topRight"
+                  >
+                    <span
+                      className="text-anchor"
+                      onClick={() => {
+                        window.scroll({
+                          top: 0,
+                          left: 0,
+                          behavior: "smooth"
+                        });
+                      }}
+                    >
+                      <i className="material-icons">arrow_upward</i>
+                    </span>
+                  </Tooltip>
+                </div>
+              )}
+              {this.showComments() && (
+                <div>
+                  <Comments
+                    object_id={this.state.object_id}
+                    toggleSidebar={this.callBackCollapser}
+                    addComment={this.addComment}
+                    gotoStep={this.fetchStepData}
+                    selectActiveStep={this.handleUpdateOfActiveStep}
+                    changeFlag={this.changeFlag}
+                    changeIntegrationStatus={this.changeIntegrationStatus}
+                    {...this.props}
+                  />
+                </div>
+              )}
+            </Content>
           </Layout>
         </div>
       );
