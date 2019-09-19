@@ -8,20 +8,9 @@ import {
 const { Sider } = Layout;
 
 export const StyledSidebar = styled(Sider)`
-  /* overflow: scroll;
-  left: 0;
-  background-color: #fafafa;
-  padding: 30px;
-  padding-top: 0;
-  padding-left: ${({ minimalui }) => (minimalui ? "30px" : "55px")};
-  z-index: 0;
-  margin-right: ${({ minimalui }) => (minimalui ? 0 : 35)};
-  padding-right: 0;
-  position: relative;
-  margin-top: ${({ minimalui }) => (minimalui ? 0 : 35)}; */
-
   /* Overriding the background color from antd-component */
   background-color: #f6f7f9;
+  margin-right: 25px;
 
   /* Make the sidebar fixed */
   .ant-layout-sider-children {
@@ -31,7 +20,9 @@ export const StyledSidebar = styled(Sider)`
     padding: 0 ${WORKFLOW_DETAILS_SIDEBAR_PADDING};
   }
 
-  .ant-collapse,.ant-collapse-content {
+  /* Overriding the background color from antd-component */
+  .ant-collapse,
+  .ant-collapse-content {
     background-color: transparent;
   }
 `;

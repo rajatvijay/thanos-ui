@@ -26,7 +26,11 @@ const { Content } = Layout;
  * [x] Scroll up syncing of step with sidebar
  * [] Quick view testing
  * [] All other todos
- * [] Smooth user experience while scrolling down
+ * [x] Smooth user experience while scrolling down
+ * [] On click of step from sidebar
+ * [] Animation when the height expands
+ * [] Animation when the step changes
+ * [] Show step name before loading the step data
  * [x] UI fixes
  */
 
@@ -436,25 +440,14 @@ class WorkflowDetails extends Component {
             <Content
               className={css`
                 flex: 1;
-                margin-top: 12px;
+                margin-top: 25px;
                 padding-left: 10px;
               `}
             >
-              {/* TODO: Check if this is required */}
+              {/* This class is for adding print-only styles */}
               <div className="printOnly">
-                <div
-                  style={{
-                    // TODO: Check if this is required
-                    background: "transparent",
-                    margin: minimalUI ? "0px 24px 0px 0px" : "24px"
-                  }}
-                >
-                  {/* For the profile step */}
-                  {this.renderProfileStep()}
-
-                  {/* TODO: Clean the JSX */}
-                  {!this.props.hideStepBody && this.renderAllStepData()}
-                </div>
+                {this.renderProfileStep()}
+                {!this.props.hideStepBody && this.renderAllStepData()}
               </div>
 
               {this.showComments() && (
@@ -478,7 +471,7 @@ class WorkflowDetails extends Component {
     }
   };
 
-  // TODO: These methods need to be refactored when the `Comments` component is looked at
+  // FIXME: These methods need to be refactored when the `Comments` component is looked at
   /////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
@@ -486,7 +479,7 @@ class WorkflowDetails extends Component {
 
   /// this will be moved to another component///
   callBackCollapser = (objectId, content_type, isEmbeddedDetails) => {
-    // TODO: Here it's called with no parameters when the comment section is
+    // FIXME: Here it's called with no parameters when the comment section is
     // to be closed. Visibilty should be handled in state and not through an
     // API call. Also removing comments each time is not an efficient way.
     // They should rather be updated in-redux while the workflow is opened
