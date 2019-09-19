@@ -4,14 +4,12 @@ import {
   workflowStepConstants,
   workflowCommentsConstants,
   stepVersionConstants
-  // SET_WORKFLOW_KEYS
 } from "../constants";
 import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
 import { history } from "../_helpers";
 import { notification } from "antd";
 import * as Sentry from "@sentry/browser";
-// import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -70,34 +68,6 @@ function getStepGroup(id, isActive) {
     // workflowDetailsService
     return workflowDetailsService.getStepGroup(id).then(
       stepGroups => {
-        // TODO: See if this actually required
-        // const { minimalUI } = getState();
-        // const { workflowId, stepId, groupId } = currentActiveStep(
-        //   stepGroups,
-        //   id
-        // );
-        // if (isActive && !minimalUI) {
-        //   history.replace(
-        //     `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
-        //   );
-        // } else {
-        //   dispatch(
-        //     getStepFields({
-        //       workflowId,
-        //       stepId,
-        //       groupId
-        //     })
-        //   );
-        // }
-        // // Moving to next step only in the full screen view
-        // // This is done to avoid moving to first incomplete step in modal view,
-        // // on the first load
-        // if (!minimalUI) {
-        //   dispatch({
-        //     type: SET_WORKFLOW_KEYS,
-        //     payload: { workflowId, stepId, groupId }
-        //   });
-        // }
         dispatch(success(stepGroups, id));
         return stepGroups;
       },
