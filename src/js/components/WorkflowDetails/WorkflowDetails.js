@@ -10,6 +10,7 @@ import {
   workflowDetailsActions,
   workflowStepActions
 } from "../../actions";
+import { workflowService } from "../../services";
 import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
@@ -25,7 +26,8 @@ class WorkflowDetails extends Component {
   state = {
     currentGroupId: null,
     currentStepId: null,
-    hasLoadedAllData: false
+    hasLoadedAllData: false,
+    stepUserTagData: []
   };
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -41,6 +43,8 @@ class WorkflowDetails extends Component {
     const stepsDataPromise = this.props.dispatch(
       workflowDetailsActions.getStepGroup(this.workflowId)
     );
+
+    this.getStepUserTag();
 
     Promise.all([basicWorkflowDetailsPromise, stepsDataPromise]).then(() => {
       // The component has been re-rendered here with the data from the API
@@ -269,6 +273,19 @@ class WorkflowDetails extends Component {
       return this.handleUpdateOfActiveStep(null, null);
     }
     this.handleUpdateOfActiveStep(groupId, stepId);
+  };
+
+  getStepUserTag = () => {
+    workflowService
+      .getStepUserTagDetail(this.props.workflowId)
+      .then(response => {
+        this.setState({
+          stepUserTagData: response.results
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -546,8 +563,7 @@ function mapStateToProps(state) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl,
-    workflowKeys
+    nextUrl
   } = state;
 
   return {
@@ -563,8 +579,7 @@ function mapStateToProps(state) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl,
-    workflowKeys
+    nextUrl
   };
 }
 

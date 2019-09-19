@@ -119,7 +119,11 @@ class StepBody extends Component {
           overlay={
             <StepAssignmentUsers
               onSelectUser={user =>
-                postStepUser({ step: stepId, user: user.id })
+                postStepUser({
+                  step: stepId,
+                  user: user.id,
+                  getStepUserTag: this.props.getStepUserTag
+                })
               }
               users={stepUsers[stepId].data}
             />
@@ -234,7 +238,17 @@ class StepBody extends Component {
                     deleteStepUser(stepId, stepUsers[stepId].user.id)
                   }
                 >
-                  {stepUsers[stepId].user.user_full_name}
+                  <span>
+                    <i
+                      className="material-icons t-18 text-middle"
+                      style={{ marginRight: 4 }}
+                    >
+                      person
+                    </i>
+                    {stepUsers[stepId].user.user_full_name
+                      ? stepUsers[stepId].user.user_full_name
+                      : stepUsers[stepId].user.user_email}
+                  </span>
                 </Tag>
               )}
 
@@ -312,7 +326,13 @@ class StepBody extends Component {
             }}
           />
         )}
-        <Row style={{ padding: "29px 44px 27px 37px" }}>
+        <Row
+          style={{
+            padding: "29px 44px 27px 37px",
+            alignItems: "center",
+            display: "flex"
+          }}
+        >
           <Col span={16}>
             <span className="t-18 text-black">
               {displayProfile

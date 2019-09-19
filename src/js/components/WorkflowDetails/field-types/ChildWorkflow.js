@@ -15,7 +15,7 @@ import {
   Select,
   Checkbox
 } from "antd";
-import _ from "lodash";
+import _, { get as lodashGet } from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { injectIntl, FormattedMessage } from "react-intl";
@@ -317,8 +317,11 @@ class ChildWorkflowField2 extends Component {
   };
 
   get relatedWorkflowKind() {
-    const relatedTypes = this.props.workflowDetailsHeader[this.props.workflowId]
-      .definition.related_types;
+    const relatedTypes = lodashGet(
+      this.props.workflowDetailsHeader,
+      `${this.props.workflowId}.definition.related_types`,
+      null
+    );
 
     // In case where the related types is not defined
     // or the workflow kinds are not loaded yet.

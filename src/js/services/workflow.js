@@ -10,7 +10,8 @@ export const workflowService = {
   getChildWorkflow,
   searchUserWorkflowByEmail,
   updateWorkflow,
-  clearAll
+  clearAll,
+  getStepUserTagDetail
 };
 
 //FETCH THE LIST OF WORLFOWS FOR WORKFLOW LIST PAGE
@@ -149,4 +150,17 @@ function updateWorkflow({ id, payload }) {
   };
 
   return APIFetch(`workflows/${id}/`, requestOptions).then(handleResponse);
+}
+
+function getStepUserTagDetail(workflowId) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  return APIFetch(
+    `my-step-user-tags/?step__workflow=${workflowId}`,
+    requestOptions
+  ).then(handleResponse);
 }

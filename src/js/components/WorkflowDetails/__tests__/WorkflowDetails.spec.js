@@ -34,7 +34,7 @@ test("should render current workflow name", () => {
     },
     permissions: {}
   });
-  const { queryByText, debug } = renderWithReactIntl(
+  const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
         workflowIdFromPropsForModal={fakeWorkflowId}
