@@ -364,7 +364,7 @@ class WorkflowDetails extends Component {
         <LazyLoadHOC
           onInViewCallback={() => this.handleOnInView(null, null)}
           defaultElem={this.nextStepPlaceholder}
-          threshold={0.2}
+          threshold={0.1}
           rootStyle={{ marginBottom: 40 }}
         >
           <StepBody
