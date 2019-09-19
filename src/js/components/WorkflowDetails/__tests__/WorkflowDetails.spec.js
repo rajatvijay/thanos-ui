@@ -8,7 +8,7 @@ import workflowKeys from "../../../../js/reducers/workflowKeys";
 import { permissions } from "../../../../modules/common/permissions/reducer";
 import { renderWithReactIntl } from "../../../../modules/common/testUtils";
 import { BrowserRouter } from "react-router-dom";
-import { fireEvent, queryByText } from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 import Permissions from "../../../../modules/common/permissions/permissionsList";
 
 // Fake Data
@@ -37,7 +37,7 @@ test("should render current workflow name", () => {
     permissions: {},
     workflowKeys: {}
   });
-  const { queryByText, debug } = renderWithReactIntl(
+  const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
         workflowIdFromPropsForModal={fakeWorkflowId}
