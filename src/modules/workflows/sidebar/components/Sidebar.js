@@ -413,6 +413,7 @@ class Sidebar extends Component {
               stepGroups={this.stepGroups}
               handleStepClick={this.handleStepClick}
               onChangeOfCollapse={this.onChangeOfCollapse}
+              stepUserTagData={this.props.stepUserTagData}
             />
           )}
         </StyledSidebar>

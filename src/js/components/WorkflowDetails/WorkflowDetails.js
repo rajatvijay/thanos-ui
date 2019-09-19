@@ -11,6 +11,7 @@ import {
   workflowDetailsActions,
   workflowStepActions
 } from "../../actions";
+import { workflowService } from "../../services";
 import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
@@ -34,9 +35,27 @@ class WorkflowDetails extends Component {
       newWorkflow: params.get("new") === "true",
       currentStep: null,
       // TODO: Check why we need groupId check
-      displayProfile: minimalUI && this.lcData.length ? true : !groupId
+      displayProfile: minimalUI && this.lcData.length ? true : !groupId,
+      stepUserTagData: []
     };
   }
+
+  getStepUserTag = () => {
+    workflowService
+      .getStepUserTagDetail(this.props.workflowId)
+      .then(response => {
+        this.setState({
+          stepUserTagData: response.results
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  componentDidMount = () => {
+    this.getStepUserTag();
+  };
 
   get stepGroups() {
     return _.get(
@@ -45,7 +64,6 @@ class WorkflowDetails extends Component {
       null
     );
   }
-
   componentDidUpdate = prevProps => {
     const { match, minimalUI, workflowKeys } = this.props;
 
@@ -388,6 +406,7 @@ class WorkflowDetails extends Component {
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
                 displayProfile={displayProfile}
                 changeProfileDisplay={this.changeProfileDisplay}
+                stepUserTagData={this.state.stepUserTagData}
               />
               <Content
                 style={{
@@ -428,6 +447,7 @@ class WorkflowDetails extends Component {
                         }
                         dispatch={this.props.dispatch}
                         displayProfile={this.state.displayProfile}
+                        getStepUserTag={this.getStepUserTag}
                       />
                     )}
                   </div>
