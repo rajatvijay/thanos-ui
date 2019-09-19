@@ -9,7 +9,9 @@ class WhenInViewHOC extends Component {
       const placeholderRootNode = this.rootRef.current;
       const observerConfig = {
         rootMargin: "0px",
-        threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+        // 400 why? => Making it more sensitive to
+        // make the step transition in the left sidebar more accurate
+        threshold: buildThresholdList(400)
       };
       const observer = new IntersectionObserver(
         this.whenComesInViewport,
@@ -20,24 +22,23 @@ class WhenInViewHOC extends Component {
   }
 
   whenComesInViewport = entries => {
-    console.log("NextStepPlaceholder", entries.length);
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        console.log(
-          "outside",
-          "boundingClientRect",
-          entry.boundingClientRect.top,
-          this.props.extra
-        );
-
-        // TODO: This condition needs to be more scientific
-        if (entry.boundingClientRect.top <= 250) {
-          console.log(
-            "inside",
-            "boundingClientRect",
-            entry.boundingClientRect.top,
-            this.props.extra
-          );
+        /**
+         * 200px is the distance of the element from top
+         * 200 is a good enough aussumption,
+         * for the step to appear as focussed in the viewport
+         * 60px is the height of the header
+         * 40px is the margin between two stepbody element
+         * 200 - 60 removes the conflicts between the previous element
+         * and the next element to be as current at the same time
+         * equality is used with top condition to give the `top` condition
+         * so as to prioritise the next element to be as current, when scrolling
+         */
+        if (
+          entry.boundingClientRect.top <= 200 &&
+          entry.boundingClientRect.bottom > 200 - 40
+        ) {
           this.props.onInViewCallback && this.props.onInViewCallback();
         }
       }
@@ -45,7 +46,7 @@ class WhenInViewHOC extends Component {
   };
 
   componentDidCatch(error) {
-    console.error(error);
+    // DO nothing, just don't let it burst
   }
 
   render() {
@@ -61,3 +62,18 @@ class WhenInViewHOC extends Component {
 }
 
 export default WhenInViewHOC;
+
+///////////////////////////////////////////////////////////////////////////
+// Utils
+
+function buildThresholdList(numSteps) {
+  const thresholds = [];
+
+  for (let i = 1.0; i <= numSteps; i++) {
+    const ratio = i / numSteps;
+    thresholds.push(ratio);
+  }
+
+  thresholds.push(0);
+  return thresholds;
+}

@@ -7,7 +7,10 @@ class LazyLoadHOC extends Component {
   rootRef = createRef();
 
   componentDidMount() {
+    // Taking it as a prop, so that the user can decide the threshold of lazy laoding
+    // tweak it to load earlier and faster
     const { threshold } = this.props;
+
     // Feature detection
     if ("IntersectionObserver" in window) {
       const placeholderRootNode = this.rootRef.current;
@@ -24,26 +27,8 @@ class LazyLoadHOC extends Component {
   }
 
   whenComesInViewport = entries => {
-    console.log("NextStepPlaceholder", entries.length);
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        console.log(
-          "NextStepPlaceholder",
-          "boundingClientRect",
-          entry.boundingClientRect
-        );
-        console.log(
-          "NextStepPlaceholder",
-          "intersectionRatio",
-          entry.intersectionRatio
-        );
-        console.log(
-          "NextStepPlaceholder",
-          "intersectionRect",
-          entry.intersectionRect,
-          this.props.extras
-        );
-
         this.props.onInViewCallback && this.props.onInViewCallback();
         this.setState({ inView: true });
       }
@@ -51,7 +36,7 @@ class LazyLoadHOC extends Component {
   };
 
   componentDidCatch(error) {
-    console.error(error);
+    // DO nothing, just don't let it burst
   }
 
   render() {

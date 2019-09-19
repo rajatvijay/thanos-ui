@@ -21,24 +21,6 @@ import { css } from "emotion";
 
 const { Content } = Layout;
 
-/**
- * TODOs:
- * [x] Scroll up syncing of step with sidebar
- * [x] Quick view testing
- * [] All other todos
- * [x] Smooth user experience while scrolling down
- * [x] On click of step from sidebar
- * [] Animation when the height expands
- * [x] Show step name before loading the step data
- * [x] UI fixes
- */
-
-const namespacedLogger = (namespace, turnOff = false) => (...args) => {
-  !turnOff && console.debug(namespace, ...args);
-};
-
-const wdLog = namespacedLogger("WorkflowDetails");
-
 class WorkflowDetails extends Component {
   state = {
     currentGroupId: null,
@@ -60,7 +42,6 @@ class WorkflowDetails extends Component {
       workflowDetailsActions.getStepGroup(this.workflowId)
     );
 
-    wdLog("resolving details and stepgroups api calls");
     Promise.all([basicWorkflowDetailsPromise, stepsDataPromise]).then(() => {
       // The component has been re-rendered here with the data from the API
       // Think :tongue_stuck_out:
@@ -68,12 +49,6 @@ class WorkflowDetails extends Component {
         stepId: currentStepId,
         groupId: currentGroupId
       } = this.decideCurrentStep();
-      wdLog(
-        "componentDidMount",
-        "current step and group will be",
-        currentStepId,
-        currentGroupId
-      );
 
       this.setState({ hasLoadedAllData: true }, () => {
         // To update state and do more side effects
@@ -191,8 +166,6 @@ class WorkflowDetails extends Component {
 
   // Set the passed groupId and stepId as the current step and group
   handleUpdateOfActiveStep = (groupId, stepId) => {
-    wdLog("handleUpdateOfActiveStep", groupId, stepId);
-
     // Don't update any data until all the data is loaded
     if (!this.state.hasLoadedAllData) {
       return;
@@ -207,11 +180,6 @@ class WorkflowDetails extends Component {
             group: groupId,
             step: stepId
           });
-      wdLog(
-        "handleUpdateOfActiveStep",
-        "redirecting to url",
-        searchParams.toString()
-      );
       history.replace({
         search: searchParams.toString()
       });
@@ -261,7 +229,6 @@ class WorkflowDetails extends Component {
 
   // payload: {workflowId, stepId, groupId}
   getStepDetailsData = payload => {
-    wdLog("getStepDetailsData", "fetching step data", JSON.stringify(payload));
     this.props.dispatch(workflowDetailsActions.getStepFields(payload));
   };
 
@@ -290,8 +257,6 @@ class WorkflowDetails extends Component {
   // Callback to lazy load the data
   // Only fetches the data
   handleOnInView = (stepId, groupId) => {
-    wdLog("handleOnInView", stepId, groupId);
-
     if (!stepId && !groupId) {
       return;
     }
@@ -300,7 +265,6 @@ class WorkflowDetails extends Component {
 
   // Update the new step and group when the user scrolls to it
   handlTouchTop = (stepId, groupId) => {
-    wdLog("handlTouchTop", stepId, groupId);
     if (!stepId && !groupId) {
       return this.handleUpdateOfActiveStep(null, null);
     }
@@ -360,6 +324,7 @@ class WorkflowDetails extends Component {
       <WhenInViewHOC
         id="step_body_0_0"
         onInViewCallback={() => this.handlTouchTop(null, null)}
+        extra={null}
       >
         <LazyLoadHOC
           onInViewCallback={() => this.handleOnInView(null, null)}
@@ -388,6 +353,7 @@ class WorkflowDetails extends Component {
         <WhenInViewHOC
           id={`step_body_${group.id}_${step.id}`}
           onInViewCallback={() => this.handlTouchTop(step.id, group.id)}
+          extra={step.name}
         >
           <LazyLoadHOC
             threshold={0.2}

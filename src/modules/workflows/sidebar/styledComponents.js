@@ -15,6 +15,7 @@ export const StyledSidebar = styled(Sider)`
     width: 350px;
     padding: 0 40px;
     max-height: ${props => (props.minimalui ? "400px" : "100vh")};
+    padding-bottom: 100px;
   }
 
   /* Overriding the background color from antd-component */
