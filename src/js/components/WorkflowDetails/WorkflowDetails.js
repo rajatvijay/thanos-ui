@@ -24,12 +24,11 @@ const { Content } = Layout;
 /**
  * TODOs:
  * [x] Scroll up syncing of step with sidebar
- * [] Quick view testing
+ * [x] Quick view testing
  * [] All other todos
  * [x] Smooth user experience while scrolling down
  * [x] On click of step from sidebar
  * [] Animation when the height expands
- * [] Animation when the step changes
  * [x] Show step name before loading the step data
  * [x] UI fixes
  */
@@ -226,6 +225,13 @@ class WorkflowDetails extends Component {
         left: 0
       });
     }
+
+    // Optimization Alert: Updating state here also,
+    // for quick reflection in the UI
+    this.setState({
+      currentStepId: stepId,
+      currentGroupId: groupId
+    });
   };
 
   // TODO: Don't forget to take care of this case
@@ -417,7 +423,7 @@ class WorkflowDetails extends Component {
           <Layout
             className={css`
               min-height: 100vh;
-              padding: 60px 10px 0 0;
+              padding: ${minimalUI ? "120px 10px 0 0" : "60px 10px 0 0"};
             `}
           >
             {!minimalUI && this.renderBackButton}

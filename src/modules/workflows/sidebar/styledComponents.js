@@ -1,9 +1,5 @@
 import styled from "@emotion/styled";
 import { Collapse, Layout } from "antd";
-import {
-  WORKFLOW_DETAILS_SIDEBAR_WIDTH,
-  WORKFLOW_DETAILS_SIDEBAR_PADDING
-} from "../../../js/components/WorkflowDetails/utils/constants";
 
 const { Sider } = Layout;
 
@@ -16,8 +12,9 @@ export const StyledSidebar = styled(Sider)`
   .ant-layout-sider-children {
     position: fixed;
     overflow-y: scroll;
-    width: ${WORKFLOW_DETAILS_SIDEBAR_WIDTH};
-    padding: 0 ${WORKFLOW_DETAILS_SIDEBAR_PADDING};
+    width: 350px;
+    padding: 0 40px;
+    max-height: ${props => (props.minimalui ? "400px" : "100vh")};
   }
 
   /* Overriding the background color from antd-component */
