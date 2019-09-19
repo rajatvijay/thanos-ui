@@ -128,10 +128,11 @@ const createFamilyListForBreadcrums = family => {
 };
 
 const HeaderTitle = props => {
-  const { workflow } = props;
+  const { workflow, fieldExtra, isEmbedded } = props;
   const { family } = workflow;
+  const showBreadCrumbs = fieldExtra && fieldExtra.showBreadCrumbs;
 
-  if (family.length === 1 || props.isEmbedded) {
+  if (family.length === 1 || (!showBreadCrumbs && isEmbedded)) {
     return (
       <div>
         <span
