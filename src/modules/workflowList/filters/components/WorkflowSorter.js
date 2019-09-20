@@ -15,6 +15,7 @@ class WorkflowToolbar extends Component {
   };
   render() {
     const { isFilterPopupVisible } = this.state;
+    const { selectedWorkflowFilters } = this.props;
     return (
       <div>
         <div>
@@ -28,6 +29,7 @@ class WorkflowToolbar extends Component {
             Filter
             {isFilterPopupVisible ? <Icon type="up" /> : <Icon type="down" />}
           </span>
+          <SelectedBasicFilters filters={selectedWorkflowFilters} />
           {isFilterPopupVisible && <FilterPopup />}
         </div>
       </div>
@@ -37,8 +39,17 @@ class WorkflowToolbar extends Component {
 
 const mapStateToProps = state => {
   return {
-    // staticData:
+    selectedWorkflowFilters: state.workflowList.selectedWorkflowFilters
   };
 };
 
 export default connect(mapStateToProps)(WorkflowToolbar);
+
+function SelectedBasicFilters({ filters }) {
+  const filterKeys = Object.keys(filters);
+  return filterKeys.map(filterName => (
+    <span>
+      {filterName}: {filters[filterName]}
+    </span>
+  ));
+}

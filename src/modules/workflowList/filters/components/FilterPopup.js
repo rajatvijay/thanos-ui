@@ -8,9 +8,11 @@ import { get as lodashGet } from "lodash";
 import {
   getStatusesThunk,
   getRegionsThunk,
-  getBusinessUnitsThunk
+  getBusinessUnitsThunk,
+  applyWorkflowFilterThunk
 } from "../../thunks";
 import { bindActionCreators } from "redux";
+import { statusesForFilterDropdownSelector } from "../../selectors";
 
 const OPERATORS_TYPES = [
   {
@@ -53,10 +55,11 @@ class FilterPopup extends Component {
   }
   handleBasicFilters = field => value => {
     console.log(field, value);
+    this.props.applyWorkflowFilterThunk({ field, value });
   };
   render() {
-    const { staticData } = this.props;
-    const { statuses, regions, businessUnits } = staticData;
+    const { staticData, statuses } = this.props;
+    const { regions, businessUnits } = staticData;
     return (
       <div>
         <BasicFilters
@@ -80,13 +83,19 @@ function mapStateToProps(state) {
   const { workflowList, config } = state;
   return {
     staticData: workflowList.staticData,
+    statuses: statusesForFilterDropdownSelector(state),
     config
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { getStatusesThunk, getRegionsThunk, getBusinessUnitsThunk },
+    {
+      getStatusesThunk,
+      getRegionsThunk,
+      getBusinessUnitsThunk,
+      applyWorkflowFilterThunk
+    },
     dispatch
   );
 }

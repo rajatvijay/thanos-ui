@@ -17,7 +17,8 @@ import {
   GET_ALL_ALERTS_FAILURE,
   GET_ALL_TASK_QUEUES,
   GET_ALL_TASK_QUEUES_SUCCESS,
-  GET_ALL_TASK_QUEUES_FAILURE
+  GET_ALL_TASK_QUEUES_FAILURE,
+  SET_WORKFLOW_FILTER
 } from "./actions";
 
 const INITIAL_STATE = {
@@ -38,6 +39,7 @@ const INITIAL_STATE = {
       error: null
     }
   },
+  selectedWorkflowFilters: {},
   kinds: {
     isLoading: false,
     data: null,
@@ -218,6 +220,21 @@ export function taskQueues(
         isLoading: false,
         error: payload,
         data: null
+      };
+    default:
+      return state;
+  }
+}
+
+export function selectedWorkflowFilters(
+  state = INITIAL_STATE.selectedWorkflowFilters,
+  { type, payload }
+) {
+  switch (type) {
+    case SET_WORKFLOW_FILTER:
+      return {
+        ...state,
+        [payload.field]: payload.value
       };
     default:
       return state;

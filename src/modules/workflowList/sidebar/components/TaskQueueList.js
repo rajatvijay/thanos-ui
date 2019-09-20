@@ -48,6 +48,7 @@ class TaskQueueList extends PureComponent {
   };
 
   componentDidMount() {
+    // TODO: Move this API call
     this.getMyTasksCount();
   }
 

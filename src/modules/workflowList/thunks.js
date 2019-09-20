@@ -25,7 +25,8 @@ import {
   getAllAlertsFailure,
   getAllTaskQueues,
   getAllTaskQueuesSuccess,
-  getAllTaskQueuesFailure
+  getAllTaskQueuesFailure,
+  setWorkflowFilter
 } from "./actionCreators";
 
 export const getStatusesThunk = () => {
@@ -122,3 +123,9 @@ export const getAllTaskQueuesThunk = () => {
     return taskQueues;
   };
 };
+
+export function applyWorkflowFilterThunk(filter) {
+  return async dispatch => {
+    dispatch(setWorkflowFilter(filter));
+  };
+}
