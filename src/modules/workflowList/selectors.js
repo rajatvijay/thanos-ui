@@ -51,3 +51,11 @@ export const selectedFieldAnswerSelector = state =>
   );
 
 export const taskQueuesSelector = state => state.workflowList.taskQueues;
+export const alertsSelector = state => state.workflowList.alerts;
+
+export const selectedTaskQueuesSelector = state =>
+  state.workflowList.selectedWorkflowFilters.taskQueues;
+export const selectedAlertsSelector = state =>
+  state.workflowList.selectedWorkflowFilters.alerts;
+export const isMyTaskSelectedSelector = state =>
+  !!state.workflowList.selectedWorkflowFilters.myTask;

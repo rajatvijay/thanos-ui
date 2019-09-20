@@ -2,109 +2,64 @@ import React, { Component } from "react";
 import { Layout } from "antd";
 import TaskQueueList from "./TaskQueueList";
 import AlertList from "./AlertList";
-import {
-  workflowFiltersActions,
-  workflowKindActions
-} from "../../../../js/actions";
 import { connect } from "react-redux";
 import { css } from "emotion";
-// import { taskQueueCount } from "../sidebarActions";
-import { getAllTaskQueuesThunk } from "../../thunks";
+import { getAllTaskQueuesThunk, applyWorkflowFilterThunk } from "../../thunks";
 import { injectIntl } from "react-intl";
 import KindDropdown from "./KindDropdown";
-import { taskQueuesSelector } from "../../selectors";
+import {
+  taskQueuesSelector,
+  alertsSelector,
+  selectedAlertsSelector,
+  selectedTaskQueuesSelector,
+  isMyTaskSelectedSelector
+} from "../../selectors";
 
 const { Sider } = Layout;
 
 class Sidebar extends Component {
-  state = {
-    activeFilter: []
-  };
+  toggleFilter = field => value => {
+    if (field === "taskQueues") {
+      const { selectedTaskQueues } = this.props;
+      if (selectedTaskQueues && selectedTaskQueues.tag === value.tag) {
+        // Remove case
+        this.props.applyWorkflowFilterThunk({ field, value: null });
+      } else {
+        // Apply case
+        this.props.applyWorkflowFilterThunk({ field, value });
+      }
+    }
 
-  componentDidMount() {
-    // TODO: Using service
-    // this.props.getAllTaskQueuesThunk();
-  }
+    if (field === "alerts") {
+      const { selectedAlerts } = this.props;
+      if (selectedAlerts && selectedAlerts.id === value.id) {
+        // Remove case
+        this.props.applyWorkflowFilterThunk({ field, value: null });
+      } else {
+        // Apply case
+        this.props.applyWorkflowFilterThunk({ field, value });
+      }
+    }
 
-  // TODO: Use the service method to set filter
-  setFilter = () => {
-    const payload = {
-      filterType: "alert_category",
-      filterValue: this.state.activeFilter
-    };
-    this.props.dispatch(workflowFiltersActions.setFilters(payload));
-  };
-
-  // componentDidUpdate(prevProps) {
-  //   const { workflowKind, selectedKindValue } = this.props;
-  //   const { workflowKind: prevWorkflowKind } = prevProps;
-
-  //   // TODO: See of this is required
-  //   if (workflowKind.workflowKind && !prevWorkflowKind.workflowKind) {
-  //     // So, we just got workflow kinds populated.
-  //     // Now, we'll check if there's no selected workflow kind
-  //     // Or if the one selected is not available anymore,
-  //     // in which case, we'll assign a default one.
-  //     if (
-  //       !selectedKindValue ||
-  //       !workflowKind.workflowKind.find(
-  //         workflow => workflow.id === selectedKindValue.id
-  //       )
-  //     ) {
-  //       this.props.dispatch(
-  //         workflowKindActions.setValue(workflowKind.workflowKind[0])
-  //       );
-  //     }
-  //   }
-  // }
-
-  // TODO: Combine into single setFitler method
-  onSelectAlert = value => {
-    if (this.state.activeFilter[0] === value.tag) {
-      this.setState({ activeFilter: [] }, function() {
-        this.setFilter();
-      });
-    } else {
-      this.setState({ activeFilter: [value.tag] }, function() {
-        this.setFilter();
-      });
+    if (field === "myTask") {
+      const { isMyTaskSelected } = this.props;
+      if (isMyTaskSelected) {
+        // Remove case
+        this.props.applyWorkflowFilterThunk({ field, value: null });
+      } else {
+        // Apply case
+        this.props.applyWorkflowFilterThunk({ field, value });
+      }
     }
   };
 
-  // TODO: Combine into single setFitler method
-  onSelectTask = value => {
-    const payload = {
-      filterType: "stepgroupdef",
-      filterValue: value ? [value.tag] : []
-    };
-    if (!!value)
-      this.props.dispatch(workflowFiltersActions.setFilters(payload));
-    else this.props.dispatch(workflowFiltersActions.removeFilters(payload));
-  };
-
-  // TODO: Combine into single setFitler method
-  onSelectMyTask = tag => {
-    const payload = {
-      filterType: "user-step-tag",
-      filterValue: tag ? [tag] : []
-    };
-    this.props.dispatch(workflowFiltersActions.setFilters(payload));
-  };
-
-  get isMyTaskSelected() {
-    return (
-      this.props.workflowFilters["user-step-tag"] &&
-      this.props.workflowFilters["user-step-tag"].filterValue &&
-      this.props.workflowFilters["user-step-tag"].filterValue.length &&
-      this.props.workflowFilters["user-step-tag"].filterValue.includes(
-        "Assignee"
-      )
-    );
-  }
-
   render() {
-    // const { isError } = this.props.workflowAlertGroupCount;
-    const { taskQueues } = this.props;
+    const {
+      taskQueues,
+      alerts,
+      selectedTaskQueues,
+      isMyTaskSelected
+    } = this.props;
 
     return (
       <Sider
@@ -127,10 +82,7 @@ class Sidebar extends Component {
             position: fixed;
           `}
         >
-          <div className="logo" />
-
           <KindDropdown />
-
           <div
             style={{
               backgroundColor: "#104774",
@@ -144,24 +96,20 @@ class Sidebar extends Component {
               }
             `}
           >
-            <div>
-              <TaskQueueList
-                taskQueues={taskQueues.data}
-                loading={taskQueues.isLoading}
-                onSelectTask={this.onSelectTask}
-                onSelectMyTask={this.onSelectMyTask}
-                isMyTaskSelected={this.isMyTaskSelected}
-              />
-            </div>
+            <TaskQueueList
+              activeTaskQueue={selectedTaskQueues}
+              taskQueues={taskQueues.data}
+              loading={taskQueues.isLoading}
+              onClick={this.toggleFilter("taskQueues")}
+              onClickMyTask={this.toggleFilter("myTask")}
+              isMyTaskSelected={isMyTaskSelected}
+            />
 
-            {/* TODO: Fix this incrementaly */}
-            {/* <div style={{ display: isError ? "none" : "block" }}>
-              <AlertList
-                alerts={this.props.workflowAlertGroupCount.alert_details}
-                loading={this.props.workflowAlertGroupCount.loading}
-                onSelectAlert={this.onSelectAlert}
-              />
-            </div> */}
+            <AlertList
+              alerts={alerts.data}
+              loading={alerts.isLoading}
+              onClick={this.toggleFilter("alerts")}
+            />
           </div>
         </div>
       </Sider>
@@ -170,20 +118,16 @@ class Sidebar extends Component {
 }
 
 function mapStateToProps(state) {
-  const {
-    workflowKind, // TODO: Only used to set the default kind
-    workflowFilters,
-    workflowKindValue // TODO: Only for the selected kind
-  } = state;
   return {
-    workflowKind,
-    workflowFilters,
-    selectedKindValue: workflowKindValue.selectedKindValue, // TODO: remove this
-    taskQueues: taskQueuesSelector(state)
+    taskQueues: taskQueuesSelector(state),
+    alerts: alertsSelector(state),
+    selectedAlerts: selectedAlertsSelector(state),
+    selectedTaskQueues: selectedTaskQueuesSelector(state),
+    isMyTaskSelected: isMyTaskSelectedSelector(state)
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getAllTaskQueuesThunk }
+  { getAllTaskQueuesThunk, applyWorkflowFilterThunk }
 )(injectIntl(Sidebar));

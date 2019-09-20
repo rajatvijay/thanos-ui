@@ -3,12 +3,12 @@ import CountWidget from "./CountWidget";
 import styled from "@emotion/styled";
 import { Spin, Icon } from "antd";
 
-export function TaskQueue({ item, onSelect, isSelected }) {
+export function TaskQueue({ item, onClick, isSelected }) {
   return (
     <StyledTaskQueueContainer
       isSelected={isSelected}
       data-testid="task-queue-list-item"
-      onClick={() => onSelect(item)}
+      onClick={() => onClick(item)}
     >
       <span className="name">{item.name}</span>
       <WorkflowCounts
