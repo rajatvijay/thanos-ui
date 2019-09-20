@@ -13,7 +13,7 @@ import {
 import _ from "lodash";
 import { veryfiyClient } from "../../../js/utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
-import Sidebar from "../../sidebar/components/Sidebar";
+import Sidebar from "../../../modules/workflowList/sidebar/components/Sidebar";
 import Filter from "../filters/components/Filter";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
 import Permissions from "../../common/permissions/permissionsList";
