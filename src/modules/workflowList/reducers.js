@@ -63,27 +63,23 @@ function statuses(
     case GET_STATUSES_LIST:
       return {
         ...state,
-        statuses: {
-          isLoading: true
-        }
+
+        isLoading: true
       };
     case GET_STATUSES_LIST_SUCCESS:
       return {
         ...state,
-        statuses: {
-          isLoading: false,
-          error: null,
-          data: payload
-        }
+
+        isLoading: false,
+        error: null,
+        data: payload
       };
     case GET_STATUSES_LIST_FAILURE:
       return {
         ...state,
-        statuses: {
-          isLoading: false,
-          error: payload,
-          data: null
-        }
+        isLoading: false,
+        error: payload,
+        data: null
       };
     default:
       return state;
@@ -95,27 +91,21 @@ function regions(state = INITIAL_STATE.staticData.regions, { type, payload }) {
     case GET_REGIONS_LIST:
       return {
         ...state,
-        statuses: {
-          isLoading: true
-        }
+        isLoading: true
       };
     case GET_REGIONS_LIST_SUCCESS:
       return {
         ...state,
-        statuses: {
-          isLoading: false,
-          error: null,
-          data: payload
-        }
+        isLoading: false,
+        error: null,
+        data: payload
       };
     case GET_REGIONS_LIST_FAILURE:
       return {
         ...state,
-        statuses: {
-          isLoading: false,
-          error: payload,
-          data: null
-        }
+        isLoading: false,
+        error: payload,
+        data: null
       };
     default:
       return state;
@@ -130,27 +120,21 @@ function businessUnits(
     case GET_BUSINESS_UNITS_LIST:
       return {
         ...state,
-        statuses: {
-          isLoading: true
-        }
+        isLoading: true
       };
     case GET_BUSINESS_UNITS_LIST_SUCCESS:
       return {
         ...state,
-        statuses: {
-          isLoading: false,
-          error: null,
-          data: payload
-        }
+        isLoading: false,
+        error: null,
+        data: payload
       };
     case GET_BUSINESS_UNITS_LIST_FAILURE:
       return {
         ...state,
-        statuses: {
-          isLoading: false,
-          error: payload,
-          data: null
-        }
+        isLoading: false,
+        error: payload,
+        data: null
       };
     default:
       return state;

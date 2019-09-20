@@ -31,6 +31,9 @@ import workflowSearch from "./workflowSearch";
 import { permissions } from "../../modules/common/permissions/reducer";
 import { extraFilters } from "./extraFilters";
 
+// New module pattern
+import { workflowList } from "../../modules/workflowList";
+
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
   authentication,
@@ -66,7 +69,10 @@ const rootReducer = combineReducers({
   minimalUI,
   workflowSearch,
   permissions,
-  extraFilters
+  extraFilters,
+
+  // New module pattern
+  workflowList
 });
 
 export default rootReducer;

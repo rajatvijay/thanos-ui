@@ -54,7 +54,7 @@ export const getRegionsThunk = () => {
       throw error;
     }
 
-    dispatch(getRegionsListSuccess(regions));
+    dispatch(getRegionsListSuccess(regions.results));
     return regions;
   };
 };
@@ -70,7 +70,7 @@ export const getBusinessUnitsThunk = () => {
       throw error;
     }
 
-    dispatch(getBusinessUnitsListSuccess(businessUnits));
+    dispatch(getBusinessUnitsListSuccess(businessUnits.results));
     return businessUnits;
   };
 };

@@ -1,4 +1,4 @@
-import { makeActionCreator } from "./utils";
+import { makeActionCreator } from "../common/utils";
 import {
   GET_STATUSES_LIST,
   GET_REGIONS_LIST,

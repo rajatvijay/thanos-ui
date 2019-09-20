@@ -1,10 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import { Button, Input, Cascader, Divider, Icon } from "antd";
-import DropdownFilter from "./DropdownFilter";
+import FilterDropdown from "./FilterDropdown";
 import { connect } from "react-redux";
-import { css } from "emotion";
+// import { css } from "emotion";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { get as lodashGet } from "lodash";
+import {
+  getStatusesThunk,
+  getRegionsThunk,
+  getBusinessUnitsThunk
+} from "../../thunks";
+import { bindActionCreators } from "redux";
 
 const OPERATORS_TYPES = [
   {
@@ -40,212 +46,30 @@ const OPERATORS_TYPES = [
 ];
 
 class FilterPopup extends Component {
-  state = {
-    status: undefined,
-    region: undefined,
-    business_unit: undefined,
-    operator: undefined,
-    text: "",
-    field: undefined,
-    showError: false,
-    advFitlers: []
+  componentDidMount() {
+    this.props.getStatusesThunk();
+    this.props.getRegionsThunk();
+    this.props.getBusinessUnitsThunk();
+  }
+  handleBasicFilters = field => value => {
+    console.log(field, value);
   };
-
-  //CLEAR ALL ITEMS FROM ADVANCED FILTERS
-  onAdvClear = () => {
-    this.setState({ advFitlers: [] }, function() {
-      this.applyAdvFilters();
-    });
-    this.props.onModalClose();
-  };
-
-  onClear = () => {
-    this.props.onClear();
-    this.onAdvClear();
-  };
-
-  updateAdvanceFilterTextValue = e => {
-    const { value } = e.target;
-    this.setState({ text: value });
-  };
-
-  //ON ADVANCED FILTER APPLY EVENT
-  onApply = () => {
-    const { field, text, operator } = this.state;
-    const { onModalClose } = this.props;
-    const advFitlers = this.state.advFitlers;
-
-    if (field && text && operator) {
-      const fieldValue = field[field.length - 1];
-      const currentFitler = {
-        field: fieldValue,
-        operator: operator,
-        text: text
-      };
-
-      advFitlers.push(currentFitler);
-      this.setState({ advFitlers: advFitlers });
-      this.applyAdvFilters();
-      this.clearAdvancedFilterFileds();
-      this.setState({ showError: false });
-      onModalClose();
-    } else {
-      this.setState({ showError: true });
-    }
-  };
-
-  //CLEAR ADVANCED FILTER FILTEDS
-  clearAdvancedFilterFileds = () => {
-    this.setState({ field: null, operator: null, text: null });
-  };
-
-  //CONSTRUCST FILTER STIRNG FROM ADVANCED FILTER STATE AND DISPATCH
-  applyAdvFilters = () => {
-    let advFitlersString = "";
-
-    if (this.state.advFitlers.length > 0) {
-      this.state.advFitlers.forEach((filter, index) => {
-        const { field, text, operator } = filter;
-        if (index > 0) {
-          advFitlersString = advFitlersString.concat("|");
-        }
-        const currentFitler = `${field}__${operator}__${text}`;
-        advFitlersString = advFitlersString.concat(currentFitler);
-      });
-    }
-
-    this.props.applyFilters("answer", advFitlersString);
-  };
-
-  //REMOVE INDIVISUAL FILTER ITEM
-  removeAdvFilter = key => {
-    const { advFitlers } = this.state;
-    advFitlers.splice(key, 1);
-    this.setState({ advFitlers: advFitlers });
-    this.applyAdvFilters();
-  };
-
-  getStatusTypes = () => {
-    try {
-      const allStatuses = this.props.workflowFilterType.statusType;
-      const availableStatuses = lodashGet(
-        this.props,
-        "workflowFilters.kind.meta.available_statuses"
-      );
-      if (availableStatuses) {
-        // This will maintain the order of statuses as defined for the kind
-        return availableStatuses
-          .map(statusId => allStatuses.find(status => status.id === statusId))
-          .sort((a, b) => (a.label > b.label ? 1 : a.label < b.label ? -1 : 0));
-      }
-    } catch (e) {}
-    return [];
-    // previously it would show all statuses
-  };
-
-  onFilterChange = (key, value) => {
-    this.setState({ [key]: value });
-  };
-
   render() {
-    const {
-      workflowFilterType,
-      filterState,
-      onFilterChange,
-      onModalClose
-    } = this.props;
-
-    const {
-      fieldOptions,
-      status,
-      region,
-      business_unit,
-      showError
-    } = filterState;
-
-    const { operator, text, field } = this.state;
-
-    const { businessType, regionType } = workflowFilterType;
-
-    const custom_ui_labels = this.props.config.custom_ui_labels || {};
-
-    const regionPlaceholder =
-      custom_ui_labels["filterPlaceholders.Region"] ||
-      this.props.intl.formatMessage({
-        id: "workflowFiltersTranslated.filterPlaceholders.region"
-      });
-
-    const businessPlaceholder =
-      custom_ui_labels["filterPlaceholders.Business"] ||
-      this.props.intl.formatMessage({
-        id: "workflowFiltersTranslated.filterPlaceholders.business_unit"
-      });
-
+    const { staticData } = this.props;
+    const { statuses, regions, businessUnits } = staticData;
     return (
-      <div
-        style={{
-          height: "270px",
-          width: "975px",
-          backgroundColor: "#FFFFFF",
-          borderBottom: "1px solid #e8e8e8"
-        }}
-      >
-        <Divider style={{ marginTop: 7 }} />
-        <div
-          style={{
-            marginBottom: 12,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            paddingLeft: 28,
-            paddingRight: 28
-          }}
-        >
-          <Button
-            style={{ width: "70px", borderRadius: 3, marginRight: 12 }}
-            type="primary"
-            onClick={this.onApply}
-          >
-            <FormattedMessage id={"commonTextInstances.apply"} />
-          </Button>
-
-          <Button
-            style={{
-              width: "95px",
-              borderRadius: 3,
-              color: "#148cd6",
-              borderColor: "#148cd6",
-              marginRight: 12
-            }}
-            onClick={this.onClear}
-          >
-            <FormattedMessage id={"commonTextInstances.clear"} />
-          </Button>
-
-          <Button
-            style={{
-              width: "95px",
-              borderRadius: 3,
-              color: "#148cd6",
-              borderColor: "#148cd6",
-              marginRight: 12
-            }}
-            onClick={onModalClose}
-          >
-            <FormattedMessage id={"commonTextInstances.cancel"} />
-          </Button>
-
-          <p
-            style={{
-              color: "red",
-              display: showError ? "block" : "none",
-              textAlign: "center"
-            }}
-          >
-            <FormattedMessage
-              id={"workflowFiltersTranslated.advancedFilterMandatory"}
-            />
-          </p>
+      <div>
+        <BasicFilters
+          statuses={statuses}
+          regions={regions}
+          businessUnits={businessUnits}
+          onChange={this.handleBasicFilters}
+        />
+        <AdvancedFilters />
+        <div>
+          <Button type="primary">Apply</Button>
+          <Button>Clear All</Button>
+          <Button>Close</Button>
         </div>
       </div>
     );
@@ -253,20 +77,27 @@ class FilterPopup extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowFilterType, workflowFilters, config } = state;
+  const { workflowList, config } = state;
   return {
-    workflowFilterType,
-    workflowFilters,
+    staticData: workflowList.staticData,
     config
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(FilterPopup));
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    { getStatusesThunk, getRegionsThunk, getBusinessUnitsThunk },
+    dispatch
+  );
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectIntl(FilterPopup));
 
 /////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+// Utils
 
 const BasicFilters = injectIntl(
   ({
@@ -285,7 +116,7 @@ const BasicFilters = injectIntl(
         justifyContent: "space-between"
       }}
     >
-      <DropdownFilter
+      <FilterDropdown
         value={selectedStatus}
         data={statuses.data}
         loading={statuses.isLoading}
@@ -295,7 +126,7 @@ const BasicFilters = injectIntl(
         onChange={onChange("status")}
         searchable
       />
-      <DropdownFilter
+      <FilterDropdown
         value={selectedRegion}
         loading={regions.isLoading}
         data={regions.data}
@@ -305,7 +136,7 @@ const BasicFilters = injectIntl(
         onChange={onChange("region")}
         searchable
       />
-      <DropdownFilter
+      <FilterDropdown
         loading={businessUnits.isLoading}
         value={selectedBusinessUnit}
         data={businessUnits.data}
@@ -319,11 +150,12 @@ const BasicFilters = injectIntl(
   )
 );
 
-class AdvancedFilters extends Component {
+// TODO: Seems to have a lot of extra stylings
+class AdvancedFilters extends PureComponent {
   state = {
     currentAdvFiliter: {}
   };
-  handleApply = field => value => {
+  handleChange = field => value => {
     const { currentAdvFiliter } = this.state;
     const updatedCurrentAdvFilters = {
       ...currentAdvFiliter,
@@ -349,11 +181,11 @@ class AdvancedFilters extends Component {
   render() {
     const { advancedFilterOptions } = this.props;
     return (
-      <div style={{ marginTop: "20px", paddingLeft: 28, paddingRight: 28 }}>
+      <div style={{ marginTop: "20px" }}>
         <span
           style={{
             color: "#138BD6",
-            cursor: "pointer",
+            // cursor: "pointer",
             textTransform: "uppercase"
           }}
         >
@@ -368,32 +200,249 @@ class AdvancedFilters extends Component {
           }}
         >
           <Cascader
-            style={{ width: "100%", marginRight: "40px" }}
+            // style={{ flex: 1, marginRight: "40px" }}
             options={advancedFilterOptions}
-            onChange={this.handleApply("field")}
+            onChange={this.handleChange("field")}
             placeholder={
               <FormattedMessage id="workflowFiltersTranslated.pleaseSelectField" />
             }
           />
 
-          <DropdownFilter
+          <FilterDropdown
             data={OPERATORS_TYPES}
             placeholder={
               <FormattedMessage id="workflowFiltersTranslated.selectOperator" />
             }
             name="operator"
-            onChange={this.handleApply("operator")}
+            onChange={this.handleChange("operator")}
+            // style={{ flex: 1, paddingRight: "40px" }}
           />
 
           <Input
             placeholder={
               <FormattedMessage id="workflowFiltersTranslated.inputValue" />
             }
-            onChange={e => this.handleApply("text")(e.target.value)}
-            style={{ paddingLeft: 0, width: "100%", marginRight: "40px" }}
+            onChange={e => this.handleChange("text")(e.target.value)}
+            // style={{ flex: 1 }}
+            // style={{ paddingLeft: 0, width: "100%", marginRight: "40px" }}
           />
         </div>
       </div>
     );
   }
 }
+
+// class FilterPopup extends Component {
+//   state = {
+//     status: undefined,
+//     region: undefined,
+//     business_unit: undefined,
+//     operator: undefined,
+//     text: "",
+//     field: undefined,
+//     showError: false,
+//     advFitlers: []
+//   };
+
+//   //CLEAR ALL ITEMS FROM ADVANCED FILTERS
+//   onAdvClear = () => {
+//     this.setState({ advFitlers: [] }, function() {
+//       this.applyAdvFilters();
+//     });
+//     this.props.onModalClose();
+//   };
+
+//   onClear = () => {
+//     this.props.onClear();
+//     this.onAdvClear();
+//   };
+
+//   updateAdvanceFilterTextValue = e => {
+//     const { value } = e.target;
+//     this.setState({ text: value });
+//   };
+
+//   //ON ADVANCED FILTER APPLY EVENT
+//   onApply = () => {
+//     const { field, text, operator } = this.state;
+//     const { onModalClose } = this.props;
+//     const advFitlers = this.state.advFitlers;
+
+//     if (field && text && operator) {
+//       const fieldValue = field[field.length - 1];
+//       const currentFitler = {
+//         field: fieldValue,
+//         operator: operator,
+//         text: text
+//       };
+
+//       advFitlers.push(currentFitler);
+//       this.setState({ advFitlers: advFitlers });
+//       this.applyAdvFilters();
+//       this.clearAdvancedFilterFileds();
+//       this.setState({ showError: false });
+//       onModalClose();
+//     } else {
+//       this.setState({ showError: true });
+//     }
+//   };
+
+//   //CLEAR ADVANCED FILTER FILTEDS
+//   clearAdvancedFilterFileds = () => {
+//     this.setState({ field: null, operator: null, text: null });
+//   };
+
+//   //CONSTRUCST FILTER STIRNG FROM ADVANCED FILTER STATE AND DISPATCH
+//   applyAdvFilters = () => {
+//     let advFitlersString = "";
+
+//     if (this.state.advFitlers.length > 0) {
+//       this.state.advFitlers.forEach((filter, index) => {
+//         const { field, text, operator } = filter;
+//         if (index > 0) {
+//           advFitlersString = advFitlersString.concat("|");
+//         }
+//         const currentFitler = `${field}__${operator}__${text}`;
+//         advFitlersString = advFitlersString.concat(currentFitler);
+//       });
+//     }
+
+//     this.props.applyFilters("answer", advFitlersString);
+//   };
+
+//   //REMOVE INDIVISUAL FILTER ITEM
+//   removeAdvFilter = key => {
+//     const { advFitlers } = this.state;
+//     advFitlers.splice(key, 1);
+//     this.setState({ advFitlers: advFitlers });
+//     this.applyAdvFilters();
+//   };
+
+//   getStatusTypes = () => {
+//     try {
+//       const allStatuses = this.props.workflowFilterType.statusType;
+//       const availableStatuses = lodashGet(
+//         this.props,
+//         "workflowFilters.kind.meta.available_statuses"
+//       );
+//       if (availableStatuses) {
+//         // This will maintain the order of statuses as defined for the kind
+//         return availableStatuses
+//           .map(statusId => allStatuses.find(status => status.id === statusId))
+//           .sort((a, b) => (a.label > b.label ? 1 : a.label < b.label ? -1 : 0));
+//       }
+//     } catch (e) {}
+//     return [];
+//     // previously it would show all statuses
+//   };
+
+//   onFilterChange = (key, value) => {
+//     this.setState({ [key]: value });
+//   };
+
+//   render() {
+//     const {
+//       workflowFilterType,
+//       filterState,
+//       onFilterChange,
+//       onModalClose
+//     } = this.props;
+
+//     const {
+//       fieldOptions,
+//       status,
+//       region,
+//       business_unit,
+//       showError
+//     } = filterState;
+
+//     const { operator, text, field } = this.state;
+
+//     const { businessType, regionType } = workflowFilterType;
+
+//     const custom_ui_labels = this.props.config.custom_ui_labels || {};
+
+//     const regionPlaceholder =
+//       custom_ui_labels["filterPlaceholders.Region"] ||
+//       this.props.intl.formatMessage({
+//         id: "workflowFiltersTranslated.filterPlaceholders.region"
+//       });
+
+//     const businessPlaceholder =
+//       custom_ui_labels["filterPlaceholders.Business"] ||
+//       this.props.intl.formatMessage({
+//         id: "workflowFiltersTranslated.filterPlaceholders.business_unit"
+//       });
+
+//     return (
+//       <div
+//         style={{
+//           height: "270px",
+//           width: "975px",
+//           backgroundColor: "#FFFFFF",
+//           borderBottom: "1px solid #e8e8e8"
+//         }}
+//       >
+//         <BasicFilters />
+//         <AdvancedFilters />
+//         <Divider style={{ marginTop: 7 }} />
+//         <div
+//           style={{
+//             marginBottom: 12,
+//             display: "flex",
+//             flexDirection: "row",
+//             alignItems: "center",
+//             paddingLeft: 28,
+//             paddingRight: 28
+//           }}
+//         >
+//           <Button
+//             style={{ width: "70px", borderRadius: 3, marginRight: 12 }}
+//             type="primary"
+//             onClick={this.onApply}
+//           >
+//             <FormattedMessage id={"commonTextInstances.apply"} />
+//           </Button>
+
+//           <Button
+//             style={{
+//               width: "95px",
+//               borderRadius: 3,
+//               color: "#148cd6",
+//               borderColor: "#148cd6",
+//               marginRight: 12
+//             }}
+//             onClick={this.onClear}
+//           >
+//             <FormattedMessage id={"commonTextInstances.clear"} />
+//           </Button>
+
+//           <Button
+//             style={{
+//               width: "95px",
+//               borderRadius: 3,
+//               color: "#148cd6",
+//               borderColor: "#148cd6",
+//               marginRight: 12
+//             }}
+//             onClick={onModalClose}
+//           >
+//             <FormattedMessage id={"commonTextInstances.cancel"} />
+//           </Button>
+
+//           <p
+//             style={{
+//               color: "red",
+//               display: showError ? "block" : "none",
+//               textAlign: "center"
+//             }}
+//           >
+//             <FormattedMessage
+//               id={"workflowFiltersTranslated.advancedFilterMandatory"}
+//             />
+//           </p>
+//         </div>
+//       </div>
+//     );
+//   }
+// }
