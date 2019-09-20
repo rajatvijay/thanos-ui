@@ -307,12 +307,7 @@ class WorkflowDetails extends Component {
   };
 
   showBackButton = () => {
-    return (
-      this.props.workflow &&
-      this.props.workflow.workflow_family &&
-      this.props.workflow.workflow_family.length <= 1 &&
-      !this.props.minimalUI
-    );
+    return !this.props.minimalUI;
   };
 
   renderBackButton = () => {
