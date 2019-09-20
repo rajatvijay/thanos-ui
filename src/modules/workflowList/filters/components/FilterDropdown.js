@@ -4,7 +4,7 @@ import { Select } from "antd";
 
 const Option = Select.Option;
 
-class DropdownFilter extends Component {
+class FilterDropdown extends Component {
   renderOptions = () => {
     const { data } = this.props;
     return Array.isArray(data) ? this.makeOptionsCmp(data) : null;
@@ -62,4 +62,4 @@ class DropdownFilter extends Component {
   }
 }
 
-export default DropdownFilter;
+export default FilterDropdown;

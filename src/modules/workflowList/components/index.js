@@ -1,22 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Icon, Row } from "antd";
-import WorkflowList from "./workflow-list";
 import {
-  workflowActions,
+  Layout
+  // Icon, Row
+} from "antd";
+// import WorkflowList from "./workflow-list";
+import {
+  // workflowActions,
   workflowFiltersActions,
-  logout,
-  checkAuth,
-  workflowKindActions,
-  configActions
+  // logout,
+  checkAuth
+  // workflowKindActions,
+  // configActions
 } from "../../../js/actions";
 import _ from "lodash";
-import { veryfiyClient } from "../../../js/utils/verification";
+// import { veryfiyClient } from "../../../js/utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
-import Sidebar from "../../../modules/workflowList/sidebar/components/Sidebar";
+// import Sidebar from "../../../modules/workflowList/sidebar/components/Sidebar";
 import Filter from "../filters/components/Filter";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
 import Permissions from "../../common/permissions/permissionsList";
+import { css } from "emotion";
+import WorkflowToolbar from "../filters/components/WorkflowSorter";
 
 const { Content } = Layout;
 
@@ -296,34 +301,53 @@ class Workflow extends Component {
         check={Permissions.CAN_VIEW_DASHBOARD}
         deniedElement={this.notAllowedMessage}
       >
-        <Layout
+        <div
           // className="workflow-container inner-container"
-          style={{ minHeight: "100vh" }}
+          style={{ minHeight: "100vh", paddingTop: 60 }}
+          className={css`
+            min-height: 100vh;
+            /* Height of the header */
+            padding-top: 60px;
+            display: flex;
+          `}
         >
           {/* TODO: Pass only required props */}
-          <Sidebar {...this.props} />
-          <Layout>
-            <Content style={{ margin: "4vh 4vw" }}>
-              {/* <Row className="clear"> */}
-              <Filter />
+          {/* TODO: Incrementally uncomment it */}
+          {/* <Sidebar {...this.props} /> */}
+          <div
+            className={css`
+              flex-basis: 315px;
+            `}
+          >
+            Sidebar
+          </div>
+          <div
+            className={css`
+              flex: 1;
+            `}
+          >
+            {/* <Content style={{ margin: "4vh 4vw" }}> */}
+            {/* <Row className="clear"> */}
+            <WorkflowToolbar />
 
-              {
-                // <div className="clearfix">
-                // TODO: Send only the required props
-                <WorkflowList
-                  location={this.props.location}
-                  sortAscending={this.state.sortOrderAsc}
-                  profile={this.props.match}
-                  {...this.props}
-                  statusView={this.state.statusView}
-                  sortingEnabled={this.state.sortingEnabled}
-                />
-                // </div>
-              }
-              {/* </Row> */}
-            </Content>
-          </Layout>
-        </Layout>
+            {
+              // <div className="clearfix">
+              // TODO: Send only the required props
+              // TODO: Incrementally uncomment it
+              // <WorkflowList
+              //   location={this.props.location}
+              //   sortAscending={this.state.sortOrderAsc}
+              //   profile={this.props.match}
+              //   {...this.props}
+              //   statusView={this.state.statusView}
+              //   sortingEnabled={this.state.sortingEnabled}
+              // />
+              // </div>
+            }
+            {/* </Row> */}
+            {/* </Content> */}
+          </div>
+        </div>
       </Chowkidaar>
     );
   };

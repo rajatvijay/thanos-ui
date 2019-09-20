@@ -32,6 +32,9 @@ import { permissions } from "../../modules/common/permissions/reducer";
 import { extraFilters } from "./extraFilters";
 import isStepPrinting from "./stepPrinting";
 
+// New module pattern
+import { workflowList } from "../../modules/workflowList";
+
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
   authentication,
@@ -68,7 +71,10 @@ const rootReducer = combineReducers({
   workflowSearch,
   permissions,
   extraFilters,
-  isStepPrinting
+  isStepPrinting,
+
+  // New module pattern
+  workflowList
 });
 
 export default rootReducer;
