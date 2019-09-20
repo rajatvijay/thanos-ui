@@ -13,11 +13,11 @@ import {
   // workflowKindActions,
   // configActions
 } from "../../../js/actions";
-import _ from "lodash";
+// import _ from "lodash";
 // import { veryfiyClient } from "../../../js/utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
-// import Sidebar from "../../../modules/workflowList/sidebar/components/Sidebar";
-import Filter from "../filters/components/Filter";
+// import Sidebar from "../sidebar/components/Sidebar";
+// import Filter from "../filters/components/Filter";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
 import Permissions from "../../common/permissions/permissionsList";
 import { css } from "emotion";
@@ -319,7 +319,7 @@ class Workflow extends Component {
               flex-basis: 315px;
             `}
           >
-            Sidebar
+            {/* <Sidebar /> */}
           </div>
           <div
             className={css`
