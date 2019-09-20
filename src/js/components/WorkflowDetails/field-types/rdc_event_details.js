@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Table, Icon, Tabs, Tag } from "antd";
+import { Table, Tabs, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { getEventItem } from "./rdc_alert_metadata";
 import { event_status, status_filters } from "../EventStatuses";
 import { map, includes } from "lodash";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const TabPane = Tabs.TabPane;
@@ -375,6 +375,8 @@ const GetTabsFilter = props => {
   );
 };
 
+const IntlRDCEventDetailComponent = injectIntl(RDCEventDetailComponent);
+
 export const RDCEventDetails = props => {
-  return <RDCEventDetailComponent {...props} />;
+  return <IntlRDCEventDetailComponent {...props} />;
 };

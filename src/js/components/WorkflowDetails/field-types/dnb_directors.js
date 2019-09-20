@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Icon, Tag } from "antd";
+import { Table, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";

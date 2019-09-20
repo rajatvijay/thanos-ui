@@ -138,7 +138,9 @@ class AuditList extends Component {
       },
       activityLoading: true,
       initialLoad: true,
-      logErrorCode: null
+      logErrorCode: null,
+      isLoading: false,
+      hasMore: true
     };
   }
 
@@ -150,6 +152,11 @@ class AuditList extends Component {
           ","
         )}`;
 
+    this.setState({
+      isLoading: true,
+      hasMore: false
+    });
+
     const requestOptions = {
       method: "GET",
       headers: authHeader.get(),
@@ -159,46 +166,44 @@ class AuditList extends Component {
     fetch(url, requestOptions)
       .then(response => {
         if (!response.ok) {
-          this.setState({
-            logErrorCode: response.status
-          });
           if (response.status === 403 || response.status === 401) {
             userUtilities.postLogoutAction({ addNextURL: true });
           }
+          this.setState({
+            logErrorCode: response.status,
+            isLoading: false
+          });
           throw Error(response.statusText);
         } else {
           response.json().then(data => {
             this.appendData(data);
           });
+          this.setState({
+            logErrorCode: null,
+            isLoading: false
+          });
         }
       })
       .catch(err => {
-        // openNotificationWithIcon({
-        //   type: "error",
-        //   message: "Error in getting activity logs!"
-        // });
+        this.setState({
+          isLoading: false
+        });
       });
   };
 
   appendData = body => {
     const oldData = this.state.data.results;
-    const newData = body;
-    newData.results = oldData.concat(newData.results);
+    let newData = [];
+    newData = [...oldData, ...body.results];
     this.setState({
-      data: newData,
+      data: {
+        results: newData,
+        next: body.next
+      },
       activityLoading: false,
-      initialLoad: false
+      initialLoad: false,
+      hasMore: body.next ? true : false
     });
-  };
-
-  hasMore = () => {
-    let _hasMore = false;
-    if (this.state.initialLoad) {
-      _hasMore = true;
-    } else {
-      _hasMore = !!this.state.data.next; // next can be null, undefined or a string
-    }
-    return _hasMore;
   };
 
   render = () => {
@@ -238,9 +243,24 @@ class AuditList extends Component {
           <div>
             <AuditContent
               data={this.state.data}
-              hasMore={this.hasMore}
+              hasMore={this.state.hasMore}
               loadData={this.loadData}
+              isLoading={this.state.isLoading}
             />
+            {this.state.isLoading ? (
+              <div
+                className="loader"
+                key={0}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                <Icon type={"loading"} />
+              </div>
+            ) : null}
           </div>
         );
       }
@@ -257,7 +277,15 @@ AuditList.propTypes = {
   logType: PropTypes.string.isRequired
 };
 
-const ActivityLogSimple = ({ item }) => {
+const Timestamp = React.memo(({ timestamp }) => (
+  <span className="small text-light">
+    <Tooltip title={moment(new Date(timestamp)).format()}>
+      <Moment fromNow>{timestamp}</Moment>
+    </Tooltip>
+  </span>
+));
+
+const ActivityLogSimple = React.memo(({ item }) => {
   return (
     <div>
       <a className="text-medium text-base" href={"mailto:" + item.actor.email}>
@@ -265,16 +293,12 @@ const ActivityLogSimple = ({ item }) => {
       </a>{" "}
       {item.action.type} {item.object.name}
       <br />
-      <span className="small text-light">
-        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
-          <Moment fromNow>{item.actiontime.datetime}</Moment>
-        </Tooltip>
-      </span>
+      <Timestamp timestamp={item.actiontime.datetime} />
     </div>
   );
-};
+});
 
-const ActivityLogEmail = ({ item }) => {
+const ActivityLogEmail = React.memo(({ item }) => {
   return (
     <p className="pd-left-sm">
       Email{" "}
@@ -284,14 +308,10 @@ const ActivityLogEmail = ({ item }) => {
         {item.actor.email}
       </a>
       <br />
-      <span className="small text-light">
-        <Tooltip title={moment(item.actiontime.humanize_time).format()}>
-          <Moment fromNow>{item.actiontime.datetime}</Moment>
-        </Tooltip>
-      </span>
+      <Timestamp timestamp={item.actiontime.datetime} />
     </p>
   );
-};
+});
 
 class ActivityLogCollapsible extends Component {
   constructor(props) {
@@ -342,14 +362,8 @@ const AuditContent = props => {
       <InfiniteScroll
         pageStart={0}
         loadMore={props.loadData}
-        hasMore={props.hasMore()}
-        loader={
-          <div className="loader" key={0}>
-            <Icon type={"loading"} />
-          </div>
-        }
+        hasMore={props.hasMore && !props.isLoading}
         useWindow={false}
-        initialLoad={true}
       >
         <Timeline>
           {_.map(props.data.results, function(item, index) {

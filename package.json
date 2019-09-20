@@ -12,8 +12,8 @@
     "downloadjs": "^1.4.7",
     "emotion": "^10.0.9",
     "jest-dom": "^3.4.0",
-    "jquery": "^3.3.1",
-    "lodash": "^4.17.11",
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.13",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.25",
     "node-less-chokidar": "^0.1.2",
@@ -51,12 +51,18 @@
     "test:coverage": "react-scripts test --coverage",
     "rwstart": "react-app-rewired start",
     "rwbuild": "react-app-rewired build",
-    "rwtest": "react-app-rewired test --env=jsdom"
+    "rwtest": "react-app-rewired test --env=jsdom",
+    "lint": "npx eslint src --max-warnings=0"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "devDependencies": {
+    "eslint-plugin-flowtype": "^4.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.0.1",
     "husky": "^2.3.0",
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",

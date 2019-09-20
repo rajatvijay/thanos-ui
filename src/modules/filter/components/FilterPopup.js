@@ -157,7 +157,6 @@ class FilterPopup extends Component {
     } = this.props;
 
     const {
-      visible,
       fieldOptions,
       status,
       region,
@@ -168,6 +167,20 @@ class FilterPopup extends Component {
     const { operator, text, field } = this.state;
 
     const { businessType, regionType } = workflowFilterType;
+
+    const custom_ui_labels = this.props.config.custom_ui_labels || {};
+
+    const regionPlaceholder =
+      custom_ui_labels["filterPlaceholders.Region"] ||
+      this.props.intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.region"
+      });
+
+    const businessPlaceholder =
+      custom_ui_labels["filterPlaceholders.Business"] ||
+      this.props.intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.business_unit"
+      });
 
     return (
       <div
@@ -204,9 +217,7 @@ class FilterPopup extends Component {
             name="region"
             value={region}
             data={regionType.results}
-            placeholder={this.props.intl.formatMessage({
-              id: "workflowFiltersTranslated.filterPlaceholders.region"
-            })}
+            placeholder={regionPlaceholder}
             onFilterChange={onFilterChange}
             searchable
           />
@@ -215,9 +226,7 @@ class FilterPopup extends Component {
             name="business_unit"
             value={business_unit}
             data={businessType.results}
-            placeholder={this.props.intl.formatMessage({
-              id: "workflowFiltersTranslated.filterPlaceholders.business_unit"
-            })}
+            placeholder={businessPlaceholder}
             onFilterChange={onFilterChange}
             searchable
           />
@@ -373,10 +382,11 @@ class FilterPopup extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowFilterType, workflowFilters } = state;
+  const { workflowFilterType, workflowFilters, config } = state;
   return {
     workflowFilterType,
-    workflowFilters
+    workflowFilters,
+    config
   };
 }
 

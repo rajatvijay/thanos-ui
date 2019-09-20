@@ -141,7 +141,7 @@ class FilterDropdown extends Component {
     return (
       <StyledListContainer>
         {workflowKind.map(kind => (
-          <StyledRelativeLi>
+          <StyledRelativeLi key={kind.id}>
             <FiltersHeading onClick={() => this.handleSelectedKind(kind)}>
               {kind.name}
             </FiltersHeading>

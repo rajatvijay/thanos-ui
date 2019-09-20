@@ -251,11 +251,7 @@ class WorkflowItem extends React.Component {
             dispatch={this.props.dispatch}
             statusView={this.props.statusView}
             hasChildren={hasChildren}
-            fieldExtra={
-              this.props.field && this.props.field.definition.extra
-                ? this.props.field.definition.extra
-                : null
-            }
+            fieldExtra={this.props.fieldExtra}
             addComment={this.props.addComment || null}
             showCommentIcon={this.props.showCommentIcon}
             isExpanded={this.state.opened}

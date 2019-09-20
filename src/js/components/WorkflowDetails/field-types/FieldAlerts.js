@@ -4,17 +4,17 @@ import { css } from "emotion";
 
 const FieldAlerts = ({ alerts }) => {
   if (alerts.length < 3) {
-    return alerts.map(function(item) {
-      return <FieldAlertItem alert={item} />;
-    });
+    return alerts.map(item => (
+      <FieldAlertItem key={item.alert.id} alert={item} />
+    ));
   }
 
   const first3Alerts = alerts.slice(0, 3);
   return (
     <>
-      {first3Alerts.map(function(item) {
-        return <FieldAlertItem alert={item} />;
-      })}
+      {first3Alerts.map(item => (
+        <FieldAlertItem key={item.alert.id} alert={item} />
+      ))}
       <Popover
         trigger="click"
         content={alerts.map(function(item) {
@@ -32,7 +32,6 @@ export default FieldAlerts;
 const FieldAlertItem = ({ alert }) => {
   return (
     <Tag
-      key={alert.alert.id}
       style={{ backgroundColor: alert.alert.category.color_label }}
       className={css`
         color: white;

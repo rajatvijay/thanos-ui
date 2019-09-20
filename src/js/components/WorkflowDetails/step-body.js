@@ -119,7 +119,11 @@ class StepBody extends Component {
           overlay={
             <StepAssignmentUsers
               onSelectUser={user =>
-                postStepUser({ step: stepId, user: user.id })
+                postStepUser({
+                  step: stepId,
+                  user: user.id,
+                  getStepUserTag: this.props.getStepUserTag
+                })
               }
               users={stepUsers[stepId].data}
             />
@@ -141,24 +145,29 @@ class StepBody extends Component {
       return null;
     }
   }
+  shouldDisplayPDFModal = () => {
+    const stepId = this.props.stepId;
+    return (
+      _.get(this.props.currentStepFields, [
+        stepId,
+        "currentStepFields",
+        "definition",
+        "extra",
+        "display_pdf_modal"
+      ]) || false
+    );
+  };
 
   componentDidUpdate(previousProps) {
     const previousStepTag = lodashGet(
       previousProps,
-      `currentStepFields[${
-        previousProps.stepId
-      }].currentStepFields.definition_tag`
+      `currentStepFields[${previousProps.stepId}].currentStepFields.definition_tag`
     );
     const currentStepTag = lodashGet(
       this.props,
       `currentStepFields[${this.props.stepId}].currentStepFields.definition_tag`
     );
-
-    if (
-      previousStepTag !== currentStepTag &&
-      // TODO: Make this config driven, VET-5412
-      currentStepTag === "generate_step"
-    ) {
+    if (previousStepTag !== currentStepTag && this.shouldDisplayPDFModal()) {
       this.setState({ showWorkflowPDFModal: true });
     }
   }
@@ -229,7 +238,17 @@ class StepBody extends Component {
                     deleteStepUser(stepId, stepUsers[stepId].user.id)
                   }
                 >
-                  {stepUsers[stepId].user.user_full_name}
+                  <span>
+                    <i
+                      className="material-icons t-18 text-middle"
+                      style={{ marginRight: 4 }}
+                    >
+                      person
+                    </i>
+                    {stepUsers[stepId].user.user_full_name
+                      ? stepUsers[stepId].user.user_full_name
+                      : stepUsers[stepId].user.user_email}
+                  </span>
                 </Tag>
               )}
 
@@ -307,7 +326,13 @@ class StepBody extends Component {
             }}
           />
         )}
-        <Row style={{ padding: "29px 44px 27px 37px" }}>
+        <Row
+          style={{
+            padding: "29px 44px 27px 37px",
+            alignItems: "center",
+            display: "flex"
+          }}
+        >
           <Col span={16}>
             <span className="t-18 text-black">
               {displayProfile
@@ -434,23 +459,23 @@ const LockedAlertComponent = React.memo(
       );
 
       // Let's go through each step group looking for incomplete steps
-      stepGroups.map(stepGroup => {
+      stepGroups.forEach(stepGroup => {
         // Now lets find the incomplete dependent steps that exist in this step group
-        stepGroup.steps.map(step => {
+        stepGroup.steps.forEach(step => {
           const key = step.definition.toString();
           if (!step.completed_at && dependentStepsDefinitionIds.includes(key)) {
             // We gave one of the incomplete dependent steps.
             // Create a link to that step.
-            links[key] = `/workflows/instances/${workflowId}?group=${
-              stepGroup.id
-            }&step=${step.id}`;
+            links[
+              key
+            ] = `/workflows/instances/${workflowId}?group=${stepGroup.id}&step=${step.id}`;
           }
         });
       });
 
       // Saving the links in state.
       setLinks(links);
-    }, dependentSteps); // Will not update until dependentSteps' reference changes
+    }, [dependentSteps, stepGroups, workflowId]); // Will not update until one of these dependencies' reference changes
 
     const stepLabels = dependentSteps.map(step =>
       links[step.value] ? (
