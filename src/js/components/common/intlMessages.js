@@ -219,7 +219,8 @@ export default {
       somethingWentWrong: "Something went wrong.",
       errorCode: "Error Code: {errorCode}",
       ws001:
-        "There’s a problem with the configuration of workflow, please check with the site admin."
+        "There’s a problem with the configuration of workflow, please check with the site admin.",
+      ws002: "Workflow with ID {workflowId} is unavailable"
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -629,7 +630,8 @@ export default {
       somethingWentWrong: "Quelque chose s'est mal passé.",
       errorCode: "Código de error: {errorCode}",
       ws001:
-        "Hay un problema con la configuración del flujo de trabajo, consulte con el administrador del sitio"
+        "Hay un problema con la configuración del flujo de trabajo, consulte con el administrador del sitio",
+      ws002: "El flujo de trabajo con ID {workflowId} no está disponible"
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
@@ -1052,7 +1054,8 @@ export default {
       somethingWentWrong: "Algo salió mal.",
       errorCode: "Code d'erreur: {errorCode}",
       ws001:
-        "Il y a un problème avec la configuration du workflow, veuillez vérifier avec l'administrateur du site."
+        "Il y a un problème avec la configuration du workflow, veuillez vérifier avec l'administrateur du site.",
+      ws002: "Le workflow avec l'ID {workflowId} n'est pas disponible"
     },
     loginPageInstances: {
       oneTimeLink: "Entrez votre adresse de courriel professionnelle",
