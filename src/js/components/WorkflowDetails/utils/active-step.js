@@ -78,7 +78,11 @@ export const getStepAndGroupFromConfig = (tag, stepGroups) => {
   return { stepId: null, groupId: null };
 };
 
-export const getPreviousAndNextSteps = (
+// UN-BORN/UN-USED CHILD @rajatvijay
+// This method is not being used anywhere
+// But keeping it since
+// could be used later
+export const getNextStepAndGroup = (
   currentGroupId,
   currentStepId,
   allVisibleStepGroups

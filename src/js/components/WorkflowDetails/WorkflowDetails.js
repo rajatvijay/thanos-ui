@@ -110,7 +110,11 @@ class WorkflowDetails extends Component {
   }
 
   get defaultStepTag() {
-    return lodashGet(this.props, "workflowItem.definition.default_step", null);
+    return lodashGet(
+      this.props,
+      "workflowItem.definition.default_step_tag",
+      null
+    );
   }
 
   get worklfowHead() {
@@ -268,7 +272,7 @@ class WorkflowDetails extends Component {
   };
 
   // Update the new step and group when the user scrolls to it
-  handlTouchTop = (stepId, groupId) => {
+  handleTouchTop = (stepId, groupId) => {
     if (!stepId && !groupId) {
       return this.handleUpdateOfActiveStep(null, null);
     }
@@ -340,12 +344,12 @@ class WorkflowDetails extends Component {
     return (
       <WhenInViewHOC
         id="step_body_0_0"
-        onInViewCallback={() => this.handlTouchTop(null, null)}
+        onInViewCallback={() => this.handleTouchTop(null, null)}
         extra={null}
       >
         <LazyLoadHOC
           onInViewCallback={() => this.handleOnInView(null, null)}
-          defaultElem={this.nextStepPlaceholder}
+          defaultElement={this.nextStepPlaceholder}
           threshold={0.1}
           rootStyle={{ marginBottom: 40 }}
         >
@@ -369,14 +373,14 @@ class WorkflowDetails extends Component {
       return group.steps.map(step => (
         <WhenInViewHOC
           id={`step_body_${group.id}_${step.id}`}
-          onInViewCallback={() => this.handlTouchTop(step.id, group.id)}
+          onInViewCallback={() => this.handleTouchTop(step.id, group.id)}
           extra={step.name}
         >
           <LazyLoadHOC
             threshold={0.2}
             onInViewCallback={() => this.handleOnInView(step.id, group.id)}
             key={step.id}
-            defaultElem={this.nextStepPlaceholder}
+            defaultElement={this.nextStepPlaceholder}
             rootStyle={{ marginBottom: 40 }}
           >
             <StepBody

@@ -40,11 +40,11 @@ class LazyLoadHOC extends Component {
   }
 
   render() {
-    const { children, defaultElem, rootStyle = {} } = this.props;
+    const { children, defaultElement, rootStyle = {} } = this.props;
     const { inView } = this.state;
     return (
       <div style={rootStyle} ref={this.rootRef}>
-        {inView ? children : defaultElem}
+        {inView ? children : defaultElement}
       </div>
     );
   }
