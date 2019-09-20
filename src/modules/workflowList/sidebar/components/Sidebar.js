@@ -12,6 +12,7 @@ import { css } from "emotion";
 import { getAllTaskQueuesThunk } from "../../thunks";
 import { injectIntl } from "react-intl";
 import KindDropdown from "./KindDropdown";
+import { taskQueuesSelector } from "../../selectors";
 
 const { Sider } = Layout;
 
@@ -34,28 +35,28 @@ class Sidebar extends Component {
     this.props.dispatch(workflowFiltersActions.setFilters(payload));
   };
 
-  componentDidUpdate(prevProps) {
-    const { workflowKind, selectedKindValue } = this.props;
-    const { workflowKind: prevWorkflowKind } = prevProps;
+  // componentDidUpdate(prevProps) {
+  //   const { workflowKind, selectedKindValue } = this.props;
+  //   const { workflowKind: prevWorkflowKind } = prevProps;
 
-    // TODO: See of this is required
-    if (workflowKind.workflowKind && !prevWorkflowKind.workflowKind) {
-      // So, we just got workflow kinds populated.
-      // Now, we'll check if there's no selected workflow kind
-      // Or if the one selected is not available anymore,
-      // in which case, we'll assign a default one.
-      if (
-        !selectedKindValue ||
-        !workflowKind.workflowKind.find(
-          workflow => workflow.id === selectedKindValue.id
-        )
-      ) {
-        this.props.dispatch(
-          workflowKindActions.setValue(workflowKind.workflowKind[0])
-        );
-      }
-    }
-  }
+  //   // TODO: See of this is required
+  //   if (workflowKind.workflowKind && !prevWorkflowKind.workflowKind) {
+  //     // So, we just got workflow kinds populated.
+  //     // Now, we'll check if there's no selected workflow kind
+  //     // Or if the one selected is not available anymore,
+  //     // in which case, we'll assign a default one.
+  //     if (
+  //       !selectedKindValue ||
+  //       !workflowKind.workflowKind.find(
+  //         workflow => workflow.id === selectedKindValue.id
+  //       )
+  //     ) {
+  //       this.props.dispatch(
+  //         workflowKindActions.setValue(workflowKind.workflowKind[0])
+  //       );
+  //     }
+  //   }
+  // }
 
   // TODO: Combine into single setFitler method
   onSelectAlert = value => {
@@ -103,6 +104,7 @@ class Sidebar extends Component {
 
   render() {
     // const { isError } = this.props.workflowAlertGroupCount;
+    const { taskQueues } = this.props;
 
     return (
       <Sider
@@ -143,15 +145,13 @@ class Sidebar extends Component {
             `}
           >
             <div>
-              {/* <TaskQueueList
-                count={this.props.count}
-                activeTaskQueue={this.props.workflowFilters}
-                taskQueues={this.props.workflowGroupCount.stepgroupdef_counts}
-                loading={this.props.workflowAlertGroupCount.loading}
+              <TaskQueueList
+                taskQueues={taskQueues.data}
+                loading={taskQueues.isLoading}
                 onSelectTask={this.onSelectTask}
                 onSelectMyTask={this.onSelectMyTask}
                 isMyTaskSelected={this.isMyTaskSelected}
-              /> */}
+              />
             </div>
 
             {/* TODO: Fix this incrementaly */}
@@ -173,14 +173,13 @@ function mapStateToProps(state) {
   const {
     workflowKind, // TODO: Only used to set the default kind
     workflowFilters,
-    workflowKindValue, // TODO: Only for the selected kind
-    taskQueueCount // TODO: Only for the count of it
+    workflowKindValue // TODO: Only for the selected kind
   } = state;
   return {
     workflowKind,
     workflowFilters,
-    selectedKindValue: workflowKindValue.selectedKindValue,
-    count: 2 // TODO: Add real number
+    selectedKindValue: workflowKindValue.selectedKindValue, // TODO: remove this
+    taskQueues: taskQueuesSelector(state)
   };
 }
 

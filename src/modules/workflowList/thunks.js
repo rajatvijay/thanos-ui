@@ -28,7 +28,6 @@ import {
   getAllTaskQueuesFailure,
   setWorkflowFilter
 } from "./actionCreators";
-import { getDefaultKind } from "./utils";
 
 export const getStatusesThunk = () => {
   return async dispatch => {
@@ -88,8 +87,8 @@ export const getAllKindsThunk = () => {
       throw error;
     }
 
-    const defaultKind = getDefaultKind(kinds);
-    dispatch(setWorkflowFilter({ field: "kind", value: defaultKind }));
+    const defaultKind = kinds.results[0];
+    dispatch(applyWorkflowFilterThunk({ field: "kind", value: defaultKind }));
     dispatch(getAllKindsSuccess(kinds));
     return kinds;
   };
@@ -118,11 +117,11 @@ export const getAllTaskQueuesThunk = kindTag => {
     const [error, taskQueues] = await to(getAllTaskQueues$$(kindTag));
 
     if (error) {
-      dispatch(getAllTaskQueuesSuccess(error.message));
+      dispatch(getAllTaskQueuesFailure(error.message));
       throw error;
     }
 
-    dispatch(getAllTaskQueuesFailure(taskQueues));
+    dispatch(getAllTaskQueuesSuccess(taskQueues.stepgroupdef_counts));
     return taskQueues;
   };
 };
@@ -130,6 +129,11 @@ export const getAllTaskQueuesThunk = kindTag => {
 export function applyWorkflowFilterThunk(filter) {
   return async dispatch => {
     dispatch(setWorkflowFilter(filter));
+
     // TODO: Add logic for calling the API with filters
+
+    if (filter.field === "kind") {
+      dispatch(getAllTaskQueuesThunk(filter.value.tag));
+    }
   };
 }

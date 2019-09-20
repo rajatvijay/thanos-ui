@@ -84,3 +84,14 @@ export function getAllTaskQueues$$(kindTag) {
     requestOptions
   ).then(handleResponse);
 }
+
+export function getMyTasksCount$$() {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+  return APIFetch(`get-my-tagged-incomplete-steps/`, requestOptions).then(
+    handleResponse
+  );
+}

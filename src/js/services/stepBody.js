@@ -15,8 +15,8 @@ export const stepBodyService = {
   postStepUser,
   getStepUsers,
   deleteStepUser,
-  getAssignedUser,
-  getMyTasksCount
+  getAssignedUser
+  // getMyTasksCount
 };
 
 function postStepUser(payload) {
@@ -67,13 +67,13 @@ function getAssignedUser(stepId) {
   );
 }
 
-function getMyTasksCount() {
-  const requestOptions = {
-    method: "GET",
-    headers: authHeader.get(),
-    credentials: "include"
-  };
-  return APIFetch(`get-my-tagged-incomplete-steps/`, requestOptions).then(
-    handleResponse
-  );
-}
+// function getMyTasksCount() {
+//   const requestOptions = {
+//     method: "GET",
+//     headers: authHeader.get(),
+//     credentials: "include"
+//   };
+//   return APIFetch(`get-my-tagged-incomplete-steps/`, requestOptions).then(
+//     handleResponse
+//   );
+// }
