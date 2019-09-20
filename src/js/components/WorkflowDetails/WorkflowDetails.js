@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout, Tooltip } from "antd";
+import { Layout } from "antd";
 import SidebarView from "../../../modules/workflows/sidebar/components";
-import _ from "lodash";
 import StepBody from "./step-body.js";
 import { history } from "../../_helpers";
 import {
@@ -16,148 +15,211 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import { currentActiveStep, getStepId } from "./utils/active-step";
+import { getStepAndGroupFromConfig } from "./utils/active-step";
+import LazyLoadHOC from "./LazyLoadHOC";
+import WhenInViewHOC from "./WhenInViewHOC";
+import { css } from "emotion";
 
 const { Content } = Layout;
 
 class WorkflowDetails extends Component {
-  constructor(props) {
-    super(props);
-    const { minimalUI, setWorkflowKeys } = props;
-    const params = new URL(document.location).searchParams;
+  state = {
+    currentGroupId: null,
+    currentStepId: null,
+    hasLoadedAllData: false,
+    stepUserTagData: []
+  };
 
-    const groupId = params.get("group");
-    const stepId = params.get("step");
+  ////////////////////////////////////////////////////////////////////////////////
+  // Lifecycle Methods
 
-    setWorkflowKeys({ workflowId: this.workflowId, stepId, groupId });
+  componentDidMount() {
+    // Get basic details about the workflow
+    const basicWorkflowDetailsPromise = this.props.dispatch(
+      workflowDetailsActions.getById(this.workflowId)
+    );
 
-    this.state = {
-      newWorkflow: params.get("new") === "true",
-      currentStep: null,
-      // TODO: Check why we need groupId check
-      displayProfile: minimalUI && this.lcData.length ? true : !groupId,
-      stepUserTagData: []
+    // Get all steps
+    const stepsDataPromise = this.props.dispatch(
+      workflowDetailsActions.getStepGroup(this.workflowId)
+    );
+
+    this.getStepUserTag();
+
+    Promise.all([basicWorkflowDetailsPromise, stepsDataPromise]).then(() => {
+      // The component has been re-rendered here with the data from the API
+      // Think :tongue_stuck_out:
+      const {
+        stepId: currentStepId,
+        groupId: currentGroupId
+      } = this.decideCurrentStep();
+
+      this.setState({ hasLoadedAllData: true }, () => {
+        // To update state and do more side effects
+        this.scrollElementIntoView(currentGroupId, currentStepId);
+      });
+    });
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Getters
+  get stepGroups() {
+    return lodashGet(
+      this.props,
+      `workflowDetails["${this.workflowId}"].workflowDetails.stepGroups.results`,
+      []
+    ).filter(group => !!group.steps.length);
+  }
+
+  get lcData() {
+    const { minimalUI, workflowItem, workflowDetailsHeader } = this.props;
+
+    const workflow = minimalUI
+      ? workflowItem
+      : lodashGet(workflowDetailsHeader, this.workflowId, null);
+
+    // If we get a null in workflow, we should return [].
+    if (!workflow) return [];
+
+    // Check if we don't have any lc_data at all, then we return [] as well.
+    if (!Array.isArray(workflow.lc_data) || workflow.lc_data.length === 0)
+      return [];
+
+    // finally we check if we have something worth showing.
+    const displayData = workflow.lc_data.filter(
+      lc_data => lc_data.value && lc_data.display_type === "normal"
+    );
+
+    return displayData;
+  }
+
+  get workflowId() {
+    return (
+      this.props.workflowIdFromPropsForModal ||
+      parseInt(this.props.match.params.id, 10)
+    );
+  }
+
+  get stepAndGroupFromURL() {
+    const searchString = lodashGet(this.props, "location.search", "");
+    const urlParams = new URLSearchParams(searchString);
+    return {
+      stepId: urlParams.get("step"),
+      groupId: urlParams.get("group")
     };
   }
 
-  getStepUserTag = () => {
-    workflowService
-      .getStepUserTagDetail(this.props.workflowId)
-      .then(response => {
-        this.setState({
-          stepUserTagData: response.results
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  componentDidMount = () => {
-    this.getStepUserTag();
-  };
-
-  get stepGroups() {
-    return _.get(
+  get defaultStepTag() {
+    return lodashGet(
       this.props,
-      `workflowDetails["${this.workflowId}"].workflowDetails.stepGroups`,
+      "workflowItem.definition.default_step_tag",
       null
     );
   }
-  componentDidUpdate = prevProps => {
-    const { match, minimalUI, workflowKeys } = this.props;
 
-    const { displayProfile, newWorkflow } = this.state;
-    const params = new URL(document.location).searchParams;
-    const groupId = params.get("group");
-    const stepId = params.get("step");
-    //SET WORKFLOW ID FROM ROUTER
-    const workflowId = this.workflowId;
-    const stepGroups = this.stepGroups;
-    if (
-      groupId && // these can be null when new Child WF is created
-      stepId && // which has params ?new=true, until next refresh
-      !minimalUI &&
-      match &&
-      workflowKeys[workflowId] &&
-      workflowKeys[workflowId].stepId !== stepId &&
-      workflowKeys[workflowId].groupId !== groupId
-    ) {
-      this.handleUpdateOfActiveStep(groupId, stepId);
-      return;
+  get worklfowHead() {
+    const { minimalUI, workflowItem } = this.props;
+    return minimalUI
+      ? workflowItem
+      : lodashGet(
+          this.props,
+          `workflowDetailsHeader[${this.workflowId}]`,
+          null
+        );
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Helpers
+
+  // This is one big ass method to decide what step should be rendered
+  decideCurrentStep = () => {
+    const {
+      stepId: stepIdFromURL,
+      groupId: groupIdFromURL
+    } = this.stepAndGroupFromURL;
+
+    // Always give first priority to the URL params
+    if (stepIdFromURL && groupIdFromURL) {
+      return {
+        stepId: stepIdFromURL,
+        groupId: groupIdFromURL
+      };
     }
 
-    const workflowDetailsLoaded =
-      _.get(prevProps, `workflowDetails["${workflowId}"].loading`, null) ===
-        true &&
-      _.get(this.props, `workflowDetails["${workflowId}"].loading`, null) !==
-        true;
+    // Second priority is given to the step from the config
+    // if ther is any
+    if (this.defaultStepTag) {
+      const {
+        stepId: defaultStepId,
+        groupId: defaultGroupId
+      } = getStepAndGroupFromConfig(this.defaultStepTag, this.stepGroups);
 
-    if (
-      workflowDetailsLoaded &&
-      (newWorkflow || params.get("new") === "true")
-    ) {
-      // when workflow is loaded and it's a created workflow
-      // navigate to the first step of the first step group
-
-      if (stepGroups !== null) {
-        // has this.stepGroups
-        const { groupId, stepId } = currentActiveStep(stepGroups, workflowId);
-        if (groupId && stepId) this.handleUpdateOfActiveStep(groupId, stepId);
+      if (defaultStepId && defaultGroupId) {
+        return { stepId: defaultStepId, groupId: defaultGroupId };
       }
-      this.setState({
-        newWorkflow: false
+    }
+
+    // Third priority is given to lc data
+    // first step should ne visible if there is no lc data
+    if (!this.lcData.length) {
+      return {
+        groupId: this.stepGroups[0].id,
+        stepId: this.stepGroups[0].steps[0].id
+      };
+    }
+
+    // Lastly if there is nothing set profile as the selected step
+    return { stepId: null, groupId: null };
+  };
+
+  // Set the passed groupId and stepId as the current step and group
+  handleUpdateOfActiveStep = (groupId, stepId) => {
+    // Don't update any data until all the data is loaded
+    if (!this.state.hasLoadedAllData) {
+      return;
+    }
+
+    // URL should be changed when in expand view
+    if (!this.props.minimalUI) {
+      const isProfileStep = this.displayProfile(stepId, groupId);
+      const searchParams = isProfileStep
+        ? ""
+        : new URLSearchParams({
+            group: groupId,
+            step: stepId
+          });
+      history.replace({
+        search: searchParams.toString()
       });
-      return;
     }
-
-    if (workflowDetailsLoaded && !groupId && !stepId) {
-      // If steps are JUST loaded, we want to load the initial step
-      this.loadInitialStep();
-      return;
-    }
-
-    if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
-      this.setState({ displayProfile: true });
-    }
-    if (stepId && groupId && displayProfile && !minimalUI) {
-      this.setState({ displayProfile: false });
-    }
-
-    if (this.isTheStepAutoSubmitted(prevProps, this.props, stepId)) {
-      this.props.dispatch(workflowDetailsActions.getById(workflowId));
-      this.props.getStepGroup(workflowId, true);
-    }
+    this.setState({
+      currentStepId: stepId,
+      currentGroupId: groupId
+    });
   };
 
-  /**
-   * This is intended to load the first step that the user must see when the
-   * workflow is opened. The priorities is as :
-   * - If we've a step tag and that step is accessible, we go to that
-   * - Or, if we have data on Profile, we don't do, and it already loads that
-   * - And finally, if none of that meets, we go to first acceissible step.
-   */
-  loadInitialStep = () => {
-    const defaultStepTag = lodashGet(
-      this.props,
-      "workflowItem.definition.default_step",
-      null
-    );
-
-    const { groupId, stepId, firstGroupId, firstStepId } = getStepId(
-      defaultStepTag,
-      this.stepGroups
-    );
-    if (groupId && stepId) {
-      // found the step, let's load that.
-      this.handleUpdateOfActiveStep(groupId, stepId);
-    } else if (!this.lcData.length) {
-      // if we don't have profile data, then we should just load
-      // the default first accessible step
-      this.handleUpdateOfActiveStep(firstGroupId, firstStepId);
+  scrollElementIntoView = (groupId, stepId) => {
+    // Using 0 when null and/or undefined, assuming the user wants to navigate to the profile step
+    const elemId = `#step_body_${groupId || 0}_${stepId || 0}`;
+    const stepNode = document.querySelector(elemId);
+    if (stepNode) {
+      // Scrolling it to 80px from top
+      const y = stepNode.offsetTop - 80;
+      window.scrollTo({
+        top: y,
+        left: 0
+      });
     }
+
+    // Optimization Alert: Updating state here also,
+    // for quick reflection in the UI
+    this.setState({
+      currentStepId: stepId,
+      currentGroupId: groupId
+    });
   };
 
+  // TODO: Don't forget to take care of this case
   isTheStepAutoSubmitted = (previousProps, currentProps, stepId) => {
     const previousCompletedBy = lodashGet(
       previousProps,
@@ -173,29 +235,250 @@ class WorkflowDetails extends Component {
     return false;
   };
 
-  selectActiveStep = (step_id, stepGroup_id) => {
-    this.setState({ selectedStep: step_id, selectedGroup: stepGroup_id });
+  // payload: {workflowId, stepId, groupId}
+  getStepDetailsData = payload => {
+    this.props.dispatch(workflowDetailsActions.getStepFields(payload));
   };
 
-  fetchStepData = payload => {
-    const payloadWithMeta = {
-      ...payload,
-      fromEmbedded: this.props.fromEmbedded
-    };
-    this.props.dispatch(workflowDetailsActions.getStepFields(payloadWithMeta));
+  // Check whether the profile is selected, based on current step and group id
+  displayProfile(stepId, groupId) {
+    return stepId === null && groupId == null;
+  }
+
+  // Handles the click on profile
+  // Just the update the current step and group
+  handleProfileClick = () => {
+    this.scrollElementIntoView(null, null);
   };
 
-  isParentWorkflow = () => {
+  getLoadingError() {
+    const { workflowDetailsHeader } = this.props;
+    const error = [];
+    error[0] = !!workflowDetailsHeader.error;
+    error[1] =
+      workflowDetailsHeader.error === "Not Found"
+        ? "errorMessageInstances.workflowNotFound"
+        : workflowDetailsHeader.error;
+    return error;
+  }
+
+  // Callback to lazy load the data
+  // Only fetches the data
+  handleOnInView = (stepId, groupId) => {
+    if (!stepId && !groupId) {
+      return;
+    }
+    this.getStepDetailsData({ workflowId: this.workflowId, stepId, groupId });
+  };
+
+  // Update the new step and group when the user scrolls to it
+  handleTouchTop = (stepId, groupId) => {
+    if (!stepId && !groupId) {
+      return this.handleUpdateOfActiveStep(null, null);
+    }
+    this.handleUpdateOfActiveStep(groupId, stepId);
+  };
+
+  getStepUserTag = () => {
+    workflowService
+      .getStepUserTagDetail(this.props.workflowId)
+      .then(response => {
+        this.setState({
+          stepUserTagData: response.results
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Sub render methods
+
+  renderBackButton = (
+    <div
+      className={css`
+        background-color: #104774;
+        width: 70px;
+        padding-top: 30px;
+        margin-right: 20px;
+      `}
+      style={{
+        backgroundColor: "#104774",
+        width: "75px",
+        paddingTop: "28px"
+      }}
+    >
+      <span
+        onClick={goToPrevStep}
+        className="text-anchor pd-ard-sm "
+        style={{ padding: 15 }}
+      >
+        <i
+          className="material-icons text-secondary"
+          style={{
+            fontSize: "40px",
+            verticalAlign: "middle",
+            color: "#fff"
+          }}
+        >
+          chevron_left
+        </i>
+      </span>
+    </div>
+  );
+
+  nextStepPlaceholder = (
+    <div
+      className={css`
+        background: white;
+        min-height: 60vh;
+        margin-bottom: 40px;
+        background-color: white;
+        box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.09);
+      `}
+    ></div>
+  );
+
+  renderProfileStep = () => {
     return (
-      this.props.workflowDetailsHeader.workflowDetailsHeader.workflow_family
-        .length === 1
+      <WhenInViewHOC
+        id="step_body_0_0"
+        onInViewCallback={() => this.handleTouchTop(null, null)}
+        extra={null}
+      >
+        <LazyLoadHOC
+          onInViewCallback={() => this.handleOnInView(null, null)}
+          defaultElement={this.nextStepPlaceholder}
+          threshold={0.1}
+          rootStyle={{ marginBottom: 40 }}
+        >
+          <StepBody
+            stepId={null}
+            workflowId={this.workflowId}
+            toggleSidebar={this.callBackCollapser}
+            changeFlag={this.changeFlag}
+            getIntegrationComments={this.getIntegrationComments}
+            workflowHead={this.worklfowHead}
+            dispatch={this.props.dispatch}
+            displayProfile={true}
+          />
+        </LazyLoadHOC>
+      </WhenInViewHOC>
     );
   };
 
-  ////Comment functions begins///////
+  renderAllStepData = () => {
+    return this.stepGroups.map(group => {
+      return group.steps.map(step => (
+        <WhenInViewHOC
+          id={`step_body_${group.id}_${step.id}`}
+          onInViewCallback={() => this.handleTouchTop(step.id, group.id)}
+          extra={step.name}
+        >
+          <LazyLoadHOC
+            threshold={0.2}
+            onInViewCallback={() => this.handleOnInView(step.id, group.id)}
+            key={step.id}
+            defaultElement={this.nextStepPlaceholder}
+            rootStyle={{ marginBottom: 40 }}
+          >
+            <StepBody
+              stepId={step.id}
+              workflowId={this.workflowId}
+              toggleSidebar={this.callBackCollapser}
+              changeFlag={this.changeFlag}
+              getIntegrationComments={this.getIntegrationComments}
+              workflowHead={this.worklfowHead}
+              dispatch={this.props.dispatch}
+              displayProfile={false}
+              stepName={step.name}
+            />
+          </LazyLoadHOC>
+        </WhenInViewHOC>
+      ));
+    });
+  };
+
+  render = () => {
+    const { minimalUI } = this.props;
+    const { currentStepId, currentGroupId } = this.state;
+    const [hasError, errorMessage] = this.getLoadingError();
+
+    if (hasError) {
+      // LAYOUT PLACE HOLDER
+      return (
+        <PlaceHolder
+          error={errorMessage}
+          showFilterMenu={this.props.showFilterMenu}
+        />
+      );
+    } else {
+      return (
+        <div>
+          <Layout
+            className={css`
+              min-height: 100vh;
+              padding: ${minimalUI ? "120px 10px 0 0" : "60px 10px 0 0"};
+            `}
+          >
+            {!minimalUI && this.renderBackButton}
+
+            <SidebarView
+              selectedGroup={currentGroupId}
+              selectedStep={currentStepId}
+              minimalUI={minimalUI}
+              workflowIdFromDetailsToSidebar={this.workflowId}
+              onUpdateOfActiveStep={this.scrollElementIntoView}
+              displayProfile={this.displayProfile(
+                currentStepId,
+                currentGroupId
+              )}
+              changeProfileDisplay={this.handleProfileClick}
+            />
+            <Content
+              className={css`
+                flex: 1;
+                margin-top: 25px;
+                padding-left: 10px;
+              `}
+            >
+              {/* This class is for adding print-only styles */}
+              <div className="printOnly">
+                {this.renderProfileStep()}
+                {!this.props.hideStepBody && this.renderAllStepData()}
+              </div>
+
+              {this.showComments() && (
+                <div>
+                  <Comments
+                    object_id={this.state.object_id}
+                    toggleSidebar={this.callBackCollapser}
+                    addComment={this.addComment}
+                    gotoStep={this.fetchStepData}
+                    selectActiveStep={this.scrollElementIntoView}
+                    changeFlag={this.changeFlag}
+                    changeIntegrationStatus={this.changeIntegrationStatus}
+                    {...this.props}
+                  />
+                </div>
+              )}
+            </Content>
+          </Layout>
+        </div>
+      );
+    }
+  };
+
+  // FIXME: These methods need to be refactored when the `Comments` component is looked at
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
   /// this will be moved to another component///
   callBackCollapser = (objectId, content_type, isEmbeddedDetails) => {
-    // TODO: Here it's called with no parameters when the comment section is
+    // FIXME: Here it's called with no parameters when the comment section is
     // to be closed. Visibilty should be handled in state and not through an
     // API call. Also removing comments each time is not an efficient way.
     // They should rather be updated in-redux while the workflow is opened
@@ -229,268 +512,9 @@ class WorkflowDetails extends Component {
     this.props.dispatch(workflowStepActions.updateIntegrationStatus(payload));
   };
 
-  getStepDetailsData = (workflowId, groupId, stepId) => {
-    const stepTrack = {
-      workflowId,
-      groupId,
-      stepId
-    };
-
-    this.fetchStepData(stepTrack);
-  };
-
-  handleUpdateOfActiveStep = (groupId, stepId) => {
-    const workflowId = this.workflowId;
-    const { setWorkflowKeys } = this.props;
-
-    if (!this.props.minimalUI && groupId && stepId) {
-      history.replace(
-        `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
-      );
-    }
-    setWorkflowKeys({ workflowId, stepId, groupId });
-
-    this.setState({ displayProfile: false });
-    this.getStepDetailsData(workflowId, groupId, stepId);
-
-    if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
-  };
-
-  changeProfileDisplay = displayProfile => {
-    const { setWorkflowKeys } = this.props;
-    const workflowId = this.workflowId;
-    if (!this.props.minimalUI) {
-      history.replace(`/workflows/instances/${workflowId}`);
-    }
-    setWorkflowKeys({ workflowId, step: null, groupId: null });
-
-    this.setState({ displayProfile });
-  };
-
-  get lcData() {
-    const { minimalUI, workflowItem, workflowDetailsHeader } = this.props;
-
-    const workflow = minimalUI
-      ? workflowItem
-      : lodashGet(workflowDetailsHeader, this.workflowId, null);
-
-    // If we get a null in workflow, we should return [].
-    if (!workflow) return [];
-
-    // Check if we don't have any lc_data at all, then we return [] as well.
-    if (!Array.isArray(workflow.lc_data) || workflow.lc_data.length === 0)
-      return [];
-
-    // finally we check if we have something worth showing.
-    const displayData = workflow.lc_data.filter(
-      lc_data => lc_data.value && lc_data.display_type === "normal"
-    );
-
-    return displayData;
-  }
-
-  get workflowId() {
-    return (
-      this.props.workflowIdFromPropsForModal ||
-      parseInt(this.props.match.params.id, 10)
-    );
-  }
-
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-  // ////////////////////////////////////////////////////////////////////////////
-
   showComments = () => {
     const commentsData = lodashGet(this.props, "workflowComments.data", null);
     return commentsData && commentsData.results && !commentsData.isEmbedded;
-  };
-
-  showBackButton = () => {
-    return !this.props.minimalUI;
-  };
-
-  renderBackButton = () => {
-    return (
-      <div
-        style={{
-          backgroundColor: "#104774",
-          width: "75px",
-          paddingTop: "28px"
-        }}
-      >
-        <span
-          onClick={goToPrevStep}
-          className="text-anchor pd-ard-sm "
-          style={{ padding: 15 }}
-        >
-          <i
-            className="material-icons text-secondary"
-            style={{
-              fontSize: "40px",
-              verticalAlign: "middle",
-              color: "#fff"
-            }}
-          >
-            chevron_left
-          </i>
-        </span>
-      </div>
-    );
-  };
-
-  getLoadingError() {
-    const { workflowDetailsHeader } = this.props;
-    const error = [];
-    error[0] = !!workflowDetailsHeader.error;
-    error[1] =
-      workflowDetailsHeader.error === "Not Found"
-        ? "errorMessageInstances.workflowNotFound"
-        : workflowDetailsHeader.error;
-    return error;
-  }
-
-  render = () => {
-    const {
-      minimalUI,
-      workflowIdFromPropsForModal,
-      workflowItem,
-      workflowKeys
-    } = this.props;
-    const { displayProfile } = this.state;
-    const [hasError, errorMessage] = this.getLoadingError();
-
-    if (hasError) {
-      // LAYOUT PLACE HOLDER
-      return (
-        <PlaceHolder
-          error={errorMessage}
-          showFilterMenu={this.props.showFilterMenu}
-        />
-      );
-    } else {
-      return (
-        <div>
-          <Layout
-            className="workflow-details-container inner-container"
-            style={{ top: minimalUI ? 0 : 60 }}
-          >
-            <Layout
-              style={{
-                background: "#FAFAFA",
-                minHeight: "100vh",
-                padding: minimalUI ? "30px 0px" : 0,
-                marginTop: minimalUI ? 80 : 0
-              }}
-            >
-              {this.showBackButton() && this.renderBackButton()}
-
-              <SidebarView
-                selectedGroup={
-                  workflowKeys[this.workflowId]
-                    ? workflowKeys[this.workflowId].groupId
-                    : null
-                }
-                selectedStep={
-                  workflowKeys[this.workflowId]
-                    ? workflowKeys[this.workflowId].stepId
-                    : null
-                }
-                minimalUI={minimalUI}
-                workflowIdFromDetailsToSidebar={this.workflowId}
-                onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
-                displayProfile={displayProfile}
-                changeProfileDisplay={this.changeProfileDisplay}
-                stepUserTagData={this.state.stepUserTagData}
-              />
-              <Content
-                style={{
-                  width: "50%",
-                  marginTop: minimalUI ? 0 : 12,
-                  paddingLeft: "10px"
-                }}
-              >
-                <div className="printOnly ">
-                  <div
-                    className="mr-ard-lg"
-                    id="StepBody"
-                    style={{
-                      background: "#FAFAFA",
-                      margin: minimalUI ? "0px 24px 0px 0px" : "24px"
-                    }}
-                  >
-                    {!this.props.hideStepBody && (
-                      <StepBody
-                        stepId={
-                          workflowKeys[this.workflowId]
-                            ? workflowKeys[this.workflowId].stepId
-                            : null
-                        }
-                        workflowId={this.workflowId}
-                        workflowIdFromPropsForModal={
-                          workflowIdFromPropsForModal
-                        }
-                        toggleSidebar={this.callBackCollapser}
-                        changeFlag={this.changeFlag}
-                        getIntegrationComments={this.getIntegrationComments}
-                        workflowHead={
-                          minimalUI
-                            ? workflowItem
-                            : this.props.workflowDetailsHeader[this.workflowId]
-                            ? this.props.workflowDetailsHeader[this.workflowId]
-                            : null
-                        }
-                        dispatch={this.props.dispatch}
-                        displayProfile={this.state.displayProfile}
-                        getStepUserTag={this.getStepUserTag}
-                      />
-                    )}
-                  </div>
-                </div>
-
-                {!minimalUI && (
-                  <div className="text-right pd-ard mr-ard-md">
-                    <Tooltip
-                      title={this.props.intl.formatMessage({
-                        id: "commonTextInstances.scrollToTop"
-                      })}
-                      placement="topRight"
-                    >
-                      <span
-                        className="text-anchor"
-                        onClick={() => {
-                          window.scroll({
-                            top: 0,
-                            left: 0,
-                            behavior: "smooth"
-                          });
-                        }}
-                      >
-                        <i className="material-icons">arrow_upward</i>
-                      </span>
-                    </Tooltip>
-                  </div>
-                )}
-                {this.showComments() && (
-                  <div>
-                    <Comments
-                      object_id={this.state.object_id}
-                      toggleSidebar={this.callBackCollapser}
-                      addComment={this.addComment}
-                      gotoStep={this.fetchStepData}
-                      selectActiveStep={this.handleUpdateOfActiveStep}
-                      changeFlag={this.changeFlag}
-                      changeIntegrationStatus={this.changeIntegrationStatus}
-                      {...this.props}
-                    />
-                  </div>
-                )}
-              </Content>
-            </Layout>
-          </Layout>
-        </div>
-      );
-    }
   };
 }
 
@@ -538,8 +562,7 @@ function mapStateToProps(state) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl,
-    workflowKeys
+    nextUrl
   } = state;
 
   return {
@@ -555,8 +578,7 @@ function mapStateToProps(state) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl,
-    workflowKeys
+    nextUrl
   };
 }
 

@@ -4,7 +4,6 @@ import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { workflowDetailsHeader } from "../../../../js/reducers/workflow_details_header";
 import { workflowDetails } from "../../../../js/reducers/workflow_details";
-import workflowKeys from "../../../../js/reducers/workflowKeys";
 import { permissions } from "../../../../modules/common/permissions/reducer";
 import { renderWithReactIntl } from "../../../../modules/common/testUtils";
 import { BrowserRouter } from "react-router-dom";
@@ -24,8 +23,7 @@ beforeEach(() => {
 test("should render current workflow name", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -34,8 +32,7 @@ test("should render current workflow name", () => {
         workflow_family: []
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -52,8 +49,7 @@ test("should render current workflow name", () => {
 test("should render all workflows' name and link when from the workflow family", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const fakeParentWorkflow = { name: "Parent Workflow", id: 2120 };
   const fakeGranparentWorkflow = {
@@ -72,8 +68,7 @@ test("should render all workflows' name and link when from the workflow family",
         ]
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -107,8 +102,7 @@ test("should render all workflows' name and link when from the workflow family",
 test("should render options menu", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -117,8 +111,7 @@ test("should render options menu", () => {
         workflow_family: []
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -138,8 +131,7 @@ test("should render options menu", () => {
 test("should render options menu with view comments and, print without any permissions", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -148,8 +140,7 @@ test("should render options menu with view comments and, print without any permi
         workflow_family: []
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText, queryAllByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -173,8 +164,7 @@ test("should render options menu with view comments and, print without any permi
 test("should render options menu with activity log option when user has permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -185,8 +175,7 @@ test("should render options menu with activity log option when user has permissi
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_ACTIVITY_LOG]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -209,8 +198,7 @@ test("should render options menu with activity log option when user has permissi
 test("should render options menu with archive option when user has permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -221,8 +209,7 @@ test("should render options menu with archive option when user has permission", 
     },
     permissions: {
       permissions: [Permissions.CAN_ARCHIVE_WORKFLOWS]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -245,8 +232,7 @@ test("should render options menu with archive option when user has permission", 
 test("should not render archive workflow option when user dont have permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -257,8 +243,7 @@ test("should not render archive workflow option when user dont have permission",
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -281,8 +266,7 @@ test("should not render archive workflow option when user dont have permission",
 test("should not render view activity log option when user dont have permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -293,8 +277,7 @@ test("should not render view activity log option when user dont have permission"
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -318,8 +301,7 @@ test("should render status of the workflow when user has permission", () => {
   const fakeWorkflowStatus = "Workflow Status";
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -331,8 +313,7 @@ test("should render status of the workflow when user has permission", () => {
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -353,8 +334,7 @@ test("should render status of the workflow when user dont has permission", () =>
   const fakeWorkflowStatus = "Workflow Status";
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -366,8 +346,7 @@ test("should render status of the workflow when user dont has permission", () =>
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -393,8 +372,7 @@ test("should render exactly 3 lc data when user has permission", () => {
   ];
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -406,8 +384,7 @@ test("should render exactly 3 lc data when user has permission", () => {
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -436,8 +413,7 @@ test("should not render any lc data when user dont has permission", () => {
   ];
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -449,8 +425,7 @@ test("should not render any lc data when user dont has permission", () => {
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -479,8 +454,7 @@ test("should not render any LC data in modal, even though the user has permissio
   ];
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -492,8 +466,7 @@ test("should not render any LC data in modal, even though the user has permissio
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
@@ -530,7 +503,6 @@ test("should render all the step group names", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -541,7 +513,6 @@ test("should render all the step group names", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -586,7 +557,6 @@ test("should render completed step and total step count for every step group", (
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -597,7 +567,6 @@ test("should render completed step and total step count for every step group", (
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -640,7 +609,6 @@ test("should render check circle icon when all the steps are completed", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -651,7 +619,6 @@ test("should render check circle icon when all the steps are completed", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -687,7 +654,6 @@ test("should render alarm icon when step group is overdue and atleast one step i
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -698,7 +664,6 @@ test("should render alarm icon when step group is overdue and atleast one step i
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -734,7 +699,6 @@ test("should render panorama fish eye icon when step group is not overdue and at
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -745,7 +709,6 @@ test("should render panorama fish eye icon when step group is not overdue and at
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -784,7 +747,6 @@ test("should render all the steps for the active step group", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -795,9 +757,6 @@ test("should render all the steps for the active step group", () => {
       }
     },
     permissions: {},
-    workflowKeys: {
-      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
-    },
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -818,6 +777,8 @@ test("should render all the steps for the active step group", () => {
     </Provider>
   );
 
+  fireEvent.click(queryByText(fakeStepGroups[0].definition.name_en));
+
   expect(queryByText(fakeStepGroups[0].steps[0].name)).toBeInTheDocument();
   expect(queryByText(fakeStepGroups[0].steps[1].name)).toBeInTheDocument();
 });
@@ -834,7 +795,6 @@ test("should render check circle icon when the step is completed", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -845,7 +805,6 @@ test("should render check circle icon when the step is completed", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -884,7 +843,6 @@ test("should render alarm icon when the step is overdue and incomplete", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -895,7 +853,6 @@ test("should render alarm icon when the step is overdue and incomplete", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -934,7 +891,6 @@ test("should render lens icon when the step is not overdue, incomplete and selec
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -945,7 +901,6 @@ test("should render lens icon when the step is not overdue, incomplete and selec
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -987,7 +942,6 @@ test("should render panoram fish icon when the step is not overdue, incomplete a
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -998,7 +952,6 @@ test("should render panoram fish icon when the step is not overdue, incomplete a
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1040,7 +993,6 @@ test("should render the selected step with proper styling", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1051,7 +1003,6 @@ test("should render the selected step with proper styling", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1112,7 +1063,6 @@ test("should render Locked icon on locked steps", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1123,7 +1073,6 @@ test("should render Locked icon on locked steps", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1174,7 +1123,6 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1186,7 +1134,6 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1229,7 +1176,6 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1241,7 +1187,6 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1292,7 +1237,6 @@ test("should not render alerts count on stepgroup when when group is selected", 
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1303,7 +1247,6 @@ test("should not render alerts count on stepgroup when when group is selected", 
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1358,7 +1301,6 @@ test("should render alerts count on step when there is atleast one alert", () =>
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1369,7 +1311,6 @@ test("should render alerts count on step when there is atleast one alert", () =>
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1416,7 +1357,6 @@ test("should not render alerts count on step when there are no alerts", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1427,7 +1367,6 @@ test("should not render alerts count on step when there are no alerts", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1474,7 +1413,6 @@ test("should not display profile if the lc_data is empty, instead first step sho
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1485,9 +1423,7 @@ test("should not display profile if the lc_data is empty, instead first step sho
       }
     },
     permissions: {},
-    workflowKeys: {
-      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
-    },
+
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1531,7 +1467,6 @@ test("should display profile and should be selected, if the lc_data is not empty
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1543,9 +1478,7 @@ test("should display profile and should be selected, if the lc_data is not empty
       }
     },
     permissions: {},
-    workflowKeys: {
-      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
-    },
+
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {

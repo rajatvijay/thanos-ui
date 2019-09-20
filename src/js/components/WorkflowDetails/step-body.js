@@ -276,7 +276,7 @@ class StepBody extends Component {
       : null;
 
     return (
-      <div style={{ background: "#FFFFFF" }}>
+      <div style={{ background: "#FFFFFF" }} id="StepBody">
         {this.stepData && (
           <PDFChecklistModal
             definition={this.stepData.definition}
@@ -339,7 +339,7 @@ class StepBody extends Component {
                 ? workflowHead
                   ? workflowHead.name
                   : null
-                : stepData.name}
+                : this.props.stepName}
             </span>
           </Col>
           <Col span={8}>{!loading ? step_comment_btn : null}</Col>
@@ -356,7 +356,12 @@ class StepBody extends Component {
           {displayProfile ? (
             <ProfileStepBody workflowHead={this.props.workflowHead} />
           ) : loading ? (
-            <div className="text-center mr-top-lg">
+            <div
+              className="text-center mr-top-lg"
+              // If the loader container is small
+              // below container will come in view and will start loading step data
+              style={{ minHeight: "60vh" }}
+            >
               <Icon type={"loading"} />
             </div>
           ) : stepData && this.props.workflowHead ? (
