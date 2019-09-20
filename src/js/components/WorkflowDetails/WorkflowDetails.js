@@ -9,63 +9,74 @@ import {
   setWorkflowKeys,
   stepBodyActions,
   workflowDetailsActions,
-  workflowFiltersActions,
   workflowStepActions
 } from "../../actions";
+import { workflowService } from "../../services";
 import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import { currentActiveStep } from "./utils/active-step";
+import { currentActiveStep, getStepId } from "./utils/active-step";
 
 const { Content } = Layout;
 
 class WorkflowDetails extends Component {
   constructor(props) {
-    const { minimalUI, setWorkflowKeys, workflowIdFromPropsForModal } = props;
+    super(props);
+    const { minimalUI, setWorkflowKeys } = props;
     const params = new URL(document.location).searchParams;
-
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(props.match.params.id, 10);
 
     const groupId = params.get("group");
     const stepId = params.get("step");
 
-    setWorkflowKeys({ workflowId, stepId, groupId });
+    setWorkflowKeys({ workflowId: this.workflowId, stepId, groupId });
 
-    super(props);
     this.state = {
-      printing: false,
-      dont: false,
       newWorkflow: params.get("new") === "true",
       currentStep: null,
       // TODO: Check why we need groupId check
-      displayProfile: minimalUI ? true : !groupId
+      displayProfile: minimalUI && this.lcData.length ? true : !groupId,
+      stepUserTagData: []
     };
   }
 
-  componentDidMount = () => {
-    // TODO: Why??
-    this.getInitialData();
+  getStepUserTag = () => {
+    workflowService
+      .getStepUserTagDetail(this.props.workflowId)
+      .then(response => {
+        this.setState({
+          stepUserTagData: response.results
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
+  componentDidMount = () => {
+    this.getStepUserTag();
+  };
+
+  get stepGroups() {
+    return _.get(
+      this.props,
+      `workflowDetails["${this.workflowId}"].workflowDetails.stepGroups`,
+      null
+    );
+  }
   componentDidUpdate = prevProps => {
-    const {
-      workflowIdFromPropsForModal,
-      match,
-      minimalUI,
-      workflowKeys
-    } = this.props;
+    const { match, minimalUI, workflowKeys } = this.props;
 
     const { displayProfile, newWorkflow } = this.state;
     const params = new URL(document.location).searchParams;
     const groupId = params.get("group");
     const stepId = params.get("step");
     //SET WORKFLOW ID FROM ROUTER
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-
+    const workflowId = this.workflowId;
+    const stepGroups = this.stepGroups;
     if (
+      groupId && // these can be null when new Child WF is created
+      stepId && // which has params ?new=true, until next refresh
       !minimalUI &&
       match &&
       workflowKeys[workflowId] &&
@@ -73,30 +84,37 @@ class WorkflowDetails extends Component {
       workflowKeys[workflowId].groupId !== groupId
     ) {
       this.handleUpdateOfActiveStep(groupId, stepId);
+      return;
     }
-    if (
+
+    const workflowDetailsLoaded =
       _.get(prevProps, `workflowDetails["${workflowId}"].loading`, null) ===
         true &&
       _.get(this.props, `workflowDetails["${workflowId}"].loading`, null) !==
-        true &&
+        true;
+
+    if (
+      workflowDetailsLoaded &&
       (newWorkflow || params.get("new") === "true")
     ) {
       // when workflow is loaded and it's a created workflow
       // navigate to the first step of the first step group
 
-      const groups = _.get(
-        this.props,
-        `workflowDetails["${workflowId}"].workflowDetails.stepGroups`,
-        null
-      );
-      if (groups !== null) {
-        // has groups
-        const { groupId, stepId } = currentActiveStep(groups, workflowId);
+      if (stepGroups !== null) {
+        // has this.stepGroups
+        const { groupId, stepId } = currentActiveStep(stepGroups, workflowId);
         if (groupId && stepId) this.handleUpdateOfActiveStep(groupId, stepId);
       }
       this.setState({
         newWorkflow: false
       });
+      return;
+    }
+
+    if (workflowDetailsLoaded && !groupId && !stepId) {
+      // If steps are JUST loaded, we want to load the initial step
+      this.loadInitialStep();
+      return;
     }
 
     if (!minimalUI && match && !stepId && !groupId && !displayProfile) {
@@ -107,7 +125,36 @@ class WorkflowDetails extends Component {
     }
 
     if (this.isTheStepAutoSubmitted(prevProps, this.props, stepId)) {
+      this.props.dispatch(workflowDetailsActions.getById(workflowId));
       this.props.getStepGroup(workflowId, true);
+    }
+  };
+
+  /**
+   * This is intended to load the first step that the user must see when the
+   * workflow is opened. The priorities is as :
+   * - If we've a step tag and that step is accessible, we go to that
+   * - Or, if we have data on Profile, we don't do, and it already loads that
+   * - And finally, if none of that meets, we go to first acceissible step.
+   */
+  loadInitialStep = () => {
+    const defaultStepTag = lodashGet(
+      this.props,
+      "workflowItem.definition.default_step",
+      null
+    );
+
+    const { groupId, stepId, firstGroupId, firstStepId } = getStepId(
+      defaultStepTag,
+      this.stepGroups
+    );
+    if (groupId && stepId) {
+      // found the step, let's load that.
+      this.handleUpdateOfActiveStep(groupId, stepId);
+    } else if (!this.lcData.length) {
+      // if we don't have profile data, then we should just load
+      // the default first accessible step
+      this.handleUpdateOfActiveStep(firstGroupId, firstStepId);
     }
   };
 
@@ -124,42 +171,6 @@ class WorkflowDetails extends Component {
       return true;
     }
     return false;
-  };
-
-  updateCurrentActiveStep = () => {
-    const {
-      workflowIdFromPropsForModal,
-      minimalUI,
-      displayProfile
-    } = this.props;
-
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    //   workflowId
-    //calculate activit step
-    const stepTrack = {
-      workflowId,
-      groupId: this.state.selectedGroup,
-      stepId: this.state.selectedStep
-    };
-
-    if (
-      !displayProfile &&
-      !minimalUI &&
-      !this.props.currentStepFields[stepTrack.stepId]
-    ) {
-      this.fetchStepData(stepTrack);
-    }
-  };
-
-  getInitialData = () => {
-    //Get workflow  basic data
-    this.props.dispatch(workflowFiltersActions.getStatusData());
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
-    });
   };
 
   selectActiveStep = (step_id, stepGroup_id) => {
@@ -183,24 +194,24 @@ class WorkflowDetails extends Component {
 
   ////Comment functions begins///////
   /// this will be moved to another component///
-  callBackCollapser = (object_id, content_type, isEmbeddedDetails) => {
-    this.state.loading_sidebar = true;
-    this.state.object_id = object_id;
+  callBackCollapser = (objectId, content_type, isEmbeddedDetails) => {
+    // TODO: Here it's called with no parameters when the comment section is
+    // to be closed. Visibilty should be handled in state and not through an
+    // API call. Also removing comments each time is not an efficient way.
+    // They should rather be updated in-redux while the workflow is opened
+    // and flished only when the workflow is closed.
     this.props.dispatch(
-      workflowDetailsActions.getComment(object_id, content_type, "", false)
+      workflowDetailsActions.getComment(objectId, content_type, "", false)
     );
   };
 
   addComment = (payload, step_reload_payload, isEmbeddedDetails) => {
-    this.state.adding_comment = true;
-    this.state.object_id = payload.object_id;
     this.props.dispatch(
       workflowStepActions.addComment(payload, step_reload_payload)
     );
   };
 
   getIntegrationComments = (uid, field_id) => {
-    this.state.loading_sidebar = true;
     const payload = {
       uid: uid,
       field_id: field_id
@@ -229,9 +240,7 @@ class WorkflowDetails extends Component {
   };
 
   handleUpdateOfActiveStep = (groupId, stepId) => {
-    const workflowId =
-      this.props.workflowIdFromPropsForModal ||
-      parseInt(this.props.match.params.id, 10);
+    const workflowId = this.workflowId;
     const { setWorkflowKeys } = this.props;
 
     if (!this.props.minimalUI && groupId && stepId) {
@@ -242,32 +251,109 @@ class WorkflowDetails extends Component {
     setWorkflowKeys({ workflowId, stepId, groupId });
 
     this.setState({ displayProfile: false });
-    this.getStepDetailsData(
-      this.props.workflowIdFromPropsForModal ||
-        Number(this.props.match.params.id),
-      groupId,
-      stepId
-    );
+    this.getStepDetailsData(workflowId, groupId, stepId);
 
     if (this.props.minimalUI) this.props.setParameter(stepId, groupId);
   };
 
   changeProfileDisplay = displayProfile => {
-    const { setWorkflowKeys, workflowIdFromPropsForModal } = this.props;
-
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-
+    const { setWorkflowKeys } = this.props;
+    const workflowId = this.workflowId;
     if (!this.props.minimalUI) {
       history.replace(`/workflows/instances/${workflowId}`);
     }
-
     setWorkflowKeys({ workflowId, step: null, groupId: null });
 
     this.setState({ displayProfile });
   };
 
-  ////Comment functions ends///////
+  get lcData() {
+    const { minimalUI, workflowItem, workflowDetailsHeader } = this.props;
+
+    const workflow = minimalUI
+      ? workflowItem
+      : lodashGet(workflowDetailsHeader, this.workflowId, null);
+
+    // If we get a null in workflow, we should return [].
+    if (!workflow) return [];
+
+    // Check if we don't have any lc_data at all, then we return [] as well.
+    if (!Array.isArray(workflow.lc_data) || workflow.lc_data.length === 0)
+      return [];
+
+    // finally we check if we have something worth showing.
+    const displayData = workflow.lc_data.filter(
+      lc_data => lc_data.value && lc_data.display_type === "normal"
+    );
+
+    return displayData;
+  }
+
+  get workflowId() {
+    return (
+      this.props.workflowIdFromPropsForModal ||
+      parseInt(this.props.match.params.id, 10)
+    );
+  }
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
+
+  showComments = () => {
+    const commentsData = lodashGet(this.props, "workflowComments.data", null);
+    return commentsData && commentsData.results && !commentsData.isEmbedded;
+  };
+
+  showBackButton = () => {
+    return (
+      this.props.workflow &&
+      this.props.workflow.workflow_family &&
+      this.props.workflow.workflow_family.length <= 1 &&
+      !this.props.minimalUI
+    );
+  };
+
+  renderBackButton = () => {
+    return (
+      <div
+        style={{
+          backgroundColor: "#104774",
+          width: "75px",
+          paddingTop: "28px"
+        }}
+      >
+        <span
+          onClick={goToPrevStep}
+          className="text-anchor pd-ard-sm "
+          style={{ padding: 15 }}
+        >
+          <i
+            className="material-icons text-secondary"
+            style={{
+              fontSize: "40px",
+              verticalAlign: "middle",
+              color: "#fff"
+            }}
+          >
+            chevron_left
+          </i>
+        </span>
+      </div>
+    );
+  };
+
+  getLoadingError() {
+    const { workflowDetailsHeader } = this.props;
+    const error = [];
+    error[0] = !!workflowDetailsHeader.error;
+    error[1] =
+      workflowDetailsHeader.error === "Not Found"
+        ? "errorMessageInstances.workflowNotFound"
+        : workflowDetailsHeader.error;
+    return error;
+  }
 
   render = () => {
     const {
@@ -277,67 +363,15 @@ class WorkflowDetails extends Component {
       workflowKeys
     } = this.props;
     const { displayProfile } = this.state;
+    const [hasError, errorMessage] = this.getLoadingError();
 
-    const workflowId =
-      workflowIdFromPropsForModal || parseInt(this.props.match.params.id, 10);
-    //   //calculate activit step
-
-    const comment_data = this.props.workflowComments.data;
-
-    let error = this.props.workflowDetailsHeader.error || this.state.error;
-    if (error === "Not Found") {
-      error = "errorMessageInstances.workflowNotFound";
-    }
-    // error can be an ID from intlMessages or text to be displayed.
-    // If ID is not found, it is rendered as text by default.
-
-    let showBackButtom = true;
-
-    if (
-      this.props.workflow &&
-      this.props.workflow.workflow_family &&
-      this.props.workflow.workflow_family.length <= 1
-    ) {
-      showBackButtom = false;
-    }
-
-    const BackButton = () => {
-      if (showBackButtom && !minimalUI) {
-        return (
-          <div
-            style={{
-              backgroundColor: "#104774",
-              width: "75px",
-              paddingTop: "28px"
-            }}
-          >
-            <span
-              onClick={goToPrevStep}
-              className="text-anchor pd-ard-sm "
-              style={{ padding: 15 }}
-            >
-              <i
-                className="material-icons text-secondary"
-                style={{
-                  fontSize: "40px",
-                  verticalAlign: "middle",
-                  color: "#fff"
-                }}
-              >
-                chevron_left
-              </i>
-            </span>
-          </div>
-        );
-      } else {
-        return <span />;
-      }
-    };
-
-    if (_.size(error)) {
+    if (hasError) {
       // LAYOUT PLACE HOLDER
       return (
-        <PlaceHolder error={error} showFilterMenu={this.props.showFilterMenu} />
+        <PlaceHolder
+          error={errorMessage}
+          showFilterMenu={this.props.showFilterMenu}
+        />
       );
     } else {
       return (
@@ -354,24 +388,25 @@ class WorkflowDetails extends Component {
                 marginTop: minimalUI ? 80 : 0
               }}
             >
-              <BackButton />
+              {this.showBackButton() && this.renderBackButton()}
 
               <SidebarView
                 selectedGroup={
-                  workflowKeys[workflowId]
-                    ? workflowKeys[workflowId].groupId
+                  workflowKeys[this.workflowId]
+                    ? workflowKeys[this.workflowId].groupId
                     : null
                 }
                 selectedStep={
-                  workflowKeys[workflowId]
-                    ? workflowKeys[workflowId].stepId
+                  workflowKeys[this.workflowId]
+                    ? workflowKeys[this.workflowId].stepId
                     : null
                 }
                 minimalUI={minimalUI}
-                workflowIdFromDetailsToSidebar={workflowId}
+                workflowIdFromDetailsToSidebar={this.workflowId}
                 onUpdateOfActiveStep={this.handleUpdateOfActiveStep}
                 displayProfile={displayProfile}
                 changeProfileDisplay={this.changeProfileDisplay}
+                stepUserTagData={this.state.stepUserTagData}
               />
               <Content
                 style={{
@@ -389,27 +424,32 @@ class WorkflowDetails extends Component {
                       margin: minimalUI ? "0px 24px 0px 0px" : "24px"
                     }}
                   >
-                    <StepBody
-                      stepId={
-                        workflowKeys[workflowId]
-                          ? workflowKeys[workflowId].stepId
-                          : null
-                      }
-                      workflowId={workflowId}
-                      workflowIdFromPropsForModal={workflowIdFromPropsForModal}
-                      toggleSidebar={this.callBackCollapser}
-                      changeFlag={this.changeFlag}
-                      getIntegrationComments={this.getIntegrationComments}
-                      workflowHead={
-                        minimalUI
-                          ? workflowItem
-                          : this.props.workflowDetailsHeader[workflowId]
-                          ? this.props.workflowDetailsHeader[workflowId]
-                          : null
-                      }
-                      dispatch={this.props.dispatch}
-                      displayProfile={this.state.displayProfile}
-                    />
+                    {!this.props.hideStepBody && (
+                      <StepBody
+                        stepId={
+                          workflowKeys[this.workflowId]
+                            ? workflowKeys[this.workflowId].stepId
+                            : null
+                        }
+                        workflowId={this.workflowId}
+                        workflowIdFromPropsForModal={
+                          workflowIdFromPropsForModal
+                        }
+                        toggleSidebar={this.callBackCollapser}
+                        changeFlag={this.changeFlag}
+                        getIntegrationComments={this.getIntegrationComments}
+                        workflowHead={
+                          minimalUI
+                            ? workflowItem
+                            : this.props.workflowDetailsHeader[this.workflowId]
+                            ? this.props.workflowDetailsHeader[this.workflowId]
+                            : null
+                        }
+                        dispatch={this.props.dispatch}
+                        displayProfile={this.state.displayProfile}
+                        getStepUserTag={this.getStepUserTag}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -436,10 +476,7 @@ class WorkflowDetails extends Component {
                     </Tooltip>
                   </div>
                 )}
-                {comment_data &&
-                comment_data.results &&
-                // comment_data.results. &&
-                !comment_data.isEmbedded ? (
+                {this.showComments() && (
                   <div>
                     <Comments
                       object_id={this.state.object_id}
@@ -452,7 +489,7 @@ class WorkflowDetails extends Component {
                       {...this.props}
                     />
                   </div>
-                ) : null}
+                )}
               </Content>
             </Layout>
           </Layout>

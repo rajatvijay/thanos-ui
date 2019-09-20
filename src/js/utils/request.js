@@ -33,7 +33,11 @@ export const APIFetch = (...params) => {
   params[0] = `${apiBaseURL}${params[0]}`;
   return fetch(...params).then(response => {
     if (response.status === 403 || response.status === 401) {
-      userUtilities.postLogoutAction({ addNextURL: true });
+      if (params[0].indexOf("users/me") === -1) {
+        // We dont want to get stuck in redicect loop if autologin
+        // fails for any reason.
+        userUtilities.postLogoutAction({ addNextURL: true });
+      }
     }
     return response;
   });

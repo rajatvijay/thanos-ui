@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader, handleResponse } from "../_helpers";
 import _ from "lodash";
 import { store } from "../_helpers";
 import { APIFetch } from "../utils/request";
@@ -10,7 +10,8 @@ export const workflowService = {
   getChildWorkflow,
   searchUserWorkflowByEmail,
   updateWorkflow,
-  clearAll
+  clearAll,
+  getStepUserTagDetail
 };
 
 //FETCH THE LIST OF WORLFOWS FOR WORKFLOW LIST PAGE
@@ -34,6 +35,19 @@ function getAll(filter) {
     const params = pageUrl(filter);
     url += params;
   }
+
+  // This is super a bad hack
+  // But a quick win over doing a lot of minor fixes and refactoring
+  // Doing this specifically for VET-5267
+  // Description: Remove the kind filter in case of my task
+  // In case of any questions, please contact rajat@thevetted.com
+  if (url.includes("user-step-tag")) {
+    const searchString = url.split("?")[1];
+    const searchParams = new URLSearchParams(searchString);
+    searchParams.delete("kind");
+    url = `workflows-list/?${searchParams.toString()}`;
+  }
+
   return APIFetch(url, requestOptions).then(handleResponse);
 }
 
@@ -138,11 +152,15 @@ function updateWorkflow({ id, payload }) {
   return APIFetch(`workflows/${id}/`, requestOptions).then(handleResponse);
 }
 
-// COMMON FUNCTION TO HANDLE FETCH RESPONSE AND RETURN THE DATA TO FUNCTION AS PROMISED
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
+function getStepUserTagDetail(workflowId) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
 
-  return response.json();
+  return APIFetch(
+    `my-step-user-tags/?step__workflow=${workflowId}`,
+    requestOptions
+  ).then(handleResponse);
 }

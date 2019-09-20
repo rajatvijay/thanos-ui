@@ -24,19 +24,13 @@ import { commonFunctions } from "./commons";
 import { FormattedMessage } from "react-intl";
 import validator from "validator";
 import { ESign } from "./esign.js";
-import {
-  apiBaseURL,
-  siteOrigin,
-  supportedFieldFormats
-} from "../../../../config";
+import { apiBaseURL, siteOrigin } from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
-import FormattedTextInput from "../../../../modules/common/components/FormattedTextInput";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const { Option } = AntSelect;
-const { TextArea } = Input;
 
 //Common utility fucntions bundled in one file commons.js//
 const {
@@ -60,95 +54,6 @@ const openNotificationWithIcon = data => {
     placement: "bottomLeft"
   });
 };
-
-//Field Type Text
-export class Text extends Component {
-  state = {
-    inputText: this.props.decryptedData
-      ? this.props.decryptedData.answer
-      : this.props.field.answers[0]
-      ? this.props.field.answers[0].answer
-      : this.props.field.definition.defaultValue
-  };
-
-  get format() {
-    // TODO:
-    // The condition below must be removed as soon as we are getting
-    // definition.extra.format === "duns"
-    if (
-      /d-u-n-s\snumber/i.test(_.get(this.props, "field.definition.body", null))
-    )
-      return supportedFieldFormats.duns;
-    return supportedFieldFormats[
-      _.get(this.props, "field.definition.extra.format", null)
-    ];
-  }
-
-  componentDidUpdate(prevProps) {
-    const inputText = this.props.decryptedData
-      ? this.props.decryptedData.answer
-      : this.props.field.answers[0]
-      ? this.props.field.answers[0].answer
-      : this.props.field.definition.defaultValue;
-    const prevInputText = prevProps.decryptedData
-      ? prevProps.decryptedData.answer
-      : prevProps.field.answers[0]
-      ? prevProps.field.answers[0].answer
-      : prevProps.field.definition.defaultValue;
-    if (inputText !== prevInputText) {
-      this.setState({ inputText });
-    }
-  }
-  onChange = e => {
-    const { value } = e.target;
-    this.setState({ inputText: value });
-    this.props.onFieldChange(e, this.props);
-  };
-
-  onBlur = e => this.props.onFieldChange(e, this.props);
-
-  get inputProps() {
-    const { props } = this;
-    let rows = _.get(props, "field.definition.meta.height", 1);
-
-    let fieldProps = {
-      disabled: isDisabled(props),
-      autosize: { minRows: rows },
-      placeholder: props.field.placeholder,
-      value: this.state.inputText,
-      autoComplete: "new-password",
-      onChange: this.onChange,
-      onBlur: this.onBlur,
-      style: getStyle(props)
-    };
-
-    if (this.format) fieldProps.format = this.format;
-
-    return fieldProps;
-  }
-
-  render() {
-    const { props } = this;
-
-    let TextFieldComponent = this.format ? FormattedTextInput : TextArea;
-    return (
-      <FormItem
-        label={getLabel(props, this)}
-        className={
-          "from-label " + (_.size(props.field.selected_flag) ? " has-flag" : "")
-        }
-        style={{ display: "block" }}
-        key={props.field.id}
-        message=""
-        hasFeedback
-        autoComplete="new-password"
-        {...field_error(props)}
-      >
-        <TextFieldComponent {...this.inputProps} />
-      </FormItem>
-    );
-  }
-}
 
 //Field Type Boolean
 export const Bool = props => {
@@ -202,12 +107,12 @@ export const Number = props => {
         type="number"
         style={{ width: "100%" }}
         placeholder={props.field.placeholder}
-        step="1"
         defaultValue={
           props.field.answers[0]
             ? props.field.answers[0].answer
             : props.field.definition.defaultValue
         }
+        parser={value => parseInt(value, 10)}
         {...feedValue(props)}
         autoComplete="new-password"
         onChange={onFieldChange.bind(this, props)}
@@ -374,6 +279,7 @@ class URL2 extends React.Component {
               }
               style={{ cursor: "pointer" }}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <Input
                 disabled={isDisabled(props)}
@@ -429,6 +335,7 @@ class URL2 extends React.Component {
                       : props.field.definition.defaultValue
                   }
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {props.field.answers[0]
                     ? props.field.answers[0].answer

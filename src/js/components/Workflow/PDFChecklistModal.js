@@ -248,7 +248,7 @@ class PDFChecklistModal extends React.Component {
 
                 {workflow.steps.map(step => (
                   <Checkbox
-                    key={step}
+                    key={step.value}
                     className={css`
                       font-size: 17px;
                       margin-left: 10px !important;
@@ -432,7 +432,7 @@ class PDFChecklistModal extends React.Component {
     return error
       ? this.renderFetchFailPlaceholder()
       : !!pdfConfig
-      ? !pdfConfig.results.length
+      ? !Array.isArray(pdfConfig.results) || !pdfConfig.results.length
         ? this.renderEmptyDataMessage()
         : this.renderWorkflowDetails()
       : null;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tooltip, Collapse, Icon } from "antd";
+import { Tooltip, Collapse } from "antd";
 import { css } from "emotion";
 import { get as lodashGet } from "lodash";
 import { StyledCollapseItem, StyledCollapse } from "../styledComponents";
@@ -86,6 +86,39 @@ class StepsSideBar extends Component {
     return Number(stepGroup.id) === Number(selectedPanelId);
   };
 
+  isAnyStepGroupAssigned = (steps, assignedSteps = []) => {
+    const normalizedAssignedSteps = assignedSteps.map(step => step.step);
+    return steps.some(step => normalizedAssignedSteps.includes(step.id));
+  };
+
+  renderGroupUserTagIcon = stepGroup => {
+    const { stepUserTagData } = this.props;
+
+    const isAnyStepAssigned = this.isAnyStepGroupAssigned(
+      stepGroup.steps,
+      stepUserTagData
+    );
+
+    if (!isAnyStepAssigned) {
+      return null;
+    }
+
+    return (
+      <i
+        className="material-icons text-middle"
+        style={{
+          marginRight: 6,
+          marginBottom: 4,
+          opacity: 0.3,
+          color: "#000000",
+          fontSize: 20
+        }}
+      >
+        person
+      </i>
+    );
+  };
+
   renderStepGroup(stepGroup) {
     return (
       <div
@@ -115,6 +148,7 @@ class StepsSideBar extends Component {
               {this.renderAlertsCount(stepGroup)}
             </span>
           )}
+          {this.renderGroupUserTagIcon(stepGroup)}
           {this.renderStepsCountStatus(stepGroup)}
         </div>
       </div>
@@ -195,9 +229,28 @@ class StepsSideBar extends Component {
     );
   };
 
+  renderStepUserTagIcon = step => {
+    const { stepUserTagData = [] } = this.props;
+
+    const selectedUserDetail = stepUserTagData.find(
+      user => user.step === step.id
+    );
+
+    if (!selectedUserDetail) {
+      return null;
+    }
+
+    return (
+      <i className="material-icons t-18 text-middle" style={{ marginRight: 8 }}>
+        person
+      </i>
+    );
+  };
+
   renderSteps = (step, stepGroup) => {
     const hasAlerts = !!lodashGet(step, "alerts.length", 0);
     const isSelected = this.isStepSelected(step);
+
     return (
       <StyledCollapseItem
         key={"step" + step.id}
@@ -213,6 +266,7 @@ class StepsSideBar extends Component {
           {step.name}
         </div>
         {hasAlerts && this.renderAlertsCount(step)}
+        {this.renderStepUserTagIcon(step)}
       </StyledCollapseItem>
     );
   };

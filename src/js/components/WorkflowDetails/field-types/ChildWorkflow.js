@@ -6,9 +6,7 @@ import { css } from "emotion";
 import {
   Form,
   Button,
-  Dropdown,
   Row,
-  Menu,
   Col,
   Icon,
   Tooltip,
@@ -17,7 +15,7 @@ import {
   Select,
   Checkbox
 } from "antd";
-import _ from "lodash";
+import _, { get as lodashGet } from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { injectIntl, FormattedMessage } from "react-intl";
@@ -25,6 +23,9 @@ import WorkflowList from "../../../../modules/workflowList/components/workflow-l
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
 import { Pagination } from "antd";
+import IntlTooltip from "../../common/IntlTooltip";
+import showNotification from "../../../../modules/common/notification";
+import styled from "@emotion/styled";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -140,7 +141,7 @@ class ChildWorkflowField2 extends Component {
       this.props.dispatch(workflowKindActions.getAll());
       this.setState({ kindChecked: true });
     } else {
-      this.prepFetchChildData();
+      this.getChildWorkflow();
     }
 
     const currentUserGroupFilter = getUserGroupFilter(
@@ -161,18 +162,21 @@ class ChildWorkflowField2 extends Component {
       !this.state.fetching &&
       !this.state.fetchEmpty
     ) {
-      this.prepFetchChildData();
+      this.getChildWorkflow();
     }
   };
 
-  prepFetchChildData = () => {
-    if (this.props.field.definition.extra["exclude_filters"]) {
-      this.state.excluded_filters = this.props.field.definition.extra[
-        "exclude_filters"
-      ];
+  // TODO: This needs to be tested.
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let state = null;
+    if (nextProps.field.definition.extra["exclude_filters"]) {
+      state = {};
+      state.excluded_filters =
+        nextProps.field.definition.extra["exclude_filters"];
     }
-    this.getChildWorkflow();
-  };
+
+    return state;
+  }
 
   getQueryParamForChildWorkflows = () => {
     try {
@@ -312,11 +316,51 @@ class ChildWorkflowField2 extends Component {
     return filter;
   };
 
-  onChildSelect = e => {
-    const kindTag = e.key;
-    const kind = this.props.workflowKind.workflowKind.find(
-      kind => kind.tag === kindTag
+  get relatedWorkflowKind() {
+    const relatedTypes = lodashGet(
+      this.props.workflowDetailsHeader,
+      `${this.props.workflowId}.definition.related_types`,
+      null
     );
+
+    // In case where the related types is not defined
+    // or the workflow kinds are not loaded yet.
+    if (
+      !Array.isArray(relatedTypes) ||
+      relatedTypes.length === 0 ||
+      !Array.isArray(this.props.workflowKind.workflowKind) ||
+      this.props.workflowKind.workflowKind.length === 0
+    )
+      return null;
+
+    // Search creteria for the eligible related kind that can be added
+    const relatedKind = this.props.workflowKind.workflowKind.filter(
+      kind =>
+        relatedTypes.includes(kind.tag) &&
+        kind.is_related_kind &&
+        Array.isArray(kind.features) &&
+        kind.features.includes("add_workflow") &&
+        this.props.field.definition.extra.child_workflow_kind_id === kind.id
+    );
+
+    return relatedKind[0] || null;
+  }
+
+  onChildSelect = e => {
+    const kind = this.relatedWorkflowKind;
+    if (!kind) {
+      showNotification({
+        type: "error",
+        message: "errorMessageInstances.ws001",
+        description: "errorMessageInstances.errorCode",
+        descriptionData: {
+          errorCode: "WS001"
+        }
+      });
+      return null;
+    }
+
+    const kindTag = kind.tag;
     const payload = {
       status: kind && kind.default_status,
       kind: kindTag,
@@ -328,82 +372,39 @@ class ChildWorkflowField2 extends Component {
     this.props.dispatch(createWorkflow(payload));
   };
 
-  getRelatedTypes = () => {
-    const related = this.props.workflowDetailsHeader[this.props.workflowId]
-      .definition.related_types;
-
-    const that = this;
-
-    let relatedType = [];
-    if (related.length !== 0) {
-      related.map(function(rtc) {
-        _.filter(that.props.workflowKind.workflowKind, function(kind) {
-          if (kind.tag === rtc) {
-            relatedType.push(kind);
-          }
-        });
-      });
-    }
-
-    return relatedType;
-  };
-
-  getKindMenu = () => {
-    const that = this;
-    let workflowKindFiltered = [];
-    const relatedKind = this.getRelatedTypes();
-
-    if (relatedKind.length) {
-      relatedKind.map(function(item) {
-        if (
-          item.is_related_kind &&
-          _.includes(item.features, "add_workflow") &&
-          that.props.field.definition.extra.child_workflow_kind_id === item.id
-        ) {
-          workflowKindFiltered.push(item);
-        }
-      });
-    }
-
-    if (_.isEmpty(workflowKindFiltered)) {
+  renderAddButton = () => {
+    //Return empty if no related workflow kind is present
+    if (!this.relatedWorkflowKind) {
       return null;
     }
 
-    const menu = (
-      <Menu onClick={this.onChildSelect}>
-        {_.map(workflowKindFiltered, function(item, index) {
-          return <Menu.Item key={item.tag}>{item.name}</Menu.Item>;
-        })}
-      </Menu>
-    );
-
-    return menu;
-  };
-
-  getAddMenu = () => {
-    const kindMenu = this.getKindMenu();
-    if (!kindMenu) {
-      return null;
+    // Show Loading when the workflow kinds are loading
+    if (this.props.workflowKind.loading) {
+      return (
+        <StyledLoadingContainer>
+          <Icon type="loading" style={{ color: "#148cd6", fontSize: "18px" }} />
+        </StyledLoadingContainer>
+      );
     }
 
-    return this.props.stepData.completed_at ||
-      this.props.stepData.is_locked ? null : (
-      <Dropdown
-        overlay={kindMenu}
-        className="child-workflow-dropdown"
-        placement="bottomRight"
-        size="small"
-        disabled={this.props.currentStepFields.isSubmitting}
-      >
-        <span className="pd-ard-sm text-secondary text-anchor">
-          <i className="material-icons">add</i>{" "}
-          {this.state.fetching
-            ? this.props.intl
-                .formatMessage({ id: "commonTextInstances.loading" })
-                .toUpperCase() + "..."
-            : null}
+    // Show disabled + button when the step is either locked or completed
+    if (this.props.stepData.completed_at || this.props.stepData.is_locked) {
+      return (
+        <span className="disabled child-workflow-dropdown pd-ard-sm text-lighter">
+          <i className="material-icons">add</i>
         </span>
-      </Dropdown>
+      );
+    }
+
+    return (
+      <IntlTooltip title="workflowsInstances.createWorkflow">
+        <span
+          className="pd-ard-sm text-secondary text-anchor"
+          onClick={this.onChildSelect}
+        >
+          <i className="material-icons">add</i>
+        </span>
+      </IntlTooltip>
     );
   };
 
@@ -515,7 +516,7 @@ class ChildWorkflowField2 extends Component {
 
     // getting workflow status count
     filteredChildWorkflow &&
-      filteredChildWorkflow.map(function(value, key) {
+      filteredChildWorkflow.forEach((value, key) => {
         const wstatus = value["status"]["label"];
         if (workflow_status_count[wstatus]) {
           workflow_status_count[wstatus] += 1;
@@ -556,7 +557,7 @@ class ChildWorkflowField2 extends Component {
     // getting lc data alerts status count
     let total_count = 0;
     if (this.state.childWorkflow) {
-      this.state.childWorkflow.map(function(val, key) {
+      this.state.childWorkflow.forEach(function(val, key) {
         _.map(val.lc_data, function(tag, i) {
           if (tag.display_type !== "alert") {
             return true;
@@ -688,9 +689,9 @@ class ChildWorkflowField2 extends Component {
     const that = this;
     const selected_filters = this.state.selected_filters;
     if (!_.size(selected_filters)) {
-      this.state.filteredChildWorkflow = that.state.childWorkflow;
-      this.setState({ filteredChildWorkflow: that.state.childWorkflow });
-      this.excludeWorkflows();
+      this.setState({ filteredChildWorkflow: that.state.childWorkflow }, () => {
+        this.excludeWorkflows();
+      });
       return true;
     }
     let filtered_workflow = [];
@@ -770,9 +771,9 @@ class ChildWorkflowField2 extends Component {
       );
     });
 
-    this.state.filteredChildWorkflow = intersection_workflows; // not working if i remove this
-    this.setState({ filteredChildWorkflow: intersection_workflows });
-    this.excludeWorkflows();
+    this.setState({ filteredChildWorkflow: intersection_workflows }, () => {
+      this.excludeWorkflows();
+    });
   };
 
   excludeWorkflows = () => {
@@ -983,7 +984,6 @@ class ChildWorkflowField2 extends Component {
   createKindFilter = () => {
     const { props } = this;
     const {
-      field,
       workflowKind,
       intl: { formatMessage }
     } = props;
@@ -1338,7 +1338,7 @@ class ChildWorkflowField2 extends Component {
                 </span>
 
                 {this.props.workflowDetailsHeader.workflowDetailsHeader ? (
-                  this.getAddMenu()
+                  this.renderAddButton()
                 ) : (
                   <span className="disabled child-workflow-dropdown pd-ard-sm text-lighter">
                     <i className="material-icons">add</i>{" "}
@@ -1495,3 +1495,8 @@ const ChildWorkflowFieldComponent = connect(mapPropsToState)(
 export const ChildWorkflowField = props => {
   return <ChildWorkflowFieldComponent {...props} />;
 };
+
+const StyledLoadingContainer = styled.span`
+  display: inline-block;
+  transform: translateY(-4px);
+`;

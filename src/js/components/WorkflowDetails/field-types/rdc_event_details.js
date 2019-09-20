@@ -1,15 +1,16 @@
 import React, { Component } from "react";
-import { Table, Icon, Tabs, Tag } from "antd";
+import { Table, Tabs, Tag } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { getEventItem } from "./rdc_alert_metadata";
 import { event_status, status_filters } from "../EventStatuses";
 import { map, includes } from "lodash";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const TabPane = Tabs.TabPane;
 
-const { isDnBIntegrationDataLoading, getUserGroupFilter } = commonFunctions;
+const { getUserGroupFilter } = commonFunctions;
 
 class RDCEventDetailComponent extends Component {
   constructor() {
@@ -58,42 +59,32 @@ class RDCEventDetailComponent extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
 
     const updatedIntegrationJson = this.props.field.definition.extra
       ? this.filterEventsByFlag()
       : field.integration_json;
 
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      isDnBIntegrationDataLoading(this.props)
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check="default"
+      >
+        <div className="mr-top-lg mr-bottom-lg">
+          <GetTabsFilter
+            intl={this.props.intl}
+            getComment={this.getComment}
+            jsonData={updatedIntegrationJson}
+            commentCount={field.integration_comment_count}
+            flag_dict={field.selected_flag}
+          />
         </div>
-      );
-    } else if (_.size(field.integration_json)) {
-      final_html = (
-        <div>
-          {_.size(field.integration_json) ? (
-            <div className="mr-top-lg mr-bottom-lg">
-              <GetTabsFilter
-                intl={this.props.intl}
-                getComment={this.getComment}
-                jsonData={updatedIntegrationJson}
-                commentCount={field.integration_comment_count}
-                flag_dict={field.selected_flag}
-              />
-            </div>
-          ) : null}
-        </div>
-      );
-    }
-    return <div style={{ marginBottom: "50px" }}>{final_html}</div>;
+      </IntegrationLoadingWrapper>
+    );
+
+    return <div style={{ marginBottom: "50px" }}>{finalHTML}</div>;
   };
 }
 
@@ -384,6 +375,8 @@ const GetTabsFilter = props => {
   );
 };
 
+const IntlRDCEventDetailComponent = injectIntl(RDCEventDetailComponent);
+
 export const RDCEventDetails = props => {
-  return <RDCEventDetailComponent {...props} />;
+  return <IntlRDCEventDetailComponent {...props} />;
 };

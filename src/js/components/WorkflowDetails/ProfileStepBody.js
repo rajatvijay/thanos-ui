@@ -45,9 +45,9 @@ class ProfileStepBody extends Component {
     }
 
     return (
-      <div style={{ margin: "40px 50px", height: "100vh" }}>
+      <div style={{ margin: "40px 50px" }}>
         <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
-          <Row>{this.renderDetails()}</Row>
+          <Row style={{ paddingBottom: "24px" }}>{this.renderDetails()}</Row>
         </Chowkidaar>
       </div>
     );

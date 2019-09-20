@@ -10,7 +10,6 @@ import {
   workflowActions,
   changeSearchValue
 } from "../../../js/actions";
-import "../header.css";
 import { Link } from "react-router-dom";
 import IntlTooltip from "../../../js/components/common/IntlTooltip";
 import { exportWorkflow } from "../services";
@@ -33,7 +32,7 @@ class Header extends Component {
   };
 
   onSearch = searchValue => {
-    if (searchValue.length >= 3) {
+    if (searchValue && searchValue.length >= 3) {
       const page = 1;
       this.props.dispatch(workflowActions.searchWorkflow(searchValue, page));
     } else {
@@ -159,6 +158,7 @@ class Header extends Component {
           <div
             className="search-box"
             style={{ flexBasis: "300px", marginLeft: "56px" }}
+            data-testid="search-bar"
           >
             <Input
               style={{
@@ -230,8 +230,6 @@ class Header extends Component {
                 <Menu>
                   {this.supportLinks()}
                   <Menu.Divider style={{ margin: "6px 0px" }} />
-
-                  {/* <Menu.Item key="profile">Profile</Menu.Item> */}
                   <SelectLanguage />
                   {userProfileId ? (
                     <Menu.Item key="profile">

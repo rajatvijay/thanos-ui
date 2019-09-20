@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { authHeader } from "../../../_helpers";
 import { connect } from "react-redux";
 import { Form, Icon } from "antd";
@@ -9,6 +9,7 @@ import { apiBaseURL } from "../../../../config";
 import WorkflowList from "../../../../modules/workflowList/components/workflow-list";
 import { Pagination } from "antd";
 import { FormattedMessage } from "react-intl";
+import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const FormItem = Form.Item;
 
@@ -150,7 +151,7 @@ class DuplicateCheckComp extends Component {
   };
 
   render = () => {
-    const { field } = this.props;
+    const { field, currentStepFields } = this.props;
     const { childWorkflow } = this.state;
 
     const props = {
@@ -161,25 +162,16 @@ class DuplicateCheckComp extends Component {
       completed: this.props.completed,
       permission: this.props.permission
     };
-    let final_html = null;
-    if (
-      this.props.currentStepFields.integration_data_loading ||
-      field.integration_json.status_code === "fetching"
-    ) {
-      final_html = (
-        <div>
-          <div className="text-center mr-top-lg">
-            <Icon type={"loading"} />
-          </div>
-        </div>
-      );
-    } else if (field.integration_json.status_code === "error") {
-      final_html = <div>{field.integration_json.status_message}</div>;
-    } else if (
-      _.size(field.integration_json) &&
-      _.size(field.integration_json.data)
-    ) {
-      final_html = (
+
+    const finalHTML = (
+      <IntegrationLoadingWrapper
+        currentStepFields={currentStepFields}
+        field={field}
+        step={field.step}
+        check={
+          _.size(field.integration_json) && _.size(field.integration_json.data)
+        }
+      >
         <FormItem
           className={
             "from-label " +
@@ -238,12 +230,12 @@ class DuplicateCheckComp extends Component {
             </div>
           )}
         </FormItem>
-      );
-    }
+      </IntegrationLoadingWrapper>
+    );
 
     return (
       <div>
-        {getFields(props)} {final_html}
+        {getFields(props)} {finalHTML}
       </div>
     );
   };

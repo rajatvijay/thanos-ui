@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Modal, Button, Input, Cascader, Divider, Icon } from "antd";
+import { Button, Input, Cascader, Divider, Icon } from "antd";
 import DropdownFilter from "./DropdownFilter";
 import { connect } from "react-redux";
 import { css } from "emotion";
 import { FormattedMessage, injectIntl } from "react-intl";
+import { get as lodashGet } from "lodash";
 
 const OPERATORS_TYPES = [
   {
@@ -32,7 +33,7 @@ const OPERATORS_TYPES = [
   },
   {
     label: (
-      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_containsÎ" />
+      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_contains" />
     ),
     value: "not_contains"
   }
@@ -127,12 +128,15 @@ class FilterPopup extends Component {
   getStatusTypes = () => {
     try {
       const allStatuses = this.props.workflowFilterType.statusType;
-      const selectedKind = this.props.workflowKindValue.selectedKindValue;
-      if (selectedKind && selectedKind.available_statuses) {
+      const availableStatuses = lodashGet(
+        this.props,
+        "workflowFilters.kind.meta.available_statuses"
+      );
+      if (availableStatuses) {
         // This will maintain the order of statuses as defined for the kind
-        return selectedKind.available_statuses.map(statusId =>
-          allStatuses.find(status => status.id === statusId)
-        );
+        return availableStatuses
+          .map(statusId => allStatuses.find(status => status.id === statusId))
+          .sort((a, b) => (a.label > b.label ? 1 : a.label < b.label ? -1 : 0));
       }
     } catch (e) {}
     return [];
@@ -162,6 +166,20 @@ class FilterPopup extends Component {
     const { operator, text, field } = this.state;
 
     const { businessType, regionType } = workflowFilterType;
+
+    const custom_ui_labels = this.props.config.custom_ui_labels || {};
+
+    const regionPlaceholder =
+      custom_ui_labels["filterPlaceholders.Region"] ||
+      this.props.intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.region"
+      });
+
+    const businessPlaceholder =
+      custom_ui_labels["filterPlaceholders.Business"] ||
+      this.props.intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.business_unit"
+      });
 
     return (
       <div
@@ -235,10 +253,11 @@ class FilterPopup extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowFilterType, workflowKindValue } = state;
+  const { workflowFilterType, workflowFilters, config } = state;
   return {
     workflowFilterType,
-    workflowKindValue
+    workflowFilters,
+    config
   };
 }
 

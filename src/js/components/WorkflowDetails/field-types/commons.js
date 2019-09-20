@@ -30,7 +30,6 @@ export const commonFunctions = {
   getIntegrationSearchButton,
   fieldFlagDropdown,
   isDisabled,
-  isDnBIntegrationDataLoading,
   convertValueToString,
   getUserGroupFilter
 };
@@ -488,15 +487,6 @@ const GetAnsweredBy = props => {
     return <span />;
   }
 };
-
-function isDnBIntegrationDataLoading(props) {
-  return (
-    props.currentStepFields.integration_data_loading ||
-    (props.integration_json &&
-      props.integration_json.status_message ===
-        "Fetching data for this field...")
-  );
-}
 
 function convertValueToString(options) {
   if (options && options.length) {

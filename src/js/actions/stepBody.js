@@ -24,6 +24,8 @@ const postStepUser = obj => async dispatch => {
       payload: res,
       stepId: obj.step
     });
+
+    obj.getStepUserTag();
   } catch (err) {
     dispatch({
       type: POST_STEP_USER_FAILURE,
