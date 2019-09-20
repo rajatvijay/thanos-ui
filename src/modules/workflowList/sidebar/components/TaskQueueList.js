@@ -3,7 +3,7 @@ import { Icon, Spin } from "antd";
 import styled from "@emotion/styled";
 import { css } from "emotion";
 import { TaskQueue, DefaultTaskQueue } from "./TaskQueue";
-import user from "../../../images/user.svg";
+// import user from "../../../images/user.svg";
 import { stepBodyService } from "../../../js/services";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { get as lodashGet } from "lodash";
@@ -132,8 +132,9 @@ class TaskQueueList extends PureComponent {
                 name: this.props.intl.formatMessage({
                   id: "mainSidebar.myTasksText"
                 }),
-                count: myTasksCount,
-                image: user
+                count: myTasksCount
+                // TODO: Add image here
+                // image: user
               }}
               loading={loadingMyTasksCount}
               onClick={this.toggleMyTaskFilter}

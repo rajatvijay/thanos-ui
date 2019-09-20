@@ -276,30 +276,24 @@ const BasicFilters = injectIntl(
     statuses,
     regions,
     businessUnits,
-    onFilterChange
+    onChange
   }) => (
     <div
       style={{
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between",
-        paddingLeft: 28,
-        paddingRight: 28
+        justifyContent: "space-between"
       }}
     >
       <DropdownFilter
         value={selectedStatus}
-        name="status"
         data={statuses.data}
         loading={statuses.isLoading}
         placeholder={
           <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.status" />
         }
-        onChange={onFilterChange("status")}
+        onChange={onChange("status")}
         searchable
-        // style={{
-        //   width: "130px"
-        // }}
       />
       <DropdownFilter
         value={selectedRegion}
@@ -308,7 +302,7 @@ const BasicFilters = injectIntl(
         placeholder={
           <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.region" />
         }
-        onChange={onFilterChange("region")}
+        onChange={onChange("region")}
         searchable
       />
       <DropdownFilter
@@ -318,7 +312,7 @@ const BasicFilters = injectIntl(
         placeholder={
           <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.business_unit" />
         }
-        onChange={onFilterChange("businessUnit")}
+        onChange={onChange("businessUnit")}
         searchable
       />
     </div>
@@ -380,12 +374,6 @@ class AdvancedFilters extends Component {
             placeholder={
               <FormattedMessage id="workflowFiltersTranslated.pleaseSelectField" />
             }
-            // TODO: Check if this is required
-            // className={css`
-            //   .ant-input {
-            //     padding-left: 0;
-            //   }
-            // `}
           />
 
           <DropdownFilter
