@@ -23,9 +23,9 @@ export const statusesForFilterDropdownSelector = createSelector(
   }
 );
 
-export const selectedStatus = state =>
+export const selectedStatusSelector = state =>
   state.workflowList.selectedWorkflowFilters.status;
-export const selectedRegion = state =>
+export const selectedRegionSelector = state =>
   state.workflowList.selectedWorkflowFilters.region;
-export const selectedBusinessUnit = state =>
+export const selectedBusinessUnitSelector = state =>
   state.workflowList.selectedWorkflowFilters.businessUnit;
