@@ -49,3 +49,5 @@ export const selectedFieldAnswerSelector = state =>
     "workflowList.selectedWorkflowFilters.answer.fieldAnswer",
     null
   );
+
+export const taskQueuesSelector = state => state.workflowList.taskQueues;

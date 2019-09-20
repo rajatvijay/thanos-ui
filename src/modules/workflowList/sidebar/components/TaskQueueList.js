@@ -2,19 +2,16 @@ import React, { PureComponent } from "react";
 import { Icon, Spin } from "antd";
 import styled from "@emotion/styled";
 import { css } from "emotion";
-import { TaskQueue, DefaultTaskQueue } from "./TaskQueue";
-// import user from "../../../images/user.svg";
-import { stepBodyService } from "../../../../js/services";
+import { TaskQueue } from "./TaskQueue";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { get as lodashGet } from "lodash";
+import MyTaskFilter from "./MyTaskFilter";
 
 const INITIAL_SHOW_COUNT = 5;
 
 class TaskQueueList extends PureComponent {
   state = {
-    showingAll: false,
-    myTasksCount: null,
-    loadingMyTasksCount: false
+    showingAll: false
   };
 
   onSelect = taskQueue => {
@@ -33,24 +30,6 @@ class TaskQueueList extends PureComponent {
   isTaskQueueVisible = taskQueue => {
     return !taskQueue.extra || !taskQueue.extra.hide;
   };
-
-  getMyTasksCount = async () => {
-    this.setState({ loadingMyTasksCount: true });
-    try {
-      const response = await stepBodyService.getMyTasksCount();
-      this.setState({
-        myTasksCount: response["Assignee"] || 0,
-        loadingMyTasksCount: false
-      });
-    } catch (e) {
-      this.setState({ myTasksCount: null, loadingMyTasksCount: false });
-    }
-  };
-
-  componentDidMount() {
-    // TODO: Move this API call
-    this.getMyTasksCount();
-  }
 
   renderList = () => {
     const { taskQueues } = this.props;
@@ -91,7 +70,7 @@ class TaskQueueList extends PureComponent {
 
   render() {
     const { taskQueues, loading, isMyTaskSelected } = this.props;
-    const { showingAll, loadingMyTasksCount, myTasksCount } = this.state;
+    const { showingAll } = this.state;
     // Loading state
     if (loading) {
       return (
@@ -129,18 +108,9 @@ class TaskQueueList extends PureComponent {
               list-style-type: none;
             `}
           >
-            <DefaultTaskQueue
-              item={{
-                name: this.props.intl.formatMessage({
-                  id: "mainSidebar.myTasksText"
-                }),
-                count: myTasksCount
-                // TODO: Add image here
-                // image: user
-              }}
-              loading={loadingMyTasksCount}
-              onClick={this.toggleMyTaskFilter}
+            <MyTaskFilter
               isSelected={isMyTaskSelected}
+              onClick={this.toggleMyTaskFilter}
             />
             {this.renderList()}
             <StyledLastListItem>
