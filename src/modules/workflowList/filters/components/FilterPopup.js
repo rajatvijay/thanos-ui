@@ -4,7 +4,7 @@ import FilterDropdown from "./FilterDropdown";
 import { connect } from "react-redux";
 // import { css } from "emotion";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { get as lodashGet } from "lodash";
+// import { get as lodashGet } from "lodash";
 import {
   getStatusesThunk,
   getRegionsThunk,
@@ -12,7 +12,12 @@ import {
   applyWorkflowFilterThunk
 } from "../../thunks";
 import { bindActionCreators } from "redux";
-import { statusesForFilterDropdownSelector } from "../../selectors";
+import {
+  statusesForFilterDropdownSelector,
+  selectedStatusSelector,
+  selectedRegionSelector,
+  selectedBusinessUnitSelector
+} from "../../selectors";
 
 const OPERATORS_TYPES = [
   {
@@ -54,11 +59,16 @@ class FilterPopup extends Component {
     this.props.getBusinessUnitsThunk();
   }
   handleBasicFilters = field => value => {
-    console.log(field, value);
     this.props.applyWorkflowFilterThunk({ field, value });
   };
   render() {
-    const { staticData, statuses } = this.props;
+    const {
+      staticData,
+      statuses,
+      selectedStatus,
+      selectedRegion,
+      selectedBusinessUnit
+    } = this.props;
     const { regions, businessUnits } = staticData;
     return (
       <div>
@@ -67,6 +77,9 @@ class FilterPopup extends Component {
           regions={regions}
           businessUnits={businessUnits}
           onChange={this.handleBasicFilters}
+          selectedStatus={selectedStatus}
+          selectedRegion={selectedRegion}
+          selectedBusinessUnit={selectedBusinessUnit}
         />
         <AdvancedFilters />
         <div>
@@ -84,7 +97,10 @@ function mapStateToProps(state) {
   return {
     staticData: workflowList.staticData,
     statuses: statusesForFilterDropdownSelector(state),
-    config
+    config,
+    selectedStatus: selectedStatusSelector(state),
+    selectedRegion: selectedRegionSelector(state),
+    selectedBusinessUnit: selectedBusinessUnitSelector(state)
   };
 }
 
@@ -188,7 +204,7 @@ class AdvancedFilters extends PureComponent {
   };
 
   render() {
-    const { advancedFilterOptions } = this.props;
+    const { options: advancedFilterOptions } = this.props;
     return (
       <div style={{ marginTop: "20px" }}>
         <span
