@@ -14,16 +14,8 @@ class TaskQueueList extends PureComponent {
     showingAll: false
   };
 
-  onSelect = taskQueue => {
-    const { onSelectTask } = this.props;
-    const activeTaskQueue = lodashGet(
-      this.props,
-      "activeTaskQueue.stepgroupdef.filterValue.0",
-      null
-    );
-
-    if (activeTaskQueue === taskQueue.tag) onSelectTask();
-    else onSelectTask(taskQueue);
+  handleClick = taskQueue => {
+    this.props.onClick(taskQueue);
   };
 
   isTaskQueueVisible = taskQueue => {
@@ -31,40 +23,26 @@ class TaskQueueList extends PureComponent {
   };
 
   renderList = () => {
-    const { taskQueues } = this.props;
+    const { taskQueues, activeTaskQueue } = this.props;
     const { showingAll } = this.state;
     const visibleTaskQueues = taskQueues.filter(this.isTaskQueueVisible);
     const restrictedTaskQueues = showingAll
       ? visibleTaskQueues
       : visibleTaskQueues.slice(0, INITIAL_SHOW_COUNT);
-    const activeTaskQueue = lodashGet(
-      this.props,
-      "activeTaskQueue.stepgroupdef.filterValue.0",
-      null
-    );
+    const isSelected = taskQueue =>
+      activeTaskQueue && activeTaskQueue.tag === taskQueue.tag;
     return restrictedTaskQueues.map(taskQueue => (
       <TaskQueue
         key={`taskQueue_${taskQueue.tag}`}
         item={taskQueue}
-        onSelect={this.onSelect}
-        isSelected={activeTaskQueue === taskQueue.tag}
+        onClick={this.handleClick}
+        isSelected={isSelected(taskQueue)}
       />
     ));
   };
 
   toggleShowingAll = () => {
     this.setState(({ showingAll }) => ({ showingAll: !showingAll }));
-  };
-
-  toggleMyTaskFilter = () => {
-    const { isMyTaskSelected } = this.props;
-    if (isMyTaskSelected) {
-      // Remove the filter
-      this.props.onSelectMyTask();
-    } else {
-      // Apply the filter
-      this.props.onSelectMyTask("Assignee");
-    }
   };
 
   render() {
@@ -109,7 +87,7 @@ class TaskQueueList extends PureComponent {
           >
             <MyTaskFilter
               isSelected={isMyTaskSelected}
-              onClick={this.toggleMyTaskFilter}
+              onClick={this.props.onClickMyTask}
             />
             {this.renderList()}
             <StyledLastListItem>

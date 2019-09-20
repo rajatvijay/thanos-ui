@@ -9,13 +9,13 @@ class Alerts extends Component {
   state = { collapsed: false };
 
   renderSubCategoryList = () => {
-    const { onSelect, item, selected } = this.props;
+    const { onClick, item, selected } = this.props;
 
     if (item.sub_categories) {
       return item.sub_categories.map(subCategory => (
         <StyledAlertSubCategoryListItem
           key={`${subCategory.id}`}
-          onClick={e => onSelect(subCategory)}
+          onClick={e => onClick(subCategory)}
           data-testid="alerts-list-item"
           isSelected={subCategory.name === selected}
         >

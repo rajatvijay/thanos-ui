@@ -94,18 +94,18 @@ export const getAllKindsThunk = () => {
   };
 };
 
-export const getAllAlertsThunk = () => {
+export const getAllAlertsThunk = kindTag => {
   return async dispatch => {
     dispatch(getAllAlerts());
 
-    const [error, alerts] = await to(getAllAlerts$$());
+    const [error, alerts] = await to(getAllAlerts$$(kindTag));
 
     if (error) {
-      dispatch(getAllAlertsSuccess(error.message));
+      dispatch(getAllAlertsFailure(error.message));
       throw error;
     }
 
-    dispatch(getAllAlertsFailure(alerts));
+    dispatch(getAllAlertsSuccess(alerts.alert_details));
     return alerts;
   };
 };
@@ -134,6 +134,7 @@ export function applyWorkflowFilterThunk(filter) {
 
     if (filter.field === "kind") {
       dispatch(getAllTaskQueuesThunk(filter.value.tag));
+      dispatch(getAllAlertsThunk(filter.value.tag));
     }
   };
 }

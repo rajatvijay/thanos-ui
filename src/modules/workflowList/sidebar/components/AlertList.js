@@ -8,17 +8,8 @@ import { FormattedMessage } from "react-intl";
 class AlertList extends Component {
   state = { selected: null };
 
-  onSelect = alert => {
-    const { onSelectAlert } = this.props;
-    const { selected } = this.state;
-
-    if (selected === alert.name) {
-      this.setState({ selected: null });
-    } else {
-      this.setState({ selected: alert.name });
-    }
-
-    onSelectAlert(alert);
+  handleClick = alert => {
+    this.props.onClick(alert);
   };
 
   renderList = () => {
@@ -29,7 +20,7 @@ class AlertList extends Component {
           key={`alert_${item.id}`}
           loading={loading}
           selected={this.state.selected}
-          onSelect={this.onSelect}
+          onClick={this.handleClick}
           item={item}
         />
       );
