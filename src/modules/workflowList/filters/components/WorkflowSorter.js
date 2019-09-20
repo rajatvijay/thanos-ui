@@ -3,6 +3,7 @@ import { Icon } from "antd";
 import FilterPopup from "./FilterPopup";
 import { connect } from "react-redux";
 import { css } from "emotion";
+import { selectedBasicFiltersSelector } from "../../selectors";
 
 class WorkflowToolbar extends Component {
   state = {
@@ -15,7 +16,7 @@ class WorkflowToolbar extends Component {
   };
   render() {
     const { isFilterPopupVisible } = this.state;
-    const { selectedWorkflowFilters } = this.props;
+    const { selectedBasicWorkflowFilters } = this.props;
     return (
       <div>
         <div>
@@ -29,7 +30,7 @@ class WorkflowToolbar extends Component {
             Filter
             {isFilterPopupVisible ? <Icon type="up" /> : <Icon type="down" />}
           </span>
-          <SelectedBasicFilters filters={selectedWorkflowFilters} />
+          <SelectedBasicFilters filters={selectedBasicWorkflowFilters} />
           {isFilterPopupVisible && <FilterPopup />}
         </div>
       </div>
@@ -39,7 +40,7 @@ class WorkflowToolbar extends Component {
 
 const mapStateToProps = state => {
   return {
-    selectedWorkflowFilters: state.workflowList.selectedWorkflowFilters
+    selectedBasicWorkflowFilters: selectedBasicFiltersSelector(state)
   };
 };
 

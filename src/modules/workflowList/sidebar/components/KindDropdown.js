@@ -1,114 +1,82 @@
 import React, { Component } from "react";
 import { Dropdown, Icon } from "antd";
-import {
-  workflowFiltersActions,
-  workflowKindActions
-} from "../../../js/actions";
 import { connect } from "react-redux";
 import { css } from "emotion";
 import styled from "@emotion/styled";
 import { injectIntl } from "react-intl";
-import { getIntlBody } from "../../../js/_helpers/intl-helpers";
-import { get as lodashGet } from "lodash";
+import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
+import { getAllKindsThunk, applyWorkflowFilterThunk } from "../../thunks";
+import {
+  kindsSelector,
+  selectedKindSelector,
+  selectedFieldAnswerSelector
+} from "../../selectors";
 
-class FilterDropdown extends Component {
+class KindDropdown extends Component {
+  // TODO: Move this to main components/index.js
+  // since get of all the general data should be called inside the main component
+  componentDidMount() {
+    this.props.getAllKindsThunk();
+  }
+
   handleSelectedKind = kind => {
-    const kindFilter = {
-      filterType: "kind",
-      filterValue: [kind.id],
-      meta: kind
-    };
-    this.clearFitlers(["stepgroupdef", "answer"]);
-    this.applyFilters([kindFilter]);
-    this.fetchSidebarMeta(kind.tag);
+    this.props.applyWorkflowFilterThunk({ field: "kind", value: kind });
   };
 
+  // TODO: Use this when making the filter API call
+  // `${fieldTag.tag}__eq__${fieldAnswer.value}`
   handleSelectedFieldAnswer = (kind, fieldTag, fieldAnswer) => {
-    const kindFitler = {
-      filterType: "kind",
-      filterValue: [kind.id],
-      meta: kind
-    };
-    const fieldAnswerFitler = {
-      filterType: "answer",
-      filterValue: [`${fieldTag.tag}__eq__${fieldAnswer.value}`],
-      meta: fieldAnswer
-    };
-    this.clearFitlers(["stepgroupdef"]);
-    this.applyFilters([kindFitler, fieldAnswerFitler]);
-    this.fetchSidebarMeta(kind.tag);
-  };
-
-  clearFitlers = filters => {
-    filters.forEach(filterType => {
-      this.props.dispatch(workflowFiltersActions.removeFilters({ filterType }));
-    });
-  };
-
-  applyFilters = filters => {
-    filters.forEach(filter => {
-      this.props.dispatch(workflowFiltersActions.setFilters(filter));
+    this.props.applyWorkflowFilterThunk({ field: "kind", value: kind });
+    this.props.applyWorkflowFilterThunk({
+      field: "answer",
+      value: {
+        fieldTag,
+        fieldAnswer
+      }
     });
   };
 
   // TODO: This should be inside a thunk,
+  // TODO: This should be inside the `Sidebar` compoentn
   // The behaviour is of a pub-sub pattern
   // when one action is dispatched
   // dispatch these set of actions
-  fetchSidebarMeta = tag => {
-    this.props.dispatch(workflowKindActions.getCount(tag));
-    this.props.dispatch(workflowKindActions.getAlertCount(tag));
-  };
+  // fetchSidebarMeta = tag => {
+  // this.props.dispatch(workflowKindActions.getCount(tag));
+  // this.props.dispatch(workflowKindActions.getAlertCount(tag));
+  // };
 
   isFieldAnswerSelected = fieldAnswer => {
+    const { selectedFieldAnswer } = this.props;
     return (
-      this.selectedFieldAnswer &&
-      this.selectedFieldAnswer.value === fieldAnswer.value
+      selectedFieldAnswer && selectedFieldAnswer.value === fieldAnswer.value
     );
   };
 
   isKindSelected = kind => {
-    return (
-      this.selectedKind &&
-      this.selectedKind.id === kind.id &&
-      !this.selectedFieldAnswer
-    );
+    const { selectedKind, selectedFieldAnswer } = this.props;
+    return selectedKind && selectedKind.id === kind.id && !selectedFieldAnswer;
   };
-
-  // All gettters and setters
-  get selectedFieldTag() {
-    return lodashGet(this.props, "workflowFilters.field_def_tags.meta", null);
-  }
-
-  get selectedKind() {
-    return lodashGet(this.props, "workflowFilters.kind.meta", null);
-  }
-
-  get selectedFieldAnswer() {
-    return lodashGet(this.props, "workflowFilters.answer.meta", null);
-  }
-
-  get loading() {
-    return lodashGet(this.props, "workflowKind.loading", false);
-  }
 
   // TODO: Fix this
   // lodashGet(this.props, "workflowFilters.kind.meta", null);
   // the above expression has its display name
   // sometimes in the `name` key and sometimes in the `body` key
   getSelectedKindNameKey = () => {
-    return this.selectedKind.body ? "body" : "name";
+    const { selectedKind } = this.props;
+    return selectedKind.body ? "body" : "name";
   };
 
   // All render methods
   renderSelectedItem = () => {
+    const { selectedKind, selectedFieldAnswer } = this.props;
     return (
       <StyledSelectedItemContianer>
-        {this.selectedKind ? (
+        {selectedKind ? (
           <>
             <div>
-              {getIntlBody(this.selectedKind, this.getSelectedKindNameKey())}
-              {this.selectedFieldAnswer && this.renderSelectedFieldAnswer()}
+              {getIntlBody(selectedKind, this.getSelectedKindNameKey())}
+              {selectedFieldAnswer && this.renderSelectedFieldAnswer()}
             </div>
             <Icon type="down" />
           </>
@@ -120,6 +88,7 @@ class FilterDropdown extends Component {
   };
 
   renderSelectedFieldAnswer = () => {
+    const { selectedFieldAnswer } = this.props;
     return (
       <span
         className={css`
@@ -130,17 +99,17 @@ class FilterDropdown extends Component {
           color: rgb(255, 255, 255, 0.5);
         `}
       >
-        {this.selectedFieldAnswer.label}
+        {selectedFieldAnswer.label}
       </span>
     );
   };
 
   renderDropdownList = () => {
-    const { workflowKind } = this.props.workflowKind;
+    const { workflowKinds } = this.props;
 
     return (
       <StyledListContainer>
-        {workflowKind.map(kind => (
+        {workflowKinds.data.results.map(kind => (
           <StyledRelativeLi key={kind.id}>
             <FiltersHeading onClick={() => this.handleSelectedKind(kind)}>
               {kind.name}
@@ -182,16 +151,29 @@ class FilterDropdown extends Component {
   };
 
   render() {
-    const { workflowKind } = this.props.workflowKind;
+    const { workflowKinds } = this.props;
 
-    if (!workflowKind) {
+    // Loading state
+    if (workflowKinds.isLoading) {
+      return (
+        <div
+          className={css`
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+          `}
+        >
+          <Icon style={{ color: "white", fontSize: 24 }} type="loading" />
+        </div>
+      );
+    }
+
+    // Just in case backend sends no data
+    if (!workflowKinds.data) {
       return null;
     }
 
-    if (this.loading) {
-      return <Icon type="loading" />;
-    }
-
+    // The main component :smile:
     return (
       <Dropdown trigger={["click"]} overlay={this.renderDropdownList()}>
         {this.renderSelectedItem()}
@@ -201,15 +183,17 @@ class FilterDropdown extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowKind, workflowKindValue, workflowFilters } = state;
   return {
-    workflowKind,
-    selectedKindValue: workflowKindValue.selectedKindValue,
-    workflowFilters
+    workflowKinds: kindsSelector(state),
+    selectedKind: selectedKindSelector(state),
+    selectedFieldAnswer: selectedFieldAnswerSelector(state)
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(FilterDropdown));
+export default connect(
+  mapStateToProps,
+  { getAllKindsThunk, applyWorkflowFilterThunk }
+)(injectIntl(KindDropdown));
 
 // ================================================================================ //
 // ================================================================================ //
