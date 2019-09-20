@@ -10,7 +10,7 @@ import { get as lodashGet } from "lodash";
 
 class SelectLanguage extends React.Component {
   handleLanguageChange = event => {
-    const { title } = event.target;
+    const { title } = event.item.props;
     this.props.dispatch(languageActions.updateUserLanguage(title));
   };
 
@@ -51,38 +51,30 @@ class SelectLanguage extends React.Component {
   render() {
     const { supported_languages: supportedLaguanges } = this.props.config;
     if (!supportedLaguanges) return null;
+    const sanitizedProps = this.sanitizedProps;
     return (
       <Menu.SubMenu
-        {...this.sanitizedProps}
+        {...sanitizedProps}
         title={this.renderLanguageMenuTitle()}
         className="header-menu"
         onClick={this.handleLanguageChange}
       >
-        <>
-          {/** This is to avoid SubMenu passing it's prop to div and therefore prevent the warning */}
-          <div
-            style={{
-              height: "300px",
-              overflow: "scroll"
-            }}
+        {supportedLaguanges.map(language => (
+          <Menu.Item
+            {...sanitizedProps}
+            key={language}
+            title={language}
+            className={css`
+              cursor: pointer;
+              padding: 10px;
+              &:hover {
+                background-color: #eee !important;
+              }
+            `}
           >
-            {supportedLaguanges.map((language, index) => (
-              <Menu.Item
-                {...this.sanitizedProps}
-                key={index}
-                title={language}
-                style={{ cursor: "pointer", padding: "10px" }}
-                className={css`
-                  &:hover {
-                    background-color: #eee !important;
-                  }
-                `}
-              >
-                {this.renderLanguageName(language)}
-              </Menu.Item>
-            ))}
-          </div>
-        </>
+            {this.renderLanguageName(language)}
+          </Menu.Item>
+        ))}
       </Menu.SubMenu>
     );
   }
