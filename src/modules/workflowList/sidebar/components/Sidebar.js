@@ -5,26 +5,27 @@ import AlertList from "./AlertList";
 import {
   workflowFiltersActions,
   workflowKindActions
-} from "../../../js/actions";
+} from "../../../../js/actions";
 import { connect } from "react-redux";
 import { css } from "emotion";
-import { taskQueueCount } from "../sidebarActions";
+// import { taskQueueCount } from "../sidebarActions";
+import { getAllTaskQueuesThunk } from "../../thunks";
 import { injectIntl } from "react-intl";
-import FilterDropdown from "../../../js/components/WorkflowDetails/FilterDropdown";
+import KindDropdown from "./KindDropdown";
 
 const { Sider } = Layout;
 
 class Sidebar extends Component {
   state = {
-    activeFilter: [],
-    parent: null,
-    collapse: true
+    activeFilter: []
   };
 
   componentDidMount() {
-    this.props.taskQueueCount();
+    // TODO: Using service
+    // this.props.getAllTaskQueuesThunk();
   }
 
+  // TODO: Use the service method to set filter
   setFilter = () => {
     const payload = {
       filterType: "alert_category",
@@ -37,6 +38,7 @@ class Sidebar extends Component {
     const { workflowKind, selectedKindValue } = this.props;
     const { workflowKind: prevWorkflowKind } = prevProps;
 
+    // TODO: See of this is required
     if (workflowKind.workflowKind && !prevWorkflowKind.workflowKind) {
       // So, we just got workflow kinds populated.
       // Now, we'll check if there's no selected workflow kind
@@ -55,6 +57,7 @@ class Sidebar extends Component {
     }
   }
 
+  // TODO: Combine into single setFitler method
   onSelectAlert = value => {
     if (this.state.activeFilter[0] === value.tag) {
       this.setState({ activeFilter: [] }, function() {
@@ -67,6 +70,7 @@ class Sidebar extends Component {
     }
   };
 
+  // TODO: Combine into single setFitler method
   onSelectTask = value => {
     const payload = {
       filterType: "stepgroupdef",
@@ -77,6 +81,7 @@ class Sidebar extends Component {
     else this.props.dispatch(workflowFiltersActions.removeFilters(payload));
   };
 
+  // TODO: Combine into single setFitler method
   onSelectMyTask = tag => {
     const payload = {
       filterType: "user-step-tag",
@@ -97,7 +102,7 @@ class Sidebar extends Component {
   }
 
   render() {
-    const { isError } = this.props.workflowAlertGroupCount;
+    // const { isError } = this.props.workflowAlertGroupCount;
 
     return (
       <Sider
@@ -122,7 +127,7 @@ class Sidebar extends Component {
         >
           <div className="logo" />
 
-          <FilterDropdown />
+          <KindDropdown />
 
           <div
             style={{
@@ -138,7 +143,7 @@ class Sidebar extends Component {
             `}
           >
             <div>
-              <TaskQueueList
+              {/* <TaskQueueList
                 count={this.props.count}
                 activeTaskQueue={this.props.workflowFilters}
                 taskQueues={this.props.visibleWorkflowGroups}
@@ -146,16 +151,17 @@ class Sidebar extends Component {
                 onSelectTask={this.onSelectTask}
                 onSelectMyTask={this.onSelectMyTask}
                 isMyTaskSelected={this.isMyTaskSelected}
-              />
+              /> */}
             </div>
 
-            <div style={{ display: isError ? "none" : "block" }}>
+            {/* TODO: Fix this incrementaly */}
+            {/* <div style={{ display: isError ? "none" : "block" }}>
               <AlertList
                 alerts={this.props.workflowAlertGroupCount.alert_details}
                 loading={this.props.workflowAlertGroupCount.loading}
                 onSelectAlert={this.onSelectAlert}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </Sider>
@@ -165,28 +171,20 @@ class Sidebar extends Component {
 
 function mapStateToProps(state) {
   const {
-    workflowKind,
-    workflowFilterType,
+    workflowKind, // TODO: Only used to set the default kind
     workflowFilters,
-    workflowKindValue,
-    config,
-    languageSelector,
-    showFilterMenu,
-    taskQueueCount
+    workflowKindValue, // TODO: Only for the selected kind
+    taskQueueCount // TODO: Only for the count of it
   } = state;
   return {
     workflowKind,
-    workflowFilterType,
     workflowFilters,
     selectedKindValue: workflowKindValue.selectedKindValue,
-    config,
-    languageSelector,
-    showFilterMenu,
-    count: taskQueueCount.count
+    count: 2 // TODO: Add real number
   };
 }
 
 export default connect(
   mapStateToProps,
-  { taskQueueCount }
+  { getAllTaskQueuesThunk }
 )(injectIntl(Sidebar));

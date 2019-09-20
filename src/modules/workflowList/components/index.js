@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Layout
-  // Icon, Row
-} from "antd";
+// import {
+//   Layout
+//   // Icon, Row
+// } from "antd";
 // import WorkflowList from "./workflow-list";
 import {
   // workflowActions,
@@ -16,14 +16,14 @@ import {
 // import _ from "lodash";
 // import { veryfiyClient } from "../../../js/utils/verification";
 import { FormattedMessage, injectIntl } from "react-intl";
-// import Sidebar from "../sidebar/components/Sidebar";
+import Sidebar from "../sidebar/components/Sidebar";
 // import Filter from "../filters/components/Filter";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
 import Permissions from "../../common/permissions/permissionsList";
 import { css } from "emotion";
 import WorkflowToolbar from "../filters/components/WorkflowSorter";
 
-const { Content } = Layout;
+// const { Content } = Layout;
 
 class Workflow extends Component {
   state = {
@@ -319,7 +319,7 @@ class Workflow extends Component {
               flex-basis: 315px;
             `}
           >
-            {/* <Sidebar /> */}
+            <Sidebar />
           </div>
           <div
             className={css`
