@@ -4,7 +4,8 @@ import {
   getBusinessUnitsList$$,
   getAllKinds$$,
   getAllAlerts$$,
-  getAllTaskQueues$$
+  getAllTaskQueues$$,
+  getWorkflowList$$
 } from "./services";
 import { to } from "await-to-js";
 import {
@@ -26,8 +27,12 @@ import {
   getAllTaskQueues,
   getAllTaskQueuesSuccess,
   getAllTaskQueuesFailure,
-  setWorkflowFilter
+  setWorkflowFilter,
+  getWorkflowList,
+  getWorkflowListFailure,
+  getWorkflowListSuccess
 } from "./actionCreators";
+import { getWorkflowFitlersParams } from "./utils";
 
 export const getStatusesThunk = () => {
   return async dispatch => {
@@ -127,7 +132,7 @@ export const getAllTaskQueuesThunk = kindTag => {
 };
 
 export function applyWorkflowFilterThunk(filter) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch(setWorkflowFilter(filter));
 
     // TODO: Add logic for calling the API with filters
@@ -136,5 +141,26 @@ export function applyWorkflowFilterThunk(filter) {
       dispatch(getAllTaskQueuesThunk(filter.value.tag));
       dispatch(getAllAlertsThunk(filter.value.tag));
     }
+
+    // Call the workflow list API
+    const filtersFromState = getState().workflowList.selectedWorkflowFilters;
+    const filterParams = getWorkflowFitlersParams(filtersFromState);
+    dispatch(getWorkflowListThunk(filterParams));
+  };
+}
+
+export function getWorkflowListThunk(params) {
+  return async dispatch => {
+    dispatch(getWorkflowList());
+
+    const [error, workflows] = await to(getWorkflowList$$(params));
+
+    if (error) {
+      dispatch(getWorkflowListFailure(error.message));
+      throw error;
+    }
+
+    dispatch(getWorkflowListSuccess(workflows));
+    return workflows;
   };
 }

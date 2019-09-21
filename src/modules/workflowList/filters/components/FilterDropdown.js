@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Select } from "antd";
-// import { css } from "emotion";
 
-const Option = Select.Option;
+const { Option } = Select;
 
 class FilterDropdown extends Component {
   renderOptions = () => {
@@ -11,8 +10,8 @@ class FilterDropdown extends Component {
   };
 
   makeOptionsCmp = data => {
-    return data.map((item, index) => (
-      <Option key={`option_${index}`} value={item.value}>
+    return data.map(item => (
+      <Option key={item.value} value={item.value} data-item={item}>
         {item.label}
       </Option>
     ));
@@ -28,11 +27,18 @@ class FilterDropdown extends Component {
     };
   }
 
+  handleSelect = (value, option) => {
+    // Extracting out the actual item obj and sending it to the parent callback
+    const item = option.props["data-item"];
+    this.props.onSelect(value, item);
+  };
+
   render() {
     const {
       style = {},
-      data, // Extacting out data, since it should not be a part of the restProps
+      // data, // Extacting out data, since it should not be a part of the restProps
       searchable,
+      // onSelect, // Extracting this out, since we want to override this
       ...restProps
     } = this.props;
 
@@ -40,6 +46,8 @@ class FilterDropdown extends Component {
 
     return (
       <Select
+        {...restProps}
+        {...searchProps}
         style={{
           display: "block",
           margin: "20px 0px",
@@ -47,14 +55,7 @@ class FilterDropdown extends Component {
           marginRight: "40px",
           ...style
         }}
-        // TODO: Check if this is required
-        // className={css`
-        //   .ant-select-selection__rendered {
-        //     margin-left: 0;
-        //   }
-        // `}
-        {...restProps}
-        {...searchProps}
+        onSelect={this.handleSelect}
       >
         {this.renderOptions()}
       </Select>

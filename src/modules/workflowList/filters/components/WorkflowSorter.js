@@ -49,7 +49,7 @@ export default connect(mapStateToProps)(WorkflowToolbar);
 function SelectedBasicFilters({ filters }) {
   const filterKeys = Object.keys(filters);
   return filterKeys.map(filterName => (
-    <span>
+    <span key={filterName}>
       {filterName}: {filters[filterName]}
     </span>
   ));

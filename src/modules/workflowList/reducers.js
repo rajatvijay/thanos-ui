@@ -18,7 +18,10 @@ import {
   GET_ALL_TASK_QUEUES,
   GET_ALL_TASK_QUEUES_SUCCESS,
   GET_ALL_TASK_QUEUES_FAILURE,
-  SET_WORKFLOW_FILTER
+  SET_WORKFLOW_FILTER,
+  GET_WORKFLOW_LIST,
+  GET_WORKFLOW_LIST_SUCCESS,
+  GET_WORKFLOW_LIST_FAILURE
 } from "./actions";
 
 const INITIAL_STATE = {
@@ -54,6 +57,11 @@ const INITIAL_STATE = {
     isLoading: false,
     data: null,
     error: null
+  },
+  workflowList: {
+    isLoading: false,
+    data: null,
+    error: null
   }
 };
 
@@ -65,13 +73,11 @@ function statuses(
     case GET_STATUSES_LIST:
       return {
         ...state,
-
         isLoading: true
       };
     case GET_STATUSES_LIST_SUCCESS:
       return {
         ...state,
-
         isLoading: false,
         error: null,
         data: payload
@@ -235,6 +241,35 @@ export function selectedWorkflowFilters(
       return {
         ...state,
         [payload.field]: payload.value
+      };
+    default:
+      return state;
+  }
+}
+
+export function workflowList(
+  state = INITIAL_STATE.workflowList,
+  { type, payload }
+) {
+  switch (type) {
+    case GET_WORKFLOW_LIST:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_WORKFLOW_LIST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        data: payload,
+        error: null
+      };
+    case GET_WORKFLOW_LIST_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        data: null,
+        error: payload
       };
     default:
       return state;

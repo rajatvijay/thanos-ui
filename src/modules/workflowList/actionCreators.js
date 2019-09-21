@@ -19,7 +19,10 @@ import {
   GET_ALL_TASK_QUEUES_SUCCESS,
   GET_ALL_TASK_QUEUES_FAILURE,
   SET_WORKFLOW_FILTER,
-  REMOVE_WORKFLOW_FILTER
+  REMOVE_WORKFLOW_FILTER,
+  GET_WORKFLOW_LIST,
+  GET_WORKFLOW_LIST_SUCCESS,
+  GET_WORKFLOW_LIST_FAILURE
 } from "./actions";
 
 export const getStatusesList = makeActionCreator(GET_STATUSES_LIST);
@@ -64,3 +67,11 @@ export const getAllTaskQueuesFailure = makeActionCreator(
 
 export const setWorkflowFilter = makeActionCreator(SET_WORKFLOW_FILTER);
 export const removeWorkflowFilter = makeActionCreator(REMOVE_WORKFLOW_FILTER);
+
+export const getWorkflowList = makeActionCreator(GET_WORKFLOW_LIST);
+export const getWorkflowListSuccess = makeActionCreator(
+  GET_WORKFLOW_LIST_SUCCESS
+);
+export const getWorkflowListFailure = makeActionCreator(
+  GET_WORKFLOW_LIST_FAILURE
+);
