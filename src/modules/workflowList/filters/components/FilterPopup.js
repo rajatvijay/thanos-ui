@@ -18,6 +18,7 @@ import {
   selectedRegionSelector,
   selectedBusinessUnitSelector
 } from "../../selectors";
+import styled from "@emotion/styled";
 
 const OPERATORS_TYPES = [
   {
@@ -71,7 +72,7 @@ class FilterPopup extends Component {
     } = this.props;
     const { regions, businessUnits } = staticData;
     return (
-      <div>
+      <FilterModalView>
         <BasicFilters
           statuses={statuses}
           regions={regions}
@@ -82,12 +83,12 @@ class FilterPopup extends Component {
           selectedBusinessUnit={selectedBusinessUnit}
         />
         <AdvancedFilters />
-        <div>
-          <Button type="primary">Apply</Button>
-          <Button>Clear All</Button>
-          <Button>Close</Button>
-        </div>
-      </div>
+        <ButtonWrapper>
+          <StyledApplyButton type="primary">Apply</StyledApplyButton>
+          <StyledButton>Clear All</StyledButton>
+          <StyledButton>Close</StyledButton>
+        </ButtonWrapper>
+      </FilterModalView>
     );
   }
 }
@@ -256,6 +257,35 @@ class AdvancedFilters extends PureComponent {
     );
   }
 }
+
+const FilterModalView = styled.div`
+  height: 270px;
+  width: 975px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 22px;
+`;
+
+const StyledApplyButton = styled(Button)`
+  width: 70px;
+  border-radius: 3px;
+  margin-right: 12px;
+`;
+
+const StyledButton = styled(Button)`
+  width: 95px;
+  border-radius: 3px;
+  color: #148cd6;
+  border-color: #148cd6;
+  margin-right: 12px;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
 
 // class FilterPopup extends Component {
 //   state = {
