@@ -60,8 +60,7 @@ class WorkflowSorter extends Component {
         `}
         onClick={this.handleSorting}
       >
-        sort:
-        <FormattedMessage id="mainFilterbar.riskText" />
+        sort: <FormattedMessage id="mainFilterbar.riskText" />
         {this.getSortingIcon()}
       </span>
     );

@@ -29,6 +29,8 @@ class WorkflowToolbar extends Component {
             display: flex;
             justify-content: space-between;
             padding: 20px 0;
+            border-bottom: 1px solid rgba(52, 59, 76, 0.3);
+            align-items: baseline;
           `}
         >
           <div
@@ -37,7 +39,7 @@ class WorkflowToolbar extends Component {
               justify-content: space-between;
               color: rgba(0, 0, 0, 0.3);
               text-transform: uppercase;
-              font-size: 15px;
+              font-size: 14px;
 
               > span {
                 margin-right: 40px;
