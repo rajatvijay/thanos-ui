@@ -6,7 +6,8 @@ import {
   MY_TASK_FILTER_NAME,
   STATUS_FILTER_NAME,
   REGION_FILTER_NAME,
-  BUSINESS_UNIT_FILTER_NAME
+  BUSINESS_UNIT_FILTER_NAME,
+  PRIMARY_KEY_SORTING_FILTER_NAME
 } from "./constants";
 
 // TODO: Remove this later
@@ -109,3 +110,10 @@ export const businessUnitPlaceholderSelector = state => {
 
 export const workflowCountSelector = state =>
   lodashGet(state, "workflowList.workflowList.data.results.length", null);
+
+export const selectedSortingOrderSelector = state =>
+  lodashGet(
+    state,
+    `workflowList.selectedWorkflowFilters[${PRIMARY_KEY_SORTING_FILTER_NAME}].value`,
+    null
+  );
