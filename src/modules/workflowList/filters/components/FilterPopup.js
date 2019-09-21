@@ -19,6 +19,23 @@ import {
   selectedBusinessUnitSelector
 } from "../../selectors";
 import styled from "@emotion/styled";
+import {
+  STATUS_FILTER_NAME,
+  REGION_FILTER_NAME,
+  BUSINESS_UNIT_FILTER_NAME
+} from "../../constants";
+
+/**
+ * TODO:
+ * [] Business unit is filtered on the basis of selected region
+ * [] Status list is filtered on the basis of selected kind
+ * [] Add prop types
+ * [] Test cases for components
+ * [] Test cases for data layer
+ * [] test cases for API layer
+ * [] Figure out the req for snapshot test cases
+ * [] Give allowClear option for all the basic filters => better user experience
+ */
 
 const OPERATORS_TYPES = [
   {
@@ -59,8 +76,8 @@ class FilterPopup extends Component {
     this.props.getRegionsThunk();
     this.props.getBusinessUnitsThunk();
   }
-  handleBasicFilters = field => value => {
-    this.props.applyWorkflowFilterThunk({ field, value });
+  handleBasicFilters = field => (_, item) => {
+    this.props.applyWorkflowFilterThunk({ field, value: item });
   };
   render() {
     const {
@@ -77,7 +94,7 @@ class FilterPopup extends Component {
           statuses={statuses}
           regions={regions}
           businessUnits={businessUnits}
-          onChange={this.handleBasicFilters}
+          onSelect={this.handleBasicFilters}
           selectedStatus={selectedStatus}
           selectedRegion={selectedRegion}
           selectedBusinessUnit={selectedBusinessUnit}
@@ -133,7 +150,7 @@ const BasicFilters = injectIntl(
     statuses,
     regions,
     businessUnits,
-    onChange
+    onSelect
   }) => (
     <div
       style={{
@@ -149,7 +166,7 @@ const BasicFilters = injectIntl(
         placeholder={
           <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.status" />
         }
-        onChange={onChange("status")}
+        onSelect={onSelect(STATUS_FILTER_NAME)}
         searchable
       />
       <FilterDropdown
@@ -159,7 +176,7 @@ const BasicFilters = injectIntl(
         placeholder={
           <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.region" />
         }
-        onChange={onChange("region")}
+        onSelect={onSelect(REGION_FILTER_NAME)}
         searchable
       />
       <FilterDropdown
@@ -169,7 +186,7 @@ const BasicFilters = injectIntl(
         placeholder={
           <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.business_unit" />
         }
-        onChange={onChange("businessUnit")}
+        onSelect={onSelect(BUSINESS_UNIT_FILTER_NAME)}
         searchable
       />
     </div>

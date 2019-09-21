@@ -95,3 +95,43 @@ export function getMyTasksCount$$() {
     handleResponse
   );
 }
+
+export function getWorkflowList$$(params = {}) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader.get(),
+    credentials: "include"
+  };
+
+  //case filter type status ==> http://slackcart.com/api/v1/workflows/?status=<status_id>
+  //case filter type kind ==>   http://slackcart.com/api/v1/workflows/?kind=<kind_id>
+  //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?answer=<field_tag>__<operator>__<value>
+  //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?stepgroupdef=<stepgroup_id>
+
+  // const filters = store.getState().workflowFilters;
+  // const filterParams = getFilterParams(filters);
+  const queryParams = new URLSearchParams({
+    ...params,
+    lean: true
+  });
+  const url = `workflows-list/?${queryParams}`;
+
+  // if (filter) {
+  //   const params = pageUrl(filter);
+  //   url += params;
+  // }
+
+  // This is super a bad hack
+  // But a quick win over doing a lot of minor fixes and refactoring
+  // Doing this specifically for VET-5267
+  // Description: Remove the kind filter in case of my task
+  // In case of any questions, please contact rajat@thevetted.com
+  // if (url.includes("user-step-tag")) {
+  //   const searchString = url.split("?")[1];
+  //   const searchParams = new URLSearchParams(searchString);
+  //   searchParams.delete("kind");
+  //   url = `workflows-list/?${searchParams.toString()}`;
+  // }
+
+  return APIFetch(url, requestOptions).then(handleResponse);
+}

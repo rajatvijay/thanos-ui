@@ -1,5 +1,13 @@
 import { createSelector } from "reselect";
 import { get as lodashGet } from "lodash";
+import {
+  TASK_QUEUE_FILTER_NAME,
+  ALERTS_FILTER_NAME,
+  MY_TASK_FILTER_NAME,
+  STATUS_FILTER_NAME,
+  REGION_FILTER_NAME,
+  BUSINESS_UNIT_FILTER_NAME
+} from "./constants";
 
 // TODO: Remove this later
 export const getWorkflowCount = state => state.workflow.count;
@@ -23,19 +31,32 @@ export const statusesForFilterDropdownSelector = createSelector(
   }
 );
 
-export const selectedStatusSelector = state =>
-  state.workflowList.selectedWorkflowFilters.status;
-export const selectedRegionSelector = state =>
-  state.workflowList.selectedWorkflowFilters.region;
-export const selectedBusinessUnitSelector = state =>
-  state.workflowList.selectedWorkflowFilters.businessUnit;
+export const selectedStatusSelector = state => {
+  return lodashGet(
+    state,
+    `workflowList.selectedWorkflowFilters[${STATUS_FILTER_NAME}].value`
+  );
+};
+export const selectedRegionSelector = state => {
+  return lodashGet(
+    state,
+    `workflowList.selectedWorkflowFilters[${REGION_FILTER_NAME}].value`
+  );
+};
+export const selectedBusinessUnitSelector = state => {
+  return lodashGet(
+    state,
+    `workflowList.selectedWorkflowFilters[${BUSINESS_UNIT_FILTER_NAME}].value`
+  );
+};
 
 export const selectedBasicFiltersSelector = createSelector(
   selectedStatusSelector,
   selectedRegionSelector,
   selectedBusinessUnitSelector,
   (status, region, businessUnit) => {
-    return { status, region, businessUnit };
+    // Removing the keys with undefined values
+    return JSON.parse(JSON.stringify({ status, region, businessUnit }));
   }
 );
 
@@ -54,8 +75,8 @@ export const taskQueuesSelector = state => state.workflowList.taskQueues;
 export const alertsSelector = state => state.workflowList.alerts;
 
 export const selectedTaskQueuesSelector = state =>
-  state.workflowList.selectedWorkflowFilters.taskQueues;
+  state.workflowList.selectedWorkflowFilters[TASK_QUEUE_FILTER_NAME];
 export const selectedAlertsSelector = state =>
-  state.workflowList.selectedWorkflowFilters.alerts;
+  state.workflowList.selectedWorkflowFilters[ALERTS_FILTER_NAME];
 export const isMyTaskSelectedSelector = state =>
-  !!state.workflowList.selectedWorkflowFilters.myTask;
+  !!state.workflowList.selectedWorkflowFilters[MY_TASK_FILTER_NAME];

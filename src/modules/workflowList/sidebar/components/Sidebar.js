@@ -14,12 +14,17 @@ import {
   selectedTaskQueuesSelector,
   isMyTaskSelectedSelector
 } from "../../selectors";
+import {
+  TASK_QUEUE_FILTER_NAME,
+  MY_TASK_FILTER_NAME,
+  ALERTS_FILTER_NAME
+} from "../../constants";
 
 const { Sider } = Layout;
 
 class Sidebar extends Component {
   toggleFilter = field => value => {
-    if (field === "taskQueues") {
+    if (field === TASK_QUEUE_FILTER_NAME) {
       const { selectedTaskQueues } = this.props;
       if (selectedTaskQueues && selectedTaskQueues.tag === value.tag) {
         // Remove case
@@ -30,7 +35,7 @@ class Sidebar extends Component {
       }
     }
 
-    if (field === "alerts") {
+    if (field === ALERTS_FILTER_NAME) {
       const { selectedAlerts } = this.props;
       if (selectedAlerts && selectedAlerts.id === value.id) {
         // Remove case
@@ -41,7 +46,7 @@ class Sidebar extends Component {
       }
     }
 
-    if (field === "myTask") {
+    if (field === MY_TASK_FILTER_NAME) {
       const { isMyTaskSelected } = this.props;
       if (isMyTaskSelected) {
         // Remove case
@@ -100,15 +105,15 @@ class Sidebar extends Component {
               activeTaskQueue={selectedTaskQueues}
               taskQueues={taskQueues.data}
               loading={taskQueues.isLoading}
-              onClick={this.toggleFilter("taskQueues")}
-              onClickMyTask={this.toggleFilter("myTask")}
+              onClick={this.toggleFilter(TASK_QUEUE_FILTER_NAME)}
+              onClickMyTask={this.toggleFilter(MY_TASK_FILTER_NAME)}
               isMyTaskSelected={isMyTaskSelected}
             />
 
             <AlertList
               alerts={alerts.data}
               loading={alerts.isLoading}
-              onClick={this.toggleFilter("alerts")}
+              onClick={this.toggleFilter(ALERTS_FILTER_NAME)}
             />
           </div>
         </div>
