@@ -412,23 +412,23 @@ export class GetMergedData extends React.Component {
 
     const that = this;
 
-    const expander = alert_data => {
-      const count = 2;
-      if (_.size(alert_data) > count) {
-        return (
-          <span
-            className="ant-tag v-tag pd-right "
-            onClick={this.toggleExpand}
-            style={{ background: "#B2B2B2", color: "#fff" }}
-          >
-            {this.state.expanded ? "-" : "+"}
-            {_.size(alert_data) - count}
-          </span>
-        );
-      } else {
-        return;
-      }
-    };
+    // const expander = alert_data => {
+    //   const count = 2;
+    //   if (_.size(alert_data) > count) {
+    //     return (
+    //       <span
+    //         className="ant-tag v-tag pd-right "
+    //         onClick={this.toggleExpand}
+    //         style={{ background: "#B2B2B2", color: "#fff" }}
+    //       >
+    //         {this.state.expanded ? "-" : "+"}
+    //         {_.size(alert_data) - count}
+    //       </span>
+    //     );
+    //   } else {
+    //     return;
+    //   }
+    // };
 
     const TagItem = (item, index, is_alert) => {
       let classes = "  t-12 text-middle text-light ";
@@ -531,7 +531,7 @@ export class GetMergedData extends React.Component {
                       return TagItem(item, index, false);
                     }
                   })}
-              {expander(alert_data_filtered)}
+              {/* {expander(alert_data_filtered)} */}
             </Row>
           </div>
         </div>
