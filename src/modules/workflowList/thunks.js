@@ -6,7 +6,8 @@ import {
   getAllAlerts$$,
   getAllTaskQueues$$,
   getWorkflowList$$,
-  getAdvancedFilterData$$
+  getAdvancedFilterData$$,
+  crerateWorkflow$$
 } from "./services";
 import { to } from "await-to-js";
 import {
@@ -34,10 +35,14 @@ import {
   getWorkflowListSuccess,
   getAdvancedFilterData,
   getAdvancedFilterDataFailure,
-  getAdvancedFilterDataSuccess
+  getAdvancedFilterDataSuccess,
+  createWorklfow,
+  createWorklfowFailure,
+  createWorklfowSuccess
 } from "./actionCreators";
 import { getWorkflowFitlersParams } from "./utils";
 import { KIND_FILTER_NAME, REGION_FILTER_NAME } from "./constants";
+import { history } from "../../js/_helpers";
 
 export const getStatusesThunk = () => {
   return async dispatch => {
@@ -188,5 +193,21 @@ export function getAdvancedFilterDataThunk(kindTag) {
 
     dispatch(getAdvancedFilterDataSuccess(filterData.results));
     return filterData;
+  };
+}
+
+export function createWorkflowThunk(payload) {
+  return async dispatch => {
+    dispatch(createWorklfow());
+
+    const [error, workflowData] = await to(crerateWorkflow$$(payload));
+
+    if (error) {
+      dispatch(createWorklfowFailure(error.message));
+      throw error;
+    }
+
+    dispatch(createWorklfowSuccess(workflowData));
+    return workflowData;
   };
 }

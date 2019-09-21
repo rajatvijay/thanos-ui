@@ -10,9 +10,6 @@ import {
   PRIMARY_KEY_SORTING_FILTER_NAME
 } from "./constants";
 
-// TODO: Remove this later
-export const getWorkflowCount = state => state.workflow.count;
-
 export const statusesSelector = state => state.workflowList.staticData.statuses;
 
 export const selectedKindSelector = state =>
@@ -75,6 +72,18 @@ export const selectedBasicFiltersSelector = createSelector(
 );
 
 export const kindsSelector = state => state.workflowList.kinds;
+export const kindsForNewWorkflowSelector = createSelector(
+  kindsSelector,
+  kinds =>
+    kinds.data && Array.isArray(kinds.data.results)
+      ? kinds.data.results.filter(
+          kind =>
+            !kind.is_related_kind &&
+            kind.features.includes("add_workflow") &&
+            !["users", "entity-id"].includes(kind.tag)
+        )
+      : null
+);
 
 export const selectedFieldAnswerSelector = state =>
   lodashGet(
