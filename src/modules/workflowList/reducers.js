@@ -21,7 +21,10 @@ import {
   SET_WORKFLOW_FILTER,
   GET_WORKFLOW_LIST,
   GET_WORKFLOW_LIST_SUCCESS,
-  GET_WORKFLOW_LIST_FAILURE
+  GET_WORKFLOW_LIST_FAILURE,
+  GET_ADVANCED_FILTER_DATA,
+  GET_ADVANCED_FILTER_DATA_SUCCESS,
+  GET_ADVANCED_FILTER_DATA_FAILURE
 } from "./actions";
 
 const INITIAL_STATE = {
@@ -37,6 +40,11 @@ const INITIAL_STATE = {
       error: null
     },
     businessUnits: {
+      isLoading: false,
+      data: null,
+      error: null
+    },
+    advancedFilterData: {
       isLoading: false,
       data: null,
       error: null
@@ -149,7 +157,41 @@ function businessUnits(
   }
 }
 
-export const staticData = combineReducers({ statuses, regions, businessUnits });
+function advancedFilterData(
+  state = INITIAL_STATE.staticData.advancedFilterData,
+  { type, payload }
+) {
+  switch (type) {
+    case GET_ADVANCED_FILTER_DATA:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case GET_ADVANCED_FILTER_DATA_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+        data: payload
+      };
+    case GET_ADVANCED_FILTER_DATA_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: payload,
+        data: null
+      };
+    default:
+      return state;
+  }
+}
+
+export const staticData = combineReducers({
+  statuses,
+  regions,
+  businessUnits,
+  advancedFilterData
+});
 
 export function kinds(state = INITIAL_STATE.kinds, { type, payload }) {
   switch (type) {
