@@ -14,20 +14,33 @@ export const getWorkflowCount = state => state.workflow.count;
 
 export const statusesSelector = state => state.workflowList.staticData.statuses;
 
+export const selectedKindSelector = state =>
+  state.workflowList.selectedWorkflowFilters.kind;
+
 // TODO: Check for kind_display || label
 // TODO: filter using selected kind id
 export const statusesForFilterDropdownSelector = createSelector(
   statusesSelector,
-  statuses => {
-    return Array.isArray(statuses.data)
-      ? {
-          ...statuses,
-          data: statuses.data.map(status => ({
+  selectedKindSelector,
+  (statuses, kind) => {
+    const statusesData = Array.isArray(statuses.data)
+      ? kind
+        ? kind.available_statuses
+            .map(statusId =>
+              statuses.data.find(status => status.id === statusId)
+            )
+            .sort((a, b) =>
+              a.label > b.label ? 1 : a.label < b.label ? -1 : 0
+            )
+        : statuses.data.map(status => ({
             label: status.label,
             value: status.id
           }))
-        }
-      : statuses;
+      : statuses.data;
+    return {
+      ...statuses,
+      data: statusesData
+    };
   }
 );
 
@@ -61,8 +74,6 @@ export const selectedBasicFiltersSelector = createSelector(
 );
 
 export const kindsSelector = state => state.workflowList.kinds;
-export const selectedKindSelector = state =>
-  state.workflowList.selectedWorkflowFilters.kind;
 
 export const selectedFieldAnswerSelector = state =>
   lodashGet(
@@ -80,3 +91,21 @@ export const selectedAlertsSelector = state =>
   state.workflowList.selectedWorkflowFilters[ALERTS_FILTER_NAME];
 export const isMyTaskSelectedSelector = state =>
   !!state.workflowList.selectedWorkflowFilters[MY_TASK_FILTER_NAME];
+
+export const regionPlaceholderSelector = state => {
+  return lodashGet(
+    state,
+    "config.custom_ui_labels.filterPlaceholders.Region",
+    null
+  );
+};
+export const businessUnitPlaceholderSelector = state => {
+  return lodashGet(
+    state,
+    "config.custom_ui_labels.filterPlaceholders.Business",
+    null
+  );
+};
+
+export const workflowCountSelector = state =>
+  lodashGet(state, "workflowList.workflowList.data.results.length", null);

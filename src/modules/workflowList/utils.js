@@ -14,6 +14,11 @@ export const getWorkflowFitlersParams = filtersFromState => {
     filtersFromState
   );
 
+  // This is super a bad hack
+  // But a quick win over doing a lot of minor fixes and refactoring
+  // Doing this specifically for VET-5267
+  // Description: Remove the kind filter in case of my task
+  // In case of any questions, please contact rajat@thevetted.com
   if (queryParamsFromState[MY_TASK_FILTER_NAME]) {
     delete queryParamsFromState[KIND_FILTER_NAME];
   }

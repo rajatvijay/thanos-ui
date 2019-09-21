@@ -22,7 +22,10 @@ import {
   REMOVE_WORKFLOW_FILTER,
   GET_WORKFLOW_LIST,
   GET_WORKFLOW_LIST_SUCCESS,
-  GET_WORKFLOW_LIST_FAILURE
+  GET_WORKFLOW_LIST_FAILURE,
+  GET_ADVANCED_FILTER_DATA,
+  GET_ADVANCED_FILTER_DATA_SUCCESS,
+  GET_ADVANCED_FILTER_DATA_FAILURE
 } from "./actions";
 
 export const getStatusesList = makeActionCreator(GET_STATUSES_LIST);
@@ -74,4 +77,14 @@ export const getWorkflowListSuccess = makeActionCreator(
 );
 export const getWorkflowListFailure = makeActionCreator(
   GET_WORKFLOW_LIST_FAILURE
+);
+
+export const getAdvancedFilterData = makeActionCreator(
+  GET_ADVANCED_FILTER_DATA
+);
+export const getAdvancedFilterDataSuccess = makeActionCreator(
+  GET_ADVANCED_FILTER_DATA_SUCCESS
+);
+export const getAdvancedFilterDataFailure = makeActionCreator(
+  GET_ADVANCED_FILTER_DATA_FAILURE
 );

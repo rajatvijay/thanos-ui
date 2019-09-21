@@ -3,7 +3,10 @@ import { Icon } from "antd";
 import FilterPopup from "./FilterPopup";
 import { connect } from "react-redux";
 import { css } from "emotion";
-import { selectedBasicFiltersSelector } from "../../selectors";
+import {
+  selectedBasicFiltersSelector,
+  workflowCountSelector
+} from "../../selectors";
 
 class WorkflowToolbar extends Component {
   state = {
@@ -16,31 +19,60 @@ class WorkflowToolbar extends Component {
   };
   render() {
     const { isFilterPopupVisible } = this.state;
-    const { selectedBasicWorkflowFilters } = this.props;
+    const { selectedBasicWorkflowFilters, workflowCount } = this.props;
     return (
-      <div>
-        <div>
-          <span
+      <>
+        <div
+          className={css`
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+          `}
+        >
+          <div
             className={css`
-              cursor: pointer;
-              user-select: none;
+              display: flex;
+              justify-content: space-between;
+              color: black;
+              opacity: 0.3;
+              text-transform: uppercase;
+              font-size: 15px;
+
+              span {
+                margin-right: 40px;
+              }
             `}
-            onClick={this.toggleFilterPopup}
           >
-            Filter
-            {isFilterPopupVisible ? <Icon type="up" /> : <Icon type="down" />}
-          </span>
-          <SelectedBasicFilters filters={selectedBasicWorkflowFilters} />
-          {isFilterPopupVisible && <FilterPopup />}
+            <span>{workflowCount !== null && `${workflowCount} RESULTS`}</span>
+            <div>
+              <span
+                className={css`
+                  cursor: pointer;
+                  user-select: none;
+                `}
+                onClick={this.toggleFilterPopup}
+              >
+                Filter
+                {isFilterPopupVisible ? (
+                  <Icon style={{ marginLeft: 5, fontSize: 10 }} type="up" />
+                ) : (
+                  <Icon style={{ marginLeft: 5, fontSize: 10 }} type="down" />
+                )}
+              </span>
+              {/* <SelectedBasicFilters filters={selectedBasicWorkflowFilters} /> */}
+            </div>
+          </div>
         </div>
-      </div>
+        {isFilterPopupVisible && <FilterPopup />}
+      </>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    selectedBasicWorkflowFilters: selectedBasicFiltersSelector(state)
+    selectedBasicWorkflowFilters: selectedBasicFiltersSelector(state),
+    workflowCount: workflowCountSelector(state)
   };
 };
 

@@ -5,7 +5,8 @@ import {
   getAllKinds$$,
   getAllAlerts$$,
   getAllTaskQueues$$,
-  getWorkflowList$$
+  getWorkflowList$$,
+  getAdvancedFilterData$$
 } from "./services";
 import { to } from "await-to-js";
 import {
@@ -30,9 +31,13 @@ import {
   setWorkflowFilter,
   getWorkflowList,
   getWorkflowListFailure,
-  getWorkflowListSuccess
+  getWorkflowListSuccess,
+  getAdvancedFilterData,
+  getAdvancedFilterDataFailure,
+  getAdvancedFilterDataSuccess
 } from "./actionCreators";
 import { getWorkflowFitlersParams } from "./utils";
+import { KIND_FILTER_NAME, REGION_FILTER_NAME } from "./constants";
 
 export const getStatusesThunk = () => {
   return async dispatch => {
@@ -65,11 +70,11 @@ export const getRegionsThunk = () => {
   };
 };
 
-export const getBusinessUnitsThunk = () => {
+export const getBusinessUnitsThunk = regionCode => {
   return async dispatch => {
     dispatch(getBusinessUnitsList());
 
-    const [error, businessUnits] = await to(getBusinessUnitsList$$());
+    const [error, businessUnits] = await to(getBusinessUnitsList$$(regionCode));
 
     if (error) {
       dispatch(getBusinessUnitsListFailure(error.message));
@@ -137,9 +142,14 @@ export function applyWorkflowFilterThunk(filter) {
 
     // TODO: Add logic for calling the API with filters
 
-    if (filter.field === "kind") {
+    if (filter.field === KIND_FILTER_NAME) {
       dispatch(getAllTaskQueuesThunk(filter.value.tag));
       dispatch(getAllAlertsThunk(filter.value.tag));
+      dispatch(getAdvancedFilterDataThunk(filter.value.tag));
+    }
+
+    if (filter.field === REGION_FILTER_NAME) {
+      dispatch(getBusinessUnitsThunk(filter.value.value));
     }
 
     // Call the workflow list API
@@ -162,5 +172,21 @@ export function getWorkflowListThunk(params) {
 
     dispatch(getWorkflowListSuccess(workflows));
     return workflows;
+  };
+}
+
+export function getAdvancedFilterDataThunk(kindTag) {
+  return async dispatch => {
+    dispatch(getAdvancedFilterData());
+
+    const [error, filterData] = await to(getAdvancedFilterData$$(kindTag));
+
+    if (error) {
+      dispatch(getAdvancedFilterDataFailure(error.message));
+      throw error;
+    }
+
+    dispatch(getAdvancedFilterDataSuccess(filterData.results));
+    return filterData;
   };
 }

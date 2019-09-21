@@ -311,23 +311,14 @@ class Workflow extends Component {
             display: flex;
           `}
         >
-          {/* TODO: Pass only required props */}
-          {/* TODO: Incrementally uncomment it */}
-          {/* <Sidebar {...this.props} /> */}
-          <div
-            className={css`
-              flex-basis: 315px;
-            `}
-          >
-            <Sidebar />
-          </div>
+          <Sidebar />
           <div
             className={css`
               flex: 1;
+              padding: 20px 50px;
+              background-color: #fafafa;
             `}
           >
-            {/* <Content style={{ margin: "4vh 4vw" }}> */}
-            {/* <Row className="clear"> */}
             <WorkflowToolbar />
 
             {

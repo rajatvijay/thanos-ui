@@ -16,7 +16,9 @@ import {
   statusesForFilterDropdownSelector,
   selectedStatusSelector,
   selectedRegionSelector,
-  selectedBusinessUnitSelector
+  selectedBusinessUnitSelector,
+  regionPlaceholderSelector,
+  businessUnitPlaceholderSelector
 } from "../../selectors";
 import styled from "@emotion/styled";
 import {
@@ -24,11 +26,12 @@ import {
   REGION_FILTER_NAME,
   BUSINESS_UNIT_FILTER_NAME
 } from "../../constants";
+import { css } from "emotion";
 
 /**
- * TODO:
- * [] Business unit is filtered on the basis of selected region
- * [] Status list is filtered on the basis of selected kind
+ * TODO: Please do this before merging the PR
+ * [x] Business unit is filtered on the basis of selected region
+ * [x] Status list is filtered on the basis of selected kind
  * [] Add prop types
  * [] Test cases for components
  * [] Test cases for data layer
@@ -79,6 +82,25 @@ class FilterPopup extends Component {
   handleBasicFilters = field => (_, item) => {
     this.props.applyWorkflowFilterThunk({ field, value: item });
   };
+
+  get regionPlaceholder() {
+    return (
+      this.props.regionPlaceholder ||
+      this.props.intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.region"
+      })
+    );
+  }
+
+  get businessUnitPlaceholder() {
+    return (
+      this.props.businessUnitPlaceholder ||
+      this.props.intl.formatMessage({
+        id: "workflowFiltersTranslated.filterPlaceholders.business_unit"
+      })
+    );
+  }
+
   render() {
     const {
       staticData,
@@ -87,7 +109,7 @@ class FilterPopup extends Component {
       selectedRegion,
       selectedBusinessUnit
     } = this.props;
-    const { regions, businessUnits } = staticData;
+    const { regions, businessUnits, advancedFilterData } = staticData;
     return (
       <FilterModalView>
         <BasicFilters
@@ -98,13 +120,18 @@ class FilterPopup extends Component {
           selectedStatus={selectedStatus}
           selectedRegion={selectedRegion}
           selectedBusinessUnit={selectedBusinessUnit}
+          businessUnitPlaceholder={this.businessUnitPlaceholder}
+          regionPlaceholder={this.regionPlaceholder}
+          statusPlaceholder={
+            <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.status" />
+          }
         />
-        <AdvancedFilters />
-        <ButtonWrapper>
-          <StyledApplyButton type="primary">Apply</StyledApplyButton>
-          <StyledButton>Clear All</StyledButton>
-          <StyledButton>Close</StyledButton>
-        </ButtonWrapper>
+        <AdvancedFilters options={advancedFilterData.data} />
+        <FilterButtonsContainer>
+          <Button type="primary">Apply</Button>
+          <Button>Clear All</Button>
+          <Button>Close</Button>
+        </FilterButtonsContainer>
       </FilterModalView>
     );
   }
@@ -118,7 +145,9 @@ function mapStateToProps(state) {
     config,
     selectedStatus: selectedStatusSelector(state),
     selectedRegion: selectedRegionSelector(state),
-    selectedBusinessUnit: selectedBusinessUnitSelector(state)
+    selectedBusinessUnit: selectedBusinessUnitSelector(state),
+    regionPlaceholder: regionPlaceholderSelector(state),
+    businessUnitPlaceholder: businessUnitPlaceholderSelector(state)
   };
 }
 
@@ -150,50 +179,43 @@ const BasicFilters = injectIntl(
     statuses,
     regions,
     businessUnits,
+    businessUnitPlaceholder,
+    regionPlaceholder,
+    statusPlaceholder,
     onSelect
   }) => (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between"
-      }}
-    >
+    <FilterRow>
       <FilterDropdown
         value={selectedStatus}
         data={statuses.data}
         loading={statuses.isLoading}
-        placeholder={
-          <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.status" />
-        }
+        placeholder={statusPlaceholder}
         onSelect={onSelect(STATUS_FILTER_NAME)}
         searchable
+        className={FilterDropdownClass}
       />
       <FilterDropdown
         value={selectedRegion}
         loading={regions.isLoading}
         data={regions.data}
-        placeholder={
-          <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.region" />
-        }
+        placeholder={regionPlaceholder}
         onSelect={onSelect(REGION_FILTER_NAME)}
         searchable
+        className={FilterDropdownClass}
       />
       <FilterDropdown
         loading={businessUnits.isLoading}
         value={selectedBusinessUnit}
         data={businessUnits.data}
-        placeholder={
-          <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.business_unit" />
-        }
+        placeholder={businessUnitPlaceholder}
         onSelect={onSelect(BUSINESS_UNIT_FILTER_NAME)}
         searchable
+        className={FilterDropdownClass}
       />
-    </div>
+    </FilterRow>
   )
 );
 
-// TODO: Seems to have a lot of extra stylings
 class AdvancedFilters extends PureComponent {
   state = {
     currentAdvFiliter: {}
@@ -224,26 +246,19 @@ class AdvancedFilters extends PureComponent {
   render() {
     const { options: advancedFilterOptions } = this.props;
     return (
-      <div style={{ marginTop: "20px" }}>
+      <div>
         <span
-          style={{
-            color: "#138BD6",
-            // cursor: "pointer",
-            textTransform: "uppercase"
-          }}
+          className={css`
+            color: #138bd6;
+            text-transform: uppercase;
+            font-size: 15px;
+          `}
         >
           <FormattedMessage id={"workflowFiltersTranslated.advancedFilter"} />
         </span>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center"
-          }}
-        >
+        <FilterRow style={{ marginTop: 14, alignItems: "center" }}>
           <Cascader
-            // style={{ flex: 1, marginRight: "40px" }}
+            className={FilterDropdownClass}
             options={advancedFilterOptions}
             onChange={this.handleChange("field")}
             placeholder={
@@ -252,16 +267,18 @@ class AdvancedFilters extends PureComponent {
           />
 
           <FilterDropdown
+            className={FilterDropdownClass}
             data={OPERATORS_TYPES}
             placeholder={
               <FormattedMessage id="workflowFiltersTranslated.selectOperator" />
             }
             name="operator"
-            onChange={this.handleChange("operator")}
+            onSelect={this.handleChange("operator")}
             // style={{ flex: 1, paddingRight: "40px" }}
           />
 
           <Input
+            className={FilterDropdownClass}
             placeholder={
               <FormattedMessage id="workflowFiltersTranslated.inputValue" />
             }
@@ -269,39 +286,43 @@ class AdvancedFilters extends PureComponent {
             // style={{ flex: 1 }}
             // style={{ paddingLeft: 0, width: "100%", marginRight: "40px" }}
           />
-        </div>
+        </FilterRow>
       </div>
     );
   }
 }
 
 const FilterModalView = styled.div`
-  height: 270px;
-  width: 975px;
+  height: 250px;
   background-color: #ffffff;
-  border-bottom: 1px solid #e8e8e8;
-  padding: 22px;
-`;
-
-const StyledApplyButton = styled(Button)`
-  width: 70px;
-  border-radius: 3px;
-  margin-right: 12px;
-`;
-
-const StyledButton = styled(Button)`
-  width: 95px;
-  border-radius: 3px;
-  color: #148cd6;
-  border-color: #148cd6;
-  margin-right: 12px;
-`;
-
-const ButtonWrapper = styled.div`
-  margin-bottom: 12px;
+  border-bottom: 1px solid #979797;
+  padding: 20px 25px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const FilterRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const FilterButtonsContainer = styled.div`
   align-items: center;
+  display: flex;
+
+  button {
+    margin-right: 10px;
+  }
+`;
+
+const FilterDropdownClass = css`
+  flex: 1;
+  flex-basis: 33%;
+  margin-right: 40px;
+  &:last-child {
+    margin-right: 0;
+  }
 `;
 
 // class FilterPopup extends Component {

@@ -35,7 +35,6 @@ class FilterDropdown extends Component {
 
   render() {
     const {
-      style = {},
       // data, // Extacting out data, since it should not be a part of the restProps
       searchable,
       // onSelect, // Extracting this out, since we want to override this
@@ -45,18 +44,7 @@ class FilterDropdown extends Component {
     const searchProps = searchable ? this.searchProps : {};
 
     return (
-      <Select
-        {...restProps}
-        {...searchProps}
-        style={{
-          display: "block",
-          margin: "20px 0px",
-          width: "100%",
-          marginRight: "40px",
-          ...style
-        }}
-        onSelect={this.handleSelect}
-      >
+      <Select {...restProps} {...searchProps} onSelect={this.handleSelect}>
         {this.renderOptions()}
       </Select>
     );
