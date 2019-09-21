@@ -53,7 +53,10 @@ class Sidebar extends Component {
         this.props.applyWorkflowFilterThunk({ field, value: null });
       } else {
         // Apply case
-        this.props.applyWorkflowFilterThunk({ field, value });
+        this.props.applyWorkflowFilterThunk({
+          field,
+          value: { value: "Assignee" }
+        });
       }
     }
   };

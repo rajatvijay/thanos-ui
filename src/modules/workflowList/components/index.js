@@ -21,7 +21,7 @@ import Sidebar from "../sidebar/components/Sidebar";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
 import Permissions from "../../common/permissions/permissionsList";
 import { css } from "emotion";
-import WorkflowToolbar from "../filters/components/WorkflowSorter";
+import WorkflowToolbar from "../filters/components/WorkflowToolbar";
 
 // const { Content } = Layout;
 

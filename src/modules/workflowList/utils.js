@@ -5,7 +5,8 @@ import {
   BUSINESS_UNIT_FILTER_NAME,
   TASK_QUEUE_FILTER_NAME,
   ALERTS_FILTER_NAME,
-  KIND_FILTER_NAME
+  KIND_FILTER_NAME,
+  PRIMARY_KEY_SORTING_FILTER_NAME
 } from "./constants";
 import { get as lodashGet } from "lodash";
 
@@ -23,17 +24,19 @@ export const getWorkflowFitlersParams = filtersFromState => {
     delete queryParamsFromState[KIND_FILTER_NAME];
   }
 
-  return queryParamsFromState;
+  // To remove the undefined values
+  return JSON.parse(JSON.stringify(queryParamsFromState));
 };
 
 const FILTER_SELECTOR = {
-  [MY_TASK_FILTER_NAME]: [null, "Assignee"],
-  [STATUS_FILTER_NAME]: ["value", null],
-  [REGION_FILTER_NAME]: ["value", null],
-  [BUSINESS_UNIT_FILTER_NAME]: ["value", null],
-  [TASK_QUEUE_FILTER_NAME]: ["tag", null],
-  [ALERTS_FILTER_NAME]: ["tag", null],
-  [KIND_FILTER_NAME]: ["id", null]
+  [MY_TASK_FILTER_NAME]: ["value", undefined],
+  [STATUS_FILTER_NAME]: ["value", undefined],
+  [REGION_FILTER_NAME]: ["value", undefined],
+  [BUSINESS_UNIT_FILTER_NAME]: ["value", undefined],
+  [TASK_QUEUE_FILTER_NAME]: ["tag", undefined],
+  [ALERTS_FILTER_NAME]: ["tag", undefined],
+  [KIND_FILTER_NAME]: ["id", undefined],
+  [PRIMARY_KEY_SORTING_FILTER_NAME]: ["value", undefined]
 };
 
 const createParamsFromSelectedFilters = filters => {
