@@ -8,6 +8,7 @@ import {
   workflowCountSelector
 } from "../../selectors";
 import WorkflowSorter from "./WorkflowSorter";
+import CreateNew from "./CreateNew";
 
 class WorkflowToolbar extends Component {
   state = {
@@ -65,6 +66,7 @@ class WorkflowToolbar extends Component {
               {/* <SelectedBasicFilters filters={selectedBasicWorkflowFilters} /> */}
             </div>
           </div>
+          <CreateNew />
         </div>
         {isFilterPopupVisible && <FilterPopup />}
       </>

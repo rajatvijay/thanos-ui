@@ -120,3 +120,14 @@ export function getAdvancedFilterData$$(kindTag) {
   const url = `fields/export-json/?active_kind=${kindTag}`;
   return APIFetch(url, requestOptions).then(handleResponse);
 }
+
+export function crerateWorkflow$$(payload) {
+  const requestOptions = {
+    method: "POST",
+    headers: authHeader.post(),
+    credentials: "include",
+    body: JSON.stringify(payload)
+  };
+
+  return APIFetch("workflows/", requestOptions).then(handleResponse);
+}

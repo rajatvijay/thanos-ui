@@ -1,104 +1,86 @@
 import React, { Component } from "react";
-import { Menu, Dropdown, Icon } from "antd";
+import { Menu, Dropdown, Icon, message } from "antd";
 import { connect } from "react-redux";
-import { workflowKindActions, createWorkflow } from "../../../../js/actions";
 import { injectIntl } from "react-intl";
-import { getIntlBody } from "../../../js/_helpers/intl-helpers";
-import { getVisibleWorkflowKinds } from "../createNew.selector";
+import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
+import { css } from "emotion";
+import { kindsForNewWorkflowSelector } from "../../selectors";
+import { createWorkflowThunk } from "../../thunks";
+import { history } from "../../../../js/_helpers";
 
 class CreateNew extends Component {
-  loadWorkflowKind = () => {
-    this.props.dispatch(workflowKindActions.getAll());
-  };
-
   handleWorkflowKindClick = kind => {
     const payload = {
       status: kind.default_status,
       kind: kind.tag,
       name: "Draft"
     };
-    this.props.dispatch(createWorkflow(payload));
+
+    const hideLoader = message.loading("Preparing Workflow", 0);
+    this.props.createWorkflowThunk(payload).then(({ id }) => {
+      hideLoader();
+      history.push(`/workflows/instances/${id}`);
+    });
   };
 
   getKindMenu = () => {
-    const { workflowKind, visibleWorkflowKinds } = this.props;
-    // Error case
-    if (workflowKind.error) {
-      return (
-        <Menu className="kind-menu" theme="Light">
-          <Menu.Item key="1" className="text-primary text-medium">
-            <span onClick={this.loadWorkflowKind}>
-              <i className="material-icons t-14 pd-right-sm">refresh</i> Reload
-            </span>
-          </Menu.Item>
-        </Menu>
-      );
-    }
-
-    // No kind from backend case
-    if (!visibleWorkflowKinds.length) {
-      return (
-        <Menu className="kind-menu" theme="Light">
-          <Menu.Item key="1" className="text-grey text-medium" disabled>
-            <span>
-              <i className="material-icons t-14 pd-right-sm">error</i> Empty
-            </span>
-          </Menu.Item>
-        </Menu>
-      );
-    }
-
-    // Happy case, we have some kinds
+    const { workflowKinds } = this.props;
     return (
-      <Menu className="kind-menu" theme="Light">
-        {visibleWorkflowKinds.map((item, index) => {
-          return (
-            <Menu.Item key={`${item.id}`}>
-              <div
-                onClick={() => this.handleWorkflowKindClick(item)}
-                className="kind-item"
-              >
-                {getIntlBody(item, "name")}
-              </div>
-            </Menu.Item>
-          );
-        })}
+      <Menu>
+        {workflowKinds.map(item => (
+          <Menu.Item
+            key={item.id}
+            onClick={() => this.handleWorkflowKindClick(item)}
+          >
+            {getIntlBody(item, "name")}
+          </Menu.Item>
+        ))}
       </Menu>
     );
   };
 
   render() {
+    const { isLoading, workflowKinds } = this.props;
+
+    if (isLoading) {
+      return <Icon style={{ fontSize: 24 }} type="loading" />;
+    }
+
+    if (!workflowKinds) {
+      return null;
+    }
+
     return (
       <div>
         <Dropdown overlay={this.getKindMenu()} placement="bottomCenter">
-          <p
-            style={{
-              backgroundColor: "#138BD6",
-              borderRadius: "50%",
-              height: 39,
-              width: 39,
-              lineHeight: "40px",
-              textAlign: "center",
-              fontSize: 24,
-              color: "white",
-              boxShadow: "1px 5px 8px rgba(0, 0, 0, .12)"
-            }}
-            className="ant-dropdown-link"
+          <span
+            className={css`
+              background-color: #138bd6;
+              border-radius: 50%;
+              height: 40px;
+              width: 40px;
+              line-height: 40px;
+              text-align: center;
+              font-size: 24px;
+              color: white;
+              box-shadow: 1px 5px 8px rgba(0, 0, 0, 0.12);
+              display: inline-block;
+            `}
           >
-            <Icon type="plus" data-testid="create-main-workflow" />
-          </p>
+            <Icon type="plus" />
+          </span>
         </Dropdown>
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  const { workflowKind } = state;
-  return {
-    workflowKind,
-    visibleWorkflowKinds: getVisibleWorkflowKinds(state)
-  };
-}
+const mapStateToProps = state => ({
+  isLoading: state.workflowList.kinds.isLoading,
+  workflowKinds: kindsForNewWorkflowSelector(state)
+});
 
-export default connect(mapStateToProps)(injectIntl(CreateNew));
+export default connect(
+  mapStateToProps,
+  { createWorkflowThunk }
+)(injectIntl(CreateNew));
