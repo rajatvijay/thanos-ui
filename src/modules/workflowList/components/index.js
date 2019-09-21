@@ -315,7 +315,7 @@ class Workflow extends Component {
           <div
             className={css`
               flex: 1;
-              padding: 20px 50px;
+              padding: 20px 80px;
               background-color: #fafafa;
             `}
           >
