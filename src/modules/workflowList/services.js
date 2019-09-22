@@ -1,4 +1,4 @@
-import { authHeader, handleResponse } from "../../js/_helpers";
+import { authHeader, handleResponse, history } from "../../js/_helpers";
 import { APIFetch } from "../../js/utils/request";
 
 export async function getStatusesList$$(queryParams = {}) {
@@ -106,6 +106,10 @@ export function getWorkflowList$$(params = {}) {
     ...params,
     lean: true
   });
+
+  // TODO: Find a better place for this
+  history.push({ search: queryParams.toString() });
+
   const url = `workflows-list/?${queryParams}`;
   return APIFetch(url, requestOptions).then(handleResponse);
 }

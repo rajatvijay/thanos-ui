@@ -6,9 +6,15 @@ import {
   TASK_QUEUE_FILTER_NAME,
   ALERTS_FILTER_NAME,
   KIND_FILTER_NAME,
-  PRIMARY_KEY_SORTING_FILTER_NAME
+  PRIMARY_KEY_SORTING_FILTER_NAME,
+  PAGE_FILTER_NAME
 } from "./constants";
 import { get as lodashGet } from "lodash";
+import { FormattedMessage } from "react-intl";
+import React from "react";
+
+// TODO: Tree shake
+import moment from "moment";
 
 export const getWorkflowFitlersParams = filtersFromState => {
   const queryParamsFromState = createParamsFromSelectedFilters(
@@ -36,7 +42,8 @@ const FILTER_SELECTOR = {
   [TASK_QUEUE_FILTER_NAME]: ["tag", undefined],
   [ALERTS_FILTER_NAME]: ["tag", undefined],
   [KIND_FILTER_NAME]: ["id", undefined],
-  [PRIMARY_KEY_SORTING_FILTER_NAME]: ["value", undefined]
+  [PRIMARY_KEY_SORTING_FILTER_NAME]: ["value", undefined],
+  [PAGE_FILTER_NAME]: ["value", undefined]
 };
 
 const createParamsFromSelectedFilters = filters => {
@@ -49,4 +56,21 @@ const createParamsFromSelectedFilters = filters => {
   }
 
   return params;
+};
+
+export const getOccurrenceDay = occurrence => {
+  const today = moment().startOf("day");
+  const thisWeek = moment().startOf("week");
+  const thisMonth = moment().startOf("month");
+
+  if (moment(occurrence.created_at).isAfter(today)) {
+    return "commonTextInstances.today";
+  }
+  if (moment(occurrence.created_at).isAfter(thisWeek)) {
+    return "commonTextInstances.thisWeek";
+  }
+  if (moment(occurrence.created_at).isAfter(thisMonth)) {
+    return "commonTextInstances.thisMonth";
+  }
+  return moment(occurrence.created_at).format("MMM");
 };
