@@ -13,9 +13,9 @@ import { LCDataValue } from "../../common/components/LCDataValue";
  * [] Modularize this file => move components out of this file
  * [] Refactor some of the components
  * [] Display Risk ranking
- * [] Grouping of workflows
+ * [x] Grouping of workflows
  * [] Show modal on click
- * [] Positioning of workflows
+ * [] Positioning of quick multiple views
  */
 
 const WorkflowItem = ({ onClick, workflow, showSortingValue }) => {
