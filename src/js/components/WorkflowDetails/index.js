@@ -6,10 +6,10 @@ import { veryfiyClient } from "../../utils/verification";
 import {
   logout,
   checkAuth,
-  workflowDetailsActions,
   navbarActions,
   workflowActions
 } from "../../actions";
+import showNotification from "../../../modules/common/notification";
 
 class WorkflowDetailsRoot extends Component {
   constructor(props) {
@@ -32,9 +32,20 @@ class WorkflowDetailsRoot extends Component {
   };
 
   componentDidUpdate = prevProps => {
-    const { location } = this.props;
+    const { location, workflowDetailsHeader } = this.props;
     this.setWorkflowId();
 
+    // check if workflow loading has failed,
+    // if so, then go back and show notification
+    // about the workflow being unavailable.
+    if (
+      this.state.workflowId &&
+      workflowDetailsHeader.loading === false &&
+      workflowDetailsHeader.error
+    ) {
+      this.handleWorkflowNotFound();
+      return;
+    }
     //update custom history stack for back button purpose
 
     if (location.search && location.search !== prevProps.location.search) {
@@ -71,6 +82,30 @@ class WorkflowDetailsRoot extends Component {
     this.setState({ workflowId: null });
   };
 
+  handleWorkflowNotFound = () => {
+    const { workflowId, customHistory } = this.state;
+    const { minimalUI, closeModal } = this.props;
+    showNotification({
+      type: "error",
+      message: "errorMessageInstances.ws002",
+      messageData: {
+        workflowId
+      },
+      description: "errorMessageInstances.errorCode",
+      descriptionData: {
+        errorCode: "WS002"
+      },
+      key: workflowId,
+      duration: 0
+    });
+    if (!minimalUI) {
+      const last = customHistory.pop();
+      history.replace(last);
+    } else {
+      closeModal();
+    }
+  };
+
   setWorkflowId = () => {
     const { workflowIdFromPropsForModal } = this.props;
     const WFId =
@@ -94,10 +129,10 @@ class WorkflowDetailsRoot extends Component {
 
   fetchWorkflowData = () => {
     //Get workflow  basic data
-    const { workflowId } = this.state;
-
-    this.props.dispatch(workflowDetailsActions.getById(workflowId));
-    this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
+    // const { workflowId } = this.state;
+    //
+    // this.props.dispatch(workflowDetailsActions.getById(workflowId));
+    // this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
   };
 
   updateCustomHistory = url => {

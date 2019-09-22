@@ -134,6 +134,7 @@ class WorkflowItem extends React.Component {
                 workflowItem={this.props.workflow}
                 location={this.props.location}
                 minimalUI={this.props.minimalUI}
+                closeModal={this.handleCancel}
                 workflowIdFromPropsForModal={this.props.workflow.id}
                 setParameter={this.setParameter}
                 fieldExtra={this.props.fieldExtra}

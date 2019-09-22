@@ -126,7 +126,7 @@ class StepsSideBar extends Component {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          background-color: #fafafa;
+          background-color: transparent;
           margin-left: -14px;
         `}
       >
