@@ -22,6 +22,7 @@ import { Chowkidaar } from "../../common/permissions/Chowkidaar";
 import Permissions from "../../common/permissions/permissionsList";
 import { css } from "emotion";
 import WorkflowToolbar from "../filters/components/WorkflowToolbar";
+import WorkflowList from "./WorkflowList";
 
 // const { Content } = Layout;
 
@@ -320,6 +321,8 @@ class Workflow extends Component {
             `}
           >
             <WorkflowToolbar />
+
+            <WorkflowList />
 
             {
               // <div className="clearfix">

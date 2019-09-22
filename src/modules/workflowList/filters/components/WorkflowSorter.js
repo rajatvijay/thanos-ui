@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { applyWorkflowFilterThunk } from "../../thunks";
 import {
   selectedKindSelector,
-  selectedSortingOrderSelector
+  selectedSortingOrderSelector,
+  isWorkflowSortingEnabledSelector
 } from "../../selectors";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { Icon } from "antd";
@@ -46,9 +47,9 @@ class WorkflowSorter extends Component {
     }[sortingOrder];
   };
   render() {
-    const { selectedKind, sortingOrder } = this.props;
+    const { selectedKind, sortingOrder, isSortingEnabled } = this.props;
 
-    if (!selectedKind || !selectedKind.is_sorting_field_enabled) {
+    if (!selectedKind || !isSortingEnabled) {
       return null;
     }
 
@@ -69,7 +70,8 @@ class WorkflowSorter extends Component {
 
 const mapStateToProps = state => ({
   selectedKind: selectedKindSelector(state),
-  sortingOrder: selectedSortingOrderSelector(state)
+  sortingOrder: selectedSortingOrderSelector(state),
+  isSortingEnabled: isWorkflowSortingEnabledSelector(state)
 });
 
 export default connect(

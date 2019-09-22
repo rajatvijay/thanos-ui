@@ -7,3 +7,4 @@ export const TASK_QUEUE_FILTER_NAME = "stepgroupdef";
 export const ALERTS_FILTER_NAME = "alerts"; // TODO: Add this
 export const KIND_FILTER_NAME = "kind";
 export const PRIMARY_KEY_SORTING_FILTER_NAME = "ordering";
+export const PAGE_FILTER_NAME = "page";

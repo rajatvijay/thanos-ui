@@ -42,7 +42,6 @@ import {
 } from "./actionCreators";
 import { getWorkflowFitlersParams } from "./utils";
 import { KIND_FILTER_NAME, REGION_FILTER_NAME } from "./constants";
-import { history } from "../../js/_helpers";
 
 export const getStatusesThunk = () => {
   return async dispatch => {

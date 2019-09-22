@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { get as lodashGet } from "lodash";
+import { get as lodashGet, groupBy } from "lodash";
 import {
   TASK_QUEUE_FILTER_NAME,
   ALERTS_FILTER_NAME,
@@ -9,6 +9,7 @@ import {
   BUSINESS_UNIT_FILTER_NAME,
   PRIMARY_KEY_SORTING_FILTER_NAME
 } from "./constants";
+import { getOccurrenceDay } from "./utils";
 
 export const statusesSelector = state => state.workflowList.staticData.statuses;
 
@@ -126,3 +127,19 @@ export const selectedSortingOrderSelector = state =>
     `workflowList.selectedWorkflowFilters[${PRIMARY_KEY_SORTING_FILTER_NAME}].value`,
     null
   );
+
+export const isWorkflowSortingEnabledSelector = state =>
+  createSelector(
+    selectedKindSelector,
+    kind => lodashGet(kind, "is_sorting_field_enabled", false)
+  );
+
+export const workflowListCountSelector = state =>
+  lodashGet(state, "workflowList.workflowList.data.count", 0);
+export const workflowListSelector = state =>
+  lodashGet(state, "workflowList.workflowList.data.results", []);
+
+export const groupedWorkflowsSelector = createSelector(
+  workflowListSelector,
+  workflows => groupBy(workflows, getOccurrenceDay)
+);

@@ -39,7 +39,7 @@ class WorkflowToolbar extends Component {
               justify-content: space-between;
               color: rgba(0, 0, 0, 0.3);
               text-transform: uppercase;
-              font-size: 14px;
+              font-size: 13px;
 
               > span {
                 margin-right: 40px;
