@@ -18,7 +18,7 @@ import {
   STATUS_FILTER_NAME,
   REGION_FILTER_NAME,
   BUSINESS_UNIT_FILTER_NAME,
-  ADVANCED_FILTER_NAME
+  FIELD_ANSWER_PARAM
 } from "../../constants";
 import { FilterDropdownClass, FilterRow } from "./styledComponents";
 import AdvancedFilters from "./AdvancedFilter";
@@ -49,7 +49,7 @@ class FilterPopup extends Component {
       { field: STATUS_FILTER_NAME, value: null },
       { field: REGION_FILTER_NAME, value: null },
       { field: BUSINESS_UNIT_FILTER_NAME, value: null },
-      { field: ADVANCED_FILTER_NAME, value: null }
+      { field: FIELD_ANSWER_PARAM, value: null }
     ]);
   };
 
@@ -60,7 +60,7 @@ class FilterPopup extends Component {
   handleAdvancedFilterApply = () => {
     const { field, operator, text } = this.state.advancedFilters;
     this.props.applyWorkflowFilterThunk({
-      field: ADVANCED_FILTER_NAME,
+      field: FIELD_ANSWER_PARAM,
       value: { value: `${field[field.length - 1]}__${operator}__${text}` }
     });
   };
