@@ -70,7 +70,9 @@ class WorkflowToolbar extends Component {
           </div>
           <CreateNew />
         </div>
-        {isFilterPopupVisible && <FilterPopup />}
+        {isFilterPopupVisible && (
+          <FilterPopup onClose={this.toggleFilterPopup} />
+        )}
       </>
     );
   }

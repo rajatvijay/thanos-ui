@@ -8,6 +8,7 @@ export const ALERTS_FILTER_NAME = "alerts"; // TODO: Add this
 export const KIND_FILTER_NAME = "kind";
 export const PRIMARY_KEY_SORTING_FILTER_NAME = "ordering";
 export const PAGE_FILTER_NAME = "page";
+export const ADVANCED_FILTER_NAME = "answer";
 
 export const WORKLFOW_ASC_SORT_PARAM = "sorting_primary_field";
 export const WORKLFOW_DESC_SORT_PARAM = "-sorting_primary_field";

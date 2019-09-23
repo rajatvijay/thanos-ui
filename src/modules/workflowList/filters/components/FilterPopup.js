@@ -1,16 +1,9 @@
-import React, { Component, PureComponent } from "react";
-import { Button, Input, Cascader, Divider, Icon } from "antd";
+import React, { Component } from "react";
+import { Button } from "antd";
 import FilterDropdown from "./FilterDropdown";
 import { connect } from "react-redux";
-// import { css } from "emotion";
 import { FormattedMessage, injectIntl } from "react-intl";
-// import { get as lodashGet } from "lodash";
-import {
-  getStatusesThunk,
-  getRegionsThunk,
-  getBusinessUnitsThunk,
-  applyWorkflowFilterThunk
-} from "../../thunks";
+import { applyWorkflowFilterThunk } from "../../thunks";
 import { bindActionCreators } from "redux";
 import {
   statusesForFilterDropdownSelector,
@@ -24,14 +17,17 @@ import styled from "@emotion/styled";
 import {
   STATUS_FILTER_NAME,
   REGION_FILTER_NAME,
-  BUSINESS_UNIT_FILTER_NAME
+  BUSINESS_UNIT_FILTER_NAME,
+  ADVANCED_FILTER_NAME
 } from "../../constants";
-import { css } from "emotion";
+import { FilterDropdownClass, FilterRow } from "./styledComponents";
+import AdvancedFilters from "./AdvancedFilter";
 
 /**
  * TODO: Please do this before merging the PR
  * [x] Business unit is filtered on the basis of selected region
  * [x] Status list is filtered on the basis of selected kind
+ * [] No workflow found state
  * [] Add prop types
  * [] Test cases for components
  * [] Test cases for data layer
@@ -40,47 +36,33 @@ import { css } from "emotion";
  * [] Give allowClear option for all the basic filters => better user experience
  */
 
-const OPERATORS_TYPES = [
-  {
-    label: (
-      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.eq" />
-    ),
-    value: "eq"
-  },
-  {
-    label: (
-      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_eq" />
-    ),
-    value: "not_eq"
-  },
-  {
-    label: (
-      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.is_set" />
-    ),
-    value: "is_set"
-  },
-  {
-    label: (
-      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.contains" />
-    ),
-    value: "contains"
-  },
-  {
-    label: (
-      <FormattedMessage id="workflowFiltersTranslated.advancedFilterOperators.not_contains" />
-    ),
-    value: "not_contains"
-  }
-];
-
 class FilterPopup extends Component {
-  componentDidMount() {
-    this.props.getStatusesThunk();
-    this.props.getRegionsThunk();
-    this.props.getBusinessUnitsThunk();
-  }
+  state = {
+    advancedFilters: null
+  };
   handleBasicFilters = field => (_, item) => {
     this.props.applyWorkflowFilterThunk({ field, value: item });
+  };
+
+  handleClearFilter = () => {
+    this.props.applyWorkflowFilterThunk([
+      { field: STATUS_FILTER_NAME, value: null },
+      { field: REGION_FILTER_NAME, value: null },
+      { field: BUSINESS_UNIT_FILTER_NAME, value: null },
+      { field: ADVANCED_FILTER_NAME, value: null }
+    ]);
+  };
+
+  handleAdvancedFilterUpdate = advancedFilters => {
+    this.setState({ advancedFilters });
+  };
+
+  handleAdvancedFilterApply = () => {
+    const { field, operator, text } = this.state.advancedFilters;
+    this.props.applyWorkflowFilterThunk({
+      field: ADVANCED_FILTER_NAME,
+      value: { value: `${field[field.length - 1]}__${operator}__${text}` }
+    });
   };
 
   get regionPlaceholder() {
@@ -126,11 +108,16 @@ class FilterPopup extends Component {
             <FormattedMessage id="workflowFiltersTranslated.filterPlaceholders.status" />
           }
         />
-        <AdvancedFilters options={advancedFilterData.data} />
+        <AdvancedFilters
+          onApply={this.handleAdvancedFilterUpdate}
+          options={advancedFilterData.data}
+        />
         <FilterButtonsContainer>
-          <Button type="primary">Apply</Button>
-          <Button>Clear All</Button>
-          <Button>Close</Button>
+          <Button onClick={this.handleAdvancedFilterApply} type="primary">
+            Apply
+          </Button>
+          <Button onClick={this.handleClearFilter}>Clear All</Button>
+          <Button onClick={this.props.onClose}>Close</Button>
         </FilterButtonsContainer>
       </FilterModalView>
     );
@@ -138,11 +125,9 @@ class FilterPopup extends Component {
 }
 
 function mapStateToProps(state) {
-  const { workflowList, config } = state;
   return {
-    staticData: workflowList.staticData,
+    staticData: state.workflowList.staticData,
     statuses: statusesForFilterDropdownSelector(state),
-    config,
     selectedStatus: selectedStatusSelector(state),
     selectedRegion: selectedRegionSelector(state),
     selectedBusinessUnit: selectedBusinessUnitSelector(state),
@@ -154,9 +139,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      getStatusesThunk,
-      getRegionsThunk,
-      getBusinessUnitsThunk,
       applyWorkflowFilterThunk
     },
     dispatch
@@ -216,82 +198,6 @@ const BasicFilters = injectIntl(
   )
 );
 
-class AdvancedFilters extends PureComponent {
-  state = {
-    currentAdvFiliter: {}
-  };
-  handleChange = field => value => {
-    const { currentAdvFiliter } = this.state;
-    const updatedCurrentAdvFilters = {
-      ...currentAdvFiliter,
-      [field]: value
-    };
-
-    // Update it in the state
-    this.setState({
-      currentAdvFiliter: updatedCurrentAdvFilters
-    });
-
-    // If the user has selected all the 3 value
-    // update it in the state
-    if (
-      updatedCurrentAdvFilters.field &&
-      updatedCurrentAdvFilters.operator &&
-      updatedCurrentAdvFilters.text
-    ) {
-      this.props.onApply(updatedCurrentAdvFilters);
-    }
-  };
-
-  render() {
-    const { options: advancedFilterOptions } = this.props;
-    return (
-      <div>
-        <span
-          className={css`
-            color: #138bd6;
-            text-transform: uppercase;
-            font-size: 15px;
-          `}
-        >
-          <FormattedMessage id={"workflowFiltersTranslated.advancedFilter"} />
-        </span>
-        <FilterRow style={{ marginTop: 14, alignItems: "center" }}>
-          <Cascader
-            className={FilterDropdownClass}
-            options={advancedFilterOptions}
-            onChange={this.handleChange("field")}
-            placeholder={
-              <FormattedMessage id="workflowFiltersTranslated.pleaseSelectField" />
-            }
-          />
-
-          <FilterDropdown
-            className={FilterDropdownClass}
-            data={OPERATORS_TYPES}
-            placeholder={
-              <FormattedMessage id="workflowFiltersTranslated.selectOperator" />
-            }
-            name="operator"
-            onSelect={this.handleChange("operator")}
-            // style={{ flex: 1, paddingRight: "40px" }}
-          />
-
-          <Input
-            className={FilterDropdownClass}
-            placeholder={
-              <FormattedMessage id="workflowFiltersTranslated.inputValue" />
-            }
-            onChange={e => this.handleChange("text")(e.target.value)}
-            // style={{ flex: 1 }}
-            // style={{ paddingLeft: 0, width: "100%", marginRight: "40px" }}
-          />
-        </FilterRow>
-      </div>
-    );
-  }
-}
-
 const FilterModalView = styled.div`
   height: 250px;
   background-color: #ffffff;
@@ -302,26 +208,12 @@ const FilterModalView = styled.div`
   justify-content: space-between;
 `;
 
-const FilterRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 const FilterButtonsContainer = styled.div`
   align-items: center;
   display: flex;
 
   button {
     margin-right: 10px;
-  }
-`;
-
-const FilterDropdownClass = css`
-  flex: 1;
-  flex-basis: 33%;
-  margin-right: 40px;
-  &:last-child {
-    margin-right: 0;
   }
 `;
 

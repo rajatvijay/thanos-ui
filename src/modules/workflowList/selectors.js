@@ -31,6 +31,10 @@ export const statusesForFilterDropdownSelector = createSelector(
             .sort((a, b) =>
               a.label > b.label ? 1 : a.label < b.label ? -1 : 0
             )
+            .map(status => ({
+              label: status.label,
+              value: status.id
+            }))
         : statuses.data.map(status => ({
             label: status.label,
             value: status.id
