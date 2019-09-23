@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import { css } from "emotion";
 import { TaskQueue } from "./TaskQueue";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { get as lodashGet } from "lodash";
 import MyTaskFilter from "./MyTaskFilter";
 
 const INITIAL_SHOW_COUNT = 5;
