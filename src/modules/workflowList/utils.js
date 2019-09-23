@@ -7,7 +7,8 @@ import {
   ALERTS_FILTER_NAME,
   KIND_FILTER_NAME,
   PRIMARY_KEY_SORTING_FILTER_NAME,
-  PAGE_FILTER_NAME
+  PAGE_FILTER_NAME,
+  ADVANCED_FILTER_NAME
 } from "./constants";
 import { get as lodashGet } from "lodash";
 import { FormattedMessage } from "react-intl";
@@ -43,7 +44,8 @@ const FILTER_SELECTOR = {
   [ALERTS_FILTER_NAME]: ["tag", undefined],
   [KIND_FILTER_NAME]: ["id", undefined],
   [PRIMARY_KEY_SORTING_FILTER_NAME]: ["value", undefined],
-  [PAGE_FILTER_NAME]: ["value", undefined]
+  [PAGE_FILTER_NAME]: ["value", undefined],
+  [ADVANCED_FILTER_NAME]: ["value", undefined]
 };
 
 const createParamsFromSelectedFilters = filters => {

@@ -7,7 +7,12 @@ import { css } from "emotion";
 import WorkflowToolbar from "../filters/components/WorkflowToolbar";
 import WorkflowList from "./WorkflowList";
 import { connect } from "react-redux";
-import { applyWorkflowFilterThunk } from "../thunks";
+import {
+  applyWorkflowFilterThunk,
+  getStatusesThunk,
+  getRegionsThunk,
+  getBusinessUnitsThunk
+} from "../thunks";
 
 class Workflow extends Component {
   componentDidMount = () => {
@@ -15,6 +20,9 @@ class Workflow extends Component {
     //     const {location} = this.props;
     //     const urlParams = new URLSearchParams(location.search);
     // const params = Object.fromEntries(urlParams);
+    this.props.getStatusesThunk();
+    this.props.getRegionsThunk();
+    this.props.getBusinessUnitsThunk();
   };
 
   get notAllowedMessage() {
@@ -60,5 +68,10 @@ class Workflow extends Component {
 
 export default connect(
   null,
-  { applyWorkflowFilterThunk }
+  {
+    applyWorkflowFilterThunk,
+    getStatusesThunk,
+    getRegionsThunk,
+    getBusinessUnitsThunk
+  }
 )(injectIntl(Workflow));

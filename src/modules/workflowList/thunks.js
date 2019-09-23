@@ -142,18 +142,20 @@ export const getAllTaskQueuesThunk = kindTag => {
 
 export function applyWorkflowFilterThunk(filter) {
   return async (dispatch, getState) => {
-    dispatch(setWorkflowFilter(filter));
+    if (Array.isArray(filter)) {
+      filter.forEach(filt => dispatch(setWorkflowFilter(filt)));
+    } else {
+      dispatch(setWorkflowFilter(filter));
 
-    // TODO: Add logic for calling the API with filters
+      if (filter.field === KIND_FILTER_NAME) {
+        dispatch(getAllTaskQueuesThunk(filter.value.tag));
+        dispatch(getAllAlertsThunk(filter.value.tag));
+        dispatch(getAdvancedFilterDataThunk(filter.value.tag));
+      }
 
-    if (filter.field === KIND_FILTER_NAME) {
-      dispatch(getAllTaskQueuesThunk(filter.value.tag));
-      dispatch(getAllAlertsThunk(filter.value.tag));
-      dispatch(getAdvancedFilterDataThunk(filter.value.tag));
-    }
-
-    if (filter.field === REGION_FILTER_NAME) {
-      dispatch(getBusinessUnitsThunk(filter.value.value));
+      if (filter.field === REGION_FILTER_NAME) {
+        dispatch(getBusinessUnitsThunk(filter.value.value));
+      }
     }
 
     // Call the workflow list API
