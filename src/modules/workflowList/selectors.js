@@ -99,6 +99,8 @@ export const kindsForNewWorkflowSelector = createSelector(
       : null
 );
 
+// Since advanced filter and subkind(field answer) has the same query param name
+// to differentiate storing the field answer in the nested `fieldAnswer` key
 export const selectedFieldAnswerSelector = state =>
   lodashGet(
     state,

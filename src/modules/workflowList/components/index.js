@@ -11,7 +11,8 @@ import {
   applyWorkflowFilterThunk,
   getStatusesThunk,
   getRegionsThunk,
-  getBusinessUnitsThunk
+  getBusinessUnitsThunk,
+  getAllKindsThunk
 } from "../thunks";
 
 class Workflow extends Component {
@@ -23,6 +24,7 @@ class Workflow extends Component {
     this.props.getStatusesThunk();
     this.props.getRegionsThunk();
     this.props.getBusinessUnitsThunk();
+    this.props.getAllKindsThunk();
   };
 
   get notAllowedMessage() {
@@ -72,6 +74,7 @@ export default connect(
     applyWorkflowFilterThunk,
     getStatusesThunk,
     getRegionsThunk,
-    getBusinessUnitsThunk
+    getBusinessUnitsThunk,
+    getAllKindsThunk
   }
 )(injectIntl(Workflow));
