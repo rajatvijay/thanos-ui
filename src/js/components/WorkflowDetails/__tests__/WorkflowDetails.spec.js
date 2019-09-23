@@ -1169,7 +1169,6 @@ test("should not render Locked step if the step is inaccessible", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1180,7 +1179,6 @@ test("should not render Locked step if the step is inaccessible", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
