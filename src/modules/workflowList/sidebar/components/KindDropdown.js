@@ -13,38 +13,21 @@ import {
 } from "../../selectors";
 
 class KindDropdown extends Component {
-  // TODO: Move this to main components/index.js
-  // since get of all the general data should be called inside the main component
-  componentDidMount() {
-    this.props.getAllKindsThunk();
-  }
-
   handleSelectedKind = kind => {
     this.props.applyWorkflowFilterThunk({ field: "kind", value: kind });
   };
 
-  // TODO: Use this when making the filter API call
-  // `${fieldTag.tag}__eq__${fieldAnswer.value}`
   handleSelectedFieldAnswer = (kind, fieldTag, fieldAnswer) => {
     this.props.applyWorkflowFilterThunk({ field: "kind", value: kind });
     this.props.applyWorkflowFilterThunk({
       field: "answer",
       value: {
         fieldTag,
-        fieldAnswer
+        fieldAnswer,
+        value: `${fieldTag.tag}__eq__${fieldAnswer.value}`
       }
     });
   };
-
-  // TODO: This should be inside a thunk,
-  // TODO: This should be inside the `Sidebar` compoentn
-  // The behaviour is of a pub-sub pattern
-  // when one action is dispatched
-  // dispatch these set of actions
-  // fetchSidebarMeta = tag => {
-  // this.props.dispatch(workflowKindActions.getCount(tag));
-  // this.props.dispatch(workflowKindActions.getAlertCount(tag));
-  // };
 
   isFieldAnswerSelected = fieldAnswer => {
     const { selectedFieldAnswer } = this.props;
@@ -134,7 +117,7 @@ class KindDropdown extends Component {
       const extra = getIntlBody(fieldTag, "extra");
       if (!extra.length || !Object.keys(extra).length) return null;
       return extra.map(fieldAnswer => (
-        <StyledRelativeLi>
+        <StyledRelativeLi key={fieldAnswer.label}>
           <SubMenuHeading
             onClick={() =>
               this.handleSelectedFieldAnswer(kind, fieldTag, fieldAnswer)
@@ -163,7 +146,11 @@ class KindDropdown extends Component {
             padding: 20px;
           `}
         >
-          <Icon style={{ color: "white", fontSize: 24 }} type="loading" />
+          <Icon
+            data-testid="kind-dropdown-loader"
+            style={{ color: "white", fontSize: 24 }}
+            type="loading"
+          />
         </div>
       );
     }
@@ -249,6 +236,7 @@ const StyledSelectedItemContianer = styled.div`
 const StyledPostionedCheckIndicator = () => {
   return (
     <Icon
+      data-testid="kinds-dropdonw-check-icon"
       className={css`
         position: absolute;
         top: 10px;

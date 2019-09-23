@@ -7,7 +7,7 @@ import {
   REGION_FILTER_NAME,
   STATUS_FILTER_NAME,
   BUSINESS_UNIT_FILTER_NAME,
-  ADVANCED_FILTER_NAME
+  FIELD_ANSWER_PARAM
 } from "../../constants";
 
 test("should render status filter dropdown with options filtered with kind", () => {
@@ -322,9 +322,7 @@ test("should call the api without status, region and business filter when clear 
   );
   const regionFilterParam = new URL(url).searchParams.get(REGION_FILTER_NAME);
   const statusFilterParam = new URL(url).searchParams.get(STATUS_FILTER_NAME);
-  const advancedFilterParam = new URL(url).searchParams.get(
-    ADVANCED_FILTER_NAME
-  );
+  const advancedFilterParam = new URL(url).searchParams.get(FIELD_ANSWER_PARAM);
 
   expect(businessFilterParam).toBeNull();
   expect(regionFilterParam).toBeNull();
@@ -400,9 +398,7 @@ test("should call the workflow filter api when apply is clicked with selected ad
   fireEvent.click(queryByText(/apply/i));
 
   const [url] = fetchMock.lastCall(API_URL, "GET");
-  const advancedFilterParam = new URL(url).searchParams.get(
-    ADVANCED_FILTER_NAME
-  );
+  const advancedFilterParam = new URL(url).searchParams.get(FIELD_ANSWER_PARAM);
   expect(advancedFilterParam).toBe(
     `${decodeURIComponent("Fake L4")}__not_eq__asdf`
   );

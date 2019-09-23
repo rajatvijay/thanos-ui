@@ -8,11 +8,9 @@ import {
   KIND_FILTER_NAME,
   PRIMARY_KEY_SORTING_FILTER_NAME,
   PAGE_FILTER_NAME,
-  ADVANCED_FILTER_NAME
+  FIELD_ANSWER_PARAM
 } from "./constants";
 import { get as lodashGet } from "lodash";
-import { FormattedMessage } from "react-intl";
-import React from "react";
 
 // TODO: Tree shake
 import moment from "moment";
@@ -45,7 +43,7 @@ const FILTER_SELECTOR = {
   [KIND_FILTER_NAME]: ["id", undefined],
   [PRIMARY_KEY_SORTING_FILTER_NAME]: ["value", undefined],
   [PAGE_FILTER_NAME]: ["value", undefined],
-  [ADVANCED_FILTER_NAME]: ["value", undefined]
+  [FIELD_ANSWER_PARAM]: ["value", undefined]
 };
 
 const createParamsFromSelectedFilters = filters => {

@@ -39,19 +39,3 @@ test("should call the onClick callback when clicked on it", () => {
 
   expect(onClick).toHaveBeenCalledTimes(1);
 });
-
-test("should not render anything when api fails", async () => {
-  const API_URL = "path:/api/v1/get-my-tagged-incomplete-steps/";
-  const { queryByTestId } = renderWithReactIntl(
-    <FetchMock mocks={[{ matcher: API_URL, method: "GET", response: 500 }]}>
-      <MyTaskFilter />
-    </FetchMock>
-  );
-
-  await waitForElement(() => fetchMock.called(API_URL, "GET"));
-
-  const taskCountElement = await waitForElement(() =>
-    queryByTestId(/my-task-count-error/i)
-  );
-  expect(taskCountElement).toBeInTheDocument();
-});
