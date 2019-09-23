@@ -128,11 +128,10 @@ export const selectedSortingOrderSelector = state =>
     null
   );
 
-export const isWorkflowSortingEnabledSelector = state =>
-  createSelector(
-    selectedKindSelector,
-    kind => lodashGet(kind, "is_sorting_field_enabled", false)
-  );
+export const isWorkflowSortingEnabledSelector = createSelector(
+  selectedKindSelector,
+  kind => lodashGet(kind, "is_sorting_field_enabled", false)
+);
 
 export const workflowListCountSelector = state =>
   lodashGet(state, "workflowList.workflowList.data.count", 0);
