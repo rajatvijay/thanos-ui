@@ -26,52 +26,7 @@ import {
   GET_ADVANCED_FILTER_DATA_SUCCESS,
   GET_ADVANCED_FILTER_DATA_FAILURE
 } from "./actions";
-
-const INITIAL_STATE = {
-  staticData: {
-    statuses: {
-      isLoading: false,
-      data: null,
-      error: null
-    },
-    regions: {
-      isLoading: false,
-      data: null,
-      error: null
-    },
-    businessUnits: {
-      isLoading: false,
-      data: null,
-      error: null
-    },
-    advancedFilterData: {
-      isLoading: false,
-      data: null,
-      error: null
-    }
-  },
-  selectedWorkflowFilters: {},
-  kinds: {
-    isLoading: false,
-    data: null,
-    error: null
-  },
-  alerts: {
-    isLoading: false,
-    data: null,
-    error: null
-  },
-  taskQueues: {
-    isLoading: false,
-    data: null,
-    error: null
-  },
-  workflowList: {
-    isLoading: false,
-    data: null,
-    error: null
-  }
-};
+import { INITIAL_STATE } from "./initialState";
 
 function statuses(
   state = INITIAL_STATE.staticData.statuses,
