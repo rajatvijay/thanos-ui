@@ -130,9 +130,9 @@ const createFamilyListForBreadcrums = family => {
 const HeaderTitle = props => {
   const { workflow, fieldExtra, isEmbedded } = props;
   const { family } = workflow;
-  const showBreadCrumbs = fieldExtra && fieldExtra.showBreadCrumbs;
+  const showBreadcrumbs = fieldExtra && fieldExtra.show_breadcrumbs;
 
-  if (family.length === 1 || (!showBreadCrumbs && isEmbedded)) {
+  if (family.length === 1 || (!showBreadcrumbs && isEmbedded)) {
     return (
       <div>
         <span
@@ -393,6 +393,7 @@ export class GetMergedData extends React.Component {
     var alert_data_filtered = _.filter(alert_data, function(obj) {
       return obj.value !== "0" && obj.value !== "";
     });
+
     const lc_data = _.filter(data, function(v) {
       return v.display_type === "normal";
     });
