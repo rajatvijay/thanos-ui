@@ -15,7 +15,10 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import { getStepAndGroupFromConfig } from "./utils/active-step";
+import {
+  getStepAndGroupFromConfig,
+  getNextStepAndGroup
+} from "./utils/active-step";
 import LazyLoadHOC from "./LazyLoadHOC";
 import WhenInViewHOC from "./WhenInViewHOC";
 import { css } from "emotion";
@@ -32,10 +35,9 @@ class WorkflowDetails extends Component {
     stepUserTagData: []
   };
 
-  ////////////////////////////////////////////////////////////////////////////////
-  // Lifecycle Methods
-
-  componentDidMount() {
+  // Loads all the required data
+  // Decide the default step
+  initializeComponent = () => {
     // Get basic details about the workflow
     const basicWorkflowDetailsPromise = this.props.dispatch(
       workflowDetailsActions.getById(this.workflowId)
@@ -66,6 +68,42 @@ class WorkflowDetails extends Component {
       .catch(error => {
         if (error === 404) this.handleWorkflowNotFound();
       });
+  };
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Lifecycle Methods
+
+  componentDidMount() {
+    console.log("componentDidMount");
+    this.initializeComponent();
+  }
+
+  componentDidUpdate(previousProps) {
+    console.log("componentDidUpdate");
+    const { currentGroupId, currentStepId } = this.state;
+
+    // Auto submit
+    if (this.isTheStepAutoSubmitted(previousProps, this.props, currentStepId)) {
+      const [groupId, stepId] = getNextStepAndGroup(
+        currentGroupId,
+        currentStepId,
+        this.props.stepGroups
+      );
+      this.scrollElementIntoView(groupId, stepId);
+    }
+
+    // navigate to new workflow
+    if (previousProps.match.params.id !== this.props.match.params.id) {
+      this.initializeComponent();
+    }
+
+    if (this.props.location !== previousProps.location) {
+      const { stepId, groupId } = this.stepAndGroupFromURL;
+      const { currentGroupId, currentStepId } = this.state;
+      if (currentStepId != stepId && currentGroupId != groupId) {
+        setTimeout(() => this.scrollElementIntoView(groupId, stepId));
+      }
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -230,6 +268,8 @@ class WorkflowDetails extends Component {
         top: y,
         left: 0
       });
+    } else {
+      console.log("cant find step");
     }
 
     // Optimization Alert: Updating state here also,
