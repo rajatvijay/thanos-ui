@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { workflowDetailsHeader } from "../../../../js/reducers/workflow_details_header";
 import { workflowDetails } from "../../../../js/reducers/workflow_details";
 import { permissions } from "../../../../modules/common/permissions/reducer";
-import { renderWithReactIntl } from "../../../../modules/common/testUtils";
+import { renderWithReactIntl } from "../../../../modules/common/utils/testUtils";
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent, waitForDomChange } from "@testing-library/react";
 import Permissions from "../../../../modules/common/permissions/permissionsList";

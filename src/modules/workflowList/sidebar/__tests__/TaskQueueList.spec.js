@@ -1,5 +1,5 @@
 import React from "react";
-import { renderWithReactIntl as render } from "../../common/testUtils";
+import { renderWithReactIntl as render } from "../../../common/utils/testUtils";
 import TaskQueueList from "../components/TaskQueueList";
 import { getVisibleWorkflowGroups } from "../taskQueue.selector";
 
