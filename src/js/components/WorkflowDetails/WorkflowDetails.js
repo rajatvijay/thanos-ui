@@ -100,6 +100,7 @@ class WorkflowDetails extends Component {
     if (this.props.location !== previousProps.location) {
       const { stepId, groupId } = this.stepAndGroupFromURL;
       const { currentGroupId, currentStepId } = this.state;
+      // eslint-disable-next-line
       if (currentStepId != stepId && currentGroupId != groupId) {
         setTimeout(() => this.scrollElementIntoView(groupId, stepId));
       }
