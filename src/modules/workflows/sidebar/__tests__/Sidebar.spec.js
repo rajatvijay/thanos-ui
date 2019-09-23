@@ -4,7 +4,7 @@ import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { workflowDetailsHeader } from "../../../../js/reducers/workflow_details_header";
 import { permissions } from "../../../common/permissions/reducer";
-import { renderWithReactIntl } from "../../../common/testUtils";
+import { renderWithReactIntl } from "../../../common/utils/testUtils";
 import { BrowserRouter } from "react-router-dom";
 import { fireEvent } from "@testing-library/react";
 import Permissions from "../../../common/permissions/permissionsList";

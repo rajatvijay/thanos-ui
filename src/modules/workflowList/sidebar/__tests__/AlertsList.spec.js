@@ -1,5 +1,5 @@
 import React from "react";
-import { renderWithReactIntl as render } from "../../common/testUtils";
+import { renderWithReactIntl as render } from "../../../common/utils/testUtils";
 import AlertList from "../components/AlertList";
 
 test("should render loader when the data is loading", () => {
@@ -134,11 +134,7 @@ test("should call onSelectAlert with subcategory item when it is clicked", () =>
   ];
   const onSelectAlert = jest.fn();
   const { getByText } = render(
-    <AlertList
-      loading={false}
-      alerts={fakeAlerts}
-      onSelectAlert={onSelectAlert}
-    />
+    <AlertList loading={false} alerts={fakeAlerts} onClick={onSelectAlert} />
   );
   const element = getByText(/Fake Sub Category 1/i);
   element.click();

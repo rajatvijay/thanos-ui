@@ -30,7 +30,7 @@ test("should call onSelect prop with item provided", () => {
   const fakeTaskQueue = { name: "Fake Task Queue" };
   const onSelect = jest.fn();
   const { getByTestId } = render(
-    <TaskQueue item={fakeTaskQueue} onSelect={onSelect} />
+    <TaskQueue item={fakeTaskQueue} onClick={onSelect} />
   );
   const element = getByTestId("task-queue-list-item");
   element.click();
