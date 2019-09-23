@@ -10,20 +10,21 @@ import { injectIntl, FormattedMessage } from "react-intl";
 import { Icon } from "antd";
 import { css } from "emotion";
 import { PRIMARY_KEY_SORTING_FILTER_NAME } from "../../constants";
-
-const ASC_SORT_VALUE = "sorting_primary_field";
-const DESC_SORT_VALUE = "-sorting_primary_field";
+import {
+  WORKLFOW_ASC_SORT_PARAM,
+  WORKLFOW_DESC_SORT_PARAM
+} from "../../constants";
 
 class WorkflowSorter extends Component {
   handleSorting = () => {
     const { sortingOrder } = this.props;
     switch (sortingOrder) {
-      case ASC_SORT_VALUE:
+      case WORKLFOW_ASC_SORT_PARAM:
         return this.props.applyWorkflowFilterThunk({
           field: PRIMARY_KEY_SORTING_FILTER_NAME,
-          value: { value: DESC_SORT_VALUE }
+          value: { value: WORKLFOW_DESC_SORT_PARAM }
         });
-      case DESC_SORT_VALUE:
+      case WORKLFOW_DESC_SORT_PARAM:
         return this.props.applyWorkflowFilterThunk({
           field: PRIMARY_KEY_SORTING_FILTER_NAME,
           value: null
@@ -31,18 +32,26 @@ class WorkflowSorter extends Component {
       default:
         return this.props.applyWorkflowFilterThunk({
           field: PRIMARY_KEY_SORTING_FILTER_NAME,
-          value: { value: ASC_SORT_VALUE }
+          value: { value: WORKLFOW_ASC_SORT_PARAM }
         });
     }
   };
   getSortingIcon = () => {
     const { sortingOrder } = this.props;
     return {
-      [ASC_SORT_VALUE]: (
-        <Icon style={{ marginLeft: 5, fontSize: 10 }} type="up" />
+      [WORKLFOW_ASC_SORT_PARAM]: (
+        <Icon
+          style={{ marginLeft: 5, fontSize: 10 }}
+          data-testid="sorting-up"
+          type="up"
+        />
       ),
-      [DESC_SORT_VALUE]: (
-        <Icon style={{ marginLeft: 5, fontSize: 10 }} type="down" />
+      [WORKLFOW_DESC_SORT_PARAM]: (
+        <Icon
+          style={{ marginLeft: 5, fontSize: 10 }}
+          data-testid="sorting-down"
+          type="down"
+        />
       )
     }[sortingOrder];
   };
