@@ -19,11 +19,10 @@ import {
   StyledBreadCrumbItem
 } from "../styledComponents";
 import StepsSideBar from "./StepsSidebar";
-
 import LCData from "./LCData";
-
 import { get as lodashGet } from "lodash";
 import { css } from "emotion";
+import { getFilteredStepGroups } from "../sidebar.selectors";
 
 const confirm = Modal.confirm;
 
@@ -196,16 +195,6 @@ class Sidebar extends Component {
     );
   }
 
-  get stepGroups() {
-    const { workflowDetails, workflowIdFromDetailsToSidebar } = this.props;
-    const stepGroups = lodashGet(
-      workflowDetails,
-      `[${workflowIdFromDetailsToSidebar}].workflowDetails.stepGroups.results`,
-      []
-    );
-    return stepGroups.filter(group => group.steps.length);
-  }
-
   // ALL RENDER FUNCTIONS
   renderBreadcrumbs = () => {
     if (this.workflowFamily) {
@@ -376,7 +365,7 @@ class Sidebar extends Component {
   );
 
   render() {
-    const { minimalUI, selectedStep } = this.props;
+    const { minimalUI, selectedStep, stepGroups } = this.props;
     const { selectedPanel } = this.state;
     const showProfile = !!this.lcData.length;
 
@@ -410,7 +399,7 @@ class Sidebar extends Component {
             <StepsSideBar
               selectedPanelId={selectedPanel}
               selectedStep={selectedStep}
-              stepGroups={this.stepGroups}
+              stepGroups={stepGroups}
               handleStepClick={this.handleStepClick}
               onChangeOfCollapse={this.onChangeOfCollapse}
               stepUserTagData={this.props.stepUserTagData}
@@ -422,9 +411,13 @@ class Sidebar extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
   const { workflowDetailsHeader, workflowDetails } = state;
-  return { workflowDetailsHeader, workflowDetails };
+  return {
+    workflowDetailsHeader,
+    workflowDetails,
+    stepGroups: getFilteredStepGroups(state, props) // reselect selector
+  };
 }
 
 export default connect(mapStateToProps)(injectIntl(Sidebar));

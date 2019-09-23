@@ -1036,7 +1036,7 @@ test("should render the selected step with proper styling", () => {
   expect(style.backgroundColor).not.toBe("none");
 });
 
-test("should render Locked icon on locked steps", () => {
+test("should render Locked icon on locked steps if the step is accessible", () => {
   const fakeStepGroups = [
     {
       id: 1,
@@ -1047,14 +1047,30 @@ test("should render Locked icon on locked steps", () => {
           completed_by: null,
           name: "Step 1",
           alerts: [],
-          is_locked: true
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
         },
         {
           id: 3,
           completed_by: null,
-          name: "Step 1",
+          name: "Step 2",
           alerts: [],
           is_locked: false
+        }
+      ],
+      overdue: false
+    },
+    {
+      id: 4,
+      definition: { name_en: "Group 2" },
+      steps: [
+        {
+          id: 5,
+          completed_by: null,
+          name: "Dependent Step",
+          alerts: [],
+          is_locked: false,
+          definition: 100
         }
       ],
       overdue: false
@@ -1100,6 +1116,103 @@ test("should render Locked icon on locked steps", () => {
   fireEvent.click(groupElement);
 
   expect(queryAllByTestId(/step-locked-icon/i).length).toBe(1);
+});
+
+test("should not render Locked step if the step is inaccessible", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [],
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 2",
+          alerts: [],
+          is_locked: false
+        }
+      ],
+      overdue: false
+    },
+    {
+      id: 4,
+      definition: { name_en: "Group 2" },
+      steps: [
+        {
+          id: 5,
+          completed_by: null,
+          name: "Step 3",
+          alerts: [],
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 4",
+          alerts: [],
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowKeys,
+    workflowDetails
+  });
+  const store = createStore(rootReducer, {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: []
+      }
+    },
+    permissions: {},
+    workflowKeys: {},
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  });
+
+  const { queryByText, queryAllByText, queryAllByTestId } = renderWithReactIntl(
+    <Provider store={store}>
+      <BrowserRouter>
+        <WorkflowDetails
+          workflowIdFromPropsForModal={fakeWorkflowId}
+          hideStepBody={true}
+          dispatch={() => {}}
+        />
+      </BrowserRouter>
+    </Provider>
+  );
+
+  const groupElement = queryByText(fakeStepGroups[0].definition.name_en);
+  fireEvent.click(groupElement);
+
+  expect(queryAllByTestId(/step-locked-icon/i).length).toBe(0);
+  expect(queryAllByText(/step/i).length).toBe(1);
+
+  // since the 2nd step group has dependent steps are are inaccessible
+  // that group itself should never appear.
+  expect(queryAllByText(/group/i).length).toBe(1);
 });
 
 test("should render alerts count on stepgroup when there is atleast one alert", () => {
