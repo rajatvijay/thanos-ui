@@ -65,7 +65,7 @@ class WorkflowToolbar extends Component {
                   <Icon style={{ marginLeft: 5, fontSize: 10 }} type="down" />
                 )}
               </span>
-              {/* <SelectedBasicFilters filters={selectedBasicWorkflowFilters} /> */}
+              <SelectedBasicFilters filters={selectedBasicWorkflowFilters} />
             </div>
           </div>
           <CreateNew />
@@ -90,7 +90,17 @@ export default connect(mapStateToProps)(WorkflowToolbar);
 function SelectedBasicFilters({ filters }) {
   const filterKeys = Object.keys(filters);
   return filterKeys.map(filterName => (
-    <span key={filterName}>
+    <span
+      className={css`
+        font-size: 12px;
+        margin: 0 5px;
+        background: #ddd;
+        color: black;
+        padding: 2px 5px;
+        border-radius: 5px;
+      `}
+      key={filterName}
+    >
       {filterName}: {filters[filterName]}
     </span>
   ));

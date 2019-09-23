@@ -66,15 +66,24 @@ export const selectedBusinessUnitSelector = state => {
   );
 };
 
-export const selectedBasicFiltersSelector = createSelector(
-  selectedStatusSelector,
-  selectedRegionSelector,
-  selectedBusinessUnitSelector,
-  (status, region, businessUnit) => {
-    // Removing the keys with undefined values
-    return JSON.parse(JSON.stringify({ status, region, businessUnit }));
-  }
-);
+export const selectedBasicFiltersSelector = state => {
+  return JSON.parse(
+    JSON.stringify({
+      status: lodashGet(
+        state,
+        `workflowList.selectedWorkflowFilters[${STATUS_FILTER_NAME}].label`
+      ),
+      region: lodashGet(
+        state,
+        `workflowList.selectedWorkflowFilters[${REGION_FILTER_NAME}].label`
+      ),
+      businessUnit: lodashGet(
+        state,
+        `workflowList.selectedWorkflowFilters[${BUSINESS_UNIT_FILTER_NAME}].label`
+      )
+    })
+  );
+};
 
 export const kindsSelector = state => state.workflowList.kinds;
 export const kindsForNewWorkflowSelector = createSelector(
