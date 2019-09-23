@@ -6,7 +6,7 @@ import { workflowKind } from "../../../js/reducers/workflow_kind";
 import { authentication } from "../../../js/reducers/authentication";
 import { config } from "../../../js/reducers/config";
 import workflowSearch from "../../../js/reducers/workflowSearch";
-import { renderWithReactIntl } from "../../common/testUtils";
+import { renderWithReactIntl } from "../../common/utils/testUtils";
 import { permissions } from "../../../modules/common/permissions/reducer";
 import { BrowserRouter } from "react-router-dom";
 
