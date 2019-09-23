@@ -42,7 +42,10 @@ function getById(id) {
         dispatch(success(workflowDetails));
         return workflowDetails;
       },
-      error => dispatch(failure(error))
+      error => {
+        dispatch(failure(error));
+        throw error;
+      }
     );
   };
 

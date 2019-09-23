@@ -19,6 +19,7 @@ import { getStepAndGroupFromConfig } from "./utils/active-step";
 import LazyLoadHOC from "./LazyLoadHOC";
 import WhenInViewHOC from "./WhenInViewHOC";
 import { css } from "emotion";
+import showNotification from "../../../modules/common/notification";
 import { getFilteredStepGroups } from "../../../modules/workflows/sidebar/sidebar.selectors";
 
 const { Content } = Layout;
@@ -47,19 +48,24 @@ class WorkflowDetails extends Component {
 
     this.getStepUserTag();
 
-    Promise.all([basicWorkflowDetailsPromise, stepsDataPromise]).then(() => {
-      // The component has been re-rendered here with the data from the API
-      // Think :tongue_stuck_out:
-      const {
-        stepId: currentStepId,
-        groupId: currentGroupId
-      } = this.decideCurrentStep();
+    Promise.all([basicWorkflowDetailsPromise, stepsDataPromise])
+      .then(([workflowResponse]) => {
+        // The component has been re-rendered here with the data from the API
+        // Think :tongue_stuck_out:
 
-      this.setState({ hasLoadedAllData: true }, () => {
-        // To update state and do more side effects
-        this.scrollElementIntoView(currentGroupId, currentStepId);
+        const {
+          stepId: currentStepId,
+          groupId: currentGroupId
+        } = this.decideCurrentStep();
+
+        this.setState({ hasLoadedAllData: true }, () => {
+          // To update state and do more side effects
+          this.scrollElementIntoView(currentGroupId, currentStepId);
+        });
+      })
+      .catch(error => {
+        if (error === 404) this.handleWorkflowNotFound();
       });
-    });
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -123,6 +129,28 @@ class WorkflowDetails extends Component {
 
   ////////////////////////////////////////////////////////////////////////////////
   // Helpers
+  handleWorkflowNotFound = () => {
+    const { minimalUI, closeModal } = this.props;
+    const workflowId = this.workflowId;
+    showNotification({
+      type: "error",
+      message: "errorMessageInstances.ws002",
+      messageData: {
+        workflowId
+      },
+      description: "errorMessageInstances.errorCode",
+      descriptionData: {
+        errorCode: "WS002"
+      },
+      key: workflowId,
+      duration: 0
+    });
+    if (!minimalUI) {
+      goToPrevStep();
+    } else {
+      closeModal();
+    }
+  };
 
   // This is one big ass method to decide what step should be rendered
   decideCurrentStep = () => {

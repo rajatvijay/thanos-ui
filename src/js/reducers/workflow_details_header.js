@@ -15,7 +15,7 @@ export function workflowDetailsHeader(state = {}, action) {
     case workflowDetailsheaderConstants.GET_FAILURE:
       return {
         loading: false,
-        error: action.error || "Error"
+        error: action.error
       };
     case workflowDetailsheaderConstants.ARCHIVE_REQUEST:
       return {
