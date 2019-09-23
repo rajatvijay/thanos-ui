@@ -19,6 +19,7 @@ import { getStepAndGroupFromConfig } from "./utils/active-step";
 import LazyLoadHOC from "./LazyLoadHOC";
 import WhenInViewHOC from "./WhenInViewHOC";
 import { css } from "emotion";
+import { getFilteredStepGroups } from "../../../modules/workflows/sidebar/sidebar.selectors";
 
 const { Content } = Layout;
 
@@ -63,14 +64,6 @@ class WorkflowDetails extends Component {
 
   ////////////////////////////////////////////////////////////////////////////////
   // Getters
-  get stepGroups() {
-    return lodashGet(
-      this.props,
-      `workflowDetails["${this.workflowId}"].workflowDetails.stepGroups.results`,
-      []
-    ).filter(group => !!group.steps.length);
-  }
-
   get lcData() {
     const { minimalUI, workflowItem, workflowDetailsHeader } = this.props;
 
@@ -152,7 +145,7 @@ class WorkflowDetails extends Component {
       const {
         stepId: defaultStepId,
         groupId: defaultGroupId
-      } = getStepAndGroupFromConfig(this.defaultStepTag, this.stepGroups);
+      } = getStepAndGroupFromConfig(this.defaultStepTag, this.props.stepGroups);
 
       if (defaultStepId && defaultGroupId) {
         return { stepId: defaultStepId, groupId: defaultGroupId };
@@ -163,8 +156,8 @@ class WorkflowDetails extends Component {
     // first step should ne visible if there is no lc data
     if (!this.lcData.length) {
       return {
-        groupId: this.stepGroups[0].id,
-        stepId: this.stepGroups[0].steps[0].id
+        groupId: this.props.stepGroups[0].id,
+        stepId: this.props.stepGroups[0].steps[0].id
       };
     }
 
@@ -369,7 +362,7 @@ class WorkflowDetails extends Component {
   };
 
   renderAllStepData = () => {
-    return this.stepGroups.map(group => {
+    return this.props.stepGroups.map(group => {
       return group.steps.map(step => (
         <WhenInViewHOC
           id={`step_body_${group.id}_${step.id}`}
@@ -548,7 +541,7 @@ const PlaceHolder = props => {
   );
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
   const {
     currentStepFields,
     workflowDetails,
@@ -578,7 +571,12 @@ function mapStateToProps(state) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl
+    nextUrl,
+    stepGroups: getFilteredStepGroups(
+      // reselect selector
+      state,
+      props.workflowIdFromPropsForModal || parseInt(props.match.params.id, 10)
+    )
   };
 }
 

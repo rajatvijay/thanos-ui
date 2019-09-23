@@ -416,7 +416,10 @@ function mapStateToProps(state, props) {
   return {
     workflowDetailsHeader,
     workflowDetails,
-    stepGroups: getFilteredStepGroups(state, props) // reselect selector
+    stepGroups: getFilteredStepGroups(
+      state,
+      props.workflowIdFromDetailsToSidebar
+    ) // reselect selector
   };
 }
 

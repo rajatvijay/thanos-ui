@@ -120,11 +120,7 @@ test("should filter steps based on accessible dependent steps", () => {
     }
   };
 
-  let props = {
-    workflowIdFromDetailsToSidebar: 101
-  };
-
-  const stepGroups = getFilteredStepGroups(state, props);
+  const stepGroups = getFilteredStepGroups(state, 101);
   expect(stepGroups.length).toBe(3);
   expect(stepGroups[1].steps.length).toBe(1);
   expect(stepGroups[2].steps.length).toBe(2);

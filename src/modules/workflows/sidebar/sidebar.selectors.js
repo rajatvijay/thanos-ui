@@ -2,10 +2,10 @@ import { createSelector } from "reselect";
 import { get as lodashGet } from "lodash";
 import { getVisibleSteps, hasAccessibleDependencies } from "./sidebar.util";
 
-export const getStepGroups = (state, { workflowIdFromDetailsToSidebar }) =>
+export const getStepGroups = (state, workflowId) =>
   lodashGet(
     state.workflowDetails,
-    `[${workflowIdFromDetailsToSidebar}].workflowDetails.stepGroups.results`,
+    `[${workflowId}].workflowDetails.stepGroups.results`,
     []
   );
 
@@ -15,7 +15,7 @@ export const getStepGroups = (state, { workflowIdFromDetailsToSidebar }) =>
  * locked or if they are, then their all dependencies should be acceissible.
  * All else is ignored.
  * @param {object} state Redux State
- * @param {object} props Component Props
+ * @param {object} workflowId workflow ID
  * @returns {Array} Step Groups array that should be visible.
  */
 export const getFilteredStepGroups = createSelector(
