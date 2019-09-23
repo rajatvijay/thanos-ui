@@ -17,6 +17,7 @@ const fakeWorkflowName = "Current Workflow";
 beforeEach(() => {
   // Removing the window.scroll not implemented warning
   window.scroll = () => {};
+  window.scrollTo = () => {};
 });
 
 // Tests start here

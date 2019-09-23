@@ -79,7 +79,7 @@ test("should call onSelect with alert sub cateogry when a it is clicked", () => 
     sub_categories: [{ id: 524, name: "Fake Alert Sub Category 1", count: 572 }]
   };
   const onSelect = jest.fn();
-  const { getByText } = render(<Alerts item={fakeAlert} onSelect={onSelect} />);
+  const { getByText } = render(<Alerts item={fakeAlert} onClick={onSelect} />);
   const element = getByText(/Fake Alert Sub Category 1/i);
   element.click();
   expect(onSelect).toHaveBeenCalledTimes(1);
