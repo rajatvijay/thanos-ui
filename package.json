@@ -70,6 +70,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "@react-mock/fetch": "^0.3.0",
     "eslint-plugin-flowtype": "^4.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",

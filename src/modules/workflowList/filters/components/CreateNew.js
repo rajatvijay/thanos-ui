@@ -52,7 +52,11 @@ class CreateNew extends Component {
 
     return (
       <div>
-        <Dropdown overlay={this.getKindMenu()} placement="bottomCenter">
+        <Dropdown
+          overlay={this.getKindMenu()}
+          placement="bottomCenter"
+          trigger={["click", "hover"]}
+        >
           <span
             className={css`
               background-color: #138bd6;
@@ -67,7 +71,7 @@ class CreateNew extends Component {
               display: inline-block;
             `}
           >
-            <Icon type="plus" />
+            <Icon data-testid="plus-icon" type="plus" />
           </span>
         </Dropdown>
       </div>
