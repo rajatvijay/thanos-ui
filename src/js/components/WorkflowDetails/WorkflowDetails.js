@@ -87,12 +87,17 @@ class WorkflowDetails extends Component {
 
     // Auto submit
     if (this.isTheStepAutoSubmitted(previousProps, this.props, currentStepId)) {
-      const [groupId, stepId] = getNextStepAndGroup(
-        currentGroupId,
-        currentStepId,
-        this.props.stepGroups
-      );
-      this.scrollElementIntoView(groupId, stepId);
+      // Fetching the latest step group, since due to auto submit steps have been changed
+      this.props
+        .dispatch(workflowDetailsActions.getStepGroup(this.workflowId))
+        .then(() => {
+          const [groupId, stepId] = getNextStepAndGroup(
+            currentGroupId,
+            currentStepId,
+            this.props.stepGroups
+          );
+          this.scrollElementIntoView(groupId, stepId);
+        });
     }
 
     // navigate to new workflow
@@ -146,6 +151,15 @@ class WorkflowDetails extends Component {
   }
 
   get stepAndGroupFromURL() {
+    const { minimalUI } = this.props;
+
+    if (minimalUI) {
+      return {
+        stepId: null,
+        groupId: null
+      };
+    }
+
     const searchString = lodashGet(this.props, "location.search", "");
     const urlParams = new URLSearchParams(searchString);
     return {
