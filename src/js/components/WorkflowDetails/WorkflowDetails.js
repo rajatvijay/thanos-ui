@@ -261,19 +261,20 @@ class WorkflowDetails extends Component {
   };
 
   scrollElementIntoView = (groupId, stepId) => {
+    // FIXME: Commenting out for toggling scrolling feature
     // Using 0 when null and/or undefined, assuming the user wants to navigate to the profile step
-    const elemId = `#step_body_${groupId || 0}_${stepId || 0}`;
-    const stepNode = document.querySelector(elemId);
-    if (stepNode) {
-      // Scrolling it to 80px from top
-      const y = stepNode.offsetTop - 80;
-      window.scrollTo({
-        top: y,
-        left: 0
-      });
-    } else {
-      console.log("cant find step");
-    }
+    // const elemId = `#step_body_${groupId || 0}_${stepId || 0}`;
+    // const stepNode = document.querySelector(elemId);
+    // if (stepNode) {
+    //   // Scrolling it to 80px from top
+    //   const y = stepNode.offsetTop - 80;
+    //   window.scrollTo({
+    //     top: y,
+    //     left: 0
+    //   });
+    // } else {
+    //   console.log("cant find step");
+    // }
 
     // Optimization Alert: Updating state here also,
     // for quick reflection in the UI
@@ -432,36 +433,39 @@ class WorkflowDetails extends Component {
     );
   };
 
-  renderAllStepData = () => {
-    return this.props.stepGroups.map(group => {
-      return group.steps.map(step => (
-        <WhenInViewHOC
-          id={`step_body_${group.id}_${step.id}`}
-          onInViewCallback={() => this.handleTouchTop(step.id, group.id)}
-          extra={step.name}
+  renderAllStepData = (groupId, stepId) => {
+    // FIXME: Commenting out for toggling scrolling feature
+    // return this.props.stepGroups.map(group => {
+    //   return group.steps.map(step => (
+    return (
+      <WhenInViewHOC
+        id={`step_body_${groupId}_${stepId}`}
+        onInViewCallback={() => this.handleTouchTop(stepId, groupId)}
+        // extra={step.name}
+      >
+        <LazyLoadHOC
+          threshold={0.2}
+          onInViewCallback={() => this.handleOnInView(stepId, groupId)}
+          key={stepId}
+          defaultElement={this.nextStepPlaceholder}
+          rootStyle={{ marginBottom: 40 }}
         >
-          <LazyLoadHOC
-            threshold={0.2}
-            onInViewCallback={() => this.handleOnInView(step.id, group.id)}
-            key={step.id}
-            defaultElement={this.nextStepPlaceholder}
-            rootStyle={{ marginBottom: 40 }}
-          >
-            <StepBody
-              stepId={step.id}
-              workflowId={this.workflowId}
-              toggleSidebar={this.callBackCollapser}
-              changeFlag={this.changeFlag}
-              getIntegrationComments={this.getIntegrationComments}
-              workflowHead={this.worklfowHead}
-              dispatch={this.props.dispatch}
-              displayProfile={false}
-              stepName={step.name}
-            />
-          </LazyLoadHOC>
-        </WhenInViewHOC>
-      ));
-    });
+          <StepBody
+            stepId={stepId}
+            workflowId={this.workflowId}
+            toggleSidebar={this.callBackCollapser}
+            changeFlag={this.changeFlag}
+            getIntegrationComments={this.getIntegrationComments}
+            workflowHead={this.worklfowHead}
+            dispatch={this.props.dispatch}
+            displayProfile={false}
+            // stepName={step.name}
+          />
+        </LazyLoadHOC>
+      </WhenInViewHOC>
+    );
+    // ));
+    // });
   };
 
   render = () => {
@@ -509,8 +513,11 @@ class WorkflowDetails extends Component {
             >
               {/* This class is for adding print-only styles */}
               <div className="printOnly">
-                {this.renderProfileStep()}
-                {!this.props.hideStepBody && this.renderAllStepData()}
+                {/* FIXME: Commenting out for toggling scrolling feature */}
+                {!currentStepId && this.renderProfileStep()}
+                {!!currentStepId &&
+                  !this.props.hideStepBody &&
+                  this.renderAllStepData(currentGroupId, currentStepId)}
               </div>
 
               {this.showComments() && (
