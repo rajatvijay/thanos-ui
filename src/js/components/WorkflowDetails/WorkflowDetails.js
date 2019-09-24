@@ -74,12 +74,10 @@ class WorkflowDetails extends Component {
   // Lifecycle Methods
 
   componentDidMount() {
-    console.log("componentDidMount");
     this.initializeComponent();
   }
 
   componentDidUpdate(previousProps) {
-    console.log("componentDidUpdate");
     const { currentGroupId, currentStepId } = this.state;
 
     // Auto submit
@@ -93,7 +91,11 @@ class WorkflowDetails extends Component {
     }
 
     // navigate to new workflow
-    if (previousProps.match.params.id !== this.props.match.params.id) {
+    if (
+      previousProps.match &&
+      this.props.match &&
+      previousProps.match.params.id !== this.props.match.params.id
+    ) {
       this.initializeComponent();
     }
 
