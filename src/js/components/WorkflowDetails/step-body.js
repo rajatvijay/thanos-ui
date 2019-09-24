@@ -339,7 +339,7 @@ class StepBody extends Component {
                 ? workflowHead
                   ? workflowHead.name
                   : null
-                : this.props.stepName}
+                : this.props.stepName || stepData.name}
             </span>
           </Col>
           <Col span={8}>{!loading ? step_comment_btn : null}</Col>

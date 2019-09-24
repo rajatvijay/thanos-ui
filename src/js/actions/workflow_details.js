@@ -10,6 +10,7 @@ import { workflowDetailsService } from "../services";
 import { history } from "../_helpers";
 import { notification } from "antd";
 import * as Sentry from "@sentry/browser";
+import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -71,8 +72,17 @@ function getStepGroup(id, isActive) {
     // workflowDetailsService
     return workflowDetailsService.getStepGroup(id).then(
       stepGroups => {
+        const { minimalUI } = getState();
+        const { workflowId, stepId, groupId } = currentActiveStep(
+          stepGroups,
+          id
+        );
+        if (isActive && !minimalUI) {
+          history.replace(
+            `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
+          );
+        }
         dispatch(success(stepGroups, id));
-        return stepGroups;
       },
       error => dispatch(failure(error))
     );
