@@ -78,7 +78,6 @@ function getStepGroup(id, isActive) {
           id
         );
         if (isActive && !minimalUI) {
-          console.log("stepGroups", stepGroups, workflowId, stepId, groupId);
           history.replace(
             `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
           );
