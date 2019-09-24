@@ -19,6 +19,11 @@ import { getStepAndGroupFromConfig } from "./utils/active-step";
 import LazyLoadHOC from "./LazyLoadHOC";
 import WhenInViewHOC from "./WhenInViewHOC";
 import { css } from "emotion";
+import {
+  checkPermission,
+  Chowkidaar
+} from "../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../modules/common/permissions/permissionsList";
 import showNotification from "../../../modules/common/notification";
 import { getFilteredStepGroups } from "../../../modules/workflows/sidebar/sidebar.selectors";
 
@@ -182,7 +187,14 @@ class WorkflowDetails extends Component {
 
     // Third priority is given to lc data
     // first step should ne visible if there is no lc data
-    if (!this.lcData.length) {
+    // or if user doesn't have permission to view profile
+    if (
+      !this.lcData.length ||
+      !checkPermission({
+        permissionsAllowed: this.props.permissions.permissions,
+        permissionName: Permissions.CAN_VIEW_WORKFLOW_PROFILE
+      })
+    ) {
       return {
         groupId: this.props.stepGroups[0].id,
         stepId: this.props.stepGroups[0].steps[0].id
@@ -393,6 +405,7 @@ class WorkflowDetails extends Component {
     return this.props.stepGroups.map(group => {
       return group.steps.map(step => (
         <WhenInViewHOC
+          key={`step_body_${group.id}_${step.id}`}
           id={`step_body_${group.id}_${step.id}`}
           onInViewCallback={() => this.handleTouchTop(step.id, group.id)}
           extra={step.name}
@@ -466,7 +479,9 @@ class WorkflowDetails extends Component {
             >
               {/* This class is for adding print-only styles */}
               <div className="printOnly">
-                {this.renderProfileStep()}
+                <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+                  {this.renderProfileStep()}
+                </Chowkidaar>
                 {!this.props.hideStepBody && this.renderAllStepData()}
               </div>
 
@@ -583,7 +598,8 @@ function mapStateToProps(state, props) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl
+    nextUrl,
+    permissions
   } = state;
 
   return {
@@ -600,6 +616,7 @@ function mapStateToProps(state, props) {
     showFilterMenu,
     showPreviewSidebar,
     nextUrl,
+    permissions,
     stepGroups: getFilteredStepGroups(
       // reselect selector
       state,

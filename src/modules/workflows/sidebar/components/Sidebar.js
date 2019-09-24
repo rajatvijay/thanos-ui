@@ -374,8 +374,9 @@ class Sidebar extends Component {
 
           {!minimalUI && this.renderLCData()}
 
-          {showProfile && this.renderProfileStep()}
-
+          <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+            {showProfile && this.renderProfileStep()}
+          </Chowkidaar>
           {this.loadingSteps ? (
             this.renderLoader()
           ) : (
