@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { HeaderLcData, GetMergedData } from "./WorkflowHeader";
 import FullScreen from "../../../images/fullScreenBlack.svg";
 import { history } from "../../_helpers";
+import WorkflowBreadcrums from "../../../modules/workflows/sidebar/components/Breadcrums";
+import { get as lodashGet } from "lodash";
 
 class ModalHeader extends Component {
   handleExpand = e => {
@@ -19,6 +21,15 @@ class ModalHeader extends Component {
     this.props.toggleMinimalUI();
     history.push(link);
   };
+  get workflowFamily() {
+    const family = lodashGet(this.props.workflow, `family`, null);
+
+    // Removing the last element since it will always be the workflow itself
+    const familyCopy = [...family];
+    familyCopy.pop();
+
+    return familyCopy.length ? familyCopy : null;
+  }
   render() {
     const { workflow } = this.props;
 
@@ -37,7 +48,10 @@ class ModalHeader extends Component {
           boxShadow: "rgba(0,0,0,0.05) 0px 5px 10px"
         }}
       >
-        <h2>{workflow.name}</h2>
+        <div>
+          <WorkflowBreadcrums workflowFamily={this.workflowFamily} />
+          <h2>{workflow.name}</h2>
+        </div>
 
         <div
           style={{

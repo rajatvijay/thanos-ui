@@ -1244,7 +1244,9 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
         lc_data: [{ value: "Some value", display_type: "normal" }]
       }
     },
-    permissions: {},
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1297,7 +1299,9 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
         lc_data: [{ value: "Some value", display_type: "normal" }]
       }
     },
-    permissions: {},
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1559,7 +1563,7 @@ test("should not display profile if the lc_data is empty, instead first step sho
   expect(queryByTestId(/profile-step/i)).toBeNull();
 });
 
-test("should display profile and should be selected, if the lc_data is not empty", () => {
+test("should not display profile if the lc_data is NOT empty but user doesn't have permission to view profile data, first step should be selected", () => {
   const fakeStepGroups = [
     {
       id: 1,
@@ -1590,6 +1594,62 @@ test("should display profile and should be selected, if the lc_data is not empty
     },
     permissions: {},
 
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  });
+
+  const { queryByTestId } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+      />
+    </Provider>
+  );
+
+  expect(queryByTestId(/profile-step/i)).toBeNull();
+});
+
+test("should display profile and should be selected, if the lc_data is not empty", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: []
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowDetails
+  });
+  const store = createStore(rootReducer, {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: [],
+        lc_data: [{ value: "Some value", display_type: "normal" }]
+      }
+    },
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {

@@ -22,6 +22,11 @@ import {
 import LazyLoadHOC from "./LazyLoadHOC";
 import WhenInViewHOC from "./WhenInViewHOC";
 import { css } from "emotion";
+import {
+  checkPermission,
+  Chowkidaar
+} from "../../../modules/common/permissions/Chowkidaar";
+import Permissions from "../../../modules/common/permissions/permissionsList";
 import showNotification from "../../../modules/common/notification";
 import { getFilteredStepGroups } from "../../../modules/workflows/sidebar/sidebar.selectors";
 
@@ -223,7 +228,14 @@ class WorkflowDetails extends Component {
 
     // Third priority is given to lc data
     // first step should ne visible if there is no lc data
-    if (!this.lcData.length) {
+    // or if user doesn't have permission to view profile
+    if (
+      !this.lcData.length ||
+      !checkPermission({
+        permissionsAllowed: this.props.permissions.permissions,
+        permissionName: Permissions.CAN_VIEW_WORKFLOW_PROFILE
+      })
+    ) {
       return {
         groupId: this.props.stepGroups[0].id,
         stepId: this.props.stepGroups[0].steps[0].id
@@ -514,7 +526,9 @@ class WorkflowDetails extends Component {
               {/* This class is for adding print-only styles */}
               <div className="printOnly">
                 {/* FIXME: Commenting out for toggling scrolling feature */}
-                {!currentStepId && this.renderProfileStep()}
+                <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+                  {!currentStepId && this.renderProfileStep()}
+                </Chowkidaar>
                 {!!currentStepId &&
                   !this.props.hideStepBody &&
                   this.renderAllStepData(currentGroupId, currentStepId)}
@@ -633,7 +647,8 @@ function mapStateToProps(state, props) {
     config,
     showFilterMenu,
     showPreviewSidebar,
-    nextUrl
+    nextUrl,
+    permissions
   } = state;
 
   return {
@@ -650,6 +665,7 @@ function mapStateToProps(state, props) {
     showFilterMenu,
     showPreviewSidebar,
     nextUrl,
+    permissions,
     stepGroups: getFilteredStepGroups(
       // reselect selector
       state,

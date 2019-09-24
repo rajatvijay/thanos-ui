@@ -10,19 +10,18 @@ import {
 } from "../../../../js/actions";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
 import Permissions from "../../../common/permissions/permissionsList";
-import { Link } from "react-router-dom";
 import {
   StyledSidebarHeader,
   StyledWorkflowName,
   StyledCollapseItem,
-  StyledSidebar,
-  StyledBreadCrumbItem
+  StyledSidebar
 } from "../styledComponents";
 import StepsSideBar from "./StepsSidebar";
 import LCData from "./LCData";
 import { get as lodashGet } from "lodash";
 import { css } from "emotion";
 import { getFilteredStepGroups } from "../sidebar.selectors";
+import Breadcrums from "./Breadcrums";
 
 const confirm = Modal.confirm;
 
@@ -196,22 +195,6 @@ class Sidebar extends Component {
   }
 
   // ALL RENDER FUNCTIONS
-  renderBreadcrumbs = () => {
-    if (this.workflowFamily) {
-      return this.workflowFamily.map((family, index) => (
-        <React.Fragment key={family.id}>
-          <Link to={`/workflows/instances/${family.id}`}>
-            <StyledBreadCrumbItem>{family.name}</StyledBreadCrumbItem>
-          </Link>
-          {index === this.workflowFamily.length - 1 ? null : (
-            <StyledBreadCrumbItem>></StyledBreadCrumbItem>
-          )}
-        </React.Fragment>
-      ));
-    }
-    return null;
-  };
-
   renderActivitySidebar = () => {
     const { showActivitySidebar } = this.state;
     const { workflowIdFromDetailsToSidebar } = this.props;
@@ -248,7 +231,7 @@ class Sidebar extends Component {
             line-height: normal;
           `}
         >
-          {this.renderBreadcrumbs()}
+          <Breadcrums workflowFamily={this.workflowFamily} />
           <br />
           <StyledWorkflowName>{this.currentWorkflowName}</StyledWorkflowName>
         </div>
@@ -391,8 +374,9 @@ class Sidebar extends Component {
 
           {!minimalUI && this.renderLCData()}
 
-          {showProfile && this.renderProfileStep()}
-
+          <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+            {showProfile && this.renderProfileStep()}
+          </Chowkidaar>
           {this.loadingSteps ? (
             this.renderLoader()
           ) : (
