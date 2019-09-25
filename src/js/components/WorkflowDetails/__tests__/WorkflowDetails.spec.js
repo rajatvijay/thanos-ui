@@ -7,7 +7,7 @@ import { workflowDetails } from "../../../../js/reducers/workflow_details";
 import { permissions } from "../../../../modules/common/permissions/reducer";
 import { renderWithReactIntl } from "../../../../modules/common/testUtils";
 import { BrowserRouter } from "react-router-dom";
-import { fireEvent } from "@testing-library/react";
+import { fireEvent, waitForDomChange } from "@testing-library/react";
 import Permissions from "../../../../modules/common/permissions/permissionsList";
 
 // Fake Data
@@ -37,6 +37,7 @@ test("should render current workflow name", () => {
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -74,6 +75,7 @@ test("should render all workflows' name and link when from the workflow family",
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -117,6 +119,7 @@ test("should render options menu", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -146,6 +149,7 @@ test("should render options menu with view comments and, print without any permi
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -181,6 +185,7 @@ test("should render options menu with activity log option when user has permissi
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -215,6 +220,7 @@ test("should render options menu with archive option when user has permission", 
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -249,6 +255,7 @@ test("should not render archive workflow option when user dont have permission",
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -283,6 +290,7 @@ test("should not render view activity log option when user dont have permission"
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -319,6 +327,7 @@ test("should render status of the workflow when user has permission", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -352,6 +361,7 @@ test("should render status of the workflow when user dont has permission", () =>
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -390,6 +400,7 @@ test("should render exactly 3 lc data when user has permission", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -431,6 +442,7 @@ test("should not render any lc data when user dont has permission", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -472,6 +484,7 @@ test("should not render any LC data in modal, even though the user has permissio
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -526,6 +539,7 @@ test("should render all the step group names", () => {
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -581,6 +595,7 @@ test("should render completed step and total step count for every step group", (
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -632,6 +647,7 @@ test("should render check circle icon when all the steps are completed", () => {
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -677,6 +693,7 @@ test("should render alarm icon when step group is overdue and atleast one step i
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -722,6 +739,7 @@ test("should render panorama fish eye icon when step group is not overdue and at
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -770,6 +788,7 @@ test("should render all the steps for the active step group", () => {
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -818,6 +837,7 @@ test("should render check circle icon when the step is completed", () => {
   const { queryAllByText, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -866,6 +886,7 @@ test("should render alarm icon when the step is overdue and incomplete", () => {
   const { queryAllByText, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -915,6 +936,7 @@ test("should render lens icon when the step is not overdue, incomplete and selec
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -927,7 +949,9 @@ test("should render lens icon when the step is not overdue, incomplete and selec
 
   const stepElement = queryByText(fakeStepGroups[0].steps[0].name);
   fireEvent.click(stepElement);
-  expect(queryAllByText(/lens/i).length).toBeGreaterThanOrEqual(1);
+  waitForDomChange().then(() => {
+    expect(queryAllByText(/lens/i).length).toBeGreaterThanOrEqual(1);
+  });
 });
 
 test("should render panoram fish icon when the step is not overdue, incomplete and not selected", () => {
@@ -966,6 +990,7 @@ test("should render panoram fish icon when the step is not overdue, incomplete a
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -1018,6 +1043,7 @@ test("should render the selected step with proper styling", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -1104,6 +1130,7 @@ test("should render Locked icon on locked steps if the step is accessible", () =
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -1194,6 +1221,7 @@ test("should not render Locked step if the step is inaccessible", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -1261,6 +1289,7 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1316,6 +1345,7 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1376,6 +1406,7 @@ test("should not render alerts count on stepgroup when when group is selected", 
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1440,6 +1471,7 @@ test("should render alerts count on step when there is atleast one alert", () =>
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1496,6 +1528,7 @@ test("should not render alerts count on step when there are no alerts", () => {
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1553,6 +1586,7 @@ test("should not display profile if the lc_data is empty, instead first step sho
   const { queryByTestId } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1608,6 +1642,7 @@ test("should not display profile if the lc_data is NOT empty but user doesn't ha
   const { queryByTestId } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1664,6 +1699,7 @@ test("should display profile and should be selected, if the lc_data is not empty
   const { queryByTestId } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1825,6 +1861,7 @@ test("should display profile and should be selected, if the lc_data is not empty
 //   const { queryByText, queryAllByText } = renderWithReactIntl(
 //     <Provider store={store}>
 //       <WorkflowDetails
+//          location={{search: "", pathname: ""}}
 //         workflowIdFromPropsForModal={fakeWorkflowId}
 //         dispatch={() => {}}
 //       />

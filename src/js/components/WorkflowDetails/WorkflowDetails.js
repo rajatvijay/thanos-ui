@@ -109,7 +109,10 @@ class WorkflowDetails extends Component {
       this.initializeComponent();
     }
 
-    if (this.props.location !== previousProps.location) {
+    if (
+      this.props.location.pathname + this.props.location.search !==
+      previousProps.location.pathname + previousProps.location.search
+    ) {
       const { stepId, groupId } = this.stepAndGroupFromURL;
       const { currentGroupId, currentStepId } = this.state;
       // eslint-disable-next-line
@@ -166,6 +169,18 @@ class WorkflowDetails extends Component {
       stepId: urlParams.get("step"),
       groupId: urlParams.get("group")
     };
+  }
+
+  get isNewWorkflow() {
+    const searchString = lodashGet(this.props, "location.search", "");
+    return searchString.indexOf("new=true") >= 0;
+  }
+
+  get hasProfileViewPermissions() {
+    return checkPermission({
+      permissionsAllowed: this.props.permissions.permissions,
+      permissionName: Permissions.CAN_VIEW_WORKFLOW_PROFILE
+    });
   }
 
   get defaultStepTag() {
@@ -243,12 +258,11 @@ class WorkflowDetails extends Component {
     // Third priority is given to lc data
     // first step should ne visible if there is no lc data
     // or if user doesn't have permission to view profile
+    // or if it's a fresh created child workflow (with new=true in URL)
     if (
       !this.lcData.length ||
-      !checkPermission({
-        permissionsAllowed: this.props.permissions.permissions,
-        permissionName: Permissions.CAN_VIEW_WORKFLOW_PROFILE
-      })
+      !this.hasProfileViewPermissions ||
+      this.isNewWorkflow
     ) {
       return {
         groupId: this.props.stepGroups[0].id,
@@ -304,10 +318,13 @@ class WorkflowDetails extends Component {
 
     // Optimization Alert: Updating state here also,
     // for quick reflection in the UI
-    this.setState({
-      currentStepId: stepId,
-      currentGroupId: groupId
-    });
+    // this.setState({
+    //   currentStepId: stepId,
+    //   currentGroupId: groupId
+    // });
+
+    // Routing to this until the scroll view is turned off.
+    this.handleUpdateOfActiveStep(groupId, stepId);
   };
 
   // TODO: Don't forget to take care of this case
@@ -466,7 +483,7 @@ class WorkflowDetails extends Component {
     return (
       <WhenInViewHOC
         id={`step_body_${groupId}_${stepId}`}
-        onInViewCallback={() => this.handleTouchTop(stepId, groupId)}
+        onInViewCallback={() => {}}
         // extra={step.name}
       >
         <LazyLoadHOC
