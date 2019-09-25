@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import { Table, Tabs, Tag } from "antd";
 import _ from "lodash";
-import { commonFunctions } from "./commons";
 import { getEventItem } from "./rdc_alert_metadata";
 import { event_status, status_filters } from "../EventStatuses";
-import { map, includes } from "lodash";
 import { FormattedMessage, injectIntl } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
+import { integrationCommonFunctions } from "./integration_common";
 
 const TabPane = Tabs.TabPane;
-
-const { getUserGroupFilter } = commonFunctions;
+const { filterEventsByFlag } = integrationCommonFunctions;
 
 class RDCEventDetailComponent extends Component {
   constructor() {
@@ -29,40 +27,11 @@ class RDCEventDetailComponent extends Component {
     );
   };
 
-  filterEventsByFlag = () => {
-    const currentFilters =
-      getUserGroupFilter(this.props.field.definition.extra) ||
-      this.props.field.definition.extra;
-    const filter =
-      currentFilters &&
-      _.find(currentFilters.filters, item => item.type === "selected_flag");
-    const selectedFlag = this.props.field.selected_flag;
-    const integrationJson = this.props.field.integration_json;
-    const flagTofilter = filter && filter.value;
-
-    const falsePositiveIdList = map(selectedFlag, flag => {
-      if (!flagTofilter) {
-        return;
-      }
-
-      return flag.flag_detail.tag === flagTofilter
-        ? flag.integration_uid
-        : null;
-    });
-
-    integrationJson.data = _.filter(
-      integrationJson.data,
-      event => !includes(falsePositiveIdList, event.custom_hash)
-    );
-
-    return integrationJson;
-  };
-
   render = () => {
     const { field, currentStepFields } = this.props;
 
     const updatedIntegrationJson = this.props.field.definition.extra
-      ? this.filterEventsByFlag()
+      ? filterEventsByFlag(this.props, "data")
       : field.integration_json;
 
     const finalHTML = (
