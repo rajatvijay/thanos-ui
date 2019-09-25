@@ -574,6 +574,8 @@ class WorkflowDetails extends Component {
                     gotoStep={this.fetchStepData}
                     selectActiveStep={this.scrollElementIntoView}
                     changeFlag={this.changeFlag}
+                    groupId={currentGroupId}
+                    stepId={currentStepId}
                     changeIntegrationStatus={this.changeIntegrationStatus}
                     {...this.props}
                   />
