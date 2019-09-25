@@ -452,10 +452,11 @@ class WorkflowDetails extends Component {
     return (
       <WhenInViewHOC
         id="step_body_0_0"
-        onInViewCallback={() => this.handleTouchTop(null, null)}
+        onInViewCallback={() => {}}
         extra={null}
       >
         <LazyLoadHOC
+          bypassObserver
           onInViewCallback={() => this.handleOnInView(null, null)}
           defaultElement={this.nextStepPlaceholder}
           threshold={0.1}
@@ -487,6 +488,7 @@ class WorkflowDetails extends Component {
         // extra={step.name}
       >
         <LazyLoadHOC
+          bypassObserver
           threshold={0.2}
           onInViewCallback={() => this.handleOnInView(stepId, groupId)}
           key={stepId}

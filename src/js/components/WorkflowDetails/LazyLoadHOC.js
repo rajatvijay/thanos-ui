@@ -9,10 +9,14 @@ class LazyLoadHOC extends Component {
   componentDidMount() {
     // Taking it as a prop, so that the user can decide the threshold of lazy laoding
     // tweak it to load earlier and faster
-    const { threshold } = this.props;
+    const { threshold, bypassObserver } = this.props;
 
+    if (bypassObserver) {
+      this.props.onInViewCallback && this.props.onInViewCallback();
+      this.setState({ inView: true });
+    }
     // Feature detection
-    if ("IntersectionObserver" in window) {
+    else if ("IntersectionObserver" in window) {
       const placeholderRootNode = this.rootRef.current;
       const observerConfig = {
         rootMargin: "0px",
