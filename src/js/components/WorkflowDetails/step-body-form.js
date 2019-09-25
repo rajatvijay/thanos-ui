@@ -152,38 +152,23 @@ class StepBodyForm extends Component {
   ///////////////////////////////////////
   //ON Field Change save or update data//
   //////////////////////////////////////
-  onFieldChange = (e, payload, calculated) => {
+  onFieldChange = (event, payload, calculated) => {
     const id = payload.field.id;
-
-    const { regex_value } = payload.field;
-    const re = new RegExp(regex_value);
-    const error = this.state.error;
     let ans = null;
-    let isvalid = true;
 
-    if (regex_value) {
-      if (calculated) {
-        ans = e || e === 0 ? e : "";
-      } else if (e.target) {
-        ans = e.target.value;
-      }
-
-      isvalid = re.test(ans);
-
-      if (!isvalid) {
-        error[id] = payload.field.regex_error;
-        this.setState({ error: error });
-      } else {
-        error[id] = "";
-        this.setState({ error: error });
-      }
+    if (calculated) {
+      ans = event || event === 0 ? event : "";
+    } else if (event.target) {
+      ans = event.target.value;
     }
 
-    if (isvalid) {
+    const isValidAnswer = this.validateAnswer(payload.field, ans);
+
+    if (isValidAnswer) {
       if (calculated === "file") {
         const method = "save";
         const data = {
-          attachment: e,
+          attachment: event,
           field: payload.field.id,
           workflow: payload.workflowId
         };
@@ -191,25 +176,46 @@ class StepBodyForm extends Component {
       } else if (calculated) {
         const method = "save";
         const data = {
-          answer: e || e === 0 ? e : "",
+          answer: event || event === 0 ? event : "",
           field: payload.field.id,
           workflow: payload.workflowId
         };
 
         this.callDispatch(data, method, payload);
-      } else if (e.target) {
+      } else if (event.target) {
         const method = "save";
         const data = {
-          answer: e.target.value,
+          answer: event.target.value,
           field: payload.field.id,
           workflow: payload.workflowId
         };
 
-        if (e.type === "blur") {
+        if (event.type === "blur") {
           this.props.dispatch(workflowStepActions.saveField(data, "blur"));
         } else {
           this.callDispatch(data, method, payload);
         }
+      }
+    }
+  };
+
+  validateAnswer = (field, ans) => {
+    const regex_value = field.regex_value || field.definition.regex_value;
+    const id = field.id;
+    const re = new RegExp(regex_value);
+    const error = this.state.error;
+    let isValidAnswer = true;
+
+    if (regex_value) {
+      isValidAnswer = re.test(ans);
+      if (!isValidAnswer) {
+        error[id] = field.regex_error;
+        this.setState({ error: error });
+        return false;
+      } else {
+        error[id] = "";
+        this.setState({ error: error });
+        return true;
       }
     }
   };
@@ -548,7 +554,8 @@ class StepBodyForm extends Component {
       permission: this.props.permission,
       dynamicUserPerms: this.props.dynamicUserPerms,
       saveResponse: this.saveResponse,
-      clearResponse: this.clearResponse
+      clearResponse: this.clearResponse,
+      validateAnswer: this.validateAnswer
     };
 
     const rowGroup = {
