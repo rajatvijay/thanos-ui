@@ -4,11 +4,10 @@ import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import { workflowDetailsHeader } from "../../../../js/reducers/workflow_details_header";
 import { workflowDetails } from "../../../../js/reducers/workflow_details";
-import workflowKeys from "../../../../js/reducers/workflowKeys";
 import { permissions } from "../../../../modules/common/permissions/reducer";
 import { renderWithReactIntl } from "../../../../modules/common/testUtils";
 import { BrowserRouter } from "react-router-dom";
-import { fireEvent } from "@testing-library/react";
+import { fireEvent, waitForDomChange } from "@testing-library/react";
 import Permissions from "../../../../modules/common/permissions/permissionsList";
 
 // Fake Data
@@ -24,8 +23,7 @@ beforeEach(() => {
 test("should render current workflow name", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -34,12 +32,12 @@ test("should render current workflow name", () => {
         workflow_family: []
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -52,8 +50,7 @@ test("should render current workflow name", () => {
 test("should render all workflows' name and link when from the workflow family", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const fakeParentWorkflow = { name: "Parent Workflow", id: 2120 };
   const fakeGranparentWorkflow = {
@@ -72,13 +69,13 @@ test("should render all workflows' name and link when from the workflow family",
         ]
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -107,8 +104,7 @@ test("should render all workflows' name and link when from the workflow family",
 test("should render options menu", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -117,13 +113,13 @@ test("should render options menu", () => {
         workflow_family: []
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -138,8 +134,7 @@ test("should render options menu", () => {
 test("should render options menu with view comments and, print without any permissions", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -148,13 +143,13 @@ test("should render options menu with view comments and, print without any permi
         workflow_family: []
       }
     },
-    permissions: {},
-    workflowKeys: {}
+    permissions: {}
   });
   const { queryByText, queryAllByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -173,8 +168,7 @@ test("should render options menu with view comments and, print without any permi
 test("should render options menu with activity log option when user has permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -185,13 +179,13 @@ test("should render options menu with activity log option when user has permissi
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_ACTIVITY_LOG]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -209,8 +203,7 @@ test("should render options menu with activity log option when user has permissi
 test("should render options menu with archive option when user has permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -221,13 +214,13 @@ test("should render options menu with archive option when user has permission", 
     },
     permissions: {
       permissions: [Permissions.CAN_ARCHIVE_WORKFLOWS]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -245,8 +238,7 @@ test("should render options menu with archive option when user has permission", 
 test("should not render archive workflow option when user dont have permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -257,13 +249,13 @@ test("should not render archive workflow option when user dont have permission",
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -281,8 +273,7 @@ test("should not render archive workflow option when user dont have permission",
 test("should not render view activity log option when user dont have permission", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -293,13 +284,13 @@ test("should not render view activity log option when user dont have permission"
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -318,8 +309,7 @@ test("should render status of the workflow when user has permission", () => {
   const fakeWorkflowStatus = "Workflow Status";
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -331,13 +321,13 @@ test("should render status of the workflow when user has permission", () => {
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -353,8 +343,7 @@ test("should render status of the workflow when user dont has permission", () =>
   const fakeWorkflowStatus = "Workflow Status";
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -366,13 +355,13 @@ test("should render status of the workflow when user dont has permission", () =>
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -393,8 +382,7 @@ test("should render exactly 3 lc data when user has permission", () => {
   ];
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -406,13 +394,13 @@ test("should render exactly 3 lc data when user has permission", () => {
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -436,8 +424,7 @@ test("should not render any lc data when user dont has permission", () => {
   ];
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -449,13 +436,13 @@ test("should not render any lc data when user dont has permission", () => {
     },
     permissions: {
       permissions: []
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -479,8 +466,7 @@ test("should not render any LC data in modal, even though the user has permissio
   ];
   const rootReducer = combineReducers({
     workflowDetailsHeader,
-    permissions,
-    workflowKeys
+    permissions
   });
   const store = createStore(rootReducer, {
     workflowDetailsHeader: {
@@ -492,13 +478,13 @@ test("should not render any LC data in modal, even though the user has permissio
     },
     permissions: {
       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
-    },
-    workflowKeys: {}
+    }
   });
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -530,7 +516,6 @@ test("should render all the step group names", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -541,7 +526,6 @@ test("should render all the step group names", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -555,6 +539,7 @@ test("should render all the step group names", () => {
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -586,7 +571,6 @@ test("should render completed step and total step count for every step group", (
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -597,7 +581,6 @@ test("should render completed step and total step count for every step group", (
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -612,6 +595,7 @@ test("should render completed step and total step count for every step group", (
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -640,7 +624,6 @@ test("should render check circle icon when all the steps are completed", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -651,7 +634,6 @@ test("should render check circle icon when all the steps are completed", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -665,6 +647,7 @@ test("should render check circle icon when all the steps are completed", () => {
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -687,7 +670,6 @@ test("should render alarm icon when step group is overdue and atleast one step i
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -698,7 +680,6 @@ test("should render alarm icon when step group is overdue and atleast one step i
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -712,6 +693,7 @@ test("should render alarm icon when step group is overdue and atleast one step i
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -734,7 +716,6 @@ test("should render panorama fish eye icon when step group is not overdue and at
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -745,7 +726,6 @@ test("should render panorama fish eye icon when step group is not overdue and at
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -759,6 +739,7 @@ test("should render panorama fish eye icon when step group is not overdue and at
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -784,7 +765,6 @@ test("should render all the steps for the active step group", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -795,9 +775,6 @@ test("should render all the steps for the active step group", () => {
       }
     },
     permissions: {},
-    workflowKeys: {
-      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
-    },
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -811,12 +788,15 @@ test("should render all the steps for the active step group", () => {
   const { queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
       />
     </Provider>
   );
+
+  fireEvent.click(queryByText(fakeStepGroups[0].definition.name_en));
 
   expect(queryByText(fakeStepGroups[0].steps[0].name)).toBeInTheDocument();
   expect(queryByText(fakeStepGroups[0].steps[1].name)).toBeInTheDocument();
@@ -834,7 +814,6 @@ test("should render check circle icon when the step is completed", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -845,7 +824,6 @@ test("should render check circle icon when the step is completed", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -859,6 +837,7 @@ test("should render check circle icon when the step is completed", () => {
   const { queryAllByText, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -884,7 +863,6 @@ test("should render alarm icon when the step is overdue and incomplete", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -895,7 +873,6 @@ test("should render alarm icon when the step is overdue and incomplete", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -909,6 +886,7 @@ test("should render alarm icon when the step is overdue and incomplete", () => {
   const { queryAllByText, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -934,7 +912,6 @@ test("should render lens icon when the step is not overdue, incomplete and selec
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -945,7 +922,6 @@ test("should render lens icon when the step is not overdue, incomplete and selec
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -960,6 +936,7 @@ test("should render lens icon when the step is not overdue, incomplete and selec
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -972,7 +949,9 @@ test("should render lens icon when the step is not overdue, incomplete and selec
 
   const stepElement = queryByText(fakeStepGroups[0].steps[0].name);
   fireEvent.click(stepElement);
-  expect(queryAllByText(/lens/i).length).toBeGreaterThanOrEqual(1);
+  waitForDomChange().then(() => {
+    expect(queryAllByText(/lens/i).length).toBeGreaterThanOrEqual(1);
+  });
 });
 
 test("should render panoram fish icon when the step is not overdue, incomplete and not selected", () => {
@@ -987,7 +966,6 @@ test("should render panoram fish icon when the step is not overdue, incomplete a
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -998,7 +976,6 @@ test("should render panoram fish icon when the step is not overdue, incomplete a
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1013,6 +990,7 @@ test("should render panoram fish icon when the step is not overdue, incomplete a
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -1040,7 +1018,6 @@ test("should render the selected step with proper styling", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1051,7 +1028,6 @@ test("should render the selected step with proper styling", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1067,6 +1043,7 @@ test("should render the selected step with proper styling", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -1085,7 +1062,7 @@ test("should render the selected step with proper styling", () => {
   expect(style.backgroundColor).not.toBe("none");
 });
 
-test("should render Locked icon on locked steps", () => {
+test("should render Locked icon on locked steps if the step is accessible", () => {
   const fakeStepGroups = [
     {
       id: 1,
@@ -1096,14 +1073,30 @@ test("should render Locked icon on locked steps", () => {
           completed_by: null,
           name: "Step 1",
           alerts: [],
-          is_locked: true
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
         },
         {
           id: 3,
           completed_by: null,
-          name: "Step 1",
+          name: "Step 2",
           alerts: [],
           is_locked: false
+        }
+      ],
+      overdue: false
+    },
+    {
+      id: 4,
+      definition: { name_en: "Group 2" },
+      steps: [
+        {
+          id: 5,
+          completed_by: null,
+          name: "Dependent Step",
+          alerts: [],
+          is_locked: false,
+          definition: 100
         }
       ],
       overdue: false
@@ -1112,7 +1105,6 @@ test("should render Locked icon on locked steps", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1123,7 +1115,6 @@ test("should render Locked icon on locked steps", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1139,6 +1130,7 @@ test("should render Locked icon on locked steps", () => {
     <Provider store={store}>
       <BrowserRouter>
         <WorkflowDetails
+          location={{ search: "", pathname: "" }}
           workflowIdFromPropsForModal={fakeWorkflowId}
           hideStepBody={true}
           dispatch={() => {}}
@@ -1151,6 +1143,102 @@ test("should render Locked icon on locked steps", () => {
   fireEvent.click(groupElement);
 
   expect(queryAllByTestId(/step-locked-icon/i).length).toBe(1);
+});
+
+test("should not render Locked step if the step is inaccessible", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [],
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 2",
+          alerts: [],
+          is_locked: false
+        }
+      ],
+      overdue: false
+    },
+    {
+      id: 4,
+      definition: { name_en: "Group 2" },
+      steps: [
+        {
+          id: 5,
+          completed_by: null,
+          name: "Step 3",
+          alerts: [],
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 4",
+          alerts: [],
+          is_locked: true,
+          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowDetails
+  });
+  const store = createStore(rootReducer, {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: []
+      }
+    },
+    permissions: {},
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  });
+
+  const { queryByText, queryAllByText, queryAllByTestId } = renderWithReactIntl(
+    <Provider store={store}>
+      <BrowserRouter>
+        <WorkflowDetails
+          location={{ search: "", pathname: "" }}
+          workflowIdFromPropsForModal={fakeWorkflowId}
+          hideStepBody={true}
+          dispatch={() => {}}
+        />
+      </BrowserRouter>
+    </Provider>
+  );
+
+  const groupElement = queryByText(fakeStepGroups[0].definition.name_en);
+  fireEvent.click(groupElement);
+
+  expect(queryAllByTestId(/step-locked-icon/i).length).toBe(0);
+  expect(queryAllByText(/step/i).length).toBe(1);
+
+  // since the 2nd step group has dependent steps are are inaccessible
+  // that group itself should never appear.
+  expect(queryAllByText(/group/i).length).toBe(1);
 });
 
 test("should render alerts count on stepgroup when there is atleast one alert", () => {
@@ -1174,7 +1262,6 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1185,8 +1272,9 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
         lc_data: [{ value: "Some value", display_type: "normal" }]
       }
     },
-    permissions: {},
-    workflowKeys: {},
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1201,6 +1289,7 @@ test("should render alerts count on stepgroup when there is atleast one alert", 
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1229,7 +1318,6 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1240,8 +1328,9 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
         lc_data: [{ value: "Some value", display_type: "normal" }]
       }
     },
-    permissions: {},
-    workflowKeys: {},
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1256,6 +1345,7 @@ test("should not render alerts count on stepgroup when there are no alerts", () 
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1292,7 +1382,6 @@ test("should not render alerts count on stepgroup when when group is selected", 
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1303,7 +1392,6 @@ test("should not render alerts count on stepgroup when when group is selected", 
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1318,6 +1406,7 @@ test("should not render alerts count on stepgroup when when group is selected", 
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1358,7 +1447,6 @@ test("should render alerts count on step when there is atleast one alert", () =>
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1369,7 +1457,6 @@ test("should render alerts count on step when there is atleast one alert", () =>
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1384,6 +1471,7 @@ test("should render alerts count on step when there is atleast one alert", () =>
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1416,7 +1504,6 @@ test("should not render alerts count on step when there are no alerts", () => {
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1427,7 +1514,6 @@ test("should not render alerts count on step when there are no alerts", () => {
       }
     },
     permissions: {},
-    workflowKeys: {},
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1442,6 +1528,7 @@ test("should not render alerts count on step when there are no alerts", () => {
   const { queryByTestId, queryByText } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1474,7 +1561,6 @@ test("should not display profile if the lc_data is empty, instead first step sho
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1485,9 +1571,7 @@ test("should not display profile if the lc_data is empty, instead first step sho
       }
     },
     permissions: {},
-    workflowKeys: {
-      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
-    },
+
     workflowDetails: {
       [fakeWorkflowId]: {
         workflowDetails: {
@@ -1502,6 +1586,63 @@ test("should not display profile if the lc_data is empty, instead first step sho
   const { queryByTestId } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+      />
+    </Provider>
+  );
+
+  expect(queryByTestId(/profile-step/i)).toBeNull();
+});
+
+test("should not display profile if the lc_data is NOT empty but user doesn't have permission to view profile data, first step should be selected", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: []
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowDetails
+  });
+  const store = createStore(rootReducer, {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: [],
+        lc_data: [{ value: "Some value", display_type: "normal" }]
+      }
+    },
+    permissions: {},
+
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  });
+
+  const { queryByTestId } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1531,7 +1672,6 @@ test("should display profile and should be selected, if the lc_data is not empty
   const rootReducer = combineReducers({
     workflowDetailsHeader,
     permissions,
-    workflowKeys,
     workflowDetails
   });
   const store = createStore(rootReducer, {
@@ -1542,9 +1682,8 @@ test("should display profile and should be selected, if the lc_data is not empty
         lc_data: [{ value: "Some value", display_type: "normal" }]
       }
     },
-    permissions: {},
-    workflowKeys: {
-      [fakeWorkflowId]: { groupId: fakeStepGroups[0].id }
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
     },
     workflowDetails: {
       [fakeWorkflowId]: {
@@ -1560,6 +1699,7 @@ test("should display profile and should be selected, if the lc_data is not empty
   const { queryByTestId } = renderWithReactIntl(
     <Provider store={store}>
       <WorkflowDetails
+        location={{ search: "", pathname: "" }}
         workflowIdFromPropsForModal={fakeWorkflowId}
         hideStepBody={true}
         dispatch={() => {}}
@@ -1572,3 +1712,184 @@ test("should display profile and should be selected, if the lc_data is not empty
 
   expect(profileStep).not.toBeNull();
 });
+
+// test("should not display any inaccessible steps", async () => {
+//   const fakeStepGroups = [
+//     {
+//       id: 1,
+//       definition: { name_en: "Group 1" },
+//       steps: [
+//         {
+//           id: 2,
+//           completed_by: null,
+//           name: "Step 1",
+//           alerts: [],
+//           is_locked: false,
+//           definition: 2
+//         },
+//         {
+//           id: 3,
+//           completed_by: null,
+//           name: "Step 2",
+//           alerts: [],
+//           is_locked: false,
+//           definition: 3
+//         }
+//       ],
+//       overdue: false
+//     },
+//     {
+//       id: 4,
+//       definition: { name_en: "Group 2" },
+//       steps: [
+//         {
+//           id: 5,
+//           completed_by: null,
+//           name: "Step 3",
+//           alerts: [],
+//           is_locked: true,
+//           definition: 5,
+//           dependent_steps: [{ value: 100, label: "Unavailable dependent step" }]
+//         },
+//         {
+//           id: 6,
+//           completed_by: null,
+//           name: "Step 4",
+//           alerts: [],
+//           is_locked: true,
+//           definition: 6,
+//           dependent_steps: [{ value: 2, label: "Step 1" }]
+//         }
+//       ],
+//       overdue: false
+//     },
+//     {
+//       id: 7,
+//       definition: { name_en: "Group 3" },
+//       steps: [
+//         {
+//           id: 8,
+//           completed_by: null,
+//           name: "Step 5",
+//           alerts: [],
+//           is_locked: true,
+//           definition: 8,
+//           dependent_steps: [{ value: 2, label: "Step 1" }]
+//         },
+//         {
+//           id: 9,
+//           completed_by: null,
+//           name: "Step 6",
+//           alerts: [],
+//           is_locked: true,
+//           definition: 9,
+//           dependent_steps: [
+//             { value: 2, label: "Step 1" },
+//             { value: 3, label: "Step 2" }
+//           ]
+//         }
+//       ],
+//       overdue: false
+//     },
+//     {
+//       id: 10,
+//       definition: { name_en: "Group 4" },
+//       steps: [
+//         {
+//           id: 11,
+//           completed_by: null,
+//           name: "Step 7",
+//           alerts: [],
+//           is_locked: true,
+//           definition: 11,
+//           dependent_steps: [{ value: 100, label: "Unavailable dependent step" }]
+//         },
+//         {
+//           id: 12,
+//           completed_by: null,
+//           name: "Step 8",
+//           alerts: [],
+//           is_locked: true,
+//           definition: 12,
+//           dependent_steps: [
+//             { value: 100, label: "Unavailable dependent step" },
+//             { value: 3, label: "Step 2" }
+//           ]
+//         }
+//       ],
+//       overdue: false
+//     }
+//   ];
+//   const rootReducer = combineReducers({
+//     workflowDetailsHeader,
+//     permissions,
+//     workflowDetails
+//   });
+//   const store = createStore(rootReducer, {
+//     workflowDetailsHeader: {
+//       [fakeWorkflowId]: {
+//         name: fakeWorkflowName,
+//         workflow_family: [],
+//         lc_data: [{ value: "Some value", display_type: "normal" }]
+//       }
+//     },
+//     currentStepFields: {
+//       2: { currentStepFields: [{}] },
+//       3: { currentStepFields: [{}] },
+//       5: { currentStepFields: [{}] },
+//       6: { currentStepFields: [{}] },
+//       8: { currentStepFields: [{}] },
+//       9: { currentStepFields: [{}] },
+//       11: { currentStepFields: [{}] },
+//       12: { currentStepFields: [{}] }
+//     },
+//     permissions: {
+//       permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+//     },
+
+//     workflowDetails: {
+//       [fakeWorkflowId]: {
+//         workflowDetails: {
+//           stepGroups: {
+//             results: fakeStepGroups
+//           }
+//         }
+//       }
+//     }
+//   });
+
+//   const { queryByText, queryAllByText } = renderWithReactIntl(
+//     <Provider store={store}>
+//       <WorkflowDetails
+//          location={{search: "", pathname: ""}}
+//         workflowIdFromPropsForModal={fakeWorkflowId}
+//         dispatch={() => {}}
+//       />
+//     </Provider>
+//   );
+
+//   const Group1 = queryByText("Group 1");
+//   const Group2 = queryByText("Group 2");
+//   const Group3 = queryByText("Group 3");
+//   const Group4 = queryByText("Group 4");
+//   fireEvent.click(Group1);
+
+//   expect(Group1).toBeInTheDocument();
+//   expect(Group2).toBeInTheDocument();
+//   expect(Group3).toBeInTheDocument();
+//   expect(Group4).not.toBeInTheDocument();
+
+//   expect(queryAllByText("Step 1").length).toBeGreaterThanOrEqual(2);
+//   expect(queryAllByText("Step 2").length).toBeGreaterThanOrEqual(2);
+
+//   fireEvent.click(Group2);
+//   expect(queryAllByText("Step 3").length).toBe(0);
+//   expect(queryAllByText("Step 4").length).toBeGreaterThanOrEqual(2);
+
+//   fireEvent.click(Group3);
+//   expect(queryAllByText("Step 4").length).toBeGreaterThanOrEqual(2);
+//   expect(queryAllByText("Step 5").length).toBeGreaterThanOrEqual(2);
+
+//   expect(queryByText("Step 7")).not.toBeInTheDocument();
+//   expect(queryByText("Step 8")).not.toBeInTheDocument();
+// });

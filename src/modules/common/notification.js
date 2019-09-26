@@ -23,7 +23,8 @@ const showNotification = ({
   description,
   descriptionData = {},
   key,
-  placement = "bottomLeft"
+  placement = "bottomLeft",
+  duration = 4.5
 }) => {
   if (!!intl === false) return;
   if (!!message === false) return;
@@ -40,6 +41,7 @@ const showNotification = ({
   notification[type]({
     message: intl.formatMessage({ id: message }, messageData),
     placement,
+    duration,
     ...extraProps
   });
 };

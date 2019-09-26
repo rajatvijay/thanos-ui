@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { Tooltip, Collapse } from "antd";
 import { css } from "emotion";
 import { get as lodashGet } from "lodash";
@@ -10,7 +10,7 @@ import ColoredCount from "../../../../js/components/common/coloredCount";
 const { Panel } = Collapse;
 
 // TODO: SelectedPanelId flow needs to be refactored
-class StepsSideBar extends Component {
+class StepsSideBar extends PureComponent {
   renderStepGroupIcon(stepGroup) {
     const allStepsCompleted = !stepGroup.steps.find(step => !step.completed_by);
     const isOverdue = stepGroup.overdue;
@@ -126,7 +126,7 @@ class StepsSideBar extends Component {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          background-color: #fafafa;
+          background-color: transparent;
           margin-left: -14px;
         `}
       >

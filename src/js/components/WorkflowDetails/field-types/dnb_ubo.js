@@ -82,8 +82,11 @@ const GetTable = props => {
   // SENTRY ISSUE : https://sentry.io/organizations/vetted/issues/1205727677/?project=1382744
   if (
     !lodashSize(
-      props.jsonData.OrderProductResponse.OrderProductResponseDetail.Product
-        .Organization.Linkage.BeneficialOwnership.BeneficialOwners
+      lodashGet(
+        props,
+        "jsonData.OrderProductResponse.OrderProductResponseDetail.Product.Organization.Linkage.BeneficialOwnership.BeneficialOwners",
+        []
+      )
     )
   )
     return (

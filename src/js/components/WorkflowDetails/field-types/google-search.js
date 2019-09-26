@@ -8,6 +8,7 @@ import { FormattedMessage } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
 
 const { getIntegrationSearchButton } = commonFunctions;
+const { filterEventsByFlag } = integrationCommonFunctions;
 
 //Field Type DUNS SEARCH
 const getFields = props => {
@@ -48,6 +49,10 @@ class GoogleSrch extends Component {
       permission: this.props.permission
     };
 
+    const updatedIntegrationJson = this.props.field.definition.extra
+      ? filterEventsByFlag(this.props, "results")
+      : field.integration_json;
+
     const finalHTML = (
       <IntegrationLoadingWrapper
         currentStepFields={currentStepFields}
@@ -58,7 +63,7 @@ class GoogleSrch extends Component {
         <div className="mr-top-lg mr-bottom-lg">
           <GetTable
             getComment={this.getComment}
-            jsonData={field.integration_json}
+            jsonData={updatedIntegrationJson}
             commentCount={field.integration_comment_count}
             flag_dict={field.selected_flag}
             onSearch={this.onSearch}

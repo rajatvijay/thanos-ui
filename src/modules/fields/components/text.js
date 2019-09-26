@@ -16,7 +16,8 @@ export class Text extends Component {
       ? this.props.decryptedData.answer
       : this.props.field.answers[0]
       ? this.props.field.answers[0].answer
-      : this.props.field.definition.defaultValue
+      : this.props.field.definition.defaultValue,
+    didFieldUpdate: false
   };
 
   get format() {
@@ -59,12 +60,14 @@ export class Text extends Component {
   onChange = e => {
     const { value } = e.target;
     this.setState({ inputText: value });
-    this.props.validateAnswer(this.props.field, value);
+    const didFieldUpdate = this.props.validateAnswer(this.props.field, value);
+    this.setState({ didFieldUpdate });
   };
 
   onBlur = e => {
     const { value } = e.target;
     const error = this.props.error[this.props.field.id];
+
     if (this.initialAnswer && value === this.initialAnswer.answer) {
       return;
     }
@@ -75,7 +78,7 @@ export class Text extends Component {
         field: this.props.field,
         workflowId: this.props.workflowId
       });
-    } else if (!error) {
+    } else if (this.state.didFieldUpdate || !error) {
       this.props.saveResponse({
         answer: value,
         field: this.props.field,

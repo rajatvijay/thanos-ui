@@ -102,12 +102,12 @@ class Comments extends Component {
     const { fileList: filesFromState } = this.state;
     const fileList = files && files.length ? files : filesFromState;
 
-    const { workflowId, workflowKeys } = this.props;
+    const { workflowId, groupId, stepId } = this.props;
 
     const step_reload_payload = {
       workflowId: workflowId,
-      groupId: workflowKeys[workflowId].groupId,
-      stepId: workflowKeys[workflowId].stepId
+      groupId,
+      stepId
     };
 
     let commentPayload = {
@@ -224,12 +224,12 @@ class Comments extends Component {
       addComment: true
     };
 
-    const workflowId = this.props.workflowId;
+    const { workflowId, groupId, stepId } = this.props;
 
     const step_reload_payload = {
       workflowId: workflowId,
-      groupId: this.props.workflowKeys[workflowId].groupId,
-      stepId: this.props.workflowKeys[workflowId].stepId
+      groupId,
+      stepId
     };
 
     this.props.dispatch(
@@ -417,7 +417,7 @@ class Comments extends Component {
                     <StyledCommentMessages>
                       {messages
                         ? messages.map(function(msg, index) {
-                            return <Message {...msg} />;
+                            return <Message {...msg} key={msg.created_at} />;
                           })
                         : null}
                     </StyledCommentMessages>
@@ -517,41 +517,39 @@ const PostButton = React.memo(({ commentContext, onClick, ...otherProps }) => (
   </Button>
 ));
 
-const Message = React.memo(
-  ({ id, posted_by, created_at, attachment, message }) => (
-    <div key={"comment" + id} className="mr-bottom">
-      <Avatar size="small" icon="user" style={{ float: "left" }} />
+const Message = React.memo(({ posted_by, created_at, attachment, message }) => (
+  <div className="mr-bottom">
+    <Avatar size="small" icon="user" style={{ float: "left" }} />
+    <StyledMessageRow>
+      <b style={{ color: "#162c5b" }}>
+        {posted_by.first_name || posted_by.email}
+      </b>
+      <StyledCommentTimestamp>
+        <Tooltip title={moment(created_at).format()}>
+          <Moment fromNow>{created_at}</Moment>
+        </Tooltip>
+      </StyledCommentTimestamp>
+    </StyledMessageRow>
+    <StyledMessageBody>
+      <div
+        className="Container"
+        dangerouslySetInnerHTML={{
+          __html: message.replace(
+            /@([a-z\d_]+)/gi,
+            '<a class="mentions" href="/users/">@$1</a>'
+          )
+        }}
+      />
+    </StyledMessageBody>
+    {attachment ? (
       <StyledMessageRow>
-        <b style={{ color: "#162c5b" }}>
-          {posted_by.first_name || posted_by.email}
-        </b>
-        <StyledCommentTimestamp>
-          <Tooltip title={moment(created_at).format()}>
-            <Moment fromNow>{created_at}</Moment>
-          </Tooltip>
-        </StyledCommentTimestamp>
+        <i className="anticon anticon-paper-clip" />
+        &nbsp;
+        <a href={attachment}>{Comments.extractAttachmentName(attachment)}</a>
       </StyledMessageRow>
-      <StyledMessageBody>
-        <div
-          className="Container"
-          dangerouslySetInnerHTML={{
-            __html: message.replace(
-              /@([a-z\d_]+)/gi,
-              '<a class="mentions" href="/users/">@$1</a>'
-            )
-          }}
-        />
-      </StyledMessageBody>
-      {attachment ? (
-        <StyledMessageRow>
-          <i className="anticon anticon-paper-clip" />
-          &nbsp;
-          <a href={attachment}>{Comments.extractAttachmentName(attachment)}</a>
-        </StyledMessageRow>
-      ) : null}
-    </div>
-  )
-);
+    ) : null}
+  </div>
+));
 
 const AdjudicationCascader = React.memo(
   injectIntl(({ onChange, intl, options }) => (

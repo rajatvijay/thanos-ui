@@ -3,6 +3,10 @@ import _ from "lodash";
 import { Row, Col, Tag } from "antd";
 import IntlTooltip from "../../common/IntlTooltip";
 import { FormattedMessage } from "react-intl";
+import { map, includes } from "lodash";
+import { commonFunctions } from "./commons";
+
+const { getUserGroupFilter } = commonFunctions;
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -14,7 +18,8 @@ export const integrationCommonFunctions = {
   google_search_html,
   serp_search_html,
   rdc_event_details,
-  comment_answer_body
+  comment_answer_body,
+  filterEventsByFlag
 };
 
 function comment_answer_body(c) {
@@ -760,4 +765,32 @@ function workflow_comment_html(record) {
       <span>{record.name}</span>
     </div>
   );
+}
+
+function filterEventsByFlag(props, keyToFilterOn) {
+  const currentFilters =
+    getUserGroupFilter(props.field.definition.extra) ||
+    props.field.definition.extra;
+  const filter =
+    currentFilters &&
+    _.find(currentFilters.filters, item => item.type === "selected_flag");
+  const selectedFlag = props.field.selected_flag;
+  const integrationJson = props.field.integration_json;
+  const flagTofilter = filter && filter.value;
+  const falsePositiveIdList = map(selectedFlag, flag => {
+    if (!flagTofilter) {
+      return;
+    }
+
+    return flag.flag_detail.tag === flagTofilter ? flag.integration_uid : null;
+  });
+
+  integrationJson[keyToFilterOn] = _.filter(
+    integrationJson[keyToFilterOn],
+    event => {
+      return !includes(falsePositiveIdList, event.custom_hash);
+    }
+  );
+
+  return integrationJson;
 }
