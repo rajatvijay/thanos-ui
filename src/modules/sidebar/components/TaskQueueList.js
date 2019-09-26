@@ -29,6 +29,7 @@ class TaskQueueList extends PureComponent {
     else onSelectTask(taskQueue);
   };
 
+  // TODO: Are we even using this?
   isTaskQueueVisible = taskQueue => {
     return !taskQueue.extra || !taskQueue.extra.hide;
   };

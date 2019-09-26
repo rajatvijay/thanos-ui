@@ -17,6 +17,7 @@ import Sidebar from "../../../modules/sidebar/components/Sidebar";
 import Filter from "../../../modules/filter/components/Filter";
 import { Chowkidaar } from "../../../modules/common/permissions/Chowkidaar";
 import Permissions from "../../../modules/common/permissions/permissionsList";
+import { getVisibleWorkflowGroups } from "../../../modules/sidebar/taskQueue.selector";
 
 const { Content } = Layout;
 
@@ -327,6 +328,7 @@ function mapStateToProps(state) {
     authentication,
     workflowAlertGroupCount,
     workflowGroupCount,
+    visibleWorkflowGroups: getVisibleWorkflowGroups(state),
     users,
     nextUrl,
     workflowFilters
