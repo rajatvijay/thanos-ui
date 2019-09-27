@@ -682,7 +682,6 @@ class ChildWorkflowField2 extends Component {
     }
 
     this.filterWorkflows();
-    this.excludeWorkflows();
   };
 
   filterWorkflows = () => {
