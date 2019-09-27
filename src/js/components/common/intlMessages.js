@@ -43,7 +43,7 @@ export default {
       parentWorkflow: "Parent Workflow",
       childWorkflows: "Child Workflows",
       staticSection: "Static Section",
-      createWorkflow: "Create new workflow"
+      createWorkflow: "Create new"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -473,7 +473,7 @@ export default {
       parentWorkflow: "Flujo de trabajo principal",
       childWorkflows: "Flujos de trabajo secundarios",
       staticSection: "Sección estática",
-      createWorkflow: "Crear nuevo flujo de trabajo"
+      createWorkflow: "Crear nuevo"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
@@ -898,7 +898,7 @@ export default {
       parentWorkflow: "Flux de travail parent",
       childWorkflows: "Flux de travail enfants",
       staticSection: "Section statique",
-      createWorkflow: "Créer un nouveau flux de travail"
+      createWorkflow: "Créer un nouveau"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
