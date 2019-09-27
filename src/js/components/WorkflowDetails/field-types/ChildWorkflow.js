@@ -709,17 +709,13 @@ class ChildWorkflowField2 extends Component {
               return false;
             }
           });
-        }
-
-        if (key === "status" && fval) {
+        } else if (key === "status" && fval) {
           // search for fvalue in cw["status"]["label"]
           if (cw["status"]["label"] !== fval && fval !== "all") {
             found = null;
             return true;
           }
-        }
-
-        if (key === "alert_status" && fval) {
+        } else if (key === "alert_status" && fval) {
           _.forEach(cw.lc_data, function(lc_tag, i) {
             if (!lc_tag.value || lc_tag.display_type !== "alert_status") {
               found = null;
@@ -730,9 +726,7 @@ class ChildWorkflowField2 extends Component {
               return false;
             }
           });
-        }
-
-        if (key === "flag" && fval) {
+        } else if (key === "flag" && fval) {
           if (
             !_.size(cw.selected_flag[cw.id]) ||
             cw.selected_flag[cw.id]["flag_detail"]["label"] !== fval
@@ -740,9 +734,7 @@ class ChildWorkflowField2 extends Component {
             found = null;
             return true;
           }
-        }
-
-        if (key === "kind" && fval) {
+        } else if (key === "kind" && fval) {
           if (cw.child_kinds[0] === null || !cw.child_kinds.includes(fval)) {
             found = null;
             return true;
@@ -761,7 +753,7 @@ class ChildWorkflowField2 extends Component {
       }
     });
 
-    let intersection_workflows = that.state.childWorkflow;
+    let intersection_workflows = filtered_workflow; // that.state.childWorkflow;
     // find common workflow across all keys
     _.forEach(found_workflow_type_map, function(workflows, filter_type) {
       intersection_workflows = _.intersection(

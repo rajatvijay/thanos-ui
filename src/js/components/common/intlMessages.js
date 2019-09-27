@@ -29,7 +29,7 @@ export default {
         changeFlag: "Change flag",
         adjudication: "Adjudication"
       },
-      adjudicationCode: "Adjutication Code",
+      adjudicationCode: "Adjudication Code",
       noBulkActions: "No bulk actions available",
       profileText: "Profile",
       unauthorisedText: {
@@ -465,7 +465,7 @@ export default {
         generateSessionText:
           "Utilice el enlace en el correo electrónico para generar otra sesión de inicio de sesión."
       },
-      adjudicationCode: "Código de Adjuticación",
+      adjudicationCode: "Código de Adjudicación",
       noBulkActions: "No hay acciones masivas disponibles",
       noDuplicatesFound: "No se encontraron duplicados",
       flagsText: "Banderas",
