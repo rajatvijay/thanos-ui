@@ -557,6 +557,7 @@ class WorkflowDetails extends Component {
               minimalUI={minimalUI}
               workflowIdFromDetailsToSidebar={this.workflowId}
               onUpdateOfActiveStep={this.scrollElementIntoView}
+              stepUserTagData={this.state.stepUserTagData}
               displayProfile={this.displayProfile(
                 currentStepId,
                 currentGroupId
