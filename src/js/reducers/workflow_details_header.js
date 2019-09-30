@@ -4,10 +4,11 @@ export function workflowDetailsHeader(state = {}, action) {
   switch (action.type) {
     //Workflow detials
     case workflowDetailsheaderConstants.GET_REQUEST:
-      return { ...state, loading: true };
+      return { ...state, error: null, loading: true };
     case workflowDetailsheaderConstants.GET_SUCCESS:
       return {
         ...state,
+        error: null,
         loading: false,
         [action.workflowDetails.id]: action.workflowDetails,
         workflowDetailsHeader: action.workflowDetails

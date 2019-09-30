@@ -29,7 +29,7 @@ export default {
         changeFlag: "Change flag",
         adjudication: "Adjudication"
       },
-      adjudicationCode: "Adjutication Code",
+      adjudicationCode: "Adjudication Code",
       noBulkActions: "No bulk actions available",
       profileText: "Profile",
       unauthorisedText: {
@@ -43,7 +43,7 @@ export default {
       parentWorkflow: "Parent Workflow",
       childWorkflows: "Child Workflows",
       staticSection: "Static Section",
-      createWorkflow: "Create new workflow"
+      createWorkflow: "Create new"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -165,7 +165,8 @@ export default {
       end: "End",
       createdOn: "Created on",
       modifiedOn: "Modified on",
-      searchResults: "Search results"
+      searchResults: "Search results",
+      selectAll: "Select All"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -464,7 +465,7 @@ export default {
         generateSessionText:
           "Utilice el enlace en el correo electrónico para generar otra sesión de inicio de sesión."
       },
-      adjudicationCode: "Código de Adjuticación",
+      adjudicationCode: "Código de Adjudicación",
       noBulkActions: "No hay acciones masivas disponibles",
       noDuplicatesFound: "No se encontraron duplicados",
       flagsText: "Banderas",
@@ -472,7 +473,7 @@ export default {
       parentWorkflow: "Flujo de trabajo principal",
       childWorkflows: "Flujos de trabajo secundarios",
       staticSection: "Sección estática",
-      createWorkflow: "Crear nuevo flujo de trabajo"
+      createWorkflow: "Crear nuevo"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
@@ -572,7 +573,8 @@ export default {
       end: "Final",
       createdOn: "Creado en",
       modifiedOn: "Modificado en",
-      searchResults: "Resultados de la búsqueda"
+      searchResults: "Resultados de la búsqueda",
+      selectAll: "Seleccionar Todo"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por ",
@@ -896,7 +898,7 @@ export default {
       parentWorkflow: "Flux de travail parent",
       childWorkflows: "Flux de travail enfants",
       staticSection: "Section statique",
-      createWorkflow: "Créer un nouveau flux de travail"
+      createWorkflow: "Créer un nouveau"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
@@ -996,7 +998,8 @@ export default {
       end: "Fin",
       createdOn: "Créé sur",
       modifiedOn: "Modifié le",
-      searchResults: "Résultats de la recherche"
+      searchResults: "Résultats de la recherche",
+      selectAll: "Tout Sélectionner"
     },
     stepBodyFormInstances: {
       submittedBy: "Envoyé par ",

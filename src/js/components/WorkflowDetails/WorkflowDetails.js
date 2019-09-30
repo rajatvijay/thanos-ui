@@ -29,6 +29,7 @@ import {
 import Permissions from "../../../modules/common/permissions/permissionsList";
 import showNotification from "../../../modules/common/notification";
 import { getFilteredStepGroups } from "../../../modules/workflows/sidebar/sidebar.selectors";
+import * as Sentry from "@sentry/browser";
 
 const { Content } = Layout;
 
@@ -87,6 +88,19 @@ class WorkflowDetails extends Component {
 
     // Auto submit
     if (this.isTheStepAutoSubmitted(previousProps, this.props, currentStepId)) {
+      // updating Workflow
+      this.props
+        .dispatch(workflowDetailsActions.getById(this.workflowId))
+        .catch(error => {
+          Sentry.captureException(
+            new Error(
+              "Failed to update Workflow after step auto-submit. Workflow ID:" +
+                this.workflowId +
+                " ERROR: " +
+                error
+            )
+          );
+        });
       // Fetching the latest step group, since due to auto submit steps have been changed
       this.props
         .dispatch(workflowDetailsActions.getStepGroup(this.workflowId))

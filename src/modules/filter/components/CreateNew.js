@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { workflowKindActions, createWorkflow } from "../../../js/actions";
 import { injectIntl } from "react-intl";
 import { getIntlBody } from "../../../js/_helpers/intl-helpers";
+import { getVisibleWorkflowKinds } from "../createNew.selector";
 
 class CreateNew extends Component {
   loadWorkflowKind = () => {
@@ -19,18 +20,8 @@ class CreateNew extends Component {
     this.props.dispatch(createWorkflow(payload));
   };
 
-  getFilteredWorkflowKind = workflowKind => {
-    return workflowKind.filter(
-      kind =>
-        !kind.is_related_kind &&
-        kind.features.includes("add_workflow") &&
-        !["users", "entity-id"].includes(kind.tag)
-    );
-  };
-
   getKindMenu = () => {
-    const { workflowKind } = this.props;
-
+    const { workflowKind, visibleWorkflowKinds } = this.props;
     // Error case
     if (workflowKind.error) {
       return (
@@ -45,7 +36,7 @@ class CreateNew extends Component {
     }
 
     // No kind from backend case
-    if (workflowKind.workflowKind && !workflowKind.workflowKind.length) {
+    if (!visibleWorkflowKinds.length) {
       return (
         <Menu className="kind-menu" theme="Light">
           <Menu.Item key="1" className="text-grey text-medium" disabled>
@@ -58,12 +49,9 @@ class CreateNew extends Component {
     }
 
     // Happy case, we have some kinds
-    const filteredWorkflow = this.getFilteredWorkflowKind(
-      workflowKind.workflowKind || []
-    );
     return (
       <Menu className="kind-menu" theme="Light">
-        {filteredWorkflow.map((item, index) => {
+        {visibleWorkflowKinds.map((item, index) => {
           return (
             <Menu.Item key={`${item.id}`}>
               <div
@@ -97,7 +85,7 @@ class CreateNew extends Component {
             }}
             className="ant-dropdown-link"
           >
-            <Icon type="plus" />
+            <Icon type="plus" data-testid="create-main-workflow" />
           </p>
         </Dropdown>
       </div>
@@ -106,21 +94,10 @@ class CreateNew extends Component {
 }
 
 function mapStateToProps(state) {
-  const {
-    workflowKind,
-    workflowFilterType,
-    workflowFilters,
-    config,
-    languageSelector,
-    showFilterMenu
-  } = state;
+  const { workflowKind } = state;
   return {
     workflowKind,
-    workflowFilterType,
-    workflowFilters,
-    config,
-    languageSelector,
-    showFilterMenu
+    visibleWorkflowKinds: getVisibleWorkflowKinds(state)
   };
 }
 
