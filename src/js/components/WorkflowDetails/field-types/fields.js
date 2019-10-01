@@ -176,7 +176,7 @@ export const GoogleAddress = props => {
           fieldService.saveResponse({
             answer: place.formatted_address,
             field: props.field.id,
-            workflowId: props.workflowId,
+            workflow: props.workflowId,
             extra: place
           });
         }}
