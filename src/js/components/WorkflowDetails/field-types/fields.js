@@ -177,11 +177,11 @@ export const GoogleAddress = props => {
             answer: place.formatted_address,
             field: props.field.id,
             workflow: props.workflowId,
-            extra: place
+            extra_json: place
           });
         }}
         defaultValue={defaultAnswer}
-        types={["(regions)"]}
+        types={["(cities)"]}
         className={css`
           width: 410px;
           border: none;
