@@ -1713,6 +1713,270 @@ test("should display profile and should be selected, if the lc_data is not empty
   expect(profileStep).not.toBeNull();
 });
 
+test("should navigate to default_step_tag in minimalUI", async () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [],
+          definition_tag: "step1"
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 2",
+          alerts: [],
+          definition_tag: "step2"
+        }
+      ],
+      overdue: false
+    },
+    {
+      id: 1,
+      definition: { name_en: "Group 2" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 3",
+          alerts: [],
+          definition_tag: "step3"
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 4",
+          alerts: [],
+          definition_tag: "step4"
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowDetails
+  });
+
+  const reduxState = {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: [],
+        definition: {
+          default_step_tag: "step4"
+        },
+        lc_data: [{ value: "Some value", display_type: "normal" }]
+      }
+    },
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  };
+  const store = createStore(rootReducer, reduxState);
+
+  const { queryByText } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        location={{ search: "", pathname: "" }}
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+        minimalUI={true}
+        workflowItem={reduxState.workflowDetailsHeader[fakeWorkflowId]}
+      />
+    </Provider>
+  );
+
+  await waitForDomChange();
+
+  const step4 = queryByText(/step 4/i);
+  expect(step4.children[0].innerHTML).toBe("lens");
+});
+
+test("should navigate to default_step_tag in expanded view", async () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [],
+          definition_tag: "step1"
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 2",
+          alerts: [],
+          definition_tag: "step2"
+        }
+      ],
+      overdue: false
+    },
+    {
+      id: 1,
+      definition: { name_en: "Group 2" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 3",
+          alerts: [],
+          definition_tag: "step3"
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 4",
+          alerts: [],
+          definition_tag: "step4"
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowDetails
+  });
+
+  const reduxState = {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: [],
+        definition: {
+          default_step_tag: "step4"
+        },
+        lc_data: [{ value: "Some value", display_type: "normal" }]
+      }
+    },
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  };
+  const store = createStore(rootReducer, reduxState);
+
+  const { queryByText } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        location={{ search: "", pathname: "" }}
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+      />
+    </Provider>
+  );
+
+  await waitForDomChange();
+
+  const step4 = queryByText(/step 4/i);
+  expect(step4.children[0].innerHTML).toBe("lens");
+});
+
+test("should navigate to first incomplete step if default_step_tag is not accessible", async () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [],
+          definition_tag: "step1"
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 2",
+          alerts: [],
+          definition_tag: "step2"
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowDetails
+  });
+
+  const reduxState = {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: [],
+        definition: {
+          default_step_tag: "step4"
+        },
+        lc_data: [{ value: "Some value", display_type: "normal" }]
+      }
+    },
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  };
+  const store = createStore(rootReducer, reduxState);
+
+  const { queryByText } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        location={{ search: "", pathname: "" }}
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+        minimalUI={true}
+      />
+    </Provider>
+  );
+
+  await waitForDomChange();
+
+  const step2 = queryByText(fakeStepGroups[0].steps[0].name);
+  expect(step2.children[0].innerHTML).toBe("lens");
+});
+
 // test("should not display any inaccessible steps", async () => {
 //   const fakeStepGroups = [
 //     {
