@@ -6,7 +6,6 @@ import { veryfiyClient } from "../../utils/verification";
 import {
   logout,
   checkAuth,
-  workflowDetailsActions,
   navbarActions,
   workflowActions
 } from "../../actions";
@@ -94,10 +93,10 @@ class WorkflowDetailsRoot extends Component {
 
   fetchWorkflowData = () => {
     //Get workflow  basic data
-    const { workflowId } = this.state;
-
-    this.props.dispatch(workflowDetailsActions.getById(workflowId));
-    this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
+    // const { workflowId } = this.state;
+    //
+    // this.props.dispatch(workflowDetailsActions.getById(workflowId));
+    // this.props.dispatch(workflowDetailsActions.getStepGroup(workflowId));
   };
 
   updateCustomHistory = url => {

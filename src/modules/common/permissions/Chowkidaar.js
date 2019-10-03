@@ -45,7 +45,9 @@ const _Chowkidaar = ({
 
   if (hasPermission) {
     return React.Children.map(children, child => {
-      return React.cloneElement(child, { ...otherProps, ...child.props });
+      return child // child can be null
+        ? React.cloneElement(child, { ...otherProps, ...child.props })
+        : child;
     });
   } else {
     return deniedElement;

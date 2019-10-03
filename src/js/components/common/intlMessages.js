@@ -29,7 +29,7 @@ export default {
         changeFlag: "Change flag",
         adjudication: "Adjudication"
       },
-      adjudicationCode: "Adjutication Code",
+      adjudicationCode: "Adjudication Code",
       noBulkActions: "No bulk actions available",
       profileText: "Profile",
       unauthorisedText: {
@@ -43,7 +43,7 @@ export default {
       parentWorkflow: "Parent Workflow",
       childWorkflows: "Child Workflows",
       staticSection: "Static Section",
-      createWorkflow: "Create new workflow"
+      createWorkflow: "Create new"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -165,7 +165,8 @@ export default {
       end: "End",
       createdOn: "Created on",
       modifiedOn: "Modified on",
-      searchResults: "Search results"
+      searchResults: "Search results",
+      selectAll: "Select All"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -219,7 +220,8 @@ export default {
       somethingWentWrong: "Something went wrong.",
       errorCode: "Error Code: {errorCode}",
       ws001:
-        "There’s a problem with the configuration of workflow, please check with the site admin."
+        "There’s a problem with the configuration of workflow, please check with the site admin.",
+      ws002: "Workflow with ID {workflowId} is unavailable"
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -435,7 +437,7 @@ export default {
       stepGroupName: "Grupo de pasos",
       Progress: "Progreso",
       statusText: "Estado",
-      comments: "Comentarios",
+      commentsText: "Comentarios",
       viewDetails: "Ver detalles",
       exportWorkflowData: "Exportar datos de flujo de trabajo",
       createChildButtonText: "Crear nuevo",
@@ -463,7 +465,7 @@ export default {
         generateSessionText:
           "Utilice el enlace en el correo electrónico para generar otra sesión de inicio de sesión."
       },
-      adjudicationCode: "Código de Adjuticación",
+      adjudicationCode: "Código de Adjudicación",
       noBulkActions: "No hay acciones masivas disponibles",
       noDuplicatesFound: "No se encontraron duplicados",
       flagsText: "Banderas",
@@ -471,7 +473,7 @@ export default {
       parentWorkflow: "Flujo de trabajo principal",
       childWorkflows: "Flujos de trabajo secundarios",
       staticSection: "Sección estática",
-      createWorkflow: "Crear nuevo flujo de trabajo"
+      createWorkflow: "Crear nuevo"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
@@ -571,7 +573,8 @@ export default {
       end: "Final",
       createdOn: "Creado en",
       modifiedOn: "Modificado en",
-      searchResults: "Resultados de la búsqueda"
+      searchResults: "Resultados de la búsqueda",
+      selectAll: "Seleccionar Todo"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por ",
@@ -629,7 +632,8 @@ export default {
       somethingWentWrong: "Quelque chose s'est mal passé.",
       errorCode: "Código de error: {errorCode}",
       ws001:
-        "Hay un problema con la configuración del flujo de trabajo, consulte con el administrador del sitio"
+        "Hay un problema con la configuración del flujo de trabajo, consulte con el administrador del sitio",
+      ws002: "El flujo de trabajo con ID {workflowId} no está disponible"
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
@@ -858,7 +862,7 @@ export default {
       stepGroupName: "Nom du groupe d'étapes",
       Progress: "Progression",
       statusText: "Statut",
-      comments: "Commentaires",
+      commentsText: "Commentaires",
       viewDetails: "Voir les détails",
       exportWorkflowData: "Exporter les données du flux de travail",
       createChildButtonText: "Créer un nouveau",
@@ -894,7 +898,7 @@ export default {
       parentWorkflow: "Flux de travail parent",
       childWorkflows: "Flux de travail enfants",
       staticSection: "Section statique",
-      createWorkflow: "Créer un nouveau flux de travail"
+      createWorkflow: "Créer un nouveau"
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
@@ -994,7 +998,8 @@ export default {
       end: "Fin",
       createdOn: "Créé sur",
       modifiedOn: "Modifié le",
-      searchResults: "Résultats de la recherche"
+      searchResults: "Résultats de la recherche",
+      selectAll: "Tout Sélectionner"
     },
     stepBodyFormInstances: {
       submittedBy: "Envoyé par ",
@@ -1052,7 +1057,8 @@ export default {
       somethingWentWrong: "Algo salió mal.",
       errorCode: "Code d'erreur: {errorCode}",
       ws001:
-        "Il y a un problème avec la configuration du workflow, veuillez vérifier avec l'administrateur du site."
+        "Il y a un problème avec la configuration du workflow, veuillez vérifier avec l'administrateur du site.",
+      ws002: "Le workflow avec l'ID {workflowId} n'est pas disponible"
     },
     loginPageInstances: {
       oneTimeLink: "Entrez votre adresse de courriel professionnelle",

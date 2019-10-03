@@ -4,23 +4,31 @@ import { Collapse, Layout } from "antd";
 const { Sider } = Layout;
 
 export const StyledSidebar = styled(Sider)`
-  overflow: scroll;
-  left: 0;
-  background-color: #fafafa;
-  padding: 30px;
-  padding-top: 0;
-  padding-left: ${({ minimalui }) => (minimalui ? "30px" : "55px")};
-  z-index: 0;
-  margin-right: ${({ minimalui }) => (minimalui ? 0 : 35)};
-  padding-right: 0;
-  position: relative;
-  margin-top: ${({ minimalui }) => (minimalui ? 0 : 35)};
+  /* Overriding the background color from antd-component */
+  background-color: #f6f7f9;
+  margin-right: 25px;
+
+  /* Make the sidebar fixed */
+  .ant-layout-sider-children {
+    position: fixed;
+    overflow-y: scroll;
+    width: 350px;
+    padding: 0 40px;
+    max-height: ${props => (props.minimalui ? "400px" : "100vh")};
+    padding-bottom: 100px;
+  }
+
+  /* Overriding the background color from antd-component */
+  .ant-collapse,
+  .ant-collapse-content {
+    background-color: transparent;
+  }
 `;
 
 export const StyledSidebarHeader = styled.div`
   padding: 25px 20px;
   cursor: pointer;
-  background-color: #fafafa;
+  /* background-color: #fafafa; */
   justify-content: space-between;
   display: flex;
   padding-bottom: 0;
@@ -42,6 +50,7 @@ export const StyledWorkflowName = styled.span`
 
 export const StyledCollapse = styled(Collapse)`
   border-left: none;
+  border-top: none;
   border-right: none;
   border-radius: 0;
   margin-bottom: 30;
@@ -59,7 +68,7 @@ export const StyledCollapseItem = styled.span`
   display: flex;
   align-items: center;
   font-size: 14;
-  background-color: ${props => (props.selected ? "#104774" : "#FAFAFA")};
+  background-color: ${props => (props.selected ? "#104774" : "transparent")};
   color: ${props => (props.selected ? "white" : "black")};
 `;
 

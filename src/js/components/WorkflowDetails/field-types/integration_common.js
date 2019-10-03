@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Tag, Alert } from "antd";
 import _ from "lodash";
-import { Row, Col, Icon } from "antd";
+import { Row, Col, Tag } from "antd";
 import IntlTooltip from "../../common/IntlTooltip";
 import { FormattedMessage } from "react-intl";
+import { map, includes } from "lodash";
+import { commonFunctions } from "./commons";
+
+const { getUserGroupFilter } = commonFunctions;
 
 export const integrationCommonFunctions = {
   dnb_ubo_html,
@@ -15,7 +18,8 @@ export const integrationCommonFunctions = {
   google_search_html,
   serp_search_html,
   rdc_event_details,
-  comment_answer_body
+  comment_answer_body,
+  filterEventsByFlag
 };
 
 function comment_answer_body(c) {
@@ -252,23 +256,7 @@ function google_search_html(record, search) {
     return icon;
   };
 
-  const keywordHighlight = (string, keyword) => {
-    const marked = `<mark><b>${keyword}</b></mark>`;
-    const regEsc = /^[a-zA-Z ]*$/g;
-
-    if (keyword && keyword.match(regEsc)) {
-      return string.replace(new RegExp(keyword, "gi"), marked);
-    } else {
-      return string;
-    }
-  };
-
-  const snippet = record.snippet;
-  let highlighted = snippet;
-
-  _.forEach(record.matched_keywords, function(keyword) {
-    highlighted = keywordHighlight(highlighted, keyword);
-  });
+  const { snippet } = record;
 
   return (
     <div>
@@ -300,7 +288,7 @@ function google_search_html(record, search) {
       </div>
       <div
         className="mr-bottom text-light"
-        dangerouslySetInnerHTML={{ __html: highlighted }}
+        dangerouslySetInnerHTML={{ __html: snippet }}
       />
       <div className="mr-bottom-lg">
         <a
@@ -777,4 +765,32 @@ function workflow_comment_html(record) {
       <span>{record.name}</span>
     </div>
   );
+}
+
+function filterEventsByFlag(props, keyToFilterOn) {
+  const currentFilters =
+    getUserGroupFilter(props.field.definition.extra) ||
+    props.field.definition.extra;
+  const filter =
+    currentFilters &&
+    _.find(currentFilters.filters, item => item.type === "selected_flag");
+  const selectedFlag = props.field.selected_flag;
+  const integrationJson = props.field.integration_json;
+  const flagTofilter = filter && filter.value;
+  const falsePositiveIdList = map(selectedFlag, flag => {
+    if (!flagTofilter) {
+      return;
+    }
+
+    return flag.flag_detail.tag === flagTofilter ? flag.integration_uid : null;
+  });
+
+  integrationJson[keyToFilterOn] = _.filter(
+    integrationJson[keyToFilterOn],
+    event => {
+      return !includes(falsePositiveIdList, event.custom_hash);
+    }
+  );
+
+  return integrationJson;
 }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { authHeader } from "../../../_helpers";
+import { css } from "emotion";
 import {
   Icon,
   Form,
@@ -27,6 +28,8 @@ import { ESign } from "./esign.js";
 import { apiBaseURL, siteOrigin } from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
+import Autocomplete from "react-google-autocomplete";
+import { fieldService } from "../../../../modules/fields/services";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -150,6 +153,44 @@ export const Date = props => {
         onChange={onFieldChange.bind(this, props)}
         value={defaultDate ? moment.utc(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"MM-DD-YYYY"}
+      />
+    </FormItem>
+  );
+};
+
+export const GoogleAddress = props => {
+  const defaultAnswer = props.field.answers[0]
+    ? props.field.answers[0].answer
+    : props.field.definition.defaultValue;
+  return (
+    <FormItem
+      label={getLabel(props, this)}
+      className="from-label"
+      style={{ display: "block" }}
+      key={props.field.id}
+      hasFeedback
+      {...field_error(props)}
+    >
+      <Autocomplete
+        onPlaceSelected={place => {
+          fieldService.saveResponse({
+            answer: place.formatted_address,
+            field: props.field.id,
+            workflow: props.workflowId,
+            extra_json: place
+          });
+        }}
+        defaultValue={defaultAnswer}
+        types={["(cities)"]}
+        className={css`
+          width: 410px;
+          border: none;
+          border-bottom: 1px solid;
+          font-size: 16px;
+          font-weight: 500;
+          padding-top: 6px;
+          padding-bottom: 4px;
+        `}
       />
     </FormItem>
   );
@@ -279,6 +320,7 @@ class URL2 extends React.Component {
               }
               style={{ cursor: "pointer" }}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <Input
                 disabled={isDisabled(props)}
@@ -334,6 +376,7 @@ class URL2 extends React.Component {
                       : props.field.definition.defaultValue
                   }
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {props.field.answers[0]
                     ? props.field.answers[0].answer

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Table, Icon, Tag, Alert } from "antd";
-import _ from "lodash";
+import { Table, Tag } from "antd";
+import { size as lodashSize, get as lodashGet } from "lodash";
 import { commonFunctions } from "./commons";
 import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
@@ -77,24 +77,32 @@ class DnbUBO extends Component {
 
 const GetTable = props => {
   // for error
+  // This should take care of scenarios where OrderProductResponse is
+  // not present.
+  // SENTRY ISSUE : https://sentry.io/organizations/vetted/issues/1205727677/?project=1382744
   if (
-    props.jsonData.OrderProductResponse.TransactionResult.ResultText !==
-    "Success"
-  ) {
+    !lodashSize(
+      lodashGet(
+        props,
+        "jsonData.OrderProductResponse.OrderProductResponseDetail.Product.Organization.Linkage.BeneficialOwnership.BeneficialOwners",
+        []
+      )
+    )
+  )
     return (
       <div className="text-center text-red">
-        {props.jsonData.OrderProductResponse.TransactionResult.ResultText}
+        <FormattedMessage id="messages.noResult" />!
       </div>
     );
-  }
 
-  if (
-    !_.size(
-      props.jsonData.OrderProductResponse.OrderProductResponseDetail.Product
-        .Organization.Linkage.BeneficialOwnership.BeneficialOwners
-    )
-  ) {
-    return <div className="text-center text-red">No result found!</div>;
+  const resultText = lodashGet(
+    props,
+    "jsonData.OrderProductResponse.TransactionResult.ResultText",
+    null
+  );
+
+  if (resultText && resultText !== "Success") {
+    return <div className="text-center text-red">{resultText}</div>;
   }
 
   const data =
@@ -114,10 +122,12 @@ const GetTable = props => {
       title: <FormattedMessage id="workflowsInstances.commentsText" />,
       key: "ubo_index",
       render: record => {
-        let flag_data = _.size(props.flag_dict[record.MemberID])
+        let flag_data = lodashSize(props.flag_dict[record.MemberID])
           ? props.flag_dict[record.MemberID]
           : {};
-        flag_data = _.size(flag_data.flag_detail) ? flag_data.flag_detail : {};
+        flag_data = lodashSize(flag_data.flag_detail)
+          ? flag_data.flag_detail
+          : {};
         const css = flag_data.extra || {};
         const flag_name = flag_data.label || null;
         return (

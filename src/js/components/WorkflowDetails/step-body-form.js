@@ -153,7 +153,6 @@ class StepBodyForm extends Component {
   //ON Field Change save or update data//
   //////////////////////////////////////
   onFieldChange = (event, payload, calculated) => {
-    const id = payload.field.id;
     let ans = null;
 
     if (calculated) {
@@ -201,6 +200,10 @@ class StepBodyForm extends Component {
 
   validateAnswer = (field, ans) => {
     const regex_value = field.regex_value || field.definition.regex_value;
+
+    if (!regex_value) {
+      return true;
+    }
     const id = field.id;
     const re = new RegExp(regex_value);
     const error = this.state.error;
@@ -211,13 +214,12 @@ class StepBodyForm extends Component {
       if (!isValidAnswer) {
         error[id] = field.regex_error;
         this.setState({ error: error });
-        return false;
       } else {
         error[id] = "";
         this.setState({ error: error });
-        return true;
       }
     }
+    return isValidAnswer;
   };
 
   //////////////////////////////////////
@@ -588,8 +590,8 @@ class StepBodyForm extends Component {
           that.props.extraFilters
         );
 
-        fieldParams.workflowId = that.props.workflowIdFromPropsForModal
-          ? that.props.workflowIdFromPropsForModal
+        fieldParams.workflowId = that.props.workflowId
+          ? that.props.workflowId
           : fieldParams.workflowId;
         return (
           <FieldItem stepData={that.props.stepData} fieldParams={fieldParams} />
@@ -769,8 +771,7 @@ class StepBodyForm extends Component {
 
         <div
           style={{
-            padding: "29px 44px 27px 37px",
-            marginBottom: "100px"
+            padding: "29px 44px 27px 37px"
           }}
         >
           <Row>

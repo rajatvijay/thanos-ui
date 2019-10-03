@@ -3,8 +3,7 @@ import {
   workflowDetailsheaderConstants,
   workflowStepConstants,
   workflowCommentsConstants,
-  stepVersionConstants,
-  SET_WORKFLOW_KEYS
+  stepVersionConstants
 } from "../constants";
 import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
@@ -37,12 +36,18 @@ function getById(id) {
   return dispatch => {
     dispatch(request());
 
-    workflowDetailsService
-      .getById(id)
-      .then(
-        workflowDetails => dispatch(success(workflowDetails)),
-        error => dispatch(failure(error))
-      );
+    // Returning promise here, so that
+    // I can use .then from the component
+    return workflowDetailsService.getById(id).then(
+      workflowDetails => {
+        dispatch(success(workflowDetails));
+        return workflowDetails;
+      },
+      error => {
+        dispatch(failure(error));
+        throw error;
+      }
+    );
   };
 
   function request() {
@@ -65,7 +70,7 @@ function getStepGroup(id, isActive) {
     dispatch(request(id));
 
     // workflowDetailsService
-    workflowDetailsService.getStepGroup(id).then(
+    return workflowDetailsService.getStepGroup(id).then(
       stepGroups => {
         const { minimalUI } = getState();
         const { workflowId, stepId, groupId } = currentActiveStep(
@@ -76,23 +81,6 @@ function getStepGroup(id, isActive) {
           history.replace(
             `/workflows/instances/${workflowId}?group=${groupId}&step=${stepId}`
           );
-        } else {
-          dispatch(
-            getStepFields({
-              workflowId,
-              stepId,
-              groupId
-            })
-          );
-        }
-        // Moving to next step only in the full screen view
-        // This is done to avoid moving to first incomplete step in modal view,
-        // on the first load
-        if (!minimalUI) {
-          dispatch({
-            type: SET_WORKFLOW_KEYS,
-            payload: { workflowId, stepId, groupId }
-          });
         }
         dispatch(success(stepGroups, id));
       },

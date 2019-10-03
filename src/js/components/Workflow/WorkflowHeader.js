@@ -128,10 +128,11 @@ const createFamilyListForBreadcrums = family => {
 };
 
 const HeaderTitle = props => {
-  const { workflow } = props;
+  const { workflow, fieldExtra, isEmbedded } = props;
   const { family } = workflow;
+  const showBreadcrumbs = fieldExtra && fieldExtra.show_breadcrumbs;
 
-  if (family.length === 1 || props.isEmbedded) {
+  if (family.length === 1 || (!showBreadcrumbs && isEmbedded)) {
     return (
       <div>
         <span
@@ -254,13 +255,11 @@ class HeaderOptions extends React.Component {
     this.setState({ showSidebar: !this.state.showSidebar });
   };
 
-  getComment = (object_id, e) => {
+  getComment = (objectId, e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    this.state.loading_sidebar = true;
-    this.state.object_id = object_id;
-    this.props.addComment(object_id, "workflow");
+    this.props.addComment(objectId, "workflow");
   };
 
   toggleWorkflowPDFModal = () => {
@@ -394,6 +393,7 @@ export class GetMergedData extends React.Component {
     var alert_data_filtered = _.filter(alert_data, function(obj) {
       return obj.value !== "0" && obj.value !== "";
     });
+
     const lc_data = _.filter(data, function(v) {
       return v.display_type === "normal";
     });
@@ -489,7 +489,11 @@ export class GetMergedData extends React.Component {
       return (
         <Tooltip
           key={`${index}`}
-          title={item.label + ": " + (item.value || "")}
+          title={
+            <>
+              {item.label}: <LCDataValue {...item} />
+            </>
+          }
         >
           {tagWrapper}
         </Tooltip>

@@ -13,7 +13,8 @@ import {
   Attachment,
   File,
   RadioField,
-  IFrameField
+  IFrameField,
+  GoogleAddress
   //Duns
 } from "./fields";
 
@@ -213,6 +214,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "general_config_3":
       return DnBCommon(props);
+    case "google_address_search":
+      return GoogleAddress(props);
     default:
       return <Text {...props} />;
   }

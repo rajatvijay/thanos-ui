@@ -15,7 +15,7 @@ import {
   Select,
   Checkbox
 } from "antd";
-import _ from "lodash";
+import _, { get as lodashGet } from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { injectIntl, FormattedMessage } from "react-intl";
@@ -141,7 +141,7 @@ class ChildWorkflowField2 extends Component {
       this.props.dispatch(workflowKindActions.getAll());
       this.setState({ kindChecked: true });
     } else {
-      this.prepFetchChildData();
+      this.getChildWorkflow();
     }
 
     const currentUserGroupFilter = getUserGroupFilter(
@@ -162,18 +162,21 @@ class ChildWorkflowField2 extends Component {
       !this.state.fetching &&
       !this.state.fetchEmpty
     ) {
-      this.prepFetchChildData();
+      this.getChildWorkflow();
     }
   };
 
-  prepFetchChildData = () => {
-    if (this.props.field.definition.extra["exclude_filters"]) {
-      this.state.excluded_filters = this.props.field.definition.extra[
-        "exclude_filters"
-      ];
+  // TODO: This needs to be tested.
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let state = null;
+    if (nextProps.field.definition.extra["exclude_filters"]) {
+      state = {};
+      state.excluded_filters =
+        nextProps.field.definition.extra["exclude_filters"];
     }
-    this.getChildWorkflow();
-  };
+
+    return state;
+  }
 
   getQueryParamForChildWorkflows = () => {
     try {
@@ -314,8 +317,11 @@ class ChildWorkflowField2 extends Component {
   };
 
   get relatedWorkflowKind() {
-    const relatedTypes = this.props.workflowDetailsHeader[this.props.workflowId]
-      .definition.related_types;
+    const relatedTypes = lodashGet(
+      this.props.workflowDetailsHeader,
+      `${this.props.workflowId}.definition.related_types`,
+      null
+    );
 
     // In case where the related types is not defined
     // or the workflow kinds are not loaded yet.
@@ -510,7 +516,7 @@ class ChildWorkflowField2 extends Component {
 
     // getting workflow status count
     filteredChildWorkflow &&
-      filteredChildWorkflow.map(function(value, key) {
+      filteredChildWorkflow.forEach((value, key) => {
         const wstatus = value["status"]["label"];
         if (workflow_status_count[wstatus]) {
           workflow_status_count[wstatus] += 1;
@@ -551,7 +557,7 @@ class ChildWorkflowField2 extends Component {
     // getting lc data alerts status count
     let total_count = 0;
     if (this.state.childWorkflow) {
-      this.state.childWorkflow.map(function(val, key) {
+      this.state.childWorkflow.forEach(function(val, key) {
         _.map(val.lc_data, function(tag, i) {
           if (tag.display_type !== "alert") {
             return true;
@@ -676,16 +682,15 @@ class ChildWorkflowField2 extends Component {
     }
 
     this.filterWorkflows();
-    this.excludeWorkflows();
   };
 
   filterWorkflows = () => {
     const that = this;
     const selected_filters = this.state.selected_filters;
     if (!_.size(selected_filters)) {
-      this.state.filteredChildWorkflow = that.state.childWorkflow;
-      this.setState({ filteredChildWorkflow: that.state.childWorkflow });
-      this.excludeWorkflows();
+      this.setState({ filteredChildWorkflow: that.state.childWorkflow }, () => {
+        this.excludeWorkflows();
+      });
       return true;
     }
     let filtered_workflow = [];
@@ -704,17 +709,13 @@ class ChildWorkflowField2 extends Component {
               return false;
             }
           });
-        }
-
-        if (key === "status" && fval) {
+        } else if (key === "status" && fval) {
           // search for fvalue in cw["status"]["label"]
           if (cw["status"]["label"] !== fval && fval !== "all") {
             found = null;
             return true;
           }
-        }
-
-        if (key === "alert_status" && fval) {
+        } else if (key === "alert_status" && fval) {
           _.forEach(cw.lc_data, function(lc_tag, i) {
             if (!lc_tag.value || lc_tag.display_type !== "alert_status") {
               found = null;
@@ -725,9 +726,7 @@ class ChildWorkflowField2 extends Component {
               return false;
             }
           });
-        }
-
-        if (key === "flag" && fval) {
+        } else if (key === "flag" && fval) {
           if (
             !_.size(cw.selected_flag[cw.id]) ||
             cw.selected_flag[cw.id]["flag_detail"]["label"] !== fval
@@ -735,9 +734,7 @@ class ChildWorkflowField2 extends Component {
             found = null;
             return true;
           }
-        }
-
-        if (key === "kind" && fval) {
+        } else if (key === "kind" && fval) {
           if (cw.child_kinds[0] === null || !cw.child_kinds.includes(fval)) {
             found = null;
             return true;
@@ -756,7 +753,7 @@ class ChildWorkflowField2 extends Component {
       }
     });
 
-    let intersection_workflows = that.state.childWorkflow;
+    let intersection_workflows = filtered_workflow; // that.state.childWorkflow;
     // find common workflow across all keys
     _.forEach(found_workflow_type_map, function(workflows, filter_type) {
       intersection_workflows = _.intersection(
@@ -765,9 +762,9 @@ class ChildWorkflowField2 extends Component {
       );
     });
 
-    this.state.filteredChildWorkflow = intersection_workflows; // not working if i remove this
-    this.setState({ filteredChildWorkflow: intersection_workflows });
-    this.excludeWorkflows();
+    this.setState({ filteredChildWorkflow: intersection_workflows }, () => {
+      this.excludeWorkflows();
+    });
   };
 
   excludeWorkflows = () => {

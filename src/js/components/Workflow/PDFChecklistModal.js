@@ -8,6 +8,7 @@ import {
 } from "../../services/workflowPdfApi";
 import { notification } from "antd";
 import { FormattedMessage } from "react-intl";
+import styled from "@emotion/styled";
 
 const openNotificationWithIcon = data => {
   notification[data.type]({
@@ -36,53 +37,78 @@ class PDFChecklistModal extends React.Component {
     pdfConfig: null,
     loading: false,
     error: false,
-    tickMarkAtleastOne: false
+    tickMarkAtleastOne: false,
+    selectAll: false,
+    userSelection: {}
   };
-
-  // To hold the user selection not the checkbox status
-  userSelection = {};
 
   componentDidMount = () => {
     this.fetchWorkflowDetails();
   };
 
   getUserSelectionObjectPath = (parentTag, workflowType) => {
-    if (["PARENT_WORKFLOW", "STATIC_SECTIONS"].includes(workflowType)) {
+    if (["PARENT_WORKFLOW", "STATIC_SECTIONS", "META"].includes(workflowType)) {
       return parentTag;
     } else {
       return `childWorkflow.${parentTag}`;
     }
   };
 
-  onSelectWorkflow = (e, tag, parentTag, workflowType) => {
+  onSelectWorkflow = (tag, parentTag, workflowType, e) => {
     const { checked } = e.target;
     const path = this.getUserSelectionObjectPath(parentTag, workflowType);
 
-    this.setState({
-      tickMarkAtleastOne: false
+    this.setState(state => {
+      lodashObjectSet(state.userSelection, path + "." + tag, checked);
+      return {
+        userSelection: state.userSelection,
+        selectAll: !checked ? false : state.selectAll,
+        tickMarkAtleastOne: false
+      };
     });
-
-    if (checked) {
-      // Add
-      lodashObjectSet(this.userSelection, path, [
-        ...lodashObjectGet(this.userSelection, path, []),
-        tag
-      ]);
-    } else {
-      // Remove
-      lodashObjectSet(
-        this.userSelection,
-        path,
-        lodashObjectGet(this.userSelection, path, []).filter(
-          step => step !== tag
-        )
-      );
-    }
   };
 
-  onSelectMetaInformation = (e, tag) => {
-    const { checked } = e.target;
-    this.userSelection[tag] = checked;
+  onSelectAll = event => {
+    const { checked } = event.target;
+    const { pdfConfig } = this.state;
+
+    const parentWorkflowSteps = pdfConfig.results[0].parent_workflows.steps;
+    const childWorkflows = pdfConfig.results[0].child_workflows;
+    const staticSections = pdfConfig.results[0].extra_sections;
+
+    const userSelection = {};
+
+    parentWorkflowSteps.forEach(step => {
+      lodashObjectSet(userSelection, "parentWorkflow." + step.value, checked);
+    });
+
+    childWorkflows.forEach(workflow => {
+      workflow.steps.forEach(step => {
+        lodashObjectSet(
+          userSelection,
+          "childWorkflow." + workflow.value + "." + step.value,
+          checked
+        );
+      });
+    });
+
+    staticSections.forEach(section => {
+      lodashObjectSet(
+        userSelection,
+        "staticSections." + section.value,
+        checked
+      );
+    });
+
+    META_INFO.forEach(meta => {
+      lodashObjectSet(userSelection, "meta." + meta.value, checked);
+    });
+
+    this.setState({
+      userSelection,
+      selectAll: checked,
+      tickMarkAtleastOne: !checked
+    });
   };
 
   handleOk = () => {
@@ -95,41 +121,71 @@ class PDFChecklistModal extends React.Component {
 
   setLoding = loading => this.setState({ loading });
 
-  validateSelection = () => {
+  validateSelection = userSelection => {
     const {
-      parentWorkflow,
-      childWorkflow,
-      staticSections
-    } = this.userSelection;
-    if (!parentWorkflow || !childWorkflow || !staticSections) {
+      parent_steps_to_print,
+      extra_sections,
+      child_steps_to_print
+    } = userSelection;
+    if (!parent_steps_to_print || !child_steps_to_print || !extra_sections) {
       this.setState({ tickMarkAtleastOne: true });
       return true;
     }
   };
 
-  handleSubmit = () => {
-    const {
-      parentWorkflow,
-      childWorkflow,
-      staticSections,
-      include_comments,
-      include_archived_related_workflows,
-      include_flags
-    } = this.userSelection;
+  preparePayload = () => {
+    const payload = {};
+    const { userSelection } = this.state;
+    if (userSelection.parentWorkflow) {
+      const data = [];
+      Object.entries(userSelection.parentWorkflow).forEach(([key, value]) => {
+        if (value) data.push(key);
+      });
+      payload.parent_steps_to_print = data;
+    }
 
-    if (this.validateSelection()) return;
+    if (userSelection.staticSections) {
+      const data = [];
+      Object.entries(userSelection.staticSections).forEach(([key, value]) => {
+        if (value) data.push(key);
+      });
+      payload.extra_sections = data;
+    }
+
+    if (userSelection.childWorkflow) {
+      payload.child_steps_to_print = {};
+      Object.keys(userSelection.childWorkflow).forEach(workflowTag => {
+        const data = [];
+        Object.entries(userSelection.childWorkflow[workflowTag]).forEach(
+          ([key, value]) => {
+            if (value) data.push(key);
+          }
+        );
+        payload.child_steps_to_print[workflowTag] = data;
+      });
+    }
+
+    META_INFO.forEach(item => {
+      payload[item.value] = lodashObjectGet(
+        userSelection,
+        "meta." + item.value,
+        false
+      );
+    });
+
+    return payload;
+  };
+
+  handleSubmit = () => {
+    const preparedData = this.preparePayload();
+    if (this.validateSelection(preparedData)) return;
 
     const { workflowId } = this.props;
     const { config_id: configId } = this.state.pdfConfig.results[0];
     const body = {
       config_id: configId,
       workflow_id: workflowId,
-      parent_steps_to_print: parentWorkflow,
-      child_steps_to_print: childWorkflow,
-      extra_sections: staticSections,
-      include_flags: !!include_flags,
-      include_comments: !!include_comments,
-      include_archived_related_workflows: !!include_archived_related_workflows
+      ...preparedData
     };
 
     this.setLoding(true);
@@ -183,35 +239,15 @@ class PDFChecklistModal extends React.Component {
       });
   };
 
-  renderParentWorkflow = steps => {
-    if (!steps) return null;
-    return steps.map((step, key) => {
-      return (
-        <div key={key}>
-          {/* TODO: Make this into a styled component */}
-          <Checkbox
-            className={css`
-              font-size: 17px;
-              margin-left: 10px;
-              margin-top: 3px;
-            `}
-            // TODO: Extract this into a separate component,
-            // so that render does not create a new function everytime
-            onChange={event =>
-              this.onSelectWorkflow(
-                event,
-                step.value,
-                "parentWorkflow",
-                "PARENT_WORKFLOW"
-              )
-            }
-          >
-            {step.label}
-          </Checkbox>
-        </div>
-      );
-    });
-  };
+  renderParentWorkflow = steps => (
+    <CheckboxGroup
+      items={steps}
+      selected={lodashObjectGet(this.state.userSelection, "parentWorkflow", {})}
+      onChange={this.onSelectWorkflow}
+      parentTag="parentWorkflow"
+      workflowType="PARENT_WORKFLOW"
+    />
+  );
 
   renderChildWorkflow = workflows => {
     if (!workflows) return null;
@@ -245,27 +281,17 @@ class PDFChecklistModal extends React.Component {
                 `}
               >
                 <h2 style={{ fontSize: 18 }}>{workflow.label}</h2>
-
-                {workflow.steps.map(step => (
-                  <Checkbox
-                    key={step}
-                    className={css`
-                      font-size: 17px;
-                      margin-left: 10px !important;
-                      margin-top: 3px;
-                    `}
-                    onChange={event =>
-                      this.onSelectWorkflow(
-                        event,
-                        step.value,
-                        workflow.value,
-                        "CHILD_WORKFLOW"
-                      )
-                    }
-                  >
-                    {step.label}
-                  </Checkbox>
-                ))}
+                <CheckboxGroup
+                  items={workflow.steps}
+                  selected={lodashObjectGet(
+                    this.state.userSelection,
+                    "childWorkflow." + workflow.value,
+                    {}
+                  )}
+                  onChange={this.onSelectWorkflow}
+                  parentTag={workflow.value}
+                  workflowType="CHILD_WORKFLOW"
+                />
               </div>
             );
           })}
@@ -274,52 +300,29 @@ class PDFChecklistModal extends React.Component {
     );
   };
 
-  renderStaticWorkflow = sections => {
-    if (!sections) return null;
-    return sections.map((section, key) => (
-      <div key={key}>
-        <Checkbox
-          className={css`
-            font-size: 17px;
-            margin-left: 10px;
-            margin-top: 3px;
-          `}
-          onChange={event =>
-            this.onSelectWorkflow(
-              event,
-              section.value,
-              "staticSections",
-              "STATIC_SECTIONS"
-            )
-          }
-        >
-          {section.label}
-        </Checkbox>
-      </div>
-    ));
-  };
+  renderStaticWorkflow = sections => (
+    <CheckboxGroup
+      items={sections}
+      selected={lodashObjectGet(this.state.userSelection, "staticSections", {})}
+      onChange={this.onSelectWorkflow}
+      parentTag="staticSections"
+      workflowType="STATIC_SECTIONS"
+    />
+  );
 
-  renderMetaInformation = () => {
-    return META_INFO.map((field, key) => (
-      <div
-        className={css`
-          width: 33%;
-        `}
-        key={key}
-      >
-        <Checkbox
-          className={css`
-            font-size: 17px;
-            margin-left: 10px;
-            margin-top: 3px;
-          `}
-          onChange={event => this.onSelectMetaInformation(event, field.value)}
-        >
-          <FormattedMessage id={field.label} />
-        </Checkbox>
-      </div>
-    ));
-  };
+  renderMetaInformation = () => (
+    <CheckboxGroup
+      items={META_INFO}
+      selected={lodashObjectGet(this.state.userSelection, "meta", {})}
+      onChange={this.onSelectWorkflow}
+      parentTag="meta"
+      workflowType="META"
+      renderLabel={label => <FormattedMessage id={label} />}
+      className={css`
+        width: 33%;
+      `}
+    />
+  );
 
   renderFetchFailPlaceholder = () => {
     return (
@@ -343,7 +346,7 @@ class PDFChecklistModal extends React.Component {
   };
 
   renderWorkflowDetails = () => {
-    const { pdfConfig, loading, tickMarkAtleastOne } = this.state;
+    const { pdfConfig } = this.state;
 
     return (
       <div style={{ margin: "0px 35px" }}>
@@ -382,38 +385,6 @@ class PDFChecklistModal extends React.Component {
         >
           {this.renderMetaInformation()}
         </div>
-        <div
-          className={css`
-            .ant-btn-primary:focus,
-            .ant-btn-primary:hover,
-            .ant-btn-primary:active {
-              background-color: #025fb5;
-              border-color: #025fb5;
-            }
-          `}
-        >
-          <Button
-            loading={loading}
-            className={css`
-              margin-top: 30px;
-            `}
-            onClick={this.handleSubmit}
-            type="primary"
-          >
-            <FormattedMessage id="commonTextInstances.submitButtonText" />
-          </Button>
-          {tickMarkAtleastOne ? (
-            <span
-              className={css`
-                margin-left: 10px;
-                color: red;
-              `}
-            >
-              &#9432;{" "}
-              <FormattedMessage id="errorMessageInstances.selectAtLeastOneCategory" />
-            </span>
-          ) : null}
-        </div>
       </div>
     );
   };
@@ -432,17 +403,91 @@ class PDFChecklistModal extends React.Component {
     return error
       ? this.renderFetchFailPlaceholder()
       : !!pdfConfig
-      ? !pdfConfig.results.length
+      ? !this.hasResults
         ? this.renderEmptyDataMessage()
         : this.renderWorkflowDetails()
       : null;
+  };
+
+  get hasResults() {
+    const { pdfConfig } = this.state;
+    return !!(
+      pdfConfig &&
+      Array.isArray(pdfConfig.results) &&
+      pdfConfig.results.length
+    );
+  }
+
+  renderFooter = () => {
+    const { loading, tickMarkAtleastOne } = this.state;
+
+    if (this.hasResults) {
+      return [
+        <div
+          key="footer"
+          className={css`
+            display: flex;
+            flex-direction: row;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            .ant-btn-primary:focus,
+            .ant-btn-primary:hover,
+            .ant-btn-primary:active {
+              background-color: #025fb5;
+              border-color: #025fb5;
+            }
+          `}
+        >
+          <div
+            className={css`
+              flex: 1;
+              align-items: center;
+              display: flex;
+            `}
+          >
+            <StyledCheckbox
+              checked={this.state.selectAll}
+              onChange={this.onSelectAll}
+            >
+              <FormattedMessage id="commonTextInstances.selectAll" />
+            </StyledCheckbox>
+          </div>
+          <div
+            className={css`
+              display: flex;
+              align-items: center;
+            `}
+          >
+            {tickMarkAtleastOne ? (
+              <span
+                className={css`
+                  margin-right: 10px;
+                  color: red;
+                `}
+              >
+                &#9432;{" "}
+                <FormattedMessage id="errorMessageInstances.selectAtLeastOneCategory" />
+              </span>
+            ) : null}
+            <Button
+              loading={loading}
+              onClick={this.handleSubmit}
+              type="primary"
+            >
+              <FormattedMessage id="commonTextInstances.submitButtonText" />
+            </Button>
+          </div>
+        </div>
+      ];
+    } else {
+      return null;
+    }
   };
 
   render = () => {
     const { visible } = this.props;
     return (
       <Modal
-        footer={null}
         bodyStyle={{ padding: "30px 0px", maxHeight: 530, overflowY: "auto" }}
         width="77vw"
         destroyOnClose={true}
@@ -450,6 +495,7 @@ class PDFChecklistModal extends React.Component {
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         className="workflow-modal"
+        footer={this.renderFooter()}
       >
         <div style={{ borderRadius: 5 }}>
           <div
@@ -466,3 +512,47 @@ class PDFChecklistModal extends React.Component {
 }
 
 export default PDFChecklistModal;
+
+/**
+ * CheckboxGroup renders a group of checkboxes
+ * using an Array source, where each element has it's own
+ * label and value.
+ *
+ * @param {Array} items [{label, value}]
+ * @param {object} selected Key should be item.value and it's value should be boolean
+ * @param {Function} onChage Handler for on Change event with parameters as: item.value, parentTag, workflowType, event
+ * @param {string} parentTag
+ * @param {string} workflowType
+ * @param {Function} renderLabel To be used to map label into some other string or component
+ *
+ * @returns {React.DetailedReactHTMLElement<any, HTMLElement>[]}
+ */
+const CheckboxGroup = ({
+  items,
+  selected,
+  onChange,
+  parentTag,
+  workflowType,
+  renderLabel,
+  ...otherProps
+}) =>
+  !items
+    ? null
+    : items.map(item => (
+        <StyledCheckbox
+          key={item.value}
+          checked={lodashObjectGet(selected, item.value, false)}
+          onChange={onChange.bind(null, item.value, parentTag, workflowType)}
+          {...otherProps}
+        >
+          {renderLabel && renderLabel.apply
+            ? renderLabel(item.label)
+            : item.label}
+        </StyledCheckbox>
+      ));
+
+const StyledCheckbox = styled(Checkbox)`
+  font-size: 17px;
+  margin-left: 10px;
+  margin-top: 3px;
+`;

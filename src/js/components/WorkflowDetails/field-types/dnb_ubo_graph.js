@@ -1,8 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";
-import { Icon, Alert } from "antd";
 import $ from "jquery";
 import { FormattedMessage } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
@@ -29,6 +28,7 @@ class DnbUBOGraph extends Component {
       field: null,
       country: null
     };
+    this.graphContainerRef = createRef();
   }
 
   loadResources = () => {
@@ -55,20 +55,32 @@ class DnbUBOGraph extends Component {
   componentDidMount = () => {
     this.loadResources();
     if (this.props.field.integration_json) {
-      const data = JSON.stringify(this.props.field.integration_json);
-      window.renderGraph("GraphContainer", "ubo-container", data, "English");
+      this.loadGraph();
     }
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    const that = this;
-
+  componentDidUpdate(prevProps, prevState) {
     if (
-      _.size(that.props.field.integration_json) ||
-      prevProps.field.integration_json !== that.props.field.integration_json
+      _.size(this.props.field.integration_json) ||
+      prevProps.field.integration_json !== this.props.field.integration_json
     ) {
-      const data = JSON.stringify(that.props.field.integration_json);
-      window.renderGraph("GraphContainer", "ubo-container", data, "English");
+      this.loadGraph();
+    }
+  }
+
+  loadGraph = () => {
+    if (!this.graphContainerRef.current) return;
+    const data = JSON.stringify(this.props.field.integration_json);
+
+    let didEnforceStyle = false;
+    const style = this.graphContainerRef.current.getBoundingClientRect();
+    if (style.width < 900) {
+      this.graphContainerRef.current.style.minWidth = "900px";
+      didEnforceStyle = true;
+    }
+    window.renderGraph("GraphContainer", "ubo-container", data, "English");
+    if (didEnforceStyle) {
+      this.graphContainerRef.current.style.minWidth = "auto";
     }
   };
 
@@ -92,7 +104,7 @@ class DnbUBOGraph extends Component {
         "integration_json.OrderProductResponse.OrderProductResponseDetail"
       )
     ) {
-      return <div id="GraphContainer" />;
+      return <div id="GraphContainer" ref={this.graphContainerRef} />;
     } else {
       return (
         <div className="pd-ard t-16 mr-bottom-lg">

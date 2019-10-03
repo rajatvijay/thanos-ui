@@ -141,8 +141,8 @@ class Sidebar extends Component {
               <TaskQueueList
                 count={this.props.count}
                 activeTaskQueue={this.props.workflowFilters}
-                taskQueues={this.props.workflowGroupCount.stepgroupdef_counts}
-                loading={this.props.workflowAlertGroupCount.loading}
+                taskQueues={this.props.visibleWorkflowGroups}
+                loading={this.props.workflowGroupCount.loading}
                 onSelectTask={this.onSelectTask}
                 onSelectMyTask={this.onSelectMyTask}
                 isMyTaskSelected={this.isMyTaskSelected}

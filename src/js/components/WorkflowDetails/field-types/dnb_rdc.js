@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Table, Icon, Divider, Tag, Tabs, Tooltip } from "antd";
+import { Row, Col, Table, Divider, Tag, Tabs, Tooltip } from "antd";
 import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions } from "../../../actions";

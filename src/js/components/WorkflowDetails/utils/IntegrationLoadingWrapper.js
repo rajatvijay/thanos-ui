@@ -1,6 +1,6 @@
 import React from "react";
 import { PropTypes } from "prop-types";
-import { size } from "lodash";
+import { size, get } from "lodash";
 import { FormattedMessage } from "react-intl";
 import { Icon, Alert } from "antd";
 
@@ -34,21 +34,20 @@ const IntegrationLoadingWrapper = ({
     </div>
   );
 
-  const noResult = (
-    <div className="text-center text-medium pd-ard-sm text-light mr-top-lg mr-bottom-lg">
-      {" "}
-      <FormattedMessage id="messages.noResult" />
-    </div>
-  );
-
   const checked =
     check === "default"
       ? size(field.integration_json) && !field.integration_json.selected_match
       : check;
 
+  const isIntegrationHidden = get(
+    field,
+    "definition.extra.hide_integration_button",
+    null
+  );
+
   if (isLoading) {
     return renderLoading;
-  } else if (fieldError) {
+  } else if (fieldError && !isIntegrationHidden) {
     return renderError;
   } else if (checked) {
     return React.Children.map(children, child => {

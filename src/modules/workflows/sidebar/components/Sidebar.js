@@ -10,20 +10,18 @@ import {
 } from "../../../../js/actions";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
 import Permissions from "../../../common/permissions/permissionsList";
-import { Link } from "react-router-dom";
 import {
   StyledSidebarHeader,
   StyledWorkflowName,
   StyledCollapseItem,
-  StyledSidebar,
-  StyledBreadCrumbItem
+  StyledSidebar
 } from "../styledComponents";
 import StepsSideBar from "./StepsSidebar";
-
 import LCData from "./LCData";
-
 import { get as lodashGet } from "lodash";
 import { css } from "emotion";
+import { getFilteredStepGroups } from "../sidebar.selectors";
+import Breadcrums from "./Breadcrums";
 
 const confirm = Modal.confirm;
 
@@ -46,34 +44,28 @@ class Sidebar extends Component {
   // ================================================================ //
 
   // DIRTY CODE, SORRY!!
-  callBackCollapser = (object_id, content_type) => {
-    this.state.loading_sidebar = true;
-    this.state.object_id = object_id;
+  callBackCollapser = (objectId, content_type) => {
     this.props.dispatch(
-      workflowDetailsActions.getComment(object_id, content_type)
+      workflowDetailsActions.getComment(objectId, content_type)
     );
   };
 
   addComment = (payload, step_reload_payload) => {
-    this.state.adding_comment = true;
-    this.state.object_id = payload.object_id;
     this.props.dispatch(
       workflowStepActions.addComment(payload, step_reload_payload)
     );
   };
 
-  getComment = object_id => {
-    this.state.loading_sidebar = true;
-    this.state.object_id = object_id;
-    this.addComment(object_id, "workflow");
+  getComment = objectId => {
+    this.addComment(objectId, "workflow");
   };
 
   openCommentSidebar = () => {
     const { workflowIdFromDetailsToSidebar } = this.props;
-    const object_id = this.props.workflowDetailsHeader[
+    const objectId = this.props.workflowDetailsHeader[
       workflowIdFromDetailsToSidebar
     ].id;
-    this.callBackCollapser(object_id, "all_data");
+    this.callBackCollapser(objectId, "all_data");
   };
 
   // DIRTY CODE ENDS HERE!
@@ -202,33 +194,7 @@ class Sidebar extends Component {
     );
   }
 
-  get stepGroups() {
-    const { workflowDetails, workflowIdFromDetailsToSidebar } = this.props;
-    const stepGroups = lodashGet(
-      workflowDetails,
-      `[${workflowIdFromDetailsToSidebar}].workflowDetails.stepGroups.results`,
-      []
-    );
-    return stepGroups.filter(group => group.steps.length);
-  }
-
   // ALL RENDER FUNCTIONS
-  renderBreadcrumbs = () => {
-    if (this.workflowFamily) {
-      return this.workflowFamily.map((family, index) => (
-        <React.Fragment key={family.id}>
-          <Link to={`/workflows/instances/${family.id}`}>
-            <StyledBreadCrumbItem>{family.name}</StyledBreadCrumbItem>
-          </Link>
-          {index === this.workflowFamily.length - 1 ? null : (
-            <StyledBreadCrumbItem>></StyledBreadCrumbItem>
-          )}
-        </React.Fragment>
-      ));
-    }
-    return null;
-  };
-
   renderActivitySidebar = () => {
     const { showActivitySidebar } = this.state;
     const { workflowIdFromDetailsToSidebar } = this.props;
@@ -245,7 +211,7 @@ class Sidebar extends Component {
         width={500}
         className="activity-log-drawer"
       >
-        {process.env.REACT_APP_ACTIVITY_LOG_SERVERLESS ? (
+        {process.env.REACT_APP_ACTIVITY_LOG_SERVERLESS === "true" ? (
           <ServerlessAuditListTabs
             id={[...childWorkflowIds, workflowIdFromDetailsToSidebar]}
           />
@@ -265,7 +231,7 @@ class Sidebar extends Component {
             line-height: normal;
           `}
         >
-          {this.renderBreadcrumbs()}
+          <Breadcrums workflowFamily={this.workflowFamily} />
           <br />
           <StyledWorkflowName>{this.currentWorkflowName}</StyledWorkflowName>
         </div>
@@ -299,22 +265,28 @@ class Sidebar extends Component {
     const { selectedGroup } = this.props;
     const profileSelected = selectedGroup === null;
     return (
-      <StyledCollapseItem
-        onClick={this.onProfileClick}
-        selected={profileSelected}
-      >
-        <i
-          className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-          fill="#FFF"
-          style={{
-            color: profileSelected ? "white" : "rgb(204, 204, 204)",
-            fontSize: 24
-          }}
+      <>
+        <StyledCollapseItem
+          onClick={this.onProfileClick}
+          selected={profileSelected}
+          data-testid="profile-step"
         >
-          info_outline
-        </i>
-        <FormattedMessage id="workflowsInstances.profileText" />
-      </StyledCollapseItem>
+          <i
+            className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+            fill="#FFF"
+            style={{
+              color: profileSelected ? "white" : "rgb(204, 204, 204)",
+              fontSize: 24
+            }}
+          >
+            info_outline
+          </i>
+          <FormattedMessage id="workflowsInstances.profileText" />
+        </StyledCollapseItem>
+        <Divider
+          style={{ margin: 0, marginTop: "12px", backgroundColor: "#d9d9d9" }}
+        />
+      </>
     );
   };
 
@@ -376,8 +348,9 @@ class Sidebar extends Component {
   );
 
   render() {
-    const { minimalUI, selectedStep } = this.props;
+    const { minimalUI, selectedStep, stepGroups } = this.props;
     const { selectedPanel } = this.state;
+    const showProfile = !!this.lcData.length;
 
     // TODO: This check should be outside this component
     if (!this.currentWorkflow) {
@@ -401,17 +374,19 @@ class Sidebar extends Component {
 
           {!minimalUI && this.renderLCData()}
 
-          {this.renderProfileStep()}
-
+          <Chowkidaar check={Permissions.CAN_VIEW_WORKFLOW_PROFILE}>
+            {showProfile && this.renderProfileStep()}
+          </Chowkidaar>
           {this.loadingSteps ? (
             this.renderLoader()
           ) : (
             <StepsSideBar
               selectedPanelId={selectedPanel}
               selectedStep={selectedStep}
-              stepGroups={this.stepGroups}
+              stepGroups={stepGroups}
               handleStepClick={this.handleStepClick}
               onChangeOfCollapse={this.onChangeOfCollapse}
+              stepUserTagData={this.props.stepUserTagData}
             />
           )}
         </StyledSidebar>
@@ -420,9 +395,16 @@ class Sidebar extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
   const { workflowDetailsHeader, workflowDetails } = state;
-  return { workflowDetailsHeader, workflowDetails };
+  return {
+    workflowDetailsHeader,
+    workflowDetails,
+    stepGroups: getFilteredStepGroups(
+      state,
+      props.workflowIdFromDetailsToSidebar
+    ) // reselect selector
+  };
 }
 
 export default connect(mapStateToProps)(injectIntl(Sidebar));
