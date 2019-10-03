@@ -69,14 +69,20 @@ class PDFChecklistModal extends React.Component {
   };
 
   toggleSelectAll = event => {
+    if (this.state.error || !this.hasResults) return;
+
     const checked = event
       ? lodashObjectGet(event, "target.checked", false)
       : true;
-    const { pdfConfig } = this.state;
 
-    const parentWorkflowSteps = pdfConfig.results[0].parent_workflows.steps;
-    const childWorkflows = pdfConfig.results[0].child_workflows;
-    const staticSections = pdfConfig.results[0].extra_sections;
+    const results = this.state.pdfConfig.results[0];
+    const parentWorkflowSteps = lodashObjectGet(
+      results,
+      "parent_workflows.steps",
+      []
+    );
+    const childWorkflows = lodashObjectGet(results, "child_workflows", []);
+    const staticSections = lodashObjectGet(results, "extra_sections", []);
 
     const userSelection = {};
 
@@ -426,9 +432,9 @@ class PDFChecklistModal extends React.Component {
   }
 
   renderFooter = () => {
-    const { loading, tickMarkAtleastOne } = this.state;
+    const { loading, tickMarkAtleastOne, error } = this.state;
 
-    if (this.hasResults) {
+    if (!error && this.hasResults) {
       return [
         <div
           key="footer"
