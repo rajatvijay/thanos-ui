@@ -176,12 +176,12 @@ export const GoogleAddress = props => {
           fieldService.saveResponse({
             answer: place.formatted_address,
             field: props.field.id,
-            workflowId: props.workflowId,
-            extra: place
+            workflow: props.workflowId,
+            extra_json: place
           });
         }}
         defaultValue={defaultAnswer}
-        types={["(regions)"]}
+        types={["(cities)"]}
         className={css`
           width: 410px;
           border: none;

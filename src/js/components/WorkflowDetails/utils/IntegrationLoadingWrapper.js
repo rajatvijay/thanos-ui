@@ -1,6 +1,6 @@
 import React from "react";
 import { PropTypes } from "prop-types";
-import { size } from "lodash";
+import { size, get } from "lodash";
 import { FormattedMessage } from "react-intl";
 import { Icon, Alert } from "antd";
 
@@ -39,9 +39,15 @@ const IntegrationLoadingWrapper = ({
       ? size(field.integration_json) && !field.integration_json.selected_match
       : check;
 
+  const isIntegrationHidden = get(
+    field,
+    "definition.extra.hide_integration_button",
+    null
+  );
+
   if (isLoading) {
     return renderLoading;
-  } else if (fieldError) {
+  } else if (fieldError && !isIntegrationHidden) {
     return renderError;
   } else if (checked) {
     return React.Children.map(children, child => {

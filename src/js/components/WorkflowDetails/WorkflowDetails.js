@@ -198,14 +198,13 @@ class WorkflowDetails extends Component {
   }
 
   get defaultStepTag() {
-    return lodashGet(
-      this.props,
-      "workflowItem.definition.default_step_tag",
-      null
+    return (
+      this.workflowHead &&
+      lodashGet(this.workflowHead, "definition.default_step_tag", null)
     );
   }
 
-  get worklfowHead() {
+  get workflowHead() {
     const { minimalUI, workflowItem } = this.props;
     return minimalUI
       ? workflowItem
@@ -482,7 +481,7 @@ class WorkflowDetails extends Component {
             toggleSidebar={this.callBackCollapser}
             changeFlag={this.changeFlag}
             getIntegrationComments={this.getIntegrationComments}
-            workflowHead={this.worklfowHead}
+            workflowHead={this.workflowHead}
             dispatch={this.props.dispatch}
             displayProfile={true}
           />
@@ -515,7 +514,7 @@ class WorkflowDetails extends Component {
             toggleSidebar={this.callBackCollapser}
             changeFlag={this.changeFlag}
             getIntegrationComments={this.getIntegrationComments}
-            workflowHead={this.worklfowHead}
+            workflowHead={this.workflowHead}
             dispatch={this.props.dispatch}
             displayProfile={false}
             // stepName={step.name}
@@ -557,6 +556,7 @@ class WorkflowDetails extends Component {
               minimalUI={minimalUI}
               workflowIdFromDetailsToSidebar={this.workflowId}
               onUpdateOfActiveStep={this.scrollElementIntoView}
+              stepUserTagData={this.state.stepUserTagData}
               displayProfile={this.displayProfile(
                 currentStepId,
                 currentGroupId
