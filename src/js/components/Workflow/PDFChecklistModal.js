@@ -68,8 +68,10 @@ class PDFChecklistModal extends React.Component {
     });
   };
 
-  onSelectAll = event => {
-    const { checked } = event.target;
+  toggleSelectAll = event => {
+    const checked = event
+      ? lodashObjectGet(event, "target.checked", false)
+      : true;
     const { pdfConfig } = this.state;
 
     const parentWorkflowSteps = pdfConfig.results[0].parent_workflows.steps;
@@ -119,7 +121,7 @@ class PDFChecklistModal extends React.Component {
     this.props.handleModalVisibility(false);
   };
 
-  setLoding = loading => this.setState({ loading });
+  setLoading = loading => this.setState({ loading });
 
   validateSelection = userSelection => {
     const {
@@ -188,18 +190,18 @@ class PDFChecklistModal extends React.Component {
       ...preparedData
     };
 
-    this.setLoding(true);
+    this.setLoading(true);
     submitWorkflows(body)
       .then(response => {
         if (!response.ok) {
-          this.setLoding(false);
+          this.setLoading(false);
           return openNotificationWithIcon({
             type: "error",
             message: "Error in performing the action!"
           });
         } else {
           this.handleCancel();
-          this.setLoding(false);
+          this.setLoading(false);
           return openNotificationWithIcon({
             type: "success",
             message:
@@ -208,7 +210,7 @@ class PDFChecklistModal extends React.Component {
         }
       })
       .catch(() => {
-        this.setLoding(false);
+        this.setLoading(false);
         openNotificationWithIcon({
           type: "error",
           message: "Please try again later!"
@@ -221,21 +223,26 @@ class PDFChecklistModal extends React.Component {
     // TODO: Remove this hardcoding also
     const stepTag = "pdf_modal";
     const definitionId = definition.workflowdef;
-    this.setLoding(true);
+    this.setLoading(true);
     fetchWorkflowDetails(stepTag, definitionId)
       .then(workflow => {
-        this.setState({
-          // pdfConfig: WORKFLOW_DATA,
-          pdfConfig: workflow,
-          error: false
-        });
-        this.setLoding(false);
+        this.setState(
+          {
+            // pdfConfig: WORKFLOW_DATA,
+            pdfConfig: workflow,
+            error: false,
+            loading: false
+          },
+          () => {
+            this.toggleSelectAll();
+          }
+        );
       })
       .catch(() => {
         this.setState({
-          error: true
+          error: true,
+          loading: false
         });
-        this.setLoding(false);
       });
   };
 
@@ -447,7 +454,7 @@ class PDFChecklistModal extends React.Component {
           >
             <StyledCheckbox
               checked={this.state.selectAll}
-              onChange={this.onSelectAll}
+              onChange={this.toggleSelectAll}
             >
               <FormattedMessage id="commonTextInstances.selectAll" />
             </StyledCheckbox>
