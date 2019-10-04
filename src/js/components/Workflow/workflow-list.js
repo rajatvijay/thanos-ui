@@ -85,8 +85,16 @@ class WorkflowList extends Component {
       page = workflowData.next.split("page=");
       page = parseInt(page[1], 10) - 1;
     } else if (workflowData.previous) {
-      page = workflowData.previous.split("page=");
-      page = parseInt(page[1], 10) + 1;
+      // in case of only two pages, you don't get "page=" in `previous`
+      if (workflowData.previous.indexOf("page=") >= 0) {
+        page = workflowData.previous.split("page=");
+        page = parseInt(page[1], 10) + 1;
+      } else {
+        // The reason we're in this block is because there's no next page.
+        // And we have a `previous`, without a "page=", which only indicates
+        // that we're on the second page.
+        page = 2;
+      }
     }
     return page;
   };

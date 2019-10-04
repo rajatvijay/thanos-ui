@@ -181,7 +181,7 @@ export const GoogleAddress = props => {
           });
         }}
         defaultValue={defaultAnswer}
-        types={["(cities)"]}
+        types={[]}
         className={css`
           width: 410px;
           border: none;

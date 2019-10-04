@@ -19,3 +19,18 @@ export const auditLogBaseURL = process.env.REACT_APP_AUDIT_LOG_BASE_URL;
 export const supportedFieldFormats = {
   duns: "##-###-####"
 };
+
+export const envTag = (() => {
+  const { hostname } = new URL(window.location.href);
+  if (hostname.indexOf("slackcart.com") >= 0) {
+    return "Development";
+  } else if (hostname.indexOf("certaqa.com") >= 0) {
+    return "Certa QA";
+  } else if (hostname.indexOf("certa.site") >= 0) {
+    return "Certa UAT";
+  } else if (hostname.indexOf("certa.in") >= 0) {
+    return "Production";
+  } else {
+    return "Other";
+  }
+})();

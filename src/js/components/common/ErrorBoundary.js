@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as Sentry from "@sentry/browser";
 import styled from "@emotion/styled";
 import { Button, Icon } from "antd";
+
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -10,8 +11,8 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(err, info) {
     this.setState({ hasError: true });
-    Sentry.captureException(err);
-    this.eventId = Sentry.captureEvent({
+    this.eventId = Sentry.captureException(err);
+    Sentry.captureEvent({
       stacktrace: [],
       beforeBreadcrumb(breadcrumb, hint) {
         return breadcrumb.category === "ui.click" ? null : breadcrumb;
