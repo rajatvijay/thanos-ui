@@ -141,7 +141,9 @@ const HeaderTitle = props => {
             color: "#000000",
             fontSize: "20px",
             letterSpacing: "-0.04px",
-            lineHeight: "24px"
+            lineHeight: "24px",
+            wordBreak: "break-word",
+            whiteSpace: "normal"
           }}
         >
           {workflow.name}
@@ -183,7 +185,7 @@ const HeaderTitle = props => {
             title={props.workflow.name}
             style={{
               color: "#000000",
-              fontSize: "16px",
+              fontSize: "20px",
               letterSpacing: "-0.04px",
               lineHeight: "24px"
             }}
@@ -437,7 +439,7 @@ export class GetMergedData extends React.Component {
               maxWidth: "100%",
               wordBreak: "break-word",
               overflow: "hidden",
-              whiteSpace: "nowrap"
+              whiteSpace: "normal"
             }}
           >
             <span className="t-cap">
