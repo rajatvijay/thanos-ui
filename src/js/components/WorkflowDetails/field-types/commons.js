@@ -36,6 +36,10 @@ export const commonFunctions = {
 
 //Utility func
 function getLabel(props, that) {
+  const hasError =
+    props.error[props.field.id] &&
+    props.error[props.field.id][0] === "This field is required";
+
   const helpText = props.field.definition.help_text ? (
     <span className="pd-left-sm">
       <Tooltip title={props.field.definition.help_text}>
@@ -54,10 +58,17 @@ function getLabel(props, that) {
     <IntlTooltip title={"tooltips.answerIsRequiredText"}>
       <i
         title="Answer required"
-        className="material-icons t-13 text-middle text-light pd-right-sm"
+        className={`material-icons t-13 text-middle pd-right-sm ${
+          hasError ? " text-orange" : "text-red"
+        }`}
       >
         panorama_fish_eye
       </i>
+      {hasError ? (
+        <span className="text-red text-bold t-12 pd-right-sm t-upr">
+          <FormattedMessage id="commonTextInstances.required" />{" "}
+        </span>
+      ) : null}
     </IntlTooltip>
   ) : null;
 

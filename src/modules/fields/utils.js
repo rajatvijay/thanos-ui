@@ -46,5 +46,7 @@ export const isAnswered = field => {
    * If answers exist for field, return true if answer is not empty
    */
   const answers = field.answers;
-  return answers.length !== 0 ? answers[0].answer !== "" : false;
+  return answers.length !== 0
+    ? answers[0].answer !== "" || answers[0].attachment
+    : false;
 };
