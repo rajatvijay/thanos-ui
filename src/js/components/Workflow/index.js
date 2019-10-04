@@ -286,7 +286,10 @@ class Workflow extends Component {
           <Layout>
             <Content style={{ margin: "4vh 4vw" }}>
               <Row className="clear">
-                <Filter />
+                <Filter
+                  changeScoreOrder={this.changeScoreOrder}
+                  sortingEnabled={this.state.sortingEnabled}
+                />
 
                 {renderMessage || (
                   <div className="clearfix">

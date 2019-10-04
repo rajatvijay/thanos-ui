@@ -138,47 +138,6 @@ class Filter extends Component {
     this.handleModalClose();
   };
 
-  changeScoreOrder = order => {
-    const isAscending = this.state.sortOrderAsc;
-    const isSortingEnabled = this.state.sortingEnabled;
-    if (!isSortingEnabled) {
-      // Enable the sroting in descending mode
-      this.setState({
-        sortOrderAsc: false,
-        sortingEnabled: true
-      });
-      return this.props.dispatch(
-        workflowFiltersActions.setFilters({
-          filterType: "ordering",
-          filterValue: ["-sorting_primary_field"]
-        })
-      );
-    }
-
-    if (isAscending) {
-      // Disable the sorting
-      this.setState({ sortingEnabled: false });
-      this.props.dispatch(
-        workflowFiltersActions.setFilters({
-          filterType: "ordering",
-          filterValue: []
-        })
-      );
-    } else {
-      // Enable sorting in the ascending mode
-      this.setState({
-        sortOrderAsc: true,
-        sortingEnabled: true
-      });
-      this.props.dispatch(
-        workflowFiltersActions.setFilters({
-          filterType: "ordering",
-          filterValue: ["sorting_primary_field"]
-        })
-      );
-    }
-  };
-
   evaluateFilter = () => {
     const { displayfilters } = this.state;
 
@@ -288,7 +247,7 @@ class Filter extends Component {
                     >
                       <span
                         className="text-secondary text-anchor"
-                        onClick={this.changeScoreOrder}
+                        onClick={this.props.changeScoreOrder}
                       >
                         <FormattedMessage id="mainFilterbar.riskText" />
                         {sortingEnabled ? (

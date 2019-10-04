@@ -5,6 +5,7 @@ import _ from "lodash";
 import { Row, Col, Tooltip, Checkbox, Popover } from "antd";
 import { LCDataValue } from "../../../modules/common/components/LCDataValue";
 import { css } from "emotion";
+import styled from "@emotion/styled";
 
 //////////////////
 /*workflow Head*/
@@ -79,16 +80,17 @@ export const WorkflowHeader = props => {
       </Col>
 
       <Col span={1} className="text-center">
-        {props.workflow.sorting_primary_field && props.sortingEnabled ? (
-          <span
-            className={
-              "risk-item bg-" +
-              getScoreColor(props.workflow.sorting_primary_field)
+        {!props.workflow.sorting_primary_field && !props.sortingEnabled ? (
+          <span />
+        ) : (
+          <StyledRiskItem
+            bgColor={
+              getScoreColor(props.workflow.sorting_primary_field) || "#00000048"
             }
           >
             {props.rank}
-          </span>
-        ) : null}
+          </StyledRiskItem>
+        )}
       </Col>
 
       {isEmbedded && (
@@ -537,12 +539,26 @@ export class GetMergedData extends React.Component {
 const getScoreColor = riskValue => {
   const value = parseInt(riskValue, 10);
   if (value >= 7) {
-    return "green";
+    return "#00c89b";
   } else if (value >= 4 && value <= 6) {
-    return "yellow";
+    return "#eebd47";
   } else if (value <= 3) {
-    return "red";
+    return "#d40000";
   } else {
-    return "light";
+    return "rgba(0, 0, 0, 0.3)";
   }
 };
+
+const StyledRiskItem = styled.div`
+  display: inline-block;
+  min-width: 21px;
+  height: 21px;
+  border-radius: 2px;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  line-height: 21px;
+  verticle-align: middle;
+  padding: 0 2px;
+  background: ${({ bgColor }) => bgColor || ""};
+`;
