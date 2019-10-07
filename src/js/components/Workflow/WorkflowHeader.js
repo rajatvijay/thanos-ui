@@ -216,6 +216,21 @@ export const HeaderLcData = props => {
   const subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal";
   });
+
+  const hasAlerts =
+    props.workflow.alerts.length ||
+    props.workflow.lc_data.some(
+      lcData =>
+        !!lcData.value &&
+        (lcData.display_type === "alert" ||
+          lcData.display_type === "alert_status")
+    );
+
+  // If there are alerts, then we show the first LC_Data
+  // otherwise the 2nd one, bcause 1st one is shown left
+  // of this one.
+  const lcDataItem = hasAlerts ? subtext[0] : subtext[1];
+
   return (
     <div
       style={{
@@ -223,21 +238,22 @@ export const HeaderLcData = props => {
         fontSize: "13px",
         letterSpacing: "-0.03px",
         lineHeight: "16px",
-        opacity: 0.3
+        opacity: 0.3,
+        marginRight: "12px"
       }}
     >
-      {_.size(subtext) >= 2 ? (
+      {lcDataItem ? (
         <Tooltip
           title={
             <span>
-              {subtext[1].label}: <LCDataValue {...subtext[1]} />
+              {lcDataItem.label}: <LCDataValue {...lcDataItem} />
             </span>
           }
         >
           <span className="t-cap">
-            {subtext[1].show_label ? subtext[1].label + ": " : ""}
+            {lcDataItem.show_label ? lcDataItem.label + ": " : ""}
           </span>
-          <LCDataValue {...subtext[1]} />
+          <LCDataValue {...lcDataItem} />
         </Tooltip>
       ) : (
         ""
@@ -403,7 +419,7 @@ export class GetMergedData extends React.Component {
     });
 
     const lc_data_filtered = _.filter(lc_data, function(v, index) {
-      return v.value && index > 1;
+      return v.value;
     });
 
     const that = this;
