@@ -50,7 +50,8 @@ export function workflowFilters(state = initialState, action) {
         region: [],
         business_unit: [],
         advFilter: null,
-        advance: []
+        advance: [],
+        answer: []
       };
 
     default:
