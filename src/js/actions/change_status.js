@@ -14,11 +14,14 @@ const openNotificationWithIcon = data => {
 
 export const changeStatusActions = (
   payload,
-  step_reload_payload
+  step_reload_payload,
+  isEmbedded,
+  fieldExtra
 ) => async dispatch => {
   dispatch({ type: changeStatusConstants.CHANGE_REQUEST, payload });
   try {
     const response = await changeStatusService.update(payload);
+    response.fieldExtra = fieldExtra;
     dispatch({
       type: changeStatusConstants.CHANGE_SUCCESS,
       response: response
@@ -33,6 +36,7 @@ export const changeStatusActions = (
       message: "Status changed."
     });
     if (payload.addComment) {
+      response.fieldExtra = fieldExtra;
       dispatch({
         type: workflowCommentsConstants.ADD_COMMENTS_SUCCESS,
         response

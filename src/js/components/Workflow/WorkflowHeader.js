@@ -279,7 +279,7 @@ class HeaderOptions extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.addComment(objectId, "workflow");
+    this.props.addComment(objectId, "workflow", "", this.props.fieldExtra);
   };
 
   toggleWorkflowPDFModal = () => {

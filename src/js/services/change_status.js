@@ -13,7 +13,9 @@ function update(payload) {
     credentials: "include",
     body: JSON.stringify({
       status: payload.statusId,
-      addComment: payload.addComment || ""
+      addComment: payload.addComment || "",
+      integration_field_tag: payload.integration_field_tag || "",
+      parent_workflow_id: payload.parent_workflow_id || ""
     })
   };
 

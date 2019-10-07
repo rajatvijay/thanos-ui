@@ -58,7 +58,6 @@ class Comments extends Component {
 
   componentDidMount() {
     const workflowKind = Comments.getWorkflowKind(this.props);
-
     if (workflowKind) {
       workflowFiltersService
         .getStatusData({ kinds: workflowKind })
@@ -217,6 +216,7 @@ class Comments extends Component {
     if (!target.workflow_details) {
       return;
     }
+    const fieldExtra = this.props.workflowComments.data.fieldExtra;
 
     const payload = {
       workflowId: target.workflow_details.id,
@@ -232,8 +232,23 @@ class Comments extends Component {
       stepId
     };
 
+    // passing from extra params in payload for calling integration if relevant config is there
+    if (
+      lodashSize(fieldExtra) &&
+      lodashGet(fieldExtra, "call_integration.integration_field_tag", null)
+    ) {
+      payload["integration_field_tag"] =
+        fieldExtra["call_integration"]["integration_field_tag"];
+      payload["parent_workflow_id"] = this.props.workflowId;
+    }
+
     this.props.dispatch(
-      changeStatusActions(payload, step_reload_payload, this.props.isEmbedded)
+      changeStatusActions(
+        payload,
+        step_reload_payload,
+        this.props.isEmbedded,
+        fieldExtra
+      )
     );
   };
 

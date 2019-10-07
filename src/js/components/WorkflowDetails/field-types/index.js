@@ -216,6 +216,8 @@ export const getFieldType = props => {
       return DnBCommon(props);
     case "google_address_search":
       return GoogleAddress(props);
+    case "workflow_status":
+      return DnBCommon(props);
     default:
       return <Text {...props} />;
   }

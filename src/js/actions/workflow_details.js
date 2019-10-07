@@ -195,7 +195,7 @@ function getStepFields(step, polling, fieldId) {
 }
 
 // Get workflow/step/field Comments
-function getComment(object_id, content_type, addtn, isEmbedded) {
+function getComment(object_id, content_type, addtn, isEmbedded, fieldExtra) {
   const payload = {
     object_id: object_id,
     type: content_type,
@@ -220,6 +220,7 @@ function getComment(object_id, content_type, addtn, isEmbedded) {
 
   function success(data) {
     data.isEmbedded = isEmbedded;
+    data.fieldExtra = fieldExtra;
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
   }
 
