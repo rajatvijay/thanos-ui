@@ -33,6 +33,7 @@ function displaySortingKey(workflow) {
 
 export const WorkflowHeader = props => {
   const { workflow, isEmbedded } = props;
+  const showRank = props.workflow.sorting_primary_field && props.sortingEnabled;
 
   const headerData = (
     <Row
@@ -80,7 +81,7 @@ export const WorkflowHeader = props => {
       </Col>
 
       <Col span={1} className="text-center">
-        {!props.workflow.sorting_primary_field && !props.sortingEnabled ? (
+        {!showRank ? (
           <span />
         ) : (
           <StyledRiskItem
