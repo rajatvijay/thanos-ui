@@ -426,3 +426,29 @@ test("should render Locked icon on locked steps", () => {
 
   expect(queryAllByTestId(/step-locked-icon/i).length).toBe(1);
 });
+
+test("should render step as group for single child group", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [{ id: 2, completed_by: "Junaid", name: "Step 1" }],
+      overdue: false
+    }
+  ];
+
+  const config = {
+    custom_ui_labels: {
+      ungroup_only_child_step: true
+    }
+  };
+
+  const { queryByText } = render(
+    <StepsSidebar config={config} stepGroups={fakeStepGroups} />
+  );
+
+  expect(
+    queryByText(fakeStepGroups[0].definition.name_en)
+  ).not.toBeInTheDocument();
+  expect(queryByText(fakeStepGroups[0].steps[0].name)).toBeInTheDocument();
+});
