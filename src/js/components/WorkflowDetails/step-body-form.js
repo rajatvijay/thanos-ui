@@ -449,6 +449,24 @@ class StepBodyForm extends Component {
     }
   };
 
+  getAnswer = field => {
+    const isTypeFile = field.definition.field_type === "file";
+    if (isTypeFile && field.answers[0].attachment) {
+      const url = field.answers[0] && field.answers[0].attachment;
+      return (
+        <mark>
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("?"))}
+          </a>
+        </mark>
+      );
+    } else if (field.answers[0].answer) {
+      return <mark>{field.answers[0].answer}</mark>;
+    } else {
+      return "";
+    }
+  };
+
   getVersionField = fieldId => {
     const data = this.props.stepVersionFields.stepVersionFields.data_fields;
 
@@ -461,7 +479,8 @@ class StepBodyForm extends Component {
     const showAnswer =
       fieldReturn &&
       fieldReturn.answers.length !== 0 &&
-      fieldReturn.answers[0].answer !== "";
+      (fieldReturn.answers[0].answer !== "" ||
+        fieldReturn.answers[0].attachment !== "");
 
     if (showAnswer)
       if (showAnswer && fieldReturn.definition.field_type !== "paragraph") {
@@ -495,11 +514,7 @@ class StepBodyForm extends Component {
             <div className="text-medium">
               {fieldReturn.definition.body || ""}
             </div>
-            {fieldReturn.answers[0].answer ? (
-              <mark>{fieldReturn.answers[0].answer}</mark>
-            ) : (
-              ""
-            )}
+            {this.getAnswer(fieldReturn)}
           </div>
         );
       } else {
