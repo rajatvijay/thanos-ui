@@ -42,7 +42,6 @@ class LexisNexisSearch extends Component {
 
   render = () => {
     const { field, currentStepFields } = this.props;
-
     const props = {
       field: field,
       onSearch: this.onSearch,
@@ -470,6 +469,7 @@ const GetTabsFilter = props => {
   if (!Array.isArray(data)) {
     data = [data];
   }
+
 
   const getFilterData = (data, intl) => {
     const fList = [
