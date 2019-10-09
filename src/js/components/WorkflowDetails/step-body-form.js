@@ -204,6 +204,7 @@ class StepBodyForm extends Component {
     if (!regex_value) {
       return true;
     }
+
     const id = field.id;
     const re = new RegExp(regex_value);
     const error = this.state.error;
@@ -455,7 +456,12 @@ class StepBodyForm extends Component {
       const url = field.answers[0] && field.answers[0].attachment;
       return (
         <mark>
-          <a href={url} target="_blank" rel="noopener noreferrer">
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ant-upload-list-item-name text-middle"
+          >
             {url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf("?"))}
           </a>
         </mark>
