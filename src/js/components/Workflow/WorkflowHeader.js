@@ -215,7 +215,7 @@ const HeaderTitle = props => {
 
 export const HeaderLcData = props => {
   const subtext = _.filter(props.workflow.lc_data, item => {
-    return item.display_type === "normal";
+    return item.display_type === "normal" && !!item.value;
   });
 
   const hasAlerts =
@@ -223,6 +223,7 @@ export const HeaderLcData = props => {
     props.workflow.lc_data.some(
       lcData =>
         !!lcData.value &&
+        lcData.value !== "0" &&
         (lcData.display_type === "alert" ||
           lcData.display_type === "alert_status")
     );
