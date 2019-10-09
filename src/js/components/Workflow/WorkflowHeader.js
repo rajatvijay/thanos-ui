@@ -223,6 +223,7 @@ export const HeaderLcData = props => {
     props.workflow.lc_data.some(
       lcData =>
         !!lcData.value &&
+        lcData.value !== "0" &&
         (lcData.display_type === "alert" ||
           lcData.display_type === "alert_status")
     );
