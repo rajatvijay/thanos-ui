@@ -43,7 +43,7 @@ class StepBody extends Component {
   }
 
   onVersionChange = e => {
-    this.versionToggle();
+    this.setState({ showVersion: true });
     const currentStepFields = this.props.currentStepFields[this.props.stepId]
       .currentStepFields;
     const stepTrack = {
