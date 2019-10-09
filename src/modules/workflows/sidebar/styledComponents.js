@@ -60,11 +60,10 @@ export const StyledCollapseItem = styled.span`
   text-decoration: none;
   cursor: pointer;
   border-radius: 50px;
-  padding-left: 7px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: ${props => (props.orphan ? "5px 12px 5px 5px" : "5px 0 5px 7px")};
   margin-left: -9px;
   margin-bottom: 8;
+  margin-top: ${props => (props.orphan ? "7px" : "0")};
   display: flex;
   align-items: center;
   font-size: 14;

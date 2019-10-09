@@ -71,7 +71,15 @@ const LCTags = React.memo(({ value, className }) => (
   <span title={value} className={className}>
     {value.split("~").map((tag, index) => {
       return (
-        <Tag title={tag} key={index + ""}>
+        <Tag
+          title={tag}
+          key={index + ""}
+          style={{
+            whiteSpace: "normal",
+            height: "auto",
+            lineHeight: "18px"
+          }}
+        >
           {tag}
         </Tag>
       );

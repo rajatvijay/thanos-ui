@@ -60,10 +60,8 @@ class ModalHeader extends Component {
             flexBasis: "50%"
           }}
         >
-          <HeaderLcData {...this.props} />
-
           <GetMergedData {...this.props} />
-
+          <HeaderLcData {...this.props} />
           <span>{workflow.status.label}</span>
 
           <a href="/" onClick={this.handleExpand}>

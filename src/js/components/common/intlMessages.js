@@ -166,7 +166,8 @@ export default {
       createdOn: "Created on",
       modifiedOn: "Modified on",
       searchResults: "Search results",
-      selectAll: "Select All"
+      selectAll: "Select All",
+      required: "Required"
     },
     stepBodyFormInstances: {
       submittedBy: "Submitted by ",
@@ -574,7 +575,8 @@ export default {
       createdOn: "Creado en",
       modifiedOn: "Modificado en",
       searchResults: "Resultados de la búsqueda",
-      selectAll: "Seleccionar Todo"
+      selectAll: "Seleccionar Todo",
+      required: "Necesaria"
     },
     stepBodyFormInstances: {
       submittedBy: "Sometido por ",
@@ -999,7 +1001,8 @@ export default {
       createdOn: "Créé sur",
       modifiedOn: "Modifié le",
       searchResults: "Résultats de la recherche",
-      selectAll: "Tout Sélectionner"
+      selectAll: "Tout Sélectionner",
+      required: "Champs obligatoires"
     },
     stepBodyFormInstances: {
       submittedBy: "Envoyé par ",

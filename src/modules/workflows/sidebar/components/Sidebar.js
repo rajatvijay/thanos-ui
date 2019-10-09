@@ -387,6 +387,7 @@ class Sidebar extends Component {
               handleStepClick={this.handleStepClick}
               onChangeOfCollapse={this.onChangeOfCollapse}
               stepUserTagData={this.props.stepUserTagData}
+              config={this.props.config}
             />
           )}
         </StyledSidebar>
@@ -396,14 +397,15 @@ class Sidebar extends Component {
 }
 
 function mapStateToProps(state, props) {
-  const { workflowDetailsHeader, workflowDetails } = state;
+  const { workflowDetailsHeader, workflowDetails, config } = state;
   return {
     workflowDetailsHeader,
     workflowDetails,
     stepGroups: getFilteredStepGroups(
       state,
       props.workflowIdFromDetailsToSidebar
-    ) // reselect selector
+    ), // reselect selector
+    config
   };
 }
 

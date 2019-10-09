@@ -611,14 +611,25 @@ class WorkflowDetails extends Component {
   /////////////////////////////////////////////////////////////////////////////////
 
   /// this will be moved to another component///
-  callBackCollapser = (objectId, content_type, isEmbeddedDetails) => {
+  callBackCollapser = (
+    objectId,
+    content_type,
+    isEmbeddedDetails,
+    fieldExtra
+  ) => {
     // FIXME: Here it's called with no parameters when the comment section is
     // to be closed. Visibilty should be handled in state and not through an
     // API call. Also removing comments each time is not an efficient way.
     // They should rather be updated in-redux while the workflow is opened
     // and flished only when the workflow is closed.
     this.props.dispatch(
-      workflowDetailsActions.getComment(objectId, content_type, "", false)
+      workflowDetailsActions.getComment(
+        objectId,
+        content_type,
+        "",
+        false,
+        fieldExtra
+      )
     );
   };
 

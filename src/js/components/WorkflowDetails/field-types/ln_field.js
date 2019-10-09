@@ -470,17 +470,18 @@ const GetTabsFilter = props => {
     data = [data];
   }
 
-  const getFilterData = (data,intl) => {
+
+  const getFilterData = (data, intl) => {
     const fList = [
       {
-        label: intl.formatMessage({id:"commonTextInstances.all"}),
+        label: intl.formatMessage({ id: "commonTextInstances.all" }),
         value: "all",
         data: data,
         count: data.length,
         tabBarStyle: { color: "red" }
       },
       {
-        label: intl.formatMessage({id:"fields.sanctions"}),
+        label: intl.formatMessage({ id: "fields.sanctions" }),
         value: "sanction",
         data: [],
         count: 0
@@ -488,31 +489,31 @@ const GetTabsFilter = props => {
       { label: "SOE", value: "soe", data: [], count: 0 },
       { label: "PEP", value: "pep", data: [], count: 0 },
       {
-        label: intl.formatMessage({id:"fields.enforcement"}),
+        label: intl.formatMessage({ id: "fields.enforcement" }),
         value: "enforcement",
         data: [],
         count: 0
       },
       {
-        label: intl.formatMessage({id:"fields.registrations"}),
+        label: intl.formatMessage({ id: "fields.registrations" }),
         value: "registrations",
         data: [],
         count: 0
       },
       {
-        label: intl.formatMessage({id:"fields.adverseMedia"} ),
+        label: intl.formatMessage({ id: "fields.adverseMedia" }),
         value: "adverse media",
         data: [],
         count: 0
       },
       {
-        label: intl.formatMessage({id:"fields.associatedEntity"}) ,
+        label: intl.formatMessage({ id: "fields.associatedEntity" }),
         value: "associatedentity",
         data: [],
         count: 0
       },
       {
-        label: intl.formatMessage({id:"fields.others"}) ,
+        label: intl.formatMessage({ id: "fields.others" }),
         value: "others",
         data: [],
         count: 0
@@ -543,7 +544,7 @@ const GetTabsFilter = props => {
 
   return (
     <Tabs defaultActiveKey="all" onChange={callback}>
-      {_.map(getFilterData(data,props.intl), function(tab, index) {
+      {_.map(getFilterData(data, props.intl), function(tab, index) {
         return (
           <TabPane
             tab={tab.label + " (" + tab.count + ")"}

@@ -5,6 +5,7 @@ import _ from "lodash";
 import { Row, Col, Tooltip, Checkbox, Popover } from "antd";
 import { LCDataValue } from "../../../modules/common/components/LCDataValue";
 import { css } from "emotion";
+import styled from "@emotion/styled";
 
 //////////////////
 /*workflow Head*/
@@ -32,6 +33,7 @@ function displaySortingKey(workflow) {
 
 export const WorkflowHeader = props => {
   const { workflow, isEmbedded } = props;
+  const showRank = props.workflow.sorting_primary_field && props.sortingEnabled;
 
   const headerData = (
     <Row
@@ -79,16 +81,17 @@ export const WorkflowHeader = props => {
       </Col>
 
       <Col span={1} className="text-center">
-        {props.workflow.sorting_primary_field && props.sortingEnabled ? (
-          <span
-            className={
-              "risk-item bg-" +
-              getScoreColor(props.workflow.sorting_primary_field)
+        {!showRank ? (
+          <span />
+        ) : (
+          <StyledRiskItem
+            bgColor={
+              getScoreColor(props.workflow.sorting_primary_field) || "#00000048"
             }
           >
             {props.rank}
-          </span>
-        ) : null}
+          </StyledRiskItem>
+        )}
       </Col>
 
       {isEmbedded && (
@@ -141,7 +144,9 @@ const HeaderTitle = props => {
             color: "#000000",
             fontSize: "20px",
             letterSpacing: "-0.04px",
-            lineHeight: "24px"
+            lineHeight: "24px",
+            wordBreak: "break-word",
+            whiteSpace: "normal"
           }}
         >
           {workflow.name}
@@ -183,7 +188,7 @@ const HeaderTitle = props => {
             title={props.workflow.name}
             style={{
               color: "#000000",
-              fontSize: "16px",
+              fontSize: "20px",
               letterSpacing: "-0.04px",
               lineHeight: "24px"
             }}
@@ -212,6 +217,21 @@ export const HeaderLcData = props => {
   const subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal";
   });
+
+  const hasAlerts =
+    props.workflow.alerts.length ||
+    props.workflow.lc_data.some(
+      lcData =>
+        !!lcData.value &&
+        (lcData.display_type === "alert" ||
+          lcData.display_type === "alert_status")
+    );
+
+  // If there are alerts, then we show the first LC_Data
+  // otherwise the 2nd one, bcause 1st one is shown left
+  // of this one.
+  const lcDataItem = hasAlerts ? subtext[0] : subtext[1];
+
   return (
     <div
       style={{
@@ -219,21 +239,22 @@ export const HeaderLcData = props => {
         fontSize: "13px",
         letterSpacing: "-0.03px",
         lineHeight: "16px",
-        opacity: 0.3
+        opacity: 0.3,
+        marginRight: "12px"
       }}
     >
-      {_.size(subtext) >= 2 ? (
+      {lcDataItem ? (
         <Tooltip
           title={
             <span>
-              {subtext[1].label}: <LCDataValue {...subtext[1]} />
+              {lcDataItem.label}: <LCDataValue {...lcDataItem} />
             </span>
           }
         >
           <span className="t-cap">
-            {subtext[1].show_label ? subtext[1].label + ": " : ""}
+            {lcDataItem.show_label ? lcDataItem.label + ": " : ""}
           </span>
-          <LCDataValue {...subtext[1]} />
+          <LCDataValue {...lcDataItem} />
         </Tooltip>
       ) : (
         ""
@@ -259,7 +280,7 @@ class HeaderOptions extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.addComment(objectId, "workflow");
+    this.props.addComment(objectId, "workflow", "", this.props.fieldExtra);
   };
 
   toggleWorkflowPDFModal = () => {
@@ -399,7 +420,7 @@ export class GetMergedData extends React.Component {
     });
 
     const lc_data_filtered = _.filter(lc_data, function(v, index) {
-      return v.value && index > 1;
+      return v.value;
     });
 
     const that = this;
@@ -437,7 +458,7 @@ export class GetMergedData extends React.Component {
               maxWidth: "100%",
               wordBreak: "break-word",
               overflow: "hidden",
-              whiteSpace: "nowrap"
+              whiteSpace: "normal"
             }}
           >
             <span className="t-cap">
@@ -535,12 +556,26 @@ export class GetMergedData extends React.Component {
 const getScoreColor = riskValue => {
   const value = parseInt(riskValue, 10);
   if (value >= 7) {
-    return "green";
+    return "#00c89b";
   } else if (value >= 4 && value <= 6) {
-    return "yellow";
+    return "#eebd47";
   } else if (value <= 3) {
-    return "red";
+    return "#d40000";
   } else {
-    return "light";
+    return "rgba(0, 0, 0, 0.3)";
   }
 };
+
+const StyledRiskItem = styled.div`
+  display: inline-block;
+  min-width: 21px;
+  height: 21px;
+  border-radius: 2px;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  line-height: 21px;
+  verticle-align: middle;
+  padding: 0 2px;
+  background: ${({ bgColor }) => bgColor || ""};
+`;

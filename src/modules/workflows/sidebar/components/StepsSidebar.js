@@ -15,12 +15,11 @@ class StepsSideBar extends PureComponent {
     const allStepsCompleted = !stepGroup.steps.find(step => !step.completed_by);
     const isOverdue = stepGroup.overdue;
 
+    const iconClasses = "material-icons t-24 pd-right-sm ";
+
     if (allStepsCompleted) {
       return (
-        <i
-          className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-          style={{ color: "#00C89B" }}
-        >
+        <i className={iconClasses} style={{ color: "#00C89B" }}>
           check_circle
         </i>
       );
@@ -29,10 +28,7 @@ class StepsSideBar extends PureComponent {
     if (isOverdue) {
       return (
         <Tooltip title="Overdue">
-          <i
-            className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-            style={{ color: "#d40000" }}
-          >
+          <i className={iconClasses} style={{ color: "#d40000" }}>
             alarm
           </i>
         </Tooltip>
@@ -40,14 +36,12 @@ class StepsSideBar extends PureComponent {
     }
 
     return (
-      <i
-        className="material-icons t-24 pd-right-sm anticon anticon-check-circle"
-        style={{ color: "#CCCCCC" }}
-      >
+      <i className={iconClasses} style={{ color: "#CCCCCC" }}>
         panorama_fish_eye
       </i>
     );
   }
+
   renderStepsCountStatus(stepGroup) {
     return (
       <span
@@ -163,11 +157,15 @@ class StepsSideBar extends PureComponent {
 
   isStepOverdue = step => !!step.overdue;
 
-  renderStepIcon = step => {
+  renderStepIcon = (step, orphan) => {
     const isCompleted = !!step.completed_by;
     const isSelected = this.isStepSelected(step);
     const isOverdue = this.isStepOverdue(step);
     const isLocked = step.is_locked;
+    const { isOrphan } = orphan;
+    const iconClasses = `material-icons pd-right-sm ${
+      isOrphan ? "t-24" : "t-14"
+    }`;
 
     if (isLocked) {
       const selectedStyle = isSelected
@@ -177,7 +175,7 @@ class StepsSideBar extends PureComponent {
       return (
         <i
           data-testid="step-locked-icon"
-          className="material-icons t-14 anticon pd-right-sm anticon-check-circle"
+          className={iconClasses}
           fill="#FFF"
           style={selectedStyle}
         >
@@ -189,7 +187,7 @@ class StepsSideBar extends PureComponent {
     if (isCompleted) {
       return (
         <i
-          className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+          className={iconClasses}
           fill="#FFF"
           style={
             isSelected
@@ -206,10 +204,7 @@ class StepsSideBar extends PureComponent {
       return (
         <Tooltip title="overdue">
           {/* TODO: Refactor all the icons */}
-          <i
-            className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
-            style={{ color: "#d40000" }}
-          >
+          <i className={iconClasses} style={{ color: "#d40000" }}>
             alarm
           </i>
         </Tooltip>
@@ -218,7 +213,7 @@ class StepsSideBar extends PureComponent {
 
     return (
       <i
-        className="material-icons t-14 pd-right-sm anticon anticon-check-circle"
+        className={iconClasses}
         fill="#FFF"
         style={
           isSelected ? { color: "#FFFFFF", fontSize: 14 } : { color: "#CCCCCC" }
@@ -247,7 +242,7 @@ class StepsSideBar extends PureComponent {
     );
   };
 
-  renderSteps = (step, stepGroup) => {
+  renderSteps = (step, stepGroup, isOrphan) => {
     const hasAlerts = !!lodashGet(step, "alerts.length", 0);
     const isSelected = this.isStepSelected(step);
 
@@ -260,9 +255,15 @@ class StepsSideBar extends PureComponent {
         `}
         onClick={event => this.props.handleStepClick(stepGroup.id, step.id)}
         selected={isSelected}
+        orphan={isOrphan}
       >
-        <div>
-          {this.renderStepIcon(step)}
+        <div
+          className={css`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          {this.renderStepIcon(step, { isOrphan: isOrphan })}
           {step.name}
         </div>
         {hasAlerts && this.renderAlertsCount(step)}
@@ -273,6 +274,12 @@ class StepsSideBar extends PureComponent {
 
   render() {
     const { stepGroups, selectedPanelId } = this.props;
+    const ungroupSingleStep = lodashGet(
+      this.props,
+      "config.custom_ui_labels.ungroup_only_child_step",
+      null
+    );
+
     return (
       <StyledCollapse
         // TODO: This should be handled in a better way
@@ -280,15 +287,27 @@ class StepsSideBar extends PureComponent {
         accordion
         onChange={this.props.onChangeOfCollapse}
       >
-        {stepGroups.map(stepGroup => (
-          <Panel
-            key={stepGroup.id}
-            showArrow={false}
-            header={this.renderStepGroup(stepGroup)}
-          >
-            {stepGroup.steps.map(step => this.renderSteps(step, stepGroup))}
-          </Panel>
-        ))}
+        {stepGroups.map(stepGroup => {
+          if (
+            stepGroup.steps &&
+            stepGroup.steps.length === 1 &&
+            ungroupSingleStep
+          ) {
+            return stepGroup.steps.map(step =>
+              this.renderSteps(step, stepGroup, { isOrphan: true })
+            );
+          } else {
+            return (
+              <Panel
+                key={stepGroup.id}
+                showArrow={false}
+                header={this.renderStepGroup(stepGroup)}
+              >
+                {stepGroup.steps.map(step => this.renderSteps(step, stepGroup))}
+              </Panel>
+            );
+          }
+        })}
       </StyledCollapse>
     );
   }

@@ -3,16 +3,15 @@ import { Row, Col, Divider, Collapse } from "antd";
 import _ from "lodash";
 import { NumberFormat } from "../../../_helpers/NumberFormat";
 import { FormattedMessage } from "react-intl";
+import { get as lodashGet } from "lodash";
 
 const Panel = Collapse.Panel;
 const FinancialData = props => {
-  const fs_list = props.field.integration_json["OrderProductResponse"][
-    "OrderProductResponseDetail"
-  ]["Product"]["Organization"]["Financial"]
-    ? props.field.integration_json["OrderProductResponse"][
-        "OrderProductResponseDetail"
-      ]["Product"]["Organization"]["Financial"]["FinancialStatement"]
-    : null;
+  const fs_list = lodashGet(
+    props.field.integration_json,
+    "OrderProductResponse.OrderProductResponseDetail.Product.Organization.Financial.FinancialStatement",
+    []
+  );
 
   const customPanelStyle = {
     borderRadius: 4,
