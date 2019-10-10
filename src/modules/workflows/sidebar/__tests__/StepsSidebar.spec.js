@@ -452,3 +452,38 @@ test("should render step as group for single child group", () => {
   ).not.toBeInTheDocument();
   expect(queryByText(fakeStepGroups[0].steps[0].name)).toBeInTheDocument();
 });
+
+test.only("should render user icon on the step and step group when the step is assigned to a user", () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 1,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [],
+          is_locked: false,
+          definition: 2
+        }
+      ]
+    }
+  ];
+  const fakeStepUserTagData = [
+    {
+      id: 1,
+      step: 1,
+      tag: "Assignee"
+    }
+  ];
+
+  const { queryAllByText } = render(
+    <StepsSidebar
+      stepUserTagData={fakeStepUserTagData}
+      stepGroups={fakeStepGroups}
+      selectedPanelId={1}
+    />
+  );
+  expect(queryAllByText(/person/i).length).toBe(2);
+});
