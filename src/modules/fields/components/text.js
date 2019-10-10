@@ -1,16 +1,18 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import { Form, Input } from "antd";
 import { commonFunctions } from "../../../js/components/WorkflowDetails/field-types/commons";
 import _ from "lodash";
 import { supportedFieldFormats } from "../../../config";
 import FormattedTextInput from "../../common/components/FormattedTextInput";
+import { connect } from "react-redux";
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
 
 const { getLabel, field_error, getStyle, isDisabled } = commonFunctions;
 
-export class Text extends Component {
+class Text extends Component {
   state = {
     inputText: this.props.decryptedData
       ? this.props.decryptedData.answer
@@ -90,6 +92,16 @@ export class Text extends Component {
   get inputProps() {
     const { props } = this;
     let rows = _.get(props, "field.definition.meta.height", 1);
+    const style = getStyle(props);
+
+    if (this.props.isStepPrinting) {
+      const currentHeight = ReactDOM.findDOMNode(
+        this.refs.textInput
+      ).getBoundingClientRect().height;
+      if (currentHeight > 33) {
+        style.paddingBottom = "50px";
+      }
+    }
 
     let fieldProps = {
       disabled: isDisabled(props),
@@ -99,7 +111,8 @@ export class Text extends Component {
       autoComplete: "new-password",
       onChange: this.onChange,
       onBlur: this.onBlur,
-      style: getStyle(props)
+      style: style,
+      ref: "textInput"
     };
 
     if (this.format) fieldProps.format = this.format;
@@ -110,6 +123,7 @@ export class Text extends Component {
   render() {
     const { props } = this;
     let TextFieldComponent = this.format ? FormattedTextInput : TextArea;
+
     return (
       <FormItem
         label={getLabel(props, this)}
@@ -128,3 +142,12 @@ export class Text extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  const { isStepPrinting } = state;
+  return {
+    isStepPrinting
+  };
+}
+
+export default connect(mapStateToProps)(Text);

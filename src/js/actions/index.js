@@ -22,3 +22,4 @@ export { stepBodyActions } from "./stepBody";
 export { setWorkflowKeys } from "./workflowKeys";
 export { toggleMinimalUI } from "./toggleMinimalUI";
 export { changeSearchValue } from "./workflowSearch";
+export { togglePrintingState } from "./stepPrinting";

@@ -41,7 +41,7 @@ import { RDCAlertsMetadata } from "./rdc_alert_metadata.js";
 import S3URL from "./S3ObjectField.js";
 import React from "react";
 import { Select } from "../../../../modules/fields/components/select";
-import { Text } from "../../../../modules/fields/components/text";
+import Text from "../../../../modules/fields/components/text";
 
 export const getFieldType = props => {
   switch (props.field.definition.field_type) {

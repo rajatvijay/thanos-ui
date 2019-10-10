@@ -20,3 +20,4 @@ export { SET_WORKFLOW_KEYS } from "./workflowKeys";
 export { TOGGLE_MINIMALUI } from "./ToggleMinimalUI";
 export { WORKFLOW_SEARCH_VALUE_CHANGE } from "./workflowSearch";
 export { fieldConstants } from "../../modules/fields/constants";
+export { STEP_PRINT_STATE_TOGGLE } from "./stepPrintingState";

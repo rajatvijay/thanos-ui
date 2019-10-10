@@ -30,6 +30,7 @@ import minimalUI from "./toggleMinimalUI";
 import workflowSearch from "./workflowSearch";
 import { permissions } from "../../modules/common/permissions/reducer";
 import { extraFilters } from "./extraFilters";
+import isStepPrinting from "./stepPrinting";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -66,7 +67,8 @@ const rootReducer = combineReducers({
   minimalUI,
   workflowSearch,
   permissions,
-  extraFilters
+  extraFilters,
+  isStepPrinting
 });
 
 export default rootReducer;

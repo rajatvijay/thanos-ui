@@ -22,6 +22,7 @@ import { get as lodashGet } from "lodash";
 import { css } from "emotion";
 import { getFilteredStepGroups } from "../sidebar.selectors";
 import Breadcrums from "./Breadcrums";
+import { togglePrintingState } from "../../../../js/actions";
 
 const confirm = Modal.confirm;
 
@@ -75,7 +76,8 @@ class Sidebar extends Component {
   // ================================================================ //
 
   printDiv = () => {
-    setTimeout(function() {
+    this.props.dispatch(togglePrintingState(true));
+    setTimeout(() => {
       const printContents = document.getElementById("StepBody").innerHTML;
       const docHead = document.querySelector("head").innerHTML;
 
@@ -91,9 +93,10 @@ class Sidebar extends Component {
       printWindow.document.close();
       printWindow.focus();
 
-      setTimeout(function() {
+      setTimeout(() => {
         printWindow.print();
         printWindow.close();
+        this.props.dispatch(togglePrintingState(false));
       }, 1000);
     }, 500);
   };
