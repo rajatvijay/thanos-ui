@@ -97,9 +97,9 @@ class RoutSwitch extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/login" exact component={OTPLogin} />
-        <Route path="/login/basic" exact component={LoginPage} />
-        <Route path="/login/magic" exact component={MagicLogin} />
+        <Route path="/login" component={OTPLogin} />
+        <Route path="/login/basic" component={LoginPage} />
+        <Route path="/login/magic" component={MagicLogin} />
         <Route path="/login/header" component={HeaderView} />
         <Route path="/login/magicprocess" component={MagicLinkProcess} />
         {this.props.nextUrl.url && Godaam.user ? (
