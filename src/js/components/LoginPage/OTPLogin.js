@@ -70,11 +70,7 @@ class OTPLogin extends React.Component {
                   <Icon type="loading" />
                 </div>
               ) : (
-                <OTPForm
-                  {...this.props}
-                  showRightBlock={showRightBlock}
-                  nextUrl={this.state.nextUrl}
-                />
+                <OTPForm {...this.props} showRightBlock={showRightBlock} />
               )}
             </div>
           </div>

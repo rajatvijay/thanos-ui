@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import {
   Form,
   Button,
@@ -395,11 +395,10 @@ class OTPForm extends React.Component {
                     </a>
                   ) : (
                     <Link
-                      to={
-                        this.props.nextUrl
-                          ? "/login/basic" + this.props.nextUrl
-                          : "/login/basic"
-                      }
+                      to={{
+                        pathname: "/login/basic",
+                        search: this.props.location.search
+                      }}
                       className="ant-btn login-form-button ant-btn-primary btn-block text-white"
                       style={{
                         height: "40px",
@@ -448,4 +447,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(OTPForm));
+export default connect(mapStateToProps)(injectIntl(withRouter(OTPForm)));
