@@ -29,7 +29,7 @@ import { apiBaseURL, siteOrigin } from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
 import Autocomplete from "react-google-autocomplete";
-import { fieldService } from "../../../../modules/fields/services";
+import { fieldActions } from "../../../..//modules/fields/actions";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -173,12 +173,14 @@ export const GoogleAddress = props => {
     >
       <Autocomplete
         onPlaceSelected={place => {
-          fieldService.saveResponse({
-            answer: place.formatted_address,
-            field: props.field.id,
-            workflow: props.workflowId,
-            extra_json: place
-          });
+          props.dispatch(
+            fieldActions.saveResponse({
+              answer: place.formatted_address,
+              fieldId: props.field.id,
+              workflowId: props.workflowId,
+              extraJSON: place
+            })
+          );
         }}
         defaultValue={defaultAnswer}
         types={[]}
