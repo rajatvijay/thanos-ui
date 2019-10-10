@@ -143,9 +143,33 @@ class Filter extends Component {
 
     const arr = Object.values(displayfilters);
     if (arr.length) {
-      const str = arr.join(",");
-
-      return `: ${str}`;
+      return arr.map(filter => {
+        return (
+          <div
+            className={css`
+              color: #ffffff;
+              font-size: 12px;
+              letter-spacing: 0.38px;
+              line-height: 15px;
+              text-align: center;
+              background-color: #000000;
+              margin-left: 6px;
+              padding: 2px 10px;
+              cursor: pointer;
+            `}
+            onClick={this.onClear}
+          >
+            <span>{filter}</span>
+            <span
+              className={css`
+                margin-left: 8px;
+              `}
+            >
+              X
+            </span>
+          </div>
+        );
+      });
     }
   };
 
@@ -180,8 +204,10 @@ class Filter extends Component {
   };
 
   render() {
-    const { sortingEnabled } = this.state;
+    const { sortingEnabled, displayfilters } = this.state;
 
+    const filter = Object.values(displayfilters);
+    const filterLength = filter.length;
     return (
       <>
         <div
@@ -194,17 +220,14 @@ class Filter extends Component {
         >
           <div>
             <ul
-              className={css`
-                li {
-                  display: inline-block;
-                }
-              `}
               style={{
                 listStyle: "none",
                 color: "#000",
                 cursor: "pointer",
                 padding: 0,
-                marginBottom: 0
+                marginBottom: 0,
+                display: "flex",
+                alignItems: "center"
               }}
             >
               {this.props.workflow.count || this.props.workflow.count === 0 ? (
@@ -263,7 +286,6 @@ class Filter extends Component {
                 </li>
               )}
               <li
-                onClick={() => this.showModal()}
                 style={{
                   color: "#000000",
                   opacity: 0.3,
@@ -271,18 +293,33 @@ class Filter extends Component {
                   lineHeight: "15px",
                   fontSize: 13,
                   marginRight: 20,
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
+                  display: "flex",
+                  alignItems: "center"
                 }}
               >
-                <FormattedMessage id="mainFilterbar.filterText" />
-                <span>{this.evaluateFilter()}</span>
-                <Icon
-                  style={{
-                    fontSize: 10,
-                    marginLeft: 6
-                  }}
-                  type="down"
-                />
+                <span onClick={() => this.showModal()}>
+                  <FormattedMessage id="mainFilterbar.filterText" />
+                  {!filterLength ? (
+                    <Icon
+                      style={{
+                        fontSize: 10,
+                        marginLeft: 6
+                      }}
+                      type="down"
+                    />
+                  ) : (
+                    ":"
+                  )}
+                </span>
+                <span
+                  className={css`
+                    display: flex;
+                    align-items: center;
+                  `}
+                >
+                  {this.evaluateFilter()}
+                </span>
               </li>
             </ul>
           </div>
