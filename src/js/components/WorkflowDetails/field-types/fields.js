@@ -936,7 +936,11 @@ export const RadioField = props => {
       >
         {_.map(getExtra(props), function(item, index) {
           return (
-            <Radio key={`${index}`} value={item.value}>
+            <Radio
+              key={`${index}`}
+              value={item.value}
+              style={{ marginBottom: "10px", whiteSpace: "normal" }}
+            >
               {item.label}
             </Radio>
           );
