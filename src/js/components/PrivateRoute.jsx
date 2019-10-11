@@ -13,7 +13,8 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
           to={{
             // Redirecting the user to login means,
             // he/she needs to go to some specifix url after login
-            pathname: `/login/?next=${rest.location.pathname}`,
+            pathname: `/login`,
+            search: `?next=${rest.location.pathname}`,
             state: { from: props.location }
           }}
         />

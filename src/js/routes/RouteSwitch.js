@@ -14,6 +14,8 @@ import ReportPage from "../components/ReportPage";
 import HeaderView from "../../modules/header/components/index";
 import _ from "lodash";
 import Godaam from "../utils/storage";
+import queryString from "query-string";
+import { userActions } from "../actions";
 
 class RoutSwitch extends React.Component {
   constructor(props) {
@@ -24,6 +26,10 @@ class RoutSwitch extends React.Component {
 
   componentDidUpdate = prevProps => {
     if (this.props.location !== prevProps.location) {
+      const parsed = queryString.parse(this.props.location.search);
+      if (parsed.next) {
+        this.props.dispatch(userActions.setNextUrl(parsed.next));
+      }
       this.calculateNav(prevProps);
     }
   };
@@ -97,15 +103,24 @@ class RoutSwitch extends React.Component {
   render() {
     return (
       <Switch>
-        <Route path="/login/basic" component={LoginPage} />
-        <Route path="/login/magic" component={MagicLogin} />
-        <Route path="/login/header" component={HeaderView} />
-        <Route path="/login/magicprocess" component={MagicLinkProcess} />
-        <Route path="/login" component={OTPLogin} />
+        <Route exact path="/login" component={OTPLogin} />
+        <Route exact path="/login/basic" component={LoginPage} />
+        <Route exact path="/login/magic" component={MagicLogin} />
+        <Route exact path="/login/header" component={HeaderView} />
+        <Route exact path="/login/magicprocess" component={MagicLinkProcess} />
+
         {this.props.nextUrl.url && Godaam.user ? (
           <Redirect from="/" exact to={this.props.nextUrl.url} />
         ) : (
-          <Redirect from="/" exact to="/workflows/instances/" />
+          <Redirect
+            from="/"
+            exact
+            to={
+              this.props.nextUrl.url
+                ? this.props.nextUrl.url
+                : `/workflows/instances/`
+            }
+          />
         )}
 
         <PrivateRoute path="/workflows/instances/" exact component={Workflow} />
