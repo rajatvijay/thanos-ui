@@ -6,7 +6,6 @@ import {
   Col,
   Icon,
   Layout,
-  Mention,
   Row,
   Select,
   Tooltip,
@@ -23,8 +22,6 @@ import { status_filters } from "./EventStatuses";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import MentionWithAttachments from "./MentionWithAttachments";
 import showNotification from "../../../modules/common/notification";
-import { Mention as ReactMention, MentionsInput } from "react-mentions";
-const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
 const Option = Select.Option;
@@ -122,12 +119,19 @@ class Comments extends Component {
     const mentionedUsers = [];
     const mentionedGroups = [];
 
+    // Going through all the mentions, breaking them
+    // into users and groups
     mentions.forEach(mention => {
+      // id is in format of u123 or g123, depending
+      // upon whether it's a user or a group.
       const realId = parseInt(mention.id.substr(1));
-      if (mention.id.indexOf("u") === 0)
+      if (mention.id.indexOf("u") === 0) {
         // it's a user mention
         mentionedUsers.push(realId);
-      else mentionedGroups.push(realId);
+      } else {
+        // it's a group mention
+        mentionedGroups.push(realId);
+      }
     });
 
     let commentPayload = {
@@ -294,17 +298,29 @@ class Comments extends Component {
     return sortedRisk;
   };
 
+  // Callback for sort method used to alphabetically sort
+  // the mentions array.
+  sortMentions = (mentionA, mentionB) => {
+    const textA = mentionA.display.toUpperCase();
+    const textB = mentionB.display.toUpperCase();
+    return textA < textB ? -1 : textA > textB ? 1 : 0;
+  };
+
   getAvailableMentions = commentContext => {
     const userMentions = commentContext.user_mentions || [];
     const groupMentions = commentContext.group_mentions || [];
 
+    // Here we prepare a single array with groups first, followed by uers, each
+    // of them sorted alphabetically. Also, ID is apparended with `u` or `g` for
+    // users and groups respectively.
+
     return [
       ...groupMentions
         .map(group => ({ id: "g" + group.id, display: group.name }))
-        .sort(),
+        .sort(this.sortMentions),
       ...userMentions
         .map(user => ({ id: "u" + user.id, display: user.username }))
-        .sort()
+        .sort(this.sortMentions)
     ];
   };
 
@@ -498,30 +514,7 @@ class Comments extends Component {
                           </div>
 
                           <div className="mr-top mr-bottom">
-                            <MentionsInput
-                              value={this.state.message}
-                              onChange={this.onChange}
-                              allowSpaceInQuery
-                              allowSuggestionsAboveCursor
-                              placeholder={this.props.intl.formatMessage({
-                                id: "stepBodyFormInstances.enterComment"
-                              })}
-                              className="comments-textarea"
-                            >
-                              <ReactMention
-                                appendSpaceOnAdd
-                                trigger="@"
-                                displayTransform={(id, display) =>
-                                  "@" + display
-                                }
-                                data={mentions}
-                                markup={"~[__display__](__id__)"}
-                                style={{
-                                  backgroundColor: "#e6f7ff"
-                                }}
-                              />
-                            </MentionsInput>
-                            {/* <MentionWithAttachments
+                            <MentionWithAttachments
                               comment={commentContext}
                               addComment={this.addComment}
                               placeholder={this.props.intl.formatMessage({
@@ -529,8 +522,9 @@ class Comments extends Component {
                               })}
                               onChange={this.onChange}
                               message={this.state.message}
+                              mentions={mentions}
                               addAttachement={this.addAttachementInState}
-                            /> */}
+                            />
                           </div>
 
                           <StyledAddCommentFooter>
@@ -603,32 +597,47 @@ const PostButton = React.memo(({ commentContext, onClick, ...otherProps }) => (
 const Message = React.memo(
   ({ posted_by, created_at, attachment, message, mentions = [] }) => {
     let transformedMessage = message;
-    // Go through each of the mentions,
-    // and find them in message, while wrapping them with anchor
-    // tag.
 
+    // Generic format regex only checks for the format of the tags,
+    // regardless of data.
+    const genericFormatRegEx = new RegExp(
+      `~\\[([^\\]]*)\\]\\((u|g)\\d+\\)`,
+      "gm"
+    );
+
+    // Go through each of the mentions, and find them in message,
+    // while wrapping them in a tag to make it look highlighted.
     for (let mention of mentions) {
       const { display, id } = mention;
-      const lookFor = `~\\[[^\\]]*\\]\\(${id}\\)`;
-      const rx = new RegExp(lookFor, "gm");
+      if (transformedMessage.indexOf("(" + id + ")") === -1) continue;
+      // We only look for the ID and ignore the name that was originally
+      // in the message because we map it with the current name that we
+      // get in mentions from the API
+      const lookForRegEx = new RegExp(`~\\[[^\\]]*\\]\\(${id}\\)`, "gm");
 
       // Now we replace all occurrences of that in the message string.
       transformedMessage = transformedMessage.replace(
-        rx,
-        `<a class="mentions" href="/users/">@${display}</a>`
+        lookForRegEx,
+        `<span class="mentions">@${display}</span>`
       );
-      // }
 
       // If we don't have any more @ mentions that are not already
       // taken care of then we can quit the loop.
-      // if (!/(?<!>)@/.test(transformedMessage)) break;
+      if (!genericFormatRegEx.test(transformedMessage)) break;
     }
 
-    // replace non existing tags into normal strings
+    // Replace left out mentions in cases like user was removed later after
+    // the comment was posted.
+    // The reason we don't do this up there is because username or group-name
+    // may have changed, so we display the one that we get in mentions within
+    // API. But in this case, since the user/group doesn't exist in current
+    // context, we display the one that was added initially in the comment.
+
     transformedMessage = transformedMessage.replace(
-      new RegExp(`~\\[([^\\]]*)\\]\\((u|g)\\d+\\)`, "gm"),
-      "<strong>@$1</strong>"
+      genericFormatRegEx,
+      "<strong><em>@$1</em></strong>"
     );
+
     return (
       <div className="mr-bottom">
         <Avatar size="small" icon="user" style={{ float: "left" }} />
