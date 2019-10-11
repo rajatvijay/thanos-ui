@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
-import { Mention, Modal, Input } from "antd";
+import { Modal, Input } from "antd";
+import { Mention, MentionsInput } from "react-mentions";
 
 class MentionWithAttachments extends Component {
   isFocussed = false;
@@ -55,7 +56,7 @@ class MentionWithAttachments extends Component {
   };
 
   render() {
-    const { comment, placeholder, onChange, message } = this.props;
+    const { placeholder, onChange, message, mentions } = this.props;
     const { isAddAttachmentModalVisible, files, inputComment } = this.state;
     return (
       <Fragment>
@@ -76,28 +77,25 @@ class MentionWithAttachments extends Component {
             onChange={this.handleInputCommentchange}
           />
         </Modal>
-        <Mention
-          onFocus={() => {
-            this.isFocussed = true;
-          }}
-          onBlur={() => {
-            this.isFocussed = false;
-          }}
-          style={{
-            width: "100%",
-            height: 110,
-            marginTop: "5px",
-            border: "none",
-            padding: "3px",
-            fontSize: "16px"
-          }}
-          suggestions={comment.mentions}
-          placeholder={placeholder}
-          multiLines
-          onChange={onChange}
+        <MentionsInput
           value={message}
-          notFoundContent={"user not found"}
-        />
+          onChange={onChange}
+          allowSpaceInQuery
+          allowSuggestionsAboveCursor
+          placeholder={placeholder}
+          className="comments-textarea"
+        >
+          <Mention
+            appendSpaceOnAdd
+            trigger="@"
+            displayTransform={(id, display) => "@" + display}
+            data={mentions}
+            markup={"~[__display__](__id__)"}
+            style={{
+              backgroundColor: "#eaf5fc"
+            }}
+          />
+        </MentionsInput>
       </Fragment>
     );
   }

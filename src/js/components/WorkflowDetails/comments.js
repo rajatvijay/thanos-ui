@@ -6,7 +6,6 @@ import {
   Col,
   Icon,
   Layout,
-  Mention,
   Row,
   Select,
   Tooltip,
@@ -24,17 +23,16 @@ import { integrationCommonFunctions } from "./field-types/integration_common";
 import MentionWithAttachments from "./MentionWithAttachments";
 import showNotification from "../../../modules/common/notification";
 
-const { toString, toContentState } = Mention;
-
 const { Sider, Content } = Layout;
 const Option = Select.Option;
 
 class Comments extends Component {
   state = {
-    message: toContentState(""),
     fileList: [],
     uploading: false,
-    workflowStatuses: []
+    workflowStatuses: [],
+    message: "",
+    mentions: []
   };
 
   static getWorkflowKind({ workflowComments }) {
@@ -84,8 +82,8 @@ class Comments extends Component {
     this.props.toggleSidebar();
   }
 
-  onChange = value => {
-    this.setState({ message: value, comment: toString(value) });
+  onChange = (event, value, rawValue, mentions) => {
+    this.setState({ message: value, mentions });
   };
 
   addComment = (comment, message, files) => {
@@ -98,7 +96,11 @@ class Comments extends Component {
       content_type = "workflow";
     }
 
-    const { fileList: filesFromState } = this.state;
+    const {
+      fileList: filesFromState,
+      message: messageFromState,
+      mentions
+    } = this.state;
     const fileList = files && files.length ? files : filesFromState;
 
     const { workflowId, groupId, stepId } = this.props;
@@ -109,10 +111,30 @@ class Comments extends Component {
       stepId
     };
 
+    const mentionedUsers = [];
+    const mentionedGroups = [];
+
+    // Going through all the mentions, breaking them
+    // into users and groups
+    mentions.forEach(mention => {
+      // id is in format of u123 or g123, depending
+      // upon whether it's a user or a group.
+      const realId = parseInt(mention.id.substr(1));
+      if (mention.id.indexOf("u") === 0) {
+        // it's a user mention
+        mentionedUsers.push(realId);
+      } else {
+        // it's a group mention
+        mentionedGroups.push(realId);
+      }
+    });
+
     let commentPayload = {
       object_id: comment.object_id,
       type: content_type,
-      message: message || this.state.comment,
+      mentioned_users: mentionedUsers,
+      mentioned_groups: mentionedGroups,
+      message: message || messageFromState || "",
       attachment: lodashSize(fileList) ? fileList[0] : ""
     };
 
@@ -133,7 +155,7 @@ class Comments extends Component {
       step_reload_payload,
       this.props.isEmbedded
     );
-    this.setState({ message: toContentState(""), comment: "", fileList: [] });
+    this.setState({ message: "", fileList: [], mentions: [] });
   };
 
   selectStep = ({ groupId, stepId, fieldId = null }) => {
@@ -271,6 +293,32 @@ class Comments extends Component {
     return sortedRisk;
   };
 
+  // Callback for sort method used to alphabetically sort
+  // the mentions array.
+  sortMentions = (mentionA, mentionB) => {
+    const textA = mentionA.display.toUpperCase();
+    const textB = mentionB.display.toUpperCase();
+    return textA < textB ? -1 : textA > textB ? 1 : 0;
+  };
+
+  getAvailableMentions = commentContext => {
+    const userMentions = commentContext.user_mentions || [];
+    const groupMentions = commentContext.group_mentions || [];
+
+    // Here we prepare a single array with groups first, followed by uers, each
+    // of them sorted alphabetically. Also, ID is apparended with `u` or `g` for
+    // users and groups respectively.
+
+    return [
+      ...groupMentions
+        .map(group => ({ id: "g" + group.id, display: group.name }))
+        .sort(this.sortMentions),
+      ...userMentions
+        .map(user => ({ id: "u" + user.id, display: user.username }))
+        .sort(this.sortMentions)
+    ];
+  };
+
   render() {
     const comments = lodashGet(this.props, "workflowComments.data", {});
     const singleContext = lodashSize(comments.results) <= 1 ? true : false;
@@ -348,6 +396,8 @@ class Comments extends Component {
                     comment_flag_options
                   }
                 } = commentContext;
+
+                const mentions = this.getAvailableMentions(commentContext);
 
                 const { type, is_integration_type, id: fieldId = null } =
                   field_details || {};
@@ -432,7 +482,13 @@ class Comments extends Component {
                     <StyledCommentMessages>
                       {messages
                         ? messages.map(function(msg, index) {
-                            return <Message {...msg} key={msg.created_at} />;
+                            return (
+                              <Message
+                                {...msg}
+                                key={msg.created_at}
+                                mentions={mentions}
+                              />
+                            );
                           })
                         : null}
                     </StyledCommentMessages>
@@ -461,6 +517,7 @@ class Comments extends Component {
                               })}
                               onChange={this.onChange}
                               message={this.state.message}
+                              mentions={mentions}
                               addAttachement={this.addAttachementInState}
                             />
                           </div>
@@ -532,39 +589,84 @@ const PostButton = React.memo(({ commentContext, onClick, ...otherProps }) => (
   </Button>
 ));
 
-const Message = React.memo(({ posted_by, created_at, attachment, message }) => (
-  <div className="mr-bottom">
-    <Avatar size="small" icon="user" style={{ float: "left" }} />
-    <StyledMessageRow>
-      <b style={{ color: "#162c5b" }}>
-        {posted_by.first_name || posted_by.email}
-      </b>
-      <StyledCommentTimestamp>
-        <Tooltip title={moment(created_at).format()}>
-          <Moment fromNow>{created_at}</Moment>
-        </Tooltip>
-      </StyledCommentTimestamp>
-    </StyledMessageRow>
-    <StyledMessageBody>
-      <div
-        className="Container"
-        dangerouslySetInnerHTML={{
-          __html: message.replace(
-            /@([a-z\d_]+)/gi,
-            '<a class="mentions" href="/users/">@$1</a>'
-          )
-        }}
-      />
-    </StyledMessageBody>
-    {attachment ? (
-      <StyledMessageRow>
-        <i className="anticon anticon-paper-clip" />
-        &nbsp;
-        <a href={attachment}>{Comments.extractAttachmentName(attachment)}</a>
-      </StyledMessageRow>
-    ) : null}
-  </div>
-));
+const Message = React.memo(
+  ({ posted_by, created_at, attachment, message, mentions = [] }) => {
+    let transformedMessage = message;
+
+    // Generic format regex only checks for the format of the tags,
+    // regardless of data.
+    const genericFormatRegEx = new RegExp(
+      `~\\[([^\\]]*)\\]\\((u|g)\\d+\\)`,
+      "gm"
+    );
+
+    // Go through each of the mentions, and find them in message,
+    // while wrapping them in a tag to make it look highlighted.
+    for (let mention of mentions) {
+      const { display, id } = mention;
+      if (transformedMessage.indexOf("(" + id + ")") === -1) continue;
+      // We only look for the ID and ignore the name that was originally
+      // in the message because we map it with the current name that we
+      // get in mentions from the API
+      const lookForRegEx = new RegExp(`~\\[[^\\]]*\\]\\(${id}\\)`, "gm");
+
+      // Now we replace all occurrences of that in the message string.
+      transformedMessage = transformedMessage.replace(
+        lookForRegEx,
+        `<span class="mentions">@${display}</span>`
+      );
+
+      // If we don't have any more @ mentions that are not already
+      // taken care of then we can quit the loop.
+      if (!genericFormatRegEx.test(transformedMessage)) break;
+    }
+
+    // Replace left out mentions in cases like user was removed later after
+    // the comment was posted.
+    // The reason we don't do this up there is because username or group-name
+    // may have changed, so we display the one that we get in mentions within
+    // API. But in this case, since the user/group doesn't exist in current
+    // context, we display the one that was added initially in the comment.
+
+    transformedMessage = transformedMessage.replace(
+      genericFormatRegEx,
+      "<strong><em>@$1</em></strong>"
+    );
+
+    return (
+      <div className="mr-bottom">
+        <Avatar size="small" icon="user" style={{ float: "left" }} />
+        <StyledMessageRow>
+          <b style={{ color: "#162c5b" }}>
+            {posted_by.first_name || posted_by.email}
+          </b>
+          <StyledCommentTimestamp>
+            <Tooltip title={moment(created_at).format()}>
+              <Moment fromNow>{created_at}</Moment>
+            </Tooltip>
+          </StyledCommentTimestamp>
+        </StyledMessageRow>
+        <StyledMessageBody>
+          <div
+            className="Container"
+            dangerouslySetInnerHTML={{
+              __html: transformedMessage
+            }}
+          />
+        </StyledMessageBody>
+        {attachment ? (
+          <StyledMessageRow>
+            <i className="anticon anticon-paper-clip" />
+            &nbsp;
+            <a href={attachment}>
+              {Comments.extractAttachmentName(attachment)}
+            </a>
+          </StyledMessageRow>
+        ) : null}
+      </div>
+    );
+  }
+);
 
 const AdjudicationCascader = React.memo(
   injectIntl(({ onChange, intl, options }) => (
