@@ -28,7 +28,6 @@ const Option = Select.Option;
 
 class Comments extends Component {
   state = {
-    // message: toContentState(""),
     fileList: [],
     uploading: false,
     workflowStatuses: [],
@@ -84,10 +83,6 @@ class Comments extends Component {
   }
 
   onChange = (event, value, rawValue, mentions) => {
-    console.log({
-      value,
-      mentions
-    });
     this.setState({ message: value, mentions });
   };
 
