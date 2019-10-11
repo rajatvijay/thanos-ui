@@ -29,7 +29,7 @@ import { apiBaseURL, siteOrigin } from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
 import Autocomplete from "react-google-autocomplete";
-import { fieldService } from "../../../../modules/fields/services";
+import { fieldActions } from "../../../..//modules/fields/actions";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -158,6 +158,79 @@ export const Date = props => {
   );
 };
 
+const getAddressDetail = place => {
+  let addressData = {};
+  place.forEach(detail => {
+    detail.types.forEach(type => {
+      return (addressData[type] = detail.long_name);
+    });
+  });
+
+  const addressUnitValue = () => {
+    const { street_number, route } = addressData;
+    if (street_number && route) {
+      return `${street_number}, ${route}`;
+    } else if (street_number) {
+      return street_number;
+    } else if (route) {
+      return route;
+    } else {
+      return "";
+    }
+  };
+
+  const addressStreetValue = () => {
+    const {
+      sublocality_level_1,
+      sublocality_level_2,
+      sublocality_level_3
+    } = addressData;
+    if (sublocality_level_1 && sublocality_level_2 && sublocality_level_3) {
+      return `${sublocality_level_1}, ${sublocality_level_2}, ${sublocality_level_3}`;
+    } else if (sublocality_level_1 && sublocality_level_2) {
+      return `${sublocality_level_1}, ${sublocality_level_2}`;
+    } else if (sublocality_level_1 && sublocality_level_3) {
+      return `${sublocality_level_1}, ${sublocality_level_3}`;
+    } else if (sublocality_level_2 && sublocality_level_3) {
+      return `${sublocality_level_2}, ${sublocality_level_3}`;
+    } else if (sublocality_level_1) {
+      return sublocality_level_1;
+    } else if (sublocality_level_2) {
+      return sublocality_level_2;
+    } else if (sublocality_level_3) {
+      return sublocality_level_3;
+    } else {
+      return [];
+    }
+  };
+
+  const addressCityValue = () => {
+    const { locality, neighborhood } = addressData;
+    if (locality && neighborhood) {
+      return `${locality}, ${neighborhood}`;
+    } else if (locality) {
+      return locality;
+    } else if (neighborhood) {
+      return neighborhood;
+    } else {
+      return "";
+    }
+  };
+
+  let addressDetail = {
+    Address_Unit: addressUnitValue(),
+    Address_Street: addressStreetValue(),
+    Address_City: addressCityValue(),
+    Address_State: addressData.administrative_area_level_1
+      ? addressData.administrative_area_level_1
+      : "",
+    Address_Country: addressData.country ? addressData.country : "",
+    Address_PostalCode: addressData.postal_code ? addressData.postal_code : ""
+  };
+
+  return addressDetail;
+};
+
 export const GoogleAddress = props => {
   const defaultAnswer = props.field.answers[0]
     ? props.field.answers[0].answer
@@ -173,12 +246,14 @@ export const GoogleAddress = props => {
     >
       <Autocomplete
         onPlaceSelected={place => {
-          fieldService.saveResponse({
-            answer: place.formatted_address,
-            field: props.field.id,
-            workflow: props.workflowId,
-            extra_json: place
-          });
+          props.dispatch(
+            fieldActions.saveResponse({
+              answer: place.formatted_address,
+              fieldId: props.field.id,
+              workflowId: props.workflowId,
+              extraJSON: getAddressDetail(place.address_components)
+            })
+          );
         }}
         defaultValue={defaultAnswer}
         types={[]}
