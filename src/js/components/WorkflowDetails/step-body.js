@@ -459,9 +459,7 @@ const LockedAlertComponent = React.memo(
       // Filter out the steps that are dependent and not completed;
       // Create link to those steps.
       let links = {};
-      const dependentStepsDefinitionIds = dependentSteps.map(
-        step => step.value
-      );
+      const dependentStepsDefinitionIds = dependentSteps.map(step => step.id);
 
       // Let's go through each step group looking for incomplete steps
       stepGroups.forEach(stepGroup => {
@@ -483,14 +481,14 @@ const LockedAlertComponent = React.memo(
     }, [dependentSteps, stepGroups, workflowId]); // Will not update until one of these dependencies' reference changes
 
     const stepLabels = dependentSteps.map(step =>
-      links[step.value] ? (
-        <li key={step.label}>
-          <StyledAnchorTag href={links[step.value]} rel="noopener noreferrer">
-            {step.label}
+      links[step.id] ? (
+        <li key={step.name}>
+          <StyledAnchorTag href={links[step.id]} rel="noopener noreferrer">
+            {step.name}
           </StyledAnchorTag>
         </li>
       ) : (
-        <li key={step.label}>{step.label}</li>
+        <li key={step.name}>{step.name}</li>
       )
     );
 

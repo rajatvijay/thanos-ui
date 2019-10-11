@@ -36,7 +36,7 @@ test("should filter steps based on accessible dependent steps", () => {
           alerts: [],
           is_locked: true,
           definition: 5,
-          dependent_steps: [{ value: 100, label: "Unavailable dependent step" }]
+          dependent_steps: [{ id: 100, name: "Unavailable dependent step" }]
         },
         {
           id: 6,
@@ -45,7 +45,7 @@ test("should filter steps based on accessible dependent steps", () => {
           alerts: [],
           is_locked: true,
           definition: 6,
-          dependent_steps: [{ value: 2, label: "Step 1" }]
+          dependent_steps: [{ id: 2, name: "Step 1" }]
         }
       ],
       overdue: false
@@ -61,7 +61,7 @@ test("should filter steps based on accessible dependent steps", () => {
           alerts: [],
           is_locked: true,
           definition: 8,
-          dependent_steps: [{ value: 2, label: "Step 1" }]
+          dependent_steps: [{ id: 2, name: "Step 1" }]
         },
         {
           id: 9,
@@ -71,8 +71,8 @@ test("should filter steps based on accessible dependent steps", () => {
           is_locked: true,
           definition: 9,
           dependent_steps: [
-            { value: 2, label: "Step 1" },
-            { value: 3, label: "Step 2" }
+            { id: 2, name: "Step 1" },
+            { id: 3, name: "Step 2" }
           ]
         }
       ],
@@ -89,7 +89,7 @@ test("should filter steps based on accessible dependent steps", () => {
           alerts: [],
           is_locked: true,
           definition: 11,
-          dependent_steps: [{ value: 100, label: "Unavailable dependent step" }]
+          dependent_steps: [{ id: 100, name: "Unavailable dependent step" }]
         },
         {
           id: 12,
@@ -99,8 +99,8 @@ test("should filter steps based on accessible dependent steps", () => {
           is_locked: true,
           definition: 12,
           dependent_steps: [
-            { value: 100, label: "Unavailable dependent step" },
-            { value: 3, label: "Step 2" }
+            { id: 100, name: "Unavailable dependent step" },
+            { id: 3, name: "Step 2" }
           ]
         }
       ],

@@ -29,5 +29,5 @@ export const getVisibleSteps = stepGroups => {
  */
 export const hasAccessibleDependencies = (step, visibleSteps) =>
   step.dependent_steps.every(dependentStep =>
-    visibleSteps.includes(dependentStep.value)
+    visibleSteps.includes(dependentStep.id)
   );

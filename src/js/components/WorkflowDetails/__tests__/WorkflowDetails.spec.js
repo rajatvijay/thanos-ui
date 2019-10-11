@@ -1157,7 +1157,7 @@ test("should not render Locked step if the step is inaccessible", () => {
           name: "Step 1",
           alerts: [],
           is_locked: true,
-          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+          dependent_steps: [{ id: 100, name: "Dependent Step" }]
         },
         {
           id: 3,
@@ -1179,7 +1179,7 @@ test("should not render Locked step if the step is inaccessible", () => {
           name: "Step 3",
           alerts: [],
           is_locked: true,
-          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+          dependent_steps: [{ id: 100, name: "Dependent Step" }]
         },
         {
           id: 3,
@@ -1187,7 +1187,7 @@ test("should not render Locked step if the step is inaccessible", () => {
           name: "Step 4",
           alerts: [],
           is_locked: true,
-          dependent_steps: [{ value: 100, label: "Dependent Step" }]
+          dependent_steps: [{ id: 100, name: "Dependent Step" }]
         }
       ],
       overdue: false
