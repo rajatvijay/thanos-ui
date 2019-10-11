@@ -124,6 +124,13 @@ class Filter extends Component {
     };
 
     this.props.dispatch(workflowFiltersActions.removeFilters(payload));
+
+    let displayfilters = this.state.displayfilters;
+    delete displayfilters[key];
+
+    this.setState({
+      displayfilters: displayfilters
+    });
   };
 
   onClear = () => {
@@ -151,12 +158,15 @@ class Filter extends Component {
 
   evaluateFilter = () => {
     const { displayfilters } = this.state;
+    const displayFilterKey = Object.keys(displayfilters);
+    const displayFilterValue = Object.values(displayfilters);
 
-    const arr = Object.values(displayfilters);
-    if (arr.length) {
-      return arr.map(filter => {
+    if (displayFilterValue.length) {
+      return displayFilterValue.map((filter, index) => {
         return (
-          <StyledFilterItem onClick={this.onClear}>
+          <StyledFilterItem
+            onClick={event => this.removeFilter(displayFilterKey[index])}
+          >
             <span>{filter}</span>
             <span
               className={css`
