@@ -23,7 +23,7 @@ import { status_filters } from "./EventStatuses";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import MentionWithAttachments from "./MentionWithAttachments";
 import showNotification from "../../../modules/common/notification";
-
+import { Mention as ReactMention, MentionsInput } from "react-mentions";
 const { toString, toContentState } = Mention;
 
 const { Sider, Content } = Layout;
@@ -31,10 +31,12 @@ const Option = Select.Option;
 
 class Comments extends Component {
   state = {
-    message: toContentState(""),
+    // message: toContentState(""),
     fileList: [],
     uploading: false,
-    workflowStatuses: []
+    workflowStatuses: [],
+    message: "",
+    mentions: []
   };
 
   static getWorkflowKind({ workflowComments }) {
@@ -84,8 +86,12 @@ class Comments extends Component {
     this.props.toggleSidebar();
   }
 
-  onChange = value => {
-    this.setState({ message: value, comment: toString(value) });
+  onChange = (event, value, rawValue, mentions) => {
+    console.log({
+      value,
+      mentions
+    });
+    this.setState({ message: value, mentions });
   };
 
   addComment = (comment, message, files) => {
@@ -98,7 +104,11 @@ class Comments extends Component {
       content_type = "workflow";
     }
 
-    const { fileList: filesFromState } = this.state;
+    const {
+      fileList: filesFromState,
+      message: messageFromState,
+      mentions
+    } = this.state;
     const fileList = files && files.length ? files : filesFromState;
 
     const { workflowId, groupId, stepId } = this.props;
@@ -109,10 +119,23 @@ class Comments extends Component {
       stepId
     };
 
+    const mentionedUsers = [];
+    const mentionedGroups = [];
+
+    mentions.forEach(mention => {
+      const realId = parseInt(mention.id.substr(1));
+      if (mention.id.indexOf("u") === 0)
+        // it's a user mention
+        mentionedUsers.push(realId);
+      else mentionedGroups.push(realId);
+    });
+
     let commentPayload = {
       object_id: comment.object_id,
       type: content_type,
-      message: message || this.state.comment,
+      mentioned_users: mentionedUsers,
+      mentioned_groups: mentionedGroups,
+      message: message || messageFromState || "",
       attachment: lodashSize(fileList) ? fileList[0] : ""
     };
 
@@ -133,7 +156,7 @@ class Comments extends Component {
       step_reload_payload,
       this.props.isEmbedded
     );
-    this.setState({ message: toContentState(""), comment: "", fileList: [] });
+    this.setState({ message: "", fileList: [], mentions: [] });
   };
 
   selectStep = ({ groupId, stepId, fieldId = null }) => {
@@ -271,6 +294,20 @@ class Comments extends Component {
     return sortedRisk;
   };
 
+  getAvailableMentions = commentContext => {
+    const userMentions = commentContext.user_mentions || [];
+    const groupMentions = commentContext.group_mentions || [];
+
+    return [
+      ...groupMentions
+        .map(group => ({ id: "g" + group.id, display: group.name }))
+        .sort(),
+      ...userMentions
+        .map(user => ({ id: "u" + user.id, display: user.username }))
+        .sort()
+    ];
+  };
+
   render() {
     const comments = lodashGet(this.props, "workflowComments.data", {});
     const singleContext = lodashSize(comments.results) <= 1 ? true : false;
@@ -346,19 +383,10 @@ class Comments extends Component {
                     step_details,
                     workflow_details,
                     comment_flag_options
-                  },
-                  mentions
+                  }
                 } = commentContext;
 
-                // Why is this necessary?
-                // If we've got to Mentions such as
-                // ABC, ABC Admin
-                // and in text we have @ABC Admin, but the replacer comes across ABC
-                // first, it'll replace it. Which is not what we want.
-                // Hence sorting using the length.
-                const sortedMentions = mentions.sort(
-                  (a, b) => b.length - a.length
-                );
+                const mentions = this.getAvailableMentions(commentContext);
 
                 const { type, is_integration_type, id: fieldId = null } =
                   field_details || {};
@@ -447,7 +475,7 @@ class Comments extends Component {
                               <Message
                                 {...msg}
                                 key={msg.created_at}
-                                mentions={sortedMentions}
+                                mentions={mentions}
                               />
                             );
                           })
@@ -470,7 +498,30 @@ class Comments extends Component {
                           </div>
 
                           <div className="mr-top mr-bottom">
-                            <MentionWithAttachments
+                            <MentionsInput
+                              value={this.state.message}
+                              onChange={this.onChange}
+                              allowSpaceInQuery
+                              allowSuggestionsAboveCursor
+                              placeholder={this.props.intl.formatMessage({
+                                id: "stepBodyFormInstances.enterComment"
+                              })}
+                              className="comments-textarea"
+                            >
+                              <ReactMention
+                                appendSpaceOnAdd
+                                trigger="@"
+                                displayTransform={(id, display) =>
+                                  "@" + display
+                                }
+                                data={mentions}
+                                markup={"~[__display__](__id__)"}
+                                style={{
+                                  backgroundColor: "#e6f7ff"
+                                }}
+                              />
+                            </MentionsInput>
+                            {/* <MentionWithAttachments
                               comment={commentContext}
                               addComment={this.addComment}
                               placeholder={this.props.intl.formatMessage({
@@ -479,7 +530,7 @@ class Comments extends Component {
                               onChange={this.onChange}
                               message={this.state.message}
                               addAttachement={this.addAttachementInState}
-                            />
+                            /> */}
                           </div>
 
                           <StyledAddCommentFooter>
@@ -552,34 +603,32 @@ const PostButton = React.memo(({ commentContext, onClick, ...otherProps }) => (
 const Message = React.memo(
   ({ posted_by, created_at, attachment, message, mentions = [] }) => {
     let transformedMessage = message;
-    // Go through each of the mentions, sorted by their lengths
+    // Go through each of the mentions,
     // and find them in message, while wrapping them with anchor
-    // tag. This will also help in not marking any random @ mentions
-    // of groups that are not in the comment context.
-    // So if we have [ABC, ABC Admin] in mentions,
-    // while in text we have something like @DEF, it will stay as text
-    // and won't be turned into a link.
+    // tag.
 
     for (let mention of mentions) {
-      let index = transformedMessage.indexOf("@" + mention);
-      if (index >= 0) {
-        // Preparing a RegEx that satisfies the condition that
-        // It must not have > prefix (i.e. it's already been wrapped with <a> tag)
-        // It must not have < as suffix (same reason as above)
-        // It must start with @, followed by the name of group
-        const rx = new RegExp(`(?!<)(?<!>)@(${mention})`, "gm");
+      const { display, id } = mention;
+      const lookFor = `~\\[[^\\]]*\\]\\(${id}\\)`;
+      const rx = new RegExp(lookFor, "gm");
 
-        // Now we replace all occurrences of that in the message string.
-        transformedMessage = transformedMessage.replace(
-          rx,
-          '<a class="mentions" href="/users/">@$1</a>'
-        );
-      }
+      // Now we replace all occurrences of that in the message string.
+      transformedMessage = transformedMessage.replace(
+        rx,
+        `<a class="mentions" href="/users/">@${display}</a>`
+      );
+      // }
 
       // If we don't have any more @ mentions that are not already
       // taken care of then we can quit the loop.
-      if (!/(?<!>)@/.test(transformedMessage)) break;
+      // if (!/(?<!>)@/.test(transformedMessage)) break;
     }
+
+    // replace non existing tags into normal strings
+    transformedMessage = transformedMessage.replace(
+      new RegExp(`~\\[([^\\]]*)\\]\\((u|g)\\d+\\)`, "gm"),
+      "<strong>@$1</strong>"
+    );
     return (
       <div className="mr-bottom">
         <Avatar size="small" icon="user" style={{ float: "left" }} />
