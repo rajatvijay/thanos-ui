@@ -7,9 +7,11 @@ import { workflowFiltersActions, workflowActions } from "../../../js/actions";
 import { Icon } from "antd";
 import CreateNew from "./CreateNew";
 import { css } from "emotion";
+import styled from "@emotion/styled";
 import { apiBaseURL } from "../../../config";
 import { FormattedMessage, injectIntl } from "react-intl";
 import IntlTooltip from "../../../js/components/common/IntlTooltip";
+import { get as lodashGet } from "lodash";
 
 class Filter extends Component {
   state = {
@@ -138,6 +140,15 @@ class Filter extends Component {
     this.handleModalClose();
   };
 
+  removeAdvFilter = () => {
+    this.props.dispatch(
+      workflowFiltersActions.setFilters({
+        filterType: "answer",
+        filterValue: []
+      })
+    );
+  };
+
   evaluateFilter = () => {
     const { displayfilters } = this.state;
 
@@ -145,20 +156,7 @@ class Filter extends Component {
     if (arr.length) {
       return arr.map(filter => {
         return (
-          <div
-            className={css`
-              color: #ffffff;
-              font-size: 12px;
-              letter-spacing: 0.38px;
-              line-height: 15px;
-              text-align: center;
-              background-color: #000000;
-              margin-left: 6px;
-              padding: 2px 10px;
-              cursor: pointer;
-            `}
-            onClick={this.onClear}
-          >
+          <StyledFilterItem onClick={this.onClear}>
             <span>{filter}</span>
             <span
               className={css`
@@ -167,9 +165,36 @@ class Filter extends Component {
             >
               X
             </span>
-          </div>
+          </StyledFilterItem>
         );
       });
+    }
+  };
+
+  evaluateAdvancedFilter = () => {
+    const filterValue = lodashGet(
+      this.props,
+      "workflowFilters.answer.filterValue",
+      []
+    );
+
+    if (filterValue.length) {
+      const fitler = filterValue[0].split("__").join(" ");
+      return (
+        <StyledFilterItem onClick={this.removeAdvFilter}>
+          <span>{fitler}</span>
+
+          <span
+            className={css`
+              margin-left: 8px;
+            `}
+          >
+            X
+          </span>
+        </StyledFilterItem>
+      );
+    } else {
+      return;
     }
   };
 
@@ -319,6 +344,7 @@ class Filter extends Component {
                   `}
                 >
                   {this.evaluateFilter()}
+                  {this.evaluateAdvancedFilter()}
                 </span>
               </li>
             </ul>
@@ -341,6 +367,18 @@ class Filter extends Component {
     );
   }
 }
+
+const StyledFilterItem = styled.div`
+  color: #ffffff;
+  font-size: 12px;
+  letter-spacing: 0.38px;
+  line-height: 15px;
+  text-align: center;
+  background-color: #000000;
+  margin-left: 6px;
+  padding: 2px 10px;
+  cursor: pointer;
+`;
 
 function mapStateToProps(state) {
   const {
