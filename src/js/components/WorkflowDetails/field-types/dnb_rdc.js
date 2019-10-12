@@ -908,9 +908,14 @@ const GetTable = props => {
 
 const GetTabsFilter = props => {
   // for error
+
   if (
+    _.has(
+      props,
+      "jsonData.SearchComplianceAlertsResponse.TransactionResult.ResultID"
+    ) &&
     props.jsonData.SearchComplianceAlertsResponse.TransactionResult.ResultID !==
-    "PD021"
+      "PD021"
   ) {
     return (
       <div className="text-center text-red">
