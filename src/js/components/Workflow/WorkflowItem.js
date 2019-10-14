@@ -53,7 +53,7 @@ class WorkflowItem extends React.Component {
     }
   };
 
-  setParameter = (selectedStep, selectedGroup) => {
+  setParameter = (selectedGroup, selectedStep) => {
     this.setState({ selectedGroup, selectedStep });
   };
 

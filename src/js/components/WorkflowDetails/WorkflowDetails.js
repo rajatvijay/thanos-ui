@@ -83,7 +83,7 @@ class WorkflowDetails extends Component {
     this.initializeComponent();
   }
 
-  componentDidUpdate(previousProps) {
+  componentDidUpdate(previousProps, previousState) {
     const { currentGroupId, currentStepId } = this.state;
 
     // Auto submit
@@ -123,6 +123,8 @@ class WorkflowDetails extends Component {
       this.initializeComponent();
     }
 
+    // Check if the URL has changed, is do, we may need to update the
+    // current step and group according to the new URL.
     if (
       this.props.location.pathname + this.props.location.search !==
       previousProps.location.pathname + previousProps.location.search
@@ -133,6 +135,19 @@ class WorkflowDetails extends Component {
       if (currentStepId != stepId && currentGroupId != groupId) {
         setTimeout(() => this.scrollElementIntoView(groupId, stepId));
       }
+    }
+
+    // Check if we're in minimal UI, because we need to update the parent
+    // component about the current group and step that we're at. So that
+    // when the user clicks `Expand`, they're redirected to the step that
+    // they were at in the modal view, instead of a default step.
+    if (
+      this.props.minimalUI &&
+      this.props.setParameter &&
+      (previousState.currentGroupId !== currentGroupId ||
+        previousState.currentStepId !== currentStepId)
+    ) {
+      this.props.setParameter(currentGroupId, currentStepId);
     }
   }
 
