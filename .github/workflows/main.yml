@@ -11,4 +11,4 @@ jobs:
     steps:
     - uses: seferov/pr-lint-action@master
       with:
-        title-regex: '^\[VET-(\d)+\] '
+        title-regex: '^\[?VET-(\d+)\]? '
