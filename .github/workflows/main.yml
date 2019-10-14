@@ -1,0 +1,14 @@
+name: PR Lint
+
+on:
+  pull_request:
+    branches:
+    - development
+
+jobs:
+  pr-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: seferov/pr-lint-action@master
+      with:
+        title-regex: '^\[VET-(\d)+\] '
