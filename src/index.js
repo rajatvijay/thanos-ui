@@ -10,14 +10,16 @@ import "antd/dist/antd.css";
 import * as Sentry from "@sentry/browser";
 import { tenant, envTag } from "./config";
 
-Sentry.init({
-  dsn: "https://ff52fd0ac35549418978a4f7aa94c7c7@sentry.io/1382744",
-  environment: envTag
-});
+if (process.env.REACT_APP_DISABLE_SENTRY !== "true") {
+  Sentry.init({
+    dsn: "https://ff52fd0ac35549418978a4f7aa94c7c7@sentry.io/1382744",
+    environment: envTag
+  });
 
-Sentry.configureScope(scope => {
-  scope.setTag("tenant", tenant);
-});
+  Sentry.configureScope(scope => {
+    scope.setTag("tenant", tenant);
+  });
+}
 
 ReactDOM.render(
   <Provider store={store}>
