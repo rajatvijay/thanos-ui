@@ -596,7 +596,7 @@ const Message = React.memo(
     // Generic format regex only checks for the format of the tags,
     // regardless of data.
     const genericFormatRegEx = new RegExp(
-      `~\\[([^\\]]*)\\]\\((u|g)\\d+\\)`,
+      `~\\[([^\\]]*)\\]\\([ug]\\d+\\)`,
       "gm"
     );
 
@@ -615,6 +615,9 @@ const Message = React.memo(
         lookForRegEx,
         `<span class="mentions">@${display}</span>`
       );
+
+      // To make it look from the very beginning, every single time.
+      genericFormatRegEx.lastIndex = 0;
 
       // If we don't have any more @ mentions that are not already
       // taken care of then we can quit the loop.
