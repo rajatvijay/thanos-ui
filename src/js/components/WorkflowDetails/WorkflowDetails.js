@@ -143,11 +143,11 @@ class WorkflowDetails extends Component {
     // they were at in the modal view, instead of a default step.
     if (
       this.props.minimalUI &&
-      this.props.setParameter &&
+      this.props.setCurrentGroupAndStep &&
       (previousState.currentGroupId !== currentGroupId ||
         previousState.currentStepId !== currentStepId)
     ) {
-      this.props.setParameter(currentGroupId, currentStepId);
+      this.props.setCurrentGroupAndStep(currentGroupId, currentStepId);
     }
   }
 
