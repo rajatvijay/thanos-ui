@@ -596,7 +596,7 @@ const Message = React.memo(
     // Generic format regex only checks for the format of the tags,
     // regardless of data.
     const genericFormatRegEx = new RegExp(
-      `~\\[([^\\]]*)\\]\\([ug]\\d+\\)`,
+      `~\\[([^\\]]*)\\]\\((u|g)\\d+\\)`,
       "gm"
     );
 
