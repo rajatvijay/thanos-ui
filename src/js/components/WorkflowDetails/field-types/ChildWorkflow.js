@@ -1378,7 +1378,7 @@ class ChildWorkflowField2 extends Component {
                       {/*STATUS FILTER*/}
                       {field.definition.extra.show_alert_status_filters ? (
                         <FilterComponent
-                          label="Alert Status"
+                          label="Notification Status"
                           filter={this.createAlertStatusFilterTag()}
                         />
                       ) : null}
