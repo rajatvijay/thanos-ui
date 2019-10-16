@@ -35,7 +35,7 @@ test("should not render loader when the data is loaded", () => {
   expect(queryByTestId("loader")).toBeNull();
 });
 
-test("should render 'Alerts' heading when there is atleast one alert", () => {
+test("should render 'Notifications' heading when there is atleast one alert", () => {
   const fakeAlerts = [
     {
       id: 511,
@@ -49,7 +49,7 @@ test("should render 'Alerts' heading when there is atleast one alert", () => {
   const { getByText } = render(
     <AlertList loading={false} alerts={fakeAlerts} />
   );
-  expect(getByText(/alerts/i)).toBeInTheDocument();
+  expect(getByText(/notifications/i)).toBeInTheDocument();
 });
 
 test("should not render 'Alerts' heading when there are no alerts", () => {

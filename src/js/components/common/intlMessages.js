@@ -81,7 +81,7 @@ export default {
     },
     mainSidebar: {
       taskQueuesText: "Task Queues",
-      alertsText: "Alerts",
+      alertsText: "Notifications",
       myTasksText: "My Tasks",
       showAllText: "Show all",
       showLessText: "Show less"
@@ -408,7 +408,7 @@ export default {
   es: {
     mainSidebar: {
       taskQueuesText: "Colas de tareas",
-      alertsText: "Alertas",
+      alertsText: "Notificaciones",
       myTasksText: "Mis tareas",
       showAllText: "Mostrar todo",
       showLessText: "Muestra menos"
@@ -834,7 +834,7 @@ export default {
   "fr-ca": {
     mainSidebar: {
       taskQueuesText: "Files d'attente des tâches",
-      alertsText: "Alertes",
+      alertsText: "Les notifications",
       myTasksText: "Mes tâches",
       showAllText: "Afficher tout",
       showLessText: "Afficher moins"

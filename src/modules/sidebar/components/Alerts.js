@@ -8,14 +8,19 @@ import { css } from "emotion";
 class Alerts extends Component {
   state = { collapsed: false };
 
+  onSelect = (e, subCategory) => {
+    e.stopPropagation();
+    this.props.onSelect(subCategory);
+  };
+
   renderSubCategoryList = () => {
-    const { onSelect, item, selected } = this.props;
+    const { item, selected } = this.props;
 
     if (item.sub_categories) {
       return item.sub_categories.map(subCategory => (
         <StyledAlertSubCategoryListItem
           key={`${subCategory.id}`}
-          onClick={e => onSelect(subCategory)}
+          onClick={e => this.onSelect(e, subCategory)}
           data-testid="alerts-list-item"
           isSelected={subCategory.name === selected}
         >
@@ -30,7 +35,7 @@ class Alerts extends Component {
     return null;
   };
 
-  toggleCollapsible = () => {
+  toggleCollapsible = e => {
     this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
   };
 
@@ -109,4 +114,5 @@ const StyledAlertSubCategoryListItem = styled.li`
   padding: 3px 3px 0px 12px;
   color: white;
   cursor: pointer;
+  align-items: center;
 `;
