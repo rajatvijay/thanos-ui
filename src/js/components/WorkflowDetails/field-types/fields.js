@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { authHeader } from "../../../_helpers";
-import { css } from "emotion";
+
 import {
   Icon,
   Form,
@@ -28,8 +28,6 @@ import { ESign } from "./esign.js";
 import { apiBaseURL, siteOrigin } from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
-import Autocomplete from "react-google-autocomplete";
-import { fieldActions } from "../../../..//modules/fields/actions";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -153,119 +151,6 @@ export const Date = props => {
         onChange={onFieldChange.bind(this, props)}
         value={defaultDate ? moment.utc(defaultAnswer2, "YYYY/MM/DD") : null}
         format={"YYYY-MM-DD"}
-      />
-    </FormItem>
-  );
-};
-
-const getAddressDetail = place => {
-  let addressData = {};
-  place.forEach(detail => {
-    detail.types.forEach(type => {
-      return (addressData[type] = detail.long_name);
-    });
-  });
-
-  const addressUnitValue = () => {
-    const { street_number, route } = addressData;
-    if (street_number && route) {
-      return `${street_number}, ${route}`;
-    } else if (street_number) {
-      return street_number;
-    } else if (route) {
-      return route;
-    } else {
-      return "";
-    }
-  };
-
-  const addressStreetValue = () => {
-    const {
-      sublocality_level_1,
-      sublocality_level_2,
-      sublocality_level_3
-    } = addressData;
-    if (sublocality_level_1 && sublocality_level_2 && sublocality_level_3) {
-      return `${sublocality_level_1}, ${sublocality_level_2}, ${sublocality_level_3}`;
-    } else if (sublocality_level_1 && sublocality_level_2) {
-      return `${sublocality_level_1}, ${sublocality_level_2}`;
-    } else if (sublocality_level_1 && sublocality_level_3) {
-      return `${sublocality_level_1}, ${sublocality_level_3}`;
-    } else if (sublocality_level_2 && sublocality_level_3) {
-      return `${sublocality_level_2}, ${sublocality_level_3}`;
-    } else if (sublocality_level_1) {
-      return sublocality_level_1;
-    } else if (sublocality_level_2) {
-      return sublocality_level_2;
-    } else if (sublocality_level_3) {
-      return sublocality_level_3;
-    } else {
-      return [];
-    }
-  };
-
-  const addressCityValue = () => {
-    const { locality, neighborhood } = addressData;
-    if (locality && neighborhood) {
-      return `${locality}, ${neighborhood}`;
-    } else if (locality) {
-      return locality;
-    } else if (neighborhood) {
-      return neighborhood;
-    } else {
-      return "";
-    }
-  };
-
-  let addressDetail = {
-    Address_Unit: addressUnitValue(),
-    Address_Street: addressStreetValue(),
-    Address_City: addressCityValue(),
-    Address_State: addressData.administrative_area_level_1
-      ? addressData.administrative_area_level_1
-      : "",
-    Address_Country: addressData.country ? addressData.country : "",
-    Address_PostalCode: addressData.postal_code ? addressData.postal_code : ""
-  };
-
-  return addressDetail;
-};
-
-export const GoogleAddress = props => {
-  const defaultAnswer = props.field.answers[0]
-    ? props.field.answers[0].answer
-    : props.field.definition.defaultValue;
-  return (
-    <FormItem
-      label={getLabel(props, this)}
-      className="from-label"
-      style={{ display: "block" }}
-      key={props.field.id}
-      hasFeedback
-      {...field_error(props)}
-    >
-      <Autocomplete
-        onPlaceSelected={place => {
-          props.dispatch(
-            fieldActions.saveResponse({
-              answer: place.formatted_address,
-              fieldId: props.field.id,
-              workflowId: props.workflowId,
-              extraJSON: getAddressDetail(place.address_components)
-            })
-          );
-        }}
-        defaultValue={defaultAnswer}
-        types={[]}
-        className={css`
-          width: 410px;
-          border: none;
-          border-bottom: 1px solid;
-          font-size: 16px;
-          font-weight: 500;
-          padding-top: 6px;
-          padding-bottom: 4px;
-        `}
       />
     </FormItem>
   );

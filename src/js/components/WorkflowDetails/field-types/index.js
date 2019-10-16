@@ -13,10 +13,11 @@ import {
   Attachment,
   File,
   RadioField,
-  IFrameField,
-  GoogleAddress
+  IFrameField
   //Duns
 } from "./fields";
+
+import GoogleAddressAutocomplete from "./GoogleAddressAutocomplete";
 
 import { GroupCheckbox } from "./fields/GroupCheckbox";
 import { Checkbox } from "./fields/Checkbox";
@@ -215,7 +216,7 @@ export const getFieldType = props => {
     case "general_config_3":
       return DnBCommon(props);
     case "google_address_search":
-      return GoogleAddress(props);
+      return <GoogleAddressAutocomplete {...props} />;
     case "workflow_status":
       return DnBCommon(props);
     default:
