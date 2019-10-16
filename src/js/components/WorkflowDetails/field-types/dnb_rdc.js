@@ -855,8 +855,14 @@ const GetTable = props => {
     },
     {
       title: <FormattedMessage id="fields.systemId" />,
-      dataIndex: "AlertEntitySystemID",
-      key: "AlertEntitySystemID"
+      key: "AlertEntitySystemID",
+      render: record => {
+        return (
+          <span style={{ wordBreak: "break-all" }}>
+            {record.AlertEntitySystemID}
+          </span>
+        );
+      }
     },
     {
       title: <FormattedMessage id="workflowsInstances.commentsText" />,
