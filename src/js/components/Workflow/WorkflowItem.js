@@ -53,7 +53,7 @@ class WorkflowItem extends React.Component {
     }
   };
 
-  setParameter = (selectedStep, selectedGroup) => {
+  setCurrentGroupAndStep = (selectedGroup, selectedStep) => {
     this.setState({ selectedGroup, selectedStep });
   };
 
@@ -226,7 +226,7 @@ class WorkflowItem extends React.Component {
                 minimalUI={this.props.minimalUI}
                 closeModal={this.handleCancel}
                 workflowIdFromPropsForModal={this.props.workflow.id}
-                setParameter={this.setParameter}
+                setCurrentGroupAndStep={this.setCurrentGroupAndStep}
                 fieldExtra={this.props.fieldExtra}
               />
             </div>
