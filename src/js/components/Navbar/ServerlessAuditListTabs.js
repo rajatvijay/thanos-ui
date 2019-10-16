@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
+import { Button, Icon, Tabs, Timeline } from "antd";
 import _ from "lodash";
 import { requestOptions } from "../../services/auth-header-auditlog-service";
-import Moment from "react-moment";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
 import download from "downloadjs";
 import { serverlessAPIFetch } from "../../utils/request";
+import { Timestamp } from "./UTCTimestamp";
 
 const TabPane = Tabs.TabPane;
 
@@ -262,9 +262,7 @@ const ActivityLogSimple = ({ item }) => {
       {item.action_type} {item.object_name}
       <br />
       <span className="small text-light">
-        <Tooltip title={moment(item.timestamp.$date).format()}>
-          <Moment fromNow>{item.timestamp.$date}</Moment>
-        </Tooltip>
+        <Timestamp timestamp={item.timestamp.$date} />
       </span>
     </div>
   );
@@ -281,9 +279,7 @@ const ActivityLogEmail = ({ item }) => {
       </a>
       <br />
       <span className="small text-light">
-        <Tooltip title={moment(item.timestamp.$date).format()}>
-          <Moment fromNow>{item.timestamp.$date}</Moment>
-        </Tooltip>
+        <Timestamp timestamp={item.timestamp.$date} />
       </span>
     </p>
   );

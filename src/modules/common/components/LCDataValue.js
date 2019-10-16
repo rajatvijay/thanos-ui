@@ -15,7 +15,7 @@ export const LCDataValue = React.memo(({ value, label, format, isAlert }) => {
   switch (format.toLowerCase()) {
     case "date":
       if (moment(value, moment.ISO_8601).isValid())
-        return <Moment format="MM/DD/YYYY">{value}</Moment>;
+        return <Moment format="YYYY/MM/DD">{value}</Moment>;
       break;
 
     case "pid":

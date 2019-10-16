@@ -483,7 +483,7 @@ const GetAnsweredBy = props => {
           values={{
             name: first_name + " " + last_name,
             email,
-            date: <Moment format="MM/DD/YYYY">{updated_at}</Moment>
+            date: <Moment format="YYYY/MM/DD">{updated_at}</Moment>
           }}
         />
       </span>

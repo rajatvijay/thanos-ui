@@ -23,7 +23,7 @@ function displaySortingKey(workflow) {
   if (obj) {
     if (obj.format === "date") {
       return moment(workflow.sorting_primary_field, moment.ISO_8601).isValid()
-        ? moment(workflow.sorting_primary_field).format("DD/MM/YYYY")
+        ? moment(workflow.sorting_primary_field).format("YYYY/MM/DD")
         : "";
     } else {
       return workflow.sorting_primary_field;

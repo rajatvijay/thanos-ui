@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Button, Icon, Tabs, Timeline, Tooltip } from "antd";
+import { Button, Icon, Tabs, Timeline } from "antd";
 import _ from "lodash";
 import { authHeader } from "../../_helpers";
-import Moment from "react-moment";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroller";
 import PropTypes from "prop-types";
@@ -10,6 +9,7 @@ import download from "downloadjs";
 import { apiBaseURL } from "../../../config";
 import { userUtilities } from "../../utils/user";
 import { injectIntl, FormattedMessage } from "react-intl";
+import { Timestamp } from "./UTCTimestamp";
 
 const TabPane = Tabs.TabPane;
 
@@ -276,14 +276,6 @@ AuditList.propTypes = {
   actions: PropTypes.array.isRequired,
   logType: PropTypes.string.isRequired
 };
-
-const Timestamp = React.memo(({ timestamp }) => (
-  <span className="small text-light">
-    <Tooltip title={moment(new Date(timestamp)).format()}>
-      <Moment fromNow>{timestamp}</Moment>
-    </Tooltip>
-  </span>
-));
 
 const ActivityLogSimple = React.memo(({ item }) => {
   return (

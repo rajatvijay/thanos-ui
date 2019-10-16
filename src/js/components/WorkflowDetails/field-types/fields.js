@@ -152,7 +152,7 @@ export const Date = props => {
         placeholder={props.field.placeholder}
         onChange={onFieldChange.bind(this, props)}
         value={defaultDate ? moment.utc(defaultAnswer2, "YYYY/MM/DD") : null}
-        format={"MM-DD-YYYY"}
+        format={"YYYY-MM-DD"}
       />
     </FormItem>
   );

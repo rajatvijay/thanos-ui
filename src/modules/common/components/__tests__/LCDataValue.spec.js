@@ -65,7 +65,7 @@ test('should render PID with class "t-upr"', () => {
   expect(instance.container.children[0].className).toBe("t-upr");
 });
 
-test("should render date formatted like MM/DD/YYYY", () => {
+test("should render date formatted like YYYY/MM/DD", () => {
   const fakeProps = {
     format: "date",
     value: "2019-08-28T17:03:17.892Z",
@@ -73,11 +73,11 @@ test("should render date formatted like MM/DD/YYYY", () => {
   };
   const instance = render(<LCDataValue {...fakeProps} />);
 
-  expect(instance.queryAllByText("08/28/2019").length).toBe(1);
+  expect(instance.queryAllByText("2019/08/28").length).toBe(1);
   expect(instance.queryAllByText("2019-08-28T17:03:17.892Z").length).toBe(0);
 });
 
-test("should render NOT date formatted like MM/DD/YYYY, instead just like plain text", () => {
+test("should render NOT date formatted like YYYY/MM/DD, instead just like plain text", () => {
   const fakeProps = {
     format: "date",
     value: "Wed Aug 28 2019 22:34:14 GMT+0530",
@@ -85,7 +85,7 @@ test("should render NOT date formatted like MM/DD/YYYY, instead just like plain 
   };
   const instance = render(<LCDataValue {...fakeProps} />);
 
-  expect(instance.queryAllByText("08/28/2019").length).toBe(0);
+  expect(instance.queryAllByText("2019/08/28").length).toBe(0);
   expect(
     instance.queryAllByText("Wed Aug 28 2019 22:34:14 GMT+0530").length
   ).toBe(1);
