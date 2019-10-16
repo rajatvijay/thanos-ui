@@ -281,7 +281,9 @@ class HeaderOptions extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.addComment(objectId, "workflow", "", this.props.fieldExtra);
+    if (!this.isAdjudicateDisabled) {
+      this.props.addComment(objectId, "workflow", "", this.props.fieldExtra);
+    }
   };
 
   toggleWorkflowPDFModal = () => {
@@ -290,6 +292,10 @@ class HeaderOptions extends React.Component {
     }));
   };
 
+  get isAdjudicateDisabled() {
+    return this.props.isCompleted || this.props.isLocked;
+  }
+
   render = () => {
     const props = this.props;
 
@@ -297,7 +303,6 @@ class HeaderOptions extends React.Component {
     if (_.size(props.workflow.selected_flag)) {
       selected_flag = props.workflow.selected_flag[props.workflow.id];
     }
-    const that = this;
     const { workflow } = this.props;
 
     const statusLabel =
@@ -353,9 +358,14 @@ class HeaderOptions extends React.Component {
               >
                 <Tooltip title={adjudicateTooltip}>
                   <span
-                    className="ant-btn ant-btn-primary btn-o btn-sm text-ellipsis"
+                    className={
+                      "ant-btn  btn-o btn-sm text-ellipsis " +
+                      (this.isAdjudicateDisabled
+                        ? "disabled"
+                        : "ant-btn-primary")
+                    }
                     style={{ color: adjBtnColor, borderColor: adjBtnColor }}
-                    onClick={that.getComment.bind(that, props.workflow.id)}
+                    onClick={this.getComment.bind(this, props.workflow.id)}
                   >
                     {adjudicateText}
                   </span>

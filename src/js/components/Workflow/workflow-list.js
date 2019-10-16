@@ -100,8 +100,9 @@ class WorkflowList extends Component {
   };
 
   render() {
+    const props = this.props;
     const that = this;
-    const data = this.props.workflow;
+    const data = props.workflow;
     const currentPage = this.getCurrentPage();
     const groupedWorkflows = this.getGroupedWorkflows(currentPage);
 
@@ -109,26 +110,28 @@ class WorkflowList extends Component {
       const listL = _.map(list, function(item, index) {
         return (
           <WorkflowItem
-            location={that.props.location}
+            location={props.location}
             rank={item.rank}
             workflow={item}
             key={`${index}`}
-            kinds={that.props.workflowKind}
-            dispatch={that.props.dispatch}
-            workflowFilterType={that.props.workflowFilterType}
+            kinds={props.workflowKind}
+            dispatch={props.dispatch}
+            workflowFilterType={props.workflowFilterType}
             onStatusChange={that.onStatusChange}
-            statusView={that.props.statusView}
-            workflowChildren={that.props.workflowChildren}
-            sortingEnabled={that.props.sortingEnabled}
-            showFilterMenu={that.props.showFilterMenu}
-            fieldExtra={that.props.fieldExtra}
-            addComment={that.props.addComment || null}
-            showCommentIcon={that.props.showCommentIcon}
-            isEmbedded={that.props.isEmbedded}
+            statusView={props.statusView}
+            workflowChildren={props.workflowChildren}
+            sortingEnabled={props.sortingEnabled}
+            showFilterMenu={props.showFilterMenu}
+            fieldExtra={props.fieldExtra}
+            addComment={props.addComment || null}
+            showCommentIcon={props.showCommentIcon}
+            isEmbedded={props.isEmbedded}
             expandedWorkflows={that.props.expandedWorkflows}
-            config={that.props.config}
-            bulkActionWorkflowChecked={that.props.bulkActionWorkflowChecked}
-            handleChildWorkflowCheckbox={that.props.handleChildWorkflowCheckbox}
+            config={props.config}
+            bulkActionWorkflowChecked={props.bulkActionWorkflowChecked}
+            handleChildWorkflowCheckbox={props.handleChildWorkflowCheckbox}
+            isCompleted={props.isCompleted}
+            isLocked={props.isCompleted}
           />
         );
       });

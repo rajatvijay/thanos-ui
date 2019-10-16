@@ -1442,6 +1442,8 @@ class ChildWorkflowField2 extends Component {
                   }
                   disableGrouping={true}
                   handleChildWorkflowCheckbox={this.handleChildWorkflowCheckbox}
+                  isCompleted={this.props.stepData.completed_at}
+                  isLocked={this.props.stepData.is_locked}
                 />
               ) : (
                 <div>

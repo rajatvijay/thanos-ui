@@ -259,6 +259,8 @@ class WorkflowItem extends React.Component {
             config={this.props.config}
             bulkActionWorkflowChecked={this.props.bulkActionWorkflowChecked}
             handleChildWorkflowCheckbox={this.props.handleChildWorkflowCheckbox}
+            isCompleted={this.props.isCompleted}
+            isLocked={this.props.isLocked}
           />
 
           <div />
