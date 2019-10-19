@@ -29,7 +29,7 @@ import {
   getAllTaskQueues,
   getAllTaskQueuesSuccess,
   getAllTaskQueuesFailure,
-  setWorkflowFilter,
+  // setWorkflowFilter,
   getWorkflowList,
   getWorkflowListFailure,
   getWorkflowListSuccess,
@@ -40,8 +40,8 @@ import {
   createWorklfowFailure,
   createWorklfowSuccess
 } from "./actionCreators";
-import { getWorkflowFitlersParams } from "./utils";
-import { KIND_FILTER_NAME, REGION_FILTER_NAME } from "./constants";
+// import { getWorkflowFitlersParams } from "./utils";
+// import { KIND_FILTER_NAME, REGION_FILTER_NAME } from "./constants";
 
 export const getStatusesThunk = () => {
   return async dispatch => {
@@ -101,8 +101,9 @@ export const getAllKindsThunk = () => {
       throw error;
     }
 
-    const defaultKind = kinds.results[0];
-    dispatch(applyWorkflowFilterThunk({ field: "kind", value: defaultKind }));
+    // TODO: Move this logic out of this thunk
+    // const defaultKind = kinds.results[0];
+    // dispatch(applyWorkflowFilterThunk({ field: "kind", value: defaultKind }));
     dispatch(getAllKindsSuccess(kinds));
     return kinds;
   };
@@ -140,30 +141,30 @@ export const getAllTaskQueuesThunk = kindTag => {
   };
 };
 
-export function applyWorkflowFilterThunk(filter) {
-  return async (dispatch, getState) => {
-    if (Array.isArray(filter)) {
-      filter.forEach(filt => dispatch(setWorkflowFilter(filt)));
-    } else {
-      dispatch(setWorkflowFilter(filter));
+// export function applyWorkflowFilterThunk(filter) {
+//   return async (dispatch, getState) => {
+//     if (Array.isArray(filter)) {
+//       filter.forEach(filt => dispatch(setWorkflowFilter(filt)));
+//     } else {
+//       dispatch(setWorkflowFilter(filter));
 
-      if (filter.field === KIND_FILTER_NAME) {
-        dispatch(getAllTaskQueuesThunk(filter.value.tag));
-        dispatch(getAllAlertsThunk(filter.value.tag));
-        dispatch(getAdvancedFilterDataThunk(filter.value.tag));
-      }
+//       if (filter.field === KIND_FILTER_NAME) {
+//         dispatch(getAllTaskQueuesThunk(filter.value.tag));
+//         dispatch(getAllAlertsThunk(filter.value.tag));
+//         dispatch(getAdvancedFilterDataThunk(filter.value.tag));
+//       }
 
-      if (filter.field === REGION_FILTER_NAME) {
-        dispatch(getBusinessUnitsThunk(filter.value.value));
-      }
-    }
+//       if (filter.field === REGION_FILTER_NAME) {
+//         dispatch(getBusinessUnitsThunk(filter.value.value));
+//       }
+//     }
 
-    // Call the workflow list API
-    const filtersFromState = getState().workflowList.selectedWorkflowFilters;
-    const filterParams = getWorkflowFitlersParams(filtersFromState);
-    dispatch(getWorkflowListThunk(filterParams));
-  };
-}
+//     // Call the workflow list API
+//     const filtersFromState = getState().workflowList.selectedWorkflowFilters;
+//     const filterParams = getWorkflowFitlersParams(filtersFromState);
+//     dispatch(getWorkflowListThunk(filterParams));
+//   };
+// }
 
 export function getWorkflowListThunk(params) {
   return async dispatch => {

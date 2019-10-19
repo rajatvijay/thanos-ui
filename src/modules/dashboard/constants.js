@@ -13,3 +13,16 @@ export const FIELD_ANSWER_PARAM = "answer";
 
 export const WORKLFOW_ASC_SORT_PARAM = "sorting_primary_field";
 export const WORKLFOW_DESC_SORT_PARAM = "-sorting_primary_field";
+
+export const FILTERS_ENUM = {
+  KIND_FILTER: { key: "kind", name: "KIND_FILTER" },
+  MY_TASK_FILTER: { key: "user-step-tag", name: "MY_TASK_FILTER" },
+  TASK_QUEUE_FILTER: { key: "stepgroupdef", name: "TASK_QUEUE_FILTER" },
+  ALERT_FILTER: { key: "alerts", name: "ALERT_FILTER" },
+  STATUS_FILTER: { key: "status", name: "STATUS_FILTER" },
+  REGION_FILTER: { key: "region", name: "REGION_FILTER" },
+  BUSINESS_UNIT_FILTER: { key: "business_unit", name: "BUSINESS_UNIT_FILTER" },
+  PAGE_FILTER: { key: "page", name: "PAGE_FILTER" },
+  FIELD_ANSWER_FILTER: { key: "answer", name: "FIELD_ANSWER_FILTER" },
+  ORDERING_FILTER: { key: "ordering", name: "ORDERING_FILTER" }
+};

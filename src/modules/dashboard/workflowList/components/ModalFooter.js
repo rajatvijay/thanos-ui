@@ -1,5 +1,5 @@
 import React from "react";
-import FullScreen from "../../../images/fullScreenWhite.svg";
+import FullScreen from "../../../../images/fullScreenWhite.svg";
 import { history } from "../../../../js/_helpers";
 import { FormattedMessage } from "react-intl";
 

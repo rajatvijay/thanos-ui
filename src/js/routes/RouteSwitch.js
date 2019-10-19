@@ -7,7 +7,7 @@ import { GenericNotFound } from "../components/notfound";
 import { LoginPage } from "../components/LoginPage";
 import { MagicLogin } from "../components/LoginPage/MagicLogin";
 import { OTPLogin } from "../components/LoginPage/OTPLogin";
-import Workflow from "../../modules/workflowList/components/index";
+import Dashboard from "../../modules/dashboard";
 import WorkflowDetailsRoot from "../components/WorkflowDetails";
 import { MagicLinkProcess } from "../components/LoginPage/MagicLinkProcess";
 import ReportPage from "../components/ReportPage";
@@ -123,7 +123,11 @@ class RoutSwitch extends React.Component {
           />
         )}
 
-        <PrivateRoute path="/workflows/instances/" exact component={Workflow} />
+        <PrivateRoute
+          path="/workflows/instances/"
+          exact
+          component={Dashboard}
+        />
 
         <PrivateRoute
           path="/workflows/instances/:id?/"

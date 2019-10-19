@@ -4,70 +4,91 @@ import TaskQueueList from "./TaskQueueList";
 import AlertList from "./AlertList";
 import { connect } from "react-redux";
 import { css } from "emotion";
-import { getAllTaskQueuesThunk, applyWorkflowFilterThunk } from "../../thunks";
+import { getAllTaskQueuesThunk } from "../../thunks";
 import { injectIntl } from "react-intl";
 import KindDropdown from "./KindDropdown";
-import {
-  taskQueuesSelector,
-  alertsSelector,
-  selectedAlertsSelector,
-  selectedTaskQueuesSelector,
-  isMyTaskSelectedSelector
-} from "../../selectors";
-import {
-  TASK_QUEUE_FILTER_NAME,
-  MY_TASK_FILTER_NAME,
-  ALERTS_FILTER_NAME
-} from "../../constants";
+import { taskQueuesSelector, alertsSelector } from "../../selectors";
+import { FILTERS_ENUM } from "../../constants";
+import withFilters from "../../filters";
 
 const { Sider } = Layout;
 
 class Sidebar extends Component {
   toggleFilter = field => value => {
-    if (field === TASK_QUEUE_FILTER_NAME) {
-      const { selectedTaskQueues } = this.props;
-      if (selectedTaskQueues && selectedTaskQueues.tag === value.tag) {
+    if (field === FILTERS_ENUM.TASK_QUEUE_FILTER) {
+      console.log("TASK_QUEUE_FILTER", this.selectedTaskQueues);
+      if (
+        this.selectedTaskQueues &&
+        this.selectedTaskQueues.tag === value.tag
+      ) {
         // Remove case
-        this.props.applyWorkflowFilterThunk({ field, value: null });
+        this.props.removeFilters([FILTERS_ENUM.TASK_QUEUE_FILTER.name]);
       } else {
         // Apply case
-        this.props.applyWorkflowFilterThunk({ field, value });
+        this.props.addFilters([
+          {
+            name: FILTERS_ENUM.TASK_QUEUE_FILTER.name,
+            key: FILTERS_ENUM.TASK_QUEUE_FILTER.key,
+            value: value.tag,
+            meta: value
+          }
+        ]);
       }
     }
 
-    if (field === ALERTS_FILTER_NAME) {
-      const { selectedAlerts } = this.props;
-      if (selectedAlerts && selectedAlerts.id === value.id) {
+    if (field === FILTERS_ENUM.ALERT_FILTER) {
+      if (this.selectedAlerts && this.selectedAlerts.id === value.id) {
         // Remove case
-        this.props.applyWorkflowFilterThunk({ field, value: null });
+        this.props.removeFilters([FILTERS_ENUM.ALERT_FILTER.name]);
       } else {
         // Apply case
-        this.props.applyWorkflowFilterThunk({ field, value });
+        this.props.addFilters([
+          {
+            name: FILTERS_ENUM.ALERT_FILTER.name,
+            key: FILTERS_ENUM.ALERT_FILTER.key,
+            value: value.id,
+            meta: value
+          }
+        ]);
       }
     }
 
-    if (field === MY_TASK_FILTER_NAME) {
-      const { isMyTaskSelected } = this.props;
-      if (isMyTaskSelected) {
+    if (field === FILTERS_ENUM.MY_TASK_FILTER) {
+      if (this.isMyTaskSelected) {
         // Remove case
-        this.props.applyWorkflowFilterThunk({ field, value: null });
+        this.props.removeFilters([FILTERS_ENUM.MY_TASK_FILTER.name]);
       } else {
         // Apply case
-        this.props.applyWorkflowFilterThunk({
-          field,
-          value: { value: "Assignee" }
-        });
+        this.props.addFilters([
+          {
+            name: FILTERS_ENUM.MY_TASK_FILTER.name,
+            key: FILTERS_ENUM.MY_TASK_FILTER.key,
+            value: "Assignee",
+            meta: "Assignee"
+          }
+        ]);
       }
     }
   };
 
+  get selectedTaskQueues() {
+    return this.props.getSelectedFilterValue(
+      FILTERS_ENUM.TASK_QUEUE_FILTER.name
+    );
+  }
+
+  get selectedAlerts() {
+    return this.props.getSelectedFilterValue(FILTERS_ENUM.ALERT_FILTER.name);
+  }
+
+  get isMyTaskSelected() {
+    return !!this.props.getSelectedFilterValue(
+      FILTERS_ENUM.MY_TASK_FILTER.name
+    );
+  }
+
   render() {
-    const {
-      taskQueues,
-      alerts,
-      selectedTaskQueues,
-      isMyTaskSelected
-    } = this.props;
+    const { taskQueues, alerts } = this.props;
 
     return (
       <Sider
@@ -105,18 +126,18 @@ class Sidebar extends Component {
             `}
           >
             <TaskQueueList
-              activeTaskQueue={selectedTaskQueues}
+              activeTaskQueue={this.selectedTaskQueues}
               taskQueues={taskQueues.data}
               loading={taskQueues.isLoading}
-              onClick={this.toggleFilter(TASK_QUEUE_FILTER_NAME)}
-              onClickMyTask={this.toggleFilter(MY_TASK_FILTER_NAME)}
-              isMyTaskSelected={isMyTaskSelected}
+              onClick={this.toggleFilter(FILTERS_ENUM.TASK_QUEUE_FILTER)}
+              onClickMyTask={this.toggleFilter(FILTERS_ENUM.MY_TASK_FILTER)}
+              isMyTaskSelected={this.isMyTaskSelected}
             />
 
             <AlertList
               alerts={alerts.data}
               loading={alerts.isLoading}
-              onClick={this.toggleFilter(ALERTS_FILTER_NAME)}
+              onClick={this.toggleFilter(FILTERS_ENUM.ALERT_FILTER)}
             />
           </div>
         </div>
@@ -128,14 +149,11 @@ class Sidebar extends Component {
 function mapStateToProps(state) {
   return {
     taskQueues: taskQueuesSelector(state),
-    alerts: alertsSelector(state),
-    selectedAlerts: selectedAlertsSelector(state),
-    selectedTaskQueues: selectedTaskQueuesSelector(state),
-    isMyTaskSelected: isMyTaskSelectedSelector(state)
+    alerts: alertsSelector(state)
   };
 }
 
 export default connect(
   mapStateToProps,
-  { getAllTaskQueuesThunk, applyWorkflowFilterThunk }
-)(injectIntl(Sidebar));
+  { getAllTaskQueuesThunk }
+)(injectIntl(withFilters(Sidebar)));

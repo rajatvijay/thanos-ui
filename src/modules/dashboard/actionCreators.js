@@ -19,7 +19,8 @@ import {
   GET_ALL_TASK_QUEUES_SUCCESS,
   GET_ALL_TASK_QUEUES_FAILURE,
   SET_WORKFLOW_FILTER,
-  REMOVE_WORKFLOW_FILTER,
+  SET_MULTIPLE_WORKFLOW_FILTERS,
+  REMOVE_WORKFLOW_FILTERS,
   GET_WORKFLOW_LIST,
   GET_WORKFLOW_LIST_SUCCESS,
   GET_WORKFLOW_LIST_FAILURE,
@@ -72,7 +73,10 @@ export const getAllTaskQueuesFailure = makeActionCreator(
 );
 
 export const setWorkflowFilter = makeActionCreator(SET_WORKFLOW_FILTER);
-export const removeWorkflowFilter = makeActionCreator(REMOVE_WORKFLOW_FILTER);
+export const setMultipleWorkflowFilters = makeActionCreator(
+  SET_MULTIPLE_WORKFLOW_FILTERS
+);
+export const removeWorkflowFilter = makeActionCreator(REMOVE_WORKFLOW_FILTERS);
 
 export const getWorkflowList = makeActionCreator(GET_WORKFLOW_LIST);
 export const getWorkflowListSuccess = makeActionCreator(

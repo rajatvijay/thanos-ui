@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { HeaderLcData, GetMergedData } from "./WorkflowHeader";
-import FullScreen from "../../../images/fullScreenBlack.svg";
+import FullScreen from "../../../../images/fullScreenBlack.svg";
 import { history } from "../../../../js/_helpers";
 import WorkflowBreadcrums from "../../../workflows/sidebar/components/Breadcrums";
 import { get as lodashGet } from "lodash";

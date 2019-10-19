@@ -24,7 +24,9 @@ import {
   GET_WORKFLOW_LIST_FAILURE,
   GET_ADVANCED_FILTER_DATA,
   GET_ADVANCED_FILTER_DATA_SUCCESS,
-  GET_ADVANCED_FILTER_DATA_FAILURE
+  GET_ADVANCED_FILTER_DATA_FAILURE,
+  REMOVE_WORKFLOW_FILTERS,
+  SET_MULTIPLE_WORKFLOW_FILTERS
 } from "./actions";
 import { INITIAL_STATE } from "./initialState";
 
@@ -237,7 +239,26 @@ export function selectedWorkflowFilters(
     case SET_WORKFLOW_FILTER:
       return {
         ...state,
-        [payload.field]: payload.value
+        [payload.name]: payload
+      };
+    case REMOVE_WORKFLOW_FILTERS:
+      const oldFilters = { ...state };
+      delete oldFilters[payload];
+      return {
+        ...oldFilters
+      };
+    // Having this action directly,
+    // instead of using the single one in loop
+    // will optimize the rendering part
+    // since wonr
+    case SET_MULTIPLE_WORKFLOW_FILTERS:
+      const newFilters = payload.reduce(
+        (filterState, filter) => ({ ...filterState, [filter.name]: filter }),
+        {}
+      );
+      return {
+        ...state,
+        ...newFilters
       };
     default:
       return state;

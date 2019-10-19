@@ -5,40 +5,53 @@ import { css } from "emotion";
 import styled from "@emotion/styled";
 import { injectIntl } from "react-intl";
 import { getIntlBody } from "../../../../js/_helpers/intl-helpers";
-import { getAllKindsThunk, applyWorkflowFilterThunk } from "../../thunks";
-import {
-  kindsSelector,
-  selectedKindSelector,
-  selectedFieldAnswerSelector
-} from "../../selectors";
+import { kindsSelector } from "../../selectors";
+import withFilters from "../../filters";
+import { FILTERS_ENUM } from "../../constants";
 
 class KindDropdown extends Component {
   handleSelectedKind = kind => {
-    this.props.applyWorkflowFilterThunk({ field: "kind", value: kind });
+    this.props.addFilters([
+      {
+        name: FILTERS_ENUM.KIND_FILTER.name,
+        value: kind.id,
+        key: FILTERS_ENUM.KIND_FILTER.key,
+        meta: kind
+      }
+    ]);
+    this.props.removeFilters([FILTERS_ENUM.FIELD_ANSWER_FILTER.name]);
   };
 
   handleSelectedFieldAnswer = (kind, fieldTag, fieldAnswer) => {
-    this.props.applyWorkflowFilterThunk({ field: "kind", value: kind });
-    this.props.applyWorkflowFilterThunk({
-      field: "answer",
-      value: {
-        fieldTag,
-        fieldAnswer,
-        value: `${fieldTag.tag}__eq__${fieldAnswer.value}`
+    this.props.addFilters([
+      {
+        name: FILTERS_ENUM.KIND_FILTER.name,
+        value: kind.id,
+        key: FILTERS_ENUM.KIND_FILTER.key,
+        meta: kind
+      },
+      {
+        name: FILTERS_ENUM.FIELD_ANSWER_FILTER.name,
+        key: FILTERS_ENUM.FIELD_ANSWER_FILTER.key,
+        value: `${fieldTag.tag}__eq__${fieldAnswer.value}`,
+        meta: fieldAnswer
       }
-    });
+    ]);
   };
 
   isFieldAnswerSelected = fieldAnswer => {
-    const { selectedFieldAnswer } = this.props;
     return (
-      selectedFieldAnswer && selectedFieldAnswer.value === fieldAnswer.value
+      this.selectedFieldAnswer &&
+      this.selectedFieldAnswer.value === fieldAnswer.value
     );
   };
 
   isKindSelected = kind => {
-    const { selectedKind, selectedFieldAnswer } = this.props;
-    return selectedKind && selectedKind.id === kind.id && !selectedFieldAnswer;
+    return (
+      this.selectedKind &&
+      this.selectedKind.id === kind.id &&
+      !this.selectedFieldAnswer
+    );
   };
 
   // TODO: Fix this
@@ -46,20 +59,28 @@ class KindDropdown extends Component {
   // the above expression has its display name
   // sometimes in the `name` key and sometimes in the `body` key
   getSelectedKindNameKey = () => {
-    const { selectedKind } = this.props;
-    return selectedKind.body ? "body" : "name";
+    return this.selectedKind.body ? "body" : "name";
   };
+
+  get selectedKind() {
+    return this.props.getSelectedFilterValue(FILTERS_ENUM.KIND_FILTER.name);
+  }
+
+  get selectedFieldAnswer() {
+    return this.props.getSelectedFilterValue(
+      FILTERS_ENUM.FIELD_ANSWER_FILTER.name
+    );
+  }
 
   // All render methods
   renderSelectedItem = () => {
-    const { selectedKind, selectedFieldAnswer } = this.props;
     return (
       <StyledSelectedItemContianer>
-        {selectedKind ? (
+        {this.selectedKind ? (
           <>
             <div>
-              {getIntlBody(selectedKind, this.getSelectedKindNameKey())}
-              {selectedFieldAnswer && this.renderSelectedFieldAnswer()}
+              {getIntlBody(this.selectedKind, this.getSelectedKindNameKey())}
+              {this.selectedFieldAnswer && this.renderSelectedFieldAnswer()}
             </div>
             <Icon type="down" />
           </>
@@ -71,7 +92,6 @@ class KindDropdown extends Component {
   };
 
   renderSelectedFieldAnswer = () => {
-    const { selectedFieldAnswer } = this.props;
     return (
       <span
         className={css`
@@ -82,7 +102,7 @@ class KindDropdown extends Component {
           color: rgb(255, 255, 255, 0.5);
         `}
       >
-        {selectedFieldAnswer.label}
+        {this.selectedFieldAnswer.label}
       </span>
     );
   };
@@ -171,16 +191,11 @@ class KindDropdown extends Component {
 
 function mapStateToProps(state) {
   return {
-    workflowKinds: kindsSelector(state),
-    selectedKind: selectedKindSelector(state),
-    selectedFieldAnswer: selectedFieldAnswerSelector(state)
+    workflowKinds: kindsSelector(state)
   };
 }
 
-export default connect(
-  mapStateToProps,
-  { getAllKindsThunk, applyWorkflowFilterThunk }
-)(injectIntl(KindDropdown));
+export default connect(mapStateToProps)(injectIntl(withFilters(KindDropdown)));
 
 // ================================================================================ //
 // ================================================================================ //

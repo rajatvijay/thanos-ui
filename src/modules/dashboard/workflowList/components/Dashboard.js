@@ -4,19 +4,20 @@ import Sidebar from "../../sidebar";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
 import Permissions from "../../../common/permissions/permissionsList";
 import { css } from "emotion";
-import WorkflowToolbar from "../../workflowToolbar";
+// import WorkflowToolbar from "../../workflowToolbar";
 import WorkflowList from "./WorkflowList";
 import { connect } from "react-redux";
 import {
-  applyWorkflowFilterThunk,
   getStatusesThunk,
   getRegionsThunk,
   getBusinessUnitsThunk,
   getAllKindsThunk
 } from "../../thunks";
+import withFilters from "../../filters";
+import { FILTERS_ENUM } from "../../constants";
 
-class Workflow extends Component {
-  componentDidMount = () => {
+class Dashboard extends Component {
+  componentDidMount = async () => {
     // TODO: Apply the filters from URL
     //     const {location} = this.props;
     //     const urlParams = new URLSearchParams(location.search);
@@ -24,7 +25,15 @@ class Workflow extends Component {
     this.props.getStatusesThunk();
     this.props.getRegionsThunk();
     this.props.getBusinessUnitsThunk();
-    this.props.getAllKindsThunk();
+    const { results: kinds } = await this.props.getAllKindsThunk();
+    this.props.addFilters([
+      {
+        name: FILTERS_ENUM.KIND_FILTER.name,
+        key: FILTERS_ENUM.KIND_FILTER.key,
+        value: kinds[0].id,
+        meta: kinds[0]
+      }
+    ]);
   };
 
   get notAllowedMessage() {
@@ -59,7 +68,7 @@ class Workflow extends Component {
               background-color: #fafafa;
             `}
           >
-            <WorkflowToolbar />
+            {/* <WorkflowToolbar /> */}
             <WorkflowList />
           </div>
         </div>
@@ -71,10 +80,9 @@ class Workflow extends Component {
 export default connect(
   null,
   {
-    applyWorkflowFilterThunk,
     getStatusesThunk,
     getRegionsThunk,
     getBusinessUnitsThunk,
     getAllKindsThunk
   }
-)(injectIntl(Workflow));
+)(injectIntl(withFilters(Dashboard)));

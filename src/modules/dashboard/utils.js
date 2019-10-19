@@ -1,62 +1,62 @@
-import {
-  MY_TASK_FILTER_NAME,
-  STATUS_FILTER_NAME,
-  REGION_FILTER_NAME,
-  BUSINESS_UNIT_FILTER_NAME,
-  TASK_QUEUE_FILTER_NAME,
-  ALERTS_FILTER_NAME,
-  KIND_FILTER_NAME,
-  PRIMARY_KEY_SORTING_FILTER_NAME,
-  PAGE_FILTER_NAME,
-  FIELD_ANSWER_PARAM
-} from "./constants";
-import { get as lodashGet } from "lodash";
+// import {
+//   MY_TASK_FILTER_NAME,
+//   STATUS_FILTER_NAME,
+//   REGION_FILTER_NAME,
+//   BUSINESS_UNIT_FILTER_NAME,
+//   TASK_QUEUE_FILTER_NAME,
+//   ALERTS_FILTER_NAME,
+//   KIND_FILTER_NAME,
+//   PRIMARY_KEY_SORTING_FILTER_NAME,
+//   PAGE_FILTER_NAME,
+//   FIELD_ANSWER_PARAM
+// } from "./constants";
+// import { get as lodashGet } from "lodash";
 
 // TODO: Tree shake
 import moment from "moment";
 
-export const getWorkflowFitlersParams = filtersFromState => {
-  const queryParamsFromState = createParamsFromSelectedFilters(
-    filtersFromState
-  );
+// export const getWorkflowFitlersParams = filtersFromState => {
+//   const queryParamsFromState = createParamsFromSelectedFilters(
+//     filtersFromState
+//   );
 
-  // This is super a bad hack
-  // But a quick win over doing a lot of minor fixes and refactoring
-  // Doing this specifically for VET-5267
-  // Description: Remove the kind filter in case of my task
-  // In case of any questions, please contact rajat@thevetted.com
-  if (queryParamsFromState[MY_TASK_FILTER_NAME]) {
-    delete queryParamsFromState[KIND_FILTER_NAME];
-  }
+//   // This is super a bad hack
+//   // But a quick win over doing a lot of minor fixes and refactoring
+//   // Doing this specifically for VET-5267
+//   // Description: Remove the kind filter in case of my task
+//   // In case of any questions, please contact rajat@thevetted.com
+//   if (queryParamsFromState[MY_TASK_FILTER_NAME]) {
+//     delete queryParamsFromState[KIND_FILTER_NAME];
+//   }
 
-  // To remove the undefined values
-  return JSON.parse(JSON.stringify(queryParamsFromState));
-};
+//   // To remove the undefined values
+//   return JSON.parse(JSON.stringify(queryParamsFromState));
+// };
 
-const FILTER_SELECTOR = {
-  [MY_TASK_FILTER_NAME]: ["value", undefined],
-  [STATUS_FILTER_NAME]: ["value", undefined],
-  [REGION_FILTER_NAME]: ["value", undefined],
-  [BUSINESS_UNIT_FILTER_NAME]: ["value", undefined],
-  [TASK_QUEUE_FILTER_NAME]: ["tag", undefined],
-  [ALERTS_FILTER_NAME]: ["tag", undefined],
-  [KIND_FILTER_NAME]: ["id", undefined],
-  [PRIMARY_KEY_SORTING_FILTER_NAME]: ["value", undefined],
-  [PAGE_FILTER_NAME]: ["value", undefined],
-  [FIELD_ANSWER_PARAM]: ["value", undefined]
-};
+// const FILTER_SELECTOR = {
+//   [MY_TASK_FILTER_NAME]: ["value", undefined],
+//   [STATUS_FILTER_NAME]: ["value", undefined],
+//   [REGION_FILTER_NAME]: ["value", undefined],
+//   [BUSINESS_UNIT_FILTER_NAME]: ["value", undefined],
+//   [TASK_QUEUE_FILTER_NAME]: ["tag", undefined],
+//   [ALERTS_FILTER_NAME]: ["tag", undefined],
+//   [KIND_FILTER_NAME]: ["id", undefined],
+//   [PRIMARY_KEY_SORTING_FILTER_NAME]: ["value", undefined],
+//   [PAGE_FILTER_NAME]: ["value", undefined],
+//   [FIELD_ANSWER_PARAM]: ["value", undefined]
+// };
 
-const createParamsFromSelectedFilters = filters => {
-  const params = {};
+// const createParamsFromSelectedFilters = filters => {
+//   const params = {};
 
-  for (let filterName in filters) {
-    const selector = FILTER_SELECTOR[filterName];
-    const filterValue = filters[filterName];
-    params[filterName] = lodashGet(filterValue, selector[0], selector[1]);
-  }
+//   for (let filterName in filters) {
+//     const selector = FILTER_SELECTOR[filterName];
+//     const filterValue = filters[filterName];
+//     params[filterName] = lodashGet(filterValue, selector[0], selector[1]);
+//   }
 
-  return params;
-};
+//   return params;
+// };
 
 export const getOccurrenceDay = occurrence => {
   const today = moment().startOf("day");

@@ -1,13 +1,11 @@
 import { createSelector } from "reselect";
 import { get as lodashGet, groupBy } from "lodash";
 import {
-  TASK_QUEUE_FILTER_NAME,
-  ALERTS_FILTER_NAME,
-  MY_TASK_FILTER_NAME,
   STATUS_FILTER_NAME,
   REGION_FILTER_NAME,
   BUSINESS_UNIT_FILTER_NAME,
-  PRIMARY_KEY_SORTING_FILTER_NAME
+  PRIMARY_KEY_SORTING_FILTER_NAME,
+  FILTERS_ENUM
 } from "./constants";
 import { getOccurrenceDay } from "./utils";
 
@@ -111,12 +109,20 @@ export const selectedFieldAnswerSelector = state =>
 export const taskQueuesSelector = state => state.workflowList.taskQueues;
 export const alertsSelector = state => state.workflowList.alerts;
 
-export const selectedTaskQueuesSelector = state =>
-  state.workflowList.selectedWorkflowFilters[TASK_QUEUE_FILTER_NAME];
-export const selectedAlertsSelector = state =>
-  state.workflowList.selectedWorkflowFilters[ALERTS_FILTER_NAME];
+export const selectedTaskQueuesSelector = state => {
+  lodashGet(
+    state,
+    `workflowList.selectedWorkflowFilters[${FILTERS_ENUM.TASK_QUEUE_FILTER}].meta`
+  );
+};
+export const selectedAlertsSelector = state => {
+  lodashGet(
+    state,
+    `workflowList.selectedWorkflowFilters[${FILTERS_ENUM.ALERT_FILTER}].meta`
+  );
+};
 export const isMyTaskSelectedSelector = state =>
-  !!state.workflowList.selectedWorkflowFilters[MY_TASK_FILTER_NAME];
+  !!state.workflowList.selectedWorkflowFilters[FILTERS_ENUM.MY_TASK_FILTER];
 
 export const regionPlaceholderSelector = state => {
   return lodashGet(

@@ -7,20 +7,24 @@ import {
   groupedWorkflowsSelector
 } from "../../selectors";
 import { css } from "emotion";
-import { applyWorkflowFilterThunk } from "../../thunks";
-import { PAGE_FILTER_NAME } from "../../constants";
+import { FILTERS_ENUM } from "../../constants";
 import { FormattedMessage } from "react-intl";
 import { Icon, Pagination } from "antd";
+import withFilters from "../../filters";
 
 // Hard coding
 const PAGE_SIZE = 20;
 
 class WorkflowList extends Component {
   handlePageChange = page => {
-    this.props.applyWorkflowFilterThunk({
-      field: PAGE_FILTER_NAME,
-      value: { value: page }
-    });
+    this.props.addFilters([
+      {
+        name: FILTERS_ENUM.PAGE_FILTER.name,
+        key: FILTERS_ENUM.PAGE_FILTER.key,
+        value: page,
+        meta: page
+      }
+    ]);
   };
   renderWorflowItem = workflow => {
     const { isSortingEnabled } = this.props;
@@ -103,7 +107,4 @@ const mapStateToProps = state => ({
   workflowGroups: groupedWorkflowsSelector(state)
 });
 
-export default connect(
-  mapStateToProps,
-  { applyWorkflowFilterThunk }
-)(WorkflowList);
+export default connect(mapStateToProps)(withFilters(WorkflowList));
