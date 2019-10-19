@@ -84,8 +84,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "sh validate-commit-msg.sh"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
