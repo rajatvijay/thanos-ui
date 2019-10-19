@@ -214,6 +214,7 @@ const StyledListContainer = styled.ul`
   list-style-type: none;
   padding: 0;
   width: 300px;
+  position: fixed;
 `;
 
 const StyledRelativeLi = styled.li`
