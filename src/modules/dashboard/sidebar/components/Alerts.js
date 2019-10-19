@@ -6,23 +6,37 @@ import styled from "@emotion/styled";
 import { css } from "emotion";
 
 class Alerts extends Component {
-  state = { collapsed: false };
+  state = { open: false };
 
-  onSelect = (e, subCategory) => {
+  handleClick = (e, subCategory) => {
     e.stopPropagation();
-    this.props.onSelect(subCategory);
+    this.props.onClick({
+      ...subCategory,
+      // Adding parent id to help identify parent easily
+      parentId: this.props.item.id
+    });
+  };
+
+  isSelectedAlert = () => {
+    const { selectedAlert, item } = this.props;
+    return selectedAlert && selectedAlert.parentId === item.id;
+  };
+
+  isSelectedSubCategory = subCategory => {
+    const { selectedAlert } = this.props;
+    return selectedAlert && selectedAlert.id === subCategory.id;
   };
 
   renderSubCategoryList = () => {
-    const { onClick, item, selected } = this.props;
+    const { item } = this.props;
 
     if (item.sub_categories) {
       return item.sub_categories.map(subCategory => (
         <StyledAlertSubCategoryListItem
           key={`${subCategory.id}`}
-          onClick={e => onClick(subCategory)}
+          onClick={e => this.handleClick(e, subCategory)}
           data-testid="alerts-list-item"
-          isSelected={subCategory.name === selected}
+          isSelected={this.isSelectedSubCategory(subCategory)}
         >
           <span>{subCategory.name}</span>
           <CountWidget
@@ -36,16 +50,17 @@ class Alerts extends Component {
   };
 
   toggleCollapsible = e => {
-    this.setState(({ collapsed }) => ({ collapsed: !collapsed }));
+    this.setState(({ open }) => ({ open: !open }));
   };
 
   render() {
-    const { collapsed } = this.state;
+    const { open } = this.state;
     const { item } = this.props;
     return (
       <StyledAlertListItem
-        collapsed={collapsed}
+        open={open}
         onClick={this.toggleCollapsible}
+        highlight={!open && this.isSelectedAlert()}
       >
         <div
           className={css`
@@ -60,7 +75,7 @@ class Alerts extends Component {
                 color: white;
               `}
               type="caret-right"
-              rotate={collapsed ? 90 : 0}
+              rotate={open ? 90 : 0}
             />
             <span
               className={css`
@@ -76,7 +91,7 @@ class Alerts extends Component {
           )}
         </div>
 
-        <Collapsible open={collapsed}>
+        <Collapsible open={open}>
           <ul
             className={css`
               padding: 0;
@@ -93,8 +108,9 @@ class Alerts extends Component {
 export default Alerts;
 
 const StyledAlertListItem = styled.li`
-  padding-bottom: ${({ collapsed }) => (collapsed ? 30 : 0)};
-  background-color: ${({ collapsed }) => (collapsed ? "#093050" : "#104775")};
+  padding-bottom: ${({ open }) => (open ? 30 : 0)};
+  background-color: ${({ open, highlight }) =>
+    highlight ? "#1489D2" : open ? "#093050" : "#104775"};
   transition-duration: 150ms;
   border-top: 1px solid rgba(0, 0, 0, 0.3);
   padding: 10px 20px;

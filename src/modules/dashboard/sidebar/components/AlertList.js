@@ -6,22 +6,20 @@ import Alerts from "./Alerts";
 import { FormattedMessage } from "react-intl";
 
 class AlertList extends Component {
-  state = { selected: null };
-
   handleClick = alert => {
     this.props.onClick(alert);
   };
 
   renderList = () => {
-    const { alerts, loading } = this.props;
+    const { alerts, loading, selectedAlert } = this.props;
     return alerts.map(item => {
       return (
         <Alerts
           key={`alert_${item.id}`}
           loading={loading}
-          selected={this.state.selected}
           onClick={this.handleClick}
           item={item}
+          selectedAlert={selectedAlert}
         />
       );
     });

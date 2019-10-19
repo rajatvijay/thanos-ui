@@ -7,6 +7,8 @@ import { workflowCountSelector } from "../../selectors";
 import WorkflowSorter from "./WorkflowSorter";
 import CreateNew from "./CreateNew";
 import withFilters from "../../filters";
+import { FILTERS_ENUM } from "../../constants";
+import styled from "@emotion/styled";
 
 class WorkflowToolbar extends Component {
   state = {
@@ -17,6 +19,15 @@ class WorkflowToolbar extends Component {
       isFilterPopupVisible: !isFilterPopupVisible
     }));
   };
+  handleRemoveBasicFilter = filterName => {
+    this.props.removeFilters([filterName]);
+  };
+  get selectedAdvancedFilter() {
+    return this.props.getSelectedFilterValue(
+      FILTERS_ENUM.ADVANCED_FILTER.name,
+      "value"
+    );
+  }
   render() {
     const { isFilterPopupVisible } = this.state;
     const { selectedBasicWorkflowFilters, workflowCount } = this.props;
@@ -63,7 +74,14 @@ class WorkflowToolbar extends Component {
                   <Icon style={{ marginLeft: 5, fontSize: 10 }} type="down" />
                 )}
               </span>
-              <SelectedBasicFilters filters={selectedBasicWorkflowFilters} />
+              <SelectedBasicFilters
+                basicFilters={selectedBasicWorkflowFilters}
+                onRemove={this.handleRemoveBasicFilter}
+                advancedFilter={{
+                  name: FILTERS_ENUM.ADVANCED_FILTER.name,
+                  value: this.selectedAdvancedFilter
+                }}
+              />
             </div>
           </div>
           <CreateNew />
@@ -84,21 +102,45 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(withFilters(WorkflowToolbar));
 
-function SelectedBasicFilters({ filters }) {
-  const filterKeys = Object.keys(filters);
-  return filterKeys.map(filterName => (
-    <span
-      className={css`
-        font-size: 12px;
-        margin: 0 5px;
-        background: #ddd;
-        color: black;
-        padding: 2px 5px;
-        border-radius: 5px;
-      `}
-      key={filterName}
-    >
-      {filterName}: {filters[filterName]}
-    </span>
-  ));
+function SelectedBasicFilters({ basicFilters, onRemove, advancedFilter }) {
+  return (
+    <>
+      {basicFilters.map(
+        filter =>
+          filter.value && (
+            <StyledSelectedFilterDisplayer key={filter.name}>
+              {filter.label}: {filter.value}
+              <StyledSelectedFilterCross onClick={e => onRemove(filter.name)}>
+                &#10005;
+              </StyledSelectedFilterCross>
+            </StyledSelectedFilterDisplayer>
+          )
+      )}
+      {advancedFilter.value && (
+        <StyledSelectedFilterDisplayer>
+          {advancedFilter.value.replace(/__/g, " ").replace(/_/g, " ")}
+          <StyledSelectedFilterCross
+            onClick={e => onRemove(advancedFilter.name)}
+          >
+            &#10005;
+          </StyledSelectedFilterCross>
+        </StyledSelectedFilterDisplayer>
+      )}
+    </>
+  );
 }
+
+const StyledSelectedFilterDisplayer = styled.span`
+  font-size: 12px;
+  margin: 0 5px;
+  background: #ddd;
+  color: black;
+  padding: 4px 8px;
+  border-radius: 5px;
+  letter-spacing: 0.4px;
+`;
+
+const StyledSelectedFilterCross = styled.span`
+  margin-left: 5px;
+  cursor: pointer;
+`;

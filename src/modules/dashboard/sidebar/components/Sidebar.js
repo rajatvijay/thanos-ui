@@ -37,7 +37,7 @@ class Sidebar extends Component {
     }
 
     if (field === FILTERS_ENUM.ALERT_FILTER) {
-      if (this.selectedAlerts && this.selectedAlerts.id === value.id) {
+      if (this.selectedAlert && this.selectedAlert.id === value.id) {
         // Remove case
         this.props.removeFilters([FILTERS_ENUM.ALERT_FILTER.name]);
       } else {
@@ -77,7 +77,7 @@ class Sidebar extends Component {
     );
   }
 
-  get selectedAlerts() {
+  get selectedAlert() {
     return this.props.getSelectedFilterValue(FILTERS_ENUM.ALERT_FILTER.name);
   }
 
@@ -138,6 +138,7 @@ class Sidebar extends Component {
               alerts={alerts.data}
               loading={alerts.isLoading}
               onClick={this.toggleFilter(FILTERS_ENUM.ALERT_FILTER)}
+              selectedAlert={this.selectedAlert}
             />
           </div>
         </div>

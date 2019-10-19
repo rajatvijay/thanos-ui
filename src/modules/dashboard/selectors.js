@@ -65,22 +65,32 @@ export const selectedBusinessUnitSelector = state => {
 };
 
 export const selectedBasicFiltersSelector = state => {
-  return JSON.parse(
-    JSON.stringify({
-      status: lodashGet(
+  return [
+    {
+      label: "status",
+      name: FILTERS_ENUM.STATUS_FILTER.name,
+      value: lodashGet(
         state,
-        `workflowList.selectedWorkflowFilters[${STATUS_FILTER_NAME}].label`
-      ),
-      region: lodashGet(
-        state,
-        `workflowList.selectedWorkflowFilters[${REGION_FILTER_NAME}].label`
-      ),
-      businessUnit: lodashGet(
-        state,
-        `workflowList.selectedWorkflowFilters[${BUSINESS_UNIT_FILTER_NAME}].label`
+        `workflowList.selectedWorkflowFilters[${FILTERS_ENUM.STATUS_FILTER.name}].meta.label`
       )
-    })
-  );
+    },
+    {
+      label: "region",
+      name: FILTERS_ENUM.REGION_FILTER.name,
+      value: lodashGet(
+        state,
+        `workflowList.selectedWorkflowFilters[${FILTERS_ENUM.REGION_FILTER.name}].meta.label`
+      )
+    },
+    {
+      label: "businessUnit",
+      name: FILTERS_ENUM.BUSINESS_UNIT_FILTER.name,
+      value: lodashGet(
+        state,
+        `workflowList.selectedWorkflowFilters[${FILTERS_ENUM.BUSINESS_UNIT_FILTER.name}].meta.label`
+      )
+    }
+  ];
 };
 
 export const kindsSelector = state => state.workflowList.kinds;

@@ -80,6 +80,7 @@
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",
     "react-app-rewired": "^2.1.3",
+    "storybook-chromatic": "^3.0.3",
     "webpack-deadcode-plugin": "^0.1.11"
   },
   "husky": {

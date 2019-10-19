@@ -60,10 +60,6 @@ class WorkflowFitlers extends Component {
     });
   };
 
-  componentDidUpdate(prevProps) {
-    console.log(prevProps);
-  }
-
   validateFitlerData = filters => {
     filters.forEach(filter => {
       if (!filter.name) {
@@ -110,17 +106,6 @@ class WorkflowFitlers extends Component {
     return filter ? filter[key] : null;
   };
 
-  // storing it as class prop, so that we don't have
-  // to make a new prop obj whenever render is called
-  filterProps = {
-    addFilters: this.addFilters,
-    removeFilters: this.removeFilters,
-    removeAllFilters: this.removeAllFilters,
-    selectedFilters: this.props.selectedWorkflowFilters,
-    getSelectedFilterValue: this.getSelectedFilterValue,
-    selectedBasicWorkflowFilters: this.props.selectedBasicWorkflowFilters
-  };
-
   render() {
     const { children } = this.props;
     if (!React.isValidElement(children)) {
@@ -130,8 +115,16 @@ class WorkflowFitlers extends Component {
       return null;
     }
 
+    const filterProps = {
+      addFilters: this.addFilters,
+      removeFilters: this.removeFilters,
+      removeAllFilters: this.removeAllFilters,
+      selectedFilters: this.props.selectedWorkflowFilters,
+      getSelectedFilterValue: this.getSelectedFilterValue,
+      selectedBasicWorkflowFilters: this.props.selectedBasicWorkflowFilters
+    };
     const childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, this.filterProps)
+      React.cloneElement(child, filterProps)
     );
 
     return <div>{childrenWithProps}</div>;

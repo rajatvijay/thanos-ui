@@ -90,23 +90,35 @@ class FilterPopup extends Component {
   }
 
   get selectedStatus() {
-    return this.props.getSelectedFilterValue(
-      FILTERS_ENUM.STATUS_FILTER.name,
-      "value"
+    // getSelectedFilterValue returns null, in case of no value,
+    // but that makes the placeholder go invisible;
+    return (
+      this.props.getSelectedFilterValue(
+        FILTERS_ENUM.STATUS_FILTER.name,
+        "value"
+      ) || undefined
     );
   }
 
   get selectedRegion() {
-    return this.props.getSelectedFilterValue(
-      FILTERS_ENUM.REGION_FILTER.name,
-      "value"
+    // getSelectedFilterValue returns null, in case of no value,
+    // but that makes the placeholder go invisible;
+    return (
+      this.props.getSelectedFilterValue(
+        FILTERS_ENUM.REGION_FILTER.name,
+        "value"
+      ) || undefined
     );
   }
 
   get selectedBusinessUnit() {
-    return this.props.getSelectedFilterValue(
-      FILTERS_ENUM.BUSINESS_UNIT_FILTER.name,
-      "value"
+    // getSelectedFilterValue returns null, in case of no value,
+    // but that makes the placeholder go invisible;
+    return (
+      this.props.getSelectedFilterValue(
+        FILTERS_ENUM.BUSINESS_UNIT_FILTER.name,
+        "value"
+      ) || undefined
     );
   }
 
