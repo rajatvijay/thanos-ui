@@ -35,6 +35,9 @@ import isStepPrinting from "./stepPrinting";
 // New module pattern
 import { workflowList } from "../../modules/workflowList";
 
+// New module pattern
+// import { workflowList } from "../../modules/workflowList";
+
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
   authentication,
