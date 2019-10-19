@@ -24,5 +24,6 @@ export const FILTERS_ENUM = {
   BUSINESS_UNIT_FILTER: { key: "business_unit", name: "BUSINESS_UNIT_FILTER" },
   PAGE_FILTER: { key: "page", name: "PAGE_FILTER" },
   FIELD_ANSWER_FILTER: { key: "answer", name: "FIELD_ANSWER_FILTER" },
+  ADVANCED_FILTER: { key: "answer", name: "ADVANCED_FILTER" },
   ORDERING_FILTER: { key: "ordering", name: "ORDERING_FILTER" }
 };

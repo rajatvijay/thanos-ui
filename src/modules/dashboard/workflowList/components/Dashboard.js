@@ -4,7 +4,7 @@ import Sidebar from "../../sidebar";
 import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
 import Permissions from "../../../common/permissions/permissionsList";
 import { css } from "emotion";
-// import WorkflowToolbar from "../../workflowToolbar";
+import WorkflowToolbar from "../../workflowToolbar";
 import WorkflowList from "./WorkflowList";
 import { connect } from "react-redux";
 import {
@@ -68,7 +68,7 @@ class Dashboard extends Component {
               background-color: #fafafa;
             `}
           >
-            {/* <WorkflowToolbar /> */}
+            <WorkflowToolbar />
             <WorkflowList />
           </div>
         </div>

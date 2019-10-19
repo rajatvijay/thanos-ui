@@ -1,43 +1,50 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { applyWorkflowFilterThunk } from "../../thunks";
-import {
-  selectedKindSelector,
-  selectedSortingOrderSelector,
-  isWorkflowSortingEnabledSelector
-} from "../../selectors";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { Icon } from "antd";
 import { css } from "emotion";
-import { PRIMARY_KEY_SORTING_FILTER_NAME } from "../../constants";
+import { FILTERS_ENUM } from "../../constants";
 import {
   WORKLFOW_ASC_SORT_PARAM,
   WORKLFOW_DESC_SORT_PARAM
 } from "../../constants";
+import withFilters from "../../filters";
+import lodashGet from "lodash/get";
 
 class WorkflowSorter extends Component {
   handleSorting = () => {
-    const { sortingOrder } = this.props;
-    switch (sortingOrder) {
+    switch (this.sortingOrder) {
       case WORKLFOW_ASC_SORT_PARAM:
-        return this.props.applyWorkflowFilterThunk({
-          field: PRIMARY_KEY_SORTING_FILTER_NAME,
-          value: { value: WORKLFOW_DESC_SORT_PARAM }
-        });
+        return this.props.addFilters([
+          {
+            name: FILTERS_ENUM.ORDERING_FILTER.name,
+            key: FILTERS_ENUM.ORDERING_FILTER.key,
+            value: WORKLFOW_DESC_SORT_PARAM,
+            meta: WORKLFOW_DESC_SORT_PARAM
+          }
+        ]);
       case WORKLFOW_DESC_SORT_PARAM:
-        return this.props.applyWorkflowFilterThunk({
-          field: PRIMARY_KEY_SORTING_FILTER_NAME,
-          value: null
-        });
+        return this.props.removeFilters([FILTERS_ENUM.ORDERING_FILTER.name]);
       default:
-        return this.props.applyWorkflowFilterThunk({
-          field: PRIMARY_KEY_SORTING_FILTER_NAME,
-          value: { value: WORKLFOW_ASC_SORT_PARAM }
-        });
+        return this.props.addFilters([
+          {
+            name: FILTERS_ENUM.ORDERING_FILTER.name,
+            key: FILTERS_ENUM.ORDERING_FILTER.key,
+            value: WORKLFOW_ASC_SORT_PARAM,
+            meta: WORKLFOW_ASC_SORT_PARAM
+          }
+        ]);
     }
   };
+  get sortingOrder() {
+    return this.props.getSelectedFilterValue(FILTERS_ENUM.ORDERING_FILTER.name);
+  }
+  get selectedKind() {
+    return this.props.getSelectedFilterValue(FILTERS_ENUM.KIND_FILTER.name);
+  }
+  get isSortingEnabled() {
+    return lodashGet(this.selectedKind, "is_sorting_field_enabled", false);
+  }
   getSortingIcon = () => {
-    const { sortingOrder } = this.props;
     return {
       [WORKLFOW_ASC_SORT_PARAM]: (
         <Icon
@@ -53,12 +60,10 @@ class WorkflowSorter extends Component {
           type="down"
         />
       )
-    }[sortingOrder];
+    }[this.sortingOrder];
   };
   render() {
-    const { selectedKind, sortingOrder, isSortingEnabled } = this.props;
-
-    if (!selectedKind || !isSortingEnabled) {
+    if (!this.selectedKind || !this.isSortingEnabled) {
       return null;
     }
 
@@ -66,7 +71,7 @@ class WorkflowSorter extends Component {
       <span
         className={css`
           cursor: pointer;
-          color: ${sortingOrder ? "black" : "inherit"};
+          color: ${this.sortingOrder ? "black" : "inherit"};
         `}
         onClick={this.handleSorting}
       >
@@ -77,13 +82,4 @@ class WorkflowSorter extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  selectedKind: selectedKindSelector(state),
-  sortingOrder: selectedSortingOrderSelector(state),
-  isSortingEnabled: isWorkflowSortingEnabledSelector(state)
-});
-
-export default connect(
-  mapStateToProps,
-  { applyWorkflowFilterThunk }
-)(injectIntl(WorkflowSorter));
+export default injectIntl(withFilters(WorkflowSorter));

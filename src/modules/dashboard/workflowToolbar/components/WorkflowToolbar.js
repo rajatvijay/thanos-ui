@@ -3,12 +3,10 @@ import { Icon } from "antd";
 import FilterPopup from "./FilterPopup";
 import { connect } from "react-redux";
 import { css } from "emotion";
-import {
-  selectedBasicFiltersSelector,
-  workflowCountSelector
-} from "../../selectors";
+import { workflowCountSelector } from "../../selectors";
 import WorkflowSorter from "./WorkflowSorter";
 import CreateNew from "./CreateNew";
+import withFilters from "../../filters";
 
 class WorkflowToolbar extends Component {
   state = {
@@ -80,12 +78,11 @@ class WorkflowToolbar extends Component {
 
 const mapStateToProps = state => {
   return {
-    selectedBasicWorkflowFilters: selectedBasicFiltersSelector(state),
     workflowCount: workflowCountSelector(state)
   };
 };
 
-export default connect(mapStateToProps)(WorkflowToolbar);
+export default connect(mapStateToProps)(withFilters(WorkflowToolbar));
 
 function SelectedBasicFilters({ filters }) {
   const filterKeys = Object.keys(filters);

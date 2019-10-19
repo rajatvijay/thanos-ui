@@ -13,6 +13,7 @@ import {
   removeWorkflowFilter
 } from "../../actionCreators";
 import { FILTERS_ENUM } from "../../constants";
+import { selectedBasicFiltersSelector } from "../../selectors";
 
 class WorkflowFitlers extends Component {
   // TODO: Add docs
@@ -104,9 +105,9 @@ class WorkflowFitlers extends Component {
     this.addFilters([], true);
   };
 
-  getSelectedFilterValue = filterName => {
+  getSelectedFilterValue = (filterName, key = "meta") => {
     const filter = this.props.selectedWorkflowFilters[filterName];
-    return filter ? filter.meta : null;
+    return filter ? filter[key] : null;
   };
 
   // storing it as class prop, so that we don't have
@@ -116,7 +117,8 @@ class WorkflowFitlers extends Component {
     removeFilters: this.removeFilters,
     removeAllFilters: this.removeAllFilters,
     selectedFilters: this.props.selectedWorkflowFilters,
-    getSelectedFilterValue: this.getSelectedFilterValue
+    getSelectedFilterValue: this.getSelectedFilterValue,
+    selectedBasicWorkflowFilters: this.props.selectedBasicWorkflowFilters
   };
 
   render() {
@@ -136,8 +138,9 @@ class WorkflowFitlers extends Component {
   }
 }
 
-const mapStateToProps = ({ workflowList }) => ({
-  selectedWorkflowFilters: workflowList.selectedWorkflowFilters
+const mapStateToProps = state => ({
+  selectedWorkflowFilters: state.workflowList.selectedWorkflowFilters,
+  selectedBasicWorkflowFilters: selectedBasicFiltersSelector(state)
 });
 
 const WrappedWorkflowFitlers = connect(
