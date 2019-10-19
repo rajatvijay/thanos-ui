@@ -10,6 +10,7 @@ import withFilters from "../../filters";
 import { FILTERS_ENUM } from "../../constants";
 
 class KindDropdown extends Component {
+  root = React.createRef();
   handleSelectedKind = kind => {
     this.props.addFilters([
       {
@@ -182,9 +183,18 @@ class KindDropdown extends Component {
 
     // The main component :smile:
     return (
-      <Dropdown trigger={["click"]} overlay={this.renderDropdownList()}>
-        {this.renderSelectedItem()}
-      </Dropdown>
+      <div ref={this.root}>
+        <Dropdown
+          // Making it relative to the parent/root div
+          // to maintain positions when scrolling
+          getPopupContainer={() => this.root.current}
+          trigger={["click"]}
+          placement="bottomCenter"
+          overlay={this.renderDropdownList()}
+        >
+          {this.renderSelectedItem()}
+        </Dropdown>
+      </div>
     );
   }
 }
