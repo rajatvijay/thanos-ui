@@ -45,10 +45,11 @@ class WorkflowToolbar extends Component {
           <div
             className={css`
               display: flex;
-              justify-content: space-between;
               color: rgba(0, 0, 0, 0.3);
               text-transform: uppercase;
               font-size: 13px;
+              align-items: center;
+              flex: 1;
 
               > span {
                 margin-right: 40px;
@@ -59,21 +60,28 @@ class WorkflowToolbar extends Component {
             <span>
               <WorkflowSorter />
             </span>
-            <div>
-              <span
-                className={css`
-                  cursor: pointer;
-                  user-select: none;
-                `}
-                onClick={this.toggleFilterPopup}
-              >
-                Filter
-                {isFilterPopupVisible ? (
-                  <Icon style={{ marginLeft: 5, fontSize: 10 }} type="up" />
-                ) : (
-                  <Icon style={{ marginLeft: 5, fontSize: 10 }} type="down" />
-                )}
-              </span>
+            <span
+              className={css`
+                cursor: pointer;
+                user-select: none;
+              `}
+              onClick={this.toggleFilterPopup}
+            >
+              Filter
+              {isFilterPopupVisible ? (
+                <Icon style={{ marginLeft: 5, fontSize: 10 }} type="up" />
+              ) : (
+                <Icon style={{ marginLeft: 5, fontSize: 10 }} type="down" />
+              )}
+            </span>
+            <div
+              className={css`
+                display: flex;
+                flex-wrap: wrap;
+                flex: 1;
+                flex-basis: 50%;
+              `}
+            >
               <SelectedBasicFilters
                 basicFilters={selectedBasicWorkflowFilters}
                 onRemove={this.handleRemoveBasicFilter}
@@ -138,6 +146,7 @@ const StyledSelectedFilterDisplayer = styled.span`
   padding: 4px 8px;
   border-radius: 5px;
   letter-spacing: 0.4px;
+  margin-bottom: 5px;
 `;
 
 const StyledSelectedFilterCross = styled.span`
