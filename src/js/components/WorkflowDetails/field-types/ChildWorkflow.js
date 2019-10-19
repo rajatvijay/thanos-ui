@@ -19,7 +19,7 @@ import _, { get as lodashGet } from "lodash";
 import { commonFunctions } from "./commons";
 import { workflowKindActions, createWorkflow } from "../../../actions";
 import { injectIntl, FormattedMessage } from "react-intl";
-import WorkflowList from "../../../../modules/dashboard/workflowList/components/workflow-list";
+import WorkflowList from "../../Workflow/workflow-list";
 import WrappedBulkActionFields from "./BulkActionFields";
 import { apiBaseURL } from "../../../../config";
 import { Pagination } from "antd";
@@ -106,7 +106,7 @@ class VTag extends PureComponent {
 
 const requestOptions = {
   method: "GET",
-  headers: authHeader.get(),
+  // headers: authHeader.get(),
   credentials: "include"
 };
 

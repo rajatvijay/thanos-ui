@@ -6,7 +6,7 @@ import _ from "lodash";
 import { commonFunctions } from "./commons";
 import { dunsFieldActions, workflowDetailsActions } from "../../../actions";
 import { apiBaseURL } from "../../../../config";
-import WorkflowList from "../../../../modules/dashboard/workflowList/components/workflow-list";
+import WorkflowList from "../../Workflow/workflow-list";
 import { Pagination } from "antd";
 import { FormattedMessage } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
@@ -17,7 +17,7 @@ const { getIntegrationSearchButton } = commonFunctions;
 
 const requestOptions = {
   method: "GET",
-  headers: authHeader.get(),
+  // headers: authHeader.get(),
   credentials: "include"
 };
 

@@ -1,198 +1,261 @@
-// import React from "react";
-// import { Modal } from "antd";
-// import { connect } from "react-redux";
-// import {
-//   createWorkflow,
-//   workflowActions,
-//   toggleMinimalUI
-// } from "../../../../js/actions";
-// import _ from "lodash";
-// import { WorkflowHeader } from "./WorkflowHeader";
-// import WorkflowDetails from "../../../../js/components/WorkflowDetails";
-// import ModalHeader from "./ModalHeader";
-// import ModalFooter from "./ModalFooter";
-// import { withRouter } from "react-router-dom";
+import React, { Component } from "react";
+import { css } from "emotion";
+import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
+import { Popover, Tooltip } from "antd";
+import { LCDataValue } from "../../../common/components/LCDataValue";
 
-// class WorkflowItem extends React.Component {
-//   state = {
-//     // TODO: Opened what? Better naming
-//     opened: false,
-//     // TODO: Visible what? Better naming
-//     visible: false,
-//     selectedStep: null,
-//     selectedGroup: null
-//   };
+/**
+ * TODO: P0
+ * [] Alerts from lc data? exmaple?
+ * [] Tooltip for alerts
+ * [] Link for alerts
+ * [] Modularize this file => move components out of this file
+ * [] Refactor some of the components
+ * [] Display Risk ranking
+ * [x] Grouping of workflows
+ * [] Show modal on click
+ * [] Positioning of quick multiple views
+ */
 
-//   setParameter = (selectedStep, selectedGroup) => {
-//     this.setState({ selectedGroup, selectedStep });
-//   };
+const WorkflowItem = ({ onClick, workflow, showSortingValue }) => {
+  const secondNormalLCData = workflow.lc_data.filter(
+    data => data.display_type === "normal"
+  )[1];
+  const status = workflow.status.label || workflow.status.kind_display;
+  return (
+    <div
+      onClick={e => onClick(workflow.id)}
+      className={css`
+        display: flex;
+        padding: 0 20px;
+        border-bottom: 1px solid #9797;
+        cursor: pointer;
+        align-items: center;
+        min-height: 60px;
+      `}
+    >
+      <div
+        className={css`
+          width: 20%;
+        `}
+      >
+        <WorkflowTitle
+          name={workflow.name}
+          family={workflow.family}
+          showBreadcrums={true}
+        />
+      </div>
 
-//   showModal = id => {
-//     if (!this.props.minimalUI) this.props.toggleMinimalUI();
+      <div
+        className={css`
+          width: 40%;
+        `}
+      >
+        <WorkflowAlerts alerts={workflow.alerts} />
+      </div>
 
-//     this.setState({
-//       visible: true,
-//       workflowId: id
-//     });
+      {secondNormalLCData && (
+        <div
+          className={css`
+            width: 20%;
+          `}
+        >
+          {secondNormalLCData && <WorkflowLCData data={secondNormalLCData} />}
+        </div>
+      )}
 
-//     // TODO: Move this to the redux layer
-//     this.addToOpenModalList();
-//   };
+      {showSortingValue && (
+        <div
+          className={css`
+            width: 10%;
+            text-align: right;
+          `}
+        >
+          <StyledSortingValue>{workflow.rank}</StyledSortingValue>
+        </div>
+      )}
 
-//   // TODO: Move this to the redux layer
-//   addToOpenModalList = () => {
-//     const { list } = this.props.expandedWorkflows;
+      <div
+        className={css`
+          width: 20%;
+          text-align: right;
+        `}
+      >
+        <WorkflowStatus status={status} />
+      </div>
+    </div>
+  );
+};
 
-//     if (!list.find(item => item.id === this.props.workflow.id)) {
-//       list.push(this.props.workflow);
-//       this.props.dispatch(workflowActions.expandedWorkflowsList(list));
-//     }
-//   };
+export default WorkflowItem;
 
-//   // TODO: Move this to the redux layer
-//   removeFromOpenModalList = () => {
-//     const { list } = this.props.expandedWorkflows;
-//     const index = list.indexOf(this.props.workflow);
+const WorkflowTitle = ({ name, family, showBreadcrums }) => {
+  if (!showBreadcrums || family.length === 1) {
+    return <StyledWorkflowName title={name}>{name}</StyledWorkflowName>;
+  }
 
-//     if (index > -1) {
-//       list.splice(index, 1);
-//       this.props.dispatch(workflowActions.expandedWorkflowsList(list));
-//     }
-//   };
+  if (family.length === 2) {
+    return (
+      <StyledWorkflowName title={family[0].name}>
+        <StyledWorkflowLink to={"/workflows/instances/" + family[0].id}>
+          {family[0].name}
+        </StyledWorkflowLink>{" "}
+        / {family[1].name}
+      </StyledWorkflowName>
+    );
+  }
 
-//   // TODO: Expanded workflow list is used to show cascading position of the modal
-//   // when more than one modal are open at the same time
-//   calcTopPos = () => {
-//     const { list } = this.props.expandedWorkflows;
-//     const index = list.indexOf(this.props.workflow);
-//     const style = {
-//       left: "21vw",
-//       margin: 0,
-//       top: "calc((100vh - 600px) / 2)"
-//     };
+  return (
+    <Popover content={<WorkflowBreadcrums family={family} />}>
+      <StyledWorkflowName>
+        <StyledWorkflowLink to={"/workflows/instances/" + family[0].id}>
+          {family[0].name}
+        </StyledWorkflowLink>
+        <span style={{ color: "#b5b5b5" }}> /... / </span>
+        {name}
+      </StyledWorkflowName>
+    </Popover>
+  );
+};
 
-//     if (index > -1) {
-//       const topPosition = (600 - index * 120).toString() + "px";
-//       style.top = `calc((100vh - ${topPosition}) / 2)`;
-//     }
+const WorkflowBreadcrums = ({ family }) => {
+  return family.map((member, index) => (
+    <React.Fragment key={member.id}>
+      <Link style={{ color: "black" }} to={"/workflows/instances/" + member.id}>
+        {" "}
+        {member.name}
+      </Link>
+      <span> /</span>
+    </React.Fragment>
+  ));
+};
 
-//     return style;
-//   };
+// TODO: Optimize it later
+// Can be create a HOC for show more and show less functionality, with mnarkup as render prop
+class WorkflowAlerts extends Component {
+  state = {
+    showingMore: false
+  };
+  toggleShowingMore = () => {
+    this.setState(({ showingMore }) => ({ showingMore: !showingMore }));
+  };
+  renderAlerts = () => {
+    const { alerts } = this.props;
+    const { showingMore } = this.state;
+    if (!showingMore) {
+      return alerts
+        .slice(0, 2) // Showing only the first two alerts
+        .map(alert => <WorkflowAlertItem alert={alert} />);
+    }
 
-//   handleOk = e => {
-//     this.setState({
-//       visible: false
-//     });
-//     this.removeFromOpenModalList();
-//   };
+    // Showing all alerts
+    return alerts.map(alert => <WorkflowAlertItem alert={alert} />);
+  };
+  renderShowIcon = () => {
+    const { showingMore } = this.state;
+    const { alerts } = this.props;
+    return (
+      <span
+        className={css`
+          background-color: #ddd;
+          color: black;
+          font-size: 13px;
+          border-radius: 10px;
+          padding: 2px 8px;
+          white-space: nowrap;
+        `}
+        onClick={this.toggleShowingMore}
+      >
+        {showingMore ? "-" : "+"}
+        {alerts.length - 2} {/** Showing only the count of extra alert */}
+      </span>
+    );
+  };
+  render() {
+    const { alerts } = this.props;
+    return (
+      <div
+        className={css`
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+        `}
+      >
+        {this.renderAlerts()}
+        {alerts.length > 2 && this.renderShowIcon()}
+      </div>
+    );
+  }
+}
 
-//   handleCancel = e => {
-//     this.props.toggleMinimalUI();
-//     this.setState({
-//       visible: false
-//     });
-//     this.removeFromOpenModalList();
-//   };
+const WorkflowAlertItem = ({ alert }) => (
+  <StyledAlertName color={alert.alert.category.color_label}>
+    {alert.alert.tag}
+  </StyledAlertName>
+);
 
-//   render = () => {
-//     const { workflow } = this.props;
-//     const { statusType } = this.props.workflowFilterType;
-//     const hasChildren = this.props.workflow.children_count !== 0;
+const WorkflowLCData = ({ data }) => (
+  <Tooltip
+    title={
+      <span>
+        {!!data.value && `${data.label}: `}
+        <LCDataValue
+          label={data.label}
+          value={data.value}
+          format={data.format}
+        />
+      </span>
+    }
+  >
+    <StyledLCData>
+      {data.showLabel && `${data.label}: `}
+      <LCDataValue label={data.label} value={data.value} format={data.format} />
+    </StyledLCData>
+  </Tooltip>
+);
 
-//     return (
-//       <div
-//         // TODO: What is this class doing?
-//         className={
-//           "paper workflow-list-item " +
-//           (this.state.opened
-//             ? " opened"
-//             : null + hasChildren
-//             ? " has-children "
-//             : null)
-//         }
-//       >
-//         <div>
-//           <Modal
-//             style={this.calcTopPos()}
-//             footer={null}
-//             bodyStyle={{ padding: 0, maxHeight: 600 }}
-//             width="77vw"
-//             destroyOnClose={true}
-//             visible={this.state.visible}
-//             onOk={this.handleOk}
-//             onCancel={this.handleCancel}
-//             className="workflow-modal"
-//           >
-//             <ModalHeader
-//               workflow={workflow}
-//               stepId={this.state.selectedStep}
-//               groupId={this.state.selectedGroup}
-//               toggleMinimalUI={this.props.toggleMinimalUI}
-//             />
-//             <div style={{ maxHeight: 600, overflowY: "scroll" }}>
-//               <WorkflowDetails
-//                 workflowItem={this.props.workflow}
-//                 location={this.props.location}
-//                 minimalUI={this.props.minimalUI}
-//                 closeModal={this.handleCancel}
-//                 workflowIdFromPropsForModal={this.props.workflow.id}
-//                 setCurrentGroupAndStep={this.setCurrentGroupAndStep}
-//                 fieldExtra={this.props.fieldExtra}
-//               />
-//             </div>
+const WorkflowStatus = ({ status }) => (
+  <Tooltip title={status}>
+    <StyledStatus>
+      <span>{status}</span>
+    </StyledStatus>
+  </Tooltip>
+);
 
-//             <ModalFooter
-//               workflowIdFromPropsForModal={this.props.workflow.id}
-//               stepId={this.state.selectedStep}
-//               groupId={this.state.selectedGroup}
-//               toggleMinimalUI={this.props.toggleMinimalUI}
-//             />
-//           </Modal>
+const StyledStatus = styled.span`
+  font-size: 12px;
+`;
 
-//           {/* TODO: Pass only the required props */}
-//           <WorkflowHeader
-//             visibleModal={this.state.modal}
-//             showModal={this.showModal}
-//             isEmbedded={this.props.isEmbedded}
-//             sortingEnabled={this.props.sortingEnabled}
-//             rank={this.props.rank}
-//             workflow={this.props.workflow}
-//             statusType={statusType}
-//             kind={this.props.kinds}
-//             onStatusChange={this.props.onStatusChange}
-//             dispatch={this.props.dispatch}
-//             statusView={this.props.statusView}
-//             hasChildren={hasChildren}
-//             fieldExtra={this.props.fieldExtra}
-//             addComment={this.props.addComment || null}
-//             showCommentIcon={this.props.showCommentIcon}
-//             isExpanded={this.state.opened}
-//             config={this.props.config}
-//             bulkActionWorkflowChecked={this.props.bulkActionWorkflowChecked}
-//             handleChildWorkflowCheckbox={this.props.handleChildWorkflowCheckbox}
-//             isCompleted={this.props.isCompleted}
-//             isLocked={this.props.isLocked}
-//           />
+const StyledLCData = styled.span`
+  opacity: 0.5;
+  font-size: 14px;
+`;
 
-//           <div />
-//         </div>
-//       </div>
-//     );
-//   };
-// }
+const StyledSortingValue = styled.span``;
 
-// function mapPropsToState(state) {
-//   const { workflowChildren, expandedWorkflows, minimalUI } = state;
-//   return {
-//     workflowChildren,
-//     expandedWorkflows,
-//     minimalUI
-//   };
-// }
+const StyledAlertName = styled.span`
+  word-break: break-word;
+  white-space: nowrap;
+  color: white;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  margin-right: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  background-color: ${props => props.color};
+`;
 
-// export default withRouter(
-//   connect(
-//     mapPropsToState,
-//     { toggleMinimalUI }
-//   )(WorkflowItem)
-// );
+const StyledWorkflowName = styled.span`
+  font-size: 20px;
+  color: black;
+`;
+
+const StyledWorkflowLink = styled(Link)`
+  color: #b5b5b5;
+  &:hover {
+    color: black;
+  }
+`;

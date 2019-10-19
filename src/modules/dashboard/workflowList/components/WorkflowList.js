@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import WorkflowItem from "./WorkflowItem2";
+import WorkflowItem from "./WorkflowItem";
 import {
   isWorkflowSortingEnabledSelector,
   workflowListCountSelector,
@@ -11,11 +11,22 @@ import { FILTERS_ENUM } from "../../constants";
 import { FormattedMessage } from "react-intl";
 import { Icon, Pagination } from "antd";
 import withFilters from "../../filters";
+import WorkflowDetailsModal from "./WorkflowDetailsModal";
 
 // Hard coding
 const PAGE_SIZE = 20;
 
 class WorkflowList extends Component {
+  state = {
+    workflowDetailsModalVisible: false
+  };
+
+  closeWorkflowDetailsModalVisible = () =>
+    this.setState({ workflowDetailsModalVisible: false });
+
+  openWorkflowDetailsModalVisible = () =>
+    this.setState({ workflowDetailsModalVisible: true });
+
   handlePageChange = page => {
     this.props.addFilters([
       {
@@ -26,22 +37,31 @@ class WorkflowList extends Component {
       }
     ]);
   };
+
+  handleWorkflowClick = workflow => e => {
+    this.setState({
+      currentWorkflow: workflow
+    });
+    this.openWorkflowDetailsModalVisible();
+  };
+
   renderWorflowItem = workflow => {
     const { isSortingEnabled } = this.props;
     return (
       <WorkflowItem
         showSortingValue={isSortingEnabled}
         workflow={workflow}
-        // TODO: Add function
-        onClick={() => {}}
+        onClick={this.handleWorkflowClick(workflow)}
       />
     );
   };
+
   renderWorkflows = workflowGoups => {
     return Object.keys(workflowGoups).map(groupTitle => (
       <div
         className={css`
           padding-top: 40px;
+          margin-bottom: 40px;
 
           > span {
             font-size: 13px;
@@ -63,6 +83,7 @@ class WorkflowList extends Component {
       </div>
     ));
   };
+
   renderLoader = () => {
     return (
       <div
@@ -76,11 +97,18 @@ class WorkflowList extends Component {
       </div>
     );
   };
+
   render() {
     const { isLoading, workflowGroups, workflowCount } = this.props;
+    const { workflowDetailsModalVisible, currentWorkflow } = this.state;
 
     return (
       <div>
+        <WorkflowDetailsModal
+          visible={workflowDetailsModalVisible}
+          workflow={currentWorkflow}
+          close={this.closeWorkflowDetailsModalVisible}
+        />
         {isLoading ? this.renderLoader() : this.renderWorkflows(workflowGroups)}
         <div>
           {workflowCount > 1 && (
