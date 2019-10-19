@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import _ from "lodash";
 import { Row, Col, Tooltip, Checkbox, Popover } from "antd";
-import { LCDataValue } from "../../common/components/LCDataValue";
+import { LCDataValue } from "../../../common/components/LCDataValue";
 import { css } from "emotion";
 import styled from "@emotion/styled";
 

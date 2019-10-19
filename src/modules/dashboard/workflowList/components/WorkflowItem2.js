@@ -3,7 +3,7 @@ import { css } from "emotion";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import { Popover, Tooltip } from "antd";
-import { LCDataValue } from "../../common/components/LCDataValue";
+import { LCDataValue } from "../../../common/components/LCDataValue";
 
 /**
  * TODO: P0

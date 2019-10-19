@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import Sidebar from "../sidebar/components/Sidebar";
-import { Chowkidaar } from "../../common/permissions/Chowkidaar";
-import Permissions from "../../common/permissions/permissionsList";
+import Sidebar from "../../sidebar";
+import { Chowkidaar } from "../../../common/permissions/Chowkidaar";
+import Permissions from "../../../common/permissions/permissionsList";
 import { css } from "emotion";
-import WorkflowToolbar from "../filters/components/WorkflowToolbar";
+import WorkflowToolbar from "../../workflowToolbar";
 import WorkflowList from "./WorkflowList";
 import { connect } from "react-redux";
 import {
@@ -13,7 +13,7 @@ import {
   getRegionsThunk,
   getBusinessUnitsThunk,
   getAllKindsThunk
-} from "../thunks";
+} from "../../thunks";
 
 class Workflow extends Component {
   componentDidMount = () => {

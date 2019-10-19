@@ -33,7 +33,7 @@ import { extraFilters } from "./extraFilters";
 import isStepPrinting from "./stepPrinting";
 
 // New module pattern
-import { workflowList } from "../../modules/workflowList";
+import { workflowList } from "../../modules/dashboard";
 
 // New module pattern
 // import { workflowList } from "../../modules/workflowList";

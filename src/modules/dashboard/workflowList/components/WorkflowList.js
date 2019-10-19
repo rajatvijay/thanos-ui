@@ -5,10 +5,10 @@ import {
   isWorkflowSortingEnabledSelector,
   workflowListCountSelector,
   groupedWorkflowsSelector
-} from "../selectors";
+} from "../../selectors";
 import { css } from "emotion";
-import { applyWorkflowFilterThunk } from "../thunks";
-import { PAGE_FILTER_NAME } from "../constants";
+import { applyWorkflowFilterThunk } from "../../thunks";
+import { PAGE_FILTER_NAME } from "../../constants";
 import { FormattedMessage } from "react-intl";
 import { Icon, Pagination } from "antd";
 

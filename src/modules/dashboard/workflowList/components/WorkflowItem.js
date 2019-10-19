@@ -5,10 +5,10 @@ import {
   createWorkflow,
   workflowActions,
   toggleMinimalUI
-} from "../../../js/actions";
+} from "../../../../js/actions";
 import _ from "lodash";
 import { WorkflowHeader } from "./WorkflowHeader";
-import WorkflowDetails from "../../../js/components/WorkflowDetails";
+import WorkflowDetails from "../../../../js/components/WorkflowDetails";
 import ModalHeader from "./ModalHeader";
 import ModalFooter from "./ModalFooter";
 import { withRouter } from "react-router-dom";
