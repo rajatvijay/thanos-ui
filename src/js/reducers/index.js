@@ -23,7 +23,6 @@ import { languageSelector } from "./internationalize";
 import { showFilterMenu, showPreviewSidebar } from "./navbar";
 import { stepPreviewFields } from "./stepPreview";
 import { userWorkflowModal } from "./user_workflow";
-// import taskQueueCount from "../../modules/sidebar/sidebarReducer";
 import stepUsers from "./stepBody";
 import workflowKeys from "./workflowKeys";
 import minimalUI from "./toggleMinimalUI";
@@ -34,9 +33,6 @@ import isStepPrinting from "./stepPrinting";
 
 // New module pattern
 import { workflowList } from "../../modules/dashboard";
-
-// New module pattern
-// import { workflowList } from "../../modules/workflowList";
 
 //THIS IS THE STRUCTURE/STATE OF YOUR STORE//
 const rootReducer = combineReducers({
@@ -67,7 +63,6 @@ const rootReducer = combineReducers({
   workflowKindValue,
   languageSelector,
   userWorkflowModal,
-  // taskQueueCount,
   stepUsers,
   workflowKeys,
   minimalUI,
