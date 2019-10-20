@@ -8,22 +8,52 @@ import {
 } from "../../actions";
 import _ from "lodash";
 import { WorkflowHeader } from "./WorkflowHeader";
-import WorkflowDetails from "../../components/WorkflowDetails";
+import WorkflowDetails from "../WorkflowDetails";
 import ModalHeader from "./ModalHeader";
 import ModalFooter from "./ModalFooter";
 import { withRouter } from "react-router-dom";
 
 class WorkflowItem extends React.Component {
   state = {
-    // TODO: Opened what? Better naming
+    relatedWorkflow: null,
+    relatedKinds: [],
+    showRelatedWorkflow: false,
     opened: false,
-    // TODO: Visible what? Better naming
+    showQuickDetails: false,
+    loadingRelatedWorkflow: false,
+    stepGroupData: null,
+    stepdataloading: true,
+    initialLoad: true,
+    collapseDisabled: false,
     visible: false,
     selectedStep: null,
     selectedGroup: null
   };
 
-  setParameter = (selectedStep, selectedGroup) => {
+  componentDidMount = () => {
+    this.setState({
+      relatedWorkflow: this.getRelatedTypes(),
+      showRelatedWorkflow: false
+    });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const id = this.props.workflow.id;
+
+    if (
+      this.props.workflowChildren[id] !== prevProps.workflowChildren[id] &&
+      _.size(this.props.workflowChildren[id].children)
+    ) {
+      this.setState(
+        { children: this.props.workflowChildren[id].children },
+        () => {
+          this.assignChilrenToKind();
+        }
+      );
+    }
+  };
+
+  setCurrentGroupAndStep = (selectedGroup, selectedStep) => {
     this.setState({ selectedGroup, selectedStep });
   };
 
@@ -35,11 +65,9 @@ class WorkflowItem extends React.Component {
       workflowId: id
     });
 
-    // TODO: Move this to the redux layer
     this.addToOpenModalList();
   };
 
-  // TODO: Move this to the redux layer
   addToOpenModalList = () => {
     const { list } = this.props.expandedWorkflows;
 
@@ -49,7 +77,6 @@ class WorkflowItem extends React.Component {
     }
   };
 
-  // TODO: Move this to the redux layer
   removeFromOpenModalList = () => {
     const { list } = this.props.expandedWorkflows;
     const index = list.indexOf(this.props.workflow);
@@ -60,8 +87,6 @@ class WorkflowItem extends React.Component {
     }
   };
 
-  // TODO: Expanded workflow list is used to show cascading position of the modal
-  // when more than one modal are open at the same time
   calcTopPos = () => {
     const { list } = this.props.expandedWorkflows;
     const index = list.indexOf(this.props.workflow);
@@ -94,6 +119,72 @@ class WorkflowItem extends React.Component {
     this.removeFromOpenModalList();
   };
 
+  setWorkflowId = id => {
+    this.setState({ workflowId: id });
+  };
+
+  assignChilrenToKind = () => {
+    const rk = this.state.relatedWorkflow;
+    const children = this.state.children;
+
+    const workflowFilterByKind = _.map(rk, kind => {
+      const k = kind;
+      k.workflows = [];
+      _.forEach(children, child => {
+        if (child.definition.kind === kind.id) {
+          k.workflows.push(child);
+        }
+      });
+      return k;
+    });
+
+    this.setState({
+      relatedKinds: _.orderBy(
+        workflowFilterByKind,
+        ["workflows.length"],
+        ["desc"]
+      )
+    });
+  };
+
+  getRelatedTypes = () => {
+    const that = this;
+    const rt = [];
+    if (this.props.workflow.definition.related_types.length !== 0) {
+      _.map(this.props.workflow.definition.related_types, function(rtc) {
+        _.filter(that.props.kinds.workflowKind, function(kind) {
+          if (kind.tag === rtc) {
+            rt.push(kind);
+          }
+        });
+      });
+    }
+    return rt;
+  };
+
+  createChildWorkflow = e => {
+    if (e.key === "users") {
+      const payload = {
+        workflowID: this.props.workflow.id
+      };
+
+      this.props.dispatch(workflowActions.showUserWorkflowModal(payload));
+    } else {
+      const kindTag = e.key;
+      const kind = this.props.kinds.workflowKind.find(
+        kind => kind.tag === kindTag
+      );
+      const payload = {
+        status: kind && kind.default_status,
+        kind: kindTag,
+        name: "Draft",
+        parent: this.props.workflow.id
+      };
+
+      this.props.dispatch(createWorkflow(payload));
+    }
+  };
+
   render = () => {
     const { workflow } = this.props;
     const { statusType } = this.props.workflowFilterType;
@@ -101,7 +192,6 @@ class WorkflowItem extends React.Component {
 
     return (
       <div
-        // TODO: What is this class doing?
         className={
           "paper workflow-list-item " +
           (this.state.opened
@@ -149,7 +239,6 @@ class WorkflowItem extends React.Component {
             />
           </Modal>
 
-          {/* TODO: Pass only the required props */}
           <WorkflowHeader
             visibleModal={this.state.modal}
             showModal={this.showModal}
