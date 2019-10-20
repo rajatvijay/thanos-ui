@@ -15,12 +15,6 @@ const FormItem = Form.Item;
 
 const { getIntegrationSearchButton } = commonFunctions;
 
-const requestOptions = {
-  method: "GET",
-  // headers: authHeader.get(),
-  credentials: "include"
-};
-
 //Field Type DUNS SEARCH
 const getFields = props => {
   return getIntegrationSearchButton(props);
@@ -100,6 +94,11 @@ class DuplicateCheckComp extends Component {
 
   fetchWorkflows = url => {
     this.setState({ fetching: true });
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
     fetch(url, requestOptions)
       .then(response => response.json())
       .then(body => {

@@ -1,6 +1,6 @@
 import { authHeader, handleResponse } from "../_helpers";
 import _ from "lodash";
-import { store } from "../_helpers";
+// import { store } from "../_helpers";
 import { APIFetch } from "../utils/request";
 
 export const workflowService = {
@@ -27,7 +27,7 @@ function getAll(filter) {
   //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?answer=<field_tag>__<operator>__<value>
   //case filter type multi ==>  http://slackcart.com/api/v1/workflows/?stepgroupdef=<stepgroup_id>
 
-  const filters = store.getState().workflowFilters;
+  const filters = {}; // store.getState().workflowFilters;
   const filterParams = getFilterParams(filters);
   let url = `workflows-list/${filterParams}&lean=true`;
 
@@ -58,7 +58,7 @@ function clearAll() {
     credentials: "include"
   };
 
-  const filters = store.getState().workflowFilters;
+  const filters = {}; // store.getState().workflowFilters;
   const filterParams = getFilterParams(filters);
   const url = `workflows-list/${filterParams}&lean=true`;
 

@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 //import registerServiceWorker from "./registerServiceWorker";
 import App from "./js/App";
 import { Provider } from "react-redux";
-import { store } from "./js/_helpers";
+import { createStore } from "./js/_helpers";
 import "./css/App.css";
 import "antd/dist/antd.css";
 import * as Sentry from "@sentry/browser";
@@ -20,6 +20,8 @@ if (process.env.REACT_APP_DISABLE_SENTRY !== "true") {
     scope.setTag("tenant", tenant);
   });
 }
+
+const store = createStore();
 
 ReactDOM.render(
   <Provider store={store}>

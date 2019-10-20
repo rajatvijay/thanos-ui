@@ -104,12 +104,6 @@ class VTag extends PureComponent {
   }
 }
 
-const requestOptions = {
-  method: "GET",
-  // headers: authHeader.get(),
-  credentials: "include"
-};
-
 class ChildWorkflowField2 extends Component {
   constructor() {
     super();
@@ -247,6 +241,11 @@ class ChildWorkflowField2 extends Component {
 
     this.setState({ fetching: true });
 
+    const requestOptions = {
+      method: "GET",
+      headers: authHeader.get(),
+      credentials: "include"
+    };
     fetch(url, requestOptions)
       .then(response => response.json())
       .then(body => {
