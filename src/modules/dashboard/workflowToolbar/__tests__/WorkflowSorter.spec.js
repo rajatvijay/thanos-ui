@@ -2,9 +2,12 @@ import React from "react";
 import { renderWithRedux } from "../../../common/utils/testUtils";
 import WorkflowSorter from "../components/WorkflowSorter";
 import { FetchMock, fetchMock } from "@react-mock/fetch";
-import { fireEvent, wait } from "@testing-library/react";
 import {
-  WORKLFOW_ASC_SORT_PARAM,
+  fireEvent
+  // wait
+} from "@testing-library/react";
+import {
+  // WORKLFOW_ASC_SORT_PARAM,
   WORKLFOW_DESC_SORT_PARAM,
   FILTERS_ENUM
 } from "../../constants";
@@ -61,7 +64,10 @@ test("should render 'sort:risk' text when sorting is enabled", () => {
 
 test("should call the api with asc order when sorting is clicked once and render proper sorting icon", () => {
   const API_URL = "path:/api/v1/workflows-list/";
-  const { queryByText, queryByTestId } = renderWithRedux(
+  const {
+    queryByText
+    // queryByTestId
+  } = renderWithRedux(
     <FetchMock mocks={[{ matcher: API_URL, method: "GET", response: 200 }]}>
       <WorkflowSorter />
     </FetchMock>,
