@@ -13,25 +13,6 @@ import styled from "@emotion/styled";
 
 // title --- lc data + alerts ---- status --- rank --- go to details //
 
-/**
- * Workflow Name + Breadcrums
- * Decided on the basis of config
- * 1st column
- *
- * Alerts => 2 alerts + expander
- * Alerts = LC data + alerts
- * 2nd column
- * only if they exists
- *
- * LC data => [1] item only
- * 3rd column
- *
- * Status
- * 4th column
- */
-
-// TODO: Value of the sortingPrimayKey name
-// TODO: To specify the value according to which sorting is done
 function displaySortingKey(workflow) {
   const obj =
     Array.isArray(workflow.definition.extra_fields_json) &&
@@ -58,10 +39,9 @@ export const WorkflowHeader = props => {
     <Row
       type="flex"
       align="middle"
-      // className="lc-card-head"
+      className="lc-card-head"
       style={{ padding: "0px 12px 0 12px" }}
     >
-      {/* TODO: Checkox for bulkAction */}
       {props.isEmbedded && props.bulkActionWorkflowChecked ? (
         <Col span={1} className="text-left">
           <Checkbox
@@ -133,7 +113,6 @@ export const WorkflowHeader = props => {
       type="flex"
       align="middle"
     >
-      {/* TODO: Check what isExpanded is used for */}
       <Col span={props.isExpanded ? 22 : 24}>{headerData}</Col>
     </Row>
   );
@@ -151,7 +130,6 @@ const createFamilyListForBreadcrums = family => {
   ));
 };
 
-// TODO: Contians, workflow name and breadcrums
 const HeaderTitle = props => {
   const { workflow, fieldExtra, isEmbedded } = props;
   const { family } = workflow;
@@ -235,9 +213,6 @@ const HeaderTitle = props => {
   }
 };
 
-// TODO: Used in modal header and this file only
-// Shows lc data of type normal
-// This is same thing as done in `GetMergedData`
 export const HeaderLcData = props => {
   const subtext = _.filter(props.workflow.lc_data, item => {
     return item.display_type === "normal" && !!item.value;
@@ -289,8 +264,6 @@ export const HeaderLcData = props => {
   );
 };
 
-// TODO: used for adjudications and comments section
-// Show only status
 class HeaderOptions extends React.Component {
   constructor(props) {
     super(props);
@@ -406,9 +379,6 @@ class HeaderOptions extends React.Component {
   };
 }
 
-// TODO: Used in modal header and this file only
-// TODO: This is complicated as FUCK!, tackle at the very end
-// Alerts and LC data
 export class GetMergedData extends React.Component {
   constructor(props) {
     super(props);
@@ -443,7 +413,6 @@ export class GetMergedData extends React.Component {
       return alertReduced;
     });
 
-    // TODO: Alerts from lc data
     _.forEach(data, function(v) {
       if (
         (v.display_type === "alert" || v.display_type === "alert_status") &&
@@ -457,20 +426,16 @@ export class GetMergedData extends React.Component {
       return obj.value !== "0" && obj.value !== "";
     });
 
-    // Separating type normal and alerts
     const lc_data = _.filter(data, function(v) {
       return v.display_type === "normal";
     });
 
-    // Just don't show the first lc data of type normal
     const lc_data_filtered = _.filter(lc_data, function(v, index) {
       return v.value;
     });
 
     const that = this;
 
-    // Show only the 2 alerts
-    // Rest when click on expand
     const expander = alert_data => {
       const count = 2;
       if (_.size(alert_data) > count) {
@@ -489,7 +454,6 @@ export class GetMergedData extends React.Component {
       }
     };
 
-    // Alert item and for lc_data item
     const TagItem = (item, index, is_alert) => {
       let classes = "  t-12 text-middle text-light ";
       if (is_alert) {
@@ -576,7 +540,7 @@ export class GetMergedData extends React.Component {
               {_.size(alert_data_filtered)
                 ? _.map(alert_data_filtered, function(item, index) {
                     if (item.value === "0") {
-                      return true; // Can be removed, since this is done above also
+                      return true;
                     }
                     const count = index + 1;
                     if (count < 3) {
@@ -600,7 +564,6 @@ export class GetMergedData extends React.Component {
   }
 }
 
-// TODO: Color according to the risk value
 const getScoreColor = riskValue => {
   const value = parseInt(riskValue, 10);
   if (value >= 7) {
