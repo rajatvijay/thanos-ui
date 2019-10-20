@@ -204,6 +204,7 @@ class StepBodyForm extends Component {
     if (!regex_value) {
       return true;
     }
+
     const id = field.id;
     const re = new RegExp(regex_value);
     const error = this.state.error;
