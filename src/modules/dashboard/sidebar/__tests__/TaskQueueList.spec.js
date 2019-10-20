@@ -152,26 +152,6 @@ test("should call onSelectTask with task queue when any one task queue is clicke
   expect(onSelectTask).toHaveBeenCalledWith(fakeTaskQueues[0]);
 });
 
-// test("should call onSelectTask with null when an already selected task queue is clicked", () => {
-//   const fakeTaskQueues = [
-//     { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" }
-//   ];
-//   const onSelectTask = jest.fn();
-//   const TaskQueueListInstance = render(
-//     <TaskQueueList
-//       activeTaskQueue={{
-//         stepgroupdef: { filterValue: [fakeTaskQueues[0].tag] }
-//       }}
-//       taskQueues={fakeTaskQueues}
-//       loading={false}
-//       onSelectTask={onSelectTask}
-//     />
-//   );
-//   const taskQueue = TaskQueueListInstance.getByText(/test task queue 1/i);
-//   taskQueue.click();
-//   expect(onSelectTask).toHaveBeenLastCalledWith();
-// });
-
 test("should apply proper styles to the selected task queue", () => {
   const fakeTaskQueues = [
     { tag: "tq10", count: 532, overdue_count: 25, name: "Test Task Queue 1" }
