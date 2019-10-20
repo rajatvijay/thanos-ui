@@ -9,9 +9,6 @@
     "@testing-library/react": "^8.0.1",
     "antd": "^3.15.1",
     "await-to-js": "^2.1.1",
-    "axios": "^0.19.0",
-    "chalk": "1.1.3",
-    "classnames": "^2.2.5",
     "colors": "^1.3.3",
     "date-fns": "^2.5.0",
     "downloadjs": "^1.4.7",
@@ -45,10 +42,6 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-thunk": "^2.2.0",
     "reselect": "^4.0.0",
-    "sockjs": "^0.3.19",
-    "style-loader": "0.19.0",
-    "sw-precache-webpack-plugin": "0.11.4",
-    "url-loader": "0.6.2",
     "validator": "^9.4.0"
   },
   "scripts": {
@@ -80,7 +73,6 @@
     "lint-staged": "^8.1.7",
     "prettier": "^1.17.1",
     "react-app-rewired": "^2.1.3",
-    "storybook-chromatic": "^3.0.3",
     "webpack-deadcode-plugin": "^0.1.11"
   },
   "husky": {
