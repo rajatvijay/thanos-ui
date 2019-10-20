@@ -142,6 +142,7 @@ test("should call onSelectAlert with subcategory item when it is clicked", () =>
   expect(onSelectAlert).toHaveBeenCalledWith({
     id: 524,
     name: "Fake Sub Category 1",
-    count: 572
+    count: 572,
+    parentId: fakeAlerts[0].id // Adding this to highglight the parent alert as well
   });
 });

@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 //import registerServiceWorker from "./registerServiceWorker";
 import App from "./js/App";
 import { Provider } from "react-redux";
-import { createStore } from "./js/_helpers";
+import { createStore } from "./js/_helpers/store";
 import "./css/App.css";
 import "antd/dist/antd.css";
 import * as Sentry from "@sentry/browser";

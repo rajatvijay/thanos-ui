@@ -5,7 +5,8 @@ import { FetchMock, fetchMock } from "@react-mock/fetch";
 import { fireEvent } from "@testing-library/react";
 import {
   WORKLFOW_ASC_SORT_PARAM,
-  WORKLFOW_DESC_SORT_PARAM
+  WORKLFOW_DESC_SORT_PARAM,
+  FILTERS_ENUM
 } from "../../constants";
 
 test("should not render anything if kind is not selected", () => {
@@ -22,8 +23,13 @@ test("should not render anything if kind not selected but sorting is disabled", 
     initialState: {
       workflowList: {
         selectedWorkflowFilters: {
-          kind: {
-            is_sorting_field_enabled: false
+          [FILTERS_ENUM.KIND_FILTER.name]: {
+            name: FILTERS_ENUM.KIND_FILTER.name,
+            key: FILTERS_ENUM.KIND_FILTER.key,
+            value: 1,
+            meta: {
+              is_sorting_field_enabled: false
+            }
           }
         }
       }
@@ -37,8 +43,13 @@ test("should render 'sort:risk' text when sorting is enabled", () => {
     initialState: {
       workflowList: {
         selectedWorkflowFilters: {
-          kind: {
-            is_sorting_field_enabled: true
+          [FILTERS_ENUM.KIND_FILTER.name]: {
+            name: FILTERS_ENUM.KIND_FILTER.name,
+            key: FILTERS_ENUM.KIND_FILTER.key,
+            value: 1,
+            meta: {
+              is_sorting_field_enabled: true
+            }
           }
         }
       }
@@ -58,8 +69,13 @@ test("should call the api with asc order when sorting is clicked once and render
       initialState: {
         workflowList: {
           selectedWorkflowFilters: {
-            kind: {
-              is_sorting_field_enabled: true
+            [FILTERS_ENUM.KIND_FILTER.name]: {
+              name: FILTERS_ENUM.KIND_FILTER.name,
+              key: FILTERS_ENUM.KIND_FILTER.key,
+              value: 1,
+              meta: {
+                is_sorting_field_enabled: true
+              }
             }
           }
         }
@@ -85,8 +101,13 @@ test("should call the api with desc order when sorting is clicked twice and rend
       initialState: {
         workflowList: {
           selectedWorkflowFilters: {
-            kind: {
-              is_sorting_field_enabled: true
+            [FILTERS_ENUM.KIND_FILTER.name]: {
+              name: FILTERS_ENUM.KIND_FILTER.name,
+              key: FILTERS_ENUM.KIND_FILTER.key,
+              value: 1,
+              meta: {
+                is_sorting_field_enabled: true
+              }
             }
           }
         }
@@ -115,8 +136,13 @@ test("should not call the api with sorting param when sorting is clicked thrice"
       initialState: {
         workflowList: {
           selectedWorkflowFilters: {
-            kind: {
-              is_sorting_field_enabled: true
+            [FILTERS_ENUM.KIND_FILTER.name]: {
+              name: FILTERS_ENUM.KIND_FILTER.name,
+              key: FILTERS_ENUM.KIND_FILTER.key,
+              value: 1,
+              meta: {
+                is_sorting_field_enabled: true
+              }
             }
           }
         }
@@ -140,8 +166,13 @@ test("should not render any sorting icon initially", () => {
     initialState: {
       workflowList: {
         selectedWorkflowFilters: {
-          kind: {
-            is_sorting_field_enabled: true
+          [FILTERS_ENUM.KIND_FILTER.name]: {
+            name: FILTERS_ENUM.KIND_FILTER.name,
+            key: FILTERS_ENUM.KIND_FILTER.key,
+            value: 1,
+            meta: {
+              is_sorting_field_enabled: true
+            }
           }
         }
       }

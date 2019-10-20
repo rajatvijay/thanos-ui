@@ -2,11 +2,7 @@ import React from "react";
 import { renderWithRedux } from "../../../common/utils/testUtils";
 import WorkflowToolbar from "../components/WorkflowToolbar";
 import { fireEvent } from "@testing-library/react";
-import {
-  STATUS_FILTER_NAME,
-  REGION_FILTER_NAME,
-  BUSINESS_UNIT_FILTER_NAME
-} from "../../constants";
+import { FILTERS_ENUM } from "../../constants";
 
 test("should render workflow count", () => {
   const { queryByText } = renderWithRedux(<WorkflowToolbar />, {
@@ -33,8 +29,13 @@ test("should render sorter when sorting is enabled", () => {
     initialState: {
       workflowList: {
         selectedWorkflowFilters: {
-          kind: {
-            is_sorting_field_enabled: true
+          [FILTERS_ENUM.KIND_FILTER.name]: {
+            name: FILTERS_ENUM.KIND_FILTER.name,
+            key: FILTERS_ENUM.KIND_FILTER.key,
+            value: 1,
+            meta: {
+              is_sorting_field_enabled: true
+            }
           }
         }
       }
@@ -83,17 +84,32 @@ test("should render all the selected basic filters", () => {
     initialState: {
       workflowList: {
         selectedWorkflowFilters: {
-          [STATUS_FILTER_NAME]: {
-            label: "Fake Selected Status Label",
-            value: "Fake Selected Status"
+          [FILTERS_ENUM.STATUS_FILTER.name]: {
+            name: FILTERS_ENUM.STATUS_FILTER.name,
+            key: FILTERS_ENUM.STATUS_FILTER.key,
+            value: "Fake Selected Status",
+            meta: {
+              label: "Fake Selected Status Label",
+              value: "Fake Selected Status"
+            }
           },
-          [REGION_FILTER_NAME]: {
-            label: "Fake Selected Region Label",
-            value: "Fake Selected Region"
+          [FILTERS_ENUM.REGION_FILTER.name]: {
+            name: FILTERS_ENUM.REGION_FILTER.name,
+            key: FILTERS_ENUM.REGION_FILTER.key,
+            value: "Fake Selected Region",
+            meta: {
+              label: "Fake Selected Region Label",
+              value: "Fake Selected Region"
+            }
           },
-          [BUSINESS_UNIT_FILTER_NAME]: {
-            label: "Fake Selected Business Label",
-            value: "Fake Selected Business"
+          [FILTERS_ENUM.BUSINESS_UNIT_FILTER.name]: {
+            name: FILTERS_ENUM.BUSINESS_UNIT_FILTER.name,
+            key: FILTERS_ENUM.BUSINESS_UNIT_FILTER.key,
+            value: "Fake Selected Business",
+            meta: {
+              label: "Fake Selected Business Label",
+              value: "Fake Selected Business"
+            }
           }
         }
       }

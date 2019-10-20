@@ -3,7 +3,11 @@ import KindDropdown from "../components/KindDropdown";
 import { renderWithRedux } from "../../../common/utils/testUtils";
 import { fireEvent } from "@testing-library/react";
 import { FetchMock, fetchMock } from "@react-mock/fetch";
-import { KIND_FILTER_NAME, FIELD_ANSWER_PARAM } from "../../constants";
+import {
+  KIND_FILTER_NAME,
+  FIELD_ANSWER_PARAM,
+  FILTERS_ENUM
+} from "../../constants";
 
 test("should render loader when kinds are loading", () => {
   const { queryByTestId } = renderWithRedux(<KindDropdown />, {
@@ -30,7 +34,7 @@ test("should render selected kind and field answer tag with check icon", () => {
       ]
     }
   ];
-  const { queryByText, queryByTestId, container } = renderWithRedux(
+  const { queryByText, queryByTestId, container, debug } = renderWithRedux(
     <KindDropdown />,
     {
       initialState: {
@@ -41,15 +45,25 @@ test("should render selected kind and field answer tag with check icon", () => {
             }
           },
           selectedWorkflowFilters: {
-            kind: fakeKinds[0],
-            answer: {
-              fieldAnswer: fakeKinds[0].field_tags_for_filter[0].extra_en[0]
+            [FILTERS_ENUM.KIND_FILTER.name]: {
+              name: FILTERS_ENUM.KIND_FILTER.name,
+              key: FILTERS_ENUM.KIND_FILTER.key,
+              value: 1,
+              meta: fakeKinds[0]
+            },
+            [FILTERS_ENUM.FIELD_ANSWER_FILTER.name]: {
+              name: FILTERS_ENUM.FIELD_ANSWER_FILTER.name,
+              key: FILTERS_ENUM.FIELD_ANSWER_FILTER.key,
+              // value: fakeKinds[0].field_tags_for_filter[0].extra_en[0],
+              meta: fakeKinds[0].field_tags_for_filter[0].extra_en[0]
             }
           }
         }
       }
     }
   );
+
+  debug();
 
   expect(queryByText(fakeKinds[0].name)).toBeInTheDocument();
   expect(
@@ -132,7 +146,12 @@ test("should render selected kind and field answer tag with check icon", () => {
             }
           },
           selectedWorkflowFilters: {
-            kind: fakeKinds[0]
+            [FILTERS_ENUM.KIND_FILTER.name]: {
+              name: FILTERS_ENUM.KIND_FILTER.name,
+              key: FILTERS_ENUM.KIND_FILTER.key,
+              value: 1,
+              meta: fakeKinds[0]
+            }
           }
         }
       }

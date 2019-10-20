@@ -1,7 +1,6 @@
 import React from "react";
 import { renderWithReactIntl as render } from "../../../common/utils/testUtils";
 import TaskQueueList from "../components/TaskQueueList";
-import { getVisibleWorkflowGroups } from "../taskQueue.selector";
 
 test("should render loading and no task queue when data is loading", () => {
   const fakeTaskQueues = [
@@ -172,59 +171,60 @@ test("should apply proper styles to the selected task queue", () => {
   expect(style.backgroundColor).not.toBe("none");
 });
 
-test("should not show task queue items that are marked as hidden in config", () => {
-  const state = {
-    workflowGroupCount: {
-      stepgroupdef_counts: [
-        {
-          tag: "tq10",
-          count: 532,
-          overdue_count: 25,
-          name: "Test Task Queue 1"
-        },
-        {
-          tag: "tq11",
-          count: 532,
-          overdue_count: 25,
-          name: "Test Task Queue 2"
-        },
-        {
-          tag: "tq12",
-          count: 532,
-          overdue_count: 25,
-          name: "Test Task Queue 3"
-        },
-        {
-          tag: "tq13",
-          count: 532,
-          overdue_count: 25,
-          name: "Test Task Queue 4"
-        }
-      ]
-    },
-    config: {
-      custom_ui_labels: {
-        "workflows.hiddenGroupsMainNav": ["tq11", "tq13"]
-      }
-    }
-  };
-  const onSelectTask = jest.fn();
-  const { getAllByText, queryByText } = render(
-    <TaskQueueList
-      activeTaskQueue={{
-        stepgroupdef: {
-          filterValue: [state.workflowGroupCount.stepgroupdef_counts[0].tag]
-        }
-      }}
-      taskQueues={getVisibleWorkflowGroups(state)}
-      loading={false}
-      onSelectTask={onSelectTask}
-    />
-  );
-  const taskQueues = getAllByText(/test task queue/i);
-  const taskQueue2 = queryByText(/test task queue 2/i);
-  const taskQueue4 = queryByText(/test task queue 4/i);
-  expect(taskQueues.length).toBe(2);
-  expect(taskQueue2).toBe(null);
-  expect(taskQueue4).toBe(null);
-});
+// TODO: Write this test + implement this feature
+// test("should not show task queue items that are marked as hidden in config", () => {
+//   const state = {
+//     workflowGroupCount: {
+//       stepgroupdef_counts: [
+//         {
+//           tag: "tq10",
+//           count: 532,
+//           overdue_count: 25,
+//           name: "Test Task Queue 1"
+//         },
+//         {
+//           tag: "tq11",
+//           count: 532,
+//           overdue_count: 25,
+//           name: "Test Task Queue 2"
+//         },
+//         {
+//           tag: "tq12",
+//           count: 532,
+//           overdue_count: 25,
+//           name: "Test Task Queue 3"
+//         },
+//         {
+//           tag: "tq13",
+//           count: 532,
+//           overdue_count: 25,
+//           name: "Test Task Queue 4"
+//         }
+//       ]
+//     },
+//     config: {
+//       custom_ui_labels: {
+//         "workflows.hiddenGroupsMainNav": ["tq11", "tq13"]
+//       }
+//     }
+//   };
+//   const onSelectTask = jest.fn();
+//   const { getAllByText, queryByText } = render(
+//     <TaskQueueList
+//       activeTaskQueue={{
+//         stepgroupdef: {
+//           filterValue: [state.workflowGroupCount.stepgroupdef_counts[0].tag]
+//         }
+//       }}
+//       taskQueues={getVisibleWorkflowGroups(state)}
+//       loading={false}
+//       onSelectTask={onSelectTask}
+//     />
+//   );
+//   const taskQueues = getAllByText(/test task queue/i);
+//   const taskQueue2 = queryByText(/test task queue 2/i);
+//   const taskQueue4 = queryByText(/test task queue 4/i);
+//   expect(taskQueues.length).toBe(2);
+//   expect(taskQueue2).toBe(null);
+//   expect(taskQueue4).toBe(null);
+// });

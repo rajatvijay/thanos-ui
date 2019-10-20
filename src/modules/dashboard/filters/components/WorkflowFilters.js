@@ -5,7 +5,8 @@ import {
   getAllAlertsThunk,
   getAdvancedFilterDataThunk,
   getBusinessUnitsThunk,
-  getWorkflowListThunk
+  getWorkflowListThunk,
+  applyFiltersFromStateThunk
 } from "../../thunks";
 import {
   setWorkflowFilter,
@@ -53,11 +54,12 @@ class WorkflowFitlers extends Component {
     });
 
     // Waiting for next tick, so that component can be re-rendered with new state
-    setTimeout(async () => {
-      // Apply the filters from the state
-      await this.props.getWorkflowListThunk(this.createFilterParams());
-      callback && callback(); // FIXME: See if some param is required
-    });
+    // setTimeout(async () => {
+    //   // Apply the filters from the state
+    //   await this.props.getWorkflowListThunk(this.createFilterParams());
+    //   callback && callback(); // FIXME: See if some param is required
+    // });
+    this.props.applyFiltersFromStateThunk();
   };
 
   validateFitlerData = filters => {
@@ -146,7 +148,8 @@ const WrappedWorkflowFitlers = connect(
     getBusinessUnitsThunk,
     getWorkflowListThunk,
     setMultipleWorkflowFilters,
-    removeWorkflowFilter
+    removeWorkflowFilter,
+    applyFiltersFromStateThunk
   }
 )(WorkflowFitlers);
 
