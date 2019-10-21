@@ -379,6 +379,9 @@ class StepBodyForm extends Component {
       completed_by = "...";
     }
 
+    let gmtFormat = new Date(step.completed_at);
+    gmtFormat = gmtFormat.toString();
+
     return (
       <span className="text-secondary pd-right-sm ">
         <i className="material-icons pd-right-sm t-20 text-bottom">
@@ -387,13 +390,7 @@ class StepBodyForm extends Component {
         <FormattedMessage id={"commonTextInstances.submittedByText"} />{" "}
         <span className="text-medium ">{completed_by}</span> on
         {"  "}
-        <Tooltip
-          title={
-            <Moment tz="UTC" format="YYYY/MM/DDTHH:mm:ssz">
-              {step.completed_at}
-            </Moment>
-          }
-        >
+        <Tooltip title={gmtFormat}>
           <Moment format="YYYY/MM/DD">{step.completed_at}</Moment>
         </Tooltip>
       </span>

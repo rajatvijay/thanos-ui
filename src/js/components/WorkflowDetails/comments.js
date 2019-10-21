@@ -8,20 +8,18 @@ import {
   Layout,
   Row,
   Select,
-  Tooltip,
   Upload
 } from "antd";
 import { get as lodashGet, size as lodashSize } from "lodash";
-import moment from "moment";
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import Moment from "react-moment";
 import { changeStatusActions } from "../../actions";
 import { workflowFiltersService } from "../../services";
 import { status_filters } from "./EventStatuses";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import MentionWithAttachments from "./MentionWithAttachments";
 import showNotification from "../../../modules/common/notification";
+import { Timestamp } from "../Navbar/UTCTimestamp";
 
 const { Sider, Content } = Layout;
 const Option = Select.Option;
@@ -644,9 +642,7 @@ const Message = React.memo(
             {posted_by.first_name || posted_by.email}
           </b>
           <StyledCommentTimestamp>
-            <Tooltip title={moment(created_at).format()}>
-              <Moment fromNow>{created_at}</Moment>
-            </Tooltip>
+            <Timestamp timestamp={created_at} />
           </StyledCommentTimestamp>
         </StyledMessageRow>
         <StyledMessageBody>
