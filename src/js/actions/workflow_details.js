@@ -221,6 +221,7 @@ function getComment(object_id, content_type, addtn, isEmbedded, fieldExtra) {
   function success(data) {
     data.isEmbedded = isEmbedded;
     data.fieldExtra = fieldExtra;
+    data.singleContext = content_type !== "all_data";
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
   }
 

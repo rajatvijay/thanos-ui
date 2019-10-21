@@ -317,9 +317,19 @@ class Comments extends Component {
     ];
   };
 
+  get hasComments() {
+    return lodashGet(this.props, "workflowComments.data.results", []).filter(
+      comment => comment.messages.length
+    ).length;
+  }
+
   render() {
     const comments = lodashGet(this.props, "workflowComments.data", {});
-    const singleContext = lodashSize(comments.results) <= 1 ? true : false;
+    // singleContext -> True means that, it's either field comment or step comment.
+    // False, simply means that we're loading consolidated comments.
+    // In case of True, we'll show things like text-area to add more comments in the same
+    // context.
+    const { singleContext } = comments;
     const { workflowStatuses, fileList } = this.state;
     const { toggleSidebar } = this.props;
 
@@ -353,7 +363,8 @@ class Comments extends Component {
       >
         <div className="comment-details" style={{ width: "570px" }}>
           <Content style={{ background: "#fdfdfd", paddingBottom: "50px" }}>
-            {comments.results.length <= 0 ? (
+            {!comments.results.length ||
+            (!singleContext && !this.hasComments) ? (
               <CommentWrapper singleContext={true}>
                 {/*///////HEADER///////*/}
                 <StyledCommentHeader>

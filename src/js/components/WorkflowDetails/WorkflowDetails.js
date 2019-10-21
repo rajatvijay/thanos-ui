@@ -637,15 +637,17 @@ class WorkflowDetails extends Component {
     // API call. Also removing comments each time is not an efficient way.
     // They should rather be updated in-redux while the workflow is opened
     // and flished only when the workflow is closed.
-    this.props.dispatch(
-      workflowDetailsActions.getComment(
-        objectId,
-        content_type,
-        "",
-        false,
-        fieldExtra
-      )
-    );
+    if (content_type)
+      this.props.dispatch(
+        workflowDetailsActions.getComment(
+          objectId,
+          content_type,
+          "",
+          false,
+          fieldExtra
+        )
+      );
+    else this.props.dispatch(workflowDetailsActions.getComment(null));
   };
 
   addComment = (payload, step_reload_payload, isEmbeddedDetails) => {
