@@ -12,6 +12,7 @@ import { getIntlBody } from "../../../js/_helpers/intl-helpers";
 import { get as lodashGet } from "lodash";
 
 class FilterDropdown extends Component {
+  root = React.createRef();
   handleSelectedKind = kind => {
     const kindFilter = {
       filterType: "kind",
@@ -193,9 +194,15 @@ class FilterDropdown extends Component {
     }
 
     return (
-      <Dropdown trigger={["click"]} overlay={this.renderDropdownList()}>
-        {this.renderSelectedItem()}
-      </Dropdown>
+      <div ref={this.root}>
+        <Dropdown
+          getPopupContainer={() => this.root.current}
+          trigger={["click"]}
+          overlay={this.renderDropdownList()}
+        >
+          {this.renderSelectedItem()}
+        </Dropdown>
+      </div>
     );
   }
 }
@@ -244,6 +251,7 @@ const StyledListContainer = styled.ul`
   padding: 0;
   width: 300px;
   position: fixed;
+  overflow-x: hidden;
 `;
 
 const StyledRelativeLi = styled.li`
