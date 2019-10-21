@@ -312,7 +312,10 @@ class Comments extends Component {
         .map(group => ({ id: "g" + group.id, display: group.name }))
         .sort(this.sortMentions),
       ...userMentions
-        .map(user => ({ id: "u" + user.id, display: user.username }))
+        .map(user => ({
+          id: "u" + user.id,
+          display: user.full_name || user.email
+        }))
         .sort(this.sortMentions)
     ];
   };
