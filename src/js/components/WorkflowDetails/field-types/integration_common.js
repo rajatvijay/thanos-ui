@@ -5,6 +5,8 @@ import IntlTooltip from "../../common/IntlTooltip";
 import { FormattedMessage } from "react-intl";
 import { map, includes } from "lodash";
 import { commonFunctions } from "./commons";
+import Highlighter from "react-highlight-words";
+import { css } from "emotion";
 
 const { getUserGroupFilter } = commonFunctions;
 
@@ -286,9 +288,14 @@ function google_search_html(record, search) {
           </Tag>
         ) : null}
       </div>
-      <div
+      <Highlighter
+        searchWords={record.matched_keywords}
+        textToHighlight={snippet}
         className="mr-bottom text-light"
-        dangerouslySetInnerHTML={{ __html: snippet }}
+        highlightClassName={css`
+          background: transparent;
+          font-weight: 700;
+        `}
       />
       <div className="mr-bottom-lg">
         <a
