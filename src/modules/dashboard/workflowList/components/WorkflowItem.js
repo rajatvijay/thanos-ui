@@ -19,10 +19,13 @@ import { LCDataValue } from "../../../common/components/LCDataValue";
  */
 
 const WorkflowItem = ({ onClick, workflow, showSortingValue }) => {
-  const secondNormalLCData = workflow.lc_data.filter(
-    data => data.display_type === "normal"
-  )[1];
+  const normalLCData = workflow.lc_data
+    .filter(data => data.display_type === "normal" && !!data.value)
+    .slice(0, 2);
   const status = workflow.status.label || workflow.status.kind_display;
+  const showAlerts = !!workflow.alerts.length;
+  const showAlertsColumn = showAlerts || normalLCData[0];
+  const showLCDataColumn = showAlerts ? normalLCData[0] : normalLCData[1];
   return (
     <div
       onClick={e => onClick(workflow.id)}
@@ -52,18 +55,28 @@ const WorkflowItem = ({ onClick, workflow, showSortingValue }) => {
           width: 40%;
         `}
       >
-        <WorkflowAlerts alerts={workflow.alerts} />
+        {showAlertsColumn ? (
+          showAlerts ? (
+            <WorkflowAlerts alerts={workflow.alerts} />
+          ) : (
+            <WorkflowLCData data={normalLCData[0]} />
+          )
+        ) : null}
       </div>
 
-      {secondNormalLCData && (
-        <div
-          className={css`
-            width: 20%;
-          `}
-        >
-          {secondNormalLCData && <WorkflowLCData data={secondNormalLCData} />}
-        </div>
-      )}
+      <div
+        className={css`
+          width: 20%;
+        `}
+      >
+        {showLCDataColumn ? (
+          showAlerts ? (
+            <WorkflowLCData data={normalLCData[0]} />
+          ) : (
+            <WorkflowLCData data={normalLCData[1]} />
+          )
+        ) : null}
+      </div>
 
       {showSortingValue && (
         <div
