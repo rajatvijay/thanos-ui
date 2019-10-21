@@ -42,7 +42,6 @@ const {
   stringToArray,
   field_error,
   feedValue,
-  getLink,
   getStyle,
   isDisabled,
   convertValueToString
@@ -479,7 +478,7 @@ export const Paragraph = props => {
       ) : null}
       <span
         dangerouslySetInnerHTML={{
-          __html: getLink(getIntlBody(props.field.definition))
+          __html: getIntlBody(props.field.definition)
         }}
       />
     </h2>
