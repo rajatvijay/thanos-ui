@@ -1,0 +1,8 @@
+{
+    "title": [
+      {
+        "pattern": "^(VET-\\d+|Release|Moving|Merge)\\s",
+        "message": "Your title needs to be prefixed with a JIRA tag"
+      }
+    ]
+  }
