@@ -116,7 +116,29 @@ export const selectedFieldAnswerSelector = state =>
     null
   );
 
+export const hiddenGroupsMainNavSelector = state => {
+  return lodashGet(
+    state,
+    `config.custom_ui_labels["workflows.hiddenGroupsMainNav"]`,
+    []
+  );
+};
 export const taskQueuesSelector = state => state.workflowList.taskQueues;
+export const visibleTaskQueuesSelector = createSelector(
+  taskQueuesSelector,
+  hiddenGroupsMainNavSelector,
+  (taskQueues, hiddentTags) => {
+    if (!taskQueues.data) {
+      return taskQueues;
+    }
+    return {
+      ...taskQueues,
+      data: taskQueues.data.filter(
+        taskQueue => !hiddentTags.includes(taskQueue.tag)
+      )
+    };
+  }
+);
 export const alertsSelector = state => state.workflowList.alerts;
 
 export const selectedTaskQueuesSelector = state => {

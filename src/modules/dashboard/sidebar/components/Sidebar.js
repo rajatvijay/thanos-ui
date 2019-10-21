@@ -7,7 +7,7 @@ import { css } from "emotion";
 import { getAllTaskQueuesThunk } from "../../thunks";
 import { injectIntl } from "react-intl";
 import KindDropdown from "./KindDropdown";
-import { taskQueuesSelector, alertsSelector } from "../../selectors";
+import { visibleTaskQueuesSelector, alertsSelector } from "../../selectors";
 import { FILTERS_ENUM } from "../../constants";
 import withFilters from "../../filters";
 
@@ -149,7 +149,7 @@ class Sidebar extends Component {
 
 function mapStateToProps(state) {
   return {
-    taskQueues: taskQueuesSelector(state),
+    taskQueues: visibleTaskQueuesSelector(state),
     alerts: alertsSelector(state)
   };
 }
