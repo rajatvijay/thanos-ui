@@ -41,7 +41,7 @@ class ModalHeader extends Component {
           padding: "20px 30px",
           alignItems: "center",
           position: "absolute",
-          zIndex: 1,
+          zIndex: 4,
           width: "77vw",
           backgroundColor: "white",
           paddingRight: "60px",
