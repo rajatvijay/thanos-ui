@@ -109,7 +109,7 @@ class DuplicateCheckComp extends Component {
           error: null
         });
       })
-      .catch(function(error) {
+      .catch(error => {
         this.setState({ error });
         console.log(error);
       });

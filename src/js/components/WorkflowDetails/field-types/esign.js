@@ -1,21 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, Form, Row, Col, Input, notification } from "antd";
+import { Button, Form, Row, Col, Input } from "antd";
 import { commonFunctions } from "./commons";
 import { authHeader } from "../../../_helpers";
 import { apiBaseURL } from "../../../../config";
 import { injectIntl } from "react-intl";
+import showNotification from "../../../../modules/common/notification";
 
 const FormItem = Form.Item;
 const { field_error, isDisabled } = commonFunctions;
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
 
 class Doc extends Component {
   constructor() {
@@ -101,7 +94,7 @@ class Doc extends Component {
     );
     if (!response.ok) {
       this.setState({ error: response.statusText, fetching: false });
-      openNotificationWithIcon({
+      showNotification({
         type: "error",
         message: response.statusText
       });
@@ -109,9 +102,9 @@ class Doc extends Component {
       const body = await response.json();
       this.setState({ fetching: false });
       if (body.view_url === "None") {
-        openNotificationWithIcon({
+        showNotification({
           type: "error",
-          message: "Invalid file"
+          message: "notificationInstances.invalidFile"
         });
       } else {
         return body.view_url;
@@ -125,7 +118,7 @@ class Doc extends Component {
         window.open(response);
       })
       .catch(err => {
-        openNotificationWithIcon({
+        showNotification({
           type: "error",
           message: err
         });

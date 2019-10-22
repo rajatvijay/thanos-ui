@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { authHeader } from "../../../js/_helpers";
-import { Dropdown, Icon, Input, Menu, notification } from "antd";
+import { Dropdown, Icon, Input, Menu } from "antd";
 import SelectLanguage from "./SelectLanguage";
 import _ from "lodash";
 import {
@@ -16,14 +16,7 @@ import { exportWorkflow } from "../services";
 import { Chowkidaar } from "../../common/permissions/Chowkidaar";
 import Permissions from "../../common/permissions/permissionsList";
 import { ExportWorkflowDropdown } from "./ExportWorkflowDropdown";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
+import showNotification from "../../common/notification";
 
 class Header extends Component {
   state = {
@@ -36,9 +29,9 @@ class Header extends Component {
       const page = 1;
       this.props.dispatch(workflowActions.searchWorkflow(searchValue, page));
     } else {
-      openNotificationWithIcon({
+      showNotification({
         type: "error",
-        message: "Please enter at least 3 characters to initiate search"
+        message: "notificationInstances.workflowSearchValidationFail"
       });
     }
   };
@@ -59,23 +52,22 @@ class Header extends Component {
     try {
       const response = await exportWorkflow({ kind });
       if (response.ok) {
-        openNotificationWithIcon({
+        showNotification({
           type: "success",
-          message:
-            "Your request for export has been accepted, it'll be mailed to you shortly"
+          message: "notificationInstances.workflowExportSuccess"
         });
       } else {
         const responseJSON = await response.json();
-        openNotificationWithIcon({
+        showNotification({
           type: "error",
           message: responseJSON["detail"]
         });
       }
     } catch (err) {
-      openNotificationWithIcon({
+      showNotification({
         type: "error",
-        message:
-          "An error occurred while processing your request, please try again later"
+        message: "notificationInstances.networkError",
+        description: "notificationInstances.networkErrorDescription"
       });
     }
     this.setState({

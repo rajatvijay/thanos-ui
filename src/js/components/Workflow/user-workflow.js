@@ -1,17 +1,10 @@
 import React from "react";
-import { Modal, Form, Input, Button, Alert, notification } from "antd";
+import { Modal, Form, Input, Button, Alert } from "antd";
 import { FormattedMessage } from "react-intl";
 import PropTypes from "prop-types";
 import { workflowService } from "../../services/workflow";
 import { workflowActions, createWorkflow } from "../../actions";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
+import showNotification from "../../../modules/common/notification";
 
 const UserWorkflowModal = props => {
   const alertMessageID = props.workflowID
@@ -191,17 +184,17 @@ class UserWorkflow extends React.Component {
     _updateWorkflow(payload)
       .then(() => {
         this.setState({ searchState: this.SEARCH_STATE_UNINTIATED });
-        openNotificationWithIcon({
+        showNotification({
           type: "success",
-          message: "Workflow linked successfully"
+          message: "notificationInstances.workflowLinkSuccess"
         });
         this.resetForm();
       })
       .catch(err => {
         this.setState({ searchState: this.SEARCH_STATE_UNINTIATED });
-        openNotificationWithIcon({
+        showNotification({
           type: "error",
-          message: "An error occurred while linking workflow"
+          message: "notificationInstances.workflowLinkFail"
         });
         console.error(err);
       });

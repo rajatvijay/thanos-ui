@@ -1,16 +1,9 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Radio, Modal, notification } from "antd";
+import { Form, Input, Button, Radio, Modal } from "antd";
 import { FormattedMessage } from "react-intl";
 import { authHeader } from "../../../_helpers";
 import { apiBaseURL } from "../../../../config";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
+import showNotification from "../../../../modules/common/notification";
 
 function getField(fieldDetail, OnFieldChange, fieldList, getFieldDecorator) {
   switch (fieldDetail.field_type) {
@@ -125,26 +118,34 @@ class BulkActionFields extends Component {
             }
           })
         };
-        return fetch(apiBaseURL + "workflow/bulk-action/", requestOptions).then(
-          response => {
+        return fetch(apiBaseURL + "workflow/bulk-action/", requestOptions)
+          .then(response => {
             this.setState({
               isLoading: false
             });
+
             if (!response.ok) {
-              return openNotificationWithIcon({
+              showNotification({
                 type: "error",
-                message: "Error in performing the action!"
+                message: "notificationInstances.asyncActionSuccess"
               });
             } else {
               this.props.onCloseBulkActionModal();
-              return openNotificationWithIcon({
+
+              showNotification({
                 type: "success",
-                message:
-                  "Your request has been submitted, action will be performed shortly."
+                message: "notificationInstances.asyncActionFail"
               });
             }
-          }
-        );
+            return;
+          })
+          .catch(err => {
+            showNotification({
+              type: "error",
+              message: "notificationInstances.networkError",
+              description: "notificationInstances.networkErrorDescription"
+            });
+          });
       }
     });
   };

@@ -1,16 +1,8 @@
 import { changeStatusConstants, workflowCommentsConstants } from "../constants";
 import { changeStatusService } from "../services";
-import { notification } from "antd";
 import { workflowDetailsActions } from "../actions";
 import _ from "lodash";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
+import showNotification from "../../modules/common/notification";
 
 export const changeStatusActions = (
   payload,
@@ -31,9 +23,9 @@ export const changeStatusActions = (
       dispatch(workflowDetailsActions.getStepFields(step_reload_payload));
     }
 
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Status changed."
+      message: "notificationInstances.statusChangeSuccess"
     });
     if (payload.addComment) {
       response.fieldExtra = fieldExtra;
@@ -44,9 +36,9 @@ export const changeStatusActions = (
     }
   } catch (error) {
     dispatch({ type: changeStatusConstants.CHANGE_FAILURE, error });
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Failed"
+      message: "notificationInstances.statusChangeFail"
     });
   }
 };

@@ -1,21 +1,17 @@
-import { PureComponent } from "react";
 import { notification } from "antd";
-import { injectIntl } from "react-intl";
+import { intl } from "./components/IntlCapture";
 
-let intl;
-
-/** React component to capture the context.  */
-class _IntlCapture extends PureComponent {
-  render() {
-    // render will only work when the props are changed, usually when the
-    // language will be changed.
-    intl = this.props.intl;
-    return null;
-  }
-}
-
-export const IntlCapture = injectIntl(_IntlCapture);
-
+/**
+ *
+ * @param {"success"|"error"|"info"|"warn"|"warning"|"open"} type Defines the type of notification that you want to show
+ * @param {string} message Translation path of title text
+ * @param {object} messageData Additional data to substiture variables from the message
+ * @param {string} description Translation path of body text
+ * @param {object} descriptionData Additional data to substitute variables from the message
+ * @param {any} key Any unique string or symbol
+ * @param {"topLeft" | "topRight" | "bottomLeft" | "bottomRight"} placement placement of the notification on screen
+ * @param {number} duration Duration for which the notification should stay
+ */
 const showNotification = ({
   type = "info",
   message = "",

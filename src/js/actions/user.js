@@ -5,8 +5,8 @@ import {
   sendEmailAuthToken as userSendEmailAuthToken
 } from "../services/user";
 import { history } from "../_helpers";
-import { notification } from "antd";
 import { userUtilities } from "../utils/user";
+import showNotification from "../../modules/common/notification";
 
 export const userActions = {
   register,
@@ -14,14 +14,6 @@ export const userActions = {
   getById,
   delete: _delete,
   setNextUrl
-};
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
 };
 
 export const login = (username, password, token) => async dispatch => {
@@ -114,12 +106,11 @@ export const sendEmailAuthToken = (email, nextUrl) => async dispatch => {
       history.push("/");
     } else {
       response.json().then(data => {
-        const genericMessage =
-          "There was an error while submitting the form, please try again. If the problem still persists please contact our team ";
-        openNotificationWithIcon({
+        showNotification({
           type: "error",
-          message: "Something went wrong.",
-          body: data.detail || genericMessage
+          message: "notificationInstances.somethingWentWrong",
+          description:
+            data.detail || "notificationInstances.somethingWentWrongDescription"
         });
       });
     }

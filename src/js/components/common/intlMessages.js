@@ -43,7 +43,8 @@ export default {
       parentWorkflow: "Parent Workflow",
       childWorkflows: "Child Workflows",
       staticSection: "Static Section",
-      createWorkflow: "Create new"
+      createWorkflow: "Create new",
+      preparingForms: "Preparing forms..."
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filter workflow type",
@@ -131,7 +132,6 @@ export default {
       resendOneTimePasswordText: "Resend One-time password",
       oneTimePasswordSentText:
         "We have sent you an email. If you are a registered user, you will also find your one time password in the email sent to {email}",
-      unableToSendOneTimePassword: "Unable to send one time password to ",
       emailCantBeEmpty: "Email can't be empty",
       invalidEmpty: "Invalid email",
       OtpEmpty: "One time password can't be empty",
@@ -223,6 +223,51 @@ export default {
       ws001:
         "There’s a problem with the configuration of workflow, please check with the site admin.",
       ws002: "Workflow with ID {workflowId} is unavailable"
+    },
+    fieldErrors: {
+      err_field_mandatory: "This field is required"
+    },
+    notificationInstances: {
+      statusChangeSuccess: "Status changed",
+      statusChangeFail: "Failed to change status",
+      saveSuccess: "Saved successfully",
+      saveFail: "Unable to save",
+      stepSubmitSuccess: "Step submitted successfully",
+      stepSubmitFail: "Failed to submit step",
+      stepRevertSuccess: "Successfully reverted step completion",
+      stepRevertFail: "Failed to revert completion",
+      stepApproveSuccess: "Step approved",
+      stepApproveFail: "Failed to approve step",
+      commentSuccess: "Comment added",
+      commentFail: "Comment could not be posted at the moment",
+      flagSuccess: "Flag updated",
+      flagFail: "Failed to update flag",
+      statusUpdateSuccess: "Status updated",
+      statusUpdateFail: "Failed to update status",
+      workflowLinkSuccess: "Workflow linked successfully",
+      workflowLinkFail: "An error occurred while linking workflow",
+      workflowCreateSuccess: "Workflow created successfully",
+      workflowCreateFail: "Workflow creation failed.",
+      workflowCreateFailDescription:
+        "Sorry for the inconvenience. Contact the Administrator for assistance.",
+      archiveWorkflowFail:
+        "Possible misconfiguration of status'es mappings, please check with site admin",
+      somethingWentWrong: "Something went wrong",
+      somethingWentWrongDescription:
+        "There was an error while submitting the form, please try again. If the problem still persists please contact the administrator.",
+      asyncActionSuccess:
+        "Your request has been submitted, action will be performed shortly.",
+      asyncActionFail: "Error in performing the action",
+      invalidFile: "Invalid file!",
+      loggedOutSSO: "You're being logged out...",
+      loggedOut: "You've been logged out. Redirecting to login page...",
+      workflowSearchValidationFail:
+        "Please enter at least 3 characters to initiate search.",
+      workflowExportSuccess:
+        "Your request for export has been accepted, it'll be mailed to you shortly",
+      networkError: "Network Error",
+      networkErrorDescription:
+        "Unable to reach the server. Please check your network connection or contact Administrator if the problem persists."
     },
     loginPageInstances: {
       oneTimeLink: "Enter your business e-mail address",
@@ -474,7 +519,8 @@ export default {
       parentWorkflow: "Flujo de trabajo principal",
       childWorkflows: "Flujos de trabajo secundarios",
       staticSection: "Sección estática",
-      createWorkflow: "Crear nuevo"
+      createWorkflow: "Crear nuevo",
+      preparingForms: "Preparando formularios ..."
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Tipo de flujo de trabajo de filtro",
@@ -538,8 +584,6 @@ export default {
       resendOneTimePasswordText: "volver a enviar una contraseña de tiempo ",
       oneTimePasswordSentText:
         "Te hemos enviado un correo electrónico. Si es un usuario registrado, también encontrará su contraseña única en el correo electrónico enviado a {email}",
-      unableToSendOneTimePassword:
-        "No se puede enviar una contraseña de tiempo a ",
       emailCantBeEmpty: "El correo electrónico no puede estar vacío",
       invalidEmpty: "Email inválido",
       OtpEmpty: "La contraseña de una sola vez no puede estar vacía ",
@@ -636,6 +680,52 @@ export default {
       ws001:
         "Hay un problema con la configuración del flujo de trabajo, consulte con el administrador del sitio",
       ws002: "El flujo de trabajo con ID {workflowId} no está disponible"
+    },
+    fieldErrors: {
+      err_field_mandatory: "Este campo es obligatorio"
+    },
+    notificationInstances: {
+      statusChangeSuccess: "Estado cambiado",
+      statusChangeFail: "Error al cambiar el estado",
+      saveSuccess: "Guardado correctamente",
+      saveFail: "No se puede guardar",
+      stepSubmitSuccess: "Paso enviado correctamente",
+      stepSubmitFail: "Error al enviar el paso",
+      stepRevertSuccess: "Finalización de paso revertida con éxito",
+      stepRevertFail: "Error al revertir la finalización",
+      stepApproveSuccess: "Paso aprobado",
+      stepApproveFail: "Error al aprobar el paso",
+      commentSuccess: "Comentario agregado",
+      commentFail: "El comentario no se pudo publicar en este momento",
+      flagSuccess: "Bandera actualizada",
+      flagFail: "Error al actualizar la bandera",
+      statusUpdateSuccess: "Estado actualizado",
+      statusUpdateFail: "Error al actualizar el estado",
+      workflowLinkSuccess: "Flujo de trabajo vinculado correctamente",
+      workflowLinkFail: "Se produjo un error al vincular el flujo de trabajo",
+      workflowCreateSuccess: "Flujo de trabajo creado con éxito",
+      workflowCreateFail: "Falló la creación del flujo de trabajo",
+      workflowCreateFailDescription:
+        "Disculpe las molestias. Póngase en contacto con el administrador para obtener ayuda",
+      archiveWorkflowFail:
+        "Posible configuración incorrecta de las asignaciones de estado, consulte con el administrador del sitio",
+      somethingWentWrong: "Algo salió mal",
+      somethingWentWrongDescription:
+        "Hubo un error al enviar el formulario, intente nuevamente. Si el problema persiste, comuníquese con el administrador",
+      asyncActionSuccess:
+        "Su solicitud ha sido enviada, la acción se realizará en breve",
+      asyncActionFail: "Error al realizar la acción",
+      invalidFile: "Archivo inválido",
+      loggedOutSSO: "Estás desconectado ...",
+      loggedOut:
+        "Se ha cerrado la sesión. Redirigiendo a la página de inicio de sesión ...",
+      workflowSearchValidationFail:
+        "Ingrese al menos 3 caracteres para iniciar la búsqueda",
+      workflowExportSuccess:
+        "Su solicitud de exportación ha sido aceptada, se le enviará por correo en breve",
+      networkError: "Error de red",
+      networkErrorDescription:
+        "No se puede acceder al servidor. Compruebe su conexión de red o póngase en contacto con el administrador si el problema persiste"
     },
     loginPageInstances: {
       oneTimeLink: "Ingrese la dirección de correo electrónico de su empresa",
@@ -900,7 +990,8 @@ export default {
       parentWorkflow: "Flux de travail parent",
       childWorkflows: "Flux de travail enfants",
       staticSection: "Section statique",
-      createWorkflow: "Créer un nouveau"
+      createWorkflow: "Créer un nouveau",
+      preparingForms: "Préparer des formulaires ..."
     },
     workflowFiltersTranslated: {
       filterWorkflowType: "Filtrer le type de flux de travail",
@@ -964,8 +1055,6 @@ export default {
       resendOneTimePasswordText: "Renvoyer le mot de passe unique",
       oneTimePasswordSentText:
         "Nous vous avons envoyé un courriel. Si vous êtes un utilisateur enregistré, vous trouverez également votre mot de passe unique dans le courriel envoyé à {email}",
-      unableToSendOneTimePassword:
-        "Impossible d'envoyer un mot de passe unique à ",
       emailCantBeEmpty: "Le courriel ne peut être vide",
       invalidEmpty: "Courriel invalide",
       OtpEmpty: "Un mot de passe unique ne peut être vide",
@@ -1062,6 +1151,53 @@ export default {
       ws001:
         "Il y a un problème avec la configuration du workflow, veuillez vérifier avec l'administrateur du site.",
       ws002: "Le workflow avec l'ID {workflowId} n'est pas disponible"
+    },
+    fieldErrors: {
+      err_field_mandatory: "Ce champ est obligatoire"
+    },
+    notificationInstances: {
+      statusChangeSuccess: "Statut modifié",
+      statusChangeFail: "Echec de la modification du statut",
+      saveSuccess: "Enregistré avec succès",
+      saveFail: "Impossible de sauvegarder",
+      stepSubmitSuccess: "Étape soumise avec succès",
+      stepSubmitFail: "Echec de la soumission de l'étape",
+      stepRevertSuccess: "L'achèvement de l'étape a été annulé avec succès",
+      stepRevertFail: "Impossible d'annuler l'achèvement",
+      stepApproveSuccess: "Étape approuvée",
+      stepApproveFail: "Échec d'approbation de l'étape",
+      commentSuccess: "Commentaire ajouté",
+      commentFail: "Le commentaire n'a pu être posté pour le moment",
+      flagSuccess: "Drapeau mis à jour",
+      flagFail: "Echec de la mise à jour du drapeau",
+      statusUpdateSuccess: "Statut mis à jour",
+      statusUpdateFail: "Echec de la mise à jour du statut",
+      workflowLinkSuccess: "Le flux de travail est lié avec succès",
+      workflowLinkFail:
+        "Une erreur s'est produite lors de la liaison du flux de travail",
+      workflowCreateSuccess: "Le flux de travail a été créé avec succès",
+      workflowCreateFail: "La création du workflow a échoué",
+      workflowCreateFailDescription:
+        "Désolé pour le dérangement. Contactez l'administrateur pour obtenir de l'aide.",
+      archiveWorkflowFail:
+        "Possible mauvaise configuration des mappages status'es, veuillez vérifier avec l'administrateur du site",
+      somethingWentWrong: "Quelque chose a mal tourné",
+      somethingWentWrongDescription:
+        "Une erreur s'est produite lors de l'envoi du formulaire. Veuillez réessayer. Si le problème persiste, veuillez contacter l'administrateur.",
+      asyncActionSuccess:
+        "Votre demande a été soumise, l'action sera exécutée sous peu.",
+      asyncActionFail: "Erreur lors de l'exécution de l'action",
+      invalidFile: "Fichier invalide!",
+      loggedOutSSO: "Vous êtes déconnecté ...",
+      loggedOut:
+        "Vous avez été déconnecté. Redirection vers la page de connexion ...",
+      workflowSearchValidationFail:
+        "Veuillez saisir au moins 3 caractères pour lancer la recherche.",
+      workflowExportSuccess:
+        "Votre demande d'exportation a été acceptée, elle vous sera postée sous peu",
+      networkError: "Erreur réseau",
+      networkErrorDescription:
+        "Impossible d'atteindre le serveur. Veuillez vérifier votre connexion réseau ou contacter l'administrateur si le problème persiste."
     },
     loginPageInstances: {
       oneTimeLink: "Entrez votre adresse de courriel professionnelle",

@@ -6,17 +6,10 @@ import {
   submitWorkflows,
   fetchWorkflowDetails
 } from "../../services/workflowPdfApi";
-import { notification } from "antd";
 import { FormattedMessage } from "react-intl";
 import styled from "@emotion/styled";
+import showNotification from "../../../modules/common/notification";
 
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
 const META_INFO = [
   {
     value: "include_flags",
@@ -210,25 +203,26 @@ class PDFChecklistModal extends React.Component {
       .then(response => {
         if (!response.ok) {
           this.setLoading(false);
-          return openNotificationWithIcon({
+          showNotification({
             type: "error",
-            message: "Error in performing the action!"
+            message: "notificationInstances.asyncActionSuccess"
           });
         } else {
           this.handleCancel();
           this.setLoading(false);
-          return openNotificationWithIcon({
+          showNotification({
             type: "success",
-            message:
-              "Your request has been submitted, action will be performed shortly."
+            message: "notificationInstances.asyncActionFail"
           });
         }
+        return;
       })
       .catch(() => {
         this.setLoading(false);
-        openNotificationWithIcon({
+        showNotification({
           type: "error",
-          message: "Please try again later!"
+          message: "notificationInstances.networkError",
+          description: "notificationInstances.networkErrorDescription"
         });
       });
   };
