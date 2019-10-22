@@ -332,7 +332,7 @@ class Comments extends Component {
     // False, simply means that we're loading consolidated comments.
     // In case of True, we'll show things like text-area to add more comments in the same
     // context.
-    const { singleContext } = comments;
+    const singleContext = comments.contentType !== "all_data";
     const { workflowStatuses, fileList } = this.state;
     const { toggleSidebar } = this.props;
 
