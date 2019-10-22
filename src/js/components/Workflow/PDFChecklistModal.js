@@ -205,14 +205,14 @@ class PDFChecklistModal extends React.Component {
           this.setLoading(false);
           showNotification({
             type: "error",
-            message: "notificationInstances.asyncActionSuccess"
+            message: "notificationInstances.asyncActionFail"
           });
         } else {
           this.handleCancel();
           this.setLoading(false);
           showNotification({
             type: "success",
-            message: "notificationInstances.asyncActionFail"
+            message: "notificationInstances.asyncActionSuccess"
           });
         }
         return;
