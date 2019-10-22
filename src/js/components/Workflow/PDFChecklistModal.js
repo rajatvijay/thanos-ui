@@ -135,7 +135,16 @@ class PDFChecklistModal extends React.Component {
       extra_sections,
       child_steps_to_print
     } = userSelection;
-    if (!parent_steps_to_print || !child_steps_to_print || !extra_sections) {
+
+    const childSteps = child_steps_to_print
+      ? Object.values(child_steps_to_print).filter(child => child.length)
+      : [];
+
+    if (
+      !parent_steps_to_print.length ||
+      !childSteps.length ||
+      !extra_sections.length
+    ) {
       this.setState({ tickMarkAtleastOne: true });
       return true;
     }
