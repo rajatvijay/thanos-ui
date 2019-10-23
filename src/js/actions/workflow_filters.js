@@ -18,7 +18,12 @@ function setFilters(payload) {
   return dispatch => {
     dispatch({
       type: workflowFiltersConstants.SET_REQUEST,
-      workflowFilter: payload
+      workflowFilter: {
+        ...payload,
+        filterValue: Array.isArray(payload.filterValue)
+          ? payload.filterValue.map(filter => window.encodeURIComponent(filter))
+          : payload.filterValue
+      }
     });
   };
 }
