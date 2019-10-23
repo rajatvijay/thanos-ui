@@ -42,6 +42,7 @@ import {
 } from "./actionCreators";
 // import { getWorkflowFitlersParams } from "./utils";
 import { FILTERS_ENUM } from "./constants";
+import { appendRankInWorkflowItem } from "./utils";
 
 export const getStatusesThunk = () => {
   return async dispatch => {
@@ -152,7 +153,7 @@ export function getWorkflowListThunk(params) {
       throw error;
     }
 
-    dispatch(getWorkflowListSuccess(workflows));
+    dispatch(getWorkflowListSuccess(appendRankInWorkflowItem(workflows)));
     return workflows;
   };
 }

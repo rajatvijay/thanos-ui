@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import WorkflowItem from "./WorkflowItem";
 import {
-  isWorkflowSortingEnabledSelector,
   workflowListCountSelector,
-  groupedWorkflowsSelector
+  groupedWorkflowsSelector,
+  isSortingFilterAppliedSelector
 } from "../../selectors";
 import { css } from "emotion";
 import { FILTERS_ENUM } from "../../constants";
@@ -46,10 +46,10 @@ class WorkflowList extends Component {
   };
 
   renderWorflowItem = workflow => {
-    const { isSortingEnabled } = this.props;
+    const { isSortinFilterApplied } = this.props;
     return (
       <WorkflowItem
-        showSortingValue={isSortingEnabled}
+        showSortingValue={isSortinFilterApplied}
         workflow={workflow}
         onClick={this.handleWorkflowClick(workflow)}
       />
@@ -129,10 +129,10 @@ class WorkflowList extends Component {
 }
 
 const mapStateToProps = state => ({
-  isSortingEnabled: isWorkflowSortingEnabledSelector(state),
   isLoading: state.workflowList.workflowList.isLoading,
   workflowCount: workflowListCountSelector(state),
-  workflowGroups: groupedWorkflowsSelector(state)
+  workflowGroups: groupedWorkflowsSelector(state),
+  isSortinFilterApplied: isSortingFilterAppliedSelector(state)
 });
 
 export default connect(mapStateToProps)(withFilters(WorkflowList));

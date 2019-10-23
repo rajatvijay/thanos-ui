@@ -78,16 +78,16 @@ const WorkflowItem = ({ onClick, workflow, showSortingValue }) => {
         ) : null}
       </div>
 
-      {showSortingValue && (
-        <div
-          className={css`
-            width: 10%;
-            text-align: right;
-          `}
-        >
+      <div
+        className={css`
+          width: 10%;
+          text-align: right;
+        `}
+      >
+        {showSortingValue && (
           <StyledSortingValue>{workflow.rank}</StyledSortingValue>
-        </div>
-      )}
+        )}
+      </div>
 
       <div
         className={css`
@@ -245,7 +245,15 @@ const StyledLCData = styled.span`
   font-size: 14px;
 `;
 
-const StyledSortingValue = styled.span``;
+const StyledSortingValue = styled.span`
+  background: #00000048;
+  padding: 2px 6px;
+  border-radius: 15%;
+  color: white;
+  font-size: 14px;
+  border-radius: 2px;
+  line-height: 21px;
+`;
 
 const StyledAlertName = styled.span`
   word-break: break-word;
