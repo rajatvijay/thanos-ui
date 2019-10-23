@@ -227,7 +227,7 @@ class Header extends Component {
           {user ? (
             <Dropdown
               overlay={
-                <Menu>
+                <Menu style={{ minWidth: 300 }}>
                   {this.supportLinks()}
                   <Menu.Divider style={{ margin: "6px 0px" }} />
                   <SelectLanguage />
