@@ -10,7 +10,7 @@ import { flattenMessages } from "./components/common/messageUtils";
 import { languageActions } from "./actions";
 import { languageConstants } from "./constants";
 import ErrorBoundary from "./components/common/ErrorBoundary";
-import { IntlCapture } from "../modules/common/notification";
+import IntlCapture from "../modules/common/components/IntlCapture";
 
 class App extends React.Component {
   componentDidMount() {

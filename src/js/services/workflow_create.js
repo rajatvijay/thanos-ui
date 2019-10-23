@@ -2,10 +2,10 @@ import { authHeader, handleResponse } from "../_helpers";
 import { APIFetch } from "../utils/request";
 
 export const workflowCreateService = {
-  crerateWorkflow
+  createWorkflow
 };
 
-function crerateWorkflow(payload) {
+function createWorkflow(payload) {
   const requestOptions = {
     method: "POST",
     headers: authHeader.post(),

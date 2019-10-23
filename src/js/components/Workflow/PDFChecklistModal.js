@@ -6,17 +6,10 @@ import {
   submitWorkflows,
   fetchWorkflowDetails
 } from "../../services/workflowPdfApi";
-import { notification } from "antd";
 import { FormattedMessage } from "react-intl";
 import styled from "@emotion/styled";
+import showNotification from "../../../modules/common/notification";
 
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
 const META_INFO = [
   {
     value: "include_flags",
@@ -135,7 +128,16 @@ class PDFChecklistModal extends React.Component {
       extra_sections,
       child_steps_to_print
     } = userSelection;
-    if (!parent_steps_to_print || !child_steps_to_print || !extra_sections) {
+
+    const childSteps = child_steps_to_print
+      ? Object.values(child_steps_to_print).filter(child => child.length)
+      : [];
+
+    if (
+      !parent_steps_to_print.length ||
+      !childSteps.length ||
+      !extra_sections.length
+    ) {
       this.setState({ tickMarkAtleastOne: true });
       return true;
     }
@@ -201,25 +203,26 @@ class PDFChecklistModal extends React.Component {
       .then(response => {
         if (!response.ok) {
           this.setLoading(false);
-          return openNotificationWithIcon({
+          showNotification({
             type: "error",
-            message: "Error in performing the action!"
+            message: "notificationInstances.asyncActionFail"
           });
         } else {
           this.handleCancel();
           this.setLoading(false);
-          return openNotificationWithIcon({
+          showNotification({
             type: "success",
-            message:
-              "Your request has been submitted, action will be performed shortly."
+            message: "notificationInstances.asyncActionSuccess"
           });
         }
+        return;
       })
       .catch(() => {
         this.setLoading(false);
-        openNotificationWithIcon({
+        showNotification({
           type: "error",
-          message: "Please try again later!"
+          message: "notificationInstances.networkError",
+          description: "notificationInstances.networkErrorDescription"
         });
       });
   };

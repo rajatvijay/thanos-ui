@@ -1,15 +1,6 @@
 import { dunsFieldConstants } from "../constants";
 import { dunsFieldService } from "../services";
-import { notification } from "antd";
-// import { workflowDetailsActions } from "./workflow_details";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
+import showNotification from "../../modules/common/notification";
 
 export const dunsFieldActions = {
   dunsSaveField,
@@ -45,9 +36,9 @@ function dunsSaveField(payload, stepId) {
   }
 
   function failure(error) {
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Unable to save."
+      message: "notificationInstances.saveFail"
     });
     return { type: dunsFieldConstants.DUNS_FIELD_FAILURE, error, stepId };
   }
@@ -75,18 +66,18 @@ function dunsSelectItem(payload, stepId) {
       return failure(field);
     }
 
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Saved successfully"
+      message: "notificationInstances.saveSuccess"
     });
 
     return { type: dunsFieldConstants.DUNS_SELECT_SUCCESS, field };
   }
 
   function failure(error) {
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Unable to save."
+      message: "notificationInstances.saveFail"
     });
     return { type: dunsFieldConstants.DUNS_SELECT_FAILURE, error, stepId };
   }

@@ -22,6 +22,7 @@ import StepAssignmentUsers from "./StepAssignmentUsers";
 import PDFChecklistModal from "../Workflow/PDFChecklistModal";
 import { get as lodashGet } from "lodash";
 import styled from "@emotion/styled";
+import { Tareekh } from "../common/Tareekh";
 
 class StepBody extends Component {
   constructor(props) {
@@ -63,13 +64,18 @@ class StepBody extends Component {
   versionDropDown = () => {
     const currentStepFields = this.props.currentStepFields[this.props.stepId]
       .currentStepFields;
+
     const versionList = (
       <Menu onClick={this.onVersionChange}>
         {currentStepFields.versions.length > 0 ? (
-          _.map(currentStepFields.versions, function(i) {
-            const str = i.label;
-            const strMod = str.replace(/Created/g, "Submitted");
-            return <Menu.Item key={`${i.value}`}> {strMod}</Menu.Item>;
+          currentStepFields.versions.map(function(item) {
+            let label = (
+              <span>
+                <FormattedMessage id="stepBodyFormInstances.versionSubmittedOn" />{" "}
+                v({item.value}) <Tareekh timestamp={item.date} />
+              </span>
+            );
+            return <Menu.Item key={`${item.value}`}> {label}</Menu.Item>;
           })
         ) : (
           <Menu.Item key={0} disabled>

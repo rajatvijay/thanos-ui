@@ -12,6 +12,7 @@ import Permissions from "../../../../modules/common/permissions/permissionsList"
 import { isAnswered } from "../../../../modules/fields/utils";
 import { FormattedMessage } from "react-intl";
 import Godaam from "../../../utils/storage";
+import { intl } from "../../../../modules/common/components/IntlCapture";
 
 export const commonFunctions = {
   getLabel,
@@ -173,12 +174,27 @@ function stringToArray(string) {
   }
 }
 
+// Temporarily here to map backend field errors to
+// intl error messages.
+// This will be removed once backend starts sending
+// error keys instead of sentences
+const fieldErrors = {
+  "This field is required": "fieldErrors.err_field_mandatory"
+};
+
 function field_error(props) {
   const error = props.error || {};
 
   if (error[props.field.id]) {
+    // Check if the error message is something we can map to
+    // translated error message, otherwise show it as it is
+    const errorMessage = fieldErrors[error[props.field.id]]
+      ? intl.formatMessage({
+          id: fieldErrors[error[props.field.id]]
+        })
+      : error[props.field.id];
     return {
-      help: error[props.field.id],
+      help: errorMessage,
       validateStatus: "error"
     };
   }

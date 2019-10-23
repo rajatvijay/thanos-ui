@@ -16,14 +16,9 @@ import _ from "lodash";
 import Godaam from "../utils/storage";
 import queryString from "query-string";
 import { userActions } from "../actions";
+import { ServiceUnavailableError } from "../components/common/ServiceUnavailableError";
 
 class RoutSwitch extends React.Component {
-  constructor(props) {
-    super();
-  }
-
-  componentDidMount = () => {};
-
   componentDidUpdate = prevProps => {
     if (this.props.location !== prevProps.location) {
       const parsed = queryString.parse(this.props.location.search);
@@ -135,6 +130,11 @@ class RoutSwitch extends React.Component {
         />
 
         <PrivateRoute path="/reports/" exact component={ReportPage} />
+
+        <Route
+          path="/service-unavailable/"
+          component={ServiceUnavailableError}
+        />
 
         <Route path="/" component={GenericNotFound} />
       </Switch>

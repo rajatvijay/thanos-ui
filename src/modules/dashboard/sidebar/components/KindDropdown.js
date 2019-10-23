@@ -240,6 +240,7 @@ const StyledListContainer = styled.ul`
   padding: 0;
   width: 300px;
   position: fixed;
+  overflow-x: hidden;
 `;
 
 const StyledRelativeLi = styled.li`

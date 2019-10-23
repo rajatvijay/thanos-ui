@@ -17,7 +17,6 @@ const StyledCountWidget = styled.span`
   padding: 0 7px;
   font-size: 14px;
   width: auto;
-  min-width: 20px;
   height: 20px;
   line-height: 20px;
   text-align: center;

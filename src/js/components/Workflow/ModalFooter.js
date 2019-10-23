@@ -29,7 +29,7 @@ class ModalFooter extends React.Component {
           textAlign: "center",
           padding: "10px 0px",
           bottom: 0,
-          zIndex: 1,
+          zIndex: 4,
           fontSize: 18
         }}
       >

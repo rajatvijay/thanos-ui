@@ -1,14 +1,5 @@
-import { notification } from "antd";
 import Godaam from "./storage";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    key: "logoutNotification", // Ensure only single instance of notification exists
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
+import showNotification from "../../modules/common/notification";
 
 const removeCookies = () => {
   const expireCookie = key => {
@@ -29,15 +20,15 @@ const postLogoutAction = ({ addNextURL = false, redirectURL = "" } = {}) => {
   if (redirectURL) {
     // In case of SSO, we get a redirect URL, that needs to be hit to ensure
     // user is logged out from the IdP as well.
-    openNotificationWithIcon({
+    showNotification({
       type: "warning",
-      message: "You're being logged out.."
+      message: "notificationInstances.loggedOutSSO"
     });
     window.location.href = redirectURL;
   } else {
-    openNotificationWithIcon({
+    showNotification({
       type: "warning",
-      message: "You've been logged out, redirecting to login page.."
+      message: "notificationInstances.loggedOut"
     });
     const newURL = addNextURL
       ? `/login/?next=${new URL(window.location.href).pathname}`

@@ -1,16 +1,6 @@
 import React from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
-import {
-  Form,
-  Button,
-  Input,
-  Icon,
-  Divider,
-  Row,
-  Alert,
-  Col,
-  notification
-} from "antd";
+import { Form, Button, Input, Icon, Divider, Row, Alert, Col } from "antd";
 import validator from "validator";
 import _ from "lodash";
 import { loginOtp } from "../../actions";
@@ -22,14 +12,6 @@ import { apiBaseURL } from "../../../config";
 import showNotification from "../../../modules/common/notification";
 
 const FormItem = Form.Item;
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
 
 class OTPForm extends React.Component {
   constructor(props) {
@@ -116,19 +98,6 @@ class OTPForm extends React.Component {
     });
   };
 
-  //opt request failure notification
-  showMessageFaliure = () => {
-    openNotificationWithIcon({
-      type: "error",
-      message:
-        this.props.intl.formatMessage({
-          id: "commonTextInstances.unableToSendOneTimePassword"
-        }) +
-        " " +
-        this.state.data.email
-    });
-  };
-
   //client side data validation
   validate = (data, opt) => {
     const errors = {};
@@ -205,16 +174,14 @@ class OTPForm extends React.Component {
         }
         return response;
       })
-      .catch(function(error) {});
-  };
-
-  //returns article depending on first letter of passed param
-  getVowel = word => {
-    if (word && _.includes("aeiou", word.charAt(0))) {
-      return "an";
-    } else {
-      return "a";
-    }
+      .catch(error => {
+        // show network error notification
+        showNotification({
+          type: "error",
+          message: "notificationInstances.networkError",
+          description: "notificationInstances.networkErrorDescription"
+        });
+      });
   };
 
   render() {

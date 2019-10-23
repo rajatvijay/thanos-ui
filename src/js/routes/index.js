@@ -68,6 +68,7 @@ class MainRoutes extends React.Component {
 
     if (
       Godaam.user &&
+      !this.props.permissions.error &&
       !this.props.permissions.loading &&
       !Object.keys(get(this.props, "permissions.permissions", {})).length
     ) {

@@ -8,20 +8,18 @@ import {
   Layout,
   Row,
   Select,
-  Tooltip,
   Upload
 } from "antd";
 import { get as lodashGet, size as lodashSize } from "lodash";
-import moment from "moment";
 import React, { Component } from "react";
 import { FormattedMessage, injectIntl } from "react-intl";
-import Moment from "react-moment";
 import { changeStatusActions } from "../../actions";
 import { workflowFiltersService } from "../../services";
 import { status_filters } from "./EventStatuses";
 import { integrationCommonFunctions } from "./field-types/integration_common";
 import MentionWithAttachments from "./MentionWithAttachments";
 import showNotification from "../../../modules/common/notification";
+import { Timestamp } from "../Navbar/UTCTimestamp";
 
 const { Sider, Content } = Layout;
 const Option = Select.Option;
@@ -314,14 +312,27 @@ class Comments extends Component {
         .map(group => ({ id: "g" + group.id, display: group.name }))
         .sort(this.sortMentions),
       ...userMentions
-        .map(user => ({ id: "u" + user.id, display: user.username }))
+        .map(user => ({
+          id: "u" + user.id,
+          display: user.full_name || user.email
+        }))
         .sort(this.sortMentions)
     ];
   };
 
+  get hasComments() {
+    return lodashGet(this.props, "workflowComments.data.results", []).filter(
+      comment => comment.messages.length
+    ).length;
+  }
+
   render() {
     const comments = lodashGet(this.props, "workflowComments.data", {});
-    const singleContext = lodashSize(comments.results) <= 1 ? true : false;
+    // singleContext -> True means that, it's either field comment or step comment.
+    // False, simply means that we're loading consolidated comments.
+    // In case of True, we'll show things like text-area to add more comments in the same
+    // context.
+    const singleContext = comments.contentType !== "all_data";
     const { workflowStatuses, fileList } = this.state;
     const { toggleSidebar } = this.props;
 
@@ -355,7 +366,8 @@ class Comments extends Component {
       >
         <div className="comment-details" style={{ width: "570px" }}>
           <Content style={{ background: "#fdfdfd", paddingBottom: "50px" }}>
-            {comments.results.length <= 0 ? (
+            {!comments.results.length ||
+            (!singleContext && !this.hasComments) ? (
               <CommentWrapper singleContext={true}>
                 {/*///////HEADER///////*/}
                 <StyledCommentHeader>
@@ -644,9 +656,7 @@ const Message = React.memo(
             {posted_by.first_name || posted_by.email}
           </b>
           <StyledCommentTimestamp>
-            <Tooltip title={moment(created_at).format()}>
-              <Moment fromNow>{created_at}</Moment>
-            </Tooltip>
+            <Timestamp timestamp={created_at} />
           </StyledCommentTimestamp>
         </StyledMessageRow>
         <StyledMessageBody>

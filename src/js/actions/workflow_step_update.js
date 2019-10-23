@@ -4,22 +4,14 @@ import {
   workflowCommentsConstants
 } from "../constants";
 import { workflowStepService } from "../services";
-import { notification, message } from "antd";
+import { message } from "antd";
 import _ from "lodash";
 import {
   workflowDetailsActions,
   workflowFiltersActions,
   stepPreviewActions
 } from "../actions";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft",
-    duration: data.duration || 4.5
-  });
-};
+import showNotification from "../../modules/common/notification";
 
 export const workflowStepActions = {
   saveField,
@@ -159,9 +151,9 @@ function removeAttachment(payload, event_type) {
   }
 
   function failure(error, workflowId) {
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Unable to save."
+      message: "notificationInstances.saveFail"
     });
     return {
       type: fieldConstants.RESPONSE_SAVE_FAILURE,
@@ -217,9 +209,9 @@ function submitStepData(payload) {
       return failure("error", stepData);
     }
     message.destroy();
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Submitted successfully"
+      message: "notificationInstances.stepSubmitSuccess"
     });
 
     return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData };
@@ -227,9 +219,9 @@ function submitStepData(payload) {
 
   function failure(error, payload) {
     message.destroy();
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Failed to submit step."
+      message: "notificationInstances.stepSubmitFail"
     });
 
     return {
@@ -260,17 +252,17 @@ function approveStep(payload) {
     return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
   function success(stepData) {
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Approved"
+      message: "notificationInstances.stepApproveSuccess"
     });
 
     return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData };
   }
   function failure(error) {
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Failed to approve step"
+      message: "notificationInstances.stepApproveFail"
     });
 
     return {
@@ -305,16 +297,16 @@ function undoStep(payload) {
     return { type: workflowStepConstants.SUBMIT_REQUEST, payload };
   }
   function success(stepData) {
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Successfully reverted step completion"
+      message: "notificationInstances.stepRevertSuccess"
     });
     return { type: workflowStepConstants.SUBMIT_SUCCESS, stepData };
   }
   function failure(error, payload) {
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Failed to revert completion"
+      message: "notificationInstances.stepRevertFail"
     });
 
     return {
@@ -369,9 +361,9 @@ function addComment(payload, step_reload_payload, isEmbedded) {
   };
 
   function success(data) {
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Comment added",
+      message: "notificationInstances.commentSuccess",
       duration: 7
     });
 
@@ -379,9 +371,8 @@ function addComment(payload, step_reload_payload, isEmbedded) {
   }
 
   function failure(error) {
-    const errorMessage =
-      error.error || "Comment could not be posted at the moment";
-    openNotificationWithIcon({
+    const errorMessage = error.error || "notificationInstances.commentFail";
+    showNotification({
       type: "error",
       message: errorMessage,
       duration: 7
@@ -422,9 +413,9 @@ function updateFlag(payload, isEmbedded) {
   };
 
   function success(data) {
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Flag updated!",
+      message: "notificationInstances.flagSuccess",
       duration: 7
     });
 
@@ -432,9 +423,9 @@ function updateFlag(payload, isEmbedded) {
   }
 
   function failure(error) {
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Failed to update",
+      message: "notificationInstances.flagFail",
       duration: 7
     });
     return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };
@@ -470,9 +461,9 @@ function updateIntegrationStatus(payload, isEmbedded) {
   };
 
   function success(data) {
-    openNotificationWithIcon({
+    showNotification({
       type: "success",
-      message: "Status updated!",
+      message: "notificationInstances.statusUpdateSuccess",
       duration: 7
     });
 
@@ -480,9 +471,9 @@ function updateIntegrationStatus(payload, isEmbedded) {
   }
 
   function failure(error) {
-    openNotificationWithIcon({
+    showNotification({
       type: "error",
-      message: "Failed to update",
+      message: "notificationInstances.statusUpdateFail",
       duration: 7
     });
     return { type: workflowCommentsConstants.ADD_COMMENTS_FAILURE, error };

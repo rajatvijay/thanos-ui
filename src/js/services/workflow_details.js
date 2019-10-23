@@ -44,9 +44,7 @@ function getStepFields(step) {
   };
 
   return APIFetch(
-    `workflows/${step.workflowId}/stepgroups/${step.groupId}/steps/${
-      step.stepId
-    }/`,
+    `workflows/${step.workflowId}/stepgroups/${step.groupId}/steps/${step.stepId}/`,
     requestOptions
   ).then(handleResponse);
 }
@@ -58,13 +56,9 @@ function getComments(payload) {
     credentials: "include"
   };
 
-  let request_url = `channels?object_id=${payload.object_id}&type=${
-    payload.type
-  }`;
+  let request_url = `channels/?object_id=${payload.object_id}&type=${payload.type}`;
   if (payload.extra) {
-    request_url += `&field_id=${payload.extra.field_id}&uid=${
-      payload.extra.uid
-    }`;
+    request_url += `&field_id=${payload.extra.field_id}&uid=${payload.extra.uid}`;
   }
 
   return APIFetch(request_url, requestOptions).then(handleResponse);
@@ -78,9 +72,7 @@ function getStepVersionFields(step) {
   };
 
   const queryParams = `version=${step.versionId}`;
-  const url = `workflows/${step.workflowId}/stepgroups/${step.groupId}/steps/${
-    step.stepId
-  }/`;
+  const url = `workflows/${step.workflowId}/stepgroups/${step.groupId}/steps/${step.stepId}/`;
 
   return APIFetch(`${url}?${queryParams}`, requestOptions).then(handleResponse);
 }

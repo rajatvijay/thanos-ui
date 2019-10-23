@@ -11,8 +11,7 @@ import {
   Select as AntSelect,
   Divider as AntDivider,
   Button,
-  Cascader,
-  notification
+  Cascader
 } from "antd";
 import _ from "lodash";
 import moment from "moment";
@@ -28,6 +27,7 @@ import { ESign } from "./esign.js";
 import { apiBaseURL, siteOrigin } from "../../../../config";
 import { validateUploadFile } from "../../../utils/files";
 import { getIntlBody } from "../../../_helpers/intl-helpers";
+import showNotification from "../../../../modules/common/notification";
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -42,19 +42,10 @@ const {
   stringToArray,
   field_error,
   feedValue,
-  getLink,
   getStyle,
   isDisabled,
   convertValueToString
 } = commonFunctions;
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
 
 //Field Type Boolean
 export const Bool = props => {
@@ -479,7 +470,7 @@ export const Paragraph = props => {
       ) : null}
       <span
         dangerouslySetInnerHTML={{
-          __html: getLink(getIntlBody(props.field.definition))
+          __html: getIntlBody(props.field.definition)
         }}
       />
     </h2>
@@ -556,7 +547,7 @@ class FileUpload extends Component {
       // TODO Back-end error is still not shown - need to show it
       this.props.onFieldChange(file, this.props, "file");
     } else {
-      openNotificationWithIcon({
+      showNotification({
         type: "error",
         message: error
       });

@@ -8,17 +8,9 @@ import {
 import { stepBodyActions } from "./";
 import { workflowDetailsService } from "../services";
 import { history } from "../_helpers";
-import { notification } from "antd";
 import * as Sentry from "@sentry/browser";
 import { currentActiveStep } from "../components/WorkflowDetails/utils/active-step";
-
-const openNotificationWithIcon = data => {
-  notification[data.type]({
-    message: data.message,
-    description: data.body,
-    placement: "bottomLeft"
-  });
-};
+import showNotification from "../../modules/common/notification";
 
 export const workflowDetailsActions = {
   getById,
@@ -221,6 +213,7 @@ function getComment(object_id, content_type, addtn, isEmbedded, fieldExtra) {
   function success(data) {
     data.isEmbedded = isEmbedded;
     data.fieldExtra = fieldExtra;
+    data.contentType = content_type;
     return { type: workflowCommentsConstants.GET_COMMENTS_SUCCESS, data };
   }
 
@@ -307,10 +300,9 @@ function archiveWorkflow(id) {
 
   function failure(response) {
     if (response.status === 400) {
-      openNotificationWithIcon({
+      showNotification({
         type: "error",
-        message:
-          "Possible misconfiguration of status'es mappings, please check with site admin"
+        message: "notificationInstances.archiveWorkflowFail"
       });
     }
     return {

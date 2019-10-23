@@ -44,6 +44,12 @@ class WorkflowDetails extends Component {
   // Loads all the required data
   // Decide the default step
   initializeComponent = () => {
+    // This is to capture the state of `isNewWorkflow` when the initiateComponent
+    // begins to execute, as the value for `this.isNewWorkflow` gets changed before
+    // Promise.all gets resolved, and hence it never knows about if this was
+    // a new child-workflow.
+    const isNewWorkflow = this.isNewWorkflow;
+
     // Get basic details about the workflow
     const basicWorkflowDetailsPromise = this.props.dispatch(
       workflowDetailsActions.getById(this.workflowId)
@@ -61,10 +67,9 @@ class WorkflowDetails extends Component {
         // The component has been re-rendered here with the data from the API
         // Think :tongue_stuck_out:
 
-        const {
-          stepId: currentStepId,
-          groupId: currentGroupId
-        } = this.decideCurrentStep();
+        const { stepId: currentStepId, groupId: currentGroupId } = isNewWorkflow
+          ? this.firstStep
+          : this.decideCurrentStep();
 
         this.setState({ hasLoadedAllData: true }, () => {
           // To update state and do more side effects
@@ -205,6 +210,15 @@ class WorkflowDetails extends Component {
     return searchString.indexOf("new=true") >= 0;
   }
 
+  get firstStep() {
+    // In case the there's no step groups, it'll return `null` for both,
+    // so as to redirect to the Profile step
+    return {
+      groupId: lodashGet(this.props, "stepGroups.0.id", null),
+      stepId: lodashGet(this.props, "stepGroups.0.steps.0.id", null)
+    };
+  }
+
   get hasProfileViewPermissions() {
     return checkPermission({
       permissionsAllowed: this.props.permissions.permissions,
@@ -286,16 +300,8 @@ class WorkflowDetails extends Component {
     // Third priority is given to lc data
     // first step should ne visible if there is no lc data
     // or if user doesn't have permission to view profile
-    // or if it's a fresh created child workflow (with new=true in URL)
-    if (
-      !this.lcData.length ||
-      !this.hasProfileViewPermissions ||
-      this.isNewWorkflow
-    ) {
-      return {
-        groupId: this.props.stepGroups[0].id,
-        stepId: this.props.stepGroups[0].steps[0].id
-      };
+    if (!this.lcData.length || !this.hasProfileViewPermissions) {
+      return this.firstStep;
     }
 
     // Lastly if there is nothing set profile as the selected step
@@ -637,15 +643,17 @@ class WorkflowDetails extends Component {
     // API call. Also removing comments each time is not an efficient way.
     // They should rather be updated in-redux while the workflow is opened
     // and flished only when the workflow is closed.
-    this.props.dispatch(
-      workflowDetailsActions.getComment(
-        objectId,
-        content_type,
-        "",
-        false,
-        fieldExtra
-      )
-    );
+    if (content_type)
+      this.props.dispatch(
+        workflowDetailsActions.getComment(
+          objectId,
+          content_type,
+          "",
+          false,
+          fieldExtra
+        )
+      );
+    else this.props.dispatch(workflowDetailsActions.getComment(null));
   };
 
   addComment = (payload, step_reload_payload, isEmbeddedDetails) => {
