@@ -153,7 +153,9 @@ export function getWorkflowListThunk(params) {
       throw error;
     }
 
-    dispatch(getWorkflowListSuccess(appendRankInWorkflowItem(workflows)));
+    dispatch(
+      getWorkflowListSuccess(appendRankInWorkflowItem(workflows, params))
+    );
     return workflows;
   };
 }

@@ -1,5 +1,6 @@
 // TODO: Tree shake
 import moment from "moment";
+import { FILTERS_ENUM } from "./constants";
 
 export const getOccurrenceDay = occurrence => {
   const today = moment().startOf("day");
@@ -28,12 +29,10 @@ const getRank = ({ page, index, count, isAscending }) => {
   }
 };
 
-export const appendRankInWorkflowItem = ({
-  results: workflows = [],
-  next,
-  count,
-  ...rest
-}) => {
+export const appendRankInWorkflowItem = (
+  { results: workflows = [], next, count, ...rest },
+  filterParams
+) => {
   if (!Array.isArray(workflows)) {
     console.warn(
       `appendRankInWorkflowItem: Expected an array recieved ${typeof workflows}`
@@ -41,9 +40,9 @@ export const appendRankInWorkflowItem = ({
     return workflows;
   }
 
-  const nextURL = new URL(next);
-  const page = nextURL.searchParams.get("page") - 1 || 0; // Using 1 as the default page
-  const sortingOrder = nextURL.searchParams.get("ordering");
+  const page = filterParams[FILTERS_ENUM.PAGE_FILTER.key] || 1;
+  const sortingOrder = filterParams[FILTERS_ENUM.ORDERING_FILTER.key];
+  console.log("appendRankInWorkflowItem", page, sortingOrder);
   const workflowWithRank = workflows.map((workflow, index) => ({
     ...workflow,
     rank: sortingOrder
