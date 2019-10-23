@@ -14,6 +14,7 @@ import { requiredParam } from "../../../modules/common/errors";
 import { checkPermission } from "../../../modules/common/permissions/Chowkidaar";
 import Permissions from "../../../modules/common/permissions/permissionsList";
 import { getFieldExtraFilters } from "./utils/getFieldExtraFilters";
+import { Tareekh } from "../common/Tareekh";
 
 const TabPane = Tabs.TabPane;
 const SIZE_33 = 4,
@@ -487,14 +488,22 @@ class StepBodyForm extends Component {
 
     if (showAnswer)
       if (showAnswer && fieldReturn.definition.field_type !== "paragraph") {
+        const date = (
+          <Tareekh
+            format={"yyyy/MMM/dd' | 'p"}
+            timestamp={fieldReturn.answers[0].created_at}
+          />
+        );
+
         const tooltip = (
           <span className="float-right ">
             {fieldReturn.answers[0].submitted_by_email ? (
               <IntlTooltip
                 placement="topRight"
-                title={"tooltips.answeredBy"}
+                title={"commonTextInstances.answeredByOn"}
                 values={{
-                  name: fieldReturn.answers[0].submitted_by_email
+                  email: fieldReturn.answers[0].submitted_by_email,
+                  date: date
                 }}
               >
                 <i className="material-icons t-14 text-middle text-light">
@@ -502,11 +511,13 @@ class StepBodyForm extends Component {
                 </i>
               </IntlTooltip>
             ) : (
-              <span>
-                <i className="material-icons t-14 text-middle text-light">
-                  history
-                </i>
-              </span>
+              <Tooltip title={date}>
+                <span>
+                  <i className="material-icons t-14 text-middle text-light">
+                    history
+                  </i>
+                </span>
+              </Tooltip>
             )}
           </span>
         );
@@ -536,6 +547,50 @@ class StepBodyForm extends Component {
 
     return consolidatedErrors;
   };
+
+  get versionData() {
+    return (
+      <div className=" mr-bottom">
+        <div className="version-item">
+          <span className="float-right">
+            <IntlTooltip
+              placement="topRight"
+              title={"tooltips.hideVersionText"}
+            >
+              <span className="text-anchor" onClick={this.props.versionToggle}>
+                <i className="material-icons t-14 text-middle text-light ">
+                  close
+                </i>
+              </span>
+            </IntlTooltip>
+          </span>
+
+          <div className="text-medium mr-bottom-sm">
+            <FormattedMessage id="stepBodyFormInstances.versionSubmittedOn" />
+            {"  "}
+            <b>
+              <Tareekh
+                format={"yyyy/MMM/dd' | 'p"}
+                timestamp={
+                  this.props.stepVersionFields.stepVersionFields.completed_at
+                }
+              />
+            </b>{" "}
+            {this.props.stepVersionFields.stepVersionFields.completed_by ? (
+              <span>
+                <FormattedMessage id="commonTextInstances.by" />
+                {"  "}
+                {
+                  this.props.stepVersionFields.stepVersionFields.completed_by
+                    .email
+                }
+              </span>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   render = () => {
     if (!this.props.currentStepFields) {
@@ -683,51 +738,10 @@ class StepBodyForm extends Component {
       >
         <div style={{ padding: "29px 44px 27px 37px" }}>
           <div>
-            {showFieldVersion ? (
-              <div className=" mr-bottom">
-                <div className="version-item">
-                  <span className="float-right">
-                    <IntlTooltip
-                      placement="topRight"
-                      title={"tooltips.hideVersionText"}
-                    >
-                      <span
-                        className="text-anchor"
-                        onClick={this.props.versionToggle}
-                      >
-                        <i className="material-icons t-14 text-middle text-light ">
-                          close
-                        </i>
-                      </span>
-                    </IntlTooltip>
-                  </span>
-                  <div className="text-medium mr-bottom-sm">
-                    <FormattedMessage id="stepBodyFormInstances.versionSubmittedOn" />
-                    {"  "}
-                    <Moment format="MM/DD/YYYY">
-                      <b>
-                        {" "}
-                        {
-                          this.props.stepVersionFields.stepVersionFields
-                            .completed_at
-                        }
-                      </b>
-                    </Moment>{" "}
-                    {this.props.stepVersionFields.stepVersionFields
-                      .completed_by ? (
-                      <span>
-                        <FormattedMessage id="commonTextInstances.by" />
-                        {"  "}
-                        {
-                          this.props.stepVersionFields.stepVersionFields
-                            .completed_by.email
-                        }
-                      </span>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            ) : null}
+            {showFieldVersion &&
+            this.props.stepVersionFields.stepVersionFields.completed_at
+              ? this.versionData
+              : null}
 
             {_.size(groupedField) ? (
               <Tabs
