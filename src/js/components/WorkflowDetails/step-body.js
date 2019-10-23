@@ -72,10 +72,9 @@ class StepBody extends Component {
             let label = (
               <span>
                 <FormattedMessage id="stepBodyFormInstances.versionSubmittedOn" />{" "}
-                <Tareekh timestamp={item.date} />
+                v({item.value}) <Tareekh timestamp={item.date} />
               </span>
             );
-
             return <Menu.Item key={`${item.value}`}> {label}</Menu.Item>;
           })
         ) : (
