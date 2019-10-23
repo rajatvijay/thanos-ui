@@ -68,16 +68,6 @@ export const currentActiveStep = (stepData, workflowId) => {
   }
 };
 
-export const getStepAndGroupFromConfig = (tag, stepGroups) => {
-  for (let group of stepGroups) {
-    const step = group.steps.find(step => step.definition_tag === tag);
-    if (step) {
-      return { stepId: step.id, groupId: group.id };
-    }
-  }
-  return { stepId: null, groupId: null };
-};
-
 // UN-BORN/UN-USED CHILD @rajatvijay
 // This method is not being used anywhere
 // But keeping it since

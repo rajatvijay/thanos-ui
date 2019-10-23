@@ -15,10 +15,7 @@ import Comments from "./comments";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { goToPrevStep } from "../../utils/customBackButton";
 import { get as lodashGet } from "lodash";
-import {
-  getStepAndGroupFromConfig,
-  getNextStepAndGroup
-} from "./utils/active-step";
+import { getNextStepAndGroup } from "./utils/active-step";
 import LazyLoadHOC from "./LazyLoadHOC";
 import WhenInViewHOC from "./WhenInViewHOC";
 import { css } from "emotion";
@@ -30,6 +27,7 @@ import Permissions from "../../../modules/common/permissions/permissionsList";
 import showNotification from "../../../modules/common/notification";
 import { getFilteredStepGroups } from "../../../modules/workflows/sidebar/sidebar.selectors";
 import * as Sentry from "@sentry/browser";
+import { getDefaultStepTagsGroupAndStep } from "./utils/defaultStep.selector";
 
 const { Content } = Layout;
 
@@ -226,13 +224,6 @@ class WorkflowDetails extends Component {
     });
   }
 
-  get defaultStepTag() {
-    return (
-      this.workflowHead &&
-      lodashGet(this.workflowHead, "definition.default_step_tag", null)
-    );
-  }
-
   get workflowHead() {
     const { minimalUI, workflowItem } = this.props;
     return minimalUI
@@ -286,15 +277,8 @@ class WorkflowDetails extends Component {
 
     // Second priority is given to the step from the config
     // if ther is any
-    if (this.defaultStepTag) {
-      const {
-        stepId: defaultStepId,
-        groupId: defaultGroupId
-      } = getStepAndGroupFromConfig(this.defaultStepTag, this.props.stepGroups);
-
-      if (defaultStepId && defaultGroupId) {
-        return { stepId: defaultStepId, groupId: defaultGroupId };
-      }
+    if (this.props.defaultGroupAndStep) {
+      return this.props.defaultGroupAndStep;
     }
 
     // Third priority is given to lc data
@@ -734,6 +718,9 @@ function mapStateToProps(state, props) {
     permissions
   } = state;
 
+  const workflowId =
+    props.workflowIdFromPropsForModal || parseInt(props.match.params.id, 10);
+
   return {
     currentStepFields,
     workflowDetails,
@@ -749,10 +736,15 @@ function mapStateToProps(state, props) {
     showPreviewSidebar,
     nextUrl,
     permissions,
-    stepGroups: getFilteredStepGroups(
-      // reselect selector
+    defaultGroupAndStep: getDefaultStepTagsGroupAndStep(
+      // reselect selector to get the best match from default_step_tags
       state,
-      props.workflowIdFromPropsForModal || parseInt(props.match.params.id, 10)
+      workflowId
+    ),
+    stepGroups: getFilteredStepGroups(
+      // reselect selector to get the list of accessible steps
+      state,
+      workflowId
     )
   };
 }

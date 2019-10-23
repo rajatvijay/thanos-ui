@@ -1713,7 +1713,7 @@ test("should display profile and should be selected, if the lc_data is not empty
   expect(profileStep).not.toBeNull();
 });
 
-test("should navigate to default_step_tag in minimalUI", async () => {
+test("should navigate to 'step4' from default_step_tags in minimalUI", async () => {
   const fakeStepGroups = [
     {
       id: 1,
@@ -1724,6 +1724,7 @@ test("should navigate to default_step_tag in minimalUI", async () => {
           completed_by: null,
           name: "Step 1",
           alerts: [],
+          step_group: 1,
           definition_tag: "step1"
         },
         {
@@ -1731,13 +1732,14 @@ test("should navigate to default_step_tag in minimalUI", async () => {
           completed_by: null,
           name: "Step 2",
           alerts: [],
+          step_group: 1,
           definition_tag: "step2"
         }
       ],
       overdue: false
     },
     {
-      id: 1,
+      id: 2,
       definition: { name_en: "Group 2" },
       steps: [
         {
@@ -1745,13 +1747,16 @@ test("should navigate to default_step_tag in minimalUI", async () => {
           completed_by: null,
           name: "Step 3",
           alerts: [],
-          definition_tag: "step3"
+          step_group: 2,
+          definition_tag: "step3",
+          completed_at: "2019-10-22T12:46:48.203108Z"
         },
         {
           id: 3,
           completed_by: null,
           name: "Step 4",
           alerts: [],
+          step_group: 2,
           definition_tag: "step4"
         }
       ],
@@ -1770,7 +1775,7 @@ test("should navigate to default_step_tag in minimalUI", async () => {
         name: fakeWorkflowName,
         workflow_family: [],
         definition: {
-          default_step_tag: "step4"
+          default_step_tags: ["step5", "step4", "step3"]
         },
         lc_data: [{ value: "Some value", display_type: "normal" }]
       }
@@ -1809,7 +1814,7 @@ test("should navigate to default_step_tag in minimalUI", async () => {
   expect(step4.children[0].innerHTML).toBe("lens");
 });
 
-test("should navigate to default_step_tag in expanded view", async () => {
+test("should navigate to 'step4' from default_step_tags in expanded view", async () => {
   const fakeStepGroups = [
     {
       id: 1,
@@ -1820,6 +1825,7 @@ test("should navigate to default_step_tag in expanded view", async () => {
           completed_by: null,
           name: "Step 1",
           alerts: [],
+          step_group: 1,
           definition_tag: "step1"
         },
         {
@@ -1827,13 +1833,14 @@ test("should navigate to default_step_tag in expanded view", async () => {
           completed_by: null,
           name: "Step 2",
           alerts: [],
+          step_group: 1,
           definition_tag: "step2"
         }
       ],
       overdue: false
     },
     {
-      id: 1,
+      id: 2,
       definition: { name_en: "Group 2" },
       steps: [
         {
@@ -1841,6 +1848,8 @@ test("should navigate to default_step_tag in expanded view", async () => {
           completed_by: null,
           name: "Step 3",
           alerts: [],
+          step_group: 2,
+          completed_at: "2019-10-22T12:46:48.203108Z",
           definition_tag: "step3"
         },
         {
@@ -1848,6 +1857,7 @@ test("should navigate to default_step_tag in expanded view", async () => {
           completed_by: null,
           name: "Step 4",
           alerts: [],
+          step_group: 2,
           definition_tag: "step4"
         }
       ],
@@ -1866,7 +1876,7 @@ test("should navigate to default_step_tag in expanded view", async () => {
         name: fakeWorkflowName,
         workflow_family: [],
         definition: {
-          default_step_tag: "step4"
+          default_step_tags: ["step5", "step4", "step3"]
         },
         lc_data: [{ value: "Some value", display_type: "normal" }]
       }
@@ -1903,7 +1913,7 @@ test("should navigate to default_step_tag in expanded view", async () => {
   expect(step4.children[0].innerHTML).toBe("lens");
 });
 
-test("should navigate to first incomplete step if default_step_tag is not accessible", async () => {
+test("should navigate to first incomplete step if default_step_tags is not accessible", async () => {
   const fakeStepGroups = [
     {
       id: 1,
@@ -1914,6 +1924,7 @@ test("should navigate to first incomplete step if default_step_tag is not access
           completed_by: null,
           name: "Step 1",
           alerts: [],
+          step_group: 1,
           definition_tag: "step1"
         },
         {
@@ -1921,6 +1932,7 @@ test("should navigate to first incomplete step if default_step_tag is not access
           completed_by: null,
           name: "Step 2",
           alerts: [],
+          step_group: 1,
           definition_tag: "step2"
         }
       ],
@@ -1939,9 +1951,8 @@ test("should navigate to first incomplete step if default_step_tag is not access
         name: fakeWorkflowName,
         workflow_family: [],
         definition: {
-          default_step_tag: "step4"
-        },
-        lc_data: [{ value: "Some value", display_type: "normal" }]
+          default_step_tags: ["step5", "step4", "step3"]
+        }
       }
     },
     permissions: {
@@ -1977,6 +1988,82 @@ test("should navigate to first incomplete step if default_step_tag is not access
   expect(step2.children[0].innerHTML).toBe("lens");
 });
 
+test("should navigate to first incomplete step if default_step_tags is empty array", async () => {
+  const fakeStepGroups = [
+    {
+      id: 1,
+      definition: { name_en: "Group 1" },
+      steps: [
+        {
+          id: 2,
+          completed_by: null,
+          name: "Step 1",
+          alerts: [],
+          step_group: 1,
+          definition_tag: "step1"
+        },
+        {
+          id: 3,
+          completed_by: null,
+          name: "Step 2",
+          alerts: [],
+          step_group: 1,
+          definition_tag: "step2"
+        }
+      ],
+      overdue: false
+    }
+  ];
+  const rootReducer = combineReducers({
+    workflowDetailsHeader,
+    permissions,
+    workflowDetails
+  });
+
+  const reduxState = {
+    workflowDetailsHeader: {
+      [fakeWorkflowId]: {
+        name: fakeWorkflowName,
+        workflow_family: [],
+        definition: {
+          default_step_tags: []
+        }
+      }
+    },
+    permissions: {
+      permissions: [Permissions.CAN_VIEW_WORKFLOW_PROFILE]
+    },
+    workflowDetails: {
+      [fakeWorkflowId]: {
+        workflowDetails: {
+          stepGroups: {
+            results: fakeStepGroups
+          }
+        }
+      }
+    }
+  };
+  const store = createStore(rootReducer, reduxState);
+
+  const { queryByText } = renderWithReactIntl(
+    <Provider store={store}>
+      <WorkflowDetails
+        location={{ search: "", pathname: "" }}
+        workflowIdFromPropsForModal={fakeWorkflowId}
+        hideStepBody={true}
+        dispatch={() => {}}
+        minimalUI={true}
+      />
+    </Provider>
+  );
+
+  await waitForDomChange();
+
+  const step2 = queryByText(fakeStepGroups[0].steps[0].name);
+  expect(step2.children[0].innerHTML).toBe("lens");
+});
+
+///////////////////
 // test("should not display any inaccessible steps", async () => {
 //   const fakeStepGroups = [
 //     {
