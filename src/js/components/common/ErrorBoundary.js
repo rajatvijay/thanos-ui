@@ -75,7 +75,7 @@ const ErrorPage = ({ onSubmitFeedback, onGoHome }) => {
   );
 };
 
-const StyledContainer = styled.div`
+export const StyledContainer = styled.div`
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -84,7 +84,7 @@ const StyledContainer = styled.div`
   flex-direction: column;
 `;
 
-const StyledHeader = styled.div`
+export const StyledHeader = styled.div`
   background-color: #148cd6;
   margin: -40px -24px 24px -24px;
   padding-top: 32px;
@@ -94,30 +94,30 @@ const StyledHeader = styled.div`
   align-items: center;
 `;
 
-const StyledPadding = styled.div`
+export const StyledPadding = styled.div`
   flex: 1;
 `;
 
-const StyledBody = styled.div`
+export const StyledBody = styled.div`
   flex: 3;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const StyledFooter = styled.div`
+export const StyledFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 48px;
 `;
 
-const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)`
   flex: 1;
   margin: 0 12px;
 `;
 
-const StyledCard = styled.div`
+export const StyledCard = styled.div`
   width: 40%;
   min-width: 400px;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
@@ -129,12 +129,12 @@ const StyledCard = styled.div`
   overflow: hidden;
 `;
 
-const StyledHeading = styled.h1`
+export const StyledHeading = styled.h1`
   text-align: center;
   color: #ffffff;
   margin-top: 12px;
 `;
 
-const StyledDescription = styled.p`
+export const StyledDescription = styled.p`
   text-align: center;
 `;

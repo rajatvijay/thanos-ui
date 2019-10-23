@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { userUtilities } from "./user";
 import { apiBaseURL, auditLogBaseURL } from "../../config";
+import { history } from "../_helpers";
 
 export const getValueFromCookie = name => {
   let cookieValue = null;
@@ -40,6 +41,8 @@ export const APIFetch = (...params) => {
             // fails for any reason.
             userUtilities.postLogoutAction({ addNextURL: true });
           }
+        } else if (response.status === 503) {
+          return history.push("/service-unavailable/");
         }
         resolve(response);
       })
