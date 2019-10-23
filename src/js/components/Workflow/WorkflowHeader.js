@@ -84,13 +84,7 @@ export const WorkflowHeader = props => {
         {!showRank ? (
           <span />
         ) : (
-          <StyledRiskItem
-            bgColor={
-              getScoreColor(props.workflow.sorting_primary_field) || "#00000048"
-            }
-          >
-            {props.rank}
-          </StyledRiskItem>
+          <StyledRiskItem bgColor={"#00000048"}>{props.rank}</StyledRiskItem>
         )}
       </Col>
 
@@ -564,18 +558,19 @@ export class GetMergedData extends React.Component {
   }
 }
 
-const getScoreColor = riskValue => {
-  const value = parseInt(riskValue, 10);
-  if (value >= 7) {
-    return "#00c89b";
-  } else if (value >= 4 && value <= 6) {
-    return "#eebd47";
-  } else if (value <= 3) {
-    return "#d40000";
-  } else {
-    return "rgba(0, 0, 0, 0.3)";
-  }
-};
+// NOTE: Don't remove it now, might need it later
+// const getScoreColor = riskValue => {
+//   const value = parseInt(riskValue, 10);
+//   if (value >= 7) {
+//     return "#00c89b";
+//   } else if (value >= 4 && value <= 6) {
+//     return "#eebd47";
+//   } else if (value <= 3) {
+//     return "#d40000";
+//   } else {
+//     return "rgba(0, 0, 0, 0.3)";
+//   }
+// };
 
 const StyledRiskItem = styled.div`
   display: inline-block;

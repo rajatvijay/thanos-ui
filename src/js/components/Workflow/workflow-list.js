@@ -47,11 +47,16 @@ class WorkflowList extends Component {
   };
 
   getGroupedWorkflows = currentPage => {
-    const { disableGrouping, isEmbedded, workflow } = this.props;
+    const {
+      disableGrouping,
+      isEmbedded,
+      workflow,
+      sortingEnabled
+    } = this.props;
     const workflows = isEmbedded
       ? workflow.workflow
       : this.getWorkflowWithHumaReadableRiskRanking(currentPage);
-    if (disableGrouping) {
+    if (disableGrouping || sortingEnabled) {
       return { workflows };
     }
     return _.groupBy(workflows, this.getOccurrenceDay);
