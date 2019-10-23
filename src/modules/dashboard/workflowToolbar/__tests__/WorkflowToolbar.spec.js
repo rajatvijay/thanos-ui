@@ -10,7 +10,8 @@ test("should render workflow count", () => {
       workflowList: {
         workflowList: {
           data: {
-            results: [1, 2, 3, 4, 5, 6]
+            // results: [1, 2, 3, 4, 5, 6],
+            count: 6
           }
         }
       }
