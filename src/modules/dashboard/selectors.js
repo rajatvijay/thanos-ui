@@ -172,7 +172,7 @@ export const businessUnitPlaceholderSelector = state => {
 };
 
 export const workflowCountSelector = state =>
-  lodashGet(state, "workflowList.workflowList.data.results.length", null);
+  lodashGet(state, "workflowList.workflowList.data.count", null);
 
 export const selectedSortingOrderSelector = state =>
   lodashGet(
