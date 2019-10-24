@@ -2,8 +2,11 @@ import React, { PureComponent } from "react";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { FilterDropdownClass, FilterRow } from "./styledComponents";
 import { css } from "emotion";
-import { Cascader, Input } from "antd";
+import { Cascader, Input, Button } from "antd";
 import FilterDropdown from "./FilterDropdown";
+import styled from "@emotion/styled";
+import withFilters from "../../filters";
+import { FILTERS_ENUM } from "../../constants";
 
 const OPERATORS_TYPES = [
   {
@@ -53,20 +56,45 @@ class AdvancedFilters extends PureComponent {
     this.setState({
       currentAdvFiliter: updatedCurrentAdvFilters
     });
+  };
 
-    // If the user has selected all the 3 value
-    // update it in the state
-    if (
-      updatedCurrentAdvFilters.field &&
-      updatedCurrentAdvFilters.operator &&
-      updatedCurrentAdvFilters.text
-    ) {
-      this.props.onApply(updatedCurrentAdvFilters);
+  handleApply = () => {
+    const { field, operator, text } = this.state.currentAdvFiliter;
+
+    if (!field || !operator || !text) {
+      return;
     }
+
+    this.props.addFilters([
+      {
+        name: FILTERS_ENUM.ADVANCED_FILTER.name,
+        key: FILTERS_ENUM.ADVANCED_FILTER.key,
+        value: `${field[field.length - 1]}__${operator}__${text}`,
+        meta: {
+          field,
+          operator,
+          text
+        }
+      },
+
+      // Moving user to page 1 when a filter is applied
+      {
+        name: FILTERS_ENUM.PAGE_FILTER.name,
+        key: FILTERS_ENUM.PAGE_FILTER.key,
+        value: 1,
+        meta: 1
+      }
+    ]);
+  };
+
+  handleClear = () => {
+    this.setState({ currentAdvFiliter: {} });
+    this.props.onClear();
   };
 
   render() {
     const { options: advancedFilterOptions } = this.props;
+    const { currentAdvFiliter } = this.state;
     return (
       <div>
         <span
@@ -86,6 +114,7 @@ class AdvancedFilters extends PureComponent {
             placeholder={this.props.intl.formatMessage({
               id: "workflowFiltersTranslated.pleaseSelectField"
             })}
+            value={currentAdvFiliter.field}
           />
 
           <FilterDropdown
@@ -96,6 +125,7 @@ class AdvancedFilters extends PureComponent {
             }
             name="operator"
             onSelect={this.handleChange("operator")}
+            value={currentAdvFiliter.operator}
           />
 
           <Input
@@ -103,12 +133,30 @@ class AdvancedFilters extends PureComponent {
             placeholder={this.props.intl.formatMessage({
               id: "workflowFiltersTranslated.inputValue"
             })}
-            onBlur={e => this.handleChange("text")(e.target.value)}
+            onChange={e => this.handleChange("text")(e.target.value)}
+            value={currentAdvFiliter.text}
           />
         </FilterRow>
+        <FilterButtonsContainer>
+          <Button onClick={this.handleApply} type="primary">
+            Apply
+          </Button>
+          <Button onClick={this.handleClear}>Clear All</Button>
+          <Button onClick={this.props.onClose}>Close</Button>
+        </FilterButtonsContainer>
       </div>
     );
   }
 }
 
-export default injectIntl(AdvancedFilters);
+export default injectIntl(withFilters(AdvancedFilters));
+
+const FilterButtonsContainer = styled.div`
+  align-items: center;
+  display: flex;
+  margin-top: 20px;
+
+  button {
+    margin-right: 10px;
+  }
+`;

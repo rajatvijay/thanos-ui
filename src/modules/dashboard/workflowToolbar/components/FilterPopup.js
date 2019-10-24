@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button } from "antd";
 import FilterDropdown from "./FilterDropdown";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
@@ -26,9 +25,6 @@ import withFilters from "../../filters";
  */
 
 class FilterPopup extends Component {
-  state = {
-    advancedFilters: null
-  };
   handleBasicFilters = filter => (_, item) => {
     this.props.addFilters([
       {
@@ -54,34 +50,6 @@ class FilterPopup extends Component {
       FILTERS_ENUM.REGION_FILTER.name,
       FILTERS_ENUM.BUSINESS_UNIT_FILTER.name,
       FILTERS_ENUM.ADVANCED_FILTER.name
-    ]);
-  };
-
-  handleAdvancedFilterUpdate = advancedFilters => {
-    this.setState({ advancedFilters });
-  };
-
-  handleAdvancedFilterApply = () => {
-    const { field, operator, text } = this.state.advancedFilters;
-    this.props.addFilters([
-      {
-        name: FILTERS_ENUM.ADVANCED_FILTER.name,
-        key: FILTERS_ENUM.ADVANCED_FILTER.key,
-        value: `${field[field.length - 1]}__${operator}__${text}`,
-        meta: {
-          field,
-          operator,
-          text
-        }
-      },
-
-      // Moving user to page 1 when a filter is applied
-      {
-        name: FILTERS_ENUM.PAGE_FILTER.name,
-        key: FILTERS_ENUM.PAGE_FILTER.key,
-        value: 1,
-        meta: 1
-      }
     ]);
   };
 
@@ -156,16 +124,10 @@ class FilterPopup extends Component {
           }
         />
         <AdvancedFilters
-          onApply={this.handleAdvancedFilterUpdate}
           options={advancedFilterData.data}
+          onClose={this.props.onClose}
+          onClear={this.handleClearFilter}
         />
-        <FilterButtonsContainer>
-          <Button onClick={this.handleAdvancedFilterApply} type="primary">
-            Apply
-          </Button>
-          <Button onClick={this.handleClearFilter}>Clear All</Button>
-          <Button onClick={this.props.onClose}>Close</Button>
-        </FilterButtonsContainer>
       </FilterModalView>
     );
   }
@@ -244,13 +206,4 @@ const FilterModalView = styled.div`
   box-sizing: content-box;
   transition: height 0.2s, opacity 0.2s, padding 0.2s;
   opacity: ${({ visible }) => (visible ? "1" : "0")};
-`;
-
-const FilterButtonsContainer = styled.div`
-  align-items: center;
-  display: flex;
-
-  button {
-    margin-right: 10px;
-  }
 `;
