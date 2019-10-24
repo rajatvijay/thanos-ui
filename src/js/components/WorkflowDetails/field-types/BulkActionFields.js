@@ -127,14 +127,13 @@ class BulkActionFields extends Component {
             if (!response.ok) {
               showNotification({
                 type: "error",
-                message: "notificationInstances.asyncActionSuccess"
+                message: "notificationInstances.asyncActionFail"
               });
             } else {
               this.props.onCloseBulkActionModal();
-
               showNotification({
                 type: "success",
-                message: "notificationInstances.asyncActionFail"
+                message: "notificationInstances.asyncActionSuccess"
               });
             }
             return;
