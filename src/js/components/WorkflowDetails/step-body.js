@@ -23,6 +23,7 @@ import PDFChecklistModal from "../Workflow/PDFChecklistModal";
 import { get as lodashGet } from "lodash";
 import styled from "@emotion/styled";
 import { Tareekh } from "../common/Tareekh";
+import { getSortedUserAssignmentList } from "./utils/stepUsers.selector";
 
 class StepBody extends Component {
   constructor(props) {
@@ -102,7 +103,7 @@ class StepBody extends Component {
   };
 
   renderStepUsers = () => {
-    const { stepUsers, stepId, postStepUser } = this.props;
+    const { stepUsers, stepId, postStepUser, sortedStepUsers } = this.props;
 
     // Loading Case
     if (stepUsers[stepId].isLoading) {
@@ -113,9 +114,8 @@ class StepBody extends Component {
       );
     }
 
-    const hasUserWithEditAccess = stepUsers[stepId].data;
     const hasUserAlreadyAssigned = stepUsers[stepId].user;
-    if (hasUserWithEditAccess && !hasUserAlreadyAssigned) {
+    if (sortedStepUsers && !hasUserAlreadyAssigned) {
       return (
         <Dropdown
           overlayStyle={{
@@ -131,7 +131,7 @@ class StepBody extends Component {
                   getStepUserTag: this.props.getStepUserTag
                 })
               }
-              users={stepUsers[stepId].data}
+              users={sortedStepUsers}
             />
           }
           trigger={["click"]}
@@ -427,7 +427,7 @@ class StepBody extends Component {
   };
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
   const {
     currentStepFields,
     workflowDetails,
@@ -445,6 +445,7 @@ function mapStateToProps(state) {
     config,
     workflowDetailsHeader,
     stepUsers,
+    sortedStepUsers: getSortedUserAssignmentList(state, props.stepId),
     permissions,
     extraFilters
   };

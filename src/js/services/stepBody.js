@@ -37,10 +37,9 @@ function getStepUsers(stepId) {
     credentials: "include"
   };
 
-  return APIFetch(
-    `steps/${stepId}/get-users-with-edit-access/`,
-    requestOptions
-  ).then(handleResponse);
+  return APIFetch(`steps/${stepId}/get-taggable-users/`, requestOptions).then(
+    handleResponse
+  );
 }
 
 function deleteStepUser(id) {
