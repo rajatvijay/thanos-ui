@@ -502,7 +502,7 @@ const LockedAlertComponent = React.memo(
     return (
       <Row style={{ padding: "29px 37px 12px 37px" }}>
         <Col span={24}>
-          <Alert
+          <StyledAlert
             message={
               <FormattedMessage id="stepBodyFormInstances.stepIsLocked" />
             }
@@ -514,7 +514,7 @@ const LockedAlertComponent = React.memo(
                 <ul>{stepLabels}</ul>
               </>
             }
-            type="error"
+            icon={<Icon type="lock" theme="filled" />}
             showIcon
           />
         </Col>
@@ -537,4 +537,12 @@ const LockedAlert = connect(lockedAlertMapStateToProps)(LockedAlertComponent);
 
 const StyledAnchorTag = styled.a`
   color: #000;
+`;
+
+const StyledAlert = styled(Alert)`
+  background-color: #f5f5f5;
+  border: 1px solid #d9d9d9;
+  & > .anticon {
+    color: #999;
+  }
 `;
