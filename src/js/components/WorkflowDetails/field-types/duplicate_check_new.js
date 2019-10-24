@@ -83,13 +83,13 @@ class DuplicateCheckComp extends Component {
 
   componentDidUpdate = previousProps => {
     if (
-      this.props.field.integration_json.status_code !==
-        previousProps.field.integration_json.status_code &&
+      (this.props.field.integration_json.status_code !==
+        previousProps.field.integration_json.status_code ||
+        this.props.field.integration_json.auto_generated_id !==
+          previousProps.field.integration_json.auto_generated_id) &&
       this.props.field.integration_json.status_code !== "fetching"
     ) {
-      // setTimeout(() => {
       this.getDuplicateWorkflow();
-      // }, 1000);
     }
   };
 
