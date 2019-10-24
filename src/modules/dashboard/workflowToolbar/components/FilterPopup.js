@@ -21,10 +21,8 @@ import withFilters from "../../filters";
  * [] No workflow found state
  * [] Add prop types
  * [] Test cases for components
- * [] Test cases for data layer
- * [] test cases for API layer
  * [] Figure out the req for snapshot test cases
- * [] Give allowClear option for all the basic filters => better user experience
+ * [x] Give allowClear option for all the basic filters => better user experience
  */
 
 class FilterPopup extends Component {
@@ -38,6 +36,14 @@ class FilterPopup extends Component {
         key: filter.key,
         value: item.value,
         meta: item
+      },
+
+      // Moving user to page 1 when a filter is applied
+      {
+        name: FILTERS_ENUM.PAGE_FILTER.name,
+        key: FILTERS_ENUM.PAGE_FILTER.key,
+        value: 1,
+        meta: 1
       }
     ]);
   };
@@ -67,6 +73,14 @@ class FilterPopup extends Component {
           operator,
           text
         }
+      },
+
+      // Moving user to page 1 when a filter is applied
+      {
+        name: FILTERS_ENUM.PAGE_FILTER.name,
+        key: FILTERS_ENUM.PAGE_FILTER.key,
+        value: 1,
+        meta: 1
       }
     ]);
   };
@@ -123,10 +137,10 @@ class FilterPopup extends Component {
   }
 
   render() {
-    const { staticData, statuses } = this.props;
+    const { staticData, statuses, visible } = this.props;
     const { regions, businessUnits, advancedFilterData } = staticData;
     return (
-      <FilterModalView>
+      <FilterModalView visible={visible}>
         <BasicFilters
           statuses={statuses}
           regions={regions}
@@ -217,13 +231,19 @@ const BasicFilters = injectIntl(
 );
 
 const FilterModalView = styled.div`
-  height: 250px;
+  height: ${({ visible }) => (visible ? "200px" : "0px")};
   background-color: #ffffff;
   border-bottom: 1px solid #979797;
-  padding: 20px 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: ${({ visible }) => (visible ? "20px" : "0")};
+  padding-bottom: ${({ visible }) => (visible ? "20px" : "0")};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-sizing: content-box;
+  transition: height 0.2s, opacity 0.2s, padding 0.2s;
+  opacity: ${({ visible }) => (visible ? "1" : "0")};
 `;
 
 const FilterButtonsContainer = styled.div`

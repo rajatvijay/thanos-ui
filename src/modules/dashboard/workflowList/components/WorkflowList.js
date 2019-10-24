@@ -56,7 +56,27 @@ class WorkflowList extends Component {
     );
   };
 
+  renderNoWorklflowMessage = () => {
+    return (
+      <div
+        className={css`
+          min-height: 25vh;
+          text-align: center;
+          padding-top: 10vh;
+          font-size: 20px;
+          color: rgba(0, 0, 0, 0.55);
+          font-weight: 500;
+        `}
+      >
+        No workflows found for the selected filters!
+      </div>
+    );
+  };
+
   renderWorkflows = workflowGoups => {
+    if (!Object.entries(workflowGoups).length) {
+      return this.renderNoWorklflowMessage();
+    }
     return Object.keys(workflowGoups).map(groupTitle => (
       <div
         className={css`
@@ -98,6 +118,13 @@ class WorkflowList extends Component {
     );
   };
 
+  get currentPage() {
+    return this.props.getSelectedFilterValue(
+      FILTERS_ENUM.PAGE_FILTER.name,
+      "value"
+    );
+  }
+
   render() {
     const { isLoading, workflowGroups, workflowCount } = this.props;
     const { workflowDetailsModalVisible, currentWorkflow } = this.state;
@@ -118,6 +145,7 @@ class WorkflowList extends Component {
                 text-align: center;
               `}
               pageSize={PAGE_SIZE}
+              current={this.currentPage}
               total={workflowCount}
               onChange={this.handlePageChange}
             />

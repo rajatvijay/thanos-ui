@@ -12,6 +12,12 @@ import lodashGet from "lodash/get";
 
 class WorkflowSorter extends Component {
   handleSorting = () => {
+    const page1Filter = {
+      name: FILTERS_ENUM.PAGE_FILTER.name,
+      key: FILTERS_ENUM.PAGE_FILTER.key,
+      value: 1,
+      meta: 1
+    };
     switch (this.sortingOrder) {
       case WORKLFOW_ASC_SORT_PARAM:
         return this.props.addFilters([
@@ -20,10 +26,15 @@ class WorkflowSorter extends Component {
             key: FILTERS_ENUM.ORDERING_FILTER.key,
             value: WORKLFOW_DESC_SORT_PARAM,
             meta: WORKLFOW_DESC_SORT_PARAM
-          }
+          },
+
+          // Moving user to page 1 when a filter is applied
+          page1Filter
         ]);
       case WORKLFOW_DESC_SORT_PARAM:
-        return this.props.removeFilters([FILTERS_ENUM.ORDERING_FILTER.name]);
+        this.props.removeFilters([FILTERS_ENUM.ORDERING_FILTER.name]);
+        this.props.addFilters(page1Filter);
+        return;
       default:
         return this.props.addFilters([
           {
@@ -31,7 +42,10 @@ class WorkflowSorter extends Component {
             key: FILTERS_ENUM.ORDERING_FILTER.key,
             value: WORKLFOW_ASC_SORT_PARAM,
             meta: WORKLFOW_ASC_SORT_PARAM
-          }
+          },
+
+          // Moving user to page 1 when a filter is applied
+          page1Filter
         ]);
     }
   };

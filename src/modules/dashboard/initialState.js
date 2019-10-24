@@ -1,3 +1,5 @@
+import { FILTERS_ENUM } from "./constants";
+
 export const INITIAL_STATE = {
   staticData: {
     statuses: {
@@ -21,7 +23,14 @@ export const INITIAL_STATE = {
       error: null
     }
   },
-  selectedWorkflowFilters: {},
+  selectedWorkflowFilters: {
+    [FILTERS_ENUM.PAGE_FILTER.name]: {
+      name: FILTERS_ENUM.PAGE_FILTER.name,
+      key: FILTERS_ENUM.PAGE_FILTER.key,
+      value: 1,
+      meta: 1
+    }
+  },
   kinds: {
     isLoading: false,
     data: null,

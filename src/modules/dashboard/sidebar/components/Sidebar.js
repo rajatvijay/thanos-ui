@@ -15,6 +15,12 @@ const { Sider } = Layout;
 
 class Sidebar extends Component {
   toggleFilter = field => value => {
+    const page1Filter = {
+      name: FILTERS_ENUM.PAGE_FILTER.name,
+      key: FILTERS_ENUM.PAGE_FILTER.key,
+      value: 1,
+      meta: 1
+    };
     if (field === FILTERS_ENUM.TASK_QUEUE_FILTER) {
       console.log("TASK_QUEUE_FILTER", this.selectedTaskQueues);
       if (
@@ -31,7 +37,10 @@ class Sidebar extends Component {
             key: FILTERS_ENUM.TASK_QUEUE_FILTER.key,
             value: value.tag,
             meta: value
-          }
+          },
+
+          // Moving user to page 1 when a filter is applied
+          page1Filter
         ]);
       }
     }
@@ -48,7 +57,10 @@ class Sidebar extends Component {
             key: FILTERS_ENUM.ALERT_FILTER.key,
             value: value.id,
             meta: value
-          }
+          },
+
+          // Moving user to page 1 when a filter is applied
+          page1Filter
         ]);
       }
     }
@@ -65,7 +77,10 @@ class Sidebar extends Component {
             key: FILTERS_ENUM.MY_TASK_FILTER.key,
             value: "Assignee",
             meta: "Assignee"
-          }
+          },
+
+          // Moving user to page 1 when a filter is applied
+          page1Filter
         ]);
       }
     }

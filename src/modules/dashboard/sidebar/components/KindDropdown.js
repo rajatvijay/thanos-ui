@@ -11,6 +11,12 @@ import { FILTERS_ENUM } from "../../constants";
 
 class KindDropdown extends Component {
   root = React.createRef();
+  pageFilter = {
+    name: FILTERS_ENUM.PAGE_FILTER.name,
+    key: FILTERS_ENUM.PAGE_FILTER.key,
+    value: 1,
+    meta: 1
+  };
   handleSelectedKind = kind => {
     this.props.addFilters([
       {
@@ -18,7 +24,8 @@ class KindDropdown extends Component {
         value: kind.id,
         key: FILTERS_ENUM.KIND_FILTER.key,
         meta: kind
-      }
+      },
+      this.pageFilter
     ]);
     this.props.removeFilters([FILTERS_ENUM.FIELD_ANSWER_FILTER.name]);
   };
@@ -36,7 +43,8 @@ class KindDropdown extends Component {
         key: FILTERS_ENUM.FIELD_ANSWER_FILTER.key,
         value: `${fieldTag.tag}__eq__${fieldAnswer.value}`,
         meta: fieldAnswer
-      }
+      },
+      this.pageFilter
     ]);
   };
 
