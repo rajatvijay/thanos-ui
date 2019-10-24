@@ -6,6 +6,7 @@ import { integrationCommonFunctions } from "./integration_common";
 import { dunsFieldActions } from "../../../actions";
 import { FormattedMessage } from "react-intl";
 import IntegrationLoadingWrapper from "../utils/IntegrationLoadingWrapper";
+import { get as lodashGet } from "lodash";
 
 const { getIntegrationSearchButton } = commonFunctions;
 const { filterEventsByFlag } = integrationCommonFunctions;
@@ -67,6 +68,7 @@ class GoogleSrch extends Component {
             commentCount={field.integration_comment_count}
             flag_dict={field.selected_flag}
             onSearch={this.onSearch}
+            search_param_data={field.search_param_data}
           />
         </div>
       </IntegrationLoadingWrapper>
@@ -81,6 +83,17 @@ class GoogleSrch extends Component {
 }
 
 const GetTable = props => {
+  const googleKeywords = lodashGet(
+    props.search_param_data.find(d => d.api_key === "keywords"),
+    "answer.answer",
+    ""
+  );
+  const formattedGoogleKeywords = googleKeywords
+    .split(" OR ") // Can we harcode this, since this is an operator?
+    .map(s => {
+      return s.trim().replace(/(\\"|!)/g, ",");
+    });
+
   // for error
   if (!props.jsonData.results) {
     return (
@@ -140,7 +153,8 @@ const GetTable = props => {
       render: (text, record, index) => {
         return integrationCommonFunctions.google_search_html(
           record,
-          props.onSearch
+          props.onSearch,
+          formattedGoogleKeywords
         );
       },
       key: "title"

@@ -242,7 +242,67 @@ class DescriptionToggle extends Component {
   }
 }
 
-function google_search_html(record, search) {
+// to find chunks in google serach
+const findChunksLastChars = ({
+  autoEscape,
+  caseSensitive,
+  sanitize,
+  searchWords,
+  textToHighlight
+}) => {
+  if (!textToHighlight) {
+    return [];
+  } else {
+    textToHighlight = textToHighlight.toLowerCase();
+  }
+
+  searchWords = searchWords.map(word => word.toLowerCase());
+
+  const chunks = [];
+
+  searchWords.forEach(word => {
+    const regex = new RegExp(`\\s${word}\\s`, "g");
+    const matches = Array.from(textToHighlight.matchAll(regex));
+    chunks.push(
+      ...matches.map(match => {
+        return {
+          start: match.index + 1,
+          end: match.index + word.length + 1
+        };
+      })
+    );
+
+    // Handling the starting of the string
+    {
+      const regex = new RegExp(`^${word}\\s`);
+      const match = textToHighlight.match(regex);
+      // console.log("start", match);
+      if (match) {
+        chunks.push({
+          start: match.index,
+          end: match.index + word.length
+        });
+      }
+    }
+
+    // Handling the ending of the string
+    {
+      const regex = new RegExp(`\\s${word}?[.\\s]$`);
+      const match = textToHighlight.match(regex);
+      // console.log("start", match);
+      if (match) {
+        chunks.push({
+          start: match.index + 1,
+          end: match.index + word.length + 1
+        });
+      }
+    }
+  });
+
+  return chunks;
+};
+
+function google_search_html(record, search, googleKeywords) {
   const getRelevanceScore = score => {
     const s = parseFloat(score).toFixed(2);
     let icon = "nobar";
@@ -289,13 +349,15 @@ function google_search_html(record, search) {
         ) : null}
       </div>
       <Highlighter
-        searchWords={record.matched_keywords}
+        searchWords={googleKeywords}
         textToHighlight={snippet}
         className="mr-bottom text-light"
         highlightClassName={css`
           background: transparent;
           font-weight: 700;
         `}
+        findChunks={findChunksLastChars}
+        autoEscape={true}
       />
       <div className="mr-bottom-lg">
         <a
