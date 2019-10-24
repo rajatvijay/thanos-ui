@@ -1,5 +1,6 @@
 import React from "react";
 import { Input, Menu } from "antd";
+import { injectIntl } from "react-intl";
 
 class StepAssignmentUsers extends React.Component {
   state = {
@@ -27,7 +28,9 @@ class StepAssignmentUsers extends React.Component {
       <div>
         <Input
           style={{ padding: "0 14px" }}
-          placeholder="Search User"
+          placeholder={this.props.intl.formatMessage({
+            id: "userWorkflowInstances.searchUser"
+          })}
           onChange={this.updateQueryString}
         />
         <Menu style={{ maxHeight: 200, overflowY: "scroll" }}>
@@ -46,4 +49,4 @@ class StepAssignmentUsers extends React.Component {
   }
 }
 
-export default StepAssignmentUsers;
+export default injectIntl(StepAssignmentUsers);

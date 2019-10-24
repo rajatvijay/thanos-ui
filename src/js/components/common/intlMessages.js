@@ -216,6 +216,7 @@ export default {
       emptyComment: "Comment cannot be empty",
       invalidEmail: "Invalid E-mail",
       invalidURL: "Invalid URL",
+      requiredFields: "Please fill out required fields",
       selectAtLeastOneCategory:
         "Please select atleast one from all categories to continue.",
       somethingWentWrong: "Something went wrong.",
@@ -673,6 +674,7 @@ export default {
       emptyComment: "El comentario no puede estar vacío",
       invalidEmail: "Email inválido",
       invalidURL: "URL invalida",
+      requiredFields: "Complete los campos obligatorios",
       selectAtLeastOneCategory:
         "Seleccione al menos una de todas las categorías para continuar",
       somethingWentWrong: "Quelque chose s'est mal passé.",
@@ -1144,6 +1146,7 @@ export default {
       emptyComment: "Le commentaire ne peut pas être vide",
       invalidEmail: "Email invalide",
       invalidURL: "URL invalide",
+      requiredFields: "Veuillez remplir les champs obligatoires",
       selectAtLeastOneCategory:
         "Veuillez en sélectionner au moins une dans toutes les catégories pour continuer.",
       somethingWentWrong: "Algo salió mal.",
