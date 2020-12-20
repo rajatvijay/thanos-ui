@@ -18,6 +18,7 @@ import Moment from "react-moment";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ProfileStepBody from "./ProfileStepBody";
 import StepAssignmentUsers from "./StepAssignmentUsers";
+import ChecklistModal from "../Workflow/ChecklistModal";
 
 class StepBody extends Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class StepBody extends Component {
     this.state = {
       stepCompletedBy: null,
       stepApprovedBy: null,
-      printing: false
+      printing: false,
+      showWorkflowPDFModal: true
     };
   }
 
@@ -34,7 +36,6 @@ class StepBody extends Component {
   };
   componentDidMount() {
     const { stepId } = this.props;
-
     this.props.getAssignedUser(stepId);
   }
 
@@ -130,6 +131,30 @@ class StepBody extends Component {
     return null;
   };
 
+  get stepData() {
+    try {
+      return this.props.currentStepFields[this.props.stepId].currentStepFields;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  componentDidUpdate(previousProps) {
+    if (this.stepData) {
+      // if (previousProps.stepId !== this.props.stepId) {
+      if (this.stepData.definition_tag === "car-qa") {
+        this.setState({ showWorkflowPDFModal: true });
+      }
+      // }
+    }
+  }
+
+  handleModalVisibility = status => {
+    this.setState({
+      showWorkflowPDFModal: status
+    });
+  };
+
   render = () => {
     const {
       displayProfile,
@@ -139,6 +164,7 @@ class StepBody extends Component {
       deleteStepUser,
       workflowId
     } = this.props;
+    const { showWorkflowPDFModal } = this.state;
     const loading =
       (this.props.currentStepFields[this.props.stepId] &&
         this.props.currentStepFields[this.props.stepId].loading) ||
@@ -228,6 +254,14 @@ class StepBody extends Component {
 
     return (
       <div style={{ background: "#FFFFFF" }}>
+        {this.state.showWorkflowPDFModal && this.stepData && (
+          <ChecklistModal
+            definition={this.stepData.definition}
+            workflowId={workflowId}
+            visible={showWorkflowPDFModal}
+            handleModalVisibility={this.handleModalVisibility}
+          />
+        )}
         {this.state.printing ? (
           <style
             dangerouslySetInnerHTML={{
